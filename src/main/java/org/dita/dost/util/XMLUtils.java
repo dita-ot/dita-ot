@@ -913,11 +913,13 @@ public final class XMLUtils {
   /**
    * Get reader for input format
    *
-   * @param format input document format
+   * @param format         input document format
+   * @param processingMode
    * @return reader for given forma
    * @throws SAXException if creating reader failed
    */
-  public static Optional<XMLReader> getXmlReader(final String format) throws SAXException {
+  public static Optional<XMLReader> getXmlReader(final String format, Configuration.Mode processingMode)
+    throws SAXException {
     if (format == null || format.equals(ATTR_FORMAT_VALUE_DITA) || format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
       return Optional.empty();
     }
@@ -933,6 +935,16 @@ public final class XMLUtils {
             } catch (final SAXNotRecognizedException ex) {
               // Not Xerces, ignore exception
             }
+          }
+          try {
+            r.setProperty(PROPERTY_FORMATS, parserMap.keySet());
+          } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
+            // Ignore
+          }
+          try {
+            r.setProperty(PROPERTY_PROCESSING_MODE, processingMode.name().toLowerCase());
+          } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
+            // Ignore
           }
           return Optional.of(r);
         } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
