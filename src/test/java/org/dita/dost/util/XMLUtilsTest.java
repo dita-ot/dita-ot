@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import net.sf.saxon.Configuration;
@@ -39,6 +40,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.DelegatingCollationUriResolverTest;
+import org.dita.dost.reader.CustomXMLReader;
 import org.dita.dost.util.Configuration.Mode;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,6 +50,8 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.LocatorImpl;
 
@@ -529,6 +533,30 @@ public class XMLUtilsTest {
   //        TestUtils.assertXMLEqual(new InputSource(new File(expDir, "identity.dita").toURI().toString()),
   //                       new InputSource(new File(tempDir, "identity.dita").toURI().toString()));
   //    }
+
+  @Test
+  void getXmlReader() throws SAXException {
+    final Optional<XMLReader> act = XMLUtils.getXmlReader("custom", Mode.LAX);
+    final CustomXMLReader reader = (CustomXMLReader) act.get();
+    assertEquals("lax", reader.getProcessingMode());
+    assertEquals(List.of("custom"), List.copyOf(reader.getFormats()));
+  }
+
+  @Test
+  void getXmlReader_notRecognized() throws SAXException {
+    final Optional<XMLReader> act = XMLUtils.getXmlReader("custom", Mode.SKIP);
+    final CustomXMLReader reader = (CustomXMLReader) act.get();
+    assertNull(reader.getProcessingMode());
+    assertEquals(List.of("custom"), List.copyOf(reader.getFormats()));
+  }
+
+  @Test
+  void getXmlReader_notSupported() throws SAXException {
+    final Optional<XMLReader> act = XMLUtils.getXmlReader("custom", Mode.STRICT);
+    final CustomXMLReader reader = (CustomXMLReader) act.get();
+    assertNull(reader.getProcessingMode());
+    assertEquals(List.of("custom"), List.copyOf(reader.getFormats()));
+  }
 
   @AfterAll
   public static void tearDown() throws IOException {
