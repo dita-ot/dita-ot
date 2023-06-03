@@ -42,7 +42,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/ul ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ul">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates/>
         </fo:list-block>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
@@ -53,7 +54,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/ol ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="ol">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates/>
         </fo:list-block>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
@@ -64,7 +66,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/ul ')]/*[contains(@class, ' topic/li ')]">
         <xsl:variable name="depth" select="count(ancestor::*[contains(@class, ' topic/ul ')])"/>
         <fo:list-item xsl:use-attribute-sets="ul.li">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <fo:list-item-label xsl:use-attribute-sets="ul.li__label">
                 <fo:block xsl:use-attribute-sets="ul.li__label__content">
                     <xsl:call-template name="getVariable">
@@ -88,7 +91,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="ol.li">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
                     <xsl:call-template name="getVariable">
@@ -111,7 +115,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/li ')]/*[contains(@class, ' topic/itemgroup ')]">
         <fo:block xsl:use-attribute-sets="li.itemgroup">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -119,7 +124,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/sl ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:list-block xsl:use-attribute-sets="sl">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates/>
         </fo:list-block>
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
@@ -129,7 +135,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/sl ')]/*[contains(@class, ' topic/sli ')]">
         <fo:list-item xsl:use-attribute-sets="sl.sli">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <fo:list-item-label xsl:use-attribute-sets="sl.sli__label">
                 <fo:block xsl:use-attribute-sets="sl.sli__label__content">
                 </fo:block>

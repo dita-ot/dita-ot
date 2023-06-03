@@ -50,9 +50,12 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
     <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     <xsl:call-template name="generateMapTitle"/> <!-- Generate the <title> element -->
-    <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
-    <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
-    <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
+    <!--<xsl:apply-templates select="." mode="gen-user-head"/>-->    <!-- include user's XSL HEAD processing here --><!-- #4207 -->
+    <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here --><!-- #4207 -->
+    <!--<xsl:apply-templates select="." mode="gen-user-scripts"/>--> <!-- include user's XSL javascripts here --><!-- #4207 -->
+    <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here --><!-- #4207 -->
+    <!--<xsl:apply-templates select="." mode="gen-user-styles"/>-->  <!-- include user's XSL style element and content here --><!-- #4207 -->
+    <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here --><!-- #4207 -->
   </head><xsl:value-of select="$newline"/>
 
   <body>
@@ -112,7 +115,8 @@ See the accompanying LICENSE file for applicable license.
   <!-- Title processing - special handling for short descriptions -->
   <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
   <title>
-    <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
+    <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--> <!-- hook for a user-XSL title prefix --><!-- #4207 -->
+    <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix --><!-- #4207 -->
     <xsl:choose>
       <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
         <xsl:value-of select="normalize-space(/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')])"/>

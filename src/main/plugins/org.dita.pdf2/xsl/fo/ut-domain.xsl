@@ -11,7 +11,8 @@ See the accompanying LICENSE file for applicable license.
     version="3.0">
 
     <xsl:template match="*[contains(@class,' ut-d/imagemap ')]">
-        <xsl:variable name="attributes" as="attribute()*"><xsl:call-template name="commonattributes"/></xsl:variable>
+        <!--<xsl:variable name="attributes" as="attribute()*"><xsl:apply-templates select="." mode="commonattributes"/></xsl:variable>--><!-- #4207 -->
+        <xsl:variable name="attributes" as="attribute()*"><xsl:call-template name="commonattributes"/></xsl:variable><!-- #4207 -->
         <xsl:if test="exists($attributes)">
             <fo:inline><xsl:sequence select="$attributes"/></fo:inline>
         </xsl:if>
@@ -23,7 +24,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ut-d/area ')]">
         <fo:list-item xsl:use-attribute-sets="ol.li">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">
                     <xsl:call-template name="getVariable">

@@ -66,7 +66,8 @@ See the accompanying LICENSE file for applicable license.
                     <!--use xref content-->
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:call-template name="href"/><!--use href text-->
+                    <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!--use href text--><!-- #4207 -->
+                    <xsl:call-template name="href"/><!--use href text--><!-- #4207 -->
                   </xsl:otherwise>
                 </xsl:choose>
               </sup>
@@ -81,7 +82,8 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="href"/><!--use href text-->
+                  <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!--use href text--><!-- #4207 -->
+                  <xsl:call-template name="href"/><!--use href text--><!-- #4207 -->
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:otherwise>
@@ -461,7 +463,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
             </xsl:when>
             <xsl:otherwise>
               <!--use href-->
-              <xsl:call-template name="href"/>
+              <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!-- #4207 -->
+              <xsl:call-template name="href"/><!-- #4207 -->
             </xsl:otherwise>
           </xsl:choose>
         </a>
@@ -496,7 +499,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
           </xsl:when>
           <xsl:otherwise>
             <!--use href-->
-            <xsl:call-template name="href"/>
+            <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!-- #4207 -->
+            <xsl:call-template name="href"/><!-- #4207 -->
           </xsl:otherwise>
         </xsl:choose>
       </a>
@@ -570,7 +574,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
         </xsl:when>
         <xsl:otherwise>
           <!--use href-->
-          <xsl:call-template name="href"/>
+          <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!-- #4207 -->
+          <xsl:call-template name="href"/><!-- #4207 -->
         </xsl:otherwise>
       </xsl:choose>
     </a>
@@ -712,7 +717,8 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
           <xsl:value-of select="normalize-space(*[contains(@class, ' topic/linktext ')])"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="href"/>
+          <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!-- #4207 -->
+          <xsl:call-template name="href"/><!-- #4207 -->
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>

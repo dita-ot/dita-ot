@@ -12,7 +12,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/xmlelement ')]">
     <fo:inline xsl:use-attribute-sets="xmlelement">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>&lt;</xsl:text>
       <xsl:apply-templates/>
       <xsl:text>&gt;</xsl:text>
@@ -21,7 +22,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/xmlatt ')]">
     <fo:inline xsl:use-attribute-sets="xmlatt">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>@</xsl:text>
       <xsl:apply-templates/>
     </fo:inline>
@@ -29,7 +31,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/textentity ')]">
     <fo:inline xsl:use-attribute-sets="textentity">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>&amp;</xsl:text>
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -38,7 +41,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/parameterentity ')]">
     <fo:inline xsl:use-attribute-sets="parameterentity">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>%</xsl:text>
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -47,7 +51,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/numcharref ')]">
     <fo:inline xsl:use-attribute-sets="numcharref">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>&amp;#</xsl:text>
       <xsl:apply-templates/>
       <xsl:text>;</xsl:text>
@@ -56,14 +61,16 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' xml-d/xmlnsname ')]">
     <fo:inline xsl:use-attribute-sets="xmlnsname">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' xml-d/xmlpi ')]">
     <fo:inline xsl:use-attribute-sets="xmlpi">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:text>&lt;?</xsl:text>
       <xsl:apply-templates/>
       <xsl:text>?&gt;</xsl:text>

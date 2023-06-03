@@ -58,14 +58,16 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">
         <fo:inline xsl:use-attribute-sets="menucascade">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates select="* | processing-instruction() | comment()"/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' ui-d/shortcut ')]">
         <fo:inline xsl:use-attribute-sets="shortcut">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
@@ -73,7 +75,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' ui-d/screen ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="screen">
-            <xsl:call-template name="commonattributes"/>
+            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+            <xsl:call-template name="commonattributes"/><!-- #4207 -->
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
             <xsl:call-template name="setExpanse"/>

@@ -910,7 +910,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="linktext-fallback"/>
+                  <!--<xsl:apply-templates select="." mode="mappull:linktext-fallback"/>--><!-- #4207 -->
+                  <xsl:call-template name="linktext-fallback"/><!-- #4207 -->
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>
@@ -926,7 +927,8 @@ Other modes can be found within the code, and may or may not prove useful for ov
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:call-template name="linktext-fallback"/>
+                  <!--<xsl:apply-templates select="." mode="mappull:linktext-fallback"/>--><!-- #4207 -->
+                  <xsl:call-template name="linktext-fallback"/><!-- #4207 -->
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:when>

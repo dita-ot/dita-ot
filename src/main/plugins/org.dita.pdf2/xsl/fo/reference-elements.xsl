@@ -33,19 +33,22 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="not(node())"/>
       <xsl:when test="$level = 1">
         <fo:block xsl:use-attribute-sets="body__toplevel refbody">
-          <xsl:call-template name="commonattributes"/>
+          <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+          <xsl:call-template name="commonattributes"/><!-- #4207 -->
           <xsl:apply-templates/>
         </fo:block>
       </xsl:when>
       <xsl:when test="$level = 2">
         <fo:block xsl:use-attribute-sets="body__secondLevel refbody">
-          <xsl:call-template name="commonattributes"/>
+          <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+          <xsl:call-template name="commonattributes"/><!-- #4207 -->
           <xsl:apply-templates/>
         </fo:block>
       </xsl:when>
       <xsl:otherwise>
         <fo:block xsl:use-attribute-sets="refbody">
-          <xsl:call-template name="commonattributes"/>
+          <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+          <xsl:call-template name="commonattributes"/><!-- #4207 -->
           <xsl:apply-templates/>
         </fo:block>
       </xsl:otherwise>
@@ -54,7 +57,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' reference/refsyn ')]">
     <fo:block xsl:use-attribute-sets="refsyn">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:apply-templates select="." mode="dita2xslfo:section-heading"/>
       <xsl:apply-templates select="*[contains(@class,' topic/title ')]"/>
       <fo:block xsl:use-attribute-sets="refsyn__content">
@@ -71,7 +75,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' reference/properties ')]">
     <fo:table xsl:use-attribute-sets="properties">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:call-template name="univAttrs"/>
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="displayAtts">
@@ -131,7 +136,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' reference/property ')]">
     <fo:table-row xsl:use-attribute-sets="property">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:variable name="valuePos">
         <xsl:apply-templates select="." mode="get-propvalue-position"/>
       </xsl:variable>
@@ -246,7 +252,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' reference/proptype ') or contains(@class, ' reference/propvalue ') or contains(@class, ' reference/propdesc ')]">
     <xsl:param name="entryCol"/>
     <fo:table-cell xsl:use-attribute-sets="property.entry">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:variable name="frame">
         <xsl:variable name="f" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
         <xsl:choose>
@@ -287,7 +294,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' reference/prophead ')]">
     <fo:table-header xsl:use-attribute-sets="prophead">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:variable name="frame">
         <xsl:variable name="f" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
         <xsl:choose>
@@ -388,7 +396,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' reference/proptypehd ') or contains(@class, ' reference/propvaluehd ') or contains(@class, ' reference/propdeschd ')]">
     <xsl:param name="entryCol"/>
     <fo:table-cell xsl:use-attribute-sets="prophead.entry">
-      <xsl:call-template name="commonattributes"/>
+      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
+      <xsl:call-template name="commonattributes"/><!-- #4207 -->
       <xsl:variable name="frame">
         <xsl:variable name="f" select="ancestor::*[contains(@class, ' reference/properties ')][1]/@frame"/>
         <xsl:choose>

@@ -114,7 +114,8 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- In the context of XREF - call it's HREF processor -->
   <xsl:template match="*[contains(@class, ' topic/xref ')]" mode="imagemap-xref">
-   <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute>
+   <!--<xsl:attribute name="href"><xsl:apply-templates select="." mode="determine-final-href"/></xsl:attribute>--><!-- #4207 -->
+   <xsl:attribute name="href"><xsl:call-template name="href"/></xsl:attribute><!-- #4207 -->
    <xsl:if test="@scope='external' or @type='external' or ((@format='PDF' or @format='pdf') and not(@scope='local'))">
      <xsl:apply-templates select="." mode="external-link"/>
    </xsl:if>
