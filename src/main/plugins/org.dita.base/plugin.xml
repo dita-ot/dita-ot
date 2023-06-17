@@ -124,7 +124,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="generate.copy.outer" desc="Adjust how output is generated for content that is located outside the directory containing the DITA map." type="enum">
+    <param name="generate.copy.outer" desc="Adjust how output is generated for content that is located outside the directory containing the input resource (DITA map or topic)." type="enum">
       <val desc="Do not generate output for content that is located outside the DITA map directory." default="true">1</val>
       <val desc="Shift the output directory so that it contains all output for the publication.">3</val>
     </param>
@@ -132,7 +132,7 @@ See the accompanying LICENSE file for applicable license.
       <val>true</val>
       <val default="true">false</val>
     </param>
-    <param name="outer.control" desc="Specifies whether to warn or fail if content is located outside the directory containing the DITA map." type="enum">
+    <param name="outer.control" desc="Specifies whether to warn or fail if content is located outside the directory containing the input resource (DITA map or topic)." type="enum">
       <val desc="Fail quickly if files are going to be generated or copied outside of the directory.">fail</val>
       <val desc="Complete the operation if files will be generated or copied outside of the directory, but log a warning." default="true">warn</val>
       <val desc="Quietly finish without generating warnings or errors.">quiet</val>
