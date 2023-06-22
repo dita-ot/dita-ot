@@ -35,22 +35,18 @@ See the accompanying LICENSE file for applicable license.
  */
 @Deprecated
 public class ParseException extends Exception {
-    
-    public ParseException() {
-    }
 
+  public ParseException() {}
 
-    public ParseException(final String message) {
-        super(message);
-    }
+  public ParseException(final String message) {
+    super(message);
+  }
 
+  public ParseException(final Throwable cause) {
+    super(cause);
+  }
 
-    public ParseException(final Throwable cause) {
-        super(cause);
-    }
-
-
-    public ParseException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+  public ParseException(final String message, final Throwable cause) {
+    super(message, cause);
+  }
 }

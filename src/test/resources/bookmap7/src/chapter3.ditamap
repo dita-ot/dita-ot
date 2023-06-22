@@ -1,24 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--Arbortext, Inc., 1988-2006, v.4002-->
-<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA 1.3 BookMap//EN"
- "..\..\dtd\bookmap.dtd">
-<bookmap id="chaper3">
-<booktitle>
-<mainbooktitle>My little book</mainbooktitle>
+<bookmap xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map bookmap/bookmap " domains="(map mapgroup-d)                            (map bookmap)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic xnal-d)                            (topic markup-d xml-d)   " id="chaper3" ditaarch:DITAArchVersion="1.3">
+<booktitle class="- topic/title bookmap/booktitle ">
+<mainbooktitle class="- topic/ph bookmap/mainbooktitle ">My little book</mainbooktitle>
 </booktitle>
-<bookmeta>
-<bookrights><copyrfirst><year>1994</year></copyrfirst><copyrlast><year>2006</year>
-</copyrlast><bookowner></bookowner></bookrights>
+<bookmeta class="- map/topicmeta bookmap/bookmeta ">
+<bookrights class="- topic/data bookmap/bookrights "><copyrfirst class="- topic/data bookmap/copyrfirst "><year class="- topic/ph bookmap/year ">1994</year></copyrfirst><copyrlast class="- topic/data bookmap/copyrlast "><year class="- topic/ph bookmap/year ">2006</year>
+</copyrlast><bookowner class="- topic/data bookmap/bookowner "></bookowner></bookrights>
 </bookmeta>
-<frontmatter>
-<booklists>
-<toc/>
-<figurelist/>
-<tablelist/></booklists>
-<preface href="p.dita"></preface>
+<frontmatter class="- map/topicref bookmap/frontmatter ">
+<booklists class="- map/topicref bookmap/booklists ">
+<toc class="- map/topicref bookmap/toc "></toc>
+<figurelist class="- map/topicref bookmap/figurelist "></figurelist>
+<tablelist class="- map/topicref bookmap/tablelist "></tablelist></booklists>
+<preface class="- map/topicref bookmap/preface " href="p.dita"></preface>
 </frontmatter>
-<chapter href="u.dita">
-<topicref href="chapter1.ditamap" format="ditamap"></topicref>
+<chapter class="- map/topicref bookmap/chapter " href="u.dita">
+<topicref class="- map/topicref " format="ditamap" href="chapter1.ditamap"></topicref>
 </chapter>
 </bookmap>
 <?Pub *0000000973?>

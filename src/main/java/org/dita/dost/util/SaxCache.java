@@ -15,124 +15,79 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public class SaxCache {
 
-    public interface SaxEvent {
-        void write(ContentHandler handler) throws SAXException;
+  public interface SaxEvent {
+    void write(ContentHandler handler) throws SAXException;
+  }
+
+  public record StartPrefixMappingEvent(String prefix, String uri) implements SaxEvent {
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.startPrefixMapping(prefix, uri);
+    }
+  }
+
+  public record EndPrefixMappingEvent(String prefix) implements SaxEvent {
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.endPrefixMapping(prefix);
+    }
+  }
+
+  public record StartElementEvent(String uri, String localName, String qName, Attributes atts) implements SaxEvent {
+    public StartElementEvent(String uri, String localName, String qName, Attributes atts) {
+      this.uri = uri;
+      this.localName = localName;
+      this.qName = qName;
+      this.atts = new AttributesImpl(atts);
     }
 
-    public static class StartPrefixMappingEvent implements SaxEvent {
-        public final String prefix;
-        public final String uri;
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.startElement(uri, localName, qName, atts);
+    }
+  }
 
-        public StartPrefixMappingEvent(String prefix, String uri) {
-            this.prefix = prefix;
-            this.uri = uri;
-        }
+  public record EndElementEvent(String uri, String localName, String qName) implements SaxEvent {
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.endElement(uri, localName, qName);
+    }
+  }
 
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.startPrefixMapping(prefix, uri);
-        }
+  public record CharactersEvent(char[] ch, int start, int length) implements SaxEvent {
+    public CharactersEvent(char[] ch, int start, int length) {
+      final char[] copy = new char[length];
+      System.arraycopy(ch, start, copy, 0, length);
+      this.ch = copy;
+      this.start = 0;
+      this.length = length;
     }
 
-    public static class EndPrefixMappingEvent implements SaxEvent {
-        public final String prefix;
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.characters(ch, start, length);
+    }
+  }
 
-        public EndPrefixMappingEvent(String prefix) {
-            this.prefix = prefix;
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.endPrefixMapping(prefix);
-        }
+  public record IgnorableWhitespaceEvent(char[] ch, int start, int length) implements SaxEvent {
+    public IgnorableWhitespaceEvent(char[] ch, int start, int length) {
+      final char[] copy = new char[length];
+      System.arraycopy(ch, start, copy, 0, length);
+      this.ch = copy;
+      this.start = 0;
+      this.length = length;
     }
 
-    public static class StartElementEvent implements SaxEvent {
-        public final String uri;
-        public final String localName;
-        public final String qName;
-        public final Attributes atts;
-
-        public StartElementEvent(String uri, String localName, String qName, Attributes atts) {
-            this.uri = uri;
-            this.localName = localName;
-            this.qName = qName;
-            this.atts = new AttributesImpl(atts);
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.startElement(uri, localName, qName, atts);
-        }
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.ignorableWhitespace(ch, start, length);
     }
+  }
 
-    public static class EndElementEvent implements SaxEvent {
-        public final String uri;
-        public final String localName;
-        public final String qName;
-
-        public EndElementEvent(String uri, String localName, String qName) {
-            this.uri = uri;
-            this.localName = localName;
-            this.qName = qName;
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.endElement(uri, localName, qName);
-        }
+  public record ProcessingInstructionEvent(String target, String data) implements SaxEvent {
+    @Override
+    public void write(ContentHandler handler) throws SAXException {
+      handler.processingInstruction(target, data);
     }
-
-    public static class CharactersEvent implements SaxEvent {
-        public final char[] ch;
-        public final int start;
-        public final int length;
-
-        public CharactersEvent(char[] ch, int start, int length) {
-            final char[] copy = new char[length];
-            System.arraycopy(ch, start, copy, 0, length);
-            this.ch = copy;
-            this.start = 0;
-            this.length = length;
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.characters(ch, start, length);
-        }
-    }
-
-    public static class IgnorableWhitespaceEvent implements SaxEvent {
-        public final char[] ch;
-        public final int start;
-        public final int length;
-
-        public IgnorableWhitespaceEvent(char[] ch, int start, int length) {
-            final char[] copy = new char[length];
-            System.arraycopy(ch, start, copy, 0, length);
-            this.ch = copy;
-            this.start = 0;
-            this.length = length;
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.ignorableWhitespace(ch, start, length);
-        }
-    }
-
-    public static class ProcessingInstructionEvent implements SaxEvent {
-        public final String target;
-        public final String data;
-
-        public ProcessingInstructionEvent(String target, String data) {
-            this.target = target;
-            this.data = data;
-        }
-
-        @Override
-        public void write(ContentHandler handler) throws SAXException {
-            handler.processingInstruction(target, data);
-        }
-    }
+  }
 }

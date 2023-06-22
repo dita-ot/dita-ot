@@ -14,16 +14,17 @@ import java.net.URI;
  * Temporary file name generator.
  */
 public interface TempFileNameScheme {
-    /**
-     * Set input base directory.
-     * @param b absolute base directory
-     */
-    default void setBaseDir(final URI b) {}
-    /**
-     * Generate temporary file name.
-     *
-     * @param src absolute source file URI
-     * @return relative temporary file URI
-     */
-    URI generateTempFileName(final URI src);
+  /**
+   * Set input base directory.
+   * @param b absolute base directory
+   */
+  default void setBaseDir(final URI b) {}
+
+  /**
+   * Generate temporary file name.
+   *
+   * @param src absolute source file URI
+   * @return relative temporary file URI
+   */
+  URI generateTempFileName(final URI src);
 }

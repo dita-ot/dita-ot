@@ -19,18 +19,20 @@ import org.xml.sax.SAXException;
  */
 final class ImportCatalogActionRelative extends ImportAction {
 
-    /**
-     * get result.
-     */
-    @Override
-    public void getResult(final ContentHandler buf) throws SAXException {
-        final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
-        for (final Value value: valueSet) {
-            buf.startElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog", new AttributesBuilder()
-                .add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value.value))
-                .build());
-            buf.endElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog");
-        }
+  /**
+   * get result.
+   */
+  @Override
+  public void getResult(final ContentHandler buf) throws SAXException {
+    final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+    for (final Value value : valueSet) {
+      buf.startElement(
+        OASIS_CATALOG_NAMESPACE,
+        "nextCatalog",
+        "nextCatalog",
+        new AttributesBuilder().add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value.value())).build()
+      );
+      buf.endElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog");
     }
-
+  }
 }

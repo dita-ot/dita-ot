@@ -8,85 +8,133 @@
 
 package org.dita.dost.chunk;
 
+import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.collect.ImmutableMap;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.module.AbstractModuleTest;
 import org.dita.dost.module.AbstractPipelineModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
-import static org.junit.Assert.assertEquals;
-
-@RunWith(Parameterized.class)
 public class ChunkModuleTest extends AbstractModuleTest {
-    private final int warningCount;
 
-    @Parameters(name = "{0} {1}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {"combine", Collections.emptyMap(), 2},
-                {"duplicate", Collections.emptyMap(), 0},
-                {"override", ImmutableMap.of("root-chunk-override", "combine"), 0},
-                {"dita", Collections.emptyMap(), 0},
-                {"combine-empty-ditabase", Collections.emptyMap(), 0},
-                {"link", Collections.emptyMap(), 0},
-                {"uplevels", Collections.emptyMap(), 0},
-                {"uplevels-dir", Collections.emptyMap(), 0},
-                {"uplevels-root", Collections.emptyMap(), 0},
-                {"uplevels-parallel", Collections.emptyMap(), 0},
-                {"format", Collections.emptyMap(), 0},
-                {"nested", Collections.emptyMap(), 0},
-                {"scope", Collections.emptyMap(), 0},
-                {"topicgroup", Collections.emptyMap(), 1},
-                {"topichead", Collections.emptyMap(), 1},
-                {"multiple", Collections.emptyMap(), 0},
-                {"map", Collections.emptyMap(), 0},
+  private int warningCount;
 
-                {"split", Collections.emptyMap(), 0},
-                {"split-dita", Collections.emptyMap(), 0},
-                {"split-hierarchy", Collections.emptyMap(), 0},
-                {"split-empty-ditabase", Collections.emptyMap(), 0},
-                {"split-map", Collections.emptyMap(), 0},
-                {"chunk-combine-within-split", Collections.emptyMap(), 0},
-                {"managing-links", Collections.emptyMap(), 0},
-                {"managing-links-duplicates", Collections.emptyMap(), 0}
-        });
-    }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("combine", Collections.emptyMap(), 2),
+      Arguments.of("duplicate", Collections.emptyMap(), 0),
+      Arguments.of("override", ImmutableMap.of("root-chunk-override", "combine"), 0),
+      Arguments.of("dita", Collections.emptyMap(), 0),
+      Arguments.of("combine-empty-ditabase", Collections.emptyMap(), 0),
+      Arguments.of("link", Collections.emptyMap(), 0),
+      Arguments.of("uplevels", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-dir", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-root", Collections.emptyMap(), 0),
+      Arguments.of("uplevels-parallel", Collections.emptyMap(), 0),
+      Arguments.of("format", Collections.emptyMap(), 0),
+      Arguments.of("nested", Collections.emptyMap(), 0),
+      Arguments.of("scope", Collections.emptyMap(), 0),
+      Arguments.of("topicgroup", Collections.emptyMap(), 1),
+      Arguments.of("topichead", Collections.emptyMap(), 1),
+      Arguments.of("multiple", Collections.emptyMap(), 0),
+      Arguments.of("map", Collections.emptyMap(), 0),
+      Arguments.of("split", Collections.emptyMap(), 0),
+      Arguments.of("split-dita", Collections.emptyMap(), 0),
+      Arguments.of("split-hierarchy", Collections.emptyMap(), 0),
+      Arguments.of("split-empty-ditabase", Collections.emptyMap(), 0),
+      Arguments.of("split-map", Collections.emptyMap(), 0),
+      Arguments.of("chunk-combine-within-split", Collections.emptyMap(), 0),
+      Arguments.of("managing-links", Collections.emptyMap(), 0),
+      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0)
+    );
+  }
 
-    public ChunkModuleTest(final String testCase, final Map<String, String> params, final int warningCount) {
-        super(testCase, params);
-        this.warningCount = warningCount;
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+    test();
+  }
 
-    @Override
-    protected AbstractPipelineInput getAbstractPipelineInput() {
-        final AbstractPipelineInput input = new PipelineHashIO();
-        input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
-        return input;
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+    chunkModule.setParallel(true);
+    test();
+  }
 
-    @Override
-    public void test() {
-        initStore(job.getStore());
-        super.test();
-        final List<Message> warnings = logger.getMessages().stream()
-                .filter(m -> m.level == WARN)
-                .collect(Collectors.toList());
-        warnings.forEach(m -> System.err.println(m.level + ": " + m.message));
-        assertEquals(warningCount, warnings.size());
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    test();
+  }
 
-    @Override
-    protected AbstractPipelineModule getModule(final File tempDir) {
-        return new ChunkModule();
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void parallelMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    this.params = params;
+    this.warningCount = warningCount;
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setParallel(true);
+    test();
+  }
+
+  @Override
+  protected AbstractPipelineInput getAbstractPipelineInput() {
+    final AbstractPipelineInput input = new PipelineHashIO();
+    input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
+    return input;
+  }
+
+  @Override
+  public void test() {
+    initStore(job.getStore());
+    super.test();
+    final List<Message> warnings = logger.getMessages().stream().filter(m -> m.level == WARN).toList();
+    warnings.forEach(m -> System.err.println(m.level + ": " + m.message));
+    assertEquals(warningCount, warnings.size());
+  }
+
+  @Override
+  protected AbstractPipelineModule getModule() {
+    return new ChunkModule();
+  }
 }

@@ -15,5 +15,4 @@ import org.slf4j.Logger;
  *
  * <p>The original interface has been retrofitted to extend SLF4J Logger.</p>
  */
-public interface DITAOTLogger extends Logger {
-}
+public interface DITAOTLogger extends Logger {}

@@ -691,8 +691,11 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get the short description for a link or xref -->
   <xsl:template match="*" mode="topicpull:get-stuff_get-shortdesc">
     <xsl:param name="targetElement" as="element()?"/>
+    <xsl:param name="inDescContent" as="xs:boolean" select="false()" tunnel="yes"/>
     
     <xsl:choose>
+      <!-- if already creating content inside a <desc>, do not create a lower-level <desc> -->
+      <xsl:when test="$inDescContent"/>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
         <xsl:apply-templates select="." mode="topicpull:add-usershortdesc-PI"/>
@@ -712,6 +715,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">
               <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
+              <xsl:with-param name="inDescContent" as="xs:boolean" select="true()" tunnel="yes"/>
             </xsl:apply-templates>
           </desc>
         </xsl:if>
@@ -1147,9 +1151,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <sup class="+ topic/ph hi-d/sup ">
-      <xsl:value-of select="$convergedcallout"/>
-    </sup>
+    <xsl:value-of select="$convergedcallout"/>
   </xsl:template>
 
   <!-- Getting text from a dlentry target: use the contents of the term -->

@@ -8,47 +8,48 @@
 
 package org.dita.dost.util;
 
-import org.w3c.dom.Element;
-
 import static org.dita.dost.util.Constants.*;
 
+import org.w3c.dom.Element;
+
 public class DitaUtils {
-    public static boolean isDitaFormat(final Element elem) {
-        final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
-        return isDitaFormat(format);
-    }
 
-    public static boolean isDitaFormat(final Job.FileInfo fi) {
-        return isDitaFormat(fi.format);
-    }
+  public static boolean isDitaFormat(final Element elem) {
+    final String format = elem.getAttribute(ATTRIBUTE_NAME_FORMAT);
+    return isDitaFormat(format);
+  }
 
-    public static boolean isDitaFormat(final String format) {
-        return format == null || format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
-    }
+  public static boolean isDitaFormat(final Job.FileInfo fi) {
+    return isDitaFormat(fi.format);
+  }
 
-    public static boolean isLocalScope(final Element elem) {
-        final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-        return isLocalScope(scope);
-    }
+  public static boolean isDitaFormat(final String format) {
+    return format == null || format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
+  }
 
-    public static boolean isLocalScope(final String scope) {
-        return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
-    }
+  public static boolean isLocalScope(final Element elem) {
+    final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+    return isLocalScope(scope);
+  }
 
-    public static boolean isNormalProcessRole(final Element elem) {
-        final String processingRole = elem.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE);
-        return !processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
-    }
+  public static boolean isLocalScope(final String scope) {
+    return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
+  }
 
-    public static Float getDitaVersion(Element topic) {
-        final String ditaVersion = topic.getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
-        if (!ditaVersion.isEmpty()) {
-            try {
-                return Float.valueOf(ditaVersion);
-            } catch (IllegalArgumentException e) {
-                // Ignore
-            }
-        }
-        return null;
+  public static boolean isNormalProcessRole(final Element elem) {
+    final String processingRole = elem.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE);
+    return !processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY);
+  }
+
+  public static Float getDitaVersion(Element topic) {
+    final String ditaVersion = topic.getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
+    if (!ditaVersion.isEmpty()) {
+      try {
+        return Float.valueOf(ditaVersion);
+      } catch (IllegalArgumentException e) {
+        // Ignore
+      }
     }
+    return null;
+  }
 }

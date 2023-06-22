@@ -3,12 +3,7 @@ package com.idiominc.ws.opentopic.fo.index2.util;
 import static com.idiominc.ws.opentopic.fo.index2.IndexPreprocessor.*;
 
 import com.idiominc.ws.opentopic.fo.index2.IndexEntry;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
-
-import org.dita.dost.util.Configuration;
 import org.w3c.dom.Node;
 
 /*
@@ -47,52 +42,50 @@ See the accompanying LICENSE file for applicable license.
 @Deprecated
 public abstract class IndexStringProcessor {
 
-    /**
-     * Parse the index marker string and create IndexEntry object from one.
-     *
-     * @param theIndexMarkerString index marker string
-     * @param contents IndexPreprocessorTask instance
-     * @return IndexEntry objects created from the index string
-     */
-    public static IndexEntry[] processIndexString(final String theIndexMarkerString, final List<Node> contents) {
-        final IndexEntryImpl indexEntry = createIndexEntry(theIndexMarkerString, contents, null, false);
-        final StringBuffer referenceIDBuf = new StringBuffer();
-        referenceIDBuf.append(indexEntry.getValue());
-        referenceIDBuf.append(VALUE_SEPARATOR);
-        indexEntry.addRefID(referenceIDBuf.toString());
+  /**
+   * Parse the index marker string and create IndexEntry object from one.
+   *
+   * @param theIndexMarkerString index marker string
+   * @param contents IndexPreprocessorTask instance
+   * @return IndexEntry objects created from the index string
+   */
+  public static IndexEntry[] processIndexString(final String theIndexMarkerString, final List<Node> contents) {
+    final IndexEntryImpl indexEntry = createIndexEntry(theIndexMarkerString, contents, null, false);
+    String referenceIDBuf = indexEntry.getValue() + VALUE_SEPARATOR;
+    indexEntry.addRefID(referenceIDBuf);
 
-        return new IndexEntry[] { indexEntry };
+    return new IndexEntry[] { indexEntry };
+  }
+
+  /**
+   * Method equals to the normalize-space xslt function
+   *
+   * @param theString string to normalize
+   * @return normalized string
+   */
+  public static String normalizeTextValue(final String theString) {
+    if (null != theString && theString.length() > 0) {
+      return theString.replaceAll("[\\s\\n]+", " ").trim();
     }
+    return theString;
+  }
 
+  private static IndexEntryImpl createIndexEntry(
+    String theValue,
+    final List<Node> contents,
+    final String theSortString,
+    final boolean theIsParentNoPage
+  ) {
+    final boolean restoresPageNumber = false;
+    final boolean startsRange = false;
+    final boolean endsRange = false;
 
-    /**
-     * Method equals to the normalize-space xslt function
-     *
-     * @param theString string to normalize
-     * @return normalized string
-     */
-    public static String normalizeTextValue(final String theString) {
-        if (null != theString && theString.length() > 0) {
-            return theString.replaceAll("[\\s\\n]+", " ").trim();
-        }
-        return theString;
-    }
-
-
-    private static IndexEntryImpl createIndexEntry(String theValue, final List<Node> contents, final String theSortString, final boolean theIsParentNoPage) {
-        final boolean suppressesThePageNumber = theIsParentNoPage;
-        final boolean restoresPageNumber = false;
-        final boolean startsRange = false;
-        final boolean endsRange = false;
-        final String strippedFormatting = theValue;
-
-        final IndexEntryImpl indexEntry = new IndexEntryImpl(strippedFormatting, theSortString, theValue, contents);
-        indexEntry.setSuppressesThePageNumber(suppressesThePageNumber);
-        indexEntry.setRestoresPageNumber(restoresPageNumber);
-        indexEntry.setStartRange(startsRange);
-        indexEntry.setEndsRange(endsRange);
-        indexEntry.setSortString(theSortString);
-        return indexEntry;
-    }
-
+    final IndexEntryImpl indexEntry = new IndexEntryImpl(theValue, theSortString, theValue, contents);
+    indexEntry.setSuppressesThePageNumber(theIsParentNoPage);
+    indexEntry.setRestoresPageNumber(restoresPageNumber);
+    indexEntry.setStartRange(startsRange);
+    indexEntry.setEndsRange(endsRange);
+    indexEntry.setSortString(theSortString);
+    return indexEntry;
+  }
 }

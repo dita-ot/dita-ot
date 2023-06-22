@@ -8,12 +8,12 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.FILE_NAME_CATALOG;
 
 import java.io.File;
-
-import org.apache.xml.resolver.CatalogManager;
-import org.apache.xml.resolver.tools.CatalogResolver;
+import org.xmlresolver.Resolver;
+import org.xmlresolver.ResolverFeature;
+import org.xmlresolver.XMLResolverConfiguration;
 
 /**
  * General catalog file resolving utilities.
@@ -23,43 +23,53 @@ import org.apache.xml.resolver.tools.CatalogResolver;
 
 public final class CatalogUtils {
 
-    /**apache catalogResolver.*/
-    private static CatalogResolver catalogResolver = null;
-    /** Absolute directory to find catalog-dita.xml.*/
-    private static File ditaDir;
-    /**
-     * Instances should NOT be constructed in standard programming.
-     */
-    private CatalogUtils() {
-        // leave blank as designed
+  /**apache catalogResolver.*/
+  private static Resolver catalogResolver = null;
+  /** Absolute directory to find catalog-dita.xml.*/
+  private static File ditaDir;
+
+  /**
+   * Instances should NOT be constructed in standard programming.
+   */
+  private CatalogUtils() {
+    // leave blank as designed
+  }
+
+  /**
+   * Set directory to find catalog-dita.xml.
+   * @param ditaDir ditaDir
+   */
+  public static synchronized void setDitaDir(final File ditaDir) {
+    catalogResolver = null;
+    CatalogUtils.ditaDir = ditaDir;
+  }
+
+  /**
+   * Get CatalogResolver.
+   * @return CatalogResolver
+   */
+  public static synchronized Resolver getCatalogResolver() {
+    if (catalogResolver == null) {
+      //            final CatalogManager manager = new CatalogManager();
+      //            manager.setIgnoreMissingProperties(true);
+      //            manager.setUseStaticCatalog(false); // We'll use a private catalog.
+      //            manager.setPreferPublic(true);
+      final File catalogFilePath = new File(
+        ditaDir,
+        Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG
+      );
+      //            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
+      //manager.setVerbosity(10);
+      //            catalogResolver = new CatalogResolver(manager);
+
+      XMLResolverConfiguration config = new XMLResolverConfiguration();
+      config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
+      config.setFeature(ResolverFeature.CACHE_DIRECTORY, null);
+      config.setFeature(ResolverFeature.CACHE_UNDER_HOME, false);
+      config.addCatalog(catalogFilePath.toURI().toASCIIString());
+      catalogResolver = new Resolver(config);
     }
 
-    /**
-     * Set directory to find catalog-dita.xml.
-     * @param ditaDir ditaDir
-     */
-    public static synchronized void setDitaDir(final File ditaDir) {
-        catalogResolver = null;
-        CatalogUtils.ditaDir = ditaDir;
-    }
-
-    /**
-     * Get CatalogResolver.
-     * @return CatalogResolver
-     */
-    public static synchronized CatalogResolver getCatalogResolver() {
-        if (catalogResolver == null) {
-            final CatalogManager manager = new CatalogManager();
-            manager.setIgnoreMissingProperties(true);
-            manager.setUseStaticCatalog(false); // We'll use a private catalog.
-            manager.setPreferPublic(true);
-            final File catalogFilePath = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base") + File.separator + FILE_NAME_CATALOG);
-            manager.setCatalogFiles(catalogFilePath.toURI().toASCIIString());
-            //manager.setVerbosity(10);
-            catalogResolver = new CatalogResolver(manager);
-        }
-
-        return catalogResolver;
-    }
+    return catalogResolver;
+  }
 }
-

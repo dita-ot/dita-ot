@@ -1,9 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN"
- "..\dtd\concept.dtd">
-<concept id="main-5" xml:lang="en-us">
-<title>Fifth item in main map - after mapref</title>
-<shortdesc>This item comes after the mapref. It is a child of the third item.
+﻿<concept xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic concept/concept " domains="(topic concept)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   " id="main-5" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+<title class="- topic/title ">Fifth item in main map - after mapref</title>
+<shortdesc class="- topic/shortdesc ">This item comes after the mapref. It is a child of the third item.
 It is a peer of the fourth item.</shortdesc>
-<conbody></conbody>
+<conbody class="- topic/body  concept/conbody "></conbody>
 </concept>

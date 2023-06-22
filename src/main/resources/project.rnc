@@ -47,7 +47,7 @@ output =
   }
 
 profile = 
-## Filter and highligh profile
+## Filter and highlight profile
 element profile { ditaval+ }
 
 ditaval =

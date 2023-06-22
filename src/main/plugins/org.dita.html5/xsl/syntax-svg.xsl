@@ -12,20 +12,20 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Logical containers -->
   
-  <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]" priority="500">
+  <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]" priority="500">
     <svg width="200" height="100">
       <xsl:apply-templates/>
     </svg>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' pr-d/fragment ')]" priority="2">
+  <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]" priority="2">
     <div>
      <a name="{title}"> </a>
      <xsl:apply-templates/>
     </div>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' pr-d/synblk ')]" priority="2">
+  <xsl:template match="*[contains(@class,' pr-d/synblk ') or contains(@class,' syntaxdiagram-d/synblk ')]" priority="2">
     <!--span-->
       <xsl:call-template name="apply-for-phrases"/>
     <!--/span-->
@@ -33,22 +33,22 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- titles for logical containers -->
   
-  <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
+  <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
     <text style="font-size: 16; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
     <xsl:value-of select="."/>
     </text>
   </xsl:template>
   
-  <xsl:template match="*[contains(@class,' pr-d/fragment ')]/*[contains(@class,' topic/title ')]" priority="2">
+  <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' topic/title ')]" priority="2">
     <text style="font-size: 12; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
     <xsl:value-of select="."/>
     </text>
   </xsl:template>
   
   <!-- Basically, we want to hide his content. -->
-  <xsl:template match="*[contains(@class,' pr-d/repsep ')]" priority="2"/>
+  <xsl:template match="*[contains(@class,' pr-d/repsep ') or contains(@class,' syntaxdiagram-d/repsep ')]" priority="2"/>
   
-  <xsl:template match="*[contains(@class,' pr-d/kwd ')]" priority="2">
+  <xsl:template match="*[contains(@class,' pr-d/kwd ') or contains(@class,' syntaxdiagram-d/kwd ')]" priority="2">
   <text style="font-size: 11; font-family: Arial; font-weight: bold; stroke:none; fill:blue;">
     <xsl:if test="parent::*[contains(@class, ' pr-d/groupchoice ')]"><xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if></xsl:if>
     <xsl:if test="@importance='optional'"> [</xsl:if>

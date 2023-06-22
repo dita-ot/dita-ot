@@ -31,13 +31,10 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class ConfigurationException extends Exception {
-    
-    public ConfigurationException() {
-    }
 
+  public ConfigurationException() {}
 
-    public ConfigurationException(final String message) {
-        super(message);
-    }
-    
+  public ConfigurationException(final String message) {
+    super(message);
+  }
 }
