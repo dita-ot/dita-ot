@@ -29,7 +29,7 @@ import org.xmlresolver.Resolver;
 /**
  * Common functionality for modules that read source documents.
  */
-abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
+public abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
 
   private static final String FEATURE_GRAMMAR_POOL = "http://apache.org/xml/properties/internal/grammar-pool";
 
@@ -62,6 +62,16 @@ abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
         } catch (final SAXNotRecognizedException e) {
           // Not Xerces, ignore exception
         }
+      }
+      try {
+        reader.setProperty(PROPERTY_FORMATS, parserMap.keySet());
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
+      }
+      try {
+        reader.setProperty(PROPERTY_PROCESSING_MODE, processingMode.name().toLowerCase());
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
       }
     } else {
       reader = XMLUtils.getXMLReader();

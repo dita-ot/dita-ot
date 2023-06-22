@@ -1716,6 +1716,11 @@ public final class Constants {
 
   public static final String PI_WORKDIR_TARGET_URI = "workdir-uri";
 
+  /** SAX property for processing mode as lowercase {@link String} name of {@link Configuration.Mode Mode}. */
+  public static final String PROPERTY_PROCESSING_MODE = "https://dita-ot.org/property/processing-mode";
+  /** SAX property for supported DITA formats as a {@link java.util.Collection Collection}<code>&lt;</code>{@link String}<code>></code>. */
+  public static final String PROPERTY_FORMATS = "https://dita-ot.org/property/formats";
+
   /**
    * Instances should NOT be constructed in standard programming.
    */

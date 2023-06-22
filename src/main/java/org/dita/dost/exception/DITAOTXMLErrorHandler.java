@@ -9,6 +9,7 @@
 package org.dita.dost.exception;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Configuration;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -25,14 +26,16 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
    */
   private final String filePath;
   private final DITAOTLogger logger;
+  private final Configuration.Mode mode;
 
   /**
    * Constructor.
    * @param file File
    */
-  public DITAOTXMLErrorHandler(final String file, final DITAOTLogger logger) {
+  public DITAOTXMLErrorHandler(final String file, final DITAOTLogger logger, final Configuration.Mode mode) {
     filePath = file;
     this.logger = logger;
+    this.mode = mode;
   }
 
   /**
@@ -42,8 +45,11 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
    */
   @Override
   public void error(final SAXParseException saxException) throws SAXException {
-    throw new SAXExceptionWrapper(filePath, saxException);
-    //throw new SAXParseException();
+    if (mode == Configuration.Mode.STRICT) {
+      throw new SAXExceptionWrapper(filePath, saxException);
+    } else {
+      logger.error(saxException.getMessage(), saxException);
+    }
   }
 
   /**

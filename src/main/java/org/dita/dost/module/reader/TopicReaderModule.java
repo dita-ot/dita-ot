@@ -270,7 +270,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     pipe.add(topicFragmentFilter);
 
     listFilter.setCurrentFile(fileToParse);
-    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger));
+    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
     ditaWriterFilter.setDefaultValueMap(defaultValueMap);

@@ -39,9 +39,9 @@ See the accompanying LICENSE file for applicable license.
     it using the <locale ISO code>.xml format.
     
     Variables with no localized text, common to all (or nearly all)
-    languages, are stored in commonstrings.xml. Any common string
+    languages, are stored in commonvariables.xml. Any common string
     may be copied into <locale ISO code>.xml to provide a 
-    local-specific value for the common variable.
+    locale-specific value for the common variable.
     
   -->
 
