@@ -37,6 +37,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -67,6 +68,7 @@ import org.dita.dost.util.URLUtils;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
+  private static final String SYSTEM_PROPERTY_DITA_HOME = "dita.dir";
   private static final String ANT_ARGS_INPUT = "args.input";
   static final String ANT_ARGS_RESOURCES = "args.resources";
   static final String ANT_ARGS_INPUTS = "args.inputs";
@@ -318,7 +320,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       return;
     }
 
-    final File integratorFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
     if (args instanceof PluginsArguments) {
       printPlugins();
       return;
@@ -335,7 +336,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       printDeliverables(deliverablesArgs.projectFile);
       return;
     } else if (args instanceof final InstallArguments installArgs) {
-      buildFile = integratorFile;
+      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
       targets.clear();
       if (installArgs.installFile != null) {
         targets.add("install");
@@ -352,11 +353,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       if (installArgs.uninstallId == null) {
         throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
       }
-      buildFile = integratorFile;
+      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
       targets.clear();
       targets.add("uninstall");
       definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
     } else if (args instanceof final ConversionArguments conversionArgs) {
+      final File basePluginDir = new File(
+        new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)),
+        Configuration.pluginResourceDirs.get("org.dita.base").getPath()
+      );
+      buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      definedProps.putAll(getLocalProperties());
       if (conversionArgs.projectFile == null) {
         projectProps = Collections.singletonList(definedProps);
       } else {
@@ -430,6 +437,29 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       System.setErr(err);
     }
     readyToRun = true;
+  }
+
+  private Map<String, Object> getLocalProperties() {
+    final File localPropertiesFile = new File(
+      new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)),
+      "local.properties"
+    );
+    if (localPropertiesFile.exists()) {
+      if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
+        System.out.println("Reading  " + localPropertiesFile);
+      }
+      try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
+        final Properties localProperties = new Properties();
+        localProperties.load(in);
+        return localProperties
+          .entrySet()
+          .stream()
+          .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
+      } catch (IOException e) {
+        System.err.println("Failed to read " + localPropertiesFile);
+      }
+    }
+    return Collections.emptyMap();
   }
 
   private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
