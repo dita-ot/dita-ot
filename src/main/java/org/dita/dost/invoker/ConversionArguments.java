@@ -23,7 +23,9 @@ import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
+import org.dita.dost.util.Configuration;
 import org.w3c.dom.Element;
 
 public class ConversionArguments extends Arguments {
@@ -141,6 +143,8 @@ public class ConversionArguments extends Arguments {
         handleArgNice(args);
       } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+      } else if (isLongForm(arg, "-format") || arg.equals("-f")) {
+        handleArgFormat(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-filter")) {
         handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
@@ -233,6 +237,17 @@ public class ConversionArguments extends Arguments {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     inputs.add(argument.getValue(entry.getValue()));
+  }
+
+  private void handleArgFormat(final String arg, final Deque<String> args, final Argument argument) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null) {
+      throw new BuildException("Missing value for transtype " + entry.getKey());
+    }
+    if (!Configuration.transtypes.contains(entry.getValue())) {
+      throw new BuildException(MessageUtils.getMessage("DOTA001F", entry.getValue()).toString());
+    }
+    definedProps.put(argument.property, entry.getValue());
   }
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
