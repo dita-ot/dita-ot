@@ -358,12 +358,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       targets.add("uninstall");
       definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
     } else if (args instanceof final ConversionArguments conversionArgs) {
-      final File basePluginDir = new File(
-        new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)),
-        Configuration.pluginResourceDirs.get("org.dita.base").getPath()
-      );
+      final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
+      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
-      definedProps.putAll(getLocalProperties());
+      definedProps.putAll(getLocalProperties(ditaDir));
       if (conversionArgs.projectFile == null) {
         projectProps = Collections.singletonList(definedProps);
       } else {
@@ -439,11 +437,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     readyToRun = true;
   }
 
-  private Map<String, Object> getLocalProperties() {
-    final File localPropertiesFile = new File(
-      new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)),
-      "local.properties"
-    );
+  private Map<String, Object> getLocalProperties(File ditaDir) {
+    final File localPropertiesFile = new File(ditaDir, "local.properties");
     if (localPropertiesFile.exists()) {
       if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
         System.out.println("Reading  " + localPropertiesFile);
