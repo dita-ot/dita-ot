@@ -431,7 +431,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         logTo = new PrintStream(new FileOutputStream(args.logFile));
       } catch (final IOException ioe) {
         throw new CliException(
-          "Cannot write on the specified log file. Make sure the path exists and you have write permissions."
+          "Cannot write to the specified log file. Make sure the path exists and you have write permissions."
         );
       }
       out = logTo;
@@ -794,7 +794,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (final Throwable t) {
         // yes, I know it is bad style to catch Throwable,
         // but if we don't, we lose valuable information
-        printErrorMessage("Caught an exception while logging the end of the build.  Exception was:");
+        printErrorMessage("Caught an exception while logging the end of the build. Exception was:");
         t.printStackTrace();
         if (error != null) {
           printErrorMessage("There has been an error prior to that:");
