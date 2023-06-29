@@ -17,6 +17,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Configuration.Mode;
 import org.slf4j.Logger;
 
@@ -190,7 +191,8 @@ public final class Processor {
     final ch.qos.logback.classic.Logger debugLogger = createDebugLog ? openDebugLogger(tempDir) : null;
 
     try {
-      final File buildFile = new File(ditaDir, "build.xml");
+      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
+      final File buildFile = new File(basePluginDir, "build.xml");
       final Project project = new Project();
       project.setCoreLoader(this.getClass().getClassLoader());
 
