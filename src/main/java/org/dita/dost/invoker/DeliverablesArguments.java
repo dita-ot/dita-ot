@@ -65,11 +65,11 @@ public class DeliverablesArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
-    UsageBuilder
+  String getUsage(final boolean compact) {
+    return UsageBuilder
       .builder(compact)
       .usage(locale.getString("deliverables.usage"))
       .arguments(null, null, "file", locale.getString("deliverables.argument.file"))
-      .print();
+      .build();
   }
 }

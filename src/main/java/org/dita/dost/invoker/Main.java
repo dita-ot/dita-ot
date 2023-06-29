@@ -37,6 +37,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -67,6 +68,7 @@ import org.dita.dost.util.URLUtils;
  */
 public class Main extends org.apache.tools.ant.Main implements AntMain {
 
+  private static final String SYSTEM_PROPERTY_DITA_HOME = "dita.dir";
   private static final String ANT_ARGS_INPUT = "args.input";
   static final String ANT_ARGS_RESOURCES = "args.resources";
   static final String ANT_ARGS_INPUTS = "args.inputs";
@@ -131,17 +133,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void printMessage(final Throwable t) {
     final String message = t.getMessage();
     if (message != null && !message.trim().isEmpty()) {
-      printErrorMessage("" + message);
+      printErrorMessage(message);
     }
   }
 
   private void printErrorMessage(final String msg) {
     if (args != null && args.useColor) {
       System.err.print(DefaultLogger.ANSI_RED);
-      System.err.print(String.format(locale.getString("error_msg"), msg));
+      System.err.print(locale.getString("error_msg").formatted(msg));
       System.err.println(DefaultLogger.ANSI_RESET);
     } else {
-      System.err.println(String.format(locale.getString("error_msg"), msg));
+      System.err.println(locale.getString("error_msg").formatted(msg));
     }
     System.err.println();
   }
@@ -181,6 +183,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   public void startAnt(final String[] args, final Properties additionalUserProperties, final ClassLoader coreLoader) {
     try {
       processArgs(args);
+    } catch (final CliException exc) {
+      handleLogfile();
+      printMessage(exc);
+      if (exc.info != null) {
+        System.out.println(exc.info);
+      }
+      exit(1);
+      return;
     } catch (final BuildException exc) {
       handleLogfile();
       printMessage(exc);
@@ -234,7 +244,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
       if (this.args.repeat > 1) {
         for (int i = 0; i < durations.length; i++) {
-          System.out.println(String.format(locale.getString("conversion.repeatDuration"), i + 1, durations[i]));
+          System.out.println(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
         }
       }
     } catch (final BuildException be) {
@@ -303,14 +313,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     buildFile = args.buildFile;
 
     if (args.justPrintUsage) {
-      args.printUsage(false);
+      System.out.println(args.getUsage(false));
       return;
     } else if (args.justPrintDiagnostics) {
       Diagnostics.doReport(System.out, args.msgOutputLevel);
       return;
     }
 
-    final File integratorFile = findBuildFile(System.getProperty("dita.dir"), "integrator.xml");
     if (args instanceof PluginsArguments) {
       printPlugins();
       return;
@@ -322,14 +331,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       return;
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
       if (deliverablesArgs.projectFile == null) {
-        printErrorMessage(locale.getString("deliverables.error.project_not_defined"));
-        args.printUsage(true);
-        throw new BuildException("");
+        throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
       }
       printDeliverables(deliverablesArgs.projectFile);
       return;
     } else if (args instanceof final InstallArguments installArgs) {
-      buildFile = integratorFile;
+      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
       targets.clear();
       if (installArgs.installFile != null) {
         targets.add("install");
@@ -344,15 +351,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
     } else if (args instanceof final UninstallArguments installArgs) {
       if (installArgs.uninstallId == null) {
-        printErrorMessage(locale.getString("uninstall.error.identifier_not_defined"));
-        args.printUsage(true);
-        throw new BuildException("");
+        throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
       }
-      buildFile = integratorFile;
+      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
       targets.clear();
       targets.add("uninstall");
       definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
     } else if (args instanceof final ConversionArguments conversionArgs) {
+      final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
+      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
+      buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      definedProps.putAll(getLocalProperties(ditaDir));
       if (conversionArgs.projectFile == null) {
         projectProps = Collections.singletonList(definedProps);
       } else {
@@ -369,9 +378,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           err = locale.getString("conversion.error.input_not_defined");
         }
         if (err != null) {
-          printErrorMessage(err);
-          args.printUsage(true);
-          throw new BuildException("");
+          throw new CliException(err, args.getUsage(true));
         }
         // default values
         if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
@@ -403,8 +410,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // make sure buildfile exists
     if (!buildFile.exists() || buildFile.isDirectory()) {
-      System.out.println("Buildfile " + buildFile + " does not exist!");
-      throw new BuildException("Build failed");
+      throw new CliException("Buildfile " + buildFile + " does not exist!");
     }
 
     // Normalize buildFile for re-import detection
@@ -419,8 +425,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       try {
         logTo = new PrintStream(new FileOutputStream(args.logFile));
       } catch (final IOException ioe) {
-        throw new BuildException(
-          "Cannot write on the specified log file. " + "Make sure the path exists and you have write permissions."
+        throw new CliException(
+          "Cannot write on the specified log file. Make sure the path exists and you have write permissions."
         );
       }
       out = logTo;
@@ -429,6 +435,26 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       System.setErr(err);
     }
     readyToRun = true;
+  }
+
+  private Map<String, Object> getLocalProperties(File ditaDir) {
+    final File localPropertiesFile = new File(ditaDir, "local.properties");
+    if (localPropertiesFile.exists()) {
+      if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
+        System.out.println("Reading  " + localPropertiesFile);
+      }
+      try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
+        final Properties localProperties = new Properties();
+        localProperties.load(in);
+        return localProperties
+          .entrySet()
+          .stream()
+          .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
+      } catch (IOException e) {
+        System.err.println("Failed to read " + localPropertiesFile);
+      }
+    }
+    return Collections.emptyMap();
   }
 
   private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
@@ -509,8 +535,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       })
       .collect(Collectors.toList());
     if (runDeliverable != null && projectProps.isEmpty()) {
-      printErrorMessage(String.format(locale.getString("project.error.deliverable_not_found"), runDeliverable));
-      throw new BuildException("");
+      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
     }
 
     return projectProps;
@@ -528,8 +553,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
   private org.dita.dost.project.Project readProjectFile(final File projectFile) throws BuildException {
     if (!projectFile.exists()) {
-      printErrorMessage(String.format(locale.getString("project.error.project_file_not_found"), projectFile));
-      throw new BuildException("");
+      throw new CliException(locale.getString("project.error.project_file_not_found").formatted(projectFile));
     }
     try {
       final ProjectFactory factory = ProjectFactory.getInstance();
@@ -538,8 +562,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       validateProject(res);
       return res;
     } catch (Exception e) {
-      printErrorMessage(e.getMessage());
-      throw new BuildException("");
+      throw new CliException(e.getMessage());
     }
   }
 
@@ -754,10 +777,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (final Throwable t) {
         // yes, I know it is bad style to catch Throwable,
         // but if we don't, we lose valuable information
-        printErrorMessage("Caught an exception while logging the" + " end of the build.  Exception was:");
+        printErrorMessage("Caught an exception while logging the end of the build.  Exception was:");
         t.printStackTrace();
         if (error != null) {
-          printErrorMessage("There has been an error prior to" + " that:");
+          printErrorMessage("There has been an error prior to that:");
           error.printStackTrace();
         }
         throw new BuildException(t);
@@ -848,6 +871,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * @throws BuildException if the version information is unavailable
    */
   private void printVersion() throws BuildException {
-    System.out.println(String.format(locale.getString("version"), Configuration.configuration.get("otversion")));
+    System.out.println(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
   }
 }
