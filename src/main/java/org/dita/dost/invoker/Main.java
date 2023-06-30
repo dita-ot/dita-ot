@@ -89,6 +89,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     "args.filter",
     "profiles"
   );
+  private static final String CONFIGURATION_FILE = ".ditaotrc";
+
+  @Deprecated
+  /** @deprecated since 4.2 */
+  private static final String CONFIGURATION_FILE_OLD = "local.properties";
 
   /**
    * File that we are using for configuration.
@@ -438,23 +443,35 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private Map<String, Object> getLocalProperties(File ditaDir) {
-    final File localPropertiesFile = new File(ditaDir, "local.properties");
-    if (localPropertiesFile.exists()) {
-      if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-        System.out.println("Reading  " + localPropertiesFile);
-      }
-      try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
-        final Properties localProperties = new Properties();
-        localProperties.load(in);
-        return localProperties
-          .entrySet()
-          .stream()
-          .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
-      } catch (IOException e) {
-        System.err.println("Failed to read " + localPropertiesFile);
-      }
+    final Map<String, Object> res = new HashMap<>();
+    Stream
+      .of(
+        new File(ditaDir, CONFIGURATION_FILE_OLD),
+        new File(ditaDir, CONFIGURATION_FILE),
+        new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE),
+        new File(new File("."), CONFIGURATION_FILE)
+      )
+      .filter(File::exists)
+      .map(this::readProperties)
+      .forEach(res::putAll);
+    return res;
+  }
+
+  private Map<String, Object> readProperties(File localPropertiesFile) {
+    if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
+      System.out.println("Reading " + localPropertiesFile);
     }
-    return Collections.emptyMap();
+    try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
+      final Properties localProperties = new Properties();
+      localProperties.load(in);
+      return localProperties
+        .entrySet()
+        .stream()
+        .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
+    } catch (IOException e) {
+      System.err.println("Failed to read " + localPropertiesFile);
+      return Collections.emptyMap();
+    }
   }
 
   private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
