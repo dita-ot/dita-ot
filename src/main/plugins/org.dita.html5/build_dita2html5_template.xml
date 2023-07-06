@@ -14,7 +14,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="dita2html5"
           depends="html5.init,
                    build-init,
-                   preprocess,
+                   preprocess2,
                    html5.topic,
                    html5.map,
                    html5.css"/>
