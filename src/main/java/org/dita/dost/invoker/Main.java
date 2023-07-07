@@ -35,7 +35,6 @@ import static org.dita.dost.util.LangUtils.zipWithIndex;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -86,7 +85,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private static final String ANT_PLUGIN_ID = "plugin.id";
   private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
   private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-  private static final Map<String, String> RESERVED_PARAMS = ImmutableMap.of(
+  private static final Map<String, String> RESERVED_PARAMS = Map.of(
     "output.dir",
     "output",
     "transtype",

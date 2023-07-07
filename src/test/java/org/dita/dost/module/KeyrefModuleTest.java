@@ -205,7 +205,7 @@ public class KeyrefModuleTest {
     final KeyScope childScope = new KeyScope(
       "A",
       "A",
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null),
         "A.VAR",
@@ -216,7 +216,7 @@ public class KeyrefModuleTest {
     final KeyScope keyScope = new KeyScope(
       "#root",
       null,
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null),
         "A.VAR",
@@ -259,7 +259,7 @@ public class KeyrefModuleTest {
     final KeyScope childScope1 = new KeyScope(
       "A",
       "A",
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
         "A.VAR",
@@ -274,7 +274,7 @@ public class KeyrefModuleTest {
     final KeyScope childScope2 = new KeyScope(
       "B",
       "B",
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
         "B.VAR",
@@ -380,7 +380,7 @@ public class KeyrefModuleTest {
     final KeyScope childScope1 = new KeyScope(
       "A",
       "A",
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
         "A.VAR",
@@ -391,7 +391,7 @@ public class KeyrefModuleTest {
     final KeyScope childScope2 = new KeyScope(
       "B",
       "B",
-      ImmutableMap.of(
+      Map.of(
         "VAR",
         new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
         "B.VAR",

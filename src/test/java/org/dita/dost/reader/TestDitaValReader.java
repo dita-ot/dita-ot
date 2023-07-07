@@ -13,13 +13,11 @@ import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
 import org.dita.dost.TestUtils;
@@ -88,7 +86,7 @@ public class TestDitaValReader {
     reader.read(ditavalFile.toURI());
     final Map<FilterKey, Action> act = reader.getFilterMap();
 
-    final Map<FilterKey, Action> exp = ImmutableMap.of(
+    final Map<FilterKey, Action> exp = Map.of(
       new FilterKey(PLATFORM, "windows"),
       Action.EXCLUDE,
       new FilterKey(LANG, "fr"),
@@ -105,13 +103,13 @@ public class TestDitaValReader {
   @Test
   public void testAnyAttribute() {
     final File ditavalFile = new File(resourceDir, "src" + File.separator + "any.ditaval");
-    DitaValReader reader = new DitaValReader(ImmutableSet.of(LANG, CONFIDENTIALITY, REV), emptySet());
+    DitaValReader reader = new DitaValReader(Set.of(LANG, CONFIDENTIALITY, REV), emptySet());
     TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
     reader.setLogger(logger);
     reader.setJob(job);
     reader.read(ditavalFile.toURI());
     final Map<FilterKey, Action> act = reader.getFilterMap();
-    final Map<FilterKey, Action> exp = ImmutableMap.of(
+    final Map<FilterKey, Action> exp = Map.of(
       new FilterKey(PLATFORM, "windows"),
       Action.EXCLUDE,
       new FilterKey(LANG, "fr"),

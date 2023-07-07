@@ -50,7 +50,7 @@ public class ProfilingFilterTest {
 
   @Test
   public void testFilter() throws Exception {
-    final Map<FilterKey, Action> filterMap = ImmutableMap.of(
+    final Map<FilterKey, Action> filterMap = Map.of(
       new FilterKey(QName.valueOf("platform"), null),
       INCLUDE,
       new FilterKey(QName.valueOf("default"), null),
@@ -74,7 +74,7 @@ public class ProfilingFilterTest {
 
   @Test
   public void testFilter_dita2() throws Exception {
-    final Map<FilterKey, Action> filterMap = ImmutableMap.of(
+    final Map<FilterKey, Action> filterMap = Map.of(
       new FilterKey(QName.valueOf("platform"), null),
       INCLUDE,
       new FilterKey(QName.valueOf("default"), null),

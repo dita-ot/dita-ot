@@ -17,7 +17,6 @@ import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
@@ -90,7 +89,7 @@ public class FilterUtilsTest {
       fm,
       null,
       null,
-      ImmutableSet.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality),
+      Set.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality),
       emptySet()
     );
     f.setLogger(new TestUtils.TestLogger());

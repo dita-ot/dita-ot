@@ -14,8 +14,6 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,13 +33,7 @@ public class ConversionArguments extends Arguments {
    * A Set of args are are handled by the launcher and should not be seen by
    * Main.
    */
-  private static final Set<String> LAUNCH_COMMANDS = ImmutableSet.of(
-    "-lib",
-    "-cp",
-    "-noclasspath",
-    "-nouserlib",
-    "-main"
-  );
+  private static final Set<String> LAUNCH_COMMANDS = Set.of("-lib", "-cp", "-noclasspath", "-nouserlib", "-main");
 
   private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
 
@@ -68,7 +60,7 @@ public class ConversionArguments extends Arguments {
     }
   }
 
-  private static final Map<String, String> RESERVED_PROPERTIES = ImmutableMap.of(
+  private static final Map<String, String> RESERVED_PROPERTIES = Map.of(
     "transtype",
     "-f",
     "args.input",
@@ -244,7 +236,7 @@ public class ConversionArguments extends Arguments {
         " instead"
       );
     }
-    return ImmutableMap.of(entry.getKey(), entry.getValue());
+    return Map.of(entry.getKey(), entry.getValue());
   }
 
   /**
@@ -297,7 +289,7 @@ public class ConversionArguments extends Arguments {
     if (entry.getValue() == null) {
       throw new BuildException("Missing value for property " + entry.getKey());
     }
-    return ImmutableMap.of(argument.property, argument.getValue(entry.getValue()));
+    return Map.of(argument.property, argument.getValue(entry.getValue()));
   }
 
   /**
