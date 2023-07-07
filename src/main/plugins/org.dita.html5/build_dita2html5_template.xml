@@ -35,6 +35,7 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.ftr}"/>
     </dita-ot-fail>
+    <makeurl file="${args.ftr}" property="args.ftr.url" if:set="args.ftr"/>
     <dita-ot-fail id="DOTA008E">
       <condition>
         <and>
@@ -46,6 +47,7 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.hdr}"/>
     </dita-ot-fail>
+    <makeurl file="${args.hdr}" property="args.hdr.url" if:set="args.hdr"/>
     <dita-ot-fail id="DOTA009E">
       <condition>
         <and>
@@ -57,6 +59,7 @@ See the accompanying LICENSE file for applicable license.
       </condition>
       <param name="1" value="${args.hdf}"/>
     </dita-ot-fail>
+    <makeurl file="${args.hdf}" property="args.hdf.url" if:set="args.hdf"/>
     
     <!-- begin to check and init css relevant properties -->
     
@@ -178,9 +181,9 @@ See the accompanying LICENSE file for applicable license.
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="CSS" expression="${args.css.file}" if:set="args.css.file"/>
         <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath"/>
-        <param name="HDF" expression="${args.hdf}" if:set="args.hdf"/>
-        <param name="HDR" expression="${args.hdr}" if:set="args.hdr"/>
-        <param name="FTR" expression="${args.ftr}" if:set="args.ftr"/>
+        <param name="HDF" expression="${args.hdf.url}" if:set="args.hdf.url"/>
+        <param name="HDR" expression="${args.hdr.url}" if:set="args.hdr.url"/>
+        <param name="FTR" expression="${args.ftr.url}" if:set="args.ftr.url"/>
         <param name="DRAFT" expression="${args.draft}" if:set="args.draft"/>
         <param name="ARTLBL" expression="${args.artlbl}" if:set="args.artlbl"/>
         <param name="GENERATE-TASK-LABELS" expression="${args.gen.task.lbl}" if:set="args.gen.task.lbl"/>
