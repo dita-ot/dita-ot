@@ -16,7 +16,6 @@ import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PLATFORM;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
@@ -43,8 +42,8 @@ public class FilterUtilsTest {
   private static final QName OTHERPROPS = QName.valueOf("otherprops");
   private static final QName REV = QName.valueOf("rev");
 
-  private static final Map<FilterKey, Action> filterMap = ImmutableMap
-    .<FilterKey, Action>builder()
+  private static final Map<FilterKey, Action> filterMap = TestUtils
+    .<FilterKey, Action>mapBuilder()
     .put(new FilterKey(PLATFORM, "unix"), Action.INCLUDE)
     .put(new FilterKey(PLATFORM, "osx"), Action.INCLUDE)
     .put(new FilterKey(PLATFORM, "linux"), Action.INCLUDE)
@@ -208,12 +207,7 @@ public class FilterUtilsTest {
   @Test
   public void testgetFlagsDefaultFlag() {
     final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
-    final FilterUtils f = new FilterUtils(
-      false,
-      ImmutableMap.<FilterKey, Action>builder().put(new FilterKey(PLATFORM, null), flag).build(),
-      null,
-      null
-    );
+    final FilterUtils f = new FilterUtils(false, Map.of(new FilterKey(PLATFORM, null), flag), null, null);
     f.setLogger(new TestUtils.TestLogger());
 
     assertEquals(emptySet(), f.getFlags(new AttributesImpl(), new QName[0][0]));
@@ -226,8 +220,8 @@ public class FilterUtilsTest {
     final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(PLATFORM, "unix"), flag)
         .put(new FilterKey(PLATFORM, "osx"), flag)
         .put(new FilterKey(PLATFORM, "linux"), flag)
@@ -252,8 +246,8 @@ public class FilterUtilsTest {
     final Flag flagSpecialization = new Flag("prop", "blue", null, null, null, null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(PLATFORM, "unix"), flagBase)
         .put(new FilterKey(OS, "amiga"), flagSpecialization)
         .build(),
@@ -417,8 +411,8 @@ public class FilterUtilsTest {
 
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(OS, "amiga"), flagRed)
         .put(new FilterKey(OS, null), flagBlue)
         .build(),
@@ -452,8 +446,8 @@ public class FilterUtilsTest {
     final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(OS, "amiga"), flagRed)
         .put(new FilterKey(OS, null), flagBlue)
         .build(),

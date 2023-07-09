@@ -12,7 +12,6 @@ package org.dita.dost.invoker;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 import static org.dita.dost.util.XMLUtils.toList;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.dita.dost.platform.Plugins;
@@ -30,16 +29,7 @@ final class ArgumentParser {
 
   static {
     TRUTHY_VALUES =
-      ImmutableMap
-        .<String, String>builder()
-        .put("true", "false")
-        .put("TRUE", "FALSE")
-        .put("yes", "no")
-        .put("YES", "NO")
-        .put("1", "0")
-        .put("on", "off")
-        .put("ON", "OFF")
-        .build();
+      Map.of("true", "false", "TRUE", "FALSE", "yes", "no", "YES", "NO", "1", "0", "on", "off", "ON", "OFF");
   }
 
   static Arguments.Argument mergeArguments(final Arguments.Argument a, final Arguments.Argument b) {

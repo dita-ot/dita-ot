@@ -14,7 +14,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -231,7 +230,7 @@ public abstract class AbstractIntegrationTest {
     final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
     final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
 
-    final ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    final Map<String, String> builder = new HashMap<>();
     args.forEach((k, v) -> {
       if (v instanceof Path) {
         builder.put(k, new File(srcDir, v.toString()).getAbsolutePath());
@@ -242,7 +241,7 @@ public abstract class AbstractIntegrationTest {
       }
     });
     builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
-    final Map<String, String> params = builder.build();
+    final Map<String, String> params = Collections.unmodifiableMap(builder);
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);

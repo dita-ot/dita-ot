@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.net.URI;
 import java.text.MessageFormat;

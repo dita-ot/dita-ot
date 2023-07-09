@@ -11,7 +11,6 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.FilterUtils.Action.EXCLUDE;
 import static org.dita.dost.util.FilterUtils.Action.INCLUDE;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.InputStream;
 import java.util.Map;
 import javax.xml.namespace.QName;

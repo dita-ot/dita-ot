@@ -14,11 +14,8 @@ import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.TestUtils.createTempDir;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_HREF;
 import static org.dita.dost.util.Constants.MAP_TOPICREF;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -129,10 +126,7 @@ public class KeyrefModuleTest {
     final KeyScope scope = new KeyScope(
       "scope",
       "scope",
-      ImmutableMap
-        .<String, KeyDef>builder()
-        .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
-        .build(),
+      Map.of("key", new KeyDef("key", create("target.dita"), null, null, null, null)),
       emptyList()
     );
     final List<ResolveTask> src = singletonList(
@@ -147,10 +141,7 @@ public class KeyrefModuleTest {
     final KeyScope exp = new KeyScope(
       "scope",
       "scope",
-      ImmutableMap
-        .<String, KeyDef>builder()
-        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
-        .build(),
+      Map.of("key", new KeyDef("key", create("target-1.dita"), null, null, null, null)),
       emptyList()
     );
 
@@ -162,27 +153,26 @@ public class KeyrefModuleTest {
     final KeyScope src = new KeyScope(
       "scope",
       "scope",
-      ImmutableMap
-        .<String, KeyDef>builder()
-        .put("key", new KeyDef("key", create("target.dita"), null, null, null, null))
-        .put("element", new KeyDef("element", create("target.dita#target/element"), null, null, null, null))
-        .build(),
+      Map.of(
+        "key",
+        new KeyDef("key", create("target.dita"), null, null, null, null),
+        "element",
+        new KeyDef("element", create("target.dita#target/element"), null, null, null, null)
+      ),
       emptyList()
     );
-    final Map<URI, URI> rewrites = ImmutableMap
-      .<URI, URI>builder()
-      .put(create("target.dita"), create("target-1.dita"))
-      .build();
+    final Map<URI, URI> rewrites = Map.of(create("target.dita"), create("target-1.dita"));
     final KeyScope act = module.rewriteScopeTargets(src, rewrites);
 
     final KeyScope exp = new KeyScope(
       "scope",
       "scope",
-      ImmutableMap
-        .<String, KeyDef>builder()
-        .put("key", new KeyDef("key", create("target-1.dita"), null, null, null, null))
-        .put("element", new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null))
-        .build(),
+      Map.of(
+        "key",
+        new KeyDef("key", create("target-1.dita"), null, null, null, null),
+        "element",
+        new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null)
+      ),
       emptyList()
     );
 
@@ -211,7 +201,7 @@ public class KeyrefModuleTest {
         "A.VAR",
         new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null)
       ),
-      EMPTY_LIST
+      emptyList()
     );
     final KeyScope keyScope = new KeyScope(
       "#root",
