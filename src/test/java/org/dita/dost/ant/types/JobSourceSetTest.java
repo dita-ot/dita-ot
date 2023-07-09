@@ -10,10 +10,10 @@ package org.dita.dost.ant.types;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.io.Files;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +41,7 @@ public class JobSourceSetTest {
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     for (String ext : Arrays.asList("dita", "ditamap", "jpg", "html")) {
       final String file = "a." + ext;
-      Files.touch(new File(tempDir, file));
+      Files.createFile(new File(tempDir, file).toPath());
       job.add(new Job.FileInfo.Builder().src(URI.create("file:///" + file)).uri(URI.create(file)).format(ext).build());
     }
   }
