@@ -22,7 +22,6 @@ import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
@@ -85,18 +84,15 @@ public final class Integrator {
   public static final String FEAT_VALUE_SEPARATOR = ",";
   private static final String PARAM_VALUE_SEPARATOR = ";";
 
-  private static final Set<PosixFilePermission> PERMISSIONS = ImmutableSet
-    .<PosixFilePermission>builder()
-    .add(
-      PosixFilePermission.OWNER_READ,
-      PosixFilePermission.OWNER_WRITE,
-      PosixFilePermission.OWNER_EXECUTE,
-      PosixFilePermission.GROUP_READ,
-      PosixFilePermission.GROUP_EXECUTE,
-      PosixFilePermission.OTHERS_READ,
-      PosixFilePermission.OTHERS_EXECUTE
-    )
-    .build();
+  private static final Set<PosixFilePermission> PERMISSIONS = Set.of(
+    PosixFilePermission.OWNER_READ,
+    PosixFilePermission.OWNER_WRITE,
+    PosixFilePermission.OWNER_EXECUTE,
+    PosixFilePermission.GROUP_READ,
+    PosixFilePermission.GROUP_EXECUTE,
+    PosixFilePermission.OTHERS_READ,
+    PosixFilePermission.OTHERS_EXECUTE
+  );
 
   public static final String CONF_PARSER_FORMAT = "parser.";
 

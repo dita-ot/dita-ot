@@ -10,7 +10,6 @@ package org.dita.dost.module;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;

@@ -13,10 +13,7 @@ import static org.dita.dost.util.XMLUtils.getChildElements;
 import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.util.XMLUtils;
@@ -47,12 +44,10 @@ final class ArgumentParser {
 
   static Arguments.Argument mergeArguments(final Arguments.Argument a, final Arguments.Argument b) {
     if (a instanceof Arguments.EnumArgument && b instanceof Arguments.EnumArgument) {
-      final Set<String> vals = ImmutableSet
-        .<String>builder()
-        .addAll(((Arguments.EnumArgument) a).values)
-        .addAll(((Arguments.EnumArgument) b).values)
-        .build();
-      return new Arguments.EnumArgument(a.property, a.desc, vals);
+      final Set<String> vals = new HashSet<>();
+      vals.addAll(((Arguments.EnumArgument) a).values);
+      vals.addAll(((Arguments.EnumArgument) b).values);
+      return new Arguments.EnumArgument(a.property, a.desc, Collections.unmodifiableSet(vals));
     } else {
       return a;
     }
