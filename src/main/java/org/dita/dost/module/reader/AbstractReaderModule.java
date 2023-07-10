@@ -141,6 +141,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final String ext = getExtension(file.getPath());
     if (parserMap.containsKey(ext)) {
       return ext;
+    } else if (Objects.equals(ext, ATTR_FORMAT_VALUE_DITAMAP)) {
+      return ATTR_FORMAT_VALUE_DITAMAP;
     }
     return null;
   }
@@ -666,6 +668,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     // Remove pure conref targets from fullTopicSet
     // XXX: if we remove from fullTopicSet, we don't get format information
     fullTopicSet.removeAll(pureConrefTargets);
+    // Treat pure conref targets same as resource-only
+    resourceOnlySet.addAll(pureConrefTargets);
   }
 
   /**
