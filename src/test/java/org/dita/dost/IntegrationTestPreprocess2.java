@@ -8,9 +8,7 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML_WITH_PREPROCESS2;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Disabled;
@@ -32,6 +30,16 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       default:
         return transtype;
     }
+  }
+
+  @Test
+  public void testRngGrammarPoolValidate() throws Throwable {
+    builder()
+      .name("bookmap-rng-based-validate")
+      .transtype(PREPROCESS)
+      .input(Paths.get("main.ditamap"))
+      .put("validate", "true")
+      .test();
   }
 
   @Disabled

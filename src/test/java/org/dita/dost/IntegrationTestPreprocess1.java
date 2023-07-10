@@ -31,7 +31,6 @@ public class IntegrationTestPreprocess1 extends IntegrationTest {
       .transtype(PREPROCESS)
       .input(Paths.get("main.ditamap"))
       .put("validate", "true")
-      .warnCount(2)
       .errorCount(1)
       .test();
   }

@@ -14,7 +14,13 @@
       <linktext class="- map/linktext ">T1</linktext>
     </topicmeta>
   </chapter>
-  <chapter class="- map/topicref bookmap/chapter " href="t2.dita">
-    <topicmeta class="- map/topicmeta "/>
+  <chapter class="- map/topicref bookmap/chapter " href="t2.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">T2</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">T2</linktext>
+      <?ditaot genshortdesc?>
+      <shortdesc class="- map/shortdesc "/>
+    </topicmeta>
   </chapter>
 </bookmap>
