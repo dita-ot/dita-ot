@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="urn:oasis:names:tc:dita:rng:topic.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <topic id="t1">
-    <title>T1</title>
-    <body>
-        <p></p>
-    </body>
+  <title>T1</title>
+  <body>
+    <p></p>
+  </body>
 </topic>
