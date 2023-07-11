@@ -29,6 +29,10 @@ dependencies {
     testImplementation rootProject.sourceSets.test.output
 }
 
+test {
+    useJUnitPlatform()
+}
+
 jar.archiveFileName = "${project.name}.jar"
 
 task copyInstall(type: Copy) {

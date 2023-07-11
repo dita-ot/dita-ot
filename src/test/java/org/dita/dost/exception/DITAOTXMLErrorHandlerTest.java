@@ -19,7 +19,7 @@ import org.xml.sax.SAXParseException;
 public class DITAOTXMLErrorHandlerTest {
 
   private final DITAOTLogger logger = new TestLogger();
-  private final DITAOTXMLErrorHandler e = new DITAOTXMLErrorHandler("path", logger, Configuration.Mode.LAX);
+  private final DITAOTXMLErrorHandler e = new DITAOTXMLErrorHandler("path", logger, Configuration.Mode.STRICT);
   private final SAXParseException se = new SAXParseException(
     "message",
     "publicId",
