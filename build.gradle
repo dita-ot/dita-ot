@@ -84,6 +84,7 @@ artifacts {
 }
 
 test {
+    useJUnitPlatform()
     exclude '**/IntegrationTest*.class'
     exclude '**/EndToEndTest*.class'
 }

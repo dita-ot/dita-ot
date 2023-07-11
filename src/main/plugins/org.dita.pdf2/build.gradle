@@ -33,6 +33,10 @@ sourceSets {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 jar.archiveFileName = "${project.name}.jar"
 jar.include "com/idiominc/**"
 jar.include "com/suite/**"
