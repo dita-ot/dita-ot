@@ -202,14 +202,14 @@ public final class TopicReaderModule extends AbstractReaderModule {
             if (fi == null) {
               fi = job.getFileInfo(tmp.resolve(href));
             }
-            assert fi != null;
-            assert fi.src != null;
-            String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
-            if (format == null) {
-              format = xdmItem.getAttributeValue(QNAME_FORMAT);
+            if (fi != null && fi.src != null) {
+              String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
+              if (format == null) {
+                format = xdmItem.getAttributeValue(QNAME_FORMAT);
+              }
+              res.add(new Reference(fi.src, format));
+              nonConrefCopytoTargetSet.add(fi.src);
             }
-            res.add(new Reference(fi.src, format));
-            nonConrefCopytoTargetSet.add(fi.src);
           }
         });
     } catch (final IOException e) {
