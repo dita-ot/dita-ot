@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -108,11 +107,9 @@ public final class MapReaderModule extends AbstractReaderModule {
     pipe.add(normalizeFilter);
 
     keydefFilter.setCurrentDir(fileToParse.resolve("."));
-    keydefFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(keydefFilter);
 
     listFilter.setCurrentFile(fileToParse);
-    listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
     ditaWriterFilter.setDefaultValueMap(defaultValueMap);

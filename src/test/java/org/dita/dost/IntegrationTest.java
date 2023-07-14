@@ -412,4 +412,15 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
       .test();
     assertEquals(0, grammarPool.getCacheSize());
   }
+
+  @Test
+  public void testRngGrammarPoolValidate() throws Throwable {
+    builder()
+      .name("bookmap-rng-based-validate")
+      .transtype(PREPROCESS)
+      .input(Paths.get("main.ditamap"))
+      .put("validate", "true")
+      .errorCount(1)
+      .test();
+  }
 }
