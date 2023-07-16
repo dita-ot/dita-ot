@@ -47,4 +47,16 @@ public class IntegrationTestPreprocess1 extends IntegrationTest {
       .errorCount(0)
       .test();
   }
+  
+  @Test
+  public void testXSDValidate() throws Throwable {
+    builder()
+      .name("bookmap-xsd-based-validate")
+      .transtype(PREPROCESS)
+      .input(Paths.get("main.ditamap"))
+      .put("validate", "true")
+      .warnCount(0)
+      .errorCount(0)
+      .test();
+  }
 }
