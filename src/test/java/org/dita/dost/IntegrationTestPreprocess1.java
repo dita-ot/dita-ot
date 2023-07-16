@@ -47,7 +47,7 @@ public class IntegrationTestPreprocess1 extends IntegrationTest {
       .errorCount(0)
       .test();
   }
-  
+
   @Test
   public void testXSDValidate() throws Throwable {
     builder()
