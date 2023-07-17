@@ -9,7 +9,9 @@ For information on additional DITA and DITA-OT resources, see [SUPPORT]. To repo
 - [Prerequisites: Java 17](#prerequisites-java-17)
 - [Installing](#installing)
 - [Building output](#building-output)
-- [For developers](#for-developers)
+- [Development](#development)
+    - [Formatting code](#formatting-code)
+    - [Distribution builds](#distribution-builds)
 - [License](#license)
 
 ## Prerequisites: Java 17
@@ -65,10 +67,9 @@ You can generate output using the `dita` command-line tool included with DITA Op
 
 See the [documentation][docs] for arguments and [options].
 
-## For developers
+## Development
 
-<details>
-<summary>Building the toolkit from source code and compiling the distribution package</summary>
+Building the toolkit from source code and compiling the distribution package
 
 1.  Clone the DITA-OT Git repository:
     ```shell
@@ -117,8 +118,6 @@ Prettier is used retain consistent Java formatting.
     If Gradle throws an error like `java.lang.OutOfMemoryError: Java heap space`, you probably need to increase the maximum Java heap size. One way to do this is to set the `GRADLE_OPTS` environment variable to a value like `-Xmx1024m`.
 
     For more information on the `-Xmx` option, see the [Java SE Documentation][javadoc].
-
-</details>
 
 ## License
 
