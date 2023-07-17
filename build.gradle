@@ -111,6 +111,10 @@ task integrationTest(type: Test, dependsOn: 'buildLocal') {
     systemProperties = integrationTestSystemProperties
     include '**/IntegrationTest*.class'
 }
+tasks.named('check') {
+    dependsOn('integrationTest')
+}
+
 
 // End to end test
 
@@ -135,6 +139,9 @@ task e2eTest(type: Test, dependsOn: 'buildLocal') {
     maxParallelForks = 4
     systemProperties = e2eTestSystemProperties
     include '**/EndToEndTest*.class'
+}
+tasks.named('check') {
+    dependsOn('e2eTest')
 }
 
 // Install
