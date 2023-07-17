@@ -10,6 +10,7 @@ For information on additional DITA and DITA-OT resources, see [SUPPORT]. To repo
 - [Installing](#installing)
 - [Building output](#building-output)
 - [Development](#development)
+    - [Running tests](#running-tests)
     - [Formatting code](#formatting-code)
     - [Distribution builds](#distribution-builds)
 - [License](#license)
@@ -88,6 +89,15 @@ Building the toolkit from source code and compiling the distribution package
     ./gradlew
     ```
 
+### Running tests
+
+```shell
+./gradlew check
+```
+
+All tests are run by GitHub Actions [test workflow] on each push and
+for every pull request. 
+
 ### Formatting code
 
 Requirements:
@@ -135,3 +145,4 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
 [issue]: https://github.com/dita-ot/dita-ot/issues/new/choose
 [contributing]: https://github.com/dita-ot/.github/blob/master/CONTRIBUTING.md
+[test workflow]: https://github.com/dita-ot/dita-ot/actions/workflows/test.yml
