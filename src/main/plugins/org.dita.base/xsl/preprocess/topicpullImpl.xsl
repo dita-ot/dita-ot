@@ -714,7 +714,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">
-              <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
+              <xsl:with-param name="baseContextElement" select="$targetElement" tunnel="yes"/>
               <xsl:with-param name="inDescContent" as="xs:boolean" select="true()" tunnel="yes"/>
             </xsl:apply-templates>
           </desc>
