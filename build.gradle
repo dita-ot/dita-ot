@@ -37,10 +37,11 @@ dependencies {
     implementation group: 'com.ibm.icu', name: 'icu4j', version:'70.1'
     implementation group: 'org.apache.ant', name: 'ant', version:'1.10.13'
     implementation group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.13'
-    implementation(group: 'com.google.guava', name: 'guava', version: '25.1-jre') {
+    implementation(group: 'com.google.guava', name: 'guava', version: '32.1.1-jre') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
-        exclude group: 'org.codehaus.mojo', module: 'animal-sniffer-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
+        exclude group: 'com.google.guava', module: 'failureaccess'
+        exclude group: 'com.google.guava', module: 'listenablefuture'
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
     }
