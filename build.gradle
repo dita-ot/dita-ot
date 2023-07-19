@@ -310,25 +310,27 @@ tasks.register('integrateDistTemp', JavaExec) {
     args file("${distTempDir}/integrator.xml")
 }
 
-task integrateDistPlugins() {
-    dependsOn bundled.collect{ name, url ->
-        return tasks.create("integrateDist${name}", JavaExec) {
-            dependsOn(integrateDistTemp)
-            mainClass = "org.apache.tools.ant.launch.Launcher"
-            classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
-            workingDir distTempDir
-            args "-f"
-            args file("${distTempDir}/integrator.xml")
-            args "install"
-            args "-Dplugin.file=${url}"
-        }.name
-    }
-}
-tasks.named('integrateDistPlugins') {
+tasks.register('integrateDistPlugins') {
     mustRunAfter integrateDistTemp
 }
+bundled.forEach{ name, url ->
+    def taskName = tasks.register("integrateDist${name}", JavaExec) {
+        dependsOn(integrateDistTemp)
+        mainClass = "org.apache.tools.ant.launch.Launcher"
+        classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
+        workingDir distTempDir
+        args "-f"
+        args file("${distTempDir}/integrator.xml")
+        args "install"
+        args "-Dplugin.file=${url}"
+    }.name
+    tasks.named('integrateDistPlugins') {
+        dependsOn taskName
+    }
+}
 
-task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
+tasks.register('generateDocs', Exec) {
+    dependsOn 'integrateDistTemp'
     workingDir = file("${distTempDir}/docsrc")
     commandLine = Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
     args = ["--no-daemon", "dist"]
@@ -370,22 +372,22 @@ def plugins = [
         "org.dita.xhtml",
 ]
 
-task distPlugins() {
-    dependsOn plugins.collect{ name ->
-        def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
-        return tasks.register(taskName, Zip) {
-            dependsOn integrateDistTemp
-            from ("${distTempDir}/plugins/${name}") {
-                exclude "build"
-                exclude "src"
-                exclude "out"
-            }
-            archiveFileName = "${name}-${project.version}.zip"
-        }.name
-    }
-}
-tasks.named('distPlugins') {
+tasks.register('distPlugins') {
     mustRunAfter integrateDistPlugins
+}
+plugins.forEach{ name ->
+    def taskName = tasks.register("distPlugin${name.split("\\.").collect{ token -> return token.capitalize()}.join("")}", Zip) {
+        dependsOn integrateDistTemp
+        from ("${distTempDir}/plugins/${name}") {
+            exclude "build"
+            exclude "src"
+            exclude "out"
+        }
+        archiveFileName = "${name}-${project.version}.zip"
+    }.name
+    tasks.named('distPlugins') {
+        dependsOn taskName
+    }
 }
 
 tasks.register('distPluginChecksums') {
