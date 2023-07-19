@@ -349,23 +349,27 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
     args file("${distTempDir}/integrator.xml")
 }
 
-task integrateDistPlugins() {
-    dependsOn bundled.collect{ name, url ->
-        return tasks.create("integrateDist${name}", JavaExec) {
-            dependsOn(integrateDistTemp)
-            mainClass = "org.apache.tools.ant.launch.Launcher"
-            classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
-            workingDir distTempDir
-            args "-f"
-            args file("${distTempDir}/integrator.xml")
-            args "install"
-            args "-Dplugin.file=${url}"
-        }.name
+tasks.register('integrateDistPlugins') {
+    mustRunAfter integrateDistTemp
+}
+bundled.forEach{ name, url ->
+    def taskName = tasks.register("integrateDist${name}", JavaExec) {
+        dependsOn(integrateDistTemp)
+        mainClass = "org.apache.tools.ant.launch.Launcher"
+        classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
+        workingDir distTempDir
+        args "-f"
+        args file("${distTempDir}/integrator.xml")
+        args "install"
+        args "-Dplugin.file=${url}"
+    }.name
+    tasks.named('integrateDistPlugins') {
+        dependsOn taskName
     }
 }
-integrateDistPlugins.mustRunAfter integrateDistTemp
 
-task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
+tasks.register('generateDocs', Exec) {
+    dependsOn 'integrateDistTemp'
     workingDir = file("${distTempDir}/docsrc")
     commandLine = Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
     args = ["--no-daemon", "dist"]
@@ -373,7 +377,7 @@ task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
 generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
 
-task cleanGenerateDocs(type: Delete) {
+tasks.register('cleanGenerateDocs', Delete) {
     delete "${distTempDir}/temp"
     delete "${distTempDir}/docsrc/.gradle"
     delete "${distTempDir}/docsrc/build"
@@ -386,7 +390,7 @@ cleanGenerateDocs.mustRunAfter generateDocs
 cleanGenerateDocs.onlyIf { skipDocs() }
 
 def skipDocs() {
-    !Boolean.parseBoolean(project.property('skipGenerateDocs', 'false'))
+    !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs').toString()))
 }
 
 tasks.register('generateJavadocs', Javadoc) {
@@ -407,21 +411,23 @@ def plugins = [
         "org.dita.xhtml",
 ]
 
-task distPlugins() {
-    dependsOn plugins.collect{ name ->
-        def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
-        return tasks.create(taskName, Zip) {
-            dependsOn(integrateDistTemp)
-            from ("${distTempDir}/plugins/${name}") {
-                exclude "build"
-                exclude "src"
-                exclude "out"
-            }
-            archiveFileName = "${name}-${project.version}.zip"
-        }.name
+tasks.register('distPlugins') {
+    mustRunAfter integrateDistPlugins
+}
+plugins.forEach{ name ->
+    def taskName = tasks.register("distPlugin${name.split("\\.").collect{ token -> return token.capitalize()}.join("")}", Zip) {
+        dependsOn integrateDistTemp
+        from ("${distTempDir}/plugins/${name}") {
+            exclude "build"
+            exclude "src"
+            exclude "out"
+        }
+        archiveFileName = "${name}-${project.version}.zip"
+    }.name
+    tasks.named('distPlugins') {
+        dependsOn taskName
     }
 }
-distPlugins.mustRunAfter integrateDistPlugins
 
 tasks.register('distPluginChecksums') {
     doLast {
@@ -436,7 +442,7 @@ distPluginChecksums.mustRunAfter distPlugins
 generateNotices.mustRunAfter distPlugins
 
 tasks.register('dist', Zip) {
-    dependsOn[jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]
+    dependsOn jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs
     into("dita-ot-${distVersion}") {
         from(distTempDir) {
             exclude "bin/dita"
@@ -532,8 +538,8 @@ publishing {
     }
     repositories {
         maven {
-            def releasesRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
-            def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username getRepositoryUsername()
