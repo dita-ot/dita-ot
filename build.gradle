@@ -217,7 +217,8 @@ tasks.register('copyInstall', Copy) {
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
+tasks.register('buildLocal', JavaExec) {
+  dependsOn 'copyInstall', ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"
     group = "build"
     description "Build archives and install all plugins with dependencies."
     mainClass = "org.apache.tools.ant.launch.Launcher"
@@ -258,11 +259,12 @@ def bundled = [
 
 apply from: 'gradle/dist.gradle'
 
-task cleanDistTemp(type: Delete) {
+tasks.register('cleanDistTemp', Delete) {
     delete distTempDir
 }
 
-task initDist(dependsOn: [jar, cleanDistTemp]) {
+tasks.register('initDist') {
+    dependsOn jar, 'cleanDistTemp'
     doLast {
         distTempDir.mkdirs()
         println "distVersion: ${distVersion}"
@@ -270,28 +272,29 @@ task initDist(dependsOn: [jar, cleanDistTemp]) {
     }
 }
 
-task copyDistTemp(type: Copy, dependsOn: initDist) {
-    from (jar) {
+tasks.register('copyDistTemp', Copy) {
+    dependsOn 'initDist'
+    from(jar) {
         into "lib"
     }
-    from (configurations.runtimeClasspath.allArtifacts.files) {
+    from(configurations.runtimeClasspath.allArtifacts.files) {
         into "lib"
     }
-    from (configurations.runtimeClasspath) {
+    from(configurations.runtimeClasspath) {
         into "lib"
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
-    from (".") {
+    from(".") {
         include "LICENSE"
     }
-    from ("src/main") {
+    from("src/main") {
         include "plugins/*/plugin.xml"
         expand(
                 version: project.version
         )
     }
-    from ("src/main") {
+    from("src/main") {
         exclude ".gradle"
         exclude "plugins/**/build.gradle"
         exclude "plugins/**/settings.gradle"
@@ -549,5 +552,3 @@ javadoc {
         options.addBooleanOption('html5', true)
     }
 }
-
-

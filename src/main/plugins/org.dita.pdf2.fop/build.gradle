@@ -26,7 +26,7 @@ test {
     useJUnitPlatform()
 }
 
-task copyInstall(type: Copy) {
+tasks.register('copyInstall', Copy) {
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-core-*.jar'
@@ -45,7 +45,7 @@ task copyInstall(type: Copy) {
     destinationDir = file("lib")
 }
 
-task copyDistTemp(type: Copy) {
+tasks.register('copyDistTemp', Copy) {
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-core-*.jar'
