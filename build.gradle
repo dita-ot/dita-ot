@@ -71,12 +71,12 @@ processResources {
     ]
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     from javadoc
     archiveClassifier = 'javadoc'
 }
@@ -171,10 +171,10 @@ clean {
     delete "src/main/plugins/org.dita.pdf2.fop/lib/"
 }
 
-task copyInstall(type: Copy) {
-    from (jar)
-    from (configurations.runtimeClasspath.allArtifacts.files)
-    from (configurations.runtimeClasspath) {
+tasks.register('copyInstall', Copy) {
+    from(jar)
+    from(configurations.runtimeClasspath.allArtifacts.files)
+    from(configurations.runtimeClasspath) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
@@ -343,10 +343,10 @@ cleanGenerateDocs.mustRunAfter generateDocs
 cleanGenerateDocs.onlyIf { skipDocs() }
 
 def skipDocs() {
-    !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs')))
+    !Boolean.parseBoolean(project.property('skipGenerateDocs', 'false'))
 }
 
-task generateJavadocs(type: Javadoc) {
+tasks.register('generateJavadocs', Javadoc) {
     include "**/org/dita/dost/*.*"
     include "**/org/dita/dost/exception/DITAOTException.*"
     include "**/org/dita/dost/util/Configuration.*"
@@ -380,7 +380,7 @@ task distPlugins() {
 }
 distPlugins.mustRunAfter integrateDistPlugins
 
-task distPluginChecksums() {
+tasks.register('distPluginChecksums') {
     doLast {
         ant.checksum(algorithm: "SHA-256", fileext: ".sha256") {
             fileset(dir: "${buildDir}/distributions") {
@@ -392,9 +392,10 @@ task distPluginChecksums() {
 distPluginChecksums.mustRunAfter distPlugins
 generateNotices.mustRunAfter distPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+tasks.register('dist', Zip) {
+    dependsOn[jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]
     into("dita-ot-${distVersion}") {
-        from (distTempDir) {
+        from(distTempDir) {
             exclude "bin/dita"
             exclude "bin/dita.bat"
             // legacy build scripts
@@ -402,7 +403,7 @@ task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, d
             exclude "bin/ant"
             exclude "bin/ant.*"
         }
-        from (distTempDir) {
+        from(distTempDir) {
             fileMode = 0755
             include "bin/dita"
             include "bin/dita.bat"
