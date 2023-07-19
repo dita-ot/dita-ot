@@ -53,9 +53,9 @@ dependencies {
     implementation group: 'org.relaxng', name: 'jing', version: '20181222'
     implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.13'
     testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.8.2'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.8.2'
-    testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.6.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.3'
+    testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.9.1'
 }
 
 jar {
