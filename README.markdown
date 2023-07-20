@@ -9,7 +9,10 @@ For information on additional DITA and DITA-OT resources, see [SUPPORT]. To repo
 - [Prerequisites: Java 17](#prerequisites-java-17)
 - [Installing](#installing)
 - [Building output](#building-output)
-- [For developers](#for-developers)
+- [Development](#development)
+    - [Running tests](#running-tests)
+    - [Formatting code](#formatting-code)
+    - [Distribution builds](#distribution-builds)
 - [License](#license)
 
 ## Prerequisites: Java 17
@@ -65,10 +68,9 @@ You can generate output using the `dita` command-line tool included with DITA Op
 
 See the [documentation][docs] for arguments and [options].
 
-## For developers
+## Development
 
-<details>
-<summary>Building the toolkit from source code and compiling the distribution package</summary>
+Building the toolkit from source code and compiling the distribution package
 
 1.  Clone the DITA-OT Git repository:
     ```shell
@@ -86,6 +88,15 @@ See the [documentation][docs] for arguments and [options].
     ```shell
     ./gradlew
     ```
+
+### Running tests
+
+```shell
+./gradlew check
+```
+
+All tests are run by GitHub Actions [test workflow] on each push and
+for every pull request. 
 
 ### Formatting code
 
@@ -118,8 +129,6 @@ Prettier is used retain consistent Java formatting.
 
     For more information on the `-Xmx` option, see the [Java SE Documentation][javadoc].
 
-</details>
-
 ## License
 
 DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
@@ -136,3 +145,4 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
 [issue]: https://github.com/dita-ot/dita-ot/issues/new/choose
 [contributing]: https://github.com/dita-ot/.github/blob/master/CONTRIBUTING.md
+[test workflow]: https://github.com/dita-ot/dita-ot/actions/workflows/test.yml
