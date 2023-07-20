@@ -52,7 +52,8 @@ def licenses = [
         [name: 'autolink', title: 'autolink-java', license: ['autolink-license.txt']],
 ]
 
-task generateNotices() {
+tasks.register('generateNotices') {
+    description "Generate notices file for bundled dependencies"
     def notices = file("${distTempDir}/NOTICES.txt")
     outputs.file(notices)
     doLast {
@@ -92,21 +93,21 @@ without limitation URLs or references to any third party websites.
             licenses.findAll { it.license != null }
                     .sort { it.title }
                     .each { license ->
-                out.writeLine('=' * 80)
-                out.writeLine("""
+                        out.writeLine('=' * 80)
+                        out.writeLine("""
 The Program includes the following software component, which was obtained under
 the following terms and conditions:
 """)
-                out.writeLine(license.title)
-                out.writeLine('')
-                license.license.each {
-                    out.writeLine('-' * 80)
-                    out.writeLine('')
-                    Paths.get("gradle", it).toFile().readLines("UTF-8").each {
-                        out.writeLine(it)
+                        out.writeLine(license.title)
+                        out.writeLine('')
+                        license.license.each {
+                            out.writeLine('-' * 80)
+                            out.writeLine('')
+                            Paths.get("gradle", it.toString()).toFile().readLines("UTF-8").each {
+                                out.writeLine(it)
+                            }
+                        }
                     }
-                }
-            }
         }
     }
 }
