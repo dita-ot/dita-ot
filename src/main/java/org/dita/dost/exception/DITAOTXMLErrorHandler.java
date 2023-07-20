@@ -45,10 +45,11 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
    */
   @Override
   public void error(final SAXParseException saxException) throws SAXException {
+    final SAXExceptionWrapper ex = new SAXExceptionWrapper(filePath, saxException);
     if (mode == Configuration.Mode.STRICT) {
-      throw new SAXExceptionWrapper(filePath, saxException);
+      throw ex;
     } else {
-      logger.error(saxException.getMessage(), saxException);
+      logger.error(ex.getMessage(), ex);
     }
   }
 

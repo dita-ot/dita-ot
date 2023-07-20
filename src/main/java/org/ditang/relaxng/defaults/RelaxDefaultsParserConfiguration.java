@@ -163,9 +163,8 @@ public class RelaxDefaultsParserConfiguration extends XIncludeAwareParserConfigu
   public void setFeature(String featureId, boolean state) throws XMLConfigurationException {
     if (XERCES_SCHEMA_VALIDATION.equals(featureId)) {
       relaxNGValidation = state;
-    } else {
-      super.setFeature(featureId, state);
     }
+    super.setFeature(featureId, state);
   }
 
   @Override
