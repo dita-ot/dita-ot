@@ -67,7 +67,7 @@ jar {
 processResources {
     filter ReplaceTokens, tokens: [
             'version': project.version,
-            'release': "${project.version.split('\\.').toList().subList(0, 2).join('.').toString()}".toString()
+            'release': "${project.version.toString().split('\\.').toList().subList(0, 2).join('.').toString()}".toString()
     ]
 }
 
@@ -112,6 +112,7 @@ if (System.getProperty("log_level") != null) {
 }
 
 tasks.register('integrationTest', Test) {
+    description "Integration tests"
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -145,6 +146,7 @@ if (System.getProperty("log_level") != null) {
 }
 
 tasks.register('e2eTest', Test) {
+    description "End to end tests"
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -172,6 +174,7 @@ clean {
 }
 
 tasks.register('copyInstall', Copy) {
+    description "Copy jars to local development environment"
     from(jar)
     from(configurations.runtimeClasspath.allArtifacts.files)
     from(configurations.runtimeClasspath) {
@@ -181,6 +184,7 @@ tasks.register('copyInstall', Copy) {
     destinationDir = file("src/main/lib")
 }
 tasks.register('buildLocal', JavaExec) {
+    description "Build local development environment to run application locally"
     dependsOn 'copyInstall', ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"
     description "Build archives and install all plugins with dependencies"
     mainClass = "org.apache.tools.ant.launch.Launcher"
@@ -194,8 +198,8 @@ tasks.register('buildLocal', JavaExec) {
 
 ext.distTempDir = file("${buildDir}/tmp/dist")
 /** When patch is "0", only use major and minor versions, e.g. 1.2 instead of 1.2.0 */
-def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
-        project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
+def cleanVersion = project.version.toString().split('\\.').toList()[2] == "0" ?
+        project.version.toString().split('\\.').toList().subList(0, 2).join('.').toString() :
         project.version
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}@${commit.substring(0, 7)}" :
@@ -221,10 +225,12 @@ def bundled = [
 apply from: 'gradle/dist.gradle'
 
 tasks.register('cleanDistTemp', Delete) {
+    description "Delete distribution temp dir"
     delete distTempDir
 }
 
 tasks.register('initDist') {
+    description "Create distribution temp dir"
     dependsOn jar, 'cleanDistTemp'
     doLast {
         distTempDir.mkdirs()
@@ -234,6 +240,7 @@ tasks.register('initDist') {
 }
 
 tasks.register('copyDistTemp', Copy) {
+    description "Copy source files to distribution temp dir"
     dependsOn 'initDist'
     from(jar) {
         into "lib"
@@ -311,6 +318,7 @@ tasks.register('integrateDistTemp', JavaExec) {
 }
 
 tasks.register('integrateDistPlugins') {
+    description "Run integrator in distribution temp to install external plug-ins"
     mustRunAfter integrateDistTemp
 }
 bundled.forEach{ name, url ->
@@ -339,6 +347,7 @@ generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
 
 tasks.register('cleanGenerateDocs', Delete) {
+    description "Clean docs source in distribution temp dir"
     delete "${distTempDir}/temp"
     delete "${distTempDir}/docsrc/.gradle"
     delete "${distTempDir}/docsrc/build"
@@ -346,9 +355,10 @@ tasks.register('cleanGenerateDocs', Delete) {
     delete "${distTempDir}/docsrc/out"
     delete "${distTempDir}/docsrc/platform.ditaval"
     delete "${distTempDir}/docsrc/temp"
+
+    mustRunAfter generateDocs
+    onlyIf { skipDocs() }
 }
-cleanGenerateDocs.mustRunAfter generateDocs
-cleanGenerateDocs.onlyIf { skipDocs() }
 
 def skipDocs() {
     !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs').toString()))
@@ -373,6 +383,7 @@ def plugins = [
 ]
 
 tasks.register('distPlugins') {
+    description "Build distribution packages for plug-ins"
     mustRunAfter integrateDistPlugins
 }
 plugins.forEach{ name ->
@@ -391,6 +402,7 @@ plugins.forEach{ name ->
 }
 
 tasks.register('distPluginChecksums') {
+    description "Create SHA-256 checksum files for plug-in distribution packages"
     doLast {
         ant.checksum(algorithm: "SHA-256", fileext: ".sha256") {
             fileset(dir: "${buildDir}/distributions") {
@@ -398,11 +410,12 @@ tasks.register('distPluginChecksums') {
             }
         }
     }
+    mustRunAfter distPlugins
 }
-distPluginChecksums.mustRunAfter distPlugins
 generateNotices.mustRunAfter distPlugins
 
 tasks.register('dist', Zip) {
+    description "Build distribution package"
     dependsOn jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs
     into("dita-ot-${distVersion}") {
         from(distTempDir) {
@@ -446,16 +459,16 @@ test {
 def getRepositoryUsername() {
     return project.hasProperty('ossrhUsername') ?
             project.property('ossrhUsername') :
-            System.env.containsKey('OSSRH_USERNAME') ?
-                    System.env['OSSRH_USERNAME'] :
+            System.getenv().containsKey('OSSRH_USERNAME') ?
+                    System.getenv()['OSSRH_USERNAME'] :
                     ""
 }
 
 def getRepositoryPassword() {
     return project.hasProperty('ossrhPassword') ?
             project.property('ossrhPassword') :
-            System.env.containsKey('OSSRH_PASSWORD') ?
-                    System.env['OSSRH_PASSWORD'] :
+            System.getenv().containsKey('OSSRH_PASSWORD') ?
+                    System.getenv()['OSSRH_PASSWORD'] :
                     ""
 }
 
@@ -503,8 +516,8 @@ publishing {
             def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
-                username getRepositoryUsername()
-                password getRepositoryPassword()
+                username = getRepositoryUsername()
+                password = getRepositoryPassword()
             }
         }
     }
