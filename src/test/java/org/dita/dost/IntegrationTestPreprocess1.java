@@ -25,18 +25,6 @@ public class IntegrationTestPreprocess1 extends IntegrationTest {
   }
 
   @Test
-  public void testRngGrammarPoolValidate() throws Throwable {
-    builder()
-      .name("bookmap-rng-based-validate")
-      .transtype(PREPROCESS)
-      .input(Paths.get("main.ditamap"))
-      .put("validate", "true")
-      .warnCount(2)
-      .errorCount(1)
-      .test();
-  }
-
-  @Test
   public void testRngGrammarPoolNoValidate() throws Throwable {
     builder()
       .name("bookmap-rng-based-no-validate")

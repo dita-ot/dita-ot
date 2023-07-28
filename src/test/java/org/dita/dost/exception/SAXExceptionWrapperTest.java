@@ -60,9 +60,9 @@ public class SAXExceptionWrapperTest {
 
   @Test
   public void testGetMessage() {
-    final SAXExceptionWrapper e = new SAXExceptionWrapper("message", new SAXParseException("msg", l));
+    final SAXExceptionWrapper e = new SAXExceptionWrapper("file", new SAXParseException("msg", l));
     final String act = e.getMessage();
-    final String exp = "message" + " Line " + l.getLineNumber() + ":" + "msg" + System.getProperty("line.separator");
+    final String exp = "file:3:1: msg";
     assertEquals(exp, act);
   }
 }
