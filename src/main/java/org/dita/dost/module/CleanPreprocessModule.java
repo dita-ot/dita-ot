@@ -38,6 +38,7 @@ import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
+import org.dita.dost.writer.TopicCleanFilter;
 import org.w3c.dom.Document;
 import org.xml.sax.XMLFilter;
 import org.xmlresolver.Resolver;
@@ -53,6 +54,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private final LinkFilter filter = new LinkFilter();
   private final MapCleanFilter mapFilter = new MapCleanFilter();
+  private final TopicCleanFilter topicFilter = new TopicCleanFilter();
 
   private boolean useResultFilename;
   private XsltTransformer rewriteTransformer;
@@ -102,6 +104,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     filter.setLogger(logger);
 
     mapFilter.setLogger(logger);
+    topicFilter.setLogger(logger);
   }
 
   @Override
@@ -123,6 +126,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       final Job tempJob = new Job(job, emptyMap(), rewritten);
       filter.setJob(tempJob);
       mapFilter.setJob(tempJob);
+      topicFilter.setJob(tempJob);
       for (final FileInfo fi : rewritten) {
         try {
           assert !fi.result.isAbsolute();
@@ -274,6 +278,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     mapFilter.setJob(job);
     mapFilter.setLogger(logger);
+
+    topicFilter.setJob(job);
+    topicFilter.setLogger(logger);
   }
 
   private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
@@ -285,7 +292,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       res.add(filter);
     }
 
-    if (fi.format != null && fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+      topicFilter.setFileInfo(fi);
+      res.add(topicFilter);
+    } else if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
       res.add(mapFilter);
     }
 
