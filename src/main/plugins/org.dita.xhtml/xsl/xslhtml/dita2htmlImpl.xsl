@@ -86,7 +86,14 @@ See the accompanying LICENSE file for applicable license.
 <!-- the path back to the project. Used for c.gif, delta.gif, css to allow user's to have
      these files in 1 location. -->
     <xsl:param name="PATH2PROJ">
-        <xsl:apply-templates select="/processing-instruction('path2project-uri')[1]" mode="get-path2project"/>
+      <xsl:value-of>
+        <xsl:choose>
+          <xsl:when test="$FILEDIR = '.'"/>
+          <xsl:otherwise>
+            <xsl:for-each select="tokenize($FILEDIR, '[\\/]')">../</xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:value-of>
     </xsl:param>
   
 <!-- the file name (file name and extension only - no path) of the document being transformed.
