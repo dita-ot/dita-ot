@@ -138,10 +138,10 @@ def integrationTestSystemProperties = [
         basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("test") != null) {
-    integrationTestSystemProperties["test"] = System.getProperty("test")
+    integrationTestSystemProperties["test"] = "${System.getProperty("test")}"
 }
 if (System.getProperty("log_level") != null) {
-    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+    integrationTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 }
 
 tasks.register('integrationTest', Test) {
@@ -176,7 +176,7 @@ def e2eTestSystemProperties = [
         basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("log_level") != null) {
-    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+    integrationTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 }
 
 tasks.register('e2eTest', Test) {
