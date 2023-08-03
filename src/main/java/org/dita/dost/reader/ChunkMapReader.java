@@ -35,6 +35,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLSerializer;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.dita.dost.writer.ChunkTopicParser;
@@ -208,11 +209,11 @@ public final class ChunkMapReader extends AbstractDomFilter {
    */
   private void chunkMap(final Element root) {
     // create the reference to the new file on root element.
-    String newFilename = replaceExtension(new File(currentFile).getName(), FILE_EXTENSION_DITA);
+    URI newFilename = URLUtils.toURI(replaceExtension(new File(currentFile).getName(), FILE_EXTENSION_DITA));
     URI newFile = currentFile.resolve(newFilename);
     if (job.getStore().exists(newFile)) {
       final URI oldFile = newFile;
-      newFilename = chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA);
+      newFilename = URLUtils.toURI(chunkFilenameGenerator.generateFilename(CHUNK_PREFIX, FILE_EXTENSION_DITA));
       newFile = currentFile.resolve(newFilename);
       // Mark up the possible name changing, in case that references might be updated.
       conflictTable.put(newFile, oldFile.normalize());
@@ -222,7 +223,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     // change the class attribute to "topicref"
     final String origCls = root.getAttribute(ATTRIBUTE_NAME_CLASS);
     root.setAttribute(ATTRIBUTE_NAME_CLASS, origCls + MAP_TOPICREF.matcher);
-    root.setAttribute(ATTRIBUTE_NAME_HREF, toURI(newFilename).toString());
+    root.setAttribute(ATTRIBUTE_NAME_HREF, newFilename.toString());
 
     createTopicStump(newFile);
 
