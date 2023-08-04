@@ -131,7 +131,7 @@ public class TopicReaderModuleTest {
     reader.readStartFile();
 
     assertEquals(1, reader.nonConrefCopytoTargetSet.size());
-    assertEquals(0, reader.conrefTargetSet.size());
-    assertEquals(1, reader.waitList.size());
+    assertEquals(1, reader.conrefTargetSet.size());
+    assertEquals(2, reader.waitList.size());
   }
 }
