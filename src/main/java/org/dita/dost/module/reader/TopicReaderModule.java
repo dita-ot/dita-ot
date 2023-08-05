@@ -22,9 +22,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Predicates;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.exception.UncheckedDITAOTException;
@@ -36,6 +38,7 @@ import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
@@ -53,6 +56,7 @@ import org.xml.sax.XMLFilter;
 public final class TopicReaderModule extends AbstractReaderModule {
 
   static final QName QNAME_HREF = new QName(ATTRIBUTE_NAME_HREF);
+  static final QName QNAME_CONREF = new QName(ATTRIBUTE_NAME_CONREF);
   static final QName QNAME_SCOPE = new QName(ATTRIBUTE_NAME_SCOPE);
   static final QName QNAME_FORMAT = new QName(ATTRIBUTE_NAME_FORMAT);
   static final QName QNAME_CLASS = new QName(ATTRIBUTE_NAME_CLASS);
@@ -212,6 +216,25 @@ public final class TopicReaderModule extends AbstractReaderModule {
             }
           }
         });
+      source
+        .select(descendant(Predicates.hasAttribute(ATTRIBUTE_NAME_CONREF)))
+        .forEach(xdmItem -> {
+          getConref(xdmItem)
+            .ifPresent(href -> {
+              FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+              if (fi == null) {
+                fi = job.getFileInfo(tmp.resolve(href));
+              }
+              if (fi != null && fi.src != null) {
+                String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
+                if (format == null) {
+                  format = xdmItem.getAttributeValue(QNAME_FORMAT);
+                }
+                res.add(new Reference(fi.src, format));
+                conrefTargetSet.add(fi.src);
+              }
+            });
+        });
     } catch (final IOException e) {
       throw new DITAOTException(e);
     }
@@ -232,6 +255,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
       return null;
     }
     return stripFragment(href);
+  }
+
+  private Optional<URI> getConref(final XdmNode in) {
+    return Optional.ofNullable(toURI(in.getAttributeValue(QNAME_CONREF))).map(URLUtils::stripFragment);
   }
 
   @Override
