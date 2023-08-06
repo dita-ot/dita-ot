@@ -8,15 +8,23 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.s9api.BuildingContentHandler;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.sapling.SaplingElement;
+import net.sf.saxon.sapling.SaplingNode;
+import net.sf.saxon.sapling.SaplingText;
+import net.sf.saxon.sapling.Saplings;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.store.StreamStore;
@@ -28,6 +36,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 public class KeyrefPaserTest {
 
@@ -69,6 +80,73 @@ public class KeyrefPaserTest {
       Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap"))
+    );
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("testDomToSaxArguments")
+  public void testDomToSax(String ignore, SaplingElement src, SaplingNode exp, boolean retainElements)
+    throws SaxonApiException, SAXException {
+    final BuildingContentHandler buildingContentHandler = xmlUtils
+      .getProcessor()
+      .newDocumentBuilder()
+      .newBuildingContentHandler();
+    final KeyrefPaser parser = new KeyrefPaser();
+    parser.setContentHandler(buildingContentHandler);
+    final XdmNode xdmNode = src.toXdmNode(xmlUtils.getProcessor());
+
+    buildingContentHandler.startDocument();
+    parser.domToSax(xdmNode, retainElements);
+    buildingContentHandler.endDocument();
+
+    final XdmNode expNode = Saplings.elem("wrapper").withChild(exp).toXdmNode(xmlUtils.getProcessor());
+    final Diff d = DiffBuilder
+      .compare(expNode.toString())
+      .withTest("<wrapper>" + buildingContentHandler.getDocumentNode().toString() + "</wrapper>")
+      .ignoreWhitespace()
+      .build();
+    if (d.hasDifferences()) {
+      System.err.println(expNode);
+      System.err.println("<wrapper>" + buildingContentHandler.getDocumentNode().toString() + "</wrapper>");
+      throw new AssertionError(d.toString());
+    }
+  }
+
+  private static Stream<Arguments> testDomToSaxArguments() {
+    final SaplingText characters = Saplings.text("text");
+    final QName xmlLang = new QName("xml", XMLConstants.XML_NS_URI, "lang");
+    final SaplingElement keyword = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement tm = Saplings
+      .elem(TOPIC_TM.localName)
+      .withAttr("class", TOPIC_TM.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement text = Saplings
+      .elem(TOPIC_TEXT.localName)
+      .withAttr("class", TOPIC_TEXT.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement keywordWithTm = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(tm);
+    final SaplingElement keywordWithText = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(text);
+    return Stream.of(
+      Arguments.of("keyword > #text, strip", keyword, characters, false),
+      Arguments.of("keyword > tm > #text, strip", keywordWithTm, tm, false),
+      Arguments.of("keyword > text > #text, strip", keywordWithText, text, false),
+      Arguments.of("keyword > #text, retain", keyword, keyword, true),
+      Arguments.of("keyword > tm > #text, retain", keywordWithTm, keywordWithTm, true),
+      Arguments.of("keyword > text > #text, retain", keywordWithText, keywordWithText, true)
     );
   }
 
