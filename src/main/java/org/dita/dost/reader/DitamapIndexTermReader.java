@@ -9,8 +9,9 @@
 
 package org.dita.dost.reader;
 
-import static org.apache.commons.io.FilenameUtils.*;
-import static org.dita.dost.index.IndexTerm.IndexTermPrefix.*;
+import static org.apache.commons.io.FilenameUtils.normalize;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE;
+import static org.dita.dost.index.IndexTerm.IndexTermPrefix.SEE_ALSO;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
@@ -144,7 +145,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
       obj = elementStack.peek();
 
       if (obj instanceof TopicrefElement) {
-        if (((TopicrefElement) obj).getHref() != null) {
+        if (((TopicrefElement) obj).href() != null) {
           genTargets(indexTerm, (TopicrefElement) obj);
           //IndexTermCollection.getInstantce().addTerm(indexTerm);
           result.addTerm(indexTerm);
@@ -172,7 +173,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     final IndexTermTarget target = new IndexTermTarget();
     String targetURI;
 
-    final String href = obj.getHref();
+    final String href = obj.href();
 
     final StringBuilder buffer = new StringBuilder();
     if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)) {
@@ -186,8 +187,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
       targetURI = href;
     }
 
-    if (obj.getNavTitle() != null) {
-      target.setTargetName(obj.getNavTitle());
+    if (obj.navtitle() != null) {
+      target.setTargetName(obj.navtitle());
     } else {
       target.setTargetName(href);
     }
@@ -241,14 +242,11 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     }
 
     if (topicrefSpecList.contains(localName)) {
-      final String href = attributes.getValue(ATTRIBUTE_NAME_HREF);
-      final String format = attributes.getValue(ATTRIBUTE_NAME_FORMAT);
-      final String navtitle = attributes.getValue(ATTRIBUTE_NAME_NAVTITLE);
-      final TopicrefElement topicref = new TopicrefElement();
-
-      topicref.setHref(href);
-      topicref.setFormat(format);
-      topicref.setNavTitle(navtitle);
+      final TopicrefElement topicref = new TopicrefElement(
+        attributes.getValue(ATTRIBUTE_NAME_HREF),
+        attributes.getValue(ATTRIBUTE_NAME_FORMAT),
+        attributes.getValue(ATTRIBUTE_NAME_NAVTITLE)
+      );
       elementStack.push(topicref);
 
       return;
@@ -328,9 +326,9 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
       if (
         indexMoved &&
         (
-          elem.getFormat() == null ||
-          elem.getFormat().equals(ATTR_FORMAT_VALUE_DITA) ||
-          elem.getFormat().equals(ATTR_FORMAT_VALUE_DITAMAP)
+          elem.format() == null ||
+          elem.format().equals(ATTR_FORMAT_VALUE_DITA) ||
+          elem.format().equals(ATTR_FORMAT_VALUE_DITAMAP)
         )
       ) {
         return false;
