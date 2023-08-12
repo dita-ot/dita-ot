@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map cascade="nomerge" class="- map/map " title="DITA Topic Map">
+  <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="os" processing-role="resource-only" toc="no">
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux" processing-role="resource-only" toc="no">
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="redhat_linux" processing-role="resource-only"
+                  toc="no"/>
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="untub_linux" processing-role="resource-only"
+                  toc="no"/>
+    </subjectdef>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin" processing-role="resource-only" toc="no"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos" processing-role="resource-only" toc="no"/>
+  </subjectdef>
+  <enumerationdef class="- map/topicref subjectScheme/enumerationdef " processing-role="resource-only" toc="no">
+    <attributedef class="- topic/data subjectScheme/attributedef " name="platform" translate="no"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os" processing-role="resource-only" toc="no"/>
+  </enumerationdef>
+  <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="os" processing-role="resource-only" toc="no">
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux" processing-role="resource-only" toc="no">
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="redhat_linux" processing-role="resource-only"
+                  toc="no"/>
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="untub_linux" processing-role="resource-only"
+                  toc="no"/>
+    </subjectdef>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin" processing-role="resource-only" toc="no"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos" processing-role="resource-only" toc="no"/>
+  </subjectdef>
+  <enumerationdef class="- map/topicref subjectScheme/enumerationdef " processing-role="resource-only" toc="no">
+    <attributedef class="- topic/data subjectScheme/attributedef " name="platform" translate="no"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os" processing-role="resource-only" toc="no"/>
+  </enumerationdef>
+  <topicref class="- map/topicref " href="simpletopic.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">Topic title</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">Topic title</linktext>
+    </topicmeta>
+  </topicref>
+</map>
