@@ -72,19 +72,15 @@ See the [documentation][docs] for arguments and [options].
 
 Building the toolkit from source code and compiling the distribution package
 
-1.  Clone the DITA-OT Git repository:
+1.  Clone the DITA-OT Git repository, including submodules:
     ```shell
-    git clone git://github.com/dita-ot/dita-ot.git
+    git clone --recurse-submodules git://github.com/dita-ot/dita-ot.git
     ```
 2.  Change to the DITA-OT directory:
     ```shell
     cd dita-ot
     ```
-3.  Fetch the submodules:
-    ```shell
-    git submodule update --init --recursive
-    ```
-4.  In the root directory, run Gradle to compile the Java code and install plugins:
+3.  In the root directory, run Gradle to compile the Java code and install plugins:
     ```shell
     ./gradlew
     ```
