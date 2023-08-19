@@ -167,17 +167,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
   @Disabled
   @Test
-  public void testuplevelslink() throws Throwable {
-    builder()
-      .name("uplevelslink")
-      .transtype(PREPROCESS)
-      .input(Paths.get("main/uplevel-in-topic.ditamap"))
-      .put("outer.control", "quiet")
-      .test();
-  }
-
-  @Disabled
-  @Test
   public void testchunk_uplevel() throws Throwable {
     builder()
       .name("chunk_uplevel")

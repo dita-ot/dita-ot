@@ -16,6 +16,7 @@ import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.*;
+import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.FileUtils.getName;
 import static org.dita.dost.util.FileUtils.replaceExtension;
 import static org.dita.dost.util.URLUtils.*;
@@ -56,12 +57,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     try {
       final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
       final URI mapFile = job.tempDirURI.resolve(in.uri);
-      logger.info("Processing {0}", mapFile);
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
         return null;
       }
+      logger.info("Processing {0}", mapFile);
       final List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
       final Map<URI, URI> combineRewriteMap = processCombine(mapFile, mapDoc, chunks);
       final Map<URI, URI> splitRewriteMap = processSplit(mapFile, mapDoc, chunks);
