@@ -1225,8 +1225,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
 
+  <!-- use common "dita-ot:text-only" templates for link text computation -->
   <xsl:template match="*|text()|processing-instruction()" mode="text-only">
-    <!-- Redirect to common dita-ot module -->
     <xsl:apply-templates select="." mode="dita-ot:text-only"/>
   </xsl:template>
   <xsl:template match="*|@*|comment()|processing-instruction()|text()">
@@ -1234,6 +1234,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
     </xsl:copy>
   </xsl:template>
+
+  <!-- in link text computation, do not resolve footnote numbers
+       (the numbering space might differ between the source and target documents) -->
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="dita-ot:text-only"/>
   
   
   <xsl:template match="*[contains(@class,' topic/xref ')]" mode="copy-shortdesc">
