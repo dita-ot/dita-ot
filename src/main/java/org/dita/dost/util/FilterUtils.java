@@ -185,7 +185,9 @@ public final class FilterUtils {
       if (value != null) {
         final Map<QName, List<String>> groups = getGroups(attr, value);
         for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
-          final QName[] propList = group.getKey() != null ? new QName[] { attr, group.getKey() } : new QName[] { attr };
+          final QName[] propList = group.getKey().equals(attr)
+            ? new QName[] { attr }
+            : new QName[] { attr, group.getKey() };
           res.addAll(extCheckFlag(propList, group.getValue()));
         }
       }
@@ -313,7 +315,9 @@ public final class FilterUtils {
       if (value != null) {
         final Map<QName, List<String>> groups = getGroups(attr, value);
         for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
-          final QName[] propList = group.getKey() != null ? new QName[] { attr, group.getKey() } : new QName[] { attr };
+          final QName[] propList = group.getKey().equals(attr)
+            ? new QName[] { attr }
+            : new QName[] { attr, group.getKey() };
           if (extCheckExclude(propList, group.getValue())) {
             return true;
           }
@@ -359,9 +363,9 @@ public final class FilterUtils {
     while (m.find()) {
       buf.append(value.subSequence(previousEnd, m.start()));
       final QName k = QName.valueOf(m.group(1));
-      final String v = m.group(2);
-      if (!v.trim().isEmpty()) {
-        res.computeIfAbsent(k, key -> new ArrayList<>()).addAll(Arrays.asList(v.trim().split("\\s+")));
+      final String v = m.group(2).trim();
+      if (!v.isEmpty()) {
+        res.computeIfAbsent(k, key -> new ArrayList<>()).addAll(Arrays.asList(v.split("\\s+")));
       }
       //      res.computeIfAbsent(null, key -> new ArrayList<>()).add(k.getLocalPart());
       previousEnd = m.end();

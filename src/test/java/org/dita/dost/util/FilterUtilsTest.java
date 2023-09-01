@@ -389,35 +389,30 @@ public class FilterUtilsTest {
   }
 
   private static Stream<Arguments> testGetUngroupedValueArguments() {
+    final QName group = QName.valueOf("group");
     return Stream.of(
       Arguments.of("", Collections.emptyMap()),
       Arguments.of("group()", Collections.emptyMap()),
       Arguments.of("foo bar bax", Map.of(OTHERPROPS, Arrays.asList("foo", "bar", "bax"))),
       Arguments.of(
         "foo group(a b c) bar",
-        Map.of(OTHERPROPS, Arrays.asList("foo", "bar"), QName.valueOf("group"), Arrays.asList("a", "b", "c"))
+        Map.of(OTHERPROPS, Arrays.asList("foo", "bar"), group, Arrays.asList("a", "b", "c"))
       ),
+      Arguments.of("foo group(a b c)", Map.of(OTHERPROPS, Arrays.asList("foo"), group, Arrays.asList("a", "b", "c"))),
+      Arguments.of("group(a b c) bar", Map.of(OTHERPROPS, Arrays.asList("bar"), group, Arrays.asList("a", "b", "c"))),
       Arguments.of(
-        "foo group(a b c)",
-        Map.of(OTHERPROPS, Arrays.asList("foo"), QName.valueOf("group"), Arrays.asList("a", "b", "c"))
-      ),
-      Arguments.of(
-        "group(a b c) bar",
-        Map.of(OTHERPROPS, Arrays.asList("bar"), QName.valueOf("group"), Arrays.asList("a", "b", "c"))
-      ),
-      Arguments.of(
-        "foo group1(a b c) bar group2(d e f) baz",
+        "foo group(a b c) bar group2(d e f) baz",
         Map.of(
           OTHERPROPS,
           Arrays.asList("foo", "bar", "baz"),
-          QName.valueOf("group1"),
+          group,
           Arrays.asList("a", "b", "c"),
           QName.valueOf("group2"),
           Arrays.asList("d", "e", "f")
         )
       ),
-      Arguments.of("group(a b) group(c)", Map.of(QName.valueOf("group"), Arrays.asList("a", "b", "c"))),
-      Arguments.of("group1() group2(a)", Map.of(QName.valueOf("group2"), Arrays.asList("a")))
+      Arguments.of("group(a b) group(c)", Map.of(group, Arrays.asList("a", "b", "c"))),
+      Arguments.of("group1() group(a)", Map.of(group, Arrays.asList("a")))
     );
   }
 
