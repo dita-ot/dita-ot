@@ -8,8 +8,6 @@
  */
 package org.dita.dost.exception;
 
-import static org.dita.dost.util.Constants.*;
-
 import java.io.Serial;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXParseException;
@@ -21,15 +19,23 @@ import org.xml.sax.SAXParseException;
  */
 public final class SAXExceptionWrapper extends SAXParseException {
 
-  /** Generated serial id. */
+  /**
+   * Generated serial id.
+   */
   @Serial
   private static final long serialVersionUID = -8266265000662519966L;
 
-  /** Message &amp; location. */
+  /**
+   * Message &amp; location.
+   */
   String messageWithLocation;
-  /** SAX parse exception. */
+  /**
+   * SAX parse exception.
+   */
   private SAXParseException saxParseException;
-  /** Source file where the exception is thrown. */
+  /**
+   * Source file where the exception is thrown.
+   */
   private String sourceFile;
 
   /**
@@ -49,7 +55,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
    *
    * @param message message
    * @param locator locator
-   * @param e Exception
+   * @param e       Exception
    * @deprecated since 2.3
    */
   @Deprecated
@@ -60,10 +66,10 @@ public final class SAXExceptionWrapper extends SAXParseException {
   /**
    * Constructor.
    *
-   * @param message message
-   * @param publicId public id
-   * @param systemId systemId
-   * @param lineNumber lineNumber
+   * @param message      message
+   * @param publicId     public id
+   * @param systemId     systemId
+   * @param lineNumber   lineNumber
    * @param columnNumber columnNumber
    * @deprecated since 2.3
    */
@@ -81,12 +87,12 @@ public final class SAXExceptionWrapper extends SAXParseException {
   /**
    * Constructor.
    *
-   * @param message message
-   * @param publicId publicId
-   * @param systemId systemId
-   * @param lineNumber lineNumber
+   * @param message      message
+   * @param publicId     publicId
+   * @param systemId     systemId
+   * @param lineNumber   lineNumber
    * @param columnNumber columnNumber
-   * @param e Exception
+   * @param e            Exception
    * @deprecated since 2.3
    */
   @Deprecated
@@ -104,7 +110,7 @@ public final class SAXExceptionWrapper extends SAXParseException {
   /**
    * Constructor.
    *
-   * @param file file
+   * @param file  file
    * @param inner SAXParseException
    */
   public SAXExceptionWrapper(final String file, final SAXParseException inner) {
@@ -127,8 +133,14 @@ public final class SAXExceptionWrapper extends SAXParseException {
    */
   @Override
   public String getMessage() {
-    return (
-      sourceFile + " Line " + saxParseException.getLineNumber() + ":" + saxParseException.getMessage() + LINE_SEPARATOR
-    );
+    final StringBuilder buf = new StringBuilder().append(sourceFile).append(":");
+    if (saxParseException.getLineNumber() != -1) {
+      buf.append(saxParseException.getLineNumber()).append(":");
+      if (saxParseException.getColumnNumber() != -1) {
+        buf.append(saxParseException.getColumnNumber()).append(":");
+      }
+    }
+    buf.append(" ").append(saxParseException.getMessage());
+    return buf.toString();
   }
 }
