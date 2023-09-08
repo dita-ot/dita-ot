@@ -428,4 +428,14 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
       .errorCount(1)
       .test();
   }
+
+  @Test
+  public void testSubjectSchema() throws Throwable {
+    builder()
+      .name("subjectschema_case")
+      .transtype(PREPROCESS)
+      .input(Paths.get("simplemap.ditamap"))
+      .put("args.filter", Paths.get("filter.ditaval"))
+      .test();
+  }
 }

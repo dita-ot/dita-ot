@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+       class="- topic/topic " id="topic-1">
+  <title class="- topic/title ">Topic title</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " platform="redhat_linux">
+      <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
+        <prop action="flag">
+          <startflag action="flag" dita-ot:imagerefuri="delta.gif" dita-ot:original-imageref="delta.gif"
+                     imageref="delta.gif">
+            <alt-text>This is a image flag:</alt-text>
+          </startflag>
+        </prop>
+      </ditaval-startprop>
+      This is a redhat linux
+      <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+        <prop action="flag"/>
+      </ditaval-endprop>
+    </p>
+    <p class="- topic/p " platform="untub_linux">
+      <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
+        <prop action="flag">
+          <startflag action="flag" dita-ot:imagerefuri="delta.gif" dita-ot:original-imageref="delta.gif"
+                     imageref="delta.gif">
+            <alt-text>This is a image flag:</alt-text>
+          </startflag>
+        </prop>
+      </ditaval-startprop>
+      This is a untub linux
+      <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+        <prop action="flag"/>
+      </ditaval-endprop>
+    </p>
+    <p class="- topic/p " platform="zos">
+      <ditaval-startprop class="+ topic/foreign ditaot-d/ditaval-startprop ">
+        <prop action="flag">
+          <startflag action="flag" dita-ot:imagerefuri="delta.gif" dita-ot:original-imageref="delta.gif"
+                     imageref="delta.gif">
+            <alt-text>This is a image flag:</alt-text>
+          </startflag>
+        </prop>
+      </ditaval-startprop>
+      This is a zos os
+      <ditaval-endprop class="+ topic/foreign ditaot-d/ditaval-endprop ">
+        <prop action="flag"/>
+      </ditaval-endprop>
+    </p>
+  </body>
+</topic>
