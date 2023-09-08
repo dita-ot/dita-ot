@@ -63,7 +63,7 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testHref() throws SAXException, URISyntaxException {
+  public void testHref() throws SAXException {
     final List<String> res = new ArrayList<>();
     f.setContentHandler(
       new DefaultHandler() {
@@ -103,7 +103,35 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testConref() throws SAXException, URISyntaxException {
+  public void testHref_networkFile() throws SAXException {
+    final List<String> res = new ArrayList<>();
+    f.setContentHandler(
+      new DefaultHandler() {
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts) {
+          res.add(atts.getValue(ATTRIBUTE_NAME_HREF));
+        }
+      }
+    );
+    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
+    f.setLogger(l);
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_XREF.localName,
+      TOPIC_XREF.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_HREF, "file://example.com/foo")
+        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+        .build()
+    );
+
+    assertTrue(l.getMessages().isEmpty());
+    assertEquals("file://example.com/foo", res.get(0));
+  }
+
+  @Test
+  public void testConref() throws SAXException {
     final List<String> res = new ArrayList<>();
     f.setContentHandler(
       new DefaultHandler() {
@@ -137,7 +165,7 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testScope() throws SAXException, URISyntaxException {
+  public void testScope() throws SAXException {
     final List<String> res = new ArrayList<>();
     f.setContentHandler(
       new DefaultHandler() {
@@ -173,7 +201,7 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testId() throws SAXException, URISyntaxException {
+  public void testId() throws SAXException {
     f.setContentHandler(new DefaultHandler());
     final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
     f.setLogger(l);
@@ -221,7 +249,7 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testKeys() throws SAXException, URISyntaxException {
+  public void testKeys() throws SAXException {
     f.setContentHandler(new DefaultHandler());
     final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
     f.setLogger(l);
@@ -268,7 +296,7 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testKeyscope() throws SAXException, URISyntaxException {
+  public void testKeyscope() throws SAXException {
     f.setContentHandler(new DefaultHandler());
     final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
     f.setLogger(l);
