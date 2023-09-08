@@ -254,7 +254,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:variable name="domains" select="($target-doc/*/@domains | $target-doc/dita/*[@domains][1]/@domains)[1]" as="xs:string?"/>
         <xsl:choose>
           <xsl:when test="empty($target-doc)">
-            <xsl:apply-templates select="$current-element" mode="ditamsg:missing-conref-target-error"/>
+            <xsl:apply-templates select="$current-element" mode="missing-conref-target-file"/>
           </xsl:when>
           <xsl:when test="conref:isValid($domains,false())">
             <xsl:if test="not(conref:isValid($domains,true()))">
@@ -329,6 +329,10 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="ditamsg:malformedConref"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*" mode="missing-conref-target-file">
+    <xsl:apply-templates select="." mode="ditamsg:missing-conref-target-error"/>
   </xsl:template>
 
   <!-- When an element is the target of a conref, treat everything the same as any other element EXCEPT the attributes.
@@ -746,7 +750,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <!--copy everything else-->
-  <xsl:template match="@* | node()">
+  <xsl:template match="@* | node()" name="copy">
     <xsl:param name="current-relative-path" tunnel="yes" as="xs:string" select="''"/>
     <xsl:param name="WORKDIR" tunnel="yes" as="xs:string">
       <xsl:apply-templates select="/processing-instruction('workdir-uri')[1]" mode="get-work-dir"/>

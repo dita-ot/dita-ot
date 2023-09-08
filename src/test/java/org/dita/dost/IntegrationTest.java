@@ -301,6 +301,11 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  public void testkeyrefKeywordConref() throws Throwable {
+    builder().name(Paths.get("keyref", "keyword_conref")).transtype(PREPROCESS).input(Paths.get("test.ditamap")).test();
+  }
+
+  @Test
   public void testmapref() throws Throwable {
     builder()
       .name(Paths.get("mapref", "basic"))
