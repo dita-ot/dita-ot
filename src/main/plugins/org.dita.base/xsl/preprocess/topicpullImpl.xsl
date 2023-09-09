@@ -1258,29 +1258,9 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*[contains(@class,' topic/fn ')]" mode="dita-ot:text-only"/>
 
   <xsl:template match="*[contains(@class,' topic/xref ')]" mode="copy-shortdesc">
-    <xsl:choose>
-      <xsl:when test="empty(@href) or @scope='peer' or @scope='external'">
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="@format and not(@format='dita')">
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="not(contains(@href,'/'))"><!-- May be DITA, but in the same directory -->
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="text()|*[not(contains(@class,' topic/desc '))]">
-        <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()" mode="#current" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>***</xsl:text><!-- go get the target text -->
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:copy>
+      <xsl:apply-templates select="@*|text()|*" mode="#current"/>
+    </xsl:copy>
   </xsl:template>
   
   <xsl:template match="text()" mode="copy-shortdesc">
