@@ -51,7 +51,7 @@ public class MapMetaReaderTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "base", "locktitle" })
+  @ValueSource(strings = { "base", "locktitle", "duplicate" })
   public void testRead(String dir) throws DITAOTException, IOException, SAXException {
     Files
       .list(srcDir.toPath().resolve(dir))

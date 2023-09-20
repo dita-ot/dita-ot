@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+  title="test">
+  <topicref class="- map/topicref " href="a.xml">
+    <topicmeta class="- map/topicmeta ">
+      <searchtitle class="- map/searchtitle ">topicref searchtitle 1</searchtitle>
+      <author class="- topic/author ">topicref author 1</author>
+      <source class="- topic/source ">topicref source 1</source>
+      <publisher class="- topic/publisher ">topicref publisher 1</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2011"/>
+        <copyrholder class="- topic/copyrholder ">topicref copyrholder 1</copyrholder>
+      </copyright>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2011"/>
+        <revised class="- topic/revised " modified="2011"/>
+      </critdates>
+      <permissions class="- topic/permissions " view="topicref permissins 1"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">topicref category 1</category>
+      <category class="- topic/category ">topicref category 1</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 1</keyword>
+      </keywords>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 1</keyword>
+      </keywords>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 1</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
+        </vrmlist>
+      </prodinfo>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 1</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta class="- topic/othermeta " content="topicref othermeta 1" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <resourceid class="- topic/resourceid " id="foo 1"/>
+      <data class="- topic/data ">topicref data 1</data>
+      <data class="- topic/data ">topicref datafoo 1</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref data 1</data>
+      </data-about>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref datafoo 1</data>
+      </data-about>
+      <foreign class="- topic/foreign ">topicref foreign 1</foreign>
+      <foreign class="- topic/foreign ">topicref foreign 1</foreign>
+      <unknown class="- topic/unknown ">topicref unknown 1</unknown>
+      <unknown class="- topic/unknown ">topicref unknown 1</unknown>
+      <linktext class="- map/linktext ">topicref linktext 1</linktext>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc 1</shortdesc>
+      <navtitle class="- topic/navtitle " dita-ot:locktitle="no">topicref navtitle 1</navtitle>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="a.xml">
+    <topicmeta class="- map/topicmeta ">
+      <searchtitle class="- map/searchtitle ">topicref searchtitle 1</searchtitle>
+      <author class="- topic/author ">topicref author 1</author>
+      <author class="- topic/author ">topicref author 2</author>
+      <source class="- topic/source ">topicref source 1</source>
+      <publisher class="- topic/publisher ">topicref publisher 1</publisher>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2011"/>
+        <copyrholder class="- topic/copyrholder ">topicref copyrholder 1</copyrholder>
+      </copyright>
+      <copyright class="- topic/copyright ">
+        <copyryear class="- topic/copyryear " year="2012"/>
+        <copyrholder class="- topic/copyrholder ">topicref copyrholder 2</copyrholder>
+      </copyright>
+      <critdates class="- topic/critdates ">
+        <created class="- topic/created " date="2011"/>
+        <revised class="- topic/revised " modified="2011"/>
+      </critdates>
+      <permissions class="- topic/permissions " view="topicref permissins 1"/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <audience class="- topic/audience "/>
+      <category class="- topic/category ">topicref category 1</category>
+      <category class="- topic/category ">topicref category 1</category>
+      <category class="- topic/category ">topicref category 2</category>
+      <category class="- topic/category ">topicref category 2</category>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 1</keyword>
+      </keywords>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 1</keyword>
+      </keywords>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 2</keyword>
+      </keywords>
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">topicref keyword 2</keyword>
+      </keywords>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 1</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="1.0"/>
+        </vrmlist>
+      </prodinfo>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 1</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 2</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <prodinfo class="- topic/prodinfo ">
+        <prodname class="- topic/prodname ">topicref prodnamefoo 2</prodname>
+        <vrmlist class="- topic/vrmlist ">
+          <vrm class="- topic/vrm " version="2.0"/>
+        </vrmlist>
+      </prodinfo>
+      <othermeta class="- topic/othermeta " content="topicref othermeta 1" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta 2" name="othermeta"/>
+      <othermeta class="- topic/othermeta " content="topicref othermeta 2" name="othermeta"/>
+      <resourceid class="- topic/resourceid " id="foo 1"/>
+      <resourceid class="- topic/resourceid " id="foo 2"/>
+      <data class="- topic/data ">topicref data 1</data>
+      <data class="- topic/data ">topicref datafoo 1</data>
+      <data class="- topic/data ">topicref data 2</data>
+      <data class="- topic/data ">topicref datafoo 2</data>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref data 1</data>
+      </data-about>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref datafoo 1</data>
+      </data-about>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref data 2</data>
+      </data-about>
+      <data-about class="- topic/data-about ">
+        <data class="- topic/data ">topicref datafoo 2</data>
+      </data-about>
+      <foreign class="- topic/foreign ">topicref foreign 1</foreign>
+      <foreign class="- topic/foreign ">topicref foreign 1</foreign>
+      <foreign class="- topic/foreign ">topicref foreign 2</foreign>
+      <foreign class="- topic/foreign ">topicref foreign 2</foreign>
+      <unknown class="- topic/unknown ">topicref unknown 1</unknown>
+      <unknown class="- topic/unknown ">topicref unknown 1</unknown>
+      <unknown class="- topic/unknown ">topicref unknown 2</unknown>
+      <unknown class="- topic/unknown ">topicref unknown 2</unknown>
+      <linktext class="- map/linktext ">topicref linktext 1</linktext>
+      <shortdesc class="- map/shortdesc ">topicref shortdesc 1</shortdesc>
+      <navtitle class="- topic/navtitle " dita-ot:locktitle="no">topicref navtitle 1</navtitle>
+    </topicmeta>
+  </topicref>
+</map>
