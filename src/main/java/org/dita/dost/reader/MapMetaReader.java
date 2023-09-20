@@ -208,7 +208,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
     final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
-    Map<String, Element> current = mergeMeta(null, inheritance, cascadeSet);
+    Map<String, Element> current = mergeMeta(null, Collections.unmodifiableMap(inheritance), cascadeSet);
     Element metaNode = null;
 
     final NodeList children = topicref.getChildNodes();
@@ -329,12 +329,10 @@ public final class MapMetaReader extends AbstractDomFilter {
           } else {
             if (TOPIC_NAVTITLE.matches(classValue)) {
               //Add locktitle value to navtitle so we know whether it should be pushed to topics
-              final String locktitleAttr = ((Element) meta.getParentNode()).getAttributeNode(
-                    ATTRIBUTE_NAME_LOCKTITLE
-                  ) !=
-                null
-                ? ((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE).getNodeValue()
-                : "no";
+              final String locktitleAttr = Optional
+                .ofNullable(((Element) meta.getParentNode()).getAttributeNode(ATTRIBUTE_NAME_LOCKTITLE))
+                .map(Attr::getNodeValue)
+                .orElse("no");
               elem.setAttributeNS(DITA_OT_NS, DITA_OT_NS_PREFIX + ":" + ATTRIBUTE_NAME_LOCKTITLE, locktitleAttr);
             }
             final Element stub = resultDoc.createElement(ELEMENT_STUB);
@@ -347,7 +345,7 @@ public final class MapMetaReader extends AbstractDomFilter {
   }
 
   private Map<String, Element> mergeMeta(
-    Map<String, Element> topicMetaTable,
+    final Map<String, Element> topicMetaTable,
     final Map<String, Element> inheritance,
     final Set<String> enableSet
   ) {
@@ -356,40 +354,42 @@ public final class MapMetaReader extends AbstractDomFilter {
     // be inherited are merged.
     // Otherwise enableSet should be metaSet in order to merge all
     // metadata.
+    final Map<String, Element> res;
     if (topicMetaTable == null) {
-      topicMetaTable = new HashMap<>(16);
+      res = new HashMap<>(16);
+    } else {
+      res = new HashMap<>(topicMetaTable);
     }
+
     for (String key : enableSet) {
       if (inheritance.containsKey(key)) {
         if (uniqueSet.contains(key)) {
-          if (!topicMetaTable.containsKey(key)) {
-            topicMetaTable.put(key, inheritance.get(key));
+          if (!res.containsKey(key)) {
+            res.put(key, inheritance.get(key));
           }
         } else { // not unique metadata
-          if (!topicMetaTable.containsKey(key)) {
-            topicMetaTable.put(key, inheritance.get(key));
+          if (!res.containsKey(key)) {
+            res.put(key, inheritance.get(key));
           } else {
             //not necessary to do node type check here
             //because inheritStub doesn't contains any node
             //other than Element.
-            final Element stub = topicMetaTable.get(key);
+            final Element stub = res.get(key);
             final Node inheritStub = inheritance.get(key);
             if (stub != inheritStub) {
               // Merge the value if stub does not equal to inheritStub
               // Otherwise it will get into infinitive loop
-              final NodeList children = inheritStub.getChildNodes();
-              for (int i = 0; i < children.getLength(); i++) {
-                Node item = children.item(i).cloneNode(true);
-                item = stub.getOwnerDocument().importNode(item, true);
+              for (Node child : XMLUtils.toList(inheritStub.getChildNodes())) {
+                final Node item = stub.getOwnerDocument().importNode(child, true);
                 stub.appendChild(item);
               }
             }
-            topicMetaTable.put(key, stub);
+            res.put(key, stub);
           }
         }
       }
     }
-    return topicMetaTable;
+    return Collections.unmodifiableMap(res);
   }
 
   private void handleGlobalMeta(final Element metadata) {
