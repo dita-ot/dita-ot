@@ -134,17 +134,13 @@ public final class MapMetaReader extends AbstractDomFilter {
   @Override
   public Document process(final Document doc) {
     this.doc = doc;
-    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement())) {
-      final String classAttr = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
-      // if this node is topicmeta node under root
-      if (MAP_TOPICMETA.matches(classAttr)) {
-        handleGlobalMeta(elem);
-        // if this node is topicref node under root
-      } else if (MAP_TOPICREF.matches(classAttr)) {
-        handleTopicref(elem, globalMeta);
-      }
-    }
 
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICMETA)) {
+      handleGlobalMeta(elem);
+    }
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICREF)) {
+      handleTopicref(elem, globalMeta);
+    }
     for (Element keyword : XMLUtils.getChildElements(doc.getDocumentElement(), TOPIC_KEYWORDS, true)) {
       removeIndexTermRecursive(keyword);
     }
