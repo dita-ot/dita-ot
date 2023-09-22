@@ -8,7 +8,6 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Arrays.asList;
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
@@ -36,84 +35,70 @@ public final class MapMetaReader extends AbstractDomFilter {
    */
   private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
 
-  private static final Set<String> uniqueSet = Collections.unmodifiableSet(
-    new HashSet<>(
-      asList(
-        TOPIC_CRITDATES.matcher,
-        TOPIC_PERMISSIONS.matcher,
-        TOPIC_PUBLISHER.matcher,
-        TOPIC_SOURCE.matcher,
-        MAP_SEARCHTITLE.matcher,
-        TOPIC_SEARCHTITLE.matcher
-      )
-    )
+  private static final Set<String> uniqueSet = Set.of(
+    TOPIC_CRITDATES.matcher,
+    TOPIC_PERMISSIONS.matcher,
+    TOPIC_PUBLISHER.matcher,
+    TOPIC_SOURCE.matcher,
+    MAP_SEARCHTITLE.matcher,
+    TOPIC_SEARCHTITLE.matcher
   );
-  private static final Set<String> cascadeSet = Collections.unmodifiableSet(
-    new HashSet<>(
-      asList(
-        TOPIC_AUDIENCE.matcher,
-        TOPIC_AUTHOR.matcher,
-        TOPIC_CATEGORY.matcher,
-        TOPIC_COPYRIGHT.matcher,
-        TOPIC_CRITDATES.matcher,
-        TOPIC_METADATA.matcher,
-        TOPIC_PERMISSIONS.matcher,
-        TOPIC_PRODINFO.matcher,
-        TOPIC_PUBLISHER.matcher
-      )
-    )
+  private static final Set<String> cascadeSet = Set.of(
+    TOPIC_AUDIENCE.matcher,
+    TOPIC_AUTHOR.matcher,
+    TOPIC_CATEGORY.matcher,
+    TOPIC_COPYRIGHT.matcher,
+    TOPIC_CRITDATES.matcher,
+    TOPIC_METADATA.matcher,
+    TOPIC_PERMISSIONS.matcher,
+    TOPIC_PRODINFO.matcher,
+    TOPIC_PUBLISHER.matcher
   );
-  private static final Set<String> metaSet = Collections.unmodifiableSet(
-    new HashSet<>(
-      asList(
-        MAP_SEARCHTITLE.matcher,
-        TOPIC_SEARCHTITLE.matcher,
-        TOPIC_AUTHOR.matcher,
-        TOPIC_SOURCE.matcher,
-        TOPIC_PUBLISHER.matcher,
-        TOPIC_COPYRIGHT.matcher,
-        TOPIC_CRITDATES.matcher,
-        TOPIC_PERMISSIONS.matcher,
-        TOPIC_AUDIENCE.matcher,
-        TOPIC_CATEGORY.matcher,
-        TOPIC_KEYWORDS.matcher,
-        TOPIC_PRODINFO.matcher,
-        TOPIC_OTHERMETA.matcher,
-        TOPIC_RESOURCEID.matcher,
-        TOPIC_DATA.matcher,
-        TOPIC_DATA_ABOUT.matcher,
-        TOPIC_FOREIGN.matcher,
-        TOPIC_UNKNOWN.matcher
-      )
-    )
+  private static final Set<String> metaSet = Set.of(
+    MAP_SEARCHTITLE.matcher,
+    TOPIC_SEARCHTITLE.matcher,
+    TOPIC_AUTHOR.matcher,
+    TOPIC_SOURCE.matcher,
+    TOPIC_PUBLISHER.matcher,
+    TOPIC_COPYRIGHT.matcher,
+    TOPIC_CRITDATES.matcher,
+    TOPIC_PERMISSIONS.matcher,
+    TOPIC_AUDIENCE.matcher,
+    TOPIC_CATEGORY.matcher,
+    TOPIC_KEYWORDS.matcher,
+    TOPIC_PRODINFO.matcher,
+    TOPIC_OTHERMETA.matcher,
+    TOPIC_RESOURCEID.matcher,
+    TOPIC_DATA.matcher,
+    TOPIC_DATA_ABOUT.matcher,
+    TOPIC_FOREIGN.matcher,
+    TOPIC_UNKNOWN.matcher
   );
-  private static final List<String> metaPos = Collections.unmodifiableList(
-    asList(
-      MAP_SEARCHTITLE.matcher,
-      TOPIC_SEARCHTITLE.matcher,
-      TOPIC_AUTHOR.matcher,
-      TOPIC_SOURCE.matcher,
-      TOPIC_PUBLISHER.matcher,
-      TOPIC_COPYRIGHT.matcher,
-      TOPIC_CRITDATES.matcher,
-      TOPIC_PERMISSIONS.matcher,
-      TOPIC_AUDIENCE.matcher,
-      TOPIC_CATEGORY.matcher,
-      TOPIC_KEYWORDS.matcher,
-      TOPIC_PRODINFO.matcher,
-      TOPIC_OTHERMETA.matcher,
-      TOPIC_RESOURCEID.matcher,
-      TOPIC_DATA.matcher,
-      TOPIC_DATA_ABOUT.matcher,
-      TOPIC_FOREIGN.matcher,
-      TOPIC_UNKNOWN.matcher,
-      MAP_LINKTEXT.matcher,
-      TOPIC_LINKTEXT.matcher,
-      MAP_SHORTDESC.matcher,
-      TOPIC_SHORTDESC.matcher,
-      TOPIC_NAVTITLE.matcher,
-      TOPIC_METADATA.matcher
-    )
+  private static final List<String> metaPos = List.of(
+    MAP_SEARCHTITLE.matcher,
+    TOPIC_SEARCHTITLE.matcher,
+    TOPIC_AUTHOR.matcher,
+    TOPIC_SOURCE.matcher,
+    TOPIC_PUBLISHER.matcher,
+    TOPIC_COPYRIGHT.matcher,
+    TOPIC_CRITDATES.matcher,
+    TOPIC_PERMISSIONS.matcher,
+    TOPIC_AUDIENCE.matcher,
+    TOPIC_CATEGORY.matcher,
+    TOPIC_KEYWORDS.matcher,
+    TOPIC_PRODINFO.matcher,
+    TOPIC_OTHERMETA.matcher,
+    TOPIC_RESOURCEID.matcher,
+    TOPIC_DATA.matcher,
+    TOPIC_DATA_ABOUT.matcher,
+    TOPIC_FOREIGN.matcher,
+    TOPIC_UNKNOWN.matcher,
+    MAP_LINKTEXT.matcher,
+    TOPIC_LINKTEXT.matcher,
+    MAP_SHORTDESC.matcher,
+    TOPIC_SHORTDESC.matcher,
+    TOPIC_NAVTITLE.matcher,
+    TOPIC_METADATA.matcher
   );
 
   private final Map<String, Element> globalMeta;
