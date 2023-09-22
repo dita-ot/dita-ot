@@ -144,16 +144,11 @@ public final class MapMetaReader extends AbstractDomFilter {
         handleTopicref(elem, globalMeta);
       }
     }
-    // Indexterm elements with either start or end attribute should not been
-    // move to referenced dita file's prolog section.
-    for (final Map<String, Element> resultTableEntry : resultTable.values()) {
-      for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
-        final String key = mapEntry.getKey();
-        if (TOPIC_KEYWORDS.matcher.equals(key)) {
-          removeIndexTermRecursive(mapEntry.getValue());
-        }
-      }
+
+    for (Element keyword : XMLUtils.getChildElements(doc.getDocumentElement(), TOPIC_KEYWORDS, true)) {
+      removeIndexTermRecursive(keyword);
     }
+
     return doc;
   }
 
