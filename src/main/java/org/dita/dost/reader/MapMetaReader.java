@@ -194,10 +194,10 @@ public final class MapMetaReader extends AbstractDomFilter {
         // the parent topicref refers to a valid dita topic
         if (hasDitaTopicTarget) {
           metaNode = elem;
-          current = handleMeta(elem, inheritance);
+          current = handleMeta(elem, Collections.unmodifiableMap(inheritance));
         }
       } else if (MAP_TOPICREF.matches(classAttr)) {
-        handleTopicref(elem, current);
+        handleTopicref(elem, Collections.unmodifiableMap(current));
       }
     }
 
@@ -214,9 +214,16 @@ public final class MapMetaReader extends AbstractDomFilter {
         //if the result table already contains some result
         //metadata for current topic path.
         final Map<String, Element> previous = resultTable.get(topicPath);
-        resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
+        resultTable.put(
+          topicPath,
+          mergeMeta(
+            Collections.unmodifiableMap(previous),
+            Collections.unmodifiableMap(current),
+            Collections.unmodifiableSet(metaSet)
+          )
+        );
       } else {
-        resultTable.put(topicPath, cloneElementMap(current));
+        resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
       }
       final Map<String, Element> metas = resultTable.get(topicPath);
       if (!metas.isEmpty()) {
