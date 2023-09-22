@@ -188,17 +188,16 @@ public final class MapMetaReader extends AbstractDomFilter {
     Element metaNode = null;
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
-    for (Element elem : XMLUtils.getChildElements(topicref)) {
-      String classAttr = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
-      if (MAP_TOPICMETA.matches(classAttr)) {
+    if (hasDitaTopicTarget) {
+      for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
         // the parent topicref refers to a valid dita topic
-        if (hasDitaTopicTarget) {
-          metaNode = elem;
-          current = handleMeta(elem, Collections.unmodifiableMap(inheritance));
-        }
-      } else if (MAP_TOPICREF.matches(classAttr)) {
-        handleTopicref(elem, Collections.unmodifiableMap(current));
+        metaNode = elem;
+        current = handleMeta(elem, Collections.unmodifiableMap(inheritance));
       }
+    }
+
+    for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
+      handleTopicref(elem, Collections.unmodifiableMap(current));
     }
 
     if (!current.isEmpty() && hasDitaTopicTarget) {
