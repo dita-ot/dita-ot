@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.stripFragment;
 
 import java.io.File;
 import java.net.URI;
@@ -180,8 +179,11 @@ public final class MapMetaReader extends AbstractDomFilter {
   }
 
   private void handleTopicref(final Element topicref, final Map<String, Element> inheritance) {
-    final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
-    final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+    final URI hrefAttr = Optional
+      .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
+      .map(Node::getNodeValue)
+      .map(URLUtils::toURI)
+      .orElse(null);
     final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
     Map<String, Element> current = mergeMeta(null, Collections.unmodifiableMap(inheritance), cascadeSet);
@@ -201,14 +203,14 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
 
     if (!current.isEmpty() && hasDitaTopicTarget) {
-      URI topicPath;
-      if (copytoAttr != null) {
-        final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-        topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
-      } else {
-        final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
-        topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
-      }
+      final URI copytoAttr = Optional
+        .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
+        .map(Attr::getNodeValue)
+        .map(URLUtils::toURI)
+        .map(URLUtils::stripFragment)
+        .orElse(null);
+      final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
+      final URI topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(rel));
       if (resultTable.containsKey(topicPath)) {
         //if the result table already contains some result
         //metadata for current topic path.
