@@ -25,7 +25,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="msg" select="'***'"/>
     <xsl:param name="msgparams" select="''"/>    
     
-    <xsl:variable name="msgdoc" select="document('platform:/config/messages.xml')" as="document-node()?"/>
+    <xsl:variable name="msgdoc" select="document('platform:config/messages.xml')" as="document-node()?"/>
     <xsl:variable name="msgcontent" as="xs:string*">
       <xsl:choose>
         <xsl:when test="$msg != '***'">

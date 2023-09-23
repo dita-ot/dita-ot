@@ -15,18 +15,17 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class LangUtils {
-    public static <T, S> Map.Entry<T, S> pair(T left, S right) {
-        return new AbstractMap.SimpleImmutableEntry(left, right);
-    }
 
-    /**
-     * Zip list with 0-based index.
-     *
-     * @return stream of value-index pairs
-     */
-    public static <T> Stream<Map.Entry<T, Integer>> zipWithIndex(List<T> src) {
-        return IntStream
-                .range(0, src.size())
-                .mapToObj(i -> pair(src.get(i), i));
-    }
+  public static <T, S> Map.Entry<T, S> pair(T left, S right) {
+    return new AbstractMap.SimpleImmutableEntry<>(left, right);
+  }
+
+  /**
+   * Zip list with 0-based index.
+   *
+   * @return stream of value-index pairs
+   */
+  public static <T> Stream<Map.Entry<T, Integer>> zipWithIndex(List<T> src) {
+    return IntStream.range(0, src.size()).mapToObj(i -> pair(src.get(i), i));
+  }
 }

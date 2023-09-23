@@ -1,18 +1,14 @@
 package com.suite.sol.ditaot;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
+import java.io.File;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.tools.ant.BuildException;
-
-import java.io.File;
-
-import org.apache.tools.ant.Task;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Task;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -48,108 +44,98 @@ Parts copyright by Suite Solutions, released under the same terms as the DITA-OT
  */
 public class DetectLang extends Task {
 
-    private String documentPath;
+  private String documentPath;
 
-    /**
-     * Sets the path to the _MERGED file which will be parsed.
-     *
-     * @param path The path to set
-     */
-    public void setDocumentPath(final String path) {
-        this.documentPath = path;
+  /**
+   * Sets the path to the _MERGED file which will be parsed.
+   *
+   * @param path The path to set
+   */
+  public void setDocumentPath(final String path) {
+    this.documentPath = path;
+  }
+
+  /**
+   * Executes the Ant task.
+   */
+  @Override
+  public void execute() throws BuildException {
+    if (getProject() == null) {
+      throw new BuildException(new IllegalStateException("Project not available"));
     }
+    if (getProject().getProperty("document.locale") == null) {
+      try {
+        documentPath = documentPath.replace(File.separatorChar, '/');
+        final File file = documentPath.startsWith("file:")
+          ? new File(new java.net.URI(documentPath))
+          : new File(documentPath);
+        if (!file.exists()) {
+          throw new Exception("File does not exist");
+        }
+        if (!file.canRead()) {
+          throw new Exception("Can't read input file");
+        }
 
-    /**
-     * Executes the Ant task.
-     */
+        final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        final SAXParser saxParser = saxParserFactory.newSAXParser();
+
+        saxParser.parse(file, new DefaultHandlerImpl());
+      } catch (final StopParsingException e) {
+        log("Lang search finished", Project.MSG_INFO);
+      } catch (final Exception e) {
+        throw new BuildException("Failed to read document language: " + e.getMessage(), e);
+      }
+    }
+    final String locale = getProject().getProperty("document.locale");
+    if (locale != null && getProject().getProperty("document.language") == null) {
+      setActiveProjectProperty("document.language", locale.substring(0, Math.min(locale.length(), 2)));
+    }
+  }
+
+  private class DefaultHandlerImpl extends DefaultHandler {
+
     @Override
-    public void execute() throws BuildException {
-        if (getProject() == null) {
-            throw new BuildException(new IllegalStateException("Project not available"));
+    public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
+      throws SAXException {
+      String processedString;
+      final String classAttr = attributes.getValue("class");
+      final String langAttr = attributes.getValue("xml:lang");
+
+      if (classAttr != null && langAttr != null) {
+        if ((classAttr.contains(" map/map ")) || (classAttr.contains(" topic/topic "))) {
+          final String partProcessedString = langAttr.replace('-', '_');
+          int length = partProcessedString.length();
+          if (length == 5) {
+            processedString =
+              partProcessedString.substring(0, length - 2).toLowerCase() +
+              partProcessedString.substring(length - 2).toUpperCase();
+          } else if (length > 5) {
+            processedString = partProcessedString.substring(0, 2).toLowerCase() + partProcessedString.substring(2);
+          } else {
+            processedString = partProcessedString;
+          }
+
+          setActiveProjectProperty("document.locale", processedString);
+          /* Successfully found xml:lang, so stop parsing. */
+          throw new StopParsingException();
         }
-        if (getProject().getProperty("document.locale") == null) {
-            try {
-
-                documentPath = documentPath.replace(File.separatorChar, '/');
-                final File file = documentPath.startsWith("file:") ?
-                        new File(new java.net.URI(documentPath)) :
-                            new File(documentPath);
-                        if (!file.exists()) {
-                            throw new Exception("File does not exist");
-                        }
-                        if (!file.canRead()) {
-                            throw new Exception("Can't read input file");
-                        }
-
-                        final SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-                        final SAXParser saxParser = saxParserFactory.newSAXParser();
-
-                        saxParser.parse(file, new DefaultHandlerImpl());
-
-            } catch (final StopParsingException e) {
-                log("Lang search finished", Project.MSG_INFO);
-            } catch (final Exception e) {
-                throw new BuildException("Failed to read document language: " + e.getMessage(), e);
-            }
-        }
-        final String locale = getProject().getProperty("document.locale");
-        if (locale != null && getProject().getProperty("document.language") == null) {
-            setActiveProjectProperty("document.language",
-                    locale.substring(0, locale.length() < 2 ? locale.length(): 2));
-        }
+      }
     }
+  }
 
-    private class DefaultHandlerImpl
-    extends DefaultHandler {
+  /**
+   * Exception to signal deliberate parsing stop.
+   */
+  private static final class StopParsingException extends SAXException {}
 
-        @Override
-        public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
-            String processedString;
-            final String classAttr = attributes.getValue("class");
-            final String langAttr = attributes.getValue("xml:lang");
-
-            if(classAttr != null && langAttr != null) {
-                if ((classAttr.indexOf(" map/map ") > -1) ||
-                        (classAttr.indexOf(" topic/topic ") > -1)) {
-                    final String partProcessedString = langAttr.replace('-','_');
-                    int length = partProcessedString.length();
-                    if (length == 5) {
-                        processedString = partProcessedString.substring(0, length - 2).toLowerCase()
-                                + partProcessedString.substring(length - 2).toUpperCase();
-                    } else if (length > 5) {
-                        processedString = partProcessedString.substring(0, 2).toLowerCase()
-                                + partProcessedString.substring(2);
-                    } else {
-                        processedString = partProcessedString;
-                    }
-
-
-                    setActiveProjectProperty("document.locale",
-                            processedString);
-                    /* Successfully found xml:lang, so stop parsing. */
-                    throw new StopParsingException();
-                }
-
-            }
-
-        }
-
+  /**
+   * Sets property in active ant project with name specified inpropertyName,
+   * and value specified in propertyValue parameter
+   */
+  private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
+    final Project activeProject = getProject();
+    if (activeProject != null) {
+      activeProject.setProperty(propertyName, propertyValue);
     }
-    
-    /**
-     * Exception to signal deliberate parsing stop.
-     */
-    private final static class StopParsingException extends SAXException {}
-
-    /**
-     * Sets property in active ant project with name specified inpropertyName,
-     * and value specified in propertyValue parameter
-     */
-    private void setActiveProjectProperty(final String propertyName, final String propertyValue) {
-        final Project activeProject = getProject();
-        if (activeProject != null) {
-            activeProject.setProperty(propertyName, propertyValue);
-        }
-    }
-
+  }
 }

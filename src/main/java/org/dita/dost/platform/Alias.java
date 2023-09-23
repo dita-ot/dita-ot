@@ -8,18 +8,7 @@
 
 package org.dita.dost.platform;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Alias {
-
-    public final String alias;
-
-    @JsonCreator
-    public Alias(@JsonProperty("alias") String alias) {
-        this.alias = alias;
-    }
-
-}
+public record Alias(String alias) {}

@@ -11,5 +11,4 @@ package org.dita.dost.writer;
 import org.dita.dost.writer.include.IncludeResolver;
 
 @Deprecated
-public final class CoderefResolver extends IncludeResolver {
-}
+public final class CoderefResolver extends IncludeResolver {}

@@ -8,180 +8,165 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.TestUtils.createTempDir;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TransformerHandler;
+import java.util.stream.Stream;
+import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
-
+import net.sf.saxon.s9api.BuildingContentHandler;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
-import org.apache.commons.io.IOUtils;
+import net.sf.saxon.sapling.SaplingElement;
+import net.sf.saxon.sapling.SaplingNode;
+import net.sf.saxon.sapling.SaplingText;
+import net.sf.saxon.sapling.Saplings;
+import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.KeyScope;
+import org.dita.dost.util.XMLUtils;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-import org.dita.dost.TestUtils;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
 public class KeyrefPaserTest {
 
-    private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
-    private static final File srcDir = new File(resourceDir, "src");
-    private static final File expDir = new File(resourceDir, "exp");
+  private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
+  private static final File srcDir = new File(resourceDir, "src");
+  private static final File expDir = new File(resourceDir, "exp");
 
-    private final XMLUtils xmlUtils = new XMLUtils();
-    private KeyScope keyDefinition;
-    private File tempDir;
+  private final XMLUtils xmlUtils = new XMLUtils();
 
-    @Before
-    public void setUp() throws Exception {
-        tempDir = createTempDir(KeyrefPaserTest.class);
-        TestUtils.copy(srcDir, tempDir);
+  @TempDir
+  private File tempDir;
 
-        keyDefinition = readKeyMap(Paths.get("keys.ditamap"));
+  @ParameterizedTest
+  @MethodSource("testWriteArguments")
+  public void testWrite(Path file, Path map) throws Exception {
+    TestUtils.copy(srcDir, tempDir);
+
+    final KeyScope keyDefinition = readKeyMap(map);
+    final KeyrefPaser parser = new KeyrefPaser();
+    parser.setLogger(new TestUtils.TestLogger());
+    parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+    parser.setKeyDefinition(keyDefinition);
+    parser.setCurrentFile(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri());
+    parser.write(Paths.get(tempDir.getAbsolutePath(), file.toString()).toFile());
+
+    assertXMLEqual(
+      new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
+      new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
+    );
+  }
+
+  private static Stream<Arguments> testWriteArguments() {
+    return Stream.of(
+      Arguments.of(Paths.get("a.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("subdir", "subdirtopic.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("id.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("fallback.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("b.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap"))
+    );
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @MethodSource("testDomToSaxArguments")
+  public void testDomToSax(String ignore, SaplingElement src, SaplingNode exp, boolean retainElements)
+    throws SaxonApiException, SAXException {
+    final BuildingContentHandler buildingContentHandler = xmlUtils
+      .getProcessor()
+      .newDocumentBuilder()
+      .newBuildingContentHandler();
+    final KeyrefPaser parser = new KeyrefPaser();
+    parser.setContentHandler(buildingContentHandler);
+    final XdmNode xdmNode = src.toXdmNode(xmlUtils.getProcessor());
+
+    buildingContentHandler.startDocument();
+    parser.domToSax(xdmNode, retainElements);
+    buildingContentHandler.endDocument();
+
+    final XdmNode expNode = Saplings.elem("wrapper").withChild(exp).toXdmNode(xmlUtils.getProcessor());
+    final Diff d = DiffBuilder
+      .compare(expNode.toString())
+      .withTest("<wrapper>" + buildingContentHandler.getDocumentNode().toString() + "</wrapper>")
+      .ignoreWhitespace()
+      .build();
+    if (d.hasDifferences()) {
+      System.err.println(expNode);
+      System.err.println("<wrapper>" + buildingContentHandler.getDocumentNode().toString() + "</wrapper>");
+      throw new AssertionError(d.toString());
     }
+  }
 
-    @After
-    public void tearDown() throws IOException {
-        TestUtils.forceDelete(tempDir);
+  private static Stream<Arguments> testDomToSaxArguments() {
+    final SaplingText characters = Saplings.text("text");
+    final QName xmlLang = new QName("xml", XMLConstants.XML_NS_URI, "lang");
+    final SaplingElement keyword = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement tm = Saplings
+      .elem(TOPIC_TM.localName)
+      .withAttr("class", TOPIC_TM.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement text = Saplings
+      .elem(TOPIC_TEXT.localName)
+      .withAttr("class", TOPIC_TEXT.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(characters);
+    final SaplingElement keywordWithTm = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(tm);
+    final SaplingElement keywordWithText = Saplings
+      .elem(TOPIC_KEYWORD.localName)
+      .withAttr("class", TOPIC_KEYWORD.toString())
+      .withAttr(xmlLang, "en")
+      .withChild(text);
+    return Stream.of(
+      Arguments.of("keyword > #text, strip", keyword, characters, false),
+      Arguments.of("keyword > tm > #text, strip", keywordWithTm, tm, false),
+      Arguments.of("keyword > text > #text, strip", keywordWithText, text, false),
+      Arguments.of("keyword > #text, retain", keyword, keyword, true),
+      Arguments.of("keyword > tm > #text, retain", keywordWithTm, keywordWithTm, true),
+      Arguments.of("keyword > text > #text, retain", keywordWithText, keywordWithText, true)
+    );
+  }
+
+  private KeyScope readKeyMap(final Path map) {
+    KeyrefReader reader = new KeyrefReader();
+    final URI keyMapFile = tempDir.toPath().resolve(map).toUri();
+    final XdmNode document = parse(keyMapFile);
+
+    reader.read(keyMapFile, document);
+
+    return reader.getKeyDefinition();
+  }
+
+  private XdmNode parse(final URI in) {
+    try {
+      final StreamSource source = new StreamSource(in.toString());
+      source.setSystemId(in.toString());
+      return xmlUtils.getProcessor().newDocumentBuilder().build(source);
+    } catch (SaxonApiException e) {
+      throw new RuntimeException(e);
     }
-
-    @Test
-    public void testTopicWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "a.xml").toURI());
-        parser.write(new File(tempDir, "a.xml"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "a.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "a.xml").toURI().toString()));
-    }
-    
-    @Test
-    public void testTopicWriteSubdir() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        final String tempSubDir = tempDir + File.separator + "subdir";
-        parser.setCurrentFile(new File(tempSubDir, "subdirtopic.xml").toURI());
-        parser.write(new File(tempSubDir, "subdirtopic.xml"));
-
-        assertXMLEqual(new InputSource(new File(expDir + File.separator + "subdir", "subdirtopic.xml").toURI().toString()),
-                new InputSource(new File(tempSubDir, "subdirtopic.xml").toURI().toString()));
-    }
-
-    @Test
-    public void testFragment() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "id.xml").toURI());
-        parser.write(new File(tempDir, "id.xml"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "id.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "id.xml").toURI().toString()));
-    }
-    
-    @Test
-    public void testFallback() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "fallback.xml").toURI());
-        parser.write(new File(tempDir, "fallback.xml"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "fallback.xml").toURI().toString()),
-                new InputSource(new File(tempDir, "fallback.xml").toURI().toString()));
-    }
-
-    @Test
-    public void testMapWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "b.ditamap").toURI());
-        parser.write(new File(tempDir, "b.ditamap"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "b.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "b.ditamap").toURI().toString()));
-    }
-
-    @Test
-    public void testUpLevelMapWrite() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(readKeyMap(Paths.get("subdir", "c.ditamap")));
-        parser.setCurrentFile(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI());
-        parser.write(new File(tempDir, "subdir"+ File.separator +"c.ditamap"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "subdir"+ File.separator +"c.ditamap").toURI().toString()));
-    }
-
-    @Test
-    public void testMapWithKeyScopes() throws Exception {
-        final KeyrefPaser parser = new KeyrefPaser();
-        parser.setLogger(new TestUtils.TestLogger());
-        parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-        parser.setKeyDefinition(keyDefinition);
-        parser.setCurrentFile(new File(tempDir, "d.ditamap").toURI());
-        parser.write(new File(tempDir, "d.ditamap"));
-
-        assertXMLEqual(new InputSource(new File(expDir, "d.ditamap").toURI().toString()),
-                new InputSource(new File(tempDir, "d.ditamap").toURI().toString()));
-    }
-
-    private KeyScope readKeyMap(final Path map) {
-        KeyrefReader reader = new KeyrefReader();
-        final URI keyMapFile = tempDir.toPath().resolve(map).toUri();
-        final XdmNode document = parse(keyMapFile);
-
-        reader.read(keyMapFile, document);
-
-        return reader.getKeyDefinition();
-    }
-
-    private XdmNode parse(final URI in) {
-        try {
-            final StreamSource source = new StreamSource(in.toString());
-            source.setSystemId(in.toString());
-            return xmlUtils.getProcessor().newDocumentBuilder().build(source);
-        } catch (SaxonApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+  }
 }

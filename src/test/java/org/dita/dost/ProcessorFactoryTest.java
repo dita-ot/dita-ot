@@ -1,40 +1,44 @@
 package org.dita.dost;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
-
-import static org.junit.Assert.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 public class ProcessorFactoryTest {
 
-    @Test
-    public void testNewInstance() {
-        String ditaDir = System.getProperty("dita.dir");
-        if (ditaDir == null) {
-            ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
-        }
-        assertNotNull(ProcessorFactory.newInstance(new File(ditaDir)));
+  @Test
+  public void testNewInstance() {
+    String ditaDir = System.getProperty("dita.dir");
+    if (ditaDir == null) {
+      ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
     }
+    assertNotNull(ProcessorFactory.newInstance(new File(ditaDir)));
+  }
 
-    @Test
-    public void testNewProcessor() {
-        String ditaDir = System.getProperty("dita.dir");
-        if (ditaDir == null) {
-            ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
-        }
-        final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
-        assertNotNull(pf.newProcessor("html5"));
+  @Test
+  public void testNewProcessor() {
+    String ditaDir = System.getProperty("dita.dir");
+    if (ditaDir == null) {
+      ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
     }
+    final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
+    assertNotNull(pf.newProcessor("html5"));
+  }
 
-    @Test(expected = java.lang.IllegalArgumentException.class)
-    public void testUnsupportedTranstype() {
+  @Test
+  public void testUnsupportedTranstype() {
+    assertThrows(
+      IllegalArgumentException.class,
+      () -> {
         String ditaDir = System.getProperty("dita.dir");
         if (ditaDir == null) {
-            ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
+          ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
         }
         final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
         pf.newProcessor("xxx");
-    }
-
+      }
+    );
+  }
 }

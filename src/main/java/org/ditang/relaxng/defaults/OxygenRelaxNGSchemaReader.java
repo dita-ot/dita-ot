@@ -7,16 +7,6 @@
  */
 package org.ditang.relaxng.defaults;
 
-import java.io.IOException;
-
-import javax.xml.transform.sax.SAXSource;
-
-import org.ditang.relaxng.defaults.RelaxNGDefaultValues.DefaultValuesCollector;
-import org.relaxng.datatype.DatatypeLibraryFactory;
-import org.relaxng.datatype.helpers.DatatypeLibraryLoader;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-
 import com.thaiopensource.relaxng.parse.IllegalSchemaException;
 import com.thaiopensource.relaxng.pattern.FeasibleTransform;
 import com.thaiopensource.relaxng.pattern.IdTypeMap;
@@ -40,91 +30,99 @@ import com.thaiopensource.validate.rng.impl.FeasibleIdTypeMapSchema;
 import com.thaiopensource.validate.rng.impl.IdTypeMapSchema;
 import com.thaiopensource.validate.rng.impl.PatternSchema;
 import com.thaiopensource.validate.rng.impl.SchemaReaderImpl;
+import java.io.IOException;
+import javax.xml.transform.sax.SAXSource;
+import org.relaxng.datatype.DatatypeLibraryFactory;
+import org.relaxng.datatype.helpers.DatatypeLibraryLoader;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
 
 /**
  * Schema Reader for RelaxNG
  * @author george@oxygenxml.com
  */
 public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
-	  /**
-	   * The Schema Wrapper.
-	   */
-	  public static class SchemaWrapper implements Schema {
-	    /**
-	     * The wrapped schema.
-	     */
-	    private Schema schema;
-	    
-	    /**
-	     * The start pattern.
-	     */
-	    private Pattern start;
-	    
-	    /**
-	     * The ID Type map.
-	     */
-	    private IdTypeMap idTypeMap;
 
-	    /**
-	     * Get start Pattern.
-	     * 
-	     * @return start pattern.
-	     */
-	    public Pattern getStart() {
-	      return start;
-	    }
+  /**
+   * The Schema Wrapper.
+   */
+  public static class SchemaWrapper implements Schema {
 
-	    /**
-	     * Set start pattern.
-	     * 
-	     * @param start The start pattern.
-	     */
-	    public void setStart(Pattern start) {
-	      this.start = start;
-	    }
+    /**
+     * The wrapped schema.
+     */
+    private final Schema schema;
 
-	    /**
-	     * Constructor.
-	     * 
-	     * @param wrapped The wrapped schema.
-	     */
-	    public SchemaWrapper(Schema wrapped) {
-	      schema = wrapped;
-	    }
+    /**
+     * The start pattern.
+     */
+    private Pattern start;
 
-	    /**
-	     * @see com.thaiopensource.validate.Schema#createValidator(com.thaiopensource.util.PropertyMap)
-	     */
-	    public Validator createValidator(PropertyMap properties) {
-	      return schema.createValidator(properties);
-	    }
+    /**
+     * The ID Type map.
+     */
+    private IdTypeMap idTypeMap;
 
-	    /**
-	     * @see com.thaiopensource.validate.Schema#getProperties()
-	     */
-	    public PropertyMap getProperties() {
-	      return schema.getProperties();
-	    }
-	    /**
-	     * Get the ID Type map.
-	     * 
-	     * @return Returns the idTypeMap.
-	     */
-	    private IdTypeMap getIdTypeMap() {
-	      return idTypeMap;
-	    }
-	    	    
-	    /**
-	     * Set the ID Type map.
-	     * 
-	     * @param idTypeMap The idTypeMap to set.
-	     */
-	    public void setIdTypeMap(IdTypeMap idTypeMap) {
-	      this.idTypeMap = idTypeMap;
-	    }
-	  }
-	
-	
+    /**
+     * Get start Pattern.
+     *
+     * @return start pattern.
+     */
+    public Pattern getStart() {
+      return start;
+    }
+
+    /**
+     * Set start pattern.
+     *
+     * @param start The start pattern.
+     */
+    public void setStart(Pattern start) {
+      this.start = start;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param wrapped The wrapped schema.
+     */
+    public SchemaWrapper(Schema wrapped) {
+      schema = wrapped;
+    }
+
+    /**
+     * @see com.thaiopensource.validate.Schema#createValidator(com.thaiopensource.util.PropertyMap)
+     */
+    public Validator createValidator(PropertyMap properties) {
+      return schema.createValidator(properties);
+    }
+
+    /**
+     * @see com.thaiopensource.validate.Schema#getProperties()
+     */
+    public PropertyMap getProperties() {
+      return schema.getProperties();
+    }
+
+    /**
+     * Get the ID Type map.
+     *
+     * @return Returns the idTypeMap.
+     */
+    private IdTypeMap getIdTypeMap() {
+      return idTypeMap;
+    }
+
+    /**
+     * Set the ID Type map.
+     *
+     * @param idTypeMap The idTypeMap to set.
+     */
+    public void setIdTypeMap(IdTypeMap idTypeMap) {
+      this.idTypeMap = idTypeMap;
+    }
+  }
+
   /**
    * Supported property ids.
    */
@@ -139,11 +137,12 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
     RngProperty.FEASIBLE,
     WrapProperty.ATTRIBUTE_OWNER,
   };
-  
+
   /***
    * Create a schema from an input source and a property map.
    */
-  public Schema createSchema(SAXSource source, PropertyMap properties) throws IOException, SAXException, IncorrectSchemaException {
+  public Schema createSchema(SAXSource source, PropertyMap properties)
+    throws IOException, SAXException, IncorrectSchemaException {
     SchemaPatternBuilder spb = new SchemaPatternBuilder();
     SAXResolver resolver = ResolverFactory.createResolver(properties);
     ErrorHandler eh = properties.get(ValidateProperty.ERROR_HANDLER);
@@ -153,19 +152,23 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
       dlf = new DatatypeLibraryLoader();
     }
     try {
-      Pattern start = SchemaBuilderImpl.parse(createParseable(source, resolver, eh, properties), eh, dlf, spb,
-          properties.contains(WrapProperty.ATTRIBUTE_OWNER));
+      Pattern start = SchemaBuilderImpl.parse(
+        createParseable(source, resolver, eh, properties),
+        eh,
+        dlf,
+        spb,
+        properties.contains(WrapProperty.ATTRIBUTE_OWNER)
+      );
       //Wrap the pattern
       return wrapPattern2(start, spb, properties);
-    }
-    catch (IllegalSchemaException e) {
+    } catch (IllegalSchemaException e) {
       throw new IncorrectSchemaException();
     }
   }
 
   /**
    * Make a schema wrapper.
-   * 
+   *
    * @param start Start pattern.
    * @param spb The schema pattern builder.
    * @param properties The properties map.
@@ -173,7 +176,6 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
    */
   private static SchemaWrapper wrapPattern2(Pattern start, SchemaPatternBuilder spb, PropertyMap properties)
     throws SAXException, IncorrectSchemaException {
-    
     if (properties.contains(RngProperty.FEASIBLE)) {
       //Use a feasible transform
       start = FeasibleTransform.transform(spb, start);
@@ -200,7 +202,7 @@ public abstract class OxygenRelaxNGSchemaReader extends SchemaReaderImpl {
     //Wrap the schema
     SchemaWrapper sw = new SchemaWrapper(schema);
     sw.setStart(start);
-    sw.setIdTypeMap(idTypeMap);      
+    sw.setIdTypeMap(idTypeMap);
     return sw;
   }
 }

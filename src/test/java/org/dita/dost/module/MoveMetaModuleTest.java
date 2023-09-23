@@ -8,98 +8,103 @@
 
 package org.dita.dost.module;
 
-import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.pipeline.PipelineHashIO;
-import org.dita.dost.util.XMLUtils;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.w3c.dom.Document;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_STYLE;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 
-@RunWith(Parameterized.class)
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.dita.dost.pipeline.AbstractPipelineInput;
+import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 public class MoveMetaModuleTest extends AbstractModuleTest {
-    @Parameterized.Parameters(name = "{0}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][]{
-                {"MatadataInheritance_foreign"},
-                {"MatadataInheritance_keywords"},
-                {"MatadataInheritance_linktext"},
-                {"MatadataInheritance_othermeta"},
-                {"MatadataInheritance_pemissions"},
-                {"MatadataInheritance_pemissions_replace"},
-                {"MatadataInheritance_prodinfo"},
-                {"MatadataInheritance_publisher"},
-                {"MatadataInheritance_resourceid"},
-                {"MatadataInheritance_searchtitle"},
-                {"MatadataInheritance_shortdesc"},
-                {"MatadataInheritance_source"},
-                {"MatadataInheritance_source_replace"},
-                {"MatadataInheritance_unknown"},
-                {"MetadataInheritance_audience"},
-                {"MetadataInheritance_author"},
-                {"MetadataInheritance_category"},
-                {"MetadataInheritance_copyright"},
-                {"MetadataInheritance_critdates"},
-                {"MetadataInheritance_critdates_replace"},
-                {"MetadataInheritance_data"},
-                {"MetadataInheritance_dataabout"}
-        });
-    }
 
-    public MoveMetaModuleTest(String testCase) {
-        super(testCase, Collections.emptyMap());
-    }
+  public static Stream<Arguments> data() {
+    return Stream.of(
+      Arguments.of("MatadataInheritance_foreign"),
+      Arguments.of("MatadataInheritance_keywords"),
+      Arguments.of("MatadataInheritance_linktext"),
+      Arguments.of("MatadataInheritance_othermeta"),
+      Arguments.of("MatadataInheritance_pemissions"),
+      Arguments.of("MatadataInheritance_pemissions_replace"),
+      Arguments.of("MatadataInheritance_prodinfo"),
+      Arguments.of("MatadataInheritance_publisher"),
+      Arguments.of("MatadataInheritance_resourceid"),
+      Arguments.of("MatadataInheritance_searchtitle"),
+      Arguments.of("MatadataInheritance_shortdesc"),
+      Arguments.of("MatadataInheritance_source"),
+      Arguments.of("MatadataInheritance_source_replace"),
+      Arguments.of("MatadataInheritance_unknown"),
+      Arguments.of("MetadataInheritance_audience"),
+      Arguments.of("MetadataInheritance_author"),
+      Arguments.of("MetadataInheritance_category"),
+      Arguments.of("MetadataInheritance_copyright"),
+      Arguments.of("MetadataInheritance_critdates"),
+      Arguments.of("MetadataInheritance_critdates_replace"),
+      Arguments.of("MetadataInheritance_data"),
+      Arguments.of("MetadataInheritance_dataabout")
+    );
+  }
 
-    @Override
-    protected AbstractPipelineInput getAbstractPipelineInput() {
-        final AbstractPipelineInput input = new PipelineHashIO();
-        input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
-        input.setAttribute(ANT_INVOKER_EXT_PARAM_STYLE,
-                Paths.get("src", "main", "plugins", "org.dita.base", "xsl", "preprocess", "mappull.xsl").toString());
-        return input;
-    }
+  @Override
+  protected AbstractPipelineInput getAbstractPipelineInput() {
+    final AbstractPipelineInput input = new PipelineHashIO();
+    input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
+    input.setAttribute(
+      ANT_INVOKER_EXT_PARAM_STYLE,
+      Paths.get("src", "main", "plugins", "org.dita.base", "xsl", "preprocess", "mappull.xsl").toString()
+    );
+    return input;
+  }
 
-    @Override
-    protected AbstractPipelineModule getModule(final File tempDir) {
-        return new MoveMetaModule();
-    }
+  @Override
+  protected AbstractPipelineModule getModule() {
+    return new MoveMetaModule();
+  }
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-        final XMLUtils xmlUtils = new XMLUtils();
-        final DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
-        f.setNamespaceAware(true);
-        final DocumentBuilder b = f.newDocumentBuilder();
-        for (File file : tempDir.listFiles((dir, name) -> name.endsWith("dita") || name.endsWith("ditamap"))) {
-            final Document d = b.parse(file);
-            d.appendChild(d.createProcessingInstruction("workdir-uri", tempDir.toURI().toString()));
-            xmlUtils.writeDocument(d, file);
-        }
+  public void initTest() {
+    try {
+      final DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+      f.setNamespaceAware(true);
+      final DocumentBuilder b = f.newDocumentBuilder();
+      for (File file : tempDir.listFiles((dir, name) -> name.endsWith("dita") || name.endsWith("ditamap"))) {
+        final Document d = b.parse(file);
+        d.appendChild(d.createProcessingInstruction("workdir-uri", tempDir.toURI().toString()));
+        xmlUtils.writeDocument(d, file);
+      }
+    } catch (ParserConfigurationException | IOException | SAXException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Test
-    @Ignore
-    public void parallelFile() {
-        // Ignore because MoveMetaModule doesn't use parallel features
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialFile(String testCase) {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    initTest();
+    test();
+  }
 
-    @Test
-    @Ignore
-    public void parallelMemory() {
-        // Ignore because MoveMetaModule doesn't use parallel features
-    }
+  @ParameterizedTest
+  @MethodSource("data")
+  public void serialMemory(String testCase) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    initTest();
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    chunkModule.setJob(job);
+    test();
+  }
 }

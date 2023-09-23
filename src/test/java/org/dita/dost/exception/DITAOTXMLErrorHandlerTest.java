@@ -7,38 +7,46 @@
  */
 package org.dita.dost.exception;
 
-import org.junit.Test;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.util.Configuration;
+import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 public class DITAOTXMLErrorHandlerTest {
 
-    private final DITAOTLogger logger = new TestLogger();
-    private final DITAOTXMLErrorHandler e = new DITAOTXMLErrorHandler("path", logger);
-    private final SAXParseException se = new SAXParseException("message", "publicId", "systemId", 3, 1,
-            new RuntimeException("msg"));
+  private final DITAOTLogger logger = new TestLogger();
+  private final DITAOTXMLErrorHandler e = new DITAOTXMLErrorHandler("path", logger, Configuration.Mode.STRICT);
+  private final SAXParseException se = new SAXParseException(
+    "message",
+    "publicId",
+    "systemId",
+    3,
+    1,
+    new RuntimeException("msg")
+  );
 
-    @Test
-    public void testDITAOTXMLErrorHandler() {
-        new DITAOTXMLErrorHandler("path", logger);
-        new DITAOTXMLErrorHandler(null, logger);
-    }
+  @Test
+  public void testDITAOTXMLErrorHandler() {
+    new DITAOTXMLErrorHandler("path", logger, Configuration.Mode.LAX);
+    new DITAOTXMLErrorHandler(null, logger, Configuration.Mode.LAX);
+  }
 
-    @Test(expected = SAXExceptionWrapper.class)
-    public void testError() throws SAXException {
-        e.error(se);
-    }
+  @Test
+  public void testError() {
+    assertThrows(SAXExceptionWrapper.class, () -> e.error(se));
+  }
 
-    @Test(expected = SAXExceptionWrapper.class)
-    public void testFatalError() throws SAXException {
-        e.fatalError(se);
-    }
+  @Test
+  public void testFatalError() {
+    assertThrows(SAXExceptionWrapper.class, () -> e.fatalError(se));
+  }
 
-    @Test
-    public void testWarning() throws SAXException {
-        e.warning(se);
-    }
-
+  @Test
+  public void testWarning() throws SAXException {
+    e.warning(se);
+  }
 }

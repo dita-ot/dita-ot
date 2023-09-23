@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
  * Corrects the urls.
  */
 public class Util {
+
   /**
    * Windows platform flag.
    */
@@ -23,7 +24,7 @@ public class Util {
 
   /**
    * Checks for a Windows platform.
-   * 
+   *
    * @return True if it is a win 32 platform.
    */
   private static boolean isWindows() {
@@ -33,14 +34,31 @@ public class Util {
     return windows;
   }
 
-    // which ASCII characters need to be escaped
-    private static boolean[] gNeedEscaping = new boolean[128];
-    // the first hex character if a character needs to be escaped
-    private static char[] gAfterEscaping1 = new char[128];
-    // the second hex character if a character needs to be escaped
-    private static char[] gAfterEscaping2 = new char[128];
-  private static char[] gHexChs = { '0', '1', '2', '3', '4', '5', '6', '7',
-      '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+  // which ASCII characters need to be escaped
+  private static final boolean[] gNeedEscaping = new boolean[128];
+  // the first hex character if a character needs to be escaped
+  private static final char[] gAfterEscaping1 = new char[128];
+  // the second hex character if a character needs to be escaped
+  private static final char[] gAfterEscaping2 = new char[128];
+  private static final char[] gHexChs = {
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+  };
+
   // initialize the above 3 arrays
   static {
     for (int i = 0; i <= 0x1f; i++) {
@@ -51,8 +69,7 @@ public class Util {
     gNeedEscaping[0x7f] = true;
     gAfterEscaping1[0x7f] = '7';
     gAfterEscaping2[0x7f] = 'F';
-    char[] escChs = { ' ', '<', '>', '#', '%', '"', '{', '}', '?', '|', '\\',
-        '^', '~', '[', ']', '`', '\'', '&' };
+    char[] escChs = { ' ', '<', '>', '#', '%', '"', '{', '}', '?', '|', '\\', '^', '~', '[', ']', '`', '\'', '&' };
     int len = escChs.length;
     char ch;
     for (char escCh : escChs) {
@@ -63,13 +80,13 @@ public class Util {
     }
   }
 
-/** 
+  /**
    * To escape a file path to a URI, by using %HH to represent
    * special ASCII characters: 0x00~0x1F, 0x7F, ' ', '<', '>', '#', '%'
    * and '"' and non-ASCII characters (whose value >= 128).
-   * 
+   * <p>
    * '\' character will also be escaped.
-   * 
+   *
    * @param path The path to be escaped.
    * @return The escaped uri.
    */
@@ -82,11 +99,11 @@ public class Util {
     return path;
   }
 
-/**
+  /**
    * To escape a file path to a URI, by using %HH to represent
    * special ASCII characters: 0x00~0x1F, 0x7F, ' ', '<', '>', '#', '%'
    * and '"' and non-ASCII characters (whose value >= 128).
-   * 
+   *
    * @param path The path to be escaped.
    * @return The escaped path.
    */
@@ -146,7 +163,7 @@ public class Util {
 
   /**
    * Corrects an URL.
-   * 
+   *
    * @param url
    *          The url to be corrected. If null will throw MalformedURLException.
    * @return a corrected URL. Never null.
@@ -164,7 +181,7 @@ public class Util {
    * Method introduced to correct the URLs in the default machine encoding. This
    * was needed by the xsltproc, the catalogs URLs must be encoded in the
    * machine encoding.
-   * 
+   *
    * @param url
    *          The URL to be corrected. If it contains a % char, it means it
    *          already was corrected, so it will be returned. Take care at
@@ -177,10 +194,13 @@ public class Util {
     // Fix for bad URLs containing UNC paths
     // If the url is a UNC file url it must be specified like:
     // file:////<PATH>...
-    if (url.startsWith("file://")
-    // A url like file:///<PATH> refers to a local file so it must not be
-    // modified.
-        && !url.startsWith("file:///") && isWindows()) {
+    if (
+      url.startsWith("file://") &&
+      // A url like file:///<PATH> refers to a local file so it must not be
+      // modified.
+      !url.startsWith("file:///") &&
+      isWindows()
+    ) {
       url = "file:////" + url.substring("file://".length());
     }
 
@@ -258,8 +278,7 @@ public class Util {
           pass = "";
         }
         // Re-attach user info.
-        toReturn = attachUserInfo(new URL(toReturn), user, pass.toCharArray())
-            .toString();
+        toReturn = attachUserInfo(new URL(toReturn), user, pass.toCharArray()).toString();
       } catch (MalformedURLException e) {
         // Shoudn't happen.
       }
@@ -269,7 +288,7 @@ public class Util {
 
   /**
    * Extract the user info from an URL.
-   * 
+   *
    * @param url
    *          The string representing the URL.
    * @return The userinfo or null if cannot extract it.
@@ -310,7 +329,7 @@ public class Util {
   /**
    * Gets the user from an userInfo string obtained from the starting URL. Used
    * only by the constructor.
-   * 
+   *
    * @param userInfo
    *          userInfo, taken from the URL.
    * @return The user.
@@ -330,13 +349,13 @@ public class Util {
 
   /**
    * Gets the password from an user info string obtained from the starting URL.
-   * 
+   *
    * @param userInfo
    *          userInfo, taken from the URL. If no user info specified returning
    *          null. If user info not null but no password after ":" then
    *          returning empty, (we have a user so the default pass for him is
    *          empty string). See bug 6086.
-   * 
+   *
    * @return The password.
    */
   private static String extractPassword(String userInfo) {
@@ -354,7 +373,7 @@ public class Util {
 
   /**
    * Clears the user info from an url.
-   * 
+   *
    * @param systemID
    *          the url to be cleaned.
    * @return the cleaned url, or null if the argument is not an URL.
@@ -375,7 +394,7 @@ public class Util {
 
   /**
    * Build the URL from the data obtained from the user.
-   * 
+   *
    * @param url
    *          The URL to be transformed.
    * @param user
@@ -386,13 +405,11 @@ public class Util {
    * @exception MalformedURLException
    *              Exception thrown if the URL is malformed.
    */
-  private static URL attachUserInfo(URL url, String user, char[] password)
-      throws MalformedURLException {
+  private static URL attachUserInfo(URL url, String user, char[] password) throws MalformedURLException {
     if (url == null) {
       return null;
     }
-    if ((url.getAuthority() == null || "".equals(url.getAuthority()))
-        && !"jar".equals(url.getProtocol())) {
+    if ((url.getAuthority() == null || "".equals(url.getAuthority())) && !"jar".equals(url.getProtocol())) {
       return url;
     }
 
@@ -405,7 +422,6 @@ public class Util {
       buf.append("jar:");
       buf.append(newURL.toString());
     } else {
-
       password = correctPassword(password);
 
       user = correctUser(user);
@@ -440,21 +456,19 @@ public class Util {
 
   /**
    * Escape the specified user.
-   * 
+   *
    * @param user
    *          The user name to correct.
    * @return The escaped user.
    */
   private static String correctUser(String user) {
-    if (user != null && user.trim().length() > 0
-        && (false || user.indexOf('%') == -1)) {
+    if (user != null && user.trim().length() > 0 && (false || user.indexOf('%') == -1)) {
       String escaped = escapeSpecialAsciiAndNonAscii(user);
       StringBuilder totalEscaped = new StringBuilder();
       for (int i = 0; i < escaped.length(); i++) {
         char ch = escaped.charAt(i);
         if (ch == '@' || ch == '/' || ch == ':') {
-          totalEscaped.append('%')
-              .append(Integer.toHexString(ch).toUpperCase());
+          totalEscaped.append('%').append(Integer.toHexString(ch).toUpperCase());
         } else {
           totalEscaped.append(ch);
         }
@@ -466,10 +480,10 @@ public class Util {
 
   /**
    * Escape the specified password.
-   * 
+   *
    * @param password
    *          The password to be corrected.
-   * 
+   *
    * @return The escaped password.
    */
   private static char[] correctPassword(char[] password) {
@@ -479,8 +493,7 @@ public class Util {
       for (int i = 0; i < escaped.length(); i++) {
         char ch = escaped.charAt(i);
         if (ch == '@' || ch == '/' || ch == ':') {
-          totalEscaped.append('%')
-              .append(Integer.toHexString(ch).toUpperCase());
+          totalEscaped.append('%').append(Integer.toHexString(ch).toUpperCase());
         } else {
           totalEscaped.append(ch);
         }

@@ -8,12 +8,7 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Hashtable;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
+import java.util.*;
 import org.dita.dost.log.DITAOTLogger;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -25,58 +20,58 @@ import org.xml.sax.SAXException;
  */
 abstract class ImportAction implements IAction {
 
-    /** Action values. */
-    final Set<Value> valueSet;
-    /** Action parameters. */
-    final Hashtable<String, String> paramTable;
-    private DITAOTLogger logger;
-    /** Plug-in features. */
-    Map<String, Features> featureTable = null;
+  /** Action values. */
+  final Set<Value> valueSet;
+  /** Action parameters. */
+  final Hashtable<String, String> paramTable;
+  DITAOTLogger logger;
+  /** Plug-in features. */
+  Map<String, Features> featureTable = null;
 
-    /**
-     * Default Constructor.
-     */
-    ImportAction() {
-        valueSet = new LinkedHashSet<>(16);
-        paramTable = new Hashtable<>();
-    }
+  /**
+   * Default Constructor.
+   */
+  ImportAction() {
+    valueSet = new LinkedHashSet<>(16);
+    paramTable = new Hashtable<>();
+  }
 
-    @Override
-    public String getResult() {
-        throw new UnsupportedOperationException();
-    }
+  @Override
+  public String getResult() {
+    throw new UnsupportedOperationException();
+  }
 
-    /**
-     * get result.
-     */
-    @Override
-    public abstract void getResult(ContentHandler output) throws SAXException;
+  /**
+   * get result.
+   */
+  @Override
+  public abstract void getResult(ContentHandler output) throws SAXException;
 
-    /**
-     * set input.
-     * @param input input
-     */
-    @Override
-    public void setInput(final List<Value> input) {
-        valueSet.addAll(input);
-    }
+  /**
+   * set input.
+   * @param input input
+   */
+  @Override
+  public void setInput(final List<Value> input) {
+    valueSet.addAll(input);
+  }
 
-    @Override
-    public void addParam(final String name, final String value) {
-        paramTable.put(name, value);
-    }
-    /**
-     * Set the feature table.
-     * @param h hastable
-     */
-    @Override
-    public void setFeatures(final Map<String, Features> h) {
-        featureTable = h;
-    }
+  @Override
+  public void addParam(final String name, final String value) {
+    paramTable.put(name, value);
+  }
 
-    @Override
-    public void setLogger(final DITAOTLogger logger) {
-        this.logger = logger;
-    }
+  /**
+   * Set the feature table.
+   * @param h hastable
+   */
+  @Override
+  public void setFeatures(final Map<String, Features> h) {
+    featureTable = h;
+  }
 
+  @Override
+  public void setLogger(final DITAOTLogger logger) {
+    this.logger = logger;
+  }
 }

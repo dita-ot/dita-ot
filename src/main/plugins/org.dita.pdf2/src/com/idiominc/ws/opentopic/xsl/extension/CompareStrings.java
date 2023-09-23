@@ -1,8 +1,7 @@
 package com.idiominc.ws.opentopic.xsl.extension;
 
-import java.util.Locale;
-
 import com.ibm.icu.text.Collator;
+import java.util.Locale;
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -35,14 +34,18 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class CompareStrings {
-    public static Integer compare(final String theS1, final String theS2, final String theLanguage, final String theCountry) {
-        final Collator collator = Collator.getInstance(new Locale(theLanguage, theCountry));
-        return new Integer(collator.compare(theS1, theS2));
-    }
 
+  public static Integer compare(
+    final String theS1,
+    final String theS2,
+    final String theLanguage,
+    final String theCountry
+  ) {
+    final Collator collator = Collator.getInstance(new Locale(theLanguage, theCountry));
+    return collator.compare(theS1, theS2);
+  }
 
-    public static Integer compare(final String theS1, final String theS2, final String theLanguage) {
-        return compare(theS1, theS2, theLanguage, "");
-    }
-
+  public static Integer compare(final String theS1, final String theS2, final String theLanguage) {
+    return compare(theS1, theS2, theLanguage, "");
+  }
 }

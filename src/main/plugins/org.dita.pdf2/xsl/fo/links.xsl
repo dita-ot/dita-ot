@@ -238,7 +238,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="*[contains(@class,' topic/dt ')][1]" mode="#current"/>
     </xsl:template>
     <xsl:template match="*[contains(@class, ' topic/dt ')]" mode="retrieveReferenceTitle">
-      <xsl:apply-templates select="." mode="text-only"/>
+      <xsl:apply-templates select="." mode="insert-text"/>
     </xsl:template>
   
     <xsl:template match="*[contains(@class, ' topic/title ')]" mode="retrieveReferenceTitle">
@@ -249,7 +249,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*" mode="retrieveReferenceTitle" >
         <xsl:choose>
             <xsl:when test="*[contains(@class,' topic/title ')]">
-                <xsl:value-of select="string(*[contains(@class, ' topic/title ')])"/>
+                <xsl:apply-templates select="*[contains(@class, ' topic/title ')]" mode="insert-text"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>#none#</xsl:text>
@@ -294,6 +294,9 @@ See the accompanying LICENSE file for applicable license.
           <xsl:choose>
             <xsl:when test="*[not(contains(@class,' topic/desc '))] | text()">
               <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
+            </xsl:when>
+            <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+              <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="@href"/>
@@ -536,6 +539,9 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:when>
                   <xsl:when test="*[contains(@class, ' topic/linktext ')]">
                     <xsl:apply-templates select="*[contains(@class, ' topic/linktext ')]"/>
+                  </xsl:when>
+                  <xsl:when test="@scope = 'external' and starts-with(@href, 'mailto:')">
+                    <xsl:value-of select="replace(@href, '^mailto:', '')"/><!--remove mailto: prefix from href text-->
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:value-of select="@href"/>

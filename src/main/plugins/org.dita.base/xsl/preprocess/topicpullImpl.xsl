@@ -402,6 +402,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
 
+  <!-- Insert a <?ditaot usershortdesc?> processing instruction to indicate preexisting <desc> elements in the input document
+       * This behavior applies only to <desc> elements contained in <xref> and <link> elements
+       * The "topicpull:add-usershortdesc-PI" mode does not add a *shortdesc PI if one already exists -->
+  <xsl:template match="*[contains(@class,' topic/xref ') or contains(@class,' topic/link ')]/*[contains(@class,' topic/desc ')]">
+    <xsl:apply-templates select=".." mode="topicpull:add-usershortdesc-PI"/>
+    <xsl:next-match/>  <!-- process the element as usual -->
+  </xsl:template>
+
   <!-- 2007.03.13: Update inheritance to check specific elements and attributes.
        Similar to the inheritance template in mappull, except that it stops at related links. -->
   <xsl:template name="topicpull:inherit">
@@ -691,11 +699,13 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get the short description for a link or xref -->
   <xsl:template match="*" mode="topicpull:get-stuff_get-shortdesc">
     <xsl:param name="targetElement" as="element()?"/>
+    <xsl:param name="inDescContent" as="xs:boolean" select="false()" tunnel="yes"/>
     
     <xsl:choose>
+      <!-- if already creating content inside a <desc>, do not create a lower-level <desc> -->
+      <xsl:when test="$inDescContent"/>
       <!--if there's already a desc, copy it-->
       <xsl:when test="*[contains(@class, ' topic/desc ')]">
-        <xsl:apply-templates select="." mode="topicpull:add-usershortdesc-PI"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/desc ')]"/>
       </xsl:when>
       <!--if the target is inaccessible, don't do anything - shortdesc is optional -->
@@ -711,7 +721,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:apply-templates select="." mode="topicpull:add-genshortdesc-PI"/>
           <desc class="- topic/desc ">
             <xsl:apply-templates select="$shortdesc">
-              <xsl:with-param name="baseContextElement" select="." tunnel="yes"/>
+              <xsl:with-param name="baseContextElement" select="$targetElement" tunnel="yes"/>
+              <xsl:with-param name="inDescContent" as="xs:boolean" select="true()" tunnel="yes"/>
             </xsl:apply-templates>
           </desc>
         </xsl:if>
@@ -1147,9 +1158,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <sup class="+ topic/ph hi-d/sup ">
-      <xsl:value-of select="$convergedcallout"/>
-    </sup>
+    <xsl:value-of select="$convergedcallout"/>
   </xsl:template>
 
   <!-- Getting text from a dlentry target: use the contents of the term -->
@@ -1414,25 +1423,16 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   </xsl:template>
   
   <!-- Added for RFE 3001750. -->
-  <xsl:template match="*" mode="topicpull:add-genshortdesc-PI">
-    <xsl:choose>
-      <xsl:when test="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']">
-        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:processing-instruction name="ditaot">genshortdesc</xsl:processing-instruction>
-      </xsl:otherwise>
-    </xsl:choose>
+  <!-- Returns a <?ditaot dita-ot:genshortdesc?> if context element does not already have a *shortdesc PI -->
+  <xsl:template match="*" mode="topicpull:add-genshortdesc-PI"/>
+  <xsl:template match="*[not(processing-instruction('ditaot')[. = ('usershortdesc' ,'genshortdesc')])]" mode="topicpull:add-genshortdesc-PI" priority="10">
+    <xsl:processing-instruction name="ditaot">genshortdesc</xsl:processing-instruction>
   </xsl:template>
-  <xsl:template match="*" mode="topicpull:add-usershortdesc-PI">
-    <xsl:choose>
-      <xsl:when test="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']">
-        <xsl:copy-of select="processing-instruction()[name()='ditaot'][.='usershortdesc' or .='genshortdesc']"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
-      </xsl:otherwise>
-    </xsl:choose>
+
+  <!-- Returns a <?ditaot dita-ot:usershortdesc?> if context element does not already have a *shortdesc PI -->
+  <xsl:template match="*" mode="topicpull:add-usershortdesc-PI"/>
+  <xsl:template match="*[not(processing-instruction('ditaot')[. = ('usershortdesc' ,'genshortdesc')])]" mode="topicpull:add-usershortdesc-PI" priority="10">
+    <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
   </xsl:template>
 
 </xsl:stylesheet>
