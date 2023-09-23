@@ -177,7 +177,11 @@ public final class MapMetaReader extends AbstractDomFilter {
       .orElse(null);
     final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
-    Map<String, Element> current = mergeMeta(null, Collections.unmodifiableMap(inheritance), cascadeSet);
+    Map<String, Element> current = mergeMeta(
+      Collections.emptyMap(),
+      Collections.unmodifiableMap(inheritance),
+      cascadeSet
+    );
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
     if (hasDitaTopicTarget) {
@@ -304,13 +308,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     // be inherited are merged.
     // Otherwise enableSet should be metaSet in order to merge all
     // metadata.
-    final Map<String, Element> res;
-    if (topicMetaTable == null) {
-      res = new HashMap<>(16);
-    } else {
-      res = new HashMap<>(topicMetaTable);
-    }
-
+    final Map<String, Element> res = new HashMap<>(topicMetaTable);
     for (String key : enableSet) {
       if (inheritance.containsKey(key)) {
         if (uniqueSet.contains(key)) {
