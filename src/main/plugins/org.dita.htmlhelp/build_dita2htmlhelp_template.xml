@@ -26,7 +26,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="dita2htmlhelp.init">
     <property name="html-version" value="html"/>
     <property name="temp.output.dir.name" value="temp_chm_dir"/>
-    <property name="preprocess.copy-image.skip" value="true"/>
+    <property name="build-step.copy-image" value="false"/>
   </target>
 
   <target name="use-init.envhhcdir" if="env.HHCDIR">

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="common" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d)                          (topic equation-d)                          (topic hazard-d)                          (topic hi-d)                          (topic indexing-d)                          (topic markup-d xml-d)                          (topic markup-d)                          (topic mathml-d)                          (topic pr-d)                          (topic relmgmt-d)                          (topic svg-d)                          (topic sw-d)                          (topic ui-d)                          (topic ut-d)                          a(props deliveryTarget)" class="- topic/topic ">
+	<title class="- topic/title ">Common Topic</title>
+	<body class="- topic/body ">
+		
+		<p class="- topic/p ">Original topic: <xref keyref="topic1" class="- topic/xref " href="copy-to-keys.dita"/></p>
+		<p class="- topic/p ">copy-to topic: <xref keyref="topic2" class="- topic/xref " href="topic2.dita"/></p>
+		<p class="- topic/p ">Figure in original topic: <xref keyref="topic1/my-fig-id" class="- topic/xref " href="copy-to-keys.dita#common/my-fig-id"/></p>
+		<p class="- topic/p ">Figure in copy-to topic: <xref keyref="topic2/my-fig-id" class="- topic/xref " href="topic2.dita#common/my-fig-id"/></p>
+		
+		
+		<p class="- topic/p ">Original subtopic: <xref keyref="topic1-subtopic" class="- topic/xref " href="copy-to-keys.dita#common-subtopic"/></p>
+		<p class="- topic/p ">copy-to subtopic: <xref keyref="topic2-subtopic" class="- topic/xref " href="topic2.dita#common-subtopic"/></p>
+		<p class="- topic/p ">Figure in original subtopic: <xref keyref="topic1-subtopic/my-subtopic-fig-id" class="- topic/xref " href="copy-to-keys.dita#common-subtopic/my-subtopic-fig-id"/></p>
+		<p class="- topic/p ">Figure in copy-to subtopic: <xref keyref="topic2-subtopic/my-subtopic-fig-id" class="- topic/xref " href="topic2.dita#common-subtopic/my-subtopic-fig-id"/></p>
+		<fig id="my-fig-id" class="- topic/fig ">
+			<title class="- topic/title ">Figure Title</title>
+		</fig>
+	</body>
+	<topic id="common-subtopic" ditaarch:DITAArchVersion="1.3" domains="(topic abbrev-d)                          (topic equation-d)                          (topic hazard-d)                          (topic hi-d)                          (topic indexing-d)                          (topic markup-d xml-d)                          (topic markup-d)                          (topic mathml-d)                          (topic pr-d)                          (topic relmgmt-d)                          (topic svg-d)                          (topic sw-d)                          (topic ui-d)                          (topic ut-d)                          a(props deliveryTarget)" class="- topic/topic ">
+		<title class="- topic/title ">Common Subtopic</title>
+		<body class="- topic/body ">
+			<fig id="my-subtopic-fig-id" class="- topic/fig ">
+				<title class="- topic/title ">Subtopic Figure Title</title>
+			</fig>
+		</body>
+	</topic>
+</topic>

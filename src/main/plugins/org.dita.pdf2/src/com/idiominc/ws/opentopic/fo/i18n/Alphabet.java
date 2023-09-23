@@ -1,8 +1,8 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 
 /*
 Copyright (c) 2004-2006 by Idiom Technologies, Inc. All rights reserved.
@@ -35,31 +35,25 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying LICENSE file for applicable license.
  */
 public class Alphabet {
-    private final String name;
 
-    private final Set<Character> charset = new HashSet<Character>();
+  private final String name;
 
+  private final Set<Character> charset = new HashSet<>();
 
-    public Alphabet(final String theName, final Character[] theChars) {
-        this.name = theName;
-        for (final Character aChar : theChars) {
-            this.charset.add(aChar);
-        }
-    }
+  public Alphabet(final String theName, final Character[] theChars) {
+    this.name = theName;
+    this.charset.addAll(Arrays.asList(theChars));
+  }
 
+  public String getName() {
+    return this.name;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public boolean isContain(final char theChar) {
+    return this.charset.contains(theChar);
+  }
 
-
-    public boolean isContain(final char theChar) {
-        return this.charset.contains(new Character(theChar));
-    }
-
-
-    public Character[] getAllChars() {
-        final Character[] characters = (Character[]) charset.toArray(new Character[charset.size()]);
-        return characters;
-    }
+  public Character[] getAllChars() {
+    return charset.toArray(new Character[0]);
+  }
 }

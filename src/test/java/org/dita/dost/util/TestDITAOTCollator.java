@@ -7,16 +7,16 @@
  */
 package org.dita.dost.util;
 
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+
 import java.util.Locale;
 import org.dita.dost.util.DITAOTCollator;
-import org.junit.Test;
-import static org.junit.Assert.assertNotSame;
+import org.junit.jupiter.api.Test;
+
 public class TestDITAOTCollator {
-    @Test
-    public void testgetinstance()
-    {
 
-        assertNotSame(DITAOTCollator.getInstance(Locale.US),DITAOTCollator.getInstance(Locale.UK));
-    }
-
+  @Test
+  public void testgetinstance() {
+    assertNotSame(DITAOTCollator.getInstance(Locale.US), DITAOTCollator.getInstance(Locale.UK));
+  }
 }

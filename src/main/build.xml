@@ -8,6 +8,8 @@ See the accompanying LICENSE file for applicable license.
 -->
 <project name="DOST" default="init">
 
+  <!-- This build script is only intended for use when DITA-OT is run using Ant directly -->
+
   <!-- Initialize DITA-OT base directory -->
   <dirname property="ant.file.DOST.dir" file="${ant.file.DOST}" />
   <property name="dita.dir" location="${ant.file.DOST.dir}"/>

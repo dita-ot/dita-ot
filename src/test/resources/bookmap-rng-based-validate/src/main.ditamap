@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="urn:oasis:names:tc:dita:rng:bookmap.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <bookmap>
-    <booktitle>
-        <mainbooktitle>Main</mainbooktitle>
-    </booktitle>
+  <booktitle>
+    <mainbooktitle>Main</mainbooktitle>
+  </booktitle>
   <chapter href="t1.dita"/>
   <chapter href="t2.dita"/>
 </bookmap>

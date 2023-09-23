@@ -363,6 +363,7 @@ See the accompanying LICENSE file for applicable license.
   +-->
   
   <!-- table caption -->
+  <!-- Deprecated in 4.0.1, this template is not called from HTML5 code. -->
   <xsl:template name="place-tbl-lbl">
     <xsl:param name="stringName"/>
     <!-- Number of table/title's before this one -->

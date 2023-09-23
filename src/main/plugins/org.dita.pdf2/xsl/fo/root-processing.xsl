@@ -106,7 +106,7 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="@href and @id">
-            <xsl:if test="not(@id = '') and empty(key('topic-id', @id))">
+            <xsl:if test="not(@id = '') and not(@scope = 'external') and empty(key('topic-id', @id))">
               <xsl:call-template name="output-message">
                 <xsl:with-param name="id" select="'PDFX005F'"/>
                 <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>

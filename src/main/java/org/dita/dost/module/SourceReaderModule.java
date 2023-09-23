@@ -7,111 +7,119 @@
  */
 package org.dita.dost.module;
 
+import static java.util.Collections.emptyMap;
+import static org.dita.dost.util.Configuration.parserFeatures;
+import static org.dita.dost.util.Configuration.parserMap;
+import static org.dita.dost.util.Constants.*;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.sf.saxon.s9api.Processor;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.dita.dost.reader.GrammarPoolManager;
 import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.*;
 import org.xml.sax.helpers.XMLReaderFactory;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Configuration.parserFeatures;
-import static org.dita.dost.util.Configuration.parserMap;
-import static org.dita.dost.util.Constants.*;
-
+import org.xmlresolver.Resolver;
 
 /**
  * Common functionality for modules that read source documents.
  */
-abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
+public abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
 
-    private static final String FEATURE_GRAMMAR_POOL = "http://apache.org/xml/properties/internal/grammar-pool";
+  private static final String FEATURE_GRAMMAR_POOL = "http://apache.org/xml/properties/internal/grammar-pool";
 
-    /**
-     * XMLReader instance for parsing dita file
-     */
-    XMLReader reader;
-    /**
-     * Validate source documents
-     */
-    boolean validate;
-    /**
-     * Use grammar pool cache
-     */
-    boolean gramcache = true;
-    Processor processor;
+  /**
+   * XMLReader instance for parsing dita file
+   */
+  XMLReader reader;
+  /**
+   * Validate source documents
+   */
+  boolean validate;
+  /**
+   * Use grammar pool cache
+   */
+  boolean gramcache = true;
+  Processor processor;
 
-    /**
-     * XML reader used for pipeline parsing DITA documents.
-     *
-     * @throws SAXException if parser configuration failed
-     */
-    void initXmlReader() throws SAXException {
-        if (parserMap.containsKey(ATTR_FORMAT_VALUE_DITA)) {
-            reader = XMLReaderFactory.createXMLReader(parserMap.get(ATTR_FORMAT_VALUE_DITA));
-            final Map<String, Boolean> features = parserFeatures.getOrDefault(ATTR_FORMAT_VALUE_DITA, emptyMap());
-            for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
-                try {
-                    reader.setFeature(feature.getKey(), feature.getValue());
-                } catch (final SAXNotRecognizedException e) {
-                    // Not Xerces, ignore exception
-                }
-            }
-        } else {
-            reader = XMLUtils.getXMLReader();
+  /**
+   * XML reader used for pipeline parsing DITA documents.
+   *
+   * @throws SAXException if parser configuration failed
+   */
+  void initXmlReader() throws SAXException {
+    if (parserMap.containsKey(ATTR_FORMAT_VALUE_DITA)) {
+      reader = XMLReaderFactory.createXMLReader(parserMap.get(ATTR_FORMAT_VALUE_DITA));
+      final Map<String, Boolean> features = parserFeatures.getOrDefault(ATTR_FORMAT_VALUE_DITA, emptyMap());
+      for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
+        try {
+          reader.setFeature(feature.getKey(), feature.getValue());
+        } catch (final SAXNotRecognizedException e) {
+          // Not Xerces, ignore exception
         }
-
-        reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-        if (validate) {
-            reader.setFeature(FEATURE_VALIDATION, true);
-            try {
-                reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-            } catch (final SAXNotRecognizedException e) {
-                // Not Xerces, ignore exception
-            }
-        }
-        if (gramcache) {
-            final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-            try {
-                reader.setProperty(FEATURE_GRAMMAR_POOL, grammarPool);
-                logger.info("Using Xerces grammar pool for DTD and schema caching.");
-            } catch (final NoClassDefFoundError e) {
-                logger.debug("Xerces not available, not using grammar caching");
-            } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-                logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
-            }
-        }
-
-        final CatalogResolver catalogResolver = CatalogUtils.getCatalogResolver();
-        reader.setEntityResolver(catalogResolver);
-
-        processor = xmlUtils.getProcessor();
+      }
+      try {
+        reader.setProperty(PROPERTY_FORMATS, parserMap.keySet());
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
+      }
+      try {
+        reader.setProperty(PROPERTY_PROCESSING_MODE, processingMode.name().toLowerCase());
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
+      }
+    } else {
+      reader = XMLUtils.getXMLReader();
     }
 
-    /**
-     * Get pipe line filters
-     *
-     * @param fileToParse absolute URI to current file being processed
-     */
-    List<XMLFilter> getProcessingPipe(final URI fileToParse) {
-        final List<XMLFilter> pipe = new ArrayList<>();
-
-        for (XmlFilterModule.FilterPair pair : filters) {
-            final AbstractXMLFilter filter = pair.newInstance();
-            filter.setLogger(logger);
-            filter.setJob(job);
-            filter.setCurrentFile(fileToParse);
-            pipe.add(filter);
-        }
-
-        return pipe;
+    reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+    if (validate) {
+      reader.setFeature(FEATURE_VALIDATION, true);
+      try {
+        reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+      } catch (final SAXNotRecognizedException e) {
+        // Not Xerces, ignore exception
+      }
     }
+    if (gramcache) {
+      final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
+      try {
+        reader.setProperty(FEATURE_GRAMMAR_POOL, grammarPool);
+        logger.info("Using Xerces grammar pool for DTD and schema caching.");
+      } catch (final NoClassDefFoundError e) {
+        logger.debug("Xerces not available, not using grammar caching");
+      } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
+        logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+      }
+    }
+
+    final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
+    reader.setEntityResolver(catalogResolver);
+
+    processor = xmlUtils.getProcessor();
+  }
+
+  /**
+   * Get pipe line filters
+   *
+   * @param fileToParse absolute URI to current file being processed
+   */
+  List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    final List<XMLFilter> pipe = new ArrayList<>();
+
+    for (XmlFilterModule.FilterPair pair : filters) {
+      final AbstractXMLFilter filter = pair.newInstance();
+      filter.setLogger(logger);
+      filter.setJob(job);
+      filter.setCurrentFile(fileToParse);
+      pipe.add(filter);
+    }
+
+    return pipe;
+  }
 }

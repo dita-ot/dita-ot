@@ -9,7 +9,6 @@
 package org.dita.dost.reader;
 
 import java.io.File;
-
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
@@ -21,26 +20,24 @@ import org.dita.dost.util.Job;
  *
  */
 public interface AbstractReader {
+  /**
+   * Use reader to parse a document.
+   *
+   * @param filename absolute filename
+   */
+  void read(File filename) throws DITAOTException;
 
-    /**
-     * Use reader to parse a document.
-     *
-     * @param filename absolute filename
-     */
-    void read(File filename) throws DITAOTException;
+  /**
+   * Set logger for module.
+   *
+   * @param logger logger to use for log message
+   */
+  void setLogger(DITAOTLogger logger);
 
-    /**
-     * Set logger for module.
-     *
-     * @param logger logger to use for log message
-     */
-    void setLogger(DITAOTLogger logger);
-
-    /**
-     * Set job configuration for module
-     *
-     * @param job job configuration to use for processing
-     */
-    void setJob(Job job);
-
+  /**
+   * Set job configuration for module
+   *
+   * @param job job configuration to use for processing
+   */
+  void setJob(Job job);
 }

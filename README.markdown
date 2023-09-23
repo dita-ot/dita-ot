@@ -1,15 +1,18 @@
-# DITA Open Toolkit [![Build]](http://travis-ci.org/dita-ot/dita-ot) [![Slack]](http://slack.dita-ot.org/)
+# DITA Open Toolkit [![DITA-OT Discussions][discussions]](https://github.com/orgs/dita-ot/discussions)
 
 _DITA Open Toolkit_, or _DITA-OT_ for short, is an open-source publishing engine for content authored in the _Darwin Information Typing Architecture_.
 
-Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].  
+Visit the project website at [dita-ot.org][site] for documentation, information about releases, and [download packages][dist].
 
 For information on additional DITA and DITA-OT resources, see [SUPPORT]. To report a bug or suggest a feature, [create an issue][issue]. For more information on how you can help contribute to the project, see [CONTRIBUTING].
 
 - [Prerequisites: Java 17](#prerequisites-java-17)
 - [Installing](#installing)
 - [Building output](#building-output)
-- [For developers](#for-developers)
+- [Development](#development)
+    - [Running tests](#running-tests)
+    - [Formatting code](#formatting-code)
+    - [Distribution builds](#distribution-builds)
 - [License](#license)
 
 ## Prerequisites: Java 17
@@ -23,25 +26,40 @@ You can download the OpenJDK from [AdoptOpenJDK][adoptopenjdk].
 1.  Download the distribution package from [dita-ot.org/download][dist].
 2.  Extract the contents of the package to the directory where you want to install DITA-OT.
 
-### Installing on macOS via Homebrew
+<details>
+<summary>Installing via Homebrew</summary>
 
-On macOS, you can also install DITA-OT using the [Homebrew] package manager:
+On macOS and Linux, you can also install DITA-OT using the [Homebrew] package manager:
 
-    brew install dita-ot
+```shell
+brew install dita-ot
+```
 
-Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to `/usr/local/bin/dita`.
+Homebrew will automatically download the latest version of the toolkit, install it in a subfolder of the local package Cellar and symlink the `dita` command to the `bin` subfolder of the Homebrew installation directory.
+
+> **Note**
+>
+> Homebrew’s default installation location depends on the operating system architecture:
+>
+> - `/usr/local` on macOS Intel
+> - `/opt/homebrew` on macOS ARM
+> - `/home/linuxbrew/.linuxbrew` on Linux
+
+</details>
 
 ## Building output
 
 You can generate output using the `dita` command-line tool included with DITA Open Toolkit.
 
 1.  On the command line, change to the `bin` folder of the DITA-OT installation directory:
-
-        cd path/to/dita-ot-dir/bin
-
+    ```shell
+    cd path/to/dita-ot-dir/bin
+    ```
 2.  Run the `dita` command to generate output:
 
-        dita --input=input-file --format=format [options]
+    ```shell
+    dita --input=input-file --format=format [options]
+    ```
 
     where:
 
@@ -50,36 +68,56 @@ You can generate output using the `dita` command-line tool included with DITA Op
 
 See the [documentation][docs] for arguments and [options].
 
-## For developers
+## Development
 
-<details>
-<summary>Building the toolkit from source code and compiling the distribution package</summary>
+Building the toolkit from source code and compiling the distribution package
 
-1.  Clone the DITA-OT Git repository:
-
-        git clone git://github.com/dita-ot/dita-ot.git
-
+1.  Clone the DITA-OT Git repository, including submodules:
+    ```shell
+    git clone --recurse-submodules git://github.com/dita-ot/dita-ot.git
+    ```
 2.  Change to the DITA-OT directory:
+    ```shell
+    cd dita-ot
+    ```
+3.  In the root directory, run Gradle to compile the Java code and install plugins:
+    ```shell
+    ./gradlew
+    ```
 
-        cd dita-ot
+### Running tests
 
-3.  Fetch the submodules:
+```shell
+./gradlew check
+```
 
-        git submodule update --init --recursive
+All tests are run by GitHub Actions [test workflow] on each push and
+for every pull request. 
 
-4.  In the root directory, run Gradle to compile the Java code and install plugins:
+### Formatting code
 
-        ./gradlew
+Requirements:
+
+- Node.js
+
+Prettier is used retain consistent Java formatting.
+
+1.  Run Prettier:
+    ```shell
+    npm run fmt
+    ```
 
 ### Distribution builds
 
 1.  In the root directory, set up the build environment:
-
-        ./gradlew
-
+    ```shell
+    ./gradlew
+    ```
 2.  Build the distribution packages:
 
-        ./gradlew dist
+    ```shell
+    ./gradlew dist
+    ```
 
     Distribution packages are built in the `build/distributions` directory.
 
@@ -87,14 +125,11 @@ See the [documentation][docs] for arguments and [options].
 
     For more information on the `-Xmx` option, see the [Java SE Documentation][javadoc].
 
-</details>
-
 ## License
 
 DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 
-[build]: https://travis-ci.org/dita-ot/dita-ot.svg?branch=develop
-[slack]: https://img.shields.io/badge/Slack-Join%20us!-%234A154B?style=flat&logo=slack
+[discussions]: https://img.shields.io/github/discussions/dita-ot/dita-ot?label=DITA-OT%20Discussions
 [site]: https://www.dita-ot.org/
 [dist]: https://www.dita-ot.org/download
 [support]: https://github.com/dita-ot/.github/blob/master/SUPPORT.md
@@ -106,3 +141,4 @@ DITA Open Toolkit is licensed for use under the [Apache License 2.0][apache].
 [apache]: http://www.apache.org/licenses/LICENSE-2.0
 [issue]: https://github.com/dita-ot/dita-ot/issues/new/choose
 [contributing]: https://github.com/dita-ot/.github/blob/master/CONTRIBUTING.md
+[test workflow]: https://github.com/dita-ot/dita-ot/actions/workflows/test.yml

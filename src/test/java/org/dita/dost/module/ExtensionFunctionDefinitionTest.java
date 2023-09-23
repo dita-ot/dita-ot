@@ -14,23 +14,24 @@ import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.value.SequenceType;
 
 public class ExtensionFunctionDefinitionTest extends ExtensionFunctionDefinition {
-    @Override
-    public StructuredQName getFunctionQName() {
-        return new StructuredQName("x", "y", "z");
-    }
 
-    @Override
-    public SequenceType[] getArgumentTypes() {
-        return new SequenceType[0];
-    }
+  @Override
+  public StructuredQName getFunctionQName() {
+    return new StructuredQName("x", "y", "z");
+  }
 
-    @Override
-    public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
-        return null;
-    }
+  @Override
+  public SequenceType[] getArgumentTypes() {
+    return new SequenceType[0];
+  }
 
-    @Override
-    public ExtensionFunctionCall makeCallExpression() {
-        return null;
-    }
+  @Override
+  public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
+    return null;
+  }
+
+  @Override
+  public ExtensionFunctionCall makeCallExpression() {
+    return null;
+  }
 }

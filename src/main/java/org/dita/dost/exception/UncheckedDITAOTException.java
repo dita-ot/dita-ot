@@ -15,11 +15,11 @@ package org.dita.dost.exception;
  */
 public class UncheckedDITAOTException extends RuntimeException {
 
-    public UncheckedDITAOTException(DITAOTException err) {
-        super(err);
-    }
+  public UncheckedDITAOTException(DITAOTException err) {
+    super(err);
+  }
 
-    public DITAOTException getDITAOTException() {
-        return (DITAOTException) getCause();
-    }
+  public DITAOTException getDITAOTException() {
+    return (DITAOTException) getCause();
+  }
 }

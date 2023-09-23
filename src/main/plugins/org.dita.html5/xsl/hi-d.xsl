@@ -36,8 +36,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' hi-d/tt ')]" name="topic.hi-d.tt">
       <span>
         <xsl:call-template name="commonattributes"/>
-          <!-- Combine TT style with style from ditaval, if present -->
-        <xsl:attribute name="style" select="('font-family: monospace', *[contains(@class,' ditaot-d/ditaval-startprop ')]/@style)" separator="; "/>
         <xsl:call-template name="setidaname"/>
         <xsl:apply-templates/>
       </span>

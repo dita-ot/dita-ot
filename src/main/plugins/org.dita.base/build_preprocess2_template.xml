@@ -43,6 +43,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess2.topics"
           depends="topic-reader,
                   topic-branch-filter,
+                  topic-map-conref,
                   topic-keyref,
                   topic-copy-to,
                   topic-conrefpush,
@@ -309,6 +310,26 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
+  <target name="topic-map-conref"
+          unless="preprocess.conref.skip"
+          description="Resolve conref in input map files">
+    <property name="dita.preprocess.reloadstylesheet.conref" value="${dita.preprocess.reloadstylesheet}"/>
+    <makeurl property="exportfile.url" file="${dita.temp.dir}/export.xml" validate="false"/>
+    <pipeline message="Resolve conref in input files" taskname="conref">
+      <xslt basedir="${dita.temp.dir}"
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.conref}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/conref.xsl"
+            filenameparameter="file-being-processed"
+            parallel="${parallel}">
+        <ditafileset format="ditamap" conref="true" input="true"/>
+        <ditafileset format="ditamap" conref="true" inputResource="true"/>
+        <param name="EXPORTFILE" expression="${exportfile.url}"/>
+        <param name="TRANSTYPE" expression="${transtype}"/>
+        <dita:extension id="dita.preprocess.conref.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </xslt>
+    </pipeline>
+  </target>
+
   <target name="topic-conrefpush"
           unless="preprocess.conref.skip"
           description="Resolve conref push">
@@ -449,7 +470,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="copy-files2"
           description="Copy files to the output directory"
           depends="copy-image2,
-                   copy-html,
+                   copy-html2,
                    copy-flag"/>
 
   <target name="copy-image2"
@@ -461,4 +482,18 @@ See the accompanying LICENSE file for applicable license.
     </copy>
   </target>
   
+  <target name="copy-html2" 
+          unless="preprocess.copy-html.skip" 
+		  description="Copy html files">
+    <copy todir="${dita.output.dir}" failonerror="false" overwrite="true">
+      <ditafileset>
+        <excludes format="dita"/>
+        <excludes format="ditamap"/>
+        <excludes format="ditaval"/>
+        <excludes format="image"/>
+        <excludes format="coderef"/>
+      </ditafileset>
+      <jobmapper/>
+    </copy>
+  </target>  
 </project>
