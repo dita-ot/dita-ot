@@ -178,13 +178,10 @@ public final class MapMetaReader extends AbstractDomFilter {
     final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
     Map<String, Element> current = mergeMeta(null, Collections.unmodifiableMap(inheritance), cascadeSet);
-    Element metaNode = null;
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
     if (hasDitaTopicTarget) {
       for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
-        // the parent topicref refers to a valid dita topic
-        metaNode = elem;
         current = handleMeta(elem, Collections.unmodifiableMap(inheritance));
       }
     }
@@ -219,9 +216,7 @@ public final class MapMetaReader extends AbstractDomFilter {
       }
       final Map<String, Element> metas = resultTable.get(topicPath);
       if (!metas.isEmpty()) {
-        if (metaNode != null) {
-          topicref.removeChild(metaNode);
-        }
+        XMLUtils.getChildElement(topicref, MAP_TOPICMETA).ifPresent(topicref::removeChild);
         final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);
         newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
         for (String metaPo : metaPos) {
