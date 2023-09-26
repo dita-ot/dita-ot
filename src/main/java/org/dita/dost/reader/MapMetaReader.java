@@ -32,7 +32,7 @@ public final class MapMetaReader extends AbstractDomFilter {
   /**
    * Cascaded metadata. Contents <topic relative URI, <class matcher, cascading metadata elements>>.
    */
-  private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
+  private final Map<URI, Map<String, Element>> resultTable = new HashMap<>();
 
   private static final Set<String> uniqueSet = Set.of(
     TOPIC_CRITDATES.matcher,
@@ -104,9 +104,9 @@ public final class MapMetaReader extends AbstractDomFilter {
   /** Current document. */
   private Document doc = null;
   /** Result metadata document. */
-  private Document resultDoc = null;
+  private final Document resultDoc;
   /** Current file. */
-  private File filePath = null;
+  private URI filePath;
 
   /**
    * Constructor.
@@ -115,7 +115,6 @@ public final class MapMetaReader extends AbstractDomFilter {
     super();
     globalMeta = new HashMap<>(16);
     resultDoc = XMLUtils.getDocumentBuilder().newDocument();
-    resultTable.clear();
   }
 
   /**
@@ -124,7 +123,7 @@ public final class MapMetaReader extends AbstractDomFilter {
    */
   @Override
   public void read(final File filename) throws DITAOTException {
-    filePath = filename;
+    filePath = filename.toURI();
 
     //clear the history on global metadata table
     globalMeta.clear();
@@ -202,7 +201,7 @@ public final class MapMetaReader extends AbstractDomFilter {
         .map(URLUtils::stripFragment)
         .orElse(null);
       final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
-      final URI topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(rel));
+      final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
       if (resultTable.containsKey(topicPath)) {
         //if the result table already contains some result
         //metadata for current topic path.
