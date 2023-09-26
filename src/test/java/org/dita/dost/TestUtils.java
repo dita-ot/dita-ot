@@ -24,7 +24,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.Configuration;
@@ -279,6 +281,11 @@ public class TestUtils {
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
     if (d.hasDifferences()) {
+      try {
+        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
+      } catch (TransformerException e) {
+        throw new RuntimeException(e);
+      }
       throw new AssertionError(d.toString());
     }
   }
