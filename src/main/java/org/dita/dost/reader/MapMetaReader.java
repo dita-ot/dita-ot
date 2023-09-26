@@ -143,8 +143,75 @@ public final class MapMetaReader extends AbstractDomFilter {
     for (Element keyword : XMLUtils.getChildElements(doc.getDocumentElement(), TOPIC_KEYWORDS, true)) {
       removeIndexTermRecursive(keyword);
     }
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICREF)) {
+      collectTopicrefs(elem);
+    }
 
     return doc;
+  }
+
+  private void collectTopicrefs(final Element topicref) {
+    final URI hrefAttr = Optional
+      .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
+      .map(Node::getNodeValue)
+      .map(URLUtils::toURI)
+      .orElse(null);
+    final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+    final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
+    Map<String, Element> current = Collections.emptyMap();
+    final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
+
+    if (hasDitaTopicTarget) {
+      for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
+        current = handleMeta(elem, Collections.emptyMap());
+      }
+    }
+
+    for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
+      collectTopicrefs(elem);
+    }
+
+    if (!current.isEmpty() && hasDitaTopicTarget) {
+      final URI copytoAttr = Optional
+        .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
+        .map(Attr::getNodeValue)
+        .map(URLUtils::toURI)
+        .map(URLUtils::stripFragment)
+        .orElse(null);
+      final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
+      final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
+      if (resultTable.containsKey(topicPath)) {
+        //if the result table already contains some result
+        //metadata for current topic path.
+        final Map<String, Element> previous = resultTable.get(topicPath);
+        resultTable.put(
+          topicPath,
+          mergeMeta(
+            Collections.unmodifiableMap(previous),
+            Collections.unmodifiableMap(current),
+            Collections.unmodifiableSet(metaSet)
+          )
+        );
+      } else {
+        resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
+      }
+      //      final Map<String, Element> metas = resultTable.get(topicPath);
+      //      if (!metas.isEmpty()) {
+      //        XMLUtils.getChildElement(topicref, MAP_TOPICMETA).ifPresent(topicref::removeChild);
+      //        final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);
+      //        newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
+      //        for (String metaPo : metaPos) {
+      //          final Node stub = metas.get(metaPo);
+      //          if (stub != null) {
+      //            for (var child : XMLUtils.toList(stub.getChildNodes())) {
+      //              final Node copy = topicref.getOwnerDocument().importNode(child, true);
+      //              newMeta.appendChild(copy);
+      //            }
+      //          }
+      //        }
+      //        topicref.insertBefore(newMeta, topicref.getFirstChild());
+      //      }
+    }
   }
 
   /**
@@ -194,14 +261,14 @@ public final class MapMetaReader extends AbstractDomFilter {
     }
 
     if (!current.isEmpty() && hasDitaTopicTarget) {
-      final URI copytoAttr = Optional
-        .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
-        .map(Attr::getNodeValue)
-        .map(URLUtils::toURI)
-        .map(URLUtils::stripFragment)
-        .orElse(null);
-      final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
-      final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
+      //      final URI copytoAttr = Optional
+      //        .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
+      //        .map(Attr::getNodeValue)
+      //        .map(URLUtils::toURI)
+      //        .map(URLUtils::stripFragment)
+      //        .orElse(null);
+      //      final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
+      //      final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
       //      if (resultTable.containsKey(topicPath)) {
       //        //if the result table already contains some result
       //        //metadata for current topic path.
@@ -215,9 +282,10 @@ public final class MapMetaReader extends AbstractDomFilter {
       //          )
       //        );
       //      } else {
-      resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
+      //      resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
       //      }
-      final Map<String, Element> metas = resultTable.get(topicPath);
+      final Map<String, Element> metas = cloneElementMap(Collections.unmodifiableMap(current));
+      //      final Map<String, Element> metas = resultTable.get(topicPath);
       if (!metas.isEmpty()) {
         XMLUtils.getChildElement(topicref, MAP_TOPICMETA).ifPresent(topicref::removeChild);
         final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);

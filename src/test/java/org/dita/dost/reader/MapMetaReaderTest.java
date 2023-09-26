@@ -108,9 +108,9 @@ public class MapMetaReaderTest {
     final Path mapFile = tempDir.toPath().resolve("test.ditamap");
     reader.read(mapFile.toAbsolutePath().toFile());
 
-    //    final Document exp = db.parse(expDir.toPath().resolve(dir).resolve("test.ditamap").toFile());
-    //    final Document act = db.parse(tempDir.toPath().resolve("test.ditamap").toFile());
-    //    assertXMLEqual(exp, act);
+    final Document exp = db.parse(expDir.toPath().resolve(dir).resolve("test.ditamap").toFile());
+    final Document act = db.parse(tempDir.toPath().resolve("test.ditamap").toFile());
+    assertXMLEqual(exp, act);
 
     assertMappingEquals(
       Map.of(
