@@ -10,7 +10,7 @@
   </topicref>
   <topicref class="- map/topicref " href="a.xml" locktitle="yes">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle " dita-ot:locktitle="yes">locktitle A</navtitle>
+      <navtitle class="- topic/navtitle " dita-ot:locktitle="yes">locktitle B</navtitle>
     </topicmeta>
   </topicref>
 </map>

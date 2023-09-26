@@ -202,21 +202,21 @@ public final class MapMetaReader extends AbstractDomFilter {
         .orElse(null);
       final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
       final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
-      if (resultTable.containsKey(topicPath)) {
-        //if the result table already contains some result
-        //metadata for current topic path.
-        final Map<String, Element> previous = resultTable.get(topicPath);
-        resultTable.put(
-          topicPath,
-          mergeMeta(
-            Collections.unmodifiableMap(previous),
-            Collections.unmodifiableMap(current),
-            Collections.unmodifiableSet(metaSet)
-          )
-        );
-      } else {
-        resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
-      }
+      //      if (resultTable.containsKey(topicPath)) {
+      //        //if the result table already contains some result
+      //        //metadata for current topic path.
+      //        final Map<String, Element> previous = resultTable.get(topicPath);
+      //        resultTable.put(
+      //          topicPath,
+      //          mergeMeta(
+      //            Collections.unmodifiableMap(previous),
+      //            Collections.unmodifiableMap(current),
+      //            Collections.unmodifiableSet(metaSet)
+      //          )
+      //        );
+      //      } else {
+      resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
+      //      }
       final Map<String, Element> metas = resultTable.get(topicPath);
       if (!metas.isEmpty()) {
         XMLUtils.getChildElement(topicref, MAP_TOPICMETA).ifPresent(topicref::removeChild);
