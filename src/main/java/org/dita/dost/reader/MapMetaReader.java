@@ -327,24 +327,25 @@ public final class MapMetaReader extends AbstractDomFilter {
     final Map<String, Element> res = new HashMap<>(topicMetaTable);
     for (String key : enableSet) {
       if (inheritance.containsKey(key)) {
+        final Element value = inheritance.get(key);
         if (uniqueSet.contains(key)) {
           if (!res.containsKey(key)) {
-            res.put(key, inheritance.get(key));
+            res.put(key, value);
           }
         } else { // not unique metadata
           if (!res.containsKey(key)) {
-            res.put(key, inheritance.get(key));
+            res.put(key, value);
           } else {
             //not necessary to do node type check here
             //because inheritStub doesn't contains any node
             //other than Element.
             final Element stub = res.get(key);
-            final Node inheritStub = inheritance.get(key);
+            final Element inheritStub = value;
             if (stub != inheritStub) {
               // Merge the value if stub does not equal to inheritStub
               // Otherwise it will get into infinitive loop
-              for (Node child : XMLUtils.toList(inheritStub.getChildNodes())) {
-                final Node item = stub.getOwnerDocument().importNode(child, true);
+              for (Element child : XMLUtils.getChildElements(inheritStub)) {
+                final Element item = (Element) stub.getOwnerDocument().importNode(child, true);
                 stub.appendChild(item);
               }
             }
