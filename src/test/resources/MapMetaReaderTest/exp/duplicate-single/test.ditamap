@@ -3,19 +3,46 @@
      xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="1.3"
      domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
      title="test">
+  <topicmeta class="- map/topicmeta ">
+    <author class="- topic/author ">map author</author>
+  </topicmeta>
   <topicref class="- map/topicref " href="a.xml">
     <topicmeta class="- map/topicmeta ">
       <author class="- topic/author ">topicref author 1</author>
+      <author class="- topic/author ">map author</author>
     </topicmeta>
+    <topicref class="- map/topicref " href="a.xml">
+      <topicmeta class="- map/topicmeta ">
+        <author class="- topic/author ">topicref author 1.1</author>
+        <author class="- topic/author ">topicref author 1</author>
+        <author class="- topic/author ">map author</author>
+      </topicmeta>
+    </topicref>
   </topicref>
   <topicref class="- map/topicref " href="a.xml">
     <topicmeta class="- map/topicmeta ">
       <author class="- topic/author ">topicref author 2</author>
+      <author class="- topic/author ">map author</author>
     </topicmeta>
+    <topicref class="- map/topicref " href="a.xml">
+      <topicmeta class="- map/topicmeta ">
+        <author class="- topic/author ">topicref author 2.1</author>
+        <author class="- topic/author ">topicref author 2</author>
+        <author class="- topic/author ">map author</author>
+      </topicmeta>
+    </topicref>
   </topicref>
   <topicref class="- map/topicref " href="a.xml">
     <topicmeta class="- map/topicmeta ">
       <author class="- topic/author ">topicref author 3</author>
+      <author class="- topic/author ">map author</author>
     </topicmeta>
+    <topicref class="- map/topicref " href="a.xml">
+      <topicmeta class="- map/topicmeta ">
+        <author class="- topic/author ">topicref author 3.1</author>
+        <author class="- topic/author ">topicref author 3</author>
+        <author class="- topic/author ">map author</author>
+      </topicmeta>
+    </topicref>
   </topicref>
 </map>

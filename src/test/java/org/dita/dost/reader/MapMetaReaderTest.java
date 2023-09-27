@@ -118,9 +118,30 @@ public class MapMetaReaderTest {
         Map.of(
           " topic/author ",
           wrap(
+            Saplings
+              .elem("author")
+              .withAttr("class", Constants.TOPIC_AUTHOR.toString())
+              .withText("topicref author 1.1"),
             Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 1"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 1"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author"),
+            Saplings
+              .elem("author")
+              .withAttr("class", Constants.TOPIC_AUTHOR.toString())
+              .withText("topicref author 2.1"),
             Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 2"),
-            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 3")
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 2"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author"),
+            Saplings
+              .elem("author")
+              .withAttr("class", Constants.TOPIC_AUTHOR.toString())
+              .withText("topicref author 3.1"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 3"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("topicref author 3"),
+            Saplings.elem("author").withAttr("class", Constants.TOPIC_AUTHOR.toString()).withText("map author")
           )
         )
       ),
