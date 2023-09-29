@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.stripFragment;
 
 import java.io.File;
 import java.net.URI;
@@ -33,7 +32,7 @@ public final class MapMetaReader extends AbstractDomFilter {
   /**
    * Cascaded metadata. Contents <topic relative URI, <class matcher, cascading metadata elements>>.
    */
-  private final Map<URI, Map<String, Element>> resultTable = new HashMap<>(16);
+  private final Map<URI, Map<String, Element>> resultTable = new HashMap<>();
 
   private static final Set<String> uniqueSet = Set.of(
     TOPIC_CRITDATES.matcher,
@@ -105,9 +104,9 @@ public final class MapMetaReader extends AbstractDomFilter {
   /** Current document. */
   private Document doc = null;
   /** Result metadata document. */
-  private Document resultDoc = null;
+  private final Document resultDoc;
   /** Current file. */
-  private File filePath = null;
+  private URI filePath;
 
   /**
    * Constructor.
@@ -116,7 +115,6 @@ public final class MapMetaReader extends AbstractDomFilter {
     super();
     globalMeta = new HashMap<>(16);
     resultDoc = XMLUtils.getDocumentBuilder().newDocument();
-    resultTable.clear();
   }
 
   /**
@@ -125,7 +123,7 @@ public final class MapMetaReader extends AbstractDomFilter {
    */
   @Override
   public void read(final File filename) throws DITAOTException {
-    filePath = filename;
+    filePath = filename.toURI();
 
     //clear the history on global metadata table
     globalMeta.clear();
@@ -135,27 +133,62 @@ public final class MapMetaReader extends AbstractDomFilter {
   @Override
   public Document process(final Document doc) {
     this.doc = doc;
-    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement())) {
-      final String classAttr = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
-      // if this node is topicmeta node under root
-      if (MAP_TOPICMETA.matches(classAttr)) {
-        handleGlobalMeta(elem);
-        // if this node is topicref node under root
-      } else if (MAP_TOPICREF.matches(classAttr)) {
-        handleTopicref(elem, globalMeta);
-      }
+
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICMETA)) {
+      handleGlobalMeta(elem);
     }
-    // Indexterm elements with either start or end attribute should not been
-    // move to referenced dita file's prolog section.
-    for (final Map<String, Element> resultTableEntry : resultTable.values()) {
-      for (final Map.Entry<String, Element> mapEntry : resultTableEntry.entrySet()) {
-        final String key = mapEntry.getKey();
-        if (TOPIC_KEYWORDS.matcher.equals(key)) {
-          removeIndexTermRecursive(mapEntry.getValue());
-        }
-      }
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICREF)) {
+      handleTopicref(elem, globalMeta);
     }
+    for (Element keyword : XMLUtils.getChildElements(doc.getDocumentElement(), TOPIC_KEYWORDS, true)) {
+      removeIndexTermRecursive(keyword);
+    }
+    for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICREF)) {
+      collectTopicrefs(elem);
+    }
+
     return doc;
+  }
+
+  private void collectTopicrefs(final Element topicref) {
+    final URI hrefAttr = Optional
+      .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
+      .map(Node::getNodeValue)
+      .map(URLUtils::toURI)
+      .orElse(null);
+    final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+    final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
+    Map<String, Element> current = Collections.emptyMap();
+    final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
+
+    for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
+      collectTopicrefs(elem);
+    }
+
+    if (hasDitaTopicTarget) {
+      for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
+        current = handleMeta(elem, Collections.emptyMap());
+      }
+    }
+
+    if (!current.isEmpty() && hasDitaTopicTarget) {
+      final URI copytoAttr = Optional
+        .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
+        .map(Attr::getNodeValue)
+        .map(URLUtils::toURI)
+        .map(URLUtils::stripFragment)
+        .orElse(null);
+      final URI rel = Objects.requireNonNullElse(copytoAttr, hrefAttr);
+      final URI topicPath = job.tempDirURI.relativize(filePath.resolve(rel));
+      if (resultTable.containsKey(topicPath)) {
+        //if the result table already contains some result
+        //metadata for current topic path.
+        final Map<String, Element> previous = resultTable.get(topicPath);
+        resultTable.put(topicPath, mergeMeta(previous, current, metaSet));
+      } else {
+        resultTable.put(topicPath, cloneElementMap(current));
+      }
+    }
   }
 
   /**
@@ -180,56 +213,30 @@ public final class MapMetaReader extends AbstractDomFilter {
   }
 
   private void handleTopicref(final Element topicref, final Map<String, Element> inheritance) {
-    final Attr hrefAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_HREF);
-    final Attr copytoAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+    final URI hrefAttr = Optional
+      .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
+      .map(Node::getNodeValue)
+      .map(URLUtils::toURI)
+      .orElse(null);
     final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
-    Map<String, Element> current = mergeMeta(null, Collections.unmodifiableMap(inheritance), cascadeSet);
-    Element metaNode = null;
+    Map<String, Element> current = mergeMeta(Collections.emptyMap(), inheritance, cascadeSet);
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
-    for (Element elem : XMLUtils.getChildElements(topicref)) {
-      String classAttr = elem.getAttribute(ATTRIBUTE_NAME_CLASS);
-      if (MAP_TOPICMETA.matches(classAttr)) {
-        // the parent topicref refers to a valid dita topic
-        if (hasDitaTopicTarget) {
-          metaNode = elem;
-          current = handleMeta(elem, Collections.unmodifiableMap(inheritance));
-        }
-      } else if (MAP_TOPICREF.matches(classAttr)) {
-        handleTopicref(elem, Collections.unmodifiableMap(current));
+    if (hasDitaTopicTarget) {
+      for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
+        current = handleMeta(elem, inheritance);
       }
     }
 
+    for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
+      handleTopicref(elem, current);
+    }
+
     if (!current.isEmpty() && hasDitaTopicTarget) {
-      URI topicPath;
-      if (copytoAttr != null) {
-        final URI copyToUri = stripFragment(URLUtils.toURI(copytoAttr.getNodeValue()));
-        topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(copyToUri));
-      } else {
-        final URI hrefUri = URLUtils.toURI(hrefAttr.getNodeValue());
-        topicPath = job.tempDirURI.relativize(filePath.toURI().resolve(hrefUri));
-      }
-      if (resultTable.containsKey(topicPath)) {
-        //if the result table already contains some result
-        //metadata for current topic path.
-        final Map<String, Element> previous = resultTable.get(topicPath);
-        resultTable.put(
-          topicPath,
-          mergeMeta(
-            Collections.unmodifiableMap(previous),
-            Collections.unmodifiableMap(current),
-            Collections.unmodifiableSet(metaSet)
-          )
-        );
-      } else {
-        resultTable.put(topicPath, cloneElementMap(Collections.unmodifiableMap(current)));
-      }
-      final Map<String, Element> metas = resultTable.get(topicPath);
+      final Map<String, Element> metas = cloneElementMap(current);
       if (!metas.isEmpty()) {
-        if (metaNode != null) {
-          topicref.removeChild(metaNode);
-        }
+        XMLUtils.getChildElement(topicref, MAP_TOPICMETA).ifPresent(topicref::removeChild);
         final Element newMeta = doc.createElement(MAP_TOPICMETA.localName);
         newMeta.setAttribute(ATTRIBUTE_NAME_CLASS, "-" + MAP_TOPICMETA.matcher);
         for (String metaPo : metaPos) {
@@ -317,33 +324,28 @@ public final class MapMetaReader extends AbstractDomFilter {
     // be inherited are merged.
     // Otherwise enableSet should be metaSet in order to merge all
     // metadata.
-    final Map<String, Element> res;
-    if (topicMetaTable == null) {
-      res = new HashMap<>(16);
-    } else {
-      res = new HashMap<>(topicMetaTable);
-    }
-
+    final Map<String, Element> res = new HashMap<>(topicMetaTable);
     for (String key : enableSet) {
       if (inheritance.containsKey(key)) {
+        final Element value = inheritance.get(key);
         if (uniqueSet.contains(key)) {
           if (!res.containsKey(key)) {
-            res.put(key, inheritance.get(key));
+            res.put(key, value);
           }
         } else { // not unique metadata
           if (!res.containsKey(key)) {
-            res.put(key, inheritance.get(key));
+            res.put(key, value);
           } else {
             //not necessary to do node type check here
             //because inheritStub doesn't contains any node
             //other than Element.
             final Element stub = res.get(key);
-            final Node inheritStub = inheritance.get(key);
+            final Element inheritStub = value;
             if (stub != inheritStub) {
               // Merge the value if stub does not equal to inheritStub
               // Otherwise it will get into infinitive loop
-              for (Node child : XMLUtils.toList(inheritStub.getChildNodes())) {
-                final Node item = stub.getOwnerDocument().importNode(child, true);
+              for (Element child : XMLUtils.getChildElements(inheritStub)) {
+                final Element item = (Element) stub.getOwnerDocument().importNode(child, true);
                 stub.appendChild(item);
               }
             }

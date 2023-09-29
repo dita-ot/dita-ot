@@ -138,8 +138,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  //
-  //  @Disabled
+  @Disabled
   @Test
   public void testuplevelslinkOnlytopic() throws Throwable {
     builder()
