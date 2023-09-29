@@ -60,7 +60,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- DOTJ005F appears to indicate an internal programming error, failed to create
        a new module in ModuleFactory.java. This message should be updated
        to indicate it is an internal programming error and should be reported to the
-       toolkit development team. -->>
+       toolkit development team. -->
   <message id="DOTJ005F" type="FATAL">
     <reason>Failed to create new instance for '%1'.</reason>
     <response>Please ensure that '%1' exists and that you have permission to access it.</response>
