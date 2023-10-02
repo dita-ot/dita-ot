@@ -11,8 +11,7 @@ import static java.util.Collections.emptyMap;
 import static javax.xml.XMLConstants.DEFAULT_NS_PREFIX;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static net.sf.saxon.s9api.streams.Predicates.*;
-import static net.sf.saxon.s9api.streams.Steps.child;
-import static net.sf.saxon.s9api.streams.Steps.descendant;
+import static net.sf.saxon.s9api.streams.Steps.*;
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Configuration.parserFeatures;
@@ -25,6 +24,7 @@ import java.net.URI;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
@@ -170,7 +170,7 @@ public final class XMLUtils {
   /**
    * Convert DOM NodeList to List.
    */
-  public static <T> List<T> toList(final NodeList nodes) {
+  public static <T extends Node> List<T> toList(final NodeList nodes) {
     final List<T> res = new ArrayList<>(nodes.getLength());
     for (int i = 0; i < nodes.getLength(); i++) {
       res.add((T) nodes.item(i));
@@ -1391,5 +1391,12 @@ public final class XMLUtils {
         parent.appendChild(doc.importNode(child, true));
       }
     }
+  }
+
+  /**
+   * Check format is dita.
+   */
+  public static Predicate<XdmNode> isDitaFormat() {
+    return attributeEq(ATTRIBUTE_NAME_FORMAT, ATTR_FORMAT_VALUE_DITA).or(empty(attribute(ATTRIBUTE_NAME_FORMAT)));
   }
 }

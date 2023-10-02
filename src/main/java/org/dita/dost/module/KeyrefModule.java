@@ -10,13 +10,14 @@ package org.dita.dost.module;
 
 import static java.util.stream.Collectors.toMap;
 import static net.sf.saxon.s9api.streams.Predicates.attributeEq;
-import static net.sf.saxon.s9api.streams.Steps.ancestorOrSelf;
+import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.isDitaFormat;
 
 import java.io.IOException;
 import java.net.URI;
@@ -109,10 +110,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       final KeyScope startScope = reader.getKeyDefinition();
 
       // Read resources maps
-      final Collection<FileInfo> resourceFis = job.getFileInfo(fi ->
+      final Collection<FileInfo> resourceMapFis = job.getFileInfo(fi ->
         fi.isInputResource && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP)
       );
-      final KeyScope rootScope = resourceFis
+      final KeyScope rootScope = resourceMapFis
         .stream()
         .map(fi -> {
           try {
@@ -122,6 +123,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
             r.setLogger(logger);
             r.read(job.tempDirURI.resolve(fi.uri), d);
             final KeyScope s = r.getKeyDefinition();
+            logger.debug("Writing " + job.tempDirURI.resolve(fi.uri));
             writeMap(fi, d);
             return s;
           } catch (DITAOTException e) {
@@ -129,6 +131,20 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
           }
         })
         .reduce(startScope, KeyScope::merge);
+
+      final Set<String> topicsInMap = doc
+        .select(descendant(MAP_TOPICREF.matcher()).where(isDitaFormat()).then(attribute(ATTRIBUTE_NAME_HREF)))
+        .map(node -> {
+          final URI href = stripFragment(job.tempDirURI.resolve(mapFile).resolve(node.getStringValue()));
+          return job.tempDirURI.relativize(href).toString();
+        })
+        .collect(Collectors.toSet());
+      final Collection<FileInfo> resourceTopicsFis = job.getFileInfo(fi ->
+        !topicsInMap.contains(fi.uri) && (Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITA) || fi.format == null)
+      );
+      final Collection<FileInfo> resourceFis = Stream
+        .concat(resourceMapFis.stream(), resourceTopicsFis.stream())
+        .toList();
       final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
 
       (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null).forEach(this::processFile);
@@ -169,6 +185,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     Destination destination = null;
     try {
       final URI file = job.tempDirURI.resolve(map.uri);
+      logger.debug("Writing " + file);
       destination = job.getStore().getDestination(file);
       final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
       final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));

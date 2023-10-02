@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map cascade="nomerge" class="- map/map " id="test" title="Key reference test">
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="author" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keywords class="- topic/keywords ">
+        <keyword class="- topic/keyword ">Keyword</keyword>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <topicref class="- map/topicref " href="b.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle ">a</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">a</linktext>
+    </topicmeta>
+  </topicref>
+</map>

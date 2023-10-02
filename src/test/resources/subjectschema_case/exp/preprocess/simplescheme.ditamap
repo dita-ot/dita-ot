@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subjectScheme cascade="nomerge" class="- map/map subjectScheme/subjectScheme " processing-role="resource-only"
+               toc="no">
+  <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="os">
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="linux">
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="redhat_linux"/>
+      <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="untub_linux"/>
+    </subjectdef>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="mswin"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keys="zos"/>
+  </subjectdef>
+  <enumerationdef class="- map/topicref subjectScheme/enumerationdef ">
+    <attributedef class="- topic/data subjectScheme/attributedef " name="platform" translate="no"/>
+    <subjectdef class="- map/topicref subjectScheme/subjectdef " keyref="os"/>
+  </enumerationdef>
+</subjectScheme>

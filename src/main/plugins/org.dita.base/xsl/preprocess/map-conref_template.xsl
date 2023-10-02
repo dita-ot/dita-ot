@@ -10,11 +10,10 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.base:xsl/preprocess/conrefImpl.xsl"/>
   <dita:extension id="dita.xsl.conref" behavior="org.dita.dost.platform.ImportXSLAction" xmlns:dita="http://dita-ot.sourceforge.net"/>
   <xsl:output method="xml" encoding="utf-8" indent="no" />
-  
-  <xsl:template match="*[@conref and contains(@class, ' topic/')]">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()"/>
-    </xsl:copy>
+
+  <!-- Ignore missing conref target and retain conref for future processing -->
+  <xsl:template match="*" mode="missing-conref-target-file">
+    <xsl:call-template name="copy"/>
   </xsl:template>
   
 </xsl:stylesheet>

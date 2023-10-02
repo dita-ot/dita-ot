@@ -8,9 +8,7 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
-import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML_WITH_PREPROCESS2;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Disabled;
@@ -37,12 +35,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
   @Disabled
   @Test
   public void testcopyto() throws Throwable {
-    builder()
-      .name(Paths.get("copyto", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("TC2.ditamap"))
-      .warnCount(0)
-      .test();
+    builder().name(Paths.get("copyto", "basic")).transtype(PREPROCESS).input(Paths.get("TC2.ditamap")).test();
   }
 
   @Test
@@ -99,7 +92,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .name(Paths.get("copyto", "copyto_extensions_metadata"))
       .transtype(PREPROCESS)
       .input(Paths.get("TC1.ditamap"))
-      .warnCount(0)
       .test();
   }
 
@@ -155,7 +147,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .input(Paths.get("main/uplevel-in-topic.ditamap"))
       .put("outer.control", "quiet")
       .put("onlytopic.in.map", "true")
-      .warnCount(2)
+      .warnCount(1)
       .test();
   }
 
@@ -174,23 +166,14 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
 
   @Disabled
   @Test
-  public void testuplevelslink() throws Throwable {
-    builder()
-      .name("uplevelslink")
-      .transtype(PREPROCESS)
-      .input(Paths.get("main/uplevel-in-topic.ditamap"))
-      .put("outer.control", "quiet")
-      .test();
-  }
-
-  @Disabled
-  @Test
   public void testchunk_uplevel() throws Throwable {
     builder()
       .name("chunk_uplevel")
       .transtype(PREPROCESS)
       .input(Paths.get("main/chunkup.ditamap"))
       .put("outer.control", "quiet")
+      .warnCount(0)
+      .errorCount(5)
       .test();
   }
 }

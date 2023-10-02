@@ -519,6 +519,8 @@ public abstract class AbstractIntegrationTest {
       e.removeAttribute(ATTRIBUTE_NAME_DOMAINS);
       e.removeAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
       e.removeAttributeNS(DITA_OT_NS, "submap-specializations");
+      e.removeAttributeNS(DITA_OT_NS, "imagerefuri");
+      e.removeAttributeNS(DITA_OT_NS, "original-imageref");
       // remove workdir processing instructions
       removeWorkdirProcessingInstruction(e);
     }

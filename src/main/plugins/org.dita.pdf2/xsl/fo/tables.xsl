@@ -266,6 +266,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/indexterm ')]" mode="insert-text"/>
     <xsl:template match="opentopic-index:*" mode="insert-text"/>
+    <xsl:template match="*[contains(@class, ' topic/fn ')]" mode="insert-text"/>
 
     <xsl:template match="text()[contains(., '[') and contains(., ']')][ancestor::*[contains(@class, ' topic/dl ')][contains(@otherprops,'sortable')]]" priority="10">
         <xsl:value-of select="substring-before(.,'[')"/>

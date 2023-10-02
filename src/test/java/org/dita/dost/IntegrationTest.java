@@ -301,6 +301,11 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
+  public void testkeyrefKeywordConref() throws Throwable {
+    builder().name(Paths.get("keyref", "keyword_conref")).transtype(PREPROCESS).input(Paths.get("test.ditamap")).test();
+  }
+
+  @Test
   public void testmapref() throws Throwable {
     builder()
       .name(Paths.get("mapref", "basic"))
@@ -411,5 +416,26 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
       .put("args.grammar.cache", "no")
       .test();
     assertEquals(0, grammarPool.getCacheSize());
+  }
+
+  @Test
+  public void testRngGrammarPoolValidate() throws Throwable {
+    builder()
+      .name("bookmap-rng-based-validate")
+      .transtype(PREPROCESS)
+      .input(Paths.get("main.ditamap"))
+      .put("validate", "true")
+      .errorCount(1)
+      .test();
+  }
+
+  @Test
+  public void testSubjectSchema() throws Throwable {
+    builder()
+      .name("subjectschema_case")
+      .transtype(PREPROCESS)
+      .input(Paths.get("simplemap.ditamap"))
+      .put("args.filter", Paths.get("filter.ditaval"))
+      .test();
   }
 }

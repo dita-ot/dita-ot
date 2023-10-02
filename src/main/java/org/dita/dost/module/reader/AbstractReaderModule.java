@@ -34,6 +34,7 @@ import javax.xml.namespace.QName;
 import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.pipeline.AbstractPipelineInput;
@@ -141,6 +142,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final String ext = getExtension(file.getPath());
     if (parserMap.containsKey(ext)) {
       return ext;
+    } else if (Objects.equals(ext, ATTR_FORMAT_VALUE_DITAMAP)) {
+      return ATTR_FORMAT_VALUE_DITAMAP;
     }
     return null;
   }
@@ -377,11 +380,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     }
 
     try {
+      final DITAOTXMLErrorHandler errorHandler = new DITAOTXMLErrorHandler(src.toString(), logger, processingMode);
       XMLReader parser = XMLUtils.getXmlReader(ref.format, processingMode).orElse(reader);
+      parser.setErrorHandler(errorHandler);
       XMLReader xmlSource = parser;
       for (final XMLFilter f : getProcessingPipe(currentFile)) {
         f.setParent(xmlSource);
         f.setEntityResolver(CatalogUtils.getCatalogResolver());
+        f.setErrorHandler(errorHandler);
         xmlSource = f;
       }
 
@@ -666,6 +672,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     // Remove pure conref targets from fullTopicSet
     // XXX: if we remove from fullTopicSet, we don't get format information
     fullTopicSet.removeAll(pureConrefTargets);
+    // Treat pure conref targets same as resource-only
+    resourceOnlySet.addAll(pureConrefTargets);
   }
 
   /**

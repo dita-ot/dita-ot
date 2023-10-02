@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map title="Key reference test" id="test">
+  <keydef keys="author">
+    <topicmeta>
+      <keywords>
+        <keyword conref="a.dita#a/keyword"/>
+      </keywords>
+    </topicmeta>
+  </keydef>
+  <topicref href="b.dita"/>
+</map>
