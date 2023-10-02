@@ -170,7 +170,7 @@ public final class XMLUtils {
   /**
    * Convert DOM NodeList to List.
    */
-  public static <T> List<T> toList(final NodeList nodes) {
+  public static <T extends Node> List<T> toList(final NodeList nodes) {
     final List<T> res = new ArrayList<>(nodes.getLength());
     for (int i = 0; i < nodes.getLength(); i++) {
       res.add((T) nodes.item(i));
