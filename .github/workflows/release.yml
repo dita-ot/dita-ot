@@ -118,4 +118,4 @@ jobs:
           token: ${{ secrets.REPOSITORY_DISPATCH }}
           repository: dita-ot/docs
           event-type: release
-          client-payload: '{"dita-ot-version": "${{ env.tag }}", "docs-tag": "${{ env.tag }}"}'
+          client-payload: '{"dita_ot_version": "${{ env.tag }}", "docs_tag": "${{ env.tag }}"}'
