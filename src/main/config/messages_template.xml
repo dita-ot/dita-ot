@@ -283,7 +283,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ054E" type="ERROR">
-    <reason>Unable to parse invalid %1 attribute value "%2"</reason>
+    <reason>Unable to parse invalid %1 attribute value "%2".</reason>
     <response></response>
   </message>
 
@@ -428,7 +428,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ083E" type="ERROR">
-    <reason>The resource referenced as %1 is capitalized differently on disk</reason>
+    <reason>The resource referenced as %1 is capitalized differently on disk.</reason>
     <response></response>
   </message>
 
@@ -630,22 +630,22 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX033E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to a list item: '%1'</reason>
+    <reason>Unable to generate link text for a cross reference to a list item: '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTX034E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to an unordered list item: '%1'</reason>
+    <reason>Unable to generate link text for a cross reference to an unordered list item: '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTX035E" type="ERROR">
-    <reason>Unable to generate the correct number for a cross reference to a footnote: '%1'</reason>
+    <reason>Unable to generate the correct number for a cross reference to a footnote: '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTX036E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to a dlentry (the dlentry or term could not be found): '%1'</reason>
+    <reason>Unable to generate link text for a cross reference to a dlentry (the dlentry or term could not be found): '%1'.</reason>
     <response></response>
   </message>
 
