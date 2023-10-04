@@ -20,11 +20,6 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
-  <message id="DOTA069F" type="FATAL">
-    <reason>Input file '%1' cannot be located or read.</reason>
-    <response>Ensure that file was specified properly and that you have permission to access it.</response>
-  </message>
-
   <message id="DOTA003F" type="FATAL">
     <reason>Cannot find the user specified XSLT stylesheet '%1'.</reason>
     <response></response>
@@ -60,6 +55,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Use property %2 instead.</response>
   </message>
 
+  <message id="DOTA069F" type="FATAL">
+    <reason>Input file '%1' cannot be located or read.</reason>
+    <response>Ensure that file was specified properly and that you have permission to access it.</response>
+  </message>
+
   <!-- Start of Java Messages -->
 
   <!-- DOTJ005F appears to indicate an internal programming error, failed to create
@@ -71,17 +71,17 @@ See the accompanying LICENSE file for applicable license.
     <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
+  <message id="DOTJ007E" type="ERROR">
+    <reason>Duplicate condition in filter file for rule '%1'.</reason>
+    <response>The first encountered condition will be used.</response>
+  </message>
+
   <message id="DOTJ007I" type="INFO">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
     <response>The first encountered condition will be used.</response>
   </message>
 
   <message id="DOTJ007W" type="WARN">
-    <reason>Duplicate condition in filter file for rule '%1'.</reason>
-    <response>The first encountered condition will be used.</response>
-  </message>
-
-  <message id="DOTJ007E" type="ERROR">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
     <response>The first encountered condition will be used.</response>
   </message>
@@ -117,15 +117,15 @@ See the accompanying LICENSE file for applicable license.
     <response>Check and see whether all prerequisite plug-ins are installed in toolkit.</response>
   </message>
 
+  <message id="DOTJ021E" type="ERROR">
+    <reason>File '%1' will not generate output because because all content has been filtered out by DITAVAL "exclude" conditions, or because the file is not valid DITA.</reason>
+    <response></response>
+  </message>
+
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
     <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the ditaval file.</reason>
     <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
-  </message>
-
-  <message id="DOTJ021E" type="ERROR">
-    <reason>File '%1' will not generate output because because all content has been filtered out by DITAVAL "exclude" conditions, or because the file is not valid DITA.</reason>
-    <response></response>
   </message>
 
   <message id="DOTJ022F" type="FATAL">
@@ -491,19 +491,19 @@ See the accompanying LICENSE file for applicable license.
     <response>To remove this message, you can set the toc="no" or processing-role="resource-only" attribute on your topicref.</response>
   </message>
 
-  <!-- As of 20012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
-  <message id="DOTX008W" type="WARN">
-    <reason>File '%1' cannot be loaded, and no navigation title is specified for the table of contents.</reason>
-    <response></response>
-  </message>
-
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
   <message id="DOTX008E" type="ERROR">
     <reason>File '%1' does not exist or cannot be loaded.</reason>
     <response></response>
   </message>
 
-  <!-- As of 20012-06-13, 009W is only called for HTML Help and map2htmtoc -->
+  <!-- As of 2012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
+  <message id="DOTX008W" type="WARN">
+    <reason>File '%1' cannot be loaded, and no navigation title is specified for the table of contents.</reason>
+    <response></response>
+  </message>
+
+  <!-- As of 2012-06-13, DOTX009W is only called for HTML Help and map2htmtoc -->
   <message id="DOTX009W" type="WARN">
     <reason>Could not retrieve a title from '%1'. Using '%2' instead.</reason>
     <response></response>
@@ -804,14 +804,14 @@ See the accompanying LICENSE file for applicable license.
     <response>Remove references to this target from your custom Ant files.</response>
   </message>
 
-  <message id="DOTX071W" type="WARN">
-    <reason>Parameter "%1" on template "%2" is deprecated.</reason>
-    <response>Use parameter "%3" instead.</response>
-  </message>
-
   <message id="DOTX071E" type="ERROR">
     <reason>Conref range: Unable to find conref range end element with ID "%1".</reason>
     <response/>
+  </message>
+
+  <message id="DOTX071W" type="WARN">
+    <reason>Parameter "%1" on template "%2" is deprecated.</reason>
+    <response>Use parameter "%3" instead.</response>
   </message>
 
   <message id="DOTX072I" type="INFO">

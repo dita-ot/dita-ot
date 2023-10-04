@@ -15,6 +15,18 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
+       DOTA prefix is innacurate. No reason to change at this point. -->
+  <message id="DOTA067W" type="WARN">
+    <reason>Ignoring index-see '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <response></response>
+  </message>
+
+  <message id="DOTA068W" type="WARN">
+    <reason>Ignoring index-see-also '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <response></response>
+  </message>
+
   <!-- Start of Java Messages -->
 
   <message id="PDFJ001E" type="ERROR">
@@ -30,18 +42,6 @@ See the accompanying LICENSE file for applicable license.
   <message id="PDFJ003I" type="INFO">
     <reason>Index entry '%1' will be sorted under the "Special characters" heading.</reason>
     <response/>
-  </message>
-
-  <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
-       DOTA prefix is innacurate. No reason to change at this point. -->
-  <message id="DOTA067W" type="WARN">
-    <reason>Ignoring index-see '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
-    <response></response>
-  </message>
-
-  <message id="DOTA068W" type="WARN">
-    <reason>Ignoring index-see-also '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
-    <response></response>
   </message>
 
   <!-- Start of XSL Messages -->
