@@ -71,6 +71,7 @@ See the accompanying LICENSE file for applicable license.
     <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTJ007E" type="ERROR">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
     <response>The first encountered condition will be used.</response>
@@ -81,6 +82,7 @@ See the accompanying LICENSE file for applicable license.
     <response>The first encountered condition will be used.</response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTJ007W" type="WARN">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
     <response>The first encountered condition will be used.</response>
