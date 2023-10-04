@@ -88,12 +88,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="PDFX009E" type="ERROR">
-    <reason>Attribute set reflection cannot handle XSLT element %1.</reason>
+    <reason>Attribute set reflection cannot handle XSLT element '%1'.</reason>
     <response/>
   </message>
 
   <message id="PDFX011E" type="ERROR">
-    <reason>The index term '%2' uses both an index-see element and %1 element.</reason>
+    <reason>The index term '%2' uses both an index-see element and '%1' element.</reason>
     <response>Convert the index-see element to index-see-also.</response>
   </message>
 

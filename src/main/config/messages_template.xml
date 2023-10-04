@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Start of Ant Messages -->
 
   <message id="DOTA001F" type="FATAL">
-    <reason>"%1" is not a recognized transformation type.</reason>
+    <reason>'%1' is not a recognized transformation type.</reason>
     <response>Supported transformation types are <dita:extension id="dita.conductor.transtype.check" behavior="org.dita.dost.platform.ListTranstypeAction" separator=", "/>.</response>
   </message>
 
@@ -31,13 +31,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA011W" type="WARN">
-    <reason>Argument "%1" is deprecated.</reason>
+    <reason>Argument '%1' is deprecated.</reason>
     <response>This argument is no longer supported in the toolkit.</response>
   </message>
 
   <message id="DOTA012W" type="WARN">
-    <reason>Argument "%1" is deprecated.</reason>
-    <response>Please use the argument "%2" instead.</response>
+    <reason>Argument '%1' is deprecated.</reason>
+    <response>Please use the argument '%2' instead.</response>
   </message>
 
   <message id="DOTA013F" type="FATAL">
@@ -51,8 +51,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA015F" type="FATAL">
-    <reason>Internal property %1 may not be set directly.</reason>
-    <response>Use property %2 instead.</response>
+    <reason>Internal property '%1' may not be set directly.</reason>
+    <response>Use property'%2'instead.</response>
   </message>
 
   <message id="DOTA069F" type="FATAL">
@@ -183,12 +183,12 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ035F" type="FATAL">
-    <reason>The file "%1" is outside the scope of the input dita/map directory.</reason>
-    <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file "%1" into the input dita/map directory.</response>
+    <reason>The file '%1' is outside the scope of the input dita/map directory.</reason>
+    <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file '%1' into the input dita/map directory.</response>
   </message>
 
   <message id="DOTJ036W" type="WARN">
-    <reason>The file "%1" is outside the scope of the input dita/map directory.</reason>
+    <reason>The file '%1' is outside the scope of the input dita/map directory.</reason>
     <response></response>
   </message>
 
@@ -199,8 +199,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ038E" type="ERROR">
-    <reason>The tag "%1" is specialized from unrecognized metadata.</reason>
-    <response>Please make sure that tag "%1" is specialized from an existing metadata tag in the core DITA vocabulary.</response>
+    <reason>The tag '%1' is specialized from unrecognized metadata.</reason>
+    <response>Please make sure that tag '%1' is specialized from an existing metadata tag in the core DITA vocabulary.</response>
   </message>
 
   <message id="DOTJ039E" type="ERROR">
@@ -220,12 +220,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ042E" type="ERROR">
-    <reason>Two elements both use conref push to replace the target "%1".</reason>
+    <reason>Two elements both use conref push to replace the target '%1'.</reason>
     <response>Please delete one of the duplicate "replace" actions.</response>
   </message>
 
   <message id="DOTJ043W" type="WARN">
-    <reason>The conref push function is trying to replace an element that does not exist (element "%1" in file "%2").</reason>
+    <reason>The conref push function is trying to replace an element that does not exist (element '%1' in file '%2').</reason>
     <response></response>
   </message>
 
@@ -236,7 +236,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ045I" type="INFO">
-    <reason>The key "%1" is defined more than once in the same map file.</reason>
+    <reason>The key '%1' is defined more than once in the same map file.</reason>
     <response></response>
   </message>
 
@@ -246,18 +246,18 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ047I" type="INFO">
-    <reason>Unable to find key definition for key reference "%1" in root scope.</reason>
+    <reason>Unable to find key definition for key reference '%1' in root scope.</reason>
     <response>The href attribute may be used as fallback if it exists</response>
   </message>
 
   <message id="DOTJ048I" type="INFO">
-    <reason>Unable to find key definition for key reference "%1" in scope "%2".</reason>
+    <reason>Unable to find key definition for key reference '%1' in scope '%2'.</reason>
     <response>The href attribute may be used as fallback if it exists</response>
   </message>
 
   <message id="DOTJ049W" type="WARN">
-    <reason>The attribute value %1="%3" on element "%2" does not comply with the specified subject scheme.</reason>
-    <response>According to the subject scheme map, the following values are valid for the %1 attribute: %4</response>
+    <reason>The attribute value %1="%3" on element '%2' does not comply with the specified subject scheme.</reason>
+    <response>According to the subject scheme map, the following values are valid for the '%1' attribute: '%4'</response>
   </message>
 
   <message id="DOTJ050W" type="WARN">
@@ -267,12 +267,12 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
-    <reason>Unable to load target for coderef "%1".</reason>
+    <reason>Unable to load target for coderef '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ052E" type="ERROR">
-    <reason>Code reference charset "%1" not supported.</reason>
+    <reason>Code reference charset '%1' not supported.</reason>
     <response>See the DITA-OT documentation for supported charset values on the format attribute.</response>
   </message>
 
@@ -283,38 +283,38 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ054E" type="ERROR">
-    <reason>Unable to parse invalid %1 attribute value "%2".</reason>
+    <reason>Unable to parse invalid '%1' attribute value '%2'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ055E" type="ERROR">
-    <reason>Invalid key name "%1".</reason>
+    <reason>Invalid key name '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ056E" type="ERROR">
-    <reason>Invalid xml:lang "%1".</reason>
+    <reason>Invalid xml:lang '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ057E" type="ERROR">
-    <reason>The id attribute value "%1" is not unique within the topic that contains it.</reason>
+    <reason>The id attribute value '%1' is not unique within the topic that contains it.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ058E" type="ERROR">
-    <reason>Both %1 and %2 attributes defined.</reason>
+    <reason>Both '%1' and '%2' attributes defined.</reason>
     <response>A single element may not contain both generalized and specialized values for the same attribute.</response>
   </message>
 
   <message id="DOTJ059E" type="ERROR">
-    <reason>Invalid key scope name "%1".</reason>
+    <reason>Invalid key scope name '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ060W" type="WARN">
-    <reason>Key "%1" was used in conkeyref but is not bound to a DITA topic or map.</reason>
-    <response>Cannot resolve conkeyref value "%2" as a valid conref reference.</response>
+    <reason>Key '%1' was used in conkeyref but is not bound to a DITA topic or map.</reason>
+    <response>Cannot resolve conkeyref value '%2' as a valid conref reference.</response>
   </message>
 
   <message id="DOTJ061E" type="ERROR">
@@ -323,12 +323,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ062E" type="ERROR">
-    <reason>Invalid %1 attribute value "%2".</reason>
+    <reason>Invalid '%1' attribute value '%2'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ063E" type="ERROR">
-    <reason>The cols attribute is "%1" but number of colspec elements was %2.</reason>
+    <reason>The cols attribute is '%1' but number of colspec elements was '%2'.</reason>
     <response></response>
   </message>
 
@@ -338,17 +338,17 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ065I" type="INFO">
-    <reason>Branch filter generated topic %1 used more than once.</reason>
-    <response>Renaming %1 to %2.</response>
+    <reason>Branch filter generated topic '%1' used more than once.</reason>
+    <response>Renaming '%1' to '%2'.</response>
   </message>
 
   <message id="DOTJ066E" type="ERROR">
-    <reason>No id attribute on topic type element %1.</reason>
-    <response>Using generated id %2.</response>
+    <reason>No id attribute on topic type element '%1'.</reason>
+    <response>Using generated id '%2'.</response>
   </message>
 
   <message id="DOTJ067E" type="ERROR">
-    <reason>No id attribute on topic type element %1.</reason>
+    <reason>No id attribute on topic type element '%1'.</reason>
     <response></response>
   </message>
 
@@ -358,7 +358,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ069E" type="ERROR">
-    <reason>Circular key definition %1.</reason>
+    <reason>Circular key definition '%1'.</reason>
     <response></response>
   </message>
 
@@ -428,13 +428,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ083E" type="ERROR">
-    <reason>The resource referenced as %1 is capitalized differently on disk.</reason>
+    <reason>The resource referenced as '%1' is capitalized differently on disk.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ084E" type="ERROR">
-    <reason>Couldn’t read '%1' with the %2 character set.</reason>
-    <response>Save the file with %2 encoding.</response>
+    <reason>Couldn’t read '%1' with the '%2' character set.</reason>
+    <response>Save the file with '%2' encoding.</response>
   </message>
 
   <message id="DOTJ085E" type="ERROR">
@@ -482,12 +482,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX006E" type="ERROR">
-    <reason>Unknown file extension in href="%1".</reason>
+    <reason>Unknown file extension in href='%1'.</reason>
     <response>References to non-DITA resources should set the format attribute to match the resource (for example, 'txt', 'pdf', or 'html').</response>
   </message>
 
   <message id="DOTX007I" type="INFO">
-    <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to "%1" will be ignored.</reason>
+    <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to '%1' will be ignored.</reason>
     <response>To remove this message, you can set the toc="no" or processing-role="resource-only" attribute on your topicref.</response>
   </message>
 
@@ -542,7 +542,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX016W" type="WARN">
-    <reason>A reference to "%2" appears to reference a DITA document, but the format attribute has inherited a value of "%1". The document will not be processed as DITA.</reason>
+    <reason>A reference to '%2' appears to reference a DITA document, but the format attribute has inherited a value of '%1'. The document will not be processed as DITA.</reason>
     <response></response>
   </message>
 
@@ -565,12 +565,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX020E" type="ERROR">
-    <reason>Missing navtitle attribute or element for peer topic "%1".</reason>
+    <reason>Missing navtitle attribute or element for peer topic '%1'.</reason>
     <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX021E" type="ERROR">
-    <reason>Missing navtitle attribute or element for non-DITA resource "%1".</reason>
+    <reason>Missing navtitle attribute or element for non-DITA resource '%1'.</reason>
     <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
   </message>
 
@@ -585,12 +585,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX024E" type="ERROR">
-    <reason>Missing linktext and navtitle for peer topic "%1".</reason>
+    <reason>Missing linktext and navtitle for peer topic '%1'.</reason>
     <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX025E" type="ERROR">
-    <reason>Missing linktext and navtitle for non-DITA resource "%1".</reason>
+    <reason>Missing linktext and navtitle for non-DITA resource '%1'.</reason>
     <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
   </message>
 
@@ -610,17 +610,17 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX029I" type="INFO">
-    <reason>The type attribute on a %1 element was set to %3, but the reference is to a more specific %4 %2. This may cause your links to sort incorrectly in the output.</reason>
+    <reason>The type attribute on a '%1' element was set to '%3', but the reference is to a more specific '%4' '%2'. This may cause your links to sort incorrectly in the output.</reason>
     <response></response>
   </message>
 
   <message id="DOTX030W" type="WARN">
-    <reason>The type attribute on a %1 element was set to %3, but the reference is to a %4 %2. This may cause your links to sort incorrectly in the output.</reason>
+    <reason>The type attribute on a '%1' element was set to '%3', but the reference is to a '%4' '%2'. This may cause your links to sort incorrectly in the output.</reason>
     <response></response>
   </message>
 
   <message id="DOTX031E" type="ERROR">
-    <reason>The file %1 is not available to resolve link information.</reason>
+    <reason>The file '%1' is not available to resolve link information.</reason>
     <response></response>
   </message>
 
@@ -670,7 +670,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX041W" type="WARN">
-    <reason>Found more than one title element in a %1 element. Using the first one for the %1's title.</reason>
+    <reason>Found more than one title element in a '%1' element. Using the first one for the %1's title.</reason>
     <response></response>
   </message>
 
@@ -745,7 +745,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX058W" type="WARN">
-    <reason>No glossary entry was found associated with key '%1' on %2 element. The build will try to determine the best display text and hover text for terms and abbreviations.</reason>
+    <reason>No glossary entry was found associated with key '%1' on '%2' element. The build will try to determine the best display text and hover text for terms and abbreviations.</reason>
     <response></response>
   </message>
 
@@ -780,7 +780,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX066W" type="WARN">
-    <reason>Template "%1" is deprecated.</reason>
+    <reason>Template '%1' is deprecated.</reason>
     <response>Remove references to this template from your custom XSLT or plug-ins.</response>
   </message>
 
@@ -795,22 +795,22 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX069W" type="WARN">
-    <reason>Template mode "%1" is deprecated.</reason>
+    <reason>Template mode '%1' is deprecated.</reason>
     <response>Remove references to this template mode from your custom XSLT or plug-ins.</response>
   </message>
 
   <message id="DOTX070W" type="WARN">
-    <reason>Target "%1" is deprecated.</reason>
+    <reason>Target '%1' is deprecated.</reason>
     <response>Remove references to this target from your custom Ant files.</response>
   </message>
 
   <message id="DOTX071E" type="ERROR">
-    <reason>Conref range: Unable to find conref range end element with ID "%1".</reason>
+    <reason>Conref range: Unable to find conref range end element with ID '%1'.</reason>
     <response/>
   </message>
 
   <message id="DOTX071W" type="WARN">
-    <reason>Parameter "%1" on template "%2" is deprecated.</reason>
+    <reason>Parameter '%1' on template '%2' is deprecated.</reason>
     <response>Use parameter "%3" instead.</response>
   </message>
 
@@ -820,22 +820,22 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX073I" type="INFO">
-    <reason>Removing broken link to "%1".</reason>
+    <reason>Removing broken link to '%1'.</reason>
     <response/>
   </message>
 
   <message id="DOTX074W" type="WARN">
-    <reason>No formatting defined for unknown class attribute value "%1".</reason>
+    <reason>No formatting defined for unknown class attribute value '%1'.</reason>
     <response/>
   </message>
 
   <message id="DOTX075W" type="WARN">
-    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type. The reference will resolve, but may result in content that violates one of the document constraints in "%1".</reason>
+    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type. The reference will resolve, but may result in content that violates one of the document constraints in '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTX076E" type="ERROR">
-    <reason>A content reference in a constrained document type cannot be resolved because it would violate one of the document constraints "%1".</reason>
+    <reason>A content reference in a constrained document type cannot be resolved because it would violate one of the document constraints '%1'.</reason>
     <response>The current constrained document may only reuse content from documents with equivalent constraints.</response>
   </message>
 
