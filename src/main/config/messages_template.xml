@@ -31,12 +31,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA011W" type="WARN">
-    <reason>Argument '%1' is deprecated.</reason>
-    <response>This argument is no longer supported in the toolkit.</response>
+    <reason>The '%1' argument is deprecated.</reason>
+    <response>This argument is no longer supported.</response>
   </message>
 
   <message id="DOTA012W" type="WARN">
-    <reason>Argument '%1' is deprecated.</reason>
+    <reason>The '%1' argument is deprecated.</reason>
     <response>Please use the argument '%2' instead.</response>
   </message>
 
@@ -46,13 +46,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA014W" type="WARN">
-    <reason>Attribute @%1 is deprecated.</reason>
-    <response>Use attribute @%2 instead.</response>
+    <reason>The @%1 attribute is deprecated.</reason>
+    <response>Use @%2 instead.</response>
   </message>
 
   <message id="DOTA015F" type="FATAL">
-    <reason>Internal property '%1' may not be set directly.</reason>
-    <response>Use property'%2'instead.</response>
+    <reason>The internal property '%1' may not be set directly.</reason>
+    <response>Use the '%2' property instead.</response>
   </message>
 
   <message id="DOTA069F" type="FATAL">
