@@ -211,13 +211,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ040E" type="ERROR">
-    <reason>An element uses conaction="replace", but a @conref attribute is not found in the expected location.</reason>
+    <reason>An element uses @conaction="replace", but a @conref attribute is not found in the expected location.</reason>
     <response></response>
   </message>
 
   <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
   <message id="DOTJ041E" type="ERROR">
-    <reason>The attribute conref="%1" uses invalid syntax.</reason>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
     <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
@@ -243,7 +243,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ046E" type="ERROR">
-    <reason>Conkeyref="%1" can not be resolved because it does not contain a key or the key is not defined.</reason>
+    <reason>The @conkeyref attribute value '%1' cannot be resolved because it does not contain a key or the key is not defined.</reason>
     <response>The build will use the @conref attribute for fallback, if one exists.</response>
   </message>
 
@@ -258,8 +258,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ049W" type="WARN">
-    <reason>The attribute value %1="%3" on element '%2' does not comply with the specified subject scheme.</reason>
-    <response>According to the subject scheme map, the following values are valid for the '%1' attribute: '%4'</response>
+    <reason>The @%1 attribute value '%3' on element '%2' does not comply with the specified subject scheme.</reason>
+    <response>According to the subject scheme map, the following values are valid for the @%1 attribute: '%4'</response>
   </message>
 
   <message id="DOTJ050W" type="WARN">
@@ -285,7 +285,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ054E" type="ERROR">
-    <reason>Unable to parse invalid '%1' attribute value '%2'.</reason>
+    <reason>Unable to parse invalid @%1 attribute value '%2'.</reason>
     <response></response>
   </message>
 
@@ -490,7 +490,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX007I" type="INFO">
     <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to '%1' will be ignored.</reason>
-    <response>To remove this message, you can set the toc="no" or processing-role="resource-only" attribute on your topicref.</response>
+    <response>To remove this message, you can set @toc="no" or @processing-role="resource-only" on the topicref.</response>
   </message>
 
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
@@ -512,13 +512,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX010E" type="ERROR">
-    <reason>Unable to find target for conref="%1".</reason>
+    <reason>Unable to find target for @conref="%1".</reason>
     <response></response>
   </message>
 
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for the reference conref="%1". Only the first will be used.</reason>
-    <response>Remove the duplicate id in the referenced file.</response>
+    <reason>There is more than one possible target for the @conref="%1" reference. Only the first will be used.</reason>
+    <response>Remove the duplicate ID in the referenced file.</response>
   </message>
 
   <!-- This message can no longer appear, though the template for producing it remains in conrefImpl.xsl.
@@ -534,12 +534,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX014E" type="ERROR">
-    <reason>The conref="%1" attribute setting uses invalid syntax.</reason>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
     <response>Conref references to a map element should contain '#' followed by an ID, such as mymap.ditamap#mytopicrefid.</response>
   </message>
 
   <message id="DOTX015E" type="ERROR">
-    <reason>The attribute conref="%1" uses invalid syntax.</reason>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
     <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
@@ -772,12 +772,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX064W" type="WARN">
-    <reason>The @copy-to attribute [copy-to="%1"] uses the name of a file that already exists, so this attribute is ignored.</reason>
+    <reason>The @copy-to attribute value '%1' uses the name of a file that already exists, so this attribute is ignored.</reason>
     <response></response>
   </message>
 
   <message id="DOTX065W" type="WARN">
-    <reason>Two unique source files each specify copy-to="%2", which results in a collision. The value associated with href="%1" is ignored.</reason>
+    <reason>Two unique source files each specify @copy-to="%2", which results in a collision. The value associated with
+      @href="%1" is ignored.</reason>
     <response></response>
   </message>
 
