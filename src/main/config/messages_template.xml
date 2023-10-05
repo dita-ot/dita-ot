@@ -126,13 +126,13 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
-    <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the ditaval file.</reason>
-    <response>Please check the file '%1' and the ditaval file to see if this is the intended result.</response>
+    <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the DITAVAL file.</reason>
+    <response>Please check the '%1' file and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <message id="DOTJ022F" type="FATAL">
     <reason>Failed to parse the input file '%1' because all of its content has been filtered out.</reason>
-    <response>This will happen if the input file has filter conditions on the root element, and a ditaval excludes all content based on those conditions.</response>
+    <response>This will happen if the input file has filter conditions on the root element, and a DITAVAL file excludes all content based on those conditions.</response>
   </message>
 
   <message id="DOTJ023E" type="ERROR">
@@ -167,8 +167,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ031I" type="INFO">
-    <reason>No specified rule for '%1' was found in the ditaval file. This value will use the default action, or a parent prop action if specified.</reason>
-    <response>To remove this message, you can specify a rule for '%1' in the ditaval file.</response>
+    <reason>No specified rule for '%1' was found in the DITAVAL file. This value will use the default action, or a parent prop action if specified.</reason>
+    <response>To remove this message, you can specify a rule for '%1' in the DITAVAL file.</response>
   </message>
 
   <!-- 2012-06-12: Still need to reproduce and edit this message -->
@@ -185,12 +185,12 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ035F" type="FATAL">
-    <reason>The file '%1' is outside the scope of the input dita/map directory.</reason>
-    <response>If you want to lower the severity level, please use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file '%1' into the input dita/map directory.</response>
+    <reason>The file '%1' is outside the scope of the input resource directory.</reason>
+    <response>To lower the severity level, use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file '%1' into the directory where the input map or topic is stored.</response>
   </message>
 
   <message id="DOTJ036W" type="WARN">
-    <reason>The file '%1' is outside the scope of the input dita/map directory.</reason>
+    <reason>The file '%1' is outside the scope of the input resource directory.</reason>
     <response></response>
   </message>
 
@@ -464,7 +464,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX002W" type="WARN">
-    <reason>The @title attribute or element in the ditamap is required for Eclipse output.</reason>
+    <reason>The @title attribute or element in the DITA map is required for Eclipse output.</reason>
     <response></response>
   </message>
 
@@ -707,7 +707,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX049I" type="INFO">
-    <reason>References to non-dita files will be ignored by the PDF, ODT, and RTF output transforms.</reason>
+    <reason>References to non-DITA files will be ignored by the PDF, ODT, and RTF output transforms.</reason>
     <response></response>
   </message>
 
@@ -728,7 +728,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX054W" type="WARN">
     <reason>Conflict text style is applied on the current element based on DITAVAL flagging rules.</reason>
-    <response>Please check ditaval and dita source to make sure there is no style conflict on the element which needs to be flagged.</response>
+    <response>Please check the DITAVAL and DITA source files to make sure there is no style conflict on the element that needs to be flagged.</response>
   </message>
 
   <message id="DOTX055W" type="WARN">
@@ -767,8 +767,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX063W" type="WARN">
-    <reason>The dita document '%1' is linked to from your content, but is not referenced by a topicref tag in the ditamap file.</reason>
-    <response>Include the topic in your map to avoid a broken link.</response>
+    <reason>The DITA document '%1' is linked to from your content, but not referenced by a &lt;topicref&gt; element in the map.</reason>
+    <response>Include the topic in your map file to avoid a broken link.</response>
   </message>
 
   <message id="DOTX064W" type="WARN">
