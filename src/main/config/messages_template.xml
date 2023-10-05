@@ -201,8 +201,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ038E" type="ERROR">
-    <reason>The tag '%1' is specialized from unrecognized metadata.</reason>
-    <response>Please make sure that tag '%1' is specialized from an existing metadata tag in the core DITA vocabulary.</response>
+    <reason>The &lt;%1&gt; element is specialized from unrecognized metadata.</reason>
+    <response>Please make sure that the &lt;%1&gt; element is specialized from an existing metadata element in the core DITA vocabulary.</response>
   </message>
 
   <message id="DOTJ039E" type="ERROR">
