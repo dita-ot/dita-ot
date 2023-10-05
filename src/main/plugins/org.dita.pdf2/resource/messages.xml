@@ -63,12 +63,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFX004F" type="ERROR">
     <reason>A topic reference was found with href="".</reason>
-    <response>Please specify a target or remove the href attribute.</response>
+    <response>Please specify a target or remove the @href attribute.</response>
   </message>
 
   <message id="PDFX005F" type="ERROR">
     <reason>The topic reference href="%1" could not be found.</reason>
-    <response>Please correct the reference, or set the scope or format attribute if the target is not a local DITA topic.</response>
+    <response>Please correct the reference, or set the @scope or @format attribute if the target is not a local DITA topic.</response>
   </message>
 
   <!-- PDFX006E cannot appear with version 2.2; commenting out. Should be removed when it is removed from the code.
