@@ -157,12 +157,12 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Deprecated since 3.5 -->
   <message id="DOTJ029I" type="INFO">
-    <reason>No 'domains' attribute was found for element '&lt;%1&gt;'.</reason>
+    <reason>No @domains attribute was found for element '&lt;%1&gt;'.</reason>
     <response>This generally indicates that your DTD or Schema was not developed properly according to the DITA specification.</response>
   </message>
 
   <message id="DOTJ030I" type="INFO">
-    <reason>No 'class' attribute for was found for element '&lt;%1&gt;'.</reason>
+    <reason>No @class attribute for was found for element '&lt;%1&gt;'.</reason>
     <response>The element will be processed as an unknown or non-DITA element.</response>
   </message>
 
@@ -335,8 +335,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ064W" type="WARN">
-    <reason>Chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
-    <response>Ignoring "by-topic" token.</response>
+    <reason>The @chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
+    <response>Ignoring the "by-topic" token.</response>
   </message>
 
   <message id="DOTJ065I" type="INFO">
@@ -375,27 +375,27 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ072E" type="ERROR">
-    <reason>Email link without correct 'format' attribute.</reason>
-    <response>Using 'format' attribute value 'email'.</response>
+    <reason>Email link without correct @format attribute.</reason>
+    <response>Using @format attribute value 'email'.</response>
   </message>
 
   <message id="DOTJ073E" type="ERROR">
-    <reason>Email link without correct 'scope' attribute.</reason>
-    <response>Using 'scope' attribute value 'external'.</response>
+    <reason>Email link without correct @scope attribute.</reason>
+    <response>Using @scope attribute value 'external'.</response>
   </message>
 
   <message id="DOTJ074W" type="WARN">
-    <reason>Rev attribute cannot be used with prop filter.</reason>
+    <reason>The @rev attribute cannot be used with prop filter.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ075W" type="WARN">
-    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
-    <response>Using 'scope' attribute value 'external'.</response>
+    <reason>Absolute link '%1' without correct @scope attribute.</reason>
+    <response>Using @scope attribute value 'external'.</response>
   </message>
 
   <message id="DOTJ076W" type="WARN">
-    <reason>Absolute link '%1' without correct 'scope' attribute.</reason>
+    <reason>Absolute link '%1' without correct @scope attribute.</reason>
     <response></response>
   </message>
 
