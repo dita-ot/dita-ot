@@ -180,20 +180,15 @@ public class SubjectSchemeReader {
   }
 
   public void loadSubjectScheme(final Element schemeRoot) {
-    final List<Element> rootChildren = XMLUtils.getChildElements(schemeRoot);
-    for (Element child : rootChildren) {
-      final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
-      if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
-        processEnumerationDef(schemeRoot, child);
-      }
+    for (Element child : XMLUtils.getChildElements(schemeRoot, SUBJECTSCHEME_ENUMERATIONDEF)) {
+      processEnumerationDef(schemeRoot, child);
     }
   }
 
   public void processEnumerationDef(final Element schemeRoot, final Element enumerationDef) {
-    final List<Element> enumChildren = XMLUtils.getChildElements(enumerationDef);
     String elementName = "*";
     QName attributeName = null;
-    for (Element child : enumChildren) {
+    for (Element child : XMLUtils.getChildElements(enumerationDef)) {
       final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
       if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
         elementName = child.getAttribute(ATTRIBUTE_NAME_NAME);
@@ -303,11 +298,8 @@ public class SubjectSchemeReader {
 
     while (!queue.isEmpty()) {
       final Element node = queue.poll();
-      final NodeList children = node.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          queue.offer((Element) children.item(i));
-        }
+      for (Element childElement : XMLUtils.getChildElements(node)) {
+        queue.offer(childElement);
       }
       if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
         final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
