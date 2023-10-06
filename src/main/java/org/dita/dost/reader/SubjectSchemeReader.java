@@ -200,10 +200,7 @@ public class SubjectSchemeReader {
         // Put default values.
         final String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
         if (keyValue != null) {
-          Map<String, String> S = defaultValueMap.get(attributeName);
-          if (S == null) {
-            S = new HashMap<>();
-          }
+          final Map<String, String> S = defaultValueMap.getOrDefault(attributeName, new HashMap<>());
           S.put(elementName, keyValue);
           defaultValueMap.put(attributeName, S);
         }
@@ -215,14 +212,8 @@ public class SubjectSchemeReader {
         }
         final Element subTree = searchForKey(schemeRoot, keyValue);
         if (subTree != null) {
-          Map<String, Set<Element>> S = bindingMap.get(attributeName);
-          if (S == null) {
-            S = new HashMap<>();
-          }
-          Set<Element> A = S.get(elementName);
-          if (A == null) {
-            A = new HashSet<>();
-          }
+          final Map<String, Set<Element>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
+          final Set<Element> A = S.getOrDefault(elementName, new HashSet<>());
           if (!A.contains(subTree)) {
             // Add sub-tree to valid values map
             putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
@@ -283,15 +274,8 @@ public class SubjectSchemeReader {
       return;
     }
 
-    Map<String, Set<String>> valueMap = validValuesMap.get(attName);
-    if (valueMap == null) {
-      valueMap = new HashMap<>();
-    }
-
-    Set<String> valueSet = valueMap.get(elementName);
-    if (valueSet == null) {
-      valueSet = new HashSet<>();
-    }
+    final Map<String, Set<String>> valueMap = validValuesMap.getOrDefault(attName, new HashMap<>());
+    final Set<String> valueSet = valueMap.getOrDefault(elementName, new HashSet<>());
 
     final LinkedList<Element> queue = new LinkedList<>();
     queue.offer(subtree);
@@ -303,7 +287,7 @@ public class SubjectSchemeReader {
       }
       if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
         final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (!(key == null || key.trim().isEmpty() || key.equals(category))) {
+        if (!(key.trim().isEmpty() || key.equals(category))) {
           valueSet.add(key);
         }
       }
