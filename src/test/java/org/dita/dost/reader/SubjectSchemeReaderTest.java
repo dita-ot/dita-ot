@@ -8,8 +8,7 @@
 
 package org.dita.dost.reader;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +16,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.namespace.QName;
@@ -94,7 +95,7 @@ class SubjectSchemeReaderTest {
         )
       )
     );
-    extracted(act, exp);
+    assertSubjectSchemeEquals(act, exp);
     assertEquals(
       Map.of(QName.valueOf("platform"), Map.of("*", Set.of("suse", "linux", "windows", "redhat", "zos"))),
       reader.getValidValuesMap()
@@ -102,7 +103,47 @@ class SubjectSchemeReaderTest {
     assertEquals(Map.of(), reader.getDefaultValueMap());
   }
 
-  private void extracted(SubjectScheme act, SubjectScheme exp) {
+  @Test
+  void loadSubjectScheme_indirectSubjectdef() throws URISyntaxException, IOException {
+    final Path src = tempDir.toPath().resolve("indirect-subjectdef.ditamap");
+    Files.copy(
+      Paths.get(
+        getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/indirect-subjectdef.ditamap").toURI()
+      ),
+      src
+    );
+
+    reader.loadSubjectScheme(src.toFile());
+
+    var act = reader.getSubjectSchemeMap();
+    assertFalse(act.isEmpty());
+    var exp = new SubjectScheme(
+      Map.of(
+        QName.valueOf("platform"),
+        Map.of(
+          "*",
+          Set.of(
+            createElement(
+              createSubjectDef("os", "Operating system")
+                .withChild(
+                  Saplings
+                    .elem("subjectdef")
+                    .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
+                    .withAttr("keyref", "linux"),
+                  createSubjectDef("windows", "Windows"),
+                  createSubjectDef("zos", "z/OS")
+                )
+            )
+          )
+        )
+      )
+    );
+    assertSubjectSchemeEquals(act, exp);
+    assertEquals(Map.of(QName.valueOf("platform"), Map.of("*", Set.of("windows", "zos"))), reader.getValidValuesMap());
+    assertEquals(Map.of(), reader.getDefaultValueMap());
+  }
+
+  private void assertSubjectSchemeEquals(SubjectScheme act, SubjectScheme exp) {
     assertEquals(exp.subjectSchemeMap().keySet(), act.subjectSchemeMap().keySet());
     for (QName expKey : exp.subjectSchemeMap().keySet()) {
       final Map<String, Set<Element>> actStringSetMap = act.subjectSchemeMap().get(expKey);
@@ -111,10 +152,24 @@ class SubjectSchemeReaderTest {
       for (String expSetKey : expStringSetMap.keySet()) {
         var expValueSet = expStringSetMap.get(expSetKey);
         var actValueSet = actStringSetMap.get(expSetKey);
-        assertEquals(expValueSet.size(), actValueSet.size());
-        assertDocumentEquals(expValueSet.stream().findFirst().get(), actValueSet.stream().findFirst().get());
+        assertDocumentSetEquals(expValueSet, actValueSet);
       }
     }
+  }
+
+  private void assertDocumentSetEquals(Set<Element> expValueSet, Set<Element> actValueSet) {
+    assertEquals(expValueSet.size(), actValueSet.size());
+    final List<Element> expList = new ArrayList<>(expValueSet);
+    for (Element act : actValueSet) {
+      for (Element exp : expList) {
+        var d = DiffBuilder.compare(exp).withTest(act).ignoreWhitespace().build();
+        if (!d.hasDifferences()) {
+          expList.remove(exp);
+          break;
+        }
+      }
+    }
+    assertTrue(expList.isEmpty());
   }
 
   private SaplingElement createSubjectDef(String keys, String navTitle) {
