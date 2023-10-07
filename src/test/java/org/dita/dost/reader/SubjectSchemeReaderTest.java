@@ -37,6 +37,8 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xmlunit.builder.DiffBuilder;
@@ -60,15 +62,14 @@ class SubjectSchemeReaderTest {
     reader.setLogger(logger);
   }
 
-  @Test
-  void loadSubjectScheme() throws URISyntaxException, IOException {
-    final Path src = tempDir.toPath().resolve("example-subjectScheme-filtering.ditamap");
+  @ParameterizedTest
+  @ValueSource(
+    strings = { "example-subjectScheme-filtering.ditamap", "example-subjectScheme-filtering-inline.ditamap" }
+  )
+  void loadSubjectScheme(String file) throws URISyntaxException, IOException {
+    final Path src = tempDir.toPath().resolve(file);
     Files.copy(
-      Paths.get(
-        getClass()
-          .getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/example-subjectScheme-filtering.ditamap")
-          .toURI()
-      ),
+      Paths.get(getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/" + file).toURI()),
       src
     );
 
