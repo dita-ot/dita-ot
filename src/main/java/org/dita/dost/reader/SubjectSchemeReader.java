@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
@@ -23,8 +24,6 @@ import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Subject scheme reader.
@@ -244,24 +243,12 @@ public class SubjectSchemeReader {
    * @return element that matches the key, otherwise {@code null}
    */
   private Element searchForKey(final Element root, final String keyValue) {
-    final LinkedList<Element> queue = new LinkedList<>();
-    queue.add(root);
-    while (!queue.isEmpty()) {
-      final Element node = queue.removeFirst();
-      final NodeList children = node.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          queue.add((Element) children.item(i));
-        }
-      }
-      if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (keyValue.equals(key)) {
-          return node;
-        }
-      }
-    }
-    return null;
+    return XMLUtils
+      .getChildElements(root, SUBJECTSCHEME_SUBJECTDEF, true)
+      .stream()
+      .filter(child -> keyValue.equals(child.getAttribute(ATTRIBUTE_NAME_KEYS)))
+      .findFirst()
+      .orElse(null);
   }
 
   /**
@@ -280,22 +267,11 @@ public class SubjectSchemeReader {
   ) {
     final Map<String, Set<String>> valueMap = validValuesMap.getOrDefault(attName, new HashMap<>());
     final Set<String> valueSet = valueMap.getOrDefault(elementName, new HashSet<>());
-
-    final LinkedList<Element> queue = new LinkedList<>();
-    queue.offer(subtree);
-
-    while (!queue.isEmpty()) {
-      final Element node = queue.poll();
-      for (Element childElement : XMLUtils.getChildElements(node)) {
-        queue.offer(childElement);
-      }
-      if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (!(key.trim().isEmpty() || key.equals(category))) {
-          valueSet.add(key);
-        }
-      }
-    }
+    Stream
+      .concat(Stream.of(subtree), XMLUtils.getChildElements(subtree, SUBJECTSCHEME_SUBJECTDEF, true).stream())
+      .map(child -> child.getAttribute(ATTRIBUTE_NAME_KEYS))
+      .filter(key -> !key.isBlank() && !key.equals(category))
+      .forEach(valueSet::add);
     valueMap.put(elementName, valueSet);
     validValuesMap.put(attName, valueMap);
   }
