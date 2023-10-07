@@ -124,12 +124,11 @@ class SubjectSchemeReaderTest {
           "*",
           Set.of(
             createElement(
-              createSubjectDef("os", "Operating system")
+              createSubjectDef("os")
                 .withChild(
-                  createSubjectDef("linux", "Linux")
-                    .withChild(createSubjectDef("redhat", "RedHat Linux"), createSubjectDef("suse", "SuSE Linux")),
-                  createSubjectDef("windows", "Windows"),
-                  createSubjectDef("zos", "z/OS")
+                  createSubjectDef("linux").withChild(createSubjectDef("redhat"), createSubjectDef("suse")),
+                  createSubjectDef("windows"),
+                  createSubjectDef("zos")
                 )
             )
           )
@@ -165,14 +164,14 @@ class SubjectSchemeReaderTest {
           "*",
           Set.of(
             createElement(
-              createSubjectDef("os", "Operating system")
+              createSubjectDef("os")
                 .withChild(
                   Saplings
                     .elem("subjectdef")
                     .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
                     .withAttr("keyref", "linux"),
-                  createSubjectDef("windows", "Windows"),
-                  createSubjectDef("zos", "z/OS")
+                  createSubjectDef("windows"),
+                  createSubjectDef("zos")
                 )
             )
           )
@@ -214,11 +213,14 @@ class SubjectSchemeReaderTest {
   }
 
   private SaplingElement createSubjectDef(String keys, String navTitle) {
+    return createSubjectDef(keys).withAttr("navtitle", navTitle);
+  }
+
+  private SaplingElement createSubjectDef(String keys) {
     return Saplings
       .elem("subjectdef")
       .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
-      .withAttr("keys", keys)
-      .withAttr("navtitle", navTitle);
+      .withAttr("keys", keys);
   }
 
   private void assertDocumentEquals(Element exp, Element act) {
