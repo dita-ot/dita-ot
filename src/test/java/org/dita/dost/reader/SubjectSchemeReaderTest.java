@@ -16,15 +16,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import javax.xml.namespace.QName;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.sapling.SaplingElement;
@@ -47,56 +40,70 @@ class SubjectSchemeReaderTest {
 
   private final XMLUtils xmlUtils = new XMLUtils();
 
-  private Job job;
   private SubjectSchemeReader reader;
 
   @TempDir
   File tempDir;
 
   @BeforeEach
-  void init() throws IOException {
-    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+  void setup() throws IOException {
+    Job job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     reader = new SubjectSchemeReader();
     reader.setJob(job);
     var logger = new TestUtils.CachingLogger();
     reader.setLogger(logger);
   }
 
+  private Path init(String file) {
+    final Path src = tempDir.toPath().resolve(file);
+    try {
+      Files.copy(
+        Paths.get(
+          Objects
+            .requireNonNull(getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/" + file))
+            .toURI()
+        ),
+        src
+      );
+    } catch (IOException | URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+    return src;
+  }
+
   @ParameterizedTest
   @ValueSource(
     strings = { "example-subjectScheme-filtering.ditamap", "example-subjectScheme-filtering-inline.ditamap" }
   )
-  void loadSubjectScheme(String file) throws URISyntaxException, IOException {
-    final Path src = tempDir.toPath().resolve(file);
-    Files.copy(
-      Paths.get(getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/" + file).toURI()),
-      src
-    );
+  void loadSubjectScheme(String file) {
+    final Path src = init(file);
 
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
     assertFalse(act.isEmpty());
-    var exp = new SubjectScheme(
-      Map.of(
-        QName.valueOf("platform"),
+    assertSubjectSchemeEquals(
+      act,
+      new SubjectScheme(
         Map.of(
-          "*",
-          Set.of(
-            createElement(
-              createSubjectDef("os", "Operating system")
-                .withChild(
-                  createSubjectDef("linux", "Linux")
-                    .withChild(createSubjectDef("redhat", "RedHat Linux"), createSubjectDef("suse", "SuSE Linux")),
-                  createSubjectDef("windows", "Windows"),
-                  createSubjectDef("zos", "z/OS")
-                )
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createElement(
+                createSubjectDef("os", "Operating system")
+                  .withChild(
+                    createSubjectDef("linux", "Linux")
+                      .withChild(createSubjectDef("redhat", "RedHat Linux"), createSubjectDef("suse", "SuSE Linux")),
+                    createSubjectDef("windows", "Windows"),
+                    createSubjectDef("zos", "z/OS")
+                  )
+              )
             )
           )
         )
       )
     );
-    assertSubjectSchemeEquals(act, exp);
     assertEquals(
       Map.of(QName.valueOf("platform"), Map.of("*", Set.of("suse", "linux", "windows", "redhat", "zos"))),
       reader.getValidValuesMap()
@@ -105,38 +112,34 @@ class SubjectSchemeReaderTest {
   }
 
   @Test
-  void loadSubjectScheme_defaultSubject() throws URISyntaxException, IOException {
-    final Path src = tempDir.toPath().resolve("defaultSubject.ditamap");
-    Files.copy(
-      Paths.get(
-        getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/defaultSubject.ditamap").toURI()
-      ),
-      src
-    );
+  void loadSubjectScheme_defaultSubject() {
+    final Path src = init("defaultSubject.ditamap");
 
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
     assertFalse(act.isEmpty());
-    var exp = new SubjectScheme(
-      Map.of(
-        QName.valueOf("platform"),
+    assertSubjectSchemeEquals(
+      act,
+      new SubjectScheme(
         Map.of(
-          "*",
-          Set.of(
-            createElement(
-              createSubjectDef("os")
-                .withChild(
-                  createSubjectDef("linux").withChild(createSubjectDef("redhat"), createSubjectDef("suse")),
-                  createSubjectDef("windows"),
-                  createSubjectDef("zos")
-                )
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createElement(
+                createSubjectDef("os")
+                  .withChild(
+                    createSubjectDef("linux").withChild(createSubjectDef("redhat"), createSubjectDef("suse")),
+                    createSubjectDef("windows"),
+                    createSubjectDef("zos")
+                  )
+              )
             )
           )
         )
       )
     );
-    assertSubjectSchemeEquals(act, exp);
     assertEquals(
       Map.of(QName.valueOf("platform"), Map.of("*", Set.of("suse", "linux", "windows", "redhat", "zos"))),
       reader.getValidValuesMap()
@@ -145,33 +148,31 @@ class SubjectSchemeReaderTest {
   }
 
   @Test
-  void loadSubjectScheme_element() throws URISyntaxException, IOException {
-    final Path src = tempDir.toPath().resolve("attribute-element.ditamap");
-    Files.copy(
-      Paths.get(
-        getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/attribute-element.ditamap").toURI()
-      ),
-      src
-    );
+  void loadSubjectScheme_element() {
+    final Path src = init("attribute-element.ditamap");
 
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
     assertFalse(act.isEmpty());
-    var exp = new SubjectScheme(
-      Map.of(
-        QName.valueOf("platform"),
+    assertSubjectSchemeEquals(
+      act,
+      new SubjectScheme(
         Map.of(
-          "*",
-          Set.of(
-            createElement(createSubjectDef("all-os").withChild(createSubjectDef("linux"), createSubjectDef("windows")))
-          ),
-          "codeblock",
-          Set.of(createElement(createSubjectDef("os").withChild(createSubjectDef("linux"))))
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createElement(
+                createSubjectDef("all-os").withChild(createSubjectDef("linux"), createSubjectDef("windows"))
+              )
+            ),
+            "codeblock",
+            Set.of(createElement(createSubjectDef("os").withChild(createSubjectDef("linux"))))
+          )
         )
       )
     );
-    assertSubjectSchemeEquals(act, exp);
     assertEquals(
       Map.of(QName.valueOf("platform"), Map.of("*", Set.of("linux", "windows"), "codeblock", Set.of("linux"))),
       reader.getValidValuesMap()
@@ -180,41 +181,37 @@ class SubjectSchemeReaderTest {
   }
 
   @Test
-  void loadSubjectScheme_indirectSubjectdef() throws URISyntaxException, IOException {
-    final Path src = tempDir.toPath().resolve("indirect-subjectdef.ditamap");
-    Files.copy(
-      Paths.get(
-        getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/indirect-subjectdef.ditamap").toURI()
-      ),
-      src
-    );
+  void loadSubjectScheme_indirectSubjectdef() {
+    final Path src = init("indirect-subjectdef.ditamap");
 
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
     assertFalse(act.isEmpty());
-    var exp = new SubjectScheme(
-      Map.of(
-        QName.valueOf("platform"),
+    assertSubjectSchemeEquals(
+      act,
+      new SubjectScheme(
         Map.of(
-          "*",
-          Set.of(
-            createElement(
-              createSubjectDef("os")
-                .withChild(
-                  Saplings
-                    .elem("subjectdef")
-                    .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
-                    .withAttr("keyref", "linux"),
-                  createSubjectDef("windows"),
-                  createSubjectDef("zos")
-                )
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createElement(
+                createSubjectDef("os")
+                  .withChild(
+                    Saplings
+                      .elem("subjectdef")
+                      .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
+                      .withAttr("keyref", "linux"),
+                    createSubjectDef("windows"),
+                    createSubjectDef("zos")
+                  )
+              )
             )
           )
         )
       )
     );
-    assertSubjectSchemeEquals(act, exp);
     assertEquals(Map.of(QName.valueOf("platform"), Map.of("*", Set.of("windows", "zos"))), reader.getValidValuesMap());
     assertEquals(Map.of(), reader.getDefaultValueMap());
   }
@@ -257,18 +254,6 @@ class SubjectSchemeReaderTest {
       .elem("subjectdef")
       .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
       .withAttr("keys", keys);
-  }
-
-  private void assertDocumentEquals(Element exp, Element act) {
-    var d = DiffBuilder.compare(exp).withTest(act).ignoreWhitespace().build();
-    if (d.hasDifferences()) {
-      try {
-        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-      } catch (TransformerException e) {
-        throw new RuntimeException(e);
-      }
-      throw new AssertionError(d.toString());
-    }
   }
 
   private Element createElement(SaplingElement exp) {
