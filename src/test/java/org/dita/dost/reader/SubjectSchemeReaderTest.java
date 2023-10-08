@@ -145,6 +145,41 @@ class SubjectSchemeReaderTest {
   }
 
   @Test
+  void loadSubjectScheme_element() throws URISyntaxException, IOException {
+    final Path src = tempDir.toPath().resolve("attribute-element.ditamap");
+    Files.copy(
+      Paths.get(
+        getClass().getResource("/org/dita/dost/reader.SubjectSchemeReaderTest.src/attribute-element.ditamap").toURI()
+      ),
+      src
+    );
+
+    reader.loadSubjectScheme(src.toFile());
+
+    var act = reader.getSubjectSchemeMap();
+    assertFalse(act.isEmpty());
+    var exp = new SubjectScheme(
+      Map.of(
+        QName.valueOf("platform"),
+        Map.of(
+          "*",
+          Set.of(
+            createElement(createSubjectDef("all-os").withChild(createSubjectDef("linux"), createSubjectDef("windows")))
+          ),
+          "codeblock",
+          Set.of(createElement(createSubjectDef("os").withChild(createSubjectDef("linux"))))
+        )
+      )
+    );
+    assertSubjectSchemeEquals(act, exp);
+    assertEquals(
+      Map.of(QName.valueOf("platform"), Map.of("*", Set.of("linux", "windows"), "codeblock", Set.of("linux"))),
+      reader.getValidValuesMap()
+    );
+    assertEquals(Map.of(), reader.getDefaultValueMap());
+  }
+
+  @Test
   void loadSubjectScheme_indirectSubjectdef() throws URISyntaxException, IOException {
     final Path src = tempDir.toPath().resolve("indirect-subjectdef.ditamap");
     Files.copy(
