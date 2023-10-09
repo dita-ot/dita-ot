@@ -601,13 +601,20 @@ public final class FilterUtils {
         }
       }
       if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (keyValue.equals(key)) {
+        if (getKeyValues(node).contains(keyValue)) {
           return node;
         }
       }
     }
     return null;
+  }
+
+  private static List<String> getKeyValues(Element child) {
+    var value = child.getAttribute(ATTRIBUTE_NAME_KEYS).trim();
+    if (value.isEmpty()) {
+      return List.of();
+    }
+    return Arrays.asList(value.split("\\s+"));
   }
 
   /**
@@ -646,8 +653,7 @@ public final class FilterUtils {
         }
       }
       if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (key != null && !key.trim().isEmpty()) {
+        for (String key : getKeyValues(node)) {
           final FilterKey k = new FilterKey(attName, key);
           if (!destFilterMap.containsKey(k)) {
             destFilterMap.put(k, action);

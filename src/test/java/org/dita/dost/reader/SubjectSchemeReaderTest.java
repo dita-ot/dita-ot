@@ -167,9 +167,8 @@ class SubjectSchemeReaderTest {
         )
       )
     );
-    // FIXME
     assertEquals(
-      Map.of(QName.valueOf("platform"), Map.of("*", Set.of("linux redhat suse windows zos"))),
+      Map.of(QName.valueOf("platform"), Map.of("*", Set.of("linux", "redhat", "suse", "windows", "zos"))),
       reader.getValidValuesMap()
     );
     assertEquals(Map.of(), reader.getDefaultValueMap());

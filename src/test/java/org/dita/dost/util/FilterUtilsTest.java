@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.*;
+import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -31,6 +32,8 @@ import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -496,8 +499,9 @@ public class FilterUtilsTest {
     assertThrows(NullPointerException.class, () -> new FilterKey(null, null));
   }
 
-  @Test
-  public void refine() {
+  @ParameterizedTest
+  @ValueSource(strings = { "arch redhat", "arch,redhat" })
+  public void refine(String values) {
     final FilterUtils f = new FilterUtils(
       Map.of(new FilterKey(QName.valueOf("platform"), "linux"), Action.INCLUDE),
       null,
@@ -512,7 +516,12 @@ public class FilterUtilsTest {
             Set.of(
               createElement(
                 createSubjectDef("os")
-                  .withChild(createSubjectDef("linux").withChild(createSubjectDef("arch"), createSubjectDef("redhat")))
+                  .withChild(
+                    createSubjectDef("linux")
+                      .withChild(
+                        Stream.of(values.split(",")).map(this::createSubjectDef).toArray(SaplingElement[]::new)
+                      )
+                  )
               )
             )
           )

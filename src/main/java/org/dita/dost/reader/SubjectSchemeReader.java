@@ -213,26 +213,40 @@ public class SubjectSchemeReader {
       });
 
     for (Element child : XMLUtils.getChildElements(enumerationDef, SUBJECTSCHEME_SUBJECTDEF)) {
-      String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
-      if (keyValue.isBlank()) {
-        keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYS);
-      }
-      if (schemeRoot != null && keyValue != null) {
-        final Element subTree = searchForKey(schemeRoot, keyValue);
-        if (subTree != null) {
-          final Map<String, Set<Element>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
-          final Set<Element> A = S.getOrDefault(elementName, new HashSet<>());
-          if (!A.contains(subTree)) {
-            if (attributeName != null) {
-              putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
+      final List<String> keyValues = Optional
+        .of(child.getAttribute(ATTRIBUTE_NAME_KEYREF))
+        .filter(Predicate.not(String::isBlank))
+        .or(() -> Optional.of(child.getAttribute(ATTRIBUTE_NAME_KEYS)))
+        .map(String::trim)
+        .filter(Predicate.not(String::isEmpty))
+        .map(value -> Arrays.asList(value.split("\\s+")))
+        .orElse(List.of());
+      if (schemeRoot != null && !keyValues.isEmpty()) {
+        for (String keyValue : keyValues) {
+          final Element subTree = searchForKey(schemeRoot, keyValue);
+          if (subTree != null) {
+            final Map<String, Set<Element>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
+            final Set<Element> A = S.getOrDefault(elementName, new HashSet<>());
+            if (!A.contains(subTree)) {
+              if (attributeName != null) {
+                putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
+              }
             }
+            A.add(subTree);
+            S.put(elementName, A);
+            bindingMap.put(attributeName, S);
           }
-          A.add(subTree);
-          S.put(elementName, A);
-          bindingMap.put(attributeName, S);
         }
       }
     }
+  }
+
+  private static List<String> getKeyValues(Element child) {
+    var value = child.getAttribute(ATTRIBUTE_NAME_KEYS).trim();
+    if (value.isEmpty()) {
+      return List.of();
+    }
+    return Arrays.asList(value.split("\\s+"));
   }
 
   /**
@@ -246,7 +260,7 @@ public class SubjectSchemeReader {
     return XMLUtils
       .getChildElements(root, SUBJECTSCHEME_SUBJECTDEF, true)
       .stream()
-      .filter(child -> keyValue.equals(child.getAttribute(ATTRIBUTE_NAME_KEYS)))
+      .filter(child -> getKeyValues(child).contains(keyValue))
       .findFirst()
       .orElse(null);
   }
@@ -269,7 +283,7 @@ public class SubjectSchemeReader {
     final Set<String> valueSet = valueMap.getOrDefault(elementName, new HashSet<>());
     Stream
       .concat(Stream.of(subtree), XMLUtils.getChildElements(subtree, SUBJECTSCHEME_SUBJECTDEF, true).stream())
-      .map(child -> child.getAttribute(ATTRIBUTE_NAME_KEYS))
+      .flatMap(child -> getKeyValues(child).stream())
       .filter(key -> !key.isBlank() && !key.equals(category))
       .forEach(valueSet::add);
     valueMap.put(elementName, valueSet);
