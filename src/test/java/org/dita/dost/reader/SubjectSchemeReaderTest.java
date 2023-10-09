@@ -148,6 +148,34 @@ class SubjectSchemeReaderTest {
   }
 
   @Test
+  void loadSubjectScheme_multipleKeyValues() {
+    final Path src = init("multiple-key-values.ditamap");
+
+    reader.loadSubjectScheme(src.toFile());
+
+    var act = reader.getSubjectSchemeMap();
+    assertFalse(act.isEmpty());
+    assertSubjectSchemeEquals(
+      act,
+      new SubjectScheme(
+        Map.of(
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(createElement(createSubjectDef("os").withChild(createSubjectDef("linux redhat suse windows zos"))))
+          )
+        )
+      )
+    );
+    // FIXME
+    assertEquals(
+      Map.of(QName.valueOf("platform"), Map.of("*", Set.of("linux redhat suse windows zos"))),
+      reader.getValidValuesMap()
+    );
+    assertEquals(Map.of(), reader.getDefaultValueMap());
+  }
+
+  @Test
   void loadSubjectScheme_element() {
     final Path src = init("attribute-element.ditamap");
 
@@ -212,6 +240,7 @@ class SubjectSchemeReaderTest {
         )
       )
     );
+    // FIXME
     assertEquals(Map.of(QName.valueOf("platform"), Map.of("*", Set.of("windows", "zos"))), reader.getValidValuesMap());
     assertEquals(Map.of(), reader.getDefaultValueMap());
   }
