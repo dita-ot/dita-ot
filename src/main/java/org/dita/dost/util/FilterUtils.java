@@ -52,7 +52,7 @@ public final class FilterUtils {
 
   private DITAOTLogger logger;
   /** Actions for filter keys. */
-  private final Map<FilterKey, Action> filterMap;
+  final Map<FilterKey, Action> filterMap;
   /** Set of filter keys for which an error has already been thrown. */
   private final Set<FilterKey> notMappingRules = new HashSet<>();
   private boolean logMissingAction;
