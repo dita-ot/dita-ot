@@ -21,8 +21,10 @@ import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -78,7 +80,8 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
       .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
       .forEach(enumerationDef -> {
         final Element schemeRoot = ancestors(enumerationDef).filter(SUBMAP::matches).findFirst().orElse(root);
-        subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+        var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
+        subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
       });
     return subjectSchemeReader.getSubjectSchemeMap();
   }
