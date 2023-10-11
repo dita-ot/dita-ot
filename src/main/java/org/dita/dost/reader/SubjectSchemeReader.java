@@ -266,7 +266,6 @@ public class SubjectSchemeReader {
         .orElse(List.of());
       if (!subjectDefinitions.isEmpty() && !keyValues.isEmpty()) {
         for (String keyValue : keyValues) {
-          //          final Element subTree = searchForKey(subjectDefinitions, keyValue);
           final SubjectDefinition subTree = subjectDefinitions.get(keyValue);
           if (subTree != null) {
             final Map<String, Set<SubjectDefinition>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());

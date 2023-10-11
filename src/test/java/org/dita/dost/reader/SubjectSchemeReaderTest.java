@@ -9,7 +9,6 @@
 package org.dita.dost.reader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +75,6 @@ class SubjectSchemeReaderTest {
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
-    assertFalse(act.isEmpty());
     assertSubjectSchemeEquals(
       act,
       new SubjectScheme(
@@ -110,7 +108,6 @@ class SubjectSchemeReaderTest {
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
-    assertFalse(act.isEmpty());
     assertSubjectSchemeEquals(
       act,
       new SubjectScheme(
@@ -144,7 +141,6 @@ class SubjectSchemeReaderTest {
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
-    assertFalse(act.isEmpty());
     assertSubjectSchemeEquals(
       act,
       new SubjectScheme(
@@ -168,7 +164,6 @@ class SubjectSchemeReaderTest {
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
-    assertFalse(act.isEmpty());
     assertSubjectSchemeEquals(
       act,
       new SubjectScheme(
@@ -197,7 +192,6 @@ class SubjectSchemeReaderTest {
     reader.loadSubjectScheme(src.toFile());
 
     var act = reader.getSubjectSchemeMap();
-    assertFalse(act.isEmpty());
     assertSubjectSchemeEquals(
       act,
       new SubjectScheme(

@@ -235,7 +235,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   private List<FilterUtils> getBaseFilter(final SubjectScheme subjectSchemeMap) {
-    if (ditavalFile != null && !subjectSchemeMap.isEmpty()) {
+    if (ditavalFile != null && !subjectSchemeMap.subjectSchemeMap().isEmpty()) {
       final FilterUtils f = getFilterUtils(ditavalFile).refine(subjectSchemeMap);
       return singletonList(f);
     }

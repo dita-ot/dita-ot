@@ -17,10 +17,6 @@ import javax.xml.namespace.QName;
  * @param subjectSchemeMap Subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>}
  */
 public record SubjectScheme(Map<QName, Map<String, Set<SubjectDefinition>>> subjectSchemeMap) {
-  public boolean isEmpty() {
-    return subjectSchemeMap.isEmpty();
-  }
-
   public record SubjectDefinition(Set<String> keys, String keyref, List<SubjectDefinition> children) {
     public SubjectDefinition(Set<String> keys, String keyref, List<SubjectDefinition> children) {
       this.keys = keys;
