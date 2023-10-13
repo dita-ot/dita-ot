@@ -21,12 +21,9 @@ import com.google.common.collect.ImmutableSet;
 import java.util.*;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
-import net.sf.saxon.dom.NodeOverNodeInfo;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.sapling.SaplingElement;
-import net.sf.saxon.sapling.Saplings;
 import org.dita.dost.TestUtils;
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
@@ -34,8 +31,6 @@ import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -514,14 +509,12 @@ public class FilterUtilsTest {
           Map.of(
             "*",
             Set.of(
-              createElement(
-                createSubjectDef("os")
-                  .withChild(
-                    createSubjectDef("linux")
-                      .withChild(
-                        Stream.of(values.split(",")).map(this::createSubjectDef).toArray(SaplingElement[]::new)
-                      )
-                  )
+              createSubjectDef(
+                "os",
+                createSubjectDef(
+                  "linux",
+                  Stream.of(values.split(",")).map(this::createSubjectDef).toArray(SubjectDefinition[]::new)
+                )
               )
             )
           )
@@ -541,19 +534,11 @@ public class FilterUtilsTest {
     );
   }
 
-  private SaplingElement createSubjectDef(String keys) {
-    return Saplings
-      .elem("subjectdef")
-      .withAttr("class", "- map/topicref subjectScheme/subjectdef ")
-      .withAttr("keys", keys);
+  private SubjectDefinition createSubjectDef(String keys) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Collections.emptyList());
   }
 
-  private Element createElement(SaplingElement exp) {
-    try {
-      var underlyingValue = Saplings.doc().withChild(exp).toXdmNode(xmlUtils.getProcessor()).getUnderlyingValue();
-      return ((Document) NodeOverNodeInfo.wrap(underlyingValue)).getDocumentElement();
-    } catch (SaxonApiException e) {
-      throw new RuntimeException(e);
-    }
+  private SubjectDefinition createSubjectDef(String keys, SubjectDefinition... children) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Arrays.asList(children));
   }
 }

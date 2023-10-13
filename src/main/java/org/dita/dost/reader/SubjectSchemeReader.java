@@ -15,10 +15,10 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
@@ -34,7 +34,7 @@ public class SubjectSchemeReader {
 
   private DITAOTLogger logger;
   private Job job;
-  private final Map<QName, Map<String, Set<Element>>> bindingMap;
+  private final Map<QName, Map<String, Set<SubjectDefinition>>> bindingMap;
   private final Map<QName, Map<String, Set<String>>> validValuesMap;
   private final Map<QName, Map<String, String>> defaultValueMap;
 
@@ -180,12 +180,55 @@ public class SubjectSchemeReader {
   }
 
   public void loadSubjectScheme(final Element schemeRoot) {
+    final Map<String, SubjectDefinition> subjectDefinitionsByKey = getSubjectDefinition(schemeRoot);
     for (Element child : XMLUtils.getChildElements(schemeRoot, SUBJECTSCHEME_ENUMERATIONDEF)) {
-      processEnumerationDef(schemeRoot, child);
+      processEnumerationDef(subjectDefinitionsByKey, child);
     }
   }
 
-  public void processEnumerationDef(final Element schemeRoot, final Element enumerationDef) {
+  public Map<String, SubjectDefinition> getSubjectDefinition(final Element schemeRoot) {
+    final List<SubjectDefinition> subjectDefinitions = readSubjectDefinitions(schemeRoot);
+    final Map<String, SubjectDefinition> buf = new HashMap<>();
+    getSubjectDefinition(subjectDefinitions, buf);
+    return Collections.unmodifiableMap(buf);
+  }
+
+  private void getSubjectDefinition(List<SubjectDefinition> subjectDefinitions, Map<String, SubjectDefinition> buf) {
+    for (SubjectDefinition subjectDefinition : subjectDefinitions) {
+      for (String key : subjectDefinition.keys()) {
+        buf.putIfAbsent(key, subjectDefinition);
+      }
+      getSubjectDefinition(subjectDefinition.children(), buf);
+    }
+  }
+
+  private List<SubjectDefinition> readSubjectDefinitions(final Element elem) {
+    final List<SubjectDefinition> res = new ArrayList<>();
+    readSubjectDefinitions(elem, res);
+    return Collections.unmodifiableList(res);
+  }
+
+  private void readSubjectDefinitions(final Element elem, List<SubjectDefinition> buf) {
+    for (Element child : XMLUtils.getChildElements(elem)) {
+      if (SUBJECTSCHEME_SUBJECTDEF.matches(child)) {
+        String keyref = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
+        if (keyref.isEmpty()) {
+          keyref = null;
+        }
+        final List<SubjectDefinition> childBuf = new ArrayList<>();
+        readSubjectDefinitions(child, childBuf);
+        final SubjectDefinition res = new SubjectDefinition(Set.copyOf(getKeyValues(child)), keyref, childBuf);
+        buf.add(res);
+      } else {
+        readSubjectDefinitions(child, buf);
+      }
+    }
+  }
+
+  public void processEnumerationDef(
+    final Map<String, SubjectDefinition> subjectDefinitions,
+    final Element enumerationDef
+  ) {
     final String elementName = XMLUtils
       .getChildElement(enumerationDef, SUBJECTSCHEME_ELEMENTDEF)
       .map(child -> child.getAttribute(ATTRIBUTE_NAME_NAME))
@@ -221,12 +264,12 @@ public class SubjectSchemeReader {
         .filter(Predicate.not(String::isEmpty))
         .map(value -> Arrays.asList(value.split("\\s+")))
         .orElse(List.of());
-      if (schemeRoot != null && !keyValues.isEmpty()) {
+      if (!subjectDefinitions.isEmpty() && !keyValues.isEmpty()) {
         for (String keyValue : keyValues) {
-          final Element subTree = searchForKey(schemeRoot, keyValue);
+          final SubjectDefinition subTree = subjectDefinitions.get(keyValue);
           if (subTree != null) {
-            final Map<String, Set<Element>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
-            final Set<Element> A = S.getOrDefault(elementName, new HashSet<>());
+            final Map<String, Set<SubjectDefinition>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
+            final Set<SubjectDefinition> A = S.getOrDefault(elementName, new HashSet<>());
             if (!A.contains(subTree)) {
               if (attributeName != null) {
                 putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
@@ -250,22 +293,6 @@ public class SubjectSchemeReader {
   }
 
   /**
-   * Search subject scheme elements for a given key
-   *
-   * @param root     subject scheme element tree to search through
-   * @param keyValue key to locate
-   * @return element that matches the key, otherwise {@code null}
-   */
-  private Element searchForKey(final Element root, final String keyValue) {
-    return XMLUtils
-      .getChildElements(root, SUBJECTSCHEME_SUBJECTDEF, true)
-      .stream()
-      .filter(child -> getKeyValues(child).contains(keyValue))
-      .findFirst()
-      .orElse(null);
-  }
-
-  /**
    * Populate valid values map
    *
    * @param subtree     subject scheme definition element
@@ -274,17 +301,18 @@ public class SubjectSchemeReader {
    * @param category    enumeration category name
    */
   private void putValuePairsIntoMap(
-    final Element subtree,
+    final SubjectDefinition subtree,
     final String elementName,
     final QName attName,
     final String category
   ) {
     final Map<String, Set<String>> valueMap = validValuesMap.getOrDefault(attName, new HashMap<>());
     final Set<String> valueSet = valueMap.getOrDefault(elementName, new HashSet<>());
-    Stream
-      .concat(Stream.of(subtree), XMLUtils.getChildElements(subtree, SUBJECTSCHEME_SUBJECTDEF, true).stream())
-      .flatMap(child -> getKeyValues(child).stream())
-      .filter(key -> !key.isBlank() && !key.equals(category))
+    subtree
+      .flatten()
+      .stream()
+      .flatMap(child -> child.keys().stream())
+      .filter(key -> !key.equals(category))
       .forEach(valueSet::add);
     valueMap.put(elementName, valueSet);
     validValuesMap.put(attName, valueMap);

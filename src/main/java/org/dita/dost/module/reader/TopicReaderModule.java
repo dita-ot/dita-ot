@@ -110,7 +110,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
               .filter(SUBMAP::matches)
               .findFirst()
               .orElse(doc.getDocumentElement());
-            subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+            var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
+            subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
           });
         final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
         filterUtils = filterUtils.refine(subjectScheme);
