@@ -50,7 +50,7 @@ public class TopicReaderModuleTest {
   }
 
   @BeforeEach
-  public void setUp() throws SAXException, IOException {
+  public void setUp() throws SAXException, IOException, DITAOTException {
     reader = new TopicReaderModule();
     reader.setLogger(new TestUtils.TestLogger());
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));

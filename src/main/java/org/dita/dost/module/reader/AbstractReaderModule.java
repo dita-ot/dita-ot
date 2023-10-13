@@ -37,6 +37,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
+import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.reader.*;
 import org.dita.dost.util.*;
@@ -104,14 +105,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   KeydefFilter keydefFilter;
   boolean validate = true;
   ContentHandler nullHandler;
-  private TempFileNameScheme tempFileNameScheme;
+  TempFileNameScheme tempFileNameScheme;
   /** Absolute path to input file. */
   URI rootFile;
   List<URI> resources;
   /** Subject scheme absolute file paths. */
   private final Set<URI> schemeSet = ConcurrentHashMap.newKeySet();
   /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
-  private final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
+  final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
   private final Map<URI, URI> copyTo = new ConcurrentHashMap<>();
   Mode processingMode;
   /** Generate {@code xtrf} and {@code xtrc} attributes */
@@ -119,12 +120,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   /** use grammar pool cache */
   private boolean gramcache = true;
   /** Profiling is enabled. */
-  private boolean profilingEnabled;
+  boolean profilingEnabled;
   String transtype;
   private File ditavalFile;
   FilterUtils filterUtils;
   /** Absolute path to current destination file. */
   File outputFile;
+  SubjectScheme subjectSchemeMap;
   Map<QName, Map<String, Set<String>>> validateMap;
   Map<QName, Map<String, String>> defaultValueMap;
   /** XMLReader instance for parsing dita file */
@@ -135,6 +137,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   TopicFragmentFilter topicFragmentFilter;
   /** Files found during additional resource crawl. **/
   final Set<URI> additionalResourcesSet = ConcurrentHashMap.newKeySet();
+
+  SubjectSchemeReader subjectSchemeReader;
 
   public abstract void readStartFile() throws DITAOTException;
 
@@ -209,32 +213,36 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @param validate whether validate input file
    * @throws SAXException parsing exception
    */
-  void initXMLReader(final boolean validate) throws SAXException {
-    reader = XMLUtils.getXMLReader();
-    reader.setFeature(FEATURE_NAMESPACE, true);
-    reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
-    if (validate) {
-      reader.setFeature(FEATURE_VALIDATION, true);
-      try {
-        reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
-      } catch (final SAXNotRecognizedException e) {
-        // Not Xerces, ignore exception
+  void initXMLReader(final boolean validate) throws DITAOTException {
+    try {
+      reader = XMLUtils.getXMLReader();
+      reader.setFeature(FEATURE_NAMESPACE, true);
+      reader.setFeature(FEATURE_NAMESPACE_PREFIX, true);
+      if (validate) {
+        reader.setFeature(FEATURE_VALIDATION, true);
+        try {
+          reader.setFeature(FEATURE_VALIDATION_SCHEMA, true);
+        } catch (final SAXNotRecognizedException e) {
+          // Not Xerces, ignore exception
+        }
+      } else {
+        logger.warn(MessageUtils.getMessage("DOTJ037W").toString());
       }
-    } else {
-      logger.warn(MessageUtils.getMessage("DOTJ037W").toString());
-    }
-    if (gramcache) {
-      final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
-      try {
-        reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
-        logger.info("Using Xerces grammar pool for DTD and schema caching.");
-      } catch (final NoClassDefFoundError e) {
-        logger.debug("Xerces not available, not using grammar caching");
-      } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-        logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+      if (gramcache) {
+        final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
+        try {
+          reader.setProperty("http://apache.org/xml/properties/internal/grammar-pool", grammarPool);
+          logger.info("Using Xerces grammar pool for DTD and schema caching.");
+        } catch (final NoClassDefFoundError e) {
+          logger.debug("Xerces not available, not using grammar caching");
+        } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
+          logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        }
       }
+      reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+    } catch (SAXException e) {
+      throw new DITAOTException(e);
     }
-    reader.setEntityResolver(CatalogUtils.getCatalogResolver());
   }
 
   void parseInputParameters(final AbstractPipelineInput input) {
@@ -360,8 +368,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         return;
       }
     }
-    validateMap = Collections.emptyMap();
-    defaultValueMap = Collections.emptyMap();
     logger.info("Processing " + currentFile + " to " + outputFile.toURI());
     final String[] params = { currentFile.toString() };
 
@@ -830,22 +836,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     } catch (final IOException e) {
       throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
     }
-
-    try {
-      final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-      subjectSchemeReader.setLogger(logger);
-      subjectSchemeReader.setJob(job);
-      subjectSchemeReader.writeMapToXML(
-        addMapFilePrefix(listFilter.getRelationshipGrap()),
-        new File(job.tempDir, FILE_NAME_SUBJECT_RELATION)
-      );
-      subjectSchemeReader.writeMapToXML(
-        addMapFilePrefix(schemeDictionary),
-        new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY)
-      );
-    } catch (final IOException e) {
-      throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
-    }
   }
 
   /** Filter copy-to where target is used directly. */
@@ -942,23 +932,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   }
 
   /**
-   * Convert absolute paths to relative temporary directory paths
-   * @return map with relative keys and values
-   */
-  private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
-    final Map<URI, Set<URI>> res = new HashMap<>();
-    for (final Map.Entry<URI, Set<URI>> e : map.entrySet()) {
-      final URI key = e.getKey();
-      final Set<URI> newSet = new HashSet<>();
-      for (final URI file : e.getValue()) {
-        newSet.add(tempFileNameScheme.generateTempFileName(file));
-      }
-      res.put(key.equals(ROOT_URI) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
-    }
-    return res;
-  }
-
-  /**
    * add FlagImangesSet to Properties, which needn't to change the dir level,
    * just ouput to the ouput dir.
    *
@@ -998,7 +971,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
   }
 
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     try {
       final String cls = Optional
         .ofNullable(job.getProperty("temp-file-name-scheme"))

@@ -31,7 +31,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
@@ -91,16 +90,16 @@ public final class TopicReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
 
     if (filterUtils != null) {
       final Document doc = getMapDocument();
       if (doc != null) {
-        final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+        subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        logger.debug("Loading subject schemes");
+        logger.info("Loading subject schemes");
         final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
         subjectSchemes
           .stream()
@@ -113,8 +112,10 @@ public final class TopicReaderModule extends AbstractReaderModule {
             var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
             subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
           });
-        final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
-        filterUtils = filterUtils.refine(subjectScheme);
+        subjectSchemeMap = subjectSchemeReader.getSubjectSchemeMap();
+        validateMap = subjectSchemeReader.getValidValuesMap();
+        defaultValueMap = subjectSchemeReader.getDefaultValueMap();
+        filterUtils = filterUtils.refine(subjectSchemeMap);
       }
     }
   }
@@ -156,7 +157,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
   }
 
-  private Document getMapDocument() throws SAXException {
+  private Document getMapDocument() throws DITAOTException {
     final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
     if (fi == null || isFormatDita(fi.format)) {
       return null;
@@ -166,7 +167,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
       logger.debug("Reading " + currentFile);
       return job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
-      throw new SAXException("Failed to parse " + currentFile, e);
+      throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
     }
   }
 

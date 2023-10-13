@@ -8,24 +8,25 @@
 
 package org.dita.dost.module.reader;
 
+import static org.dita.dost.reader.GenListModuleReader.ROOT_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.exists;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
+import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 /**
@@ -64,7 +65,7 @@ public final class MapReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
     listFilter.setForceType(MAP_MAP);
   }
@@ -142,5 +143,43 @@ public final class MapReaderModule extends AbstractReaderModule {
       default -> htmlSet.put(file.format, file.filename);
     }
     //        }
+  }
+
+  @Override
+  void outputResult() throws DITAOTException {
+    super.outputResult();
+
+    try {
+      final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+      subjectSchemeReader.setLogger(logger);
+      subjectSchemeReader.setJob(job);
+      subjectSchemeReader.writeMapToXML(
+        addMapFilePrefix(listFilter.getRelationshipGrap()),
+        new File(job.tempDir, FILE_NAME_SUBJECT_RELATION)
+      );
+      subjectSchemeReader.writeMapToXML(
+        addMapFilePrefix(schemeDictionary),
+        new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY)
+      );
+    } catch (final IOException e) {
+      throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Convert absolute paths to relative temporary directory paths
+   * @return map with relative keys and values
+   */
+  private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
+    final Map<URI, Set<URI>> res = new HashMap<>();
+    for (final Map.Entry<URI, Set<URI>> e : map.entrySet()) {
+      final URI key = e.getKey();
+      final Set<URI> newSet = new HashSet<>();
+      for (final URI file : e.getValue()) {
+        newSet.add(tempFileNameScheme.generateTempFileName(file));
+      }
+      res.put(key.equals(ROOT_URI) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
+    }
+    return res;
   }
 }

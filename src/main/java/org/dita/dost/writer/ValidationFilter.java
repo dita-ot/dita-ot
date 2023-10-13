@@ -309,7 +309,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
    * @param atts attributes
    */
   private void validateAttributeValues(final String qName, final Attributes atts) {
-    if (validateMap.isEmpty()) {
+    if (validateMap == null || validateMap.isEmpty()) {
       return;
     }
     for (int i = 0; i < atts.getLength(); i++) {
