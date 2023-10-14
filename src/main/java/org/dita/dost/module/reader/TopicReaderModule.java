@@ -8,6 +8,7 @@
 
 package org.dita.dost.module.reader;
 
+import static java.util.stream.Collectors.mapping;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
@@ -19,11 +20,9 @@ import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
@@ -104,13 +103,18 @@ public final class TopicReaderModule extends AbstractReaderModule {
         subjectSchemes
           .stream()
           .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-          .forEach(enumerationDef -> {
-            final Element schemeRoot = ancestors(enumerationDef)
-              .filter(SUBMAP::matches)
-              .findFirst()
-              .orElse(doc.getDocumentElement());
+          .map(enumerationDef ->
+            Map.entry(
+              ancestors(enumerationDef).filter(SUBMAP::matches).findFirst().orElse(doc.getDocumentElement()),
+              enumerationDef
+            )
+          )
+          .collect(Collectors.groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, Collectors.toList())))
+          .forEach((schemeRoot, enumerationDefs) -> {
             var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
-            subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+            for (Element enumerationDef : enumerationDefs) {
+              subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+            }
           });
         subjectSchemeMap = subjectSchemeReader.getSubjectSchemeMap();
         validateMap = subjectSchemeReader.getValidValuesMap();
