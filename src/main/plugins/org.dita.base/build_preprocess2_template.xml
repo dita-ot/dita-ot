@@ -250,7 +250,7 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
     <pipeline message="Profile filtering." taskname="profile">
-      <module class="org.dita.dost.module.FilterModule">
+      <module class="org.dita.dost.module.ProfileModule">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
