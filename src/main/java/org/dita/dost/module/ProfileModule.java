@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 /**
  * Filter module class.
  */
-final class ProfileModule extends AbstractPipelineModuleImpl {
+public final class ProfileModule extends AbstractPipelineModuleImpl {
 
   private FilterUtils filterUtils;
   private ProfilingFilter writer;

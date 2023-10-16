@@ -19,13 +19,13 @@ import java.util.*;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.ProfileModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
-import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
 import org.xml.sax.XMLFilter;
 
@@ -61,6 +61,18 @@ public final class MapReaderModule extends AbstractReaderModule {
       throw new DITAOTException(e.getMessage(), e);
     }
 
+    if (profilingEnabled) {
+      var profileModule = new ProfileModule();
+      profileModule.setJob(job);
+      profileModule.setLogger(logger);
+      profileModule.setXmlUtils(xmlUtils);
+      profileModule.setParallel(parallel);
+      profileModule.setProcessingMode(processingMode);
+      profileModule.setFileInfoFilter((fileInfo -> Objects.equals(fileInfo.format, ATTR_FORMAT_VALUE_DITAMAP)));
+
+      profileModule.execute(input);
+    }
+
     return null;
   }
 
@@ -87,14 +99,14 @@ public final class MapReaderModule extends AbstractReaderModule {
       pipe.add(debugFilter);
     }
 
-    if (filterUtils != null) {
-      final ProfilingFilter profilingFilter = new ProfilingFilter();
-      profilingFilter.setLogger(logger);
-      profilingFilter.setJob(job);
-      profilingFilter.setFilterUtils(filterUtils);
-      profilingFilter.setCurrentFile(fileToParse);
-      pipe.add(profilingFilter);
-    }
+    //    if (filterUtils != null) {
+    //      final ProfilingFilter profilingFilter = new ProfilingFilter();
+    //      profilingFilter.setLogger(logger);
+    //      profilingFilter.setJob(job);
+    //      profilingFilter.setFilterUtils(filterUtils);
+    //      profilingFilter.setCurrentFile(fileToParse);
+    //      pipe.add(profilingFilter);
+    //    }
 
     final ValidationFilter validationFilter = new ValidationFilter();
     validationFilter.setLogger(logger);

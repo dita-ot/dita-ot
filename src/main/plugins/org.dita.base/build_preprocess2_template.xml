@@ -111,7 +111,9 @@ See the accompanying LICENSE file for applicable license.
         </property>
       </job>
     </echoxml>
-    <property name="map.filter-on-parse" value="false"/>
+    <condition property="map.filter-on-parse" value="true" else="false">
+      <equals arg1="${filter-stage}" arg2="early"/>
+    </condition>
     <condition property="topic.filter-on-parse" value="true" else="false">
       <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
