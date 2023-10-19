@@ -34,6 +34,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="preprocess2.maps"
           depends="map-reader,
                   map-mapref,
+                  map-reader-profile,
                   map-branch-filter,
                   map-keyref,
                   map-conrefpush,
@@ -117,12 +118,14 @@ See the accompanying LICENSE file for applicable license.
     <condition property="topic.filter-on-parse" value="true" else="false">
       <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
+    <!--
     <condition property="build-step.map-profile" value="false" else="true">
       <istrue value="${map.filter-on-parse}"/>
     </condition>
     <condition property="build-step.topic-profile" value="false" else="true">
       <istrue value="${topic.filter-on-parse}"/>
     </condition>
+    -->
 
     <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
     <preprocess-skip-init name="preprocess.topic-profile" step="topic-profile"/>
@@ -163,12 +166,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
-      <module class="org.dita.dost.module.ProfileModule" if:true="${map.filter-on-parse}">
-        <ditafileset format="ditamap" input="true"/>
-        <ditafileset format="ditamap" inputResource="true"/>
-        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
-        <param name="transtype" value="${transtype}"/>
-      </module>
     </pipeline>
     <local name="inputMapPath"/>
     <pathconvert property="inputMapPath">
@@ -192,6 +189,14 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
+<!--    <pipeline message="Profile filtering." taskname="profile" if:true="${map.filter-on-parse}">-->
+<!--      <module class="org.dita.dost.module.ProfileModule">-->
+<!--        <ditafileset format="ditamap" input="true"/>-->
+<!--        <ditafileset format="ditamap" inputResource="true"/>-->
+<!--        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>-->
+<!--        <param name="transtype" value="${transtype}"/>-->
+<!--      </module>-->
+<!--    </pipeline>-->
   </target>
 
   <target name="map-branch-filter"
@@ -253,7 +258,20 @@ See the accompanying LICENSE file for applicable license.
       </xslt>
     </pipeline>
   </target>
-  
+
+  <target name="map-reader-profile"
+          unless="preprocess.map-profile.skip"
+          description="Profile input map files">
+    <pipeline message="Profile filtering." taskname="profile" if:true="${map.filter-on-parse}">
+      <module class="org.dita.dost.module.ProfileModule">
+        <ditafileset format="ditamap" input="true"/>
+        <ditafileset format="ditamap" inputResource="true"/>
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
+      </module>
+    </pipeline>
+  </target>
+
   <target name="map-profile"
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
@@ -372,7 +390,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="topic-profile"
           unless="preprocess.topic-profile.skip"
           description="Profile input files">
-    <pipeline message="Profile filtering." taskname="profile">
+    <pipeline message="Profile filtering." taskname="profile" unless:true="${map.filter-on-parse}">
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>

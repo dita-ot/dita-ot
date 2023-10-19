@@ -11,14 +11,12 @@ import static java.util.stream.Collectors.mapping;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.ancestors;
-import static org.dita.dost.util.XMLUtils.toList;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -26,10 +24,13 @@ import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
+import org.dita.dost.writer.SubjectSchemeFilter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLFilter;
 
 /**
  * Filter module class.
@@ -38,25 +39,25 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
 
   private FilterUtils filterUtils;
   private ProfilingFilter writer;
+  private SubjectSchemeFilter subjectSchemeFilter;
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     init(input);
 
     for (final FileInfo f : job.getFileInfo(fileInfoFilter)) {
-      final File file = new File(job.tempDir, f.file.getPath());
-      logger.info("Processing " + file.getAbsolutePath());
+      final URI file = job.tempDirURI.resolve(f.uri);
+      logger.info("Processing " + file);
 
-      writer.setCurrentFile(file.toURI());
       try {
-        writer.write(file.getAbsoluteFile());
+        job.getStore().transform(file, getProcessingPipe(file));
         if (!writer.hasElementOutput()) {
-          logger.info("All content in " + file.getAbsolutePath() + " was filtered out");
+          logger.info("All content in " + file + " was filtered out");
           job.remove(f);
-          FileUtils.delete(file);
+          job.getStore().delete(file);
         }
       } catch (final Exception e) {
-        logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
+        logger.error("Failed to profile " + file + ": " + e.getMessage());
       }
     }
 
@@ -67,6 +68,19 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
     }
 
     return null;
+  }
+
+  private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
+    var res = new ArrayList<XMLFilter>();
+
+    writer.setCurrentFile(fileToParse);
+    res.add(writer);
+
+    if (subjectSchemeFilter != null) {
+      res.add(subjectSchemeFilter);
+    }
+
+    return res;
   }
 
   private void init(final AbstractPipelineInput input) throws DITAOTException {
@@ -105,17 +119,21 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
   }
 
   private void initSubjectScheme() throws DITAOTException {
-    if (filterUtils != null) {
-      final Document doc = getMapDocument();
-      if (doc != null) {
-        final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-        subjectSchemeReader.setLogger(logger);
-        subjectSchemeReader.setJob(job);
+    //    if (filterUtils != null) {
+    final Document doc = getMapDocument();
+    if (doc != null) {
+      final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+      subjectSchemeReader.setLogger(logger);
+      subjectSchemeReader.setJob(job);
+      final List<Element> enumrationDefs = XMLUtils
+        .<Element>toList(doc.getDocumentElement().getElementsByTagName("*"))
+        .stream()
+        .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
+        .toList();
+      if (!enumrationDefs.isEmpty()) {
         logger.info("Loading subject schemes");
-        final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
-        subjectSchemes
+        enumrationDefs
           .stream()
-          .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
           .map(enumerationDef1 ->
             Map.entry(
               ancestors(enumerationDef1).filter(SUBMAP::matches).findFirst().orElse(doc.getDocumentElement()),
@@ -130,12 +148,18 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
             }
           });
         var subjectSchemeMap = subjectSchemeReader.getSubjectSchemeMap();
-        if (subjectSchemeMap.subjectSchemeMap().isEmpty()) {
-          return;
+        if (!subjectSchemeMap.subjectSchemeMap().isEmpty()) {
+          filterUtils = filterUtils.refine(subjectSchemeMap);
         }
-        filterUtils = filterUtils.refine(subjectSchemeMap);
+
+        subjectSchemeFilter = new SubjectSchemeFilter();
+        subjectSchemeFilter.setJob(job);
+        subjectSchemeFilter.setLogger(logger);
+        subjectSchemeFilter.setValidateMap(subjectSchemeReader.getValidValuesMap());
+        subjectSchemeFilter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
       }
     }
+    //    }
   }
 
   private Document getMapDocument() throws DITAOTException {
