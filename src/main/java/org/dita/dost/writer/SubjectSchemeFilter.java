@@ -69,7 +69,7 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
         }
       }
     }
-    return Objects.requireNonNullElse(atts, modified);
+    return Objects.requireNonNullElse(modified, atts);
   }
 
   /**
