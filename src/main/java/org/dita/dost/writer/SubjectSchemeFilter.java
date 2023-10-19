@@ -44,8 +44,6 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
     defaultValueMap = defaultMap;
   }
 
-  // SAX methods
-
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
@@ -71,37 +69,8 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
         }
       }
     }
-    //    final Map<String, String> defaultValues = defaultValueMap.get(qName);
-    //    if (defaultValues != null) {}
-    //
-    //    for (int i = 0; i < atts.getLength(); i++) {
-    //      final QName attrName = new QName(atts.getURI(i), atts.getLocalName(i));
-    //      final String attrValue = atts.getValue(i);
-    //
-    //      final String defaultValue = getAttributeValue(qName, attrName, attrValue);
-    //      if (defaultValue != null) {
-    //        if (modified == null) {
-    //          modified = new AttributesImpl(atts);
-    //        }
-    //        modified.setValue(modified.getIndex(atts.getURI(i), atts.getLocalName(i)), defaultValue);
-    //      }
-    //    }
-    //    for (QName attrName : defaultValueMap.keySet()) {}
     return Objects.requireNonNullElse(atts, modified);
   }
-
-  //  private String getAttributeValue(final String elemQName, final QName attQName, final String value) {
-  //    if (StringUtils.isEmptyString(value) && !defaultValueMap.isEmpty()) {
-  //      final Map<String, String> defaultMap = defaultValueMap.get(attQName);
-  //      if (defaultMap != null) {
-  //        final String defaultValue = defaultMap.get(elemQName);
-  //        if (defaultValue != null) {
-  //          return defaultValue;
-  //        }
-  //      }
-  //    }
-  //    return value;
-  //  }
 
   /**
    * Validate attribute values
