@@ -158,10 +158,16 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
-        <param name="profiling.enable" value="${map.filter-on-parse}" unless:set="map.filter-on-parse"/>
+        <!--param name="profiling.enable" value="${map.filter-on-parse}"/-->
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </module>
+      <module class="org.dita.dost.module.ProfileModule" if:true="${map.filter-on-parse}">
+        <ditafileset format="ditamap" input="true"/>
+        <ditafileset format="ditamap" inputResource="true"/>
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
       </module>
     </pipeline>
     <local name="inputMapPath"/>
@@ -251,7 +257,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="map-profile"
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
-    <pipeline message="Profile filtering." taskname="profile">
+    <pipeline message="Profile filtering." taskname="profile" unless:true="${map.filter-on-parse}">
       <module class="org.dita.dost.module.ProfileModule">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>

@@ -829,13 +829,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       throw new RuntimeException("Unable to set input file to job configuration");
     }
     job.add(new FileInfo.Builder(root).isInput(true).build());
-
-    try {
-      logger.info("Serializing job specification");
-      job.write();
-    } catch (final IOException e) {
-      throw new DITAOTException("Failed to serialize job configuration files: " + e.getMessage(), e);
-    }
   }
 
   /** Filter copy-to where target is used directly. */
