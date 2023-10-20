@@ -23,9 +23,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
 import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
-import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 /**
@@ -64,7 +62,7 @@ public final class MapReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
     listFilter.setForceType(MAP_MAP);
   }
@@ -86,18 +84,8 @@ public final class MapReaderModule extends AbstractReaderModule {
       pipe.add(debugFilter);
     }
 
-    if (filterUtils != null) {
-      final ProfilingFilter profilingFilter = new ProfilingFilter();
-      profilingFilter.setLogger(logger);
-      profilingFilter.setJob(job);
-      profilingFilter.setFilterUtils(filterUtils);
-      profilingFilter.setCurrentFile(fileToParse);
-      pipe.add(profilingFilter);
-    }
-
     final ValidationFilter validationFilter = new ValidationFilter();
     validationFilter.setLogger(logger);
-    validationFilter.setValidateMap(validateMap);
     validationFilter.setCurrentFile(fileToParse);
     validationFilter.setJob(job);
     validationFilter.setProcessingMode(processingMode);
@@ -115,7 +103,6 @@ public final class MapReaderModule extends AbstractReaderModule {
     listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
-    ditaWriterFilter.setDefaultValueMap(defaultValueMap);
     ditaWriterFilter.setCurrentFile(currentFile);
     ditaWriterFilter.setOutputFile(outputFile);
     pipe.add(ditaWriterFilter);

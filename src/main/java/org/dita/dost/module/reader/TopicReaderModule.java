@@ -8,6 +8,7 @@
 
 package org.dita.dost.module.reader;
 
+import static java.util.stream.Collectors.mapping;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
@@ -19,11 +20,9 @@ import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
@@ -62,6 +61,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
   static final QName QNAME_CLASS = new QName(ATTRIBUTE_NAME_CLASS);
   static final QName QNAME_ORIG_FORMAT = new QName(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
 
+  private SubjectScheme subjectSchemeMap;
+  private SubjectSchemeReader subjectSchemeReader;
+
   public TopicReaderModule() {
     super();
     formatFilter = v -> !(Objects.equals(v, ATTR_FORMAT_VALUE_DITAMAP) || Objects.equals(v, ATTR_FORMAT_VALUE_DITAVAL));
@@ -91,30 +93,37 @@ public final class TopicReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
 
     if (filterUtils != null) {
       final Document doc = getMapDocument();
       if (doc != null) {
-        final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+        subjectSchemeReader = new SubjectSchemeReader();
         subjectSchemeReader.setLogger(logger);
         subjectSchemeReader.setJob(job);
-        logger.debug("Loading subject schemes");
+        logger.info("Loading subject schemes");
         final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
         subjectSchemes
           .stream()
           .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-          .forEach(enumerationDef -> {
-            final Element schemeRoot = ancestors(enumerationDef)
-              .filter(SUBMAP::matches)
-              .findFirst()
-              .orElse(doc.getDocumentElement());
+          .map(enumerationDef ->
+            Map.entry(
+              ancestors(enumerationDef).filter(SUBMAP::matches).findFirst().orElse(doc.getDocumentElement()),
+              enumerationDef
+            )
+          )
+          .collect(Collectors.groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, Collectors.toList())))
+          .forEach((schemeRoot, enumerationDefs) -> {
             var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
-            subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+            for (Element enumerationDef : enumerationDefs) {
+              subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+            }
           });
-        final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
-        filterUtils = filterUtils.refine(subjectScheme);
+        subjectSchemeMap = subjectSchemeReader.getSubjectSchemeMap();
+        validateMap = subjectSchemeReader.getValidValuesMap();
+        defaultValueMap = subjectSchemeReader.getDefaultValueMap();
+        filterUtils = filterUtils.refine(subjectSchemeMap);
       }
     }
   }
@@ -156,7 +165,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
   }
 
-  private Document getMapDocument() throws SAXException {
+  private Document getMapDocument() throws DITAOTException {
     final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
     if (fi == null || isFormatDita(fi.format)) {
       return null;
@@ -166,7 +175,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
       logger.debug("Reading " + currentFile);
       return job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
-      throw new SAXException("Failed to parse " + currentFile, e);
+      throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
     }
   }
 
