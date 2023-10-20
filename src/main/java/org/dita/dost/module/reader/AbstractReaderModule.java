@@ -37,9 +37,11 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
-import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
-import org.dita.dost.reader.*;
+import org.dita.dost.reader.DitaValReader;
+import org.dita.dost.reader.GenListModuleReader;
+import org.dita.dost.reader.GrammarPoolManager;
+import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.util.*;
 import org.dita.dost.writer.DitaWriterFilter;
 import org.dita.dost.writer.TopicFragmentFilter;
@@ -105,14 +107,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   KeydefFilter keydefFilter;
   boolean validate = true;
   ContentHandler nullHandler;
-  TempFileNameScheme tempFileNameScheme;
+  private TempFileNameScheme tempFileNameScheme;
   /** Absolute path to input file. */
   URI rootFile;
   List<URI> resources;
   /** Subject scheme absolute file paths. */
   private final Set<URI> schemeSet = ConcurrentHashMap.newKeySet();
   /** Subject scheme usage. Key is absolute file path, value is set of applicable subject schemes. */
-  final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
+  private final Map<URI, Set<URI>> schemeDictionary = new HashMap<>();
   private final Map<URI, URI> copyTo = new ConcurrentHashMap<>();
   Mode processingMode;
   /** Generate {@code xtrf} and {@code xtrc} attributes */
@@ -120,13 +122,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   /** use grammar pool cache */
   private boolean gramcache = true;
   /** Profiling is enabled. */
-  boolean profilingEnabled;
+  private boolean profilingEnabled;
   String transtype;
   private File ditavalFile;
   FilterUtils filterUtils;
   /** Absolute path to current destination file. */
   File outputFile;
-  SubjectScheme subjectSchemeMap;
   Map<QName, Map<String, Set<String>>> validateMap;
   Map<QName, Map<String, String>> defaultValueMap;
   /** XMLReader instance for parsing dita file */
@@ -137,8 +138,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   TopicFragmentFilter topicFragmentFilter;
   /** Files found during additional resource crawl. **/
   final Set<URI> additionalResourcesSet = ConcurrentHashMap.newKeySet();
-
-  SubjectSchemeReader subjectSchemeReader;
 
   public abstract void readStartFile() throws DITAOTException;
 

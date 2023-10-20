@@ -86,7 +86,6 @@ public final class MapReaderModule extends AbstractReaderModule {
 
     final ValidationFilter validationFilter = new ValidationFilter();
     validationFilter.setLogger(logger);
-    //    validationFilter.setValidateMap(validateMap);
     validationFilter.setCurrentFile(fileToParse);
     validationFilter.setJob(job);
     validationFilter.setProcessingMode(processingMode);
@@ -104,7 +103,6 @@ public final class MapReaderModule extends AbstractReaderModule {
     listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
-    //    ditaWriterFilter.setDefaultValueMap(defaultValueMap);
     ditaWriterFilter.setCurrentFile(currentFile);
     ditaWriterFilter.setOutputFile(outputFile);
     pipe.add(ditaWriterFilter);
@@ -132,41 +130,4 @@ public final class MapReaderModule extends AbstractReaderModule {
     }
     //        }
   }
-  //  @Override
-  //  void outputResult() throws DITAOTException {
-  //    super.outputResult();
-  //
-  //    try {
-  //      final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-  //      subjectSchemeReader.setLogger(logger);
-  //      subjectSchemeReader.setJob(job);
-  //      subjectSchemeReader.writeMapToXML(
-  //        addMapFilePrefix(listFilter.getRelationshipGrap()),
-  //        new File(job.tempDir, FILE_NAME_SUBJECT_RELATION)
-  //      );
-  //      subjectSchemeReader.writeMapToXML(
-  //        addMapFilePrefix(schemeDictionary),
-  //        new File(job.tempDir, FILE_NAME_SUBJECT_DICTIONARY)
-  //      );
-  //    } catch (final IOException e) {
-  //      throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
-  //    }
-  //  }
-  //
-  //  /**
-  //   * Convert absolute paths to relative temporary directory paths
-  //   * @return map with relative keys and values
-  //   */
-  //  private Map<URI, Set<URI>> addMapFilePrefix(final Map<URI, Set<URI>> map) {
-  //    final Map<URI, Set<URI>> res = new HashMap<>();
-  //    for (final Map.Entry<URI, Set<URI>> e : map.entrySet()) {
-  //      final URI key = e.getKey();
-  //      final Set<URI> newSet = new HashSet<>();
-  //      for (final URI file : e.getValue()) {
-  //        newSet.add(tempFileNameScheme.generateTempFileName(file));
-  //      }
-  //      res.put(key.equals(ROOT_URI) ? key : tempFileNameScheme.generateTempFileName(key), newSet);
-  //    }
-  //    return res;
-  //  }
 }

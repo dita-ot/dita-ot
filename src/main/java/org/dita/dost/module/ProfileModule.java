@@ -47,17 +47,17 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
 
     for (final FileInfo f : job.getFileInfo(fileInfoFilter)) {
       final URI file = job.tempDirURI.resolve(f.uri);
-      logger.info("Processing " + file);
+      logger.info("Processing {0}", file);
 
       try {
         job.getStore().transform(file, getProcessingPipe(file));
         if (!writer.hasElementOutput()) {
-          logger.info("All content in " + file + " was filtered out");
+          logger.info("All content in {0} was filtered out", file);
           job.remove(f);
           job.getStore().delete(file);
         }
       } catch (final Exception e) {
-        logger.error("Failed to profile " + file + ": " + e.getMessage());
+        logger.error("Failed to profile " + file + ": " + e.getMessage(), e);
       }
     }
 
@@ -119,7 +119,6 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
   }
 
   private void initSubjectScheme() throws DITAOTException {
-    //    if (filterUtils != null) {
     final Document doc = getMapDocument();
     if (doc != null) {
       final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
@@ -159,7 +158,6 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
         subjectSchemeFilter.setDefaultValueMap(subjectSchemeReader.getDefaultValueMap());
       }
     }
-    //    }
   }
 
   private Document getMapDocument() throws DITAOTException {
@@ -172,7 +170,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
     final FileInfo fi = fis.iterator().next();
     final URI currentFile = job.tempDirURI.resolve(fi.uri);
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {0}", currentFile);
       return job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
       throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));

@@ -30,6 +30,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
@@ -59,6 +60,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
   static final QName QNAME_FORMAT = new QName(ATTRIBUTE_NAME_FORMAT);
   static final QName QNAME_CLASS = new QName(ATTRIBUTE_NAME_CLASS);
   static final QName QNAME_ORIG_FORMAT = new QName(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
+
+  private SubjectScheme subjectSchemeMap;
+  private SubjectSchemeReader subjectSchemeReader;
 
   public TopicReaderModule() {
     super();
