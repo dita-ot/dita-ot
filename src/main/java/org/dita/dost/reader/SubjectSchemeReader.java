@@ -32,6 +32,8 @@ import org.w3c.dom.Element;
  */
 public class SubjectSchemeReader {
 
+  public static final String ANY_ELEMENT = "*";
+
   private DITAOTLogger logger;
   private Job job;
   private final Map<QName, Map<String, Set<SubjectDefinition>>> bindingMap;
@@ -233,7 +235,7 @@ public class SubjectSchemeReader {
       .getChildElement(enumerationDef, SUBJECTSCHEME_ELEMENTDEF)
       .map(child -> child.getAttribute(ATTRIBUTE_NAME_NAME))
       .filter(Predicate.not(String::isEmpty))
-      .orElse("*");
+      .orElse(ANY_ELEMENT);
 
     final Optional<Element> attributeDefElement = XMLUtils.getChildElement(enumerationDef, SUBJECTSCHEME_ATTRIBUTEDEF);
     final QName attributeName = attributeDefElement

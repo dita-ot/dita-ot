@@ -8,11 +8,12 @@
 
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.COMMA;
+import static org.dita.dost.reader.SubjectSchemeReader.ANY_ELEMENT;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.StringUtils;
@@ -21,6 +22,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class SubjectSchemeFilter extends AbstractXMLFilter {
+
+  private static Pattern WHITESPACE = Pattern.compile("\\s+");
 
   private Map<QName, Map<String, String>> defaultValueMap = null;
   private Map<QName, Map<String, Set<String>>> validateMap = null;
@@ -47,20 +50,21 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
-    Attributes res = atts;
+    var res = addDefaultAttributeValues(qName, atts);
     validateAttributeValues(qName, res);
-    res = addDefaultAttributeValues(qName, res);
 
     super.startElement(uri, localName, qName, res);
   }
 
-  private Attributes addDefaultAttributeValues(final String qName, final Attributes atts) {
+  /**
+   * Add default attribute values from subject scheme.
+   */
+  private Attributes addDefaultAttributeValues(final String elemName, final Attributes atts) {
     AttributesImpl modified = null;
     for (Map.Entry<QName, Map<String, String>> elementDefaultValues : defaultValueMap.entrySet()) {
-      final QName attrName = elementDefaultValues.getKey();
-      final int index = atts.getIndex(attrName.getNamespaceURI(), attrName.getLocalPart());
-      if (index == -1) {
-        final String defaultValue = elementDefaultValues.getValue().get(qName);
+      var attrName = elementDefaultValues.getKey();
+      if (atts.getValue(attrName.getNamespaceURI(), attrName.getLocalPart()) == null) {
+        var defaultValue = elementDefaultValues.getValue().get(elemName);
         if (defaultValue != null) {
           if (modified == null) {
             modified = new AttributesImpl(atts);
@@ -73,28 +77,25 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
   }
 
   /**
-   * Validate attribute values
-   *
-   * @param qName element name
-   * @param atts attributes
+   * Validate attribute values against subject scheme.
    */
-  private void validateAttributeValues(final String qName, final Attributes atts) {
+  private void validateAttributeValues(final String elemName, final Attributes atts) {
     for (int i = 0; i < atts.getLength(); i++) {
-      final QName attrName = new QName(atts.getURI(i), atts.getLocalName(i));
-      final Map<String, Set<String>> valueMap = validateMap.get(attrName);
+      var attrName = new QName(atts.getURI(i), atts.getLocalName(i));
+      var valueMap = validateMap.get(attrName);
       if (valueMap != null) {
-        Set<String> valueSet = valueMap.get(qName);
+        var valueSet = valueMap.get(elemName);
         if (valueSet == null) {
-          valueSet = valueMap.get("*");
+          valueSet = valueMap.get(ANY_ELEMENT);
         }
         if (valueSet != null) {
-          final String attrValue = atts.getValue(i);
-          final String[] keylist = attrValue.trim().split("\\s+");
-          for (final String s : keylist) {
-            if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
+          var attrValue = atts.getValue(i);
+          var tokens = WHITESPACE.split(attrValue.trim());
+          for (final String token : tokens) {
+            if (!valueSet.contains(token)) {
               logger.warn(
                 MessageUtils
-                  .getMessage("DOTJ049W", attrName.toString(), qName, attrValue, StringUtils.join(valueSet, COMMA))
+                  .getMessage("DOTJ049W", attrName.toString(), elemName, attrValue, StringUtils.join(valueSet, ", "))
                   .setLocation(atts)
                   .toString()
               );
