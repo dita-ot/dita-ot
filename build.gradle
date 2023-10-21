@@ -86,9 +86,13 @@ artifacts {
 }
 
 test {
-    useJUnitPlatform()
-    exclude '**/IntegrationTest*.class'
-    exclude '**/EndToEndTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching "*Test"
+            excludeTestsMatching "IntegrationTest*"
+            excludeTestsMatching "EndToEndTest*"
+        }
+    }
 }
 
 test.maxParallelForks = 4
@@ -107,11 +111,16 @@ if (System.getProperty("log_level") != null) {
     integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
 }
 
-task integrationTest(type: Test, dependsOn: 'buildLocal') {
+tasks.register('integrationTest', Test) {
+    dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     systemProperties = integrationTestSystemProperties
-    include '**/IntegrationTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching 'IntegrationTest*'
+        }
+    }
 }
 tasks.named('check') {
     dependsOn('integrationTest')
@@ -135,12 +144,17 @@ if (System.getProperty("log_level") != null) {
     integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
 }
 
-task e2eTest(type: Test, dependsOn: 'buildLocal') {
+tasks.register('e2eTest', Test) {
+    dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     maxParallelForks = 4
     systemProperties = e2eTestSystemProperties
-    include '**/EndToEndTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching 'EndToEndTest*'
+        }
+    }
 }
 tasks.named('check') {
     dependsOn('e2eTest')

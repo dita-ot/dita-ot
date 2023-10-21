@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.namespace.QName;
 import org.apache.commons.io.FileUtils;
 import org.apache.xerces.xni.grammars.XMLGrammarPool;
 import org.dita.dost.exception.DITAOTException;
@@ -128,8 +127,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   FilterUtils filterUtils;
   /** Absolute path to current destination file. */
   File outputFile;
-  Map<QName, Map<String, Set<String>>> validateMap;
-  Map<QName, Map<String, String>> defaultValueMap;
   /** XMLReader instance for parsing dita file */
   private XMLReader reader;
   /** Absolute path to current source file. */

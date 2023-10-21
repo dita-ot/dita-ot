@@ -8,7 +8,7 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.reader.GenListModuleReader.*;
+import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
@@ -19,8 +19,11 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.*;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -53,7 +56,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   public static final String ATTRIBUTE_NAME_ORIG_FORMAT = "orig-" + ATTRIBUTE_NAME_FORMAT;
 
   /** Default value map. */
-  private Map<QName, Map<String, String>> defaultValueMap;
+  private Map<QName, Map<String, String>> defaultValueMap = Map.of();
   /** Absolute path to current destination file. */
   private File outputFile;
   /** File infos by src. */

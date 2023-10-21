@@ -63,6 +63,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
   private SubjectScheme subjectSchemeMap;
   private SubjectSchemeReader subjectSchemeReader;
+  private Map<javax.xml.namespace.QName, Map<String, Set<String>>> validateMap = Map.of();
+  private Map<javax.xml.namespace.QName, Map<String, String>> defaultValueMap = Map.of();
 
   public TopicReaderModule() {
     super();
