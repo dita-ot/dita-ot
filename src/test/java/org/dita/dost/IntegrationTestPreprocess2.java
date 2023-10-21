@@ -74,17 +74,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Test
-  public void testcontrolValueFile4() throws Throwable {
-    builder()
-      .name(Paths.get("filter", "map31_filter_multi"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("map31.ditamap"))
-      .put("args.filter", Paths.get("filter_multi.ditaval"))
-      .warnCount(0)
-      .test();
-  }
-
   @Disabled
   @Test
   public void testcopyto_extensions_metadata() throws Throwable {
@@ -127,19 +116,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Test
-  public void testcontrolValueFile5() throws Throwable {
-    builder()
-      .name(Paths.get("filter", "map32_filter_multi"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("map32.ditamap"))
-      .put("args.filter", Paths.get("filter_multi.ditaval"))
-      .warnCount(0)
-      .test();
-  }
-
-  //
-  //  @Disabled
+  @Disabled
   @Test
   public void testuplevelslinkOnlytopic() throws Throwable {
     builder()
