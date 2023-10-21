@@ -8,15 +8,17 @@
 package org.dita.dost.module;
 
 import static java.util.stream.Collectors.mapping;
+import static net.sf.saxon.s9api.streams.Steps.ancestor;
+import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.util.Configuration.printTranstype;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.XMLUtils.ancestors;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -24,11 +26,8 @@ import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.SubjectSchemeFilter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
@@ -119,30 +118,26 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
   }
 
   private void initSubjectScheme() throws DITAOTException {
-    final Document doc = getMapDocument();
+    var doc = getMapDocument();
     if (doc != null) {
-      final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
+      var subjectSchemeReader = new SubjectSchemeReader();
       subjectSchemeReader.setLogger(logger);
       subjectSchemeReader.setJob(job);
-      final List<Element> enumrationDefs = XMLUtils
-        .<Element>toList(doc.getDocumentElement().getElementsByTagName("*"))
-        .stream()
-        .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-        .toList();
-      if (!enumrationDefs.isEmpty()) {
+      var enumerationDefList = doc.select(descendant(SUBJECTSCHEME_ENUMERATIONDEF::matches)).toList();
+      if (!enumerationDefList.isEmpty()) {
         logger.info("Loading subject schemes");
-        enumrationDefs
+        enumerationDefList
           .stream()
-          .map(enumerationDef1 ->
+          .map(enumerationDef ->
             Map.entry(
-              ancestors(enumerationDef1).filter(SUBMAP::matches).findFirst().orElse(doc.getDocumentElement()),
-              enumerationDef1
+              enumerationDef.select(ancestor(SUBMAP::matches)).findFirst().orElse(doc.getOutermostElement()),
+              enumerationDef
             )
           )
           .collect(Collectors.groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, Collectors.toList())))
           .forEach((schemeRoot, enumerationDefs) -> {
             var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
-            for (Element enumerationDef : enumerationDefs) {
+            for (XdmNode enumerationDef : enumerationDefs) {
               subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
             }
           });
@@ -160,7 +155,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Document getMapDocument() throws DITAOTException {
+  private XdmNode getMapDocument() throws DITAOTException {
     final Collection<FileInfo> fis = job.getFileInfo(f ->
       f.isInput && Objects.equals(f.format, ATTR_FORMAT_VALUE_DITAMAP)
     );
@@ -171,7 +166,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
     final URI currentFile = job.tempDirURI.resolve(fi.uri);
     try {
       logger.debug("Reading {0}", currentFile);
-      return job.getStore().getDocument(currentFile);
+      return job.getStore().getImmutableNode(currentFile);
     } catch (final IOException e) {
       throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
     }

@@ -76,6 +76,15 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     currentFile = job.tempDirURI.resolve(map);
 
     logger.info("Processing " + currentFile);
+    final SubjectScheme subjectSchemeMap;
+    try {
+      logger.debug("Reading " + currentFile);
+      subjectSchemeMap = getSubjectScheme(job.getStore().getImmutableNode(currentFile).getOutermostElement());
+    } catch (final IOException e) {
+      logger.error("Failed to parse " + currentFile, e);
+      return;
+    }
+
     final Document doc;
     try {
       logger.debug("Reading " + currentFile);
@@ -84,8 +93,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
       logger.error("Failed to parse " + currentFile, e);
       return;
     }
-
-    final SubjectScheme subjectSchemeMap = getSubjectScheme(doc.getDocumentElement());
     logger.debug("Filter topics and generate copies");
     generateCopies(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
     logger.debug("Filter existing topics");

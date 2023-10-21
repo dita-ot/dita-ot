@@ -38,14 +38,15 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.event.Sender;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.CatalogResourceResolver;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ErrorReporter;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
+import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -1398,5 +1399,23 @@ public final class XMLUtils {
    */
   public static Predicate<XdmNode> isDitaFormat() {
     return attributeEq(ATTRIBUTE_NAME_FORMAT, ATTR_FORMAT_VALUE_DITA).or(empty(attribute(ATTRIBUTE_NAME_FORMAT)));
+  }
+
+  /**
+   * Convert S9API document into DOM document.
+   */
+  public Document cloneDocument(final XdmNode node) throws IOException {
+    try {
+      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final DOMDestination destination = new DOMDestination(doc);
+      final Receiver receiver = destination.getReceiver(
+        getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+        new SerializationProperties()
+      );
+      Sender.send(node.asSource(), receiver, new ParseOptions());
+      return doc;
+    } catch (XPathException e) {
+      throw new IOException(e);
+    }
   }
 }

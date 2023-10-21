@@ -16,14 +16,14 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
 import javax.xml.namespace.QName;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Subject scheme reader.
@@ -33,6 +33,15 @@ import org.w3c.dom.Element;
 public class SubjectSchemeReader {
 
   public static final String ANY_ELEMENT = "*";
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYREF = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_KEYREF
+  );
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYS = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_KEYS
+  );
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_NAME = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_NAME
+  );
 
   private DITAOTLogger logger;
   private Job job;
@@ -168,8 +177,8 @@ public class SubjectSchemeReader {
     logger.debug("Load subject scheme " + scheme);
 
     try {
-      final Document doc = job.getStore().getDocument(scheme.toURI());
-      final Element schemeRoot = doc.getDocumentElement();
+      final XdmNode doc = job.getStore().getImmutableNode(scheme.toURI());
+      final XdmNode schemeRoot = doc.getOutermostElement();
       if (schemeRoot == null) {
         return;
       }
@@ -181,14 +190,14 @@ public class SubjectSchemeReader {
     }
   }
 
-  public void loadSubjectScheme(final Element schemeRoot) {
+  public void loadSubjectScheme(final XdmNode schemeRoot) {
     final Map<String, SubjectDefinition> subjectDefinitionsByKey = getSubjectDefinition(schemeRoot);
-    for (Element child : XMLUtils.getChildElements(schemeRoot, SUBJECTSCHEME_ENUMERATIONDEF)) {
+    for (XdmNode child : schemeRoot.children(SUBJECTSCHEME_ENUMERATIONDEF::matches)) {
       processEnumerationDef(subjectDefinitionsByKey, child);
     }
   }
 
-  public Map<String, SubjectDefinition> getSubjectDefinition(final Element schemeRoot) {
+  public Map<String, SubjectDefinition> getSubjectDefinition(final XdmNode schemeRoot) {
     final List<SubjectDefinition> subjectDefinitions = readSubjectDefinitions(schemeRoot);
     final Map<String, SubjectDefinition> buf = new HashMap<>();
     getSubjectDefinition(subjectDefinitions, buf);
@@ -204,17 +213,17 @@ public class SubjectSchemeReader {
     }
   }
 
-  private List<SubjectDefinition> readSubjectDefinitions(final Element elem) {
+  private List<SubjectDefinition> readSubjectDefinitions(final XdmNode elem) {
     final List<SubjectDefinition> res = new ArrayList<>();
     readSubjectDefinitions(elem, res);
     return Collections.unmodifiableList(res);
   }
 
-  private void readSubjectDefinitions(final Element elem, List<SubjectDefinition> buf) {
-    for (Element child : XMLUtils.getChildElements(elem)) {
+  private void readSubjectDefinitions(final XdmNode elem, List<SubjectDefinition> buf) {
+    for (XdmNode child : elem.children()) {
       if (SUBJECTSCHEME_SUBJECTDEF.matches(child)) {
-        String keyref = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
-        if (keyref.isEmpty()) {
+        String keyref = child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF);
+        if (keyref == null || keyref.isEmpty()) {
           keyref = null;
         }
         final List<SubjectDefinition> childBuf = new ArrayList<>();
@@ -229,39 +238,46 @@ public class SubjectSchemeReader {
 
   public void processEnumerationDef(
     final Map<String, SubjectDefinition> subjectDefinitions,
-    final Element enumerationDef
+    final XdmNode enumerationDef
   ) {
-    final String elementName = XMLUtils
-      .getChildElement(enumerationDef, SUBJECTSCHEME_ELEMENTDEF)
-      .map(child -> child.getAttribute(ATTRIBUTE_NAME_NAME))
-      .filter(Predicate.not(String::isEmpty))
+    final String elementName = enumerationDef
+      .select(
+        Steps
+          .child(SUBJECTSCHEME_ELEMENTDEF::matches)
+          .then(Steps.attribute(ATTRIBUTE_NAME_NAME).where(Predicate.not(isEmptyAttribute())))
+      )
+      .findFirst()
+      .map(XdmItem::getStringValue)
       .orElse(ANY_ELEMENT);
 
-    final Optional<Element> attributeDefElement = XMLUtils.getChildElement(enumerationDef, SUBJECTSCHEME_ATTRIBUTEDEF);
+    final Optional<XdmNode> attributeDefElement = enumerationDef
+      .select(Steps.child(SUBJECTSCHEME_ATTRIBUTEDEF::matches).first())
+      .findFirst();
     final QName attributeName = attributeDefElement
-      .map(child -> child.getAttribute(ATTRIBUTE_NAME_NAME))
-      .filter(Predicate.not(String::isEmpty))
+      .map(child -> child.getAttributeValue(ATTRIBUTE_QNAME_NAME))
+      .filter(name -> name != null && !name.isEmpty())
       .map(QName::valueOf)
       .orElse(null);
     if (attributeDefElement.isPresent()) {
       bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
     }
 
-    XMLUtils
-      .getChildElement(enumerationDef, SUBJECTSCHEME_DEFAULTSUBJECT)
-      .map(child -> child.getAttribute(ATTRIBUTE_NAME_KEYREF))
-      .filter(Predicate.not(String::isEmpty))
+    enumerationDef
+      .select(Steps.child(SUBJECTSCHEME_DEFAULTSUBJECT::matches))
+      .map(child -> child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF))
+      .filter(keyref -> keyref != null && !keyref.isEmpty())
+      .findFirst()
       .ifPresent(keyValue -> {
         final Map<String, String> S = defaultValueMap.getOrDefault(attributeName, new HashMap<>());
         S.put(elementName, keyValue);
         defaultValueMap.put(attributeName, S);
       });
 
-    for (Element child : XMLUtils.getChildElements(enumerationDef, SUBJECTSCHEME_SUBJECTDEF)) {
+    for (XdmNode child : enumerationDef.children(SUBJECTSCHEME_SUBJECTDEF::matches)) {
       final List<String> keyValues = Optional
-        .of(child.getAttribute(ATTRIBUTE_NAME_KEYREF))
+        .ofNullable(child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF))
         .filter(Predicate.not(String::isBlank))
-        .or(() -> Optional.of(child.getAttribute(ATTRIBUTE_NAME_KEYS)))
+        .or(() -> Optional.ofNullable(child.getAttributeValue(ATTRIBUTE_QNAME_KEYS)))
         .map(String::trim)
         .filter(Predicate.not(String::isEmpty))
         .map(value -> Arrays.asList(value.split("\\s+")))
@@ -286,8 +302,16 @@ public class SubjectSchemeReader {
     }
   }
 
-  private static List<String> getKeyValues(Element child) {
-    var value = child.getAttribute(ATTRIBUTE_NAME_KEYS).trim();
+  private static Predicate<XdmNode> isEmptyAttribute() {
+    return attr -> attr.getStringValue().isEmpty();
+  }
+
+  private static List<String> getKeyValues(XdmNode child) {
+    var value = child.getAttributeValue(ATTRIBUTE_QNAME_KEYS);
+    if (value == null) {
+      return List.of();
+    }
+    value = value.trim();
     if (value.isEmpty()) {
       return List.of();
     }
