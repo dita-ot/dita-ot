@@ -24,9 +24,9 @@ jobs:
           npm ci
           npm run check-fmt
       - name: Build with Gradle
-        run: ./gradlew
+        run: ./gradlew --info --stacktrace --no-daemon
       - name: Run unit tests
-        run: ./gradlew check --info --stacktrace --no-daemon
+        run: ./gradlew test --info --stacktrace --no-daemon
       - name: Run end to end tests
         run: ./gradlew e2eTest --info --stacktrace --no-daemon
       - name: Run integration tests
