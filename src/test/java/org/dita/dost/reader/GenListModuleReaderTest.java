@@ -35,6 +35,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
@@ -46,29 +47,23 @@ public class GenListModuleReaderTest {
   private static final File srcDir = new File(baseDir, "src");
   private static final URI srcDirUri = srcDir.toURI();
   private static final File inputDir = new File(srcDir, "maps");
-  private static File tempDir;
+
+  @TempDir
+  private File tempDir;
 
   private GenListModuleReader reader;
-
-  @BeforeAll
-  public static void setUpClass() throws Exception {
-    tempDir = TestUtils.createTempDir(GenListModuleReaderTest.class);
-  }
+  private Job job;
 
   @BeforeEach
   public void setUp() throws IOException {
+    job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     reader = new GenListModuleReader();
     reader.setLogger(new TestUtils.TestLogger());
-    reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+    reader.setJob(job);
     reader.setContentHandler(new DefaultHandler());
     final URI currentFile = new File(inputDir, "root-map-01.ditamap").toURI();
     reader.setCurrentFile(currentFile);
     reader.setPrimaryDitamap(currentFile);
-  }
-
-  @AfterAll
-  public static void tearDownClass() {
-    FileUtils.deleteQuietly(tempDir);
   }
 
   @Test
@@ -104,6 +99,27 @@ public class GenListModuleReaderTest {
     assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonConrefCopytoTargets().iterator().next().filename);
     assertEquals(1, reader.getNonTopicrefReferenceSet().size());
     assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonTopicrefReferenceSet().iterator().next());
+  }
+
+  @Test
+  public void startElement_localImage_crawlMap() throws SAXException {
+    job.setCrawl("map");
+
+    reader.startDocument();
+    reader.startElement(
+      NULL_NS_URI,
+      TOPIC_IMAGE.localName,
+      TOPIC_IMAGE.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+        .add(ATTRIBUTE_NAME_HREF, "image.png")
+        .build()
+    );
+    assertEquals(1, reader.getNonConrefCopytoTargets().size());
+    assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format);
+    assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonConrefCopytoTargets().iterator().next().filename);
+    assertEquals(0, reader.getNonTopicrefReferenceSet().size());
+    assertFalse(reader.getNonTopicrefReferenceSet().iterator().hasNext());
   }
 
   @Test
