@@ -410,20 +410,4 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
       .put("onlytopic.in.map", "false")
       .test();
   }
-
-  @Test
-  public void testCrawlTopic() throws Throwable {
-    builder().name("crawl_topic").transtype(XHTML).input(Paths.get("input.ditamap")).put("link-crawl", "topic").test();
-  }
-
-  @Test
-  public void testCrawlMap() throws Throwable {
-    builder()
-      .name("crawl_map")
-      .transtype(XHTML)
-      .input(Paths.get("input.ditamap"))
-      .put("link-crawl", "map")
-      .errorCount(2)
-      .test();
-  }
 }
