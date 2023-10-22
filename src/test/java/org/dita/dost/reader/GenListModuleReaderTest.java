@@ -40,9 +40,9 @@ import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class TestGenListModuleReader {
+public class GenListModuleReaderTest {
 
-  private static final File baseDir = TestUtils.getResourceDir(TestGenListModuleReader.class);
+  private static final File baseDir = TestUtils.getResourceDir(GenListModuleReaderTest.class);
   private static final File srcDir = new File(baseDir, "src");
   private static final URI srcDirUri = srcDir.toURI();
   private static final File inputDir = new File(srcDir, "maps");
@@ -52,7 +52,7 @@ public class TestGenListModuleReader {
 
   @BeforeAll
   public static void setUpClass() throws Exception {
-    tempDir = TestUtils.createTempDir(TestGenListModuleReader.class);
+    tempDir = TestUtils.createTempDir(GenListModuleReaderTest.class);
   }
 
   @BeforeEach
