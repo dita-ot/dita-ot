@@ -16,6 +16,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.File;
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 import javax.xml.namespace.QName;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.module.reader.TempFileNameScheme;
@@ -129,8 +130,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
-    final AttributesImpl res = new AttributesImpl();
-    processAttributes(qName, atts, res);
+    final Attributes res = processAttributes(qName, atts);
 
     getContentHandler().startElement(uri, localName, qName, res);
   }
@@ -140,29 +140,36 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
    *
    * @param qName element name
    * @param atts input attributes
-   * @param res attributes to write to
    */
-  private void processAttributes(final String qName, final Attributes atts, final AttributesImpl res) {
+  private Attributes processAttributes(final String qName, final Attributes atts) {
+    AttributesImpl res = null;
     final int attsLen = atts.getLength();
     for (int i = 0; i < attsLen; i++) {
-      final QName attQName = new QName(atts.getURI(i), atts.getLocalName(i));
+      final String attName = atts.getLocalName(i);
       final String origValue = atts.getValue(i);
-      String attValue = origValue;
-      if (attValue.equals(ATTR_VALUE_DITA_USE_CONREF_TARGET)) {
+      String attValue = null;
+      if (origValue.equals(ATTR_VALUE_DITA_USE_CONREF_TARGET)) {
         // retain original value
-      } else if (ATTRIBUTE_NAME_CONREF.equals(attQName.getLocalPart())) {
-        attValue = replaceHREF(QName.valueOf(ATTRIBUTE_NAME_CONREF), atts).toString();
-      } else if (
-        ATTRIBUTE_NAME_HREF.equals(attQName.getLocalPart()) || ATTRIBUTE_NAME_COPY_TO.equals(attQName.getLocalPart())
-      ) {
-        if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
-          attValue = replaceHREF(attQName, atts).toString();
+      } else if (ATTRIBUTE_NAME_CONREF.equals(attName)) {
+        if (res == null) {
+          res = new AttributesImpl(atts);
         }
-      } else if (ATTRIBUTE_NAME_FORMAT.equals(attQName.getLocalPart())) {
+        attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
+      } else if (ATTRIBUTE_NAME_HREF.equals(attName) || ATTRIBUTE_NAME_COPY_TO.equals(attName)) {
+        if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
+          if (res == null) {
+            res = new AttributesImpl(atts);
+          }
+          attValue = replaceHREF(attName, atts).toString();
+        }
+      } else if (ATTRIBUTE_NAME_FORMAT.equals(attName)) {
         final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
         final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
         // verify format is correct
         if (isFormatDita(format) && isLocalScope(scope)) {
+          if (res == null) {
+            res = new AttributesImpl(atts);
+          }
           attValue = ATTR_FORMAT_VALUE_DITA;
           if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
             XMLUtils.addOrSetAttribute(
@@ -175,18 +182,21 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
             );
           }
         }
-      } else {
-        attValue = getAttributeValue(qName, attQName, attValue);
+        //      } else {
+        //        attValue = getAttributeValue(qName, attQName, attValue);
       }
-      XMLUtils.addOrSetAttribute(
-        res,
-        atts.getURI(i),
-        atts.getLocalName(i),
-        atts.getQName(i),
-        atts.getType(i),
-        attValue
-      );
+      if (attValue != null) {
+        XMLUtils.addOrSetAttribute(
+          res,
+          atts.getURI(i),
+          atts.getLocalName(i),
+          atts.getQName(i),
+          atts.getType(i),
+          attValue
+        );
+      }
     }
+    return Objects.requireNonNullElse(res, atts);
   }
 
   /**
@@ -217,8 +227,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
    * @param atts attributes
    * @return attribute value, may be {@code null}
    */
-  private URI replaceHREF(final QName attName, final Attributes atts) {
-    URI attValue = toURI(atts.getValue(attName.getNamespaceURI(), attName.getLocalPart()));
+  private URI replaceHREF(final String attName, final Attributes atts) {
+    URI attValue = toURI(atts.getValue(attName));
     if (attValue != null) {
       final String fragment = attValue.getFragment();
       if (fragment != null) {
