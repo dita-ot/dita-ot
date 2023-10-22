@@ -7,7 +7,6 @@
  */
 package org.dita.dost.reader;
 
-import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.stripFragment;
@@ -16,13 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.io.FileUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.reader.GenListModuleReader.Reference;
@@ -31,11 +26,12 @@ import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.XMLReader;
@@ -122,41 +118,70 @@ public class GenListModuleReaderTest {
     assertFalse(reader.getNonTopicrefReferenceSet().iterator().hasNext());
   }
 
-  @Test
-  public void startElement_externalImage_withScope() throws SAXException {
+  @ParameterizedTest
+  @MethodSource("startElement_xrefArguments")
+  public void startElement_xref(
+    String crawl,
+    Set<Reference> expNonConrefCopytoTargets,
+    Set<URI> expNonTopicrefReferenceSet
+  ) throws SAXException {
+    job.setCrawl(crawl);
+
     reader.startDocument();
     reader.startElement(
       NULL_NS_URI,
-      TOPIC_IMAGE.localName,
-      TOPIC_IMAGE.localName,
+      TOPIC_TOPIC.localName,
+      TOPIC_TOPIC.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString()).add(ATTRIBUTE_NAME_ID, "topic").build()
+    );
+    reader.startElement(
+      NULL_NS_URI,
+      TOPIC_XREF.localName,
+      TOPIC_XREF.localName,
       new AttributesBuilder()
-        .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
-        .add(ATTRIBUTE_NAME_HREF, "file://example.com/image.png")
-        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+        .add(ATTRIBUTE_NAME_CLASS, TOPIC_XREF.toString())
+        .add(ATTRIBUTE_NAME_HREF, "topic.dita")
         .build()
     );
-    reader.endElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName);
+
+    assertEquals(expNonConrefCopytoTargets, reader.getNonConrefCopytoTargets());
+    assertEquals(expNonTopicrefReferenceSet, reader.getNonTopicrefReferenceSet());
+  }
+
+  private static List<Arguments> startElement_xrefArguments() {
+    return List.of(
+      Arguments.of(
+        "topic",
+        Set.of(new Reference(inputDir.toURI().resolve("topic.dita"))),
+        Set.of(inputDir.toURI().resolve("topic.dita"))
+      ),
+      Arguments.of("map", Set.of(), Set.of())
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("startElement_externalImageArguments")
+  public void startElement_externalImage_withoutScope(String scheme, String scope) throws SAXException {
+    reader.startDocument();
+    final AttributesBuilder atts = new AttributesBuilder()
+      .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+      .add(ATTRIBUTE_NAME_HREF, scheme + "://example.com/image.png");
+    if (scope != null) {
+      atts.add(ATTRIBUTE_NAME_SCOPE, scope);
+    }
+    reader.startElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName, atts.build());
+
     assertTrue(reader.getNonConrefCopytoTargets().isEmpty());
     assertTrue(reader.getNonTopicrefReferenceSet().isEmpty());
   }
 
-  @Test
-  public void startElement_externalImage_withoutScope() throws SAXException {
-    reader.startDocument();
+  private static List<Arguments> startElement_externalImageArguments() {
+    var res = new ArrayList<Arguments>();
     for (String scheme : new String[] { "http", "https", "ftp", "ftps", "sftp", "mailto" }) {
-      reader.startElement(
-        NULL_NS_URI,
-        TOPIC_IMAGE.localName,
-        TOPIC_IMAGE.localName,
-        new AttributesBuilder()
-          .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
-          .add(ATTRIBUTE_NAME_HREF, scheme + "://example.com/image.png")
-          .build()
-      );
-      reader.endElement(NULL_NS_URI, TOPIC_IMAGE.localName, TOPIC_IMAGE.localName);
+      res.add(Arguments.of(scheme, null));
     }
-    assertTrue(reader.getNonConrefCopytoTargets().isEmpty());
-    assertTrue(reader.getNonTopicrefReferenceSet().isEmpty());
+    res.add(Arguments.of("file", "external"));
+    return res;
   }
 
   @Test
@@ -167,12 +192,10 @@ public class GenListModuleReaderTest {
     assertTrue(reader.getConrefTargets().isEmpty());
 
     assertEquals(
-      new HashSet(
-        Arrays.asList(
-          srcDirUri.resolve("topics/xreffin-topic-1.xml"),
-          srcDirUri.resolve("topics/target-topic-c.xml"),
-          srcDirUri.resolve("topics/target-topic-a.xml")
-        )
+      Set.of(
+        srcDirUri.resolve("topics/xreffin-topic-1.xml"),
+        srcDirUri.resolve("topics/target-topic-c.xml"),
+        srcDirUri.resolve("topics/target-topic-a.xml")
       ),
       reader.getHrefTargets()
     );
@@ -183,12 +206,10 @@ public class GenListModuleReaderTest {
       .map(r -> r.filename)
       .collect(Collectors.toSet());
     assertEquals(
-      new HashSet(
-        Arrays.asList(
-          srcDirUri.resolve("topics/xreffin-topic-1.xml"),
-          srcDirUri.resolve("topics/target-topic-c.xml"),
-          srcDirUri.resolve("topics/target-topic-a.xml")
-        )
+      Set.of(
+        srcDirUri.resolve("topics/xreffin-topic-1.xml"),
+        srcDirUri.resolve("topics/target-topic-c.xml"),
+        srcDirUri.resolve("topics/target-topic-a.xml")
       ),
       nonConrefCopytoTargets
     );
@@ -208,34 +229,28 @@ public class GenListModuleReaderTest {
       nonCopytoResult.add(new Reference(stripFragment(filename)));
     }
     assertEquals(
-      new HashSet(
-        Arrays.asList(
-          new Reference(srcDirUri.resolve("topics/xreffin-topic-1.xml")),
-          new Reference(srcDirUri.resolve("topics/target-topic-c.xml")),
-          new Reference(srcDirUri.resolve("topics/target-topic-a.xml"))
-        )
+      Set.of(
+        new Reference(srcDirUri.resolve("topics/xreffin-topic-1.xml")),
+        new Reference(srcDirUri.resolve("topics/target-topic-c.xml")),
+        new Reference(srcDirUri.resolve("topics/target-topic-a.xml"))
       ),
       nonCopytoResult
     );
 
     assertEquals(
-      new HashSet(
-        Arrays.asList(
-          srcDirUri.resolve("topics/xreffin-topic-1.xml"),
-          srcDirUri.resolve("topics/target-topic-c.xml"),
-          srcDirUri.resolve("topics/target-topic-a.xml")
-        )
+      Set.of(
+        srcDirUri.resolve("topics/xreffin-topic-1.xml"),
+        srcDirUri.resolve("topics/target-topic-c.xml"),
+        srcDirUri.resolve("topics/target-topic-a.xml")
       ),
       reader.getOutDitaFilesSet()
     );
 
     assertEquals(
-      new HashSet(
-        Arrays.asList(
-          srcDirUri.resolve("topics/xreffin-topic-1.xml"),
-          srcDirUri.resolve("topics/target-topic-c.xml"),
-          srcDirUri.resolve("topics/target-topic-a.xml")
-        )
+      Set.of(
+        srcDirUri.resolve("topics/xreffin-topic-1.xml"),
+        srcDirUri.resolve("topics/target-topic-c.xml"),
+        srcDirUri.resolve("topics/target-topic-a.xml")
       ),
       reader.getOutDitaFilesSet()
     );
@@ -243,7 +258,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
     nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
     nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
-    assertEquals(emptySet(), nonTopicrefReferenceSet);
+    assertEquals(Set.of(), nonTopicrefReferenceSet);
 
     final Set<URI> resourceOnlySet = new HashSet<>(reader.getResourceOnlySet());
     resourceOnlySet.removeAll(reader.getNormalProcessingRoleSet());
@@ -267,14 +282,14 @@ public class GenListModuleReaderTest {
 
     assertTrue(reader.getConrefTargets().isEmpty());
 
-    assertEquals(new HashSet(Arrays.asList(srcDirUri.resolve("maps/toolbars.dita"))), reader.getHrefTargets());
+    assertEquals(Set.of(srcDirUri.resolve("maps/toolbars.dita")), reader.getHrefTargets());
 
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
       .map(r -> r.filename)
       .collect(Collectors.toSet());
-    assertEquals(new HashSet(Arrays.asList(srcDirUri.resolve("maps/toolbars.dita"))), nonConrefCopytoTargets);
+    assertEquals(Set.of(srcDirUri.resolve("maps/toolbars.dita")), nonConrefCopytoTargets);
 
     final Set<Reference> nonCopytoResult_computed = new LinkedHashSet<>(128);
     nonCopytoResult_computed.addAll(reader.getNonConrefCopytoTargets());
@@ -290,10 +305,7 @@ public class GenListModuleReaderTest {
     for (final URI filename : reader.getCoderefTargetSet()) {
       nonCopytoResult_computed.add(new Reference(stripFragment(filename)));
     }
-    assertEquals(
-      new HashSet(Arrays.asList(new Reference(srcDirUri.resolve("maps/toolbars.dita")))),
-      nonCopytoResult_computed
-    );
+    assertEquals(Set.of(new Reference(srcDirUri.resolve("maps/toolbars.dita"))), nonCopytoResult_computed);
 
     assertTrue(reader.getOutDitaFilesSet().isEmpty());
 
@@ -308,7 +320,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
     nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
     nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
-    assertEquals(emptySet(), nonTopicrefReferenceSet);
+    assertEquals(Set.of(), nonTopicrefReferenceSet);
 
     assertFalse(reader.isDitaTopic());
     assertTrue(reader.isDitaMap());
@@ -392,7 +404,7 @@ public class GenListModuleReaderTest {
       nonCopytoResult
     );
 
-    assertEquals(emptySet(), reader.getOutDitaFilesSet());
+    assertEquals(Set.of(), reader.getOutDitaFilesSet());
 
     final Set<URI> resourceOnlySet = new HashSet<>(reader.getResourceOnlySet());
     resourceOnlySet.removeAll(reader.getNormalProcessingRoleSet());
@@ -415,7 +427,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonTopicrefReferenceSet = new HashSet<>(reader.getNonTopicrefReferenceSet());
     nonTopicrefReferenceSet.removeAll(reader.getNormalProcessingRoleSet());
     nonTopicrefReferenceSet.removeAll(reader.getResourceOnlySet());
-    assertEquals(emptySet(), nonTopicrefReferenceSet);
+    assertEquals(Set.of(), nonTopicrefReferenceSet);
 
     assertFalse(reader.isDitaTopic());
     assertTrue(reader.isDitaMap());
