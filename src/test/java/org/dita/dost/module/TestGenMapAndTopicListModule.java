@@ -277,6 +277,35 @@ public class TestGenMapAndTopicListModule {
   }
 
   @Test
+  public void testConref_onlytopicInMap() throws Exception {
+    pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, Boolean.TRUE.toString());
+
+    final File inputDirParallel = new File("conref");
+    final File inputMapParallel = new File(inputDirParallel, "main.ditamap");
+    final File outDirParallel = new File(tempDir, "out");
+    final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
+    assertEquals(
+      Set.of(
+        "link-from-normal-ALSORESOURCEONLY.dita",
+        "conref-from-resource-only-ALSORESOURCEONLY.dita",
+        "resourceonly.dita",
+        "link-from-normal.dita",
+        "link-from-resource-only.dita",
+        "conref-from-normal.dita",
+        "conref-from-resource-only.dita",
+        "link-from-resource-only-ALSORESOURCEONLY.dita",
+        "conref-from-normal-ALSORESOURCEONLY.dita"
+      ),
+      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+    );
+    assertEquals(
+      Set.of("main.ditamap", "normal.dita"),
+      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+    );
+  }
+
+  @Test
   public void testConref_crawlMap() throws Exception {
     pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_CRAWL, "map");
 
@@ -326,6 +355,38 @@ public class TestGenMapAndTopicListModule {
         "link.ditamap",
         "link-from-normal.dita",
         "link-from-resource-only.dita",
+        "link-from-resource-only-ALSORESOURCEONLY.dita",
+        "normal.dita"
+      ),
+      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+    );
+  }
+
+  @Test
+  public void testConrefLink_onlytopicInMap() throws Exception {
+    pipelineInput.setAttribute(ANT_INVOKER_EXT_PARAM_ONLYTOPICINMAP, Boolean.TRUE.toString());
+
+    final File inputDirParallel = new File("conref");
+    final File inputMapParallel = new File(inputDirParallel, "link.ditamap");
+    final File outDirParallel = new File(tempDir, "out");
+    final Job job = generate(inputDirParallel, inputMapParallel, outDirParallel, tempDir);
+
+    assertEquals(
+      Set.of(
+        "conref-from-resource-only-ALSORESOURCEONLY.dita",
+        "resourceonly.dita",
+        "link-from-normal.dita",
+        "link-from-resource-only.dita",
+        "conref-from-normal.dita",
+        "conref-from-resource-only.dita",
+        "conref-from-normal-ALSORESOURCEONLY.dita"
+      ),
+      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+    );
+    assertEquals(
+      Set.of(
+        "link-from-normal-ALSORESOURCEONLY.dita",
+        "link.ditamap",
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "normal.dita"
       ),

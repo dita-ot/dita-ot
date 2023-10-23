@@ -122,10 +122,12 @@ public class GenListModuleReaderTest {
   @MethodSource("startElement_xrefArguments")
   public void startElement_xref(
     String crawl,
+    boolean onlyTopicInMap,
     Set<Reference> expNonConrefCopytoTargets,
     Set<URI> expNonTopicrefReferenceSet
   ) throws SAXException {
     job.setCrawl(crawl);
+    job.setOnlyTopicInMap(onlyTopicInMap);
 
     reader.startDocument();
     reader.startElement(
@@ -152,10 +154,13 @@ public class GenListModuleReaderTest {
     return List.of(
       Arguments.of(
         "topic",
+        false,
         Set.of(new Reference(inputDir.toURI().resolve("topic.dita"))),
         Set.of(inputDir.toURI().resolve("topic.dita"))
       ),
-      Arguments.of("map", Set.of(), Set.of())
+      Arguments.of("topic", true, Set.of(), Set.of(inputDir.toURI().resolve("topic.dita"))),
+      Arguments.of("map", false, Set.of(), Set.of()),
+      Arguments.of("map", true, Set.of(), Set.of())
     );
   }
 
