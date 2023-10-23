@@ -10,12 +10,14 @@ package org.dita.dost.module;
 
 import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -165,6 +167,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
     if (start != null) {
       job.setInputMap(start.uri);
+
+      final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
+      try {
+        Files.writeString(inputfile.toPath(), start.file.getPath());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     try {
