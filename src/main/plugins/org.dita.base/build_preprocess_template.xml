@@ -465,6 +465,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="result.rewrite-rule.class" value="${result.rewrite-rule.class}" if:set="result.rewrite-rule.class"/>
       </module>
     </pipeline>
+    <job-property dir="${dita.temp.dir}"/>
   </target>
   
   <!-- copy-files
