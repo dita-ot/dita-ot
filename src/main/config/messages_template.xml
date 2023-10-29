@@ -367,7 +367,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ071E" type="ERROR">
-    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <reason>Cannot find the specified DITAVAL file '%1'.</reason>
     <response></response>
   </message>
 
@@ -382,7 +382,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ074W" type="WARN">
-    <reason>The @rev attribute cannot be used with prop filter.</reason>
+    <reason>The @rev attribute cannot be used with the &lt;prop&gt; filter.</reason>
     <response></response>
   </message>
 
@@ -413,7 +413,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ080W" type="WARN">
     <reason>Integrator configuration '%1' has been deprecated.</reason>
-    <response>Use plugin configuration '%1' instead.</response>
+    <response>Use plug-in configuration '%1' instead.</response>
   </message>
 
   <message id="DOTJ081W" type="WARN">
@@ -532,7 +532,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX014E" type="ERROR">
     <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
-    <response>Conref references to a map element should contain '#' followed by an ID, such as mymap.ditamap#mytopicrefid.</response>
+    <response>Conref references to a map element should contain '#' followed by an ID, such as 'mymap.ditamap#mytopicrefid'.</response>
   </message>
 
   <message id="DOTX015E" type="ERROR">
@@ -674,7 +674,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX042I" type="INFO">
-    <reason>DITAVAL based flagging is not currently supported for inline phrases in XHTML; ignoring flag value on '%1' attribute.</reason>
+    <reason>DITAVAL-based flagging is not currently supported for inline phrases in XHTML; ignoring flag value on '%1' attribute.</reason>
     <response></response>
   </message>
 
@@ -694,7 +694,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX046W" type="WARN">
-    <reason>Area shape should be: default, rect, circle, poly, or blank (no value). The value '%1' is not recognized.</reason>
+    <reason>Area shape should be one of: default, rect, circle, poly, or blank (no value). The value '%1' is not recognized.</reason>
     <response></response>
   </message>
 
@@ -729,8 +729,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX055W" type="WARN">
-    <reason>Customized stylesheet uses deprecated template "flagit". Conditional processing is no longer supported using this template.</reason>
-    <response>Please update your stylesheet to use template "start-flagit" instead of deprecated template "flagit".</response>
+    <reason>A customized stylesheet uses the deprecated "flagit" template. Conditional processing is no longer supported using this template.</reason>
+    <response>Please update the stylesheet to use the "start-flagit" template instead of the "flagit" template.</response>
   </message>
 
   <message id="DOTX056W" type="WARN">
@@ -754,8 +754,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX061W" type="WARN">
-    <reason>The @id attribute value "%1" was used on a &lt;topicref&gt; element, but it did not reference a topic element. The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</reason>
-    <response></response>
+    <reason>The @id attribute value "%1" was used on a &lt;topicref&gt; element, but it did not reference a topic element.</reason>
+    <response>The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</response>
   </message>
 
   <message id="DOTX062I" type="INFO">
@@ -774,8 +774,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX065W" type="WARN">
-    <reason>Two unique source files each specify @copy-to="%2", which results in a collision. The value associated with
-      @href="%1" is ignored.</reason>
+    <reason>Two unique source files each specify a @copy-to attribute value "%2", which results in a collision. The value associated with
+      @href value "%1" will be ignored.</reason>
     <response></response>
   </message>
 
