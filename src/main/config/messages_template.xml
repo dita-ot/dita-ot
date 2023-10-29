@@ -214,7 +214,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
   <message id="DOTJ041E" type="ERROR">
-    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
+    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
     <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
@@ -240,7 +240,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ046E" type="ERROR">
-    <reason>The @conkeyref attribute value '%1' cannot be resolved because it does not contain a key or the key is not defined.</reason>
+    <reason>The @conkeyref attribute value "%1" cannot be resolved because it does not contain a key or the key is not defined.</reason>
     <response>The build will use the @conref attribute for fallback, if one exists.</response>
   </message>
 
@@ -297,7 +297,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ057E" type="ERROR">
-    <reason>The @id attribute value '%1' is not unique within the topic that contains it.</reason>
+    <reason>The @id attribute value "%1" is not unique within the topic that contains it.</reason>
     <response></response>
   </message>
 
@@ -373,12 +373,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ072E" type="ERROR">
     <reason>Email link without correct @format attribute.</reason>
-    <response>Using @format attribute value 'email'.</response>
+    <response>Using @format attribute value "email".</response>
   </message>
 
   <message id="DOTJ073E" type="ERROR">
     <reason>Email link without correct @scope attribute.</reason>
-    <response>Using @scope attribute value 'external'.</response>
+    <response>Using @scope attribute value "external".</response>
   </message>
 
   <message id="DOTJ074W" type="WARN">
@@ -388,7 +388,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ075W" type="WARN">
     <reason>Absolute link '%1' without correct @scope attribute.</reason>
-    <response>Using @scope attribute value 'external'.</response>
+    <response>Using @scope attribute value "external".</response>
   </message>
 
   <message id="DOTJ076W" type="WARN">
@@ -447,7 +447,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ087W" type="WARN">
-    <reason>Found @chunk attribute with value '%1' inside combine chunk.</reason>
+    <reason>Found @chunk attribute with value "%1" inside combine chunk.</reason>
     <response>Ignoring chunk operation.</response>
   </message>
 
@@ -467,7 +467,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX003I" type="INFO">
     <reason>The @anchorref attribute should either reference another DITA map or an Eclipse XML TOC file.</reason>
-    <response>The value '%1' does not appear to reference either.</response>
+    <response>The value "%1" does not appear to reference either.</response>
   </message>
 
   <message id="DOTX004I" type="INFO">
@@ -481,7 +481,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX006E" type="ERROR">
-    <reason>Unknown file name extension in @href attribute value '%1'.</reason>
+    <reason>Unknown file name extension in @href attribute value "%1".</reason>
     <response>References to non-DITA resources should set the @format attribute to match the resource (for example, 'txt', 'pdf', or 'html').</response>
   </message>
 
@@ -531,12 +531,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX014E" type="ERROR">
-    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
+    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
     <response>Conref references to a map element should contain '#' followed by an ID, such as mymap.ditamap#mytopicrefid.</response>
   </message>
 
   <message id="DOTX015E" type="ERROR">
-    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
+    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
     <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
@@ -554,12 +554,12 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- 018 currently not used, commented out due to SF bug 1771123 -->
   <message id="DOTX018I" type="INFO">
-    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a more specific '%2' topic. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
+    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a more specific '%2' topic. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
     <response></response>
   </message>
 
   <message id="DOTX019W" type="WARN">
-    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a '%2' topic. This may cause your links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
+    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a '%2' topic. This may cause your links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
     <response></response>
   </message>
 
@@ -754,7 +754,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX061W" type="WARN">
-    <reason>The @id attribute value '%1' was used on a &lt;topicref&gt; element, but it did not reference a topic element. The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</reason>
+    <reason>The @id attribute value "%1" was used on a &lt;topicref&gt; element, but it did not reference a topic element. The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</reason>
     <response></response>
   </message>
 
@@ -769,7 +769,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX064W" type="WARN">
-    <reason>The @copy-to attribute value '%1' uses the name of a resource that already exists, so this attribute is ignored.</reason>
+    <reason>The @copy-to attribute value "%1" uses the name of a resource that already exists, so this attribute is ignored.</reason>
     <response></response>
   </message>
 
@@ -825,7 +825,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX074W" type="WARN">
-    <reason>No formatting defined for unknown @class attribute value '%1'.</reason>
+    <reason>No formatting defined for unknown @class attribute value "%1".</reason>
     <response/>
   </message>
 
