@@ -739,7 +739,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX057W" type="WARN">
-    <reason>The link or cross-reference target '%1' cannot be found, which may cause errors in the output.</reason>
+    <reason>The link or cross reference target '%1' cannot be found, which may cause errors in the output.</reason>
     <response></response>
   </message>
 
