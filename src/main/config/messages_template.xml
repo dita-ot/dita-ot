@@ -16,7 +16,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA002F" type="FATAL">
-    <reason>Input file is not specified, or is specified using the wrong parameter.</reason>
+    <reason>Input not specified, or specified using the wrong parameter.</reason>
     <response></response>
   </message>
 
@@ -56,8 +56,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA069F" type="FATAL">
-    <reason>Input file '%1' cannot be located or read.</reason>
-    <response>Ensure that file was specified properly and that you have permission to access it.</response>
+    <reason>The input resource '%1' cannot be located or read.</reason>
+    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- Start of Java Messages -->
@@ -90,17 +90,17 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
   <message id="DOTJ009E" type="ERROR">
-    <reason>Cannot overwrite file '%1' with file '%2'. The modified result may not be consumed by the following steps in the transform pipeline.</reason>
-    <response>Check to see whether the file is locked by some other application during the transformation process.</response>
+    <reason>Cannot overwrite the '%1' resource with '%2'. The modified result may not be available to the following steps in the transformation.</reason>
+    <response>Check if the resource is locked by some other application during the transformation process.</response>
   </message>
 
   <message id="DOTJ012F" type="FATAL">
-    <reason>Failed to parse the input file '%1'.</reason>
+    <reason>Failed to parse the input resource '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTJ013E" type="ERROR">
-    <reason>Failed to parse the referenced file '%1'.</reason>
+    <reason>Failed to parse the referenced resource '%1'.</reason>
     <response></response>
   </message>
 
@@ -120,24 +120,24 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ021E" type="ERROR">
-    <reason>File '%1' will not generate output because because all content has been filtered out by DITAVAL "exclude" conditions, or because the file is not valid DITA.</reason>
-    <response></response>
+    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
+    <response>Please check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
-    <reason>File '%1' will not generate output since it is invalid or all of its content has been filtered out by the DITAVAL file.</reason>
-    <response>Please check the '%1' file and the DITAVAL file to see if this is the intended result.</response>
+    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
+    <response>Please check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <message id="DOTJ022F" type="FATAL">
-    <reason>Failed to parse the input file '%1' because all of its content has been filtered out.</reason>
-    <response>This will happen if the input file has filter conditions on the root element, and a DITAVAL file excludes all content based on those conditions.</response>
+    <reason>Failed to parse the input resource '%1' because all of its content has been filtered out.</reason>
+    <response>This will happen if the resource has filter conditions on the root element, and a DITAVAL file excludes all content based on those conditions.</response>
   </message>
 
   <message id="DOTJ023E" type="ERROR">
-    <reason>Failed to get the specified image file '%1', so it will not be included with your output.</reason>
-    <response></response>
+    <reason>The specified image file '%1' is not available. It will not be included in the output.</reason>
+    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ025E" type="ERROR">
@@ -151,8 +151,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ028E" type="ERROR">
-    <reason>No @format attribute was found on a reference to file '%1', which does not appear to be a DITA file.</reason>
-    <response>If this is not a DITA file, set the @format attribute to an appropriate value, otherwise set the @format attribute to "dita".</response>
+    <reason>No @format attribute was found on a reference to the '%1' resource, which does not appear to be DITA.</reason>
+    <response>If this is not a DITA resource, set the @format attribute to an appropriate value; otherwise set the @format attribute to "dita".</response>
   </message>
 
   <!-- Deprecated since 3.5 -->
@@ -179,18 +179,17 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ034F" type="FATAL">
-    <reason>Failed to parse the input file '%1' (the content of the file is not valid).</reason>
-    <response>If the input file '%1' does not have a DOCTYPE declaration, please make sure that all @class attributes are present in the file.</response>
+    <reason>Failed to parse the input resource '%1' (the content is not valid).</reason>
+    <response>If '%1' does not have a DOCTYPE declaration, please make sure that all @class attributes are present.</response>
   </message>
 
-  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ035F" type="FATAL">
-    <reason>The file '%1' is outside the scope of the input resource directory.</reason>
-    <response>To lower the severity level, use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the referenced file '%1' into the directory where the input map or topic is stored.</response>
+    <reason>The '%1' resource is outside the scope of the input directory.</reason>
+    <response>To lower the severity level, use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the '%1' resource to the directory where the input map or topic is stored.</response>
   </message>
 
   <message id="DOTJ036W" type="WARN">
-    <reason>The file '%1' is outside the scope of the input resource directory.</reason>
+    <reason>The '%1' resource is outside the scope of the input directory.</reason>
     <response></response>
   </message>
 
@@ -227,7 +226,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ043W" type="WARN">
-    <reason>The conref push function is trying to replace an element that does not exist (element '%1' in file '%2').</reason>
+    <reason>The conref push function is trying to replace an element that does not exist ('%1' element in the '%2' resource).</reason>
     <response></response>
   </message>
 
@@ -238,7 +237,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ045I" type="INFO">
-    <reason>The key '%1' is defined more than once in the same map file.</reason>
+    <reason>The key '%1' is defined more than once in the same map.</reason>
     <response></response>
   </message>
 
@@ -270,17 +269,17 @@ See the accompanying LICENSE file for applicable license.
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
     <reason>Unable to load target for coderef '%1'.</reason>
-    <response></response>
+    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ052E" type="ERROR">
     <reason>Code reference charset '%1' not supported.</reason>
-    <response>See the DITA-OT documentation for supported charset values on the @format attribute.</response>
+    <response>See the DITA-OT documentation for supported character set values on the @format attribute.</response>
   </message>
 
   <!-- Obsolete since 2.3 -->
   <message id="DOTJ053W" type="WARN">
-    <reason>Input file '%1' is not valid DITA file name.</reason>
+    <reason>The input resource '%1' is not a valid DITA filename.</reason>
     <response>Please check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
   </message>
 
@@ -405,12 +404,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ078F" type="FATAL">
-    <reason>Input file '%1' could not be loaded.</reason>
+    <reason>The input resource '%1' could not be loaded.</reason>
     <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
   <message id="DOTJ079E" type="ERROR">
-    <reason>File '%1' could not be loaded.</reason>
+    <reason>The '%1' resource could not be loaded.</reason>
     <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
@@ -475,7 +474,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX004I" type="INFO">
     <reason>Found a &lt;navref&gt; element that does not reference anything.</reason>
-    <response>The &lt;navref&gt; element should either reference another DITA map or an Eclipse XML file.</response>
+    <response>The &lt;navref&gt; element should either reference another DITA map or an Eclipse XML TOC file.</response>
   </message>
 
   <message id="DOTX005E" type="ERROR">
@@ -484,7 +483,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX006E" type="ERROR">
-    <reason>Unknown file extension in href='%1'.</reason>
+    <reason>Unknown file name extension in @href attribute value '%1'.</reason>
     <response>References to non-DITA resources should set the @format attribute to match the resource (for example, 'txt', 'pdf', or 'html').</response>
   </message>
 
@@ -495,13 +494,13 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
   <message id="DOTX008E" type="ERROR">
-    <reason>File '%1' does not exist or cannot be loaded.</reason>
-    <response></response>
+    <reason>The resource '%1' cannot be loaded.</reason>
+    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- As of 2012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
   <message id="DOTX008W" type="WARN">
-    <reason>File '%1' cannot be loaded, and no navigation title is specified for the table of contents.</reason>
+    <reason>The resource '%1' cannot be loaded, and no navigation title is specified for the table of contents.</reason>
     <response></response>
   </message>
 
@@ -517,8 +516,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for the @conref="%1" reference. Only the first will be used.</reason>
-    <response>Remove the duplicate ID in the referenced file.</response>
+    <reason>There is more than one possible target for the @conref attribute value "%1". Only the first will be used.</reason>
+    <response>Remove the duplicate ID in the referenced resource.</response>
   </message>
 
   <!-- This message can no longer appear, though the template for producing it remains in conrefImpl.xsl.
@@ -622,7 +621,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX031E" type="ERROR">
-    <reason>The file '%1' is not available to resolve link information.</reason>
+    <reason>The '%1' resource is not available to resolve link information.</reason>
     <response></response>
   </message>
 
@@ -717,7 +716,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX052W" type="WARN">
-    <reason>No string named '%1' was found when creating generated text; using the value '%1' in your output file.</reason>
+    <reason>No string named '%1' was found when creating generated text; using the value '%1' in the output.</reason>
     <response></response>
   </message>
 
@@ -737,12 +736,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX056W" type="WARN">
-    <reason>The file '%1' is not available to resolve link information.</reason>
+    <reason>The '%1' resource is not available to resolve link information.</reason>
     <response></response>
   </message>
 
   <message id="DOTX057W" type="WARN">
-    <reason>The link or cross reference target '%1' cannot be found, which may cause errors creating links or cross references in your output file.</reason>
+    <reason>The link or cross-reference target '%1' cannot be found, which may cause errors in the output.</reason>
     <response></response>
   </message>
 
@@ -768,11 +767,11 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX063W" type="WARN">
     <reason>The DITA document '%1' is linked to from your content, but not referenced by a &lt;topicref&gt; element in the map.</reason>
-    <response>Include the topic in your map file to avoid a broken link.</response>
+    <response>Include the topic in your map to avoid a broken link.</response>
   </message>
 
   <message id="DOTX064W" type="WARN">
-    <reason>The @copy-to attribute value '%1' uses the name of a file that already exists, so this attribute is ignored.</reason>
+    <reason>The @copy-to attribute value '%1' uses the name of a resource that already exists, so this attribute is ignored.</reason>
     <response></response>
   </message>
 
