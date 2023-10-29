@@ -21,7 +21,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA003F" type="FATAL">
-    <reason>Cannot find the user specified XSLT stylesheet '%1'.</reason>
+    <reason>Cannot find the user-specified XSLT stylesheet '%1'.</reason>
     <response></response>
   </message>
 
@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA013F" type="FATAL">
-    <reason>Cannot find the specified DITAVAL '%1'.</reason>
+    <reason>Cannot find the specified DITAVAL file '%1'.</reason>
     <response></response>
   </message>
 
@@ -88,9 +88,8 @@ See the accompanying LICENSE file for applicable license.
     <response>The first encountered condition will be used.</response>
   </message>
 
-  <!-- Would like to improve / shorten DOTJ009E but not sure how to modify. -->
   <message id="DOTJ009E" type="ERROR">
-    <reason>Cannot overwrite the '%1' resource with '%2'. The modified result may not be available to the following steps in the transformation.</reason>
+    <reason>Cannot overwrite the '%1' resource with '%2'. The modified result may not be available to the following transformation steps.</reason>
     <response>Check if the resource is locked by some other application during the transformation process.</response>
   </message>
 
@@ -111,7 +110,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ018I" type="INFO">
     <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
-    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the DITA-OT documentation.</response>
+    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the documentation.</response>
   </message>
 
   <message id="DOTJ020W" type="WARN">
@@ -141,13 +140,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ025E" type="ERROR">
-    <reason>The input to the "topic merge" transform process cannot be found.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
+    <reason>The input to the "topic merge" process cannot be found.</reason>
+    <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ026E" type="ERROR">
-    <reason>The "topic merge" did not generate any output.</reason>
-    <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
+    <reason>The "topic merge" process did not generate any output.</reason>
+    <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
@@ -167,14 +166,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ031I" type="INFO">
-    <reason>No specified rule for '%1' was found in the DITAVAL file. This value will use the default action, or a parent prop action if specified.</reason>
-    <response>To remove this message, you can specify a rule for '%1' in the DITAVAL file.</response>
+    <reason>No rule for '%1' was found in the DITAVAL file. This value will use the default action, or a parent prop action if specified.</reason>
+    <response>To remove this message, specify a rule for '%1' in the DITAVAL file.</response>
   </message>
 
-  <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ033E" type="ERROR">
-    <reason>No valid content is found in topicref '%1' during chunk processing.</reason>
-    <response>Please specify an existing and valid topic for the topicref.</response>
+    <reason>No valid content found in topicref '%1' during chunk processing.</reason>
+    <response>Please specify an existing and valid topic for the topic reference.</response>
   </message>
 
   <!-- 2012-06-12: Still need to reproduce and edit this message -->
@@ -274,7 +272,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ052E" type="ERROR">
     <reason>Code reference charset '%1' not supported.</reason>
-    <response>See the DITA-OT documentation for supported character set values on the @format attribute.</response>
+    <response>See the documentation for supported character set values on the @format attribute.</response>
   </message>
 
   <!-- Obsolete since 2.3 -->
@@ -315,7 +313,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ060W" type="WARN">
     <reason>Key '%1' was used in conkeyref but is not bound to a DITA topic or map.</reason>
-    <response>Cannot resolve conkeyref value '%2' as a valid conref reference.</response>
+    <response>Cannot resolve conkeyref value '%2' as a valid content reference.</response>
   </message>
 
   <message id="DOTJ061E" type="ERROR">
@@ -330,7 +328,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ063E" type="ERROR">
     <reason>The @cols attribute is set to '%1' but the number of &lt;colspec&gt; elements was '%2'.</reason>
-    <response></response>
+    <response>Please verify the number of columns in the table.</response>
   </message>
 
   <message id="DOTJ064W" type="WARN">
@@ -345,7 +343,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ066E" type="ERROR">
     <reason>No @id attribute on topic type element '%1'.</reason>
-    <response>Using generated id '%2'.</response>
+    <response>Using generated ID '%2'.</response>
   </message>
 
   <message id="DOTJ067E" type="ERROR">
