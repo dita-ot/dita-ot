@@ -31,7 +31,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFJ001E" type="ERROR">
     <reason>The PDF indexing process cannot find the proper sort location for '%1', so the term has been dropped from the index.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="PDFJ002E" type="ERROR">
@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFJ003I" type="INFO">
     <reason>Index entry '%1' will be sorted under the "Special characters" heading.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <!-- Start of XSL Messages -->
@@ -74,22 +74,22 @@ See the accompanying LICENSE file for applicable license.
   <!-- PDFX006E cannot appear with version 2.2; commenting out. Should be removed when it is removed from the code.
   <message id="PDFX006E" type="ERROR">
     <reason>Number of columns must be specified.</reason>
-    <response/>
+    <response></response>
   </message>-->
 
   <message id="PDFX007W" type="WARN">
     <reason>Found an index term with end="%1", but no starting term was found for this entry.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="PDFX008W" type="WARN">
     <reason>Font definition not found for the logical name or alias '%1'.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="PDFX009E" type="ERROR">
     <reason>Attribute set reflection cannot handle the XSLT element &lt;%1&gt;.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="PDFX011E" type="ERROR">
@@ -99,12 +99,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFX012E" type="ERROR">
     <reason>Found a table row with more entries than allowed.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="PDFX013F" type="FATAL">
     <reason>The PDF file '%1' cannot be generated.</reason>
-    <response/>
+    <response></response>
   </message>
 
 </messages>

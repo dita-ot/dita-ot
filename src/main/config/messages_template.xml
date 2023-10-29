@@ -806,7 +806,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX071E" type="ERROR">
     <reason>Conref range: Unable to find conref range end element with ID '%1'.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="DOTX071W" type="WARN">
@@ -816,17 +816,17 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX072I" type="INFO">
     <reason>Ignoring navtitle within topicgroup.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="DOTX073I" type="INFO">
     <reason>Removing broken link to '%1'.</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="DOTX074W" type="WARN">
     <reason>No formatting defined for unknown @class attribute value "%1".</reason>
-    <response/>
+    <response></response>
   </message>
 
   <message id="DOTX075W" type="WARN">
