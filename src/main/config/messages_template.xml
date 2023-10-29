@@ -489,7 +489,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX007I" type="INFO">
     <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to '%1' will be ignored.</reason>
-    <response>To remove this message, you can set @toc="no" or @processing-role="resource-only" on the topicref.</response>
+    <response>To remove this message, set the @toc attribute to "no" or the @processing-role attribute to "resource-only" on the topic reference.</response>
   </message>
 
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
