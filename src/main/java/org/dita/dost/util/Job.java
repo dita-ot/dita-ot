@@ -654,6 +654,82 @@ public final class Job {
       this.result = src;
     }
 
+    public URI src() {
+      return src;
+    }
+
+    public URI uri() {
+      return uri;
+    }
+
+    public File file() {
+      return file;
+    }
+
+    public URI result() {
+      return result;
+    }
+
+    public String format() {
+      return format;
+    }
+
+    public boolean hasConref() {
+      return hasConref;
+    }
+
+    public boolean isChunked() {
+      return isChunked;
+    }
+
+    public boolean hasLink() {
+      return hasLink;
+    }
+
+    public boolean isResourceOnly() {
+      return isResourceOnly;
+    }
+
+    public boolean isTarget() {
+      return isTarget;
+    }
+
+    public boolean isConrefPush() {
+      return isConrefPush;
+    }
+
+    public boolean hasKeyref() {
+      return hasKeyref;
+    }
+
+    public boolean hasCoderef() {
+      return hasCoderef;
+    }
+
+    public boolean isSubjectScheme() {
+      return isSubjectScheme;
+    }
+
+    public boolean isSubtarget() {
+      return isSubtarget;
+    }
+
+    public boolean isFlagImage() {
+      return isFlagImage;
+    }
+
+    public boolean isOutDita() {
+      return isOutDita;
+    }
+
+    public boolean isInput() {
+      return isInput;
+    }
+
+    public boolean isInputResource() {
+      return isInputResource;
+    }
+
     @Override
     public String toString() {
       return (
@@ -806,6 +882,82 @@ public final class Job {
         isOutDita = orig.isOutDita;
         isInput = orig.isInput;
         isInputResource = orig.isInputResource;
+      }
+
+      public URI src() {
+        return src;
+      }
+
+      public URI uri() {
+        return uri;
+      }
+
+      public File file() {
+        return file;
+      }
+
+      public URI result() {
+        return result;
+      }
+
+      public String format() {
+        return format;
+      }
+
+      public boolean hasConref() {
+        return hasConref;
+      }
+
+      public boolean isChunked() {
+        return isChunked;
+      }
+
+      public boolean hasLink() {
+        return hasLink;
+      }
+
+      public boolean isResourceOnly() {
+        return isResourceOnly;
+      }
+
+      public boolean isTarget() {
+        return isTarget;
+      }
+
+      public boolean isConrefPush() {
+        return isConrefPush;
+      }
+
+      public boolean hasKeyref() {
+        return hasKeyref;
+      }
+
+      public boolean hasCoderef() {
+        return hasCoderef;
+      }
+
+      public boolean isSubjectScheme() {
+        return isSubjectScheme;
+      }
+
+      public boolean isSubtarget() {
+        return isSubtarget;
+      }
+
+      public boolean isFlagImage() {
+        return isFlagImage;
+      }
+
+      public boolean isOutDita() {
+        return isOutDita;
+      }
+
+      public boolean isInput() {
+        return isInput;
+      }
+
+      public boolean isInputResource() {
+        return isInputResource;
       }
 
       /**
