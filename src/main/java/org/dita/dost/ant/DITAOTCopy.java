@@ -7,7 +7,8 @@
  */
 package org.dita.dost.ant;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
+import static org.dita.dost.util.Constants.COMMA;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +18,6 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
@@ -134,7 +134,11 @@ public final class DITAOTCopy extends Task {
   private List<String> getIncludes() throws IOException {
     if (includes == null && includesFile == null) {
       final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-      return job.getFileInfo(fi -> fi.isFlagImage).stream().map(fi -> fi.file.toString()).collect(Collectors.toList());
+      return job
+        .getFileInfo(fi -> fi.isFlagImage())
+        .stream()
+        .map(fi -> fi.file().toString())
+        .collect(Collectors.toList());
     }
     if (includesFile != null) {
       final List<String> res = new ArrayList<>();

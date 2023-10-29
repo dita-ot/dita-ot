@@ -583,7 +583,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
             .src(currentFile)
             .format(ref.format)
             .build();
-          fileinfos.put(i.src, Collections.singletonList(i));
+          fileinfos.put(i.src(), Collections.singletonList(i));
         }
       } else {
         final FileInfo fi = job.getFileInfo(f);
@@ -599,7 +599,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       }
     } else if (listFilter.isDitaMap()) {
       final FileInfo fi = job.getFileInfo(currentFile);
-      if (fi != null && !Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP)) {
+      if (fi != null && !Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP)) {
         final FileInfo i = new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_DITAMAP).build();
         job.add(i);
       }
@@ -710,7 +710,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       createOrUpdateFileInfo(
         file,
         fi -> {
-          if (isFormatDita(fi.format)) {
+          if (isFormatDita(fi.format())) {
             fi.format = ATTR_FORMAT_VALUE_DITA;
           }
         }
@@ -720,7 +720,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       createOrUpdateFileInfo(
         file,
         fi -> {
-          if (fi.format == null) {
+          if (fi.format() == null) {
             fi.format = ATTR_FORMAT_VALUE_DITAMAP;
           }
         }
@@ -760,7 +760,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         file,
         fi -> {
           fi.isSubtarget = true;
-          if (fi.format == null) {
+          if (fi.format() == null) {
             fi.format = PR_D_CODEREF.localName;
           }
         }
@@ -791,9 +791,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       .values()
       .stream()
       .flatMap(Collection::stream)
-      .filter(fs -> !failureList.contains(fs.src))
+      .filter(fs -> !failureList.contains(fs.src()))
       .forEach(fs -> {
-        final URI src = filteredCopyTo.get(fs.src);
+        final URI src = filteredCopyTo.get(fs.src());
         // correct copy-to
         if (src != null) {
           final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
@@ -808,14 +808,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       final URI src = filteredCopyTo.get(target);
       final FileInfo fi = new FileInfo.Builder().result(target).uri(tmp).build();
       // FIXME: what's the correct value for this? Accept all?
-      if (formatFilter.test(fi.format) || fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+      if (formatFilter.test(fi.format()) || fi.format() == null || fi.format().equals(ATTR_FORMAT_VALUE_DITA)) {
         job.add(fi);
       }
     }
 
     for (URI f : additionalResourcesSet) {
       final FileInfo fi = job.getFileInfo(f);
-      if (!fi.isResourceOnly) {
+      if (!fi.isResourceOnly()) {
         fi.isInputResource = true;
       }
     }
@@ -835,8 +835,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final Set<URI> fileinfoTargets = fileInfos
       .stream()
       .flatMap(Collection::stream)
-      .filter(fi -> fi.src.equals(fi.result))
-      .map(fi -> fi.result)
+      .filter(fi -> fi.src().equals(fi.result()))
+      .map(fi -> fi.result())
       .collect(Collectors.toSet());
     return copyTo
       .entrySet()
@@ -894,14 +894,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       return fileInfos.get(f);
     } else {
       final Collection<FileInfo> prevs = job
-        .getFileInfo(fi -> Objects.equals(fi.src, f))
+        .getFileInfo(fi -> Objects.equals(fi.src(), f))
         .stream()
         .map(prev -> {
           FileInfo.Builder b = new FileInfo.Builder(prev);
-          if (prev.src == null) {
+          if (prev.src() == null) {
             b = b.src(f);
           }
-          if (prev.uri == null) {
+          if (prev.uri() == null) {
             b = b.uri(tempFileNameScheme.generateTempFileName(f));
           }
           return b.build();

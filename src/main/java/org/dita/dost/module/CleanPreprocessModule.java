@@ -118,8 +118,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       final Collection<FileInfo> original = job
         .getFileInfo()
         .stream()
-        .filter(fi -> fi.result != null)
-        .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
+        .filter(fi -> fi.result() != null)
+        .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result())).build())
         .collect(Collectors.toList());
       original.forEach(fi -> job.remove(fi));
       // rewrite results
@@ -131,13 +131,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       topicFilter.setJob(tempJob);
       for (final FileInfo fi : rewritten) {
         try {
-          assert !fi.result.isAbsolute();
-          if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-            logger.debug("Skip format " + fi.format);
+          assert !fi.result().isAbsolute();
+          if (fi.format() != null && (fi.format().equals("coderef") || fi.format().equals("image"))) {
+            logger.debug("Skip format " + fi.format());
           } else {
-            final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
+            final File srcFile = new File(job.tempDirURI.resolve(fi.uri()));
             if (job.getStore().exists(srcFile.toURI())) {
-              final File destFile = new File(job.tempDirURI.resolve(fi.result));
+              final File destFile = new File(job.tempDirURI.resolve(fi.result()));
               final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
               if (!processingPipe.isEmpty()) {
                 logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
@@ -152,10 +152,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
               }
             }
           }
-          final FileInfo res = FileInfo.builder(fi).uri(fi.result).result(base.resolve(fi.result)).build();
+          final FileInfo res = FileInfo.builder(fi).uri(fi.result()).result(base.resolve(fi.result())).build();
           job.add(res);
         } catch (final IOException e) {
-          logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
+          logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri()) + ": " + e.getMessage(), e);
         }
       }
     }
@@ -164,13 +164,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     job.setInputDir(base);
 
     // start map
-    final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
+    final FileInfo start = job.getFileInfo(f -> f.isInput()).iterator().next();
     if (start != null) {
-      job.setInputMap(start.uri);
+      job.setInputMap(start.uri());
 
       final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
       try {
-        Files.writeString(inputfile.toPath(), start.file.getPath());
+        Files.writeString(inputfile.toPath(), start.file().getPath());
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -229,10 +229,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   @VisibleForTesting
   URI getBaseDir() {
     final Collection<FileInfo> fis = job.getFileInfo();
-    URI baseDir = job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
+    URI baseDir = job.getFileInfo(fi -> fi.isInput()).iterator().next().result().resolve(".");
     for (final FileInfo fi : fis) {
-      if (fi.result != null) {
-        final URI res = fi.result.resolve(".");
+      if (fi.result() != null) {
+        final URI res = fi.result().resolve(".");
         baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
       }
     }
@@ -295,16 +295,18 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
     final List<XMLFilter> res = new ArrayList<>();
 
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    if (
+      fi.format() == null || fi.format().equals(ATTR_FORMAT_VALUE_DITA) || fi.format().equals(ATTR_FORMAT_VALUE_DITAMAP)
+    ) {
       filter.setCurrentFile(srcFile.toURI());
       filter.setDestFile(destFile.toURI());
       res.add(filter);
     }
 
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+    if (fi.format() == null || fi.format().equals(ATTR_FORMAT_VALUE_DITA)) {
       topicFilter.setFileInfo(fi);
       res.add(topicFilter);
-    } else if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    } else if (fi.format().equals(ATTR_FORMAT_VALUE_DITAMAP)) {
       res.add(mapFilter);
     }
 

@@ -8,7 +8,7 @@
 package org.dita.dost.ant;
 
 import static org.dita.dost.ant.ExtensibleAntInvoker.getJob;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
 
 import java.io.File;
 import org.apache.tools.ant.Project;
@@ -68,8 +68,8 @@ public final class CheckLang extends Task {
       } else {
         //parse topic files
         for (final FileInfo f : job.getFileInfo()) {
-          if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-            final File topicFile = new File(job.tempDir, f.file.getPath());
+          if (ATTR_FORMAT_VALUE_DITA.equals(f.format())) {
+            final File topicFile = new File(job.tempDir, f.file().getPath());
             if (topicFile.exists()) {
               job.getStore().transform(topicFile.toURI(), parser);
               langCode = parser.getLangCode();

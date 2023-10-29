@@ -95,7 +95,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
               dstFi = generateCopyToTarget(srcFi, count);
             }
             copyToMap.put(dstFi, srcFi);
-            final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri);
+            final URI dstTempAbs = job.tempDirURI.resolve(dstFi.uri());
             final URI targetRel = getRelativePath(currentFile, dstTempAbs);
             final URI target = setFragment(targetRel, href.getFragment());
 
@@ -172,9 +172,9 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
         ext.append(Integer.toString(i));
       }
       ext.append('.');
-      ext.append(getExtension(srcFi.result.toString()));
+      ext.append(getExtension(srcFi.result().toString()));
 
-      final URI dstResult = toURI(replaceExtension(srcFi.result.toString(), ext.toString()));
+      final URI dstResult = toURI(replaceExtension(srcFi.result().toString(), ext.toString()));
       final URI dstTemp = tempFileNameScheme.generateTempFileName(dstResult);
       if (job.getFileInfo(dstTemp) == null) {
         return new FileInfo.Builder(srcFi).uri(dstTemp).result(dstResult).build();

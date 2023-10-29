@@ -696,11 +696,11 @@ public final class ExtensibleAntInvoker extends Task {
 
     public Predicate<FileInfo> toFilter() {
       return f ->
-        (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA)) &&
-        (hasConref == null || f.hasConref == hasConref) &&
-        (isInput == null || f.isInput == isInput) &&
-        (isInputResource == null || f.isInputResource == isInputResource) &&
-        (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+        (formats.isEmpty() || formats.contains(f.format() != null ? f.format() : ATTR_FORMAT_VALUE_DITA)) &&
+        (hasConref == null || f.hasConref() == hasConref) &&
+        (isInput == null || f.isInput() == isInput) &&
+        (isInputResource == null || f.isInputResource() == isInputResource) &&
+        (isResourceOnly == null || f.isResourceOnly() == isResourceOnly);
     }
   }
 

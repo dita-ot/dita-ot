@@ -55,8 +55,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     init(input);
     try {
-      final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-      final URI mapFile = job.tempDirURI.resolve(in.uri);
+      final FileInfo in = job.getFileInfo(fi -> fi.isInput()).iterator().next();
+      final URI mapFile = job.tempDirURI.resolve(in.uri());
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
@@ -97,7 +97,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Collection<FileInfo> topics = job.getFileInfo(DitaUtils::isDitaFormat);
       (parallel ? topics.parallelStream() : topics.stream()).forEach(fi -> {
           try {
-            final URI uri = job.tempDirURI.resolve(fi.uri);
+            final URI uri = job.tempDirURI.resolve(fi.uri());
             final Document doc = job.getStore().getDocument(uri);
             rewriteTopicLinks(doc, uri, rewriteMapAll);
             job.getStore().writeDocument(doc, uri);
@@ -237,10 +237,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     throws IOException {
     logger.info("Write {0}", chunk.dst());
     if (chunk.dst() != null && !Objects.equals(chunk.src(), chunk.dst())) {
-      final URI src = job.tempDirURI.resolve(fileInfo.uri);
+      final URI src = job.tempDirURI.resolve(fileInfo.uri());
       final URI dst = chunk.dst();
       final URI tmp = job.tempDirURI.relativize(dst);
-      final URI result = addSuffixToPath(fileInfo.result, SPLIT_CHUNK_DUPLICATE_SUFFIX);
+      final URI result = addSuffixToPath(fileInfo.result(), SPLIT_CHUNK_DUPLICATE_SUFFIX);
       final FileInfo adoptedFileInfo = new Builder(fileInfo).uri(tmp).result(result).build();
       job.add(adoptedFileInfo);
     }
@@ -302,10 +302,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
         doc.appendChild(adoptedNestedTopic);
         cascadeNamespaces(adoptedNestedTopic, topic);
-        final URI src = job.tempDirURI.resolve(fileInfo.uri);
+        final URI src = job.tempDirURI.resolve(fileInfo.uri());
         final URI dst = addSuffixToPath(src, id);
         final URI tmp = job.tempDirURI.relativize(dst);
-        final URI result = addSuffixToPath(fileInfo.result, id);
+        final URI result = addSuffixToPath(fileInfo.result(), id);
         final FileInfo adoptedFileInfo = new Builder(fileInfo).uri(tmp).result(result).build();
         job.add(adoptedFileInfo);
         try {

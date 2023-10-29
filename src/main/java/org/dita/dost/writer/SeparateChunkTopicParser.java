@@ -255,9 +255,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     final FileInfo srcFi = job.getFileInfo(base);
     final URI dst;
     if (file != null) {
-      dst = srcFi.result.resolve(file);
+      dst = srcFi.result().resolve(file);
     } else {
-      dst = setPath(srcFi.result, srcFi.result.getPath() + FILE_EXTENSION_CHUNK);
+      dst = setPath(srcFi.result(), srcFi.result().getPath() + FILE_EXTENSION_CHUNK);
     }
     final URI tmp = tempFileNameScheme.generateTempFileName(dst);
 

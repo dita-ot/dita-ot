@@ -61,8 +61,8 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
   @Override
   public void setJob(final Job job) {
     super.setJob(job);
-    final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    baseURI = job.tempDir.toURI().resolve(in.uri);
+    final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput()).iterator().next();
+    baseURI = job.tempDir.toURI().resolve(in.uri());
   }
 
   /**

@@ -49,13 +49,13 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
       throw new IllegalStateException("Logger not set");
     }
     final Collection<FileInfo> images = job.getFileInfo(f ->
-      ATTR_FORMAT_VALUE_IMAGE.equals(f.format) || ATTR_FORMAT_VALUE_HTML.equals(f.format)
+      ATTR_FORMAT_VALUE_IMAGE.equals(f.format()) || ATTR_FORMAT_VALUE_HTML.equals(f.format())
     );
     if (!images.isEmpty()) {
       final File outputDir = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_OUTPUTDIR));
       final Predicate<FileInfo> filter = fileInfoFilter != null
         ? fileInfoFilter
-        : f -> !f.isResourceOnly && ATTR_FORMAT_VALUE_DITA.equals(f.format);
+        : f -> !f.isResourceOnly() && ATTR_FORMAT_VALUE_DITA.equals(f.format());
       final Map<URI, Attributes> cache = new ConcurrentHashMap<>();
 
       if (parallel) {
@@ -69,7 +69,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
           .getFileInfo(filter)
           .stream()
           .parallel()
-          .map(f -> new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile())
+          .map(f -> new File(job.tempDirURI.resolve(f.uri())).getAbsoluteFile())
           .forEach(filename -> {
             final ImageMetadataFilter writer = pool.borrowObject();
             try {
@@ -83,7 +83,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
         writer.setLogger(logger);
         writer.setJob(job);
         for (final FileInfo f : job.getFileInfo(filter)) {
-          writer.write(new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile());
+          writer.write(new File(job.tempDirURI.resolve(f.uri())).getAbsoluteFile());
         }
       }
 
@@ -110,7 +110,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
       }
       final FileInfo fi = job.getFileInfo(rel);
       if (fi != null) {
-        logger.debug("Set " + fi.uri + " format to " + ATTR_FORMAT_VALUE_IMAGE);
+        logger.debug("Set " + fi.uri() + " format to " + ATTR_FORMAT_VALUE_IMAGE);
         job.add(new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_IMAGE).build());
       }
     }

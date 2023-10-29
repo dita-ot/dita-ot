@@ -21,7 +21,6 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 
@@ -43,7 +42,7 @@ final class IncludeXml {
     final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     final Job.FileInfo fileInfo = job.getFileInfo(stripFragment(currentFile.resolve(hrefValue)));
     try {
-      final XdmNode doc = job.getStore().getImmutableNode(fileInfo.src);
+      final XdmNode doc = job.getStore().getImmutableNode(fileInfo.src());
       final XdmNode src;
       if (hrefValue.getFragment() != null) {
         final XdmItem id = XdmAtomicValue.makeAtomicValue(hrefValue.getFragment());
@@ -55,7 +54,7 @@ final class IncludeXml {
 
       job.getStore().writeDocument(src, new IncludeFilter(contentHandler));
     } catch (IOException e) {
-      logger.error("Failed to process include {}", fileInfo.src, e);
+      logger.error("Failed to process include {}", fileInfo.src(), e);
       return false;
     }
     return true;

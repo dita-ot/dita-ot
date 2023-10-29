@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -32,7 +31,10 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
@@ -284,7 +286,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     final URI fileName;
     final FileInfo fi = job.getFileInfo(currentFile.resolve(href));
     if (fi != null) {
-      fileName = job.getInputDir().relativize(fi.src);
+      fileName = job.getInputDir().relativize(fi.src());
     } else {
       fileName = href;
     }
@@ -302,7 +304,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     if (fi != null) {
-      final URI srcTempURI = job.tempDirURI.resolve(fi.uri);
+      final URI srcTempURI = job.tempDirURI.resolve(fi.uri());
       if (exists(srcTempURI)) {
         logger.debug("Found " + srcTempURI);
         return srcTempURI;
