@@ -30,7 +30,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Start of Java Messages -->
 
   <message id="PDFJ001E" type="ERROR">
-    <reason>The PDF indexing process could not find the proper sort location for '%1', so the term has been dropped from the index.</reason>
+    <reason>The PDF indexing process cannot find the proper sort location for '%1', so the term has been dropped from the index.</reason>
     <response/>
   </message>
 
@@ -67,7 +67,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="PDFX005F" type="ERROR">
-    <reason>The topic reference href="%1" could not be found.</reason>
+    <reason>The topic reference href="%1" cannot be found.</reason>
     <response>Please correct the reference, or set the @scope or @format attribute if the target is not a local DITA topic.</response>
   </message>
 
@@ -103,7 +103,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="PDFX013F" type="FATAL">
-    <reason>The PDF file '%1' could not be generated.</reason>
+    <reason>The PDF file '%1' cannot be generated.</reason>
     <response/>
   </message>
 

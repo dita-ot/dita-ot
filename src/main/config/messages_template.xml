@@ -141,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ025E" type="ERROR">
-    <reason>The input to the "topic merge" transform process could not be found.</reason>
+    <reason>The input to the "topic merge" transform process cannot be found.</reason>
     <response>Correct any earlier transform errors and try the build again, or see the DITA-OT documentation for additional causes.</response>
   </message>
 
@@ -404,12 +404,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ078F" type="FATAL">
-    <reason>The input resource '%1' could not be loaded.</reason>
+    <reason>The input resource '%1' cannot be loaded.</reason>
     <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
   <message id="DOTJ079E" type="ERROR">
-    <reason>The '%1' resource could not be loaded.</reason>
+    <reason>The '%1' resource cannot be loaded.</reason>
     <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
   </message>
 
@@ -434,7 +434,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ084E" type="ERROR">
-    <reason>Couldn’t read '%1' with the '%2' character set.</reason>
+    <reason>Cannot read '%1' with the '%2' character set.</reason>
     <response>Save the file with '%2' encoding.</response>
   </message>
 
@@ -506,7 +506,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- As of 2012-06-13, DOTX009W is only called for HTML Help and map2htmtoc -->
   <message id="DOTX009W" type="WARN">
-    <reason>Could not retrieve a title from '%1'. Using '%2' instead.</reason>
+    <reason>Cannot retrieve a title from '%1'. Using '%2' instead.</reason>
     <response></response>
   </message>
 
@@ -646,7 +646,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX036E" type="ERROR">
-    <reason>Unable to generate link text for a cross reference to a dlentry (the dlentry or term could not be found): '%1'.</reason>
+    <reason>Unable to generate link text for a cross reference to a dlentry (the dlentry or term cannot be found): '%1'.</reason>
     <response></response>
   </message>
 
