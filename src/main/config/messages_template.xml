@@ -116,7 +116,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ020W" type="WARN">
     <reason>At least one plug-in in '%1' is required by plug-in '%2'. Plug-in '%2' cannot be loaded.</reason>
-    <response>Check and see whether all prerequisite plug-ins are installed in toolkit.</response>
+    <response>Check and see whether all prerequisite plug-ins are installed.</response>
   </message>
 
   <message id="DOTJ021E" type="ERROR">
