@@ -157,7 +157,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 3.5 -->
   <message id="DOTJ029I" type="INFO">
     <reason>No @domains attribute was found for the &lt;%1&gt; element.</reason>
-    <response>This generally indicates that your DTD or schema was not developed properly according to the DITA specification.</response>
+    <response>This generally indicates that the DTD or schema was not developed properly according to the DITA specification.</response>
   </message>
 
   <message id="DOTJ030I" type="INFO">
@@ -486,7 +486,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX007I" type="INFO">
-    <reason>Only DITA topics, HTML files, and images may be included in your compiled CHM file. The reference to '%1' will be ignored.</reason>
+    <reason>Only DITA topics, HTML files, and images may be included in the compiled CHM file. The reference to '%1' will be ignored.</reason>
     <response>To remove this message, set the @toc attribute to "no" or the @processing-role attribute to "resource-only" on the topic reference.</response>
   </message>
 
@@ -522,7 +522,7 @@ See the accompanying LICENSE file for applicable license.
        Support for mismatched domains was added in release 1.5 or earlier. -->
   <message id="DOTX012W" type="WARN">
     <reason>When you conref another topic or an item in another topic, the @domains attribute of the target topic must be equal to or a subset of the current topic's @domains attribute.</reason>
-    <response>Put your target under an appropriate domain. You can see the messages guide for more help.</response>
+    <response>Put the target under an appropriate domain. You can see the messages guide for more help.</response>
   </message>
 
   <message id="DOTX013E" type="ERROR">
@@ -559,7 +559,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX019W" type="WARN">
-    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a '%2' topic. This may cause your links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
+    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a '%2' topic. This may cause links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
     <response></response>
   </message>
 
@@ -609,12 +609,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX029I" type="INFO">
-    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a more specific '%4' '%2'. This may cause your links to sort incorrectly in the output.</reason>
+    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a more specific '%4' '%2'. This may cause links to sort incorrectly in the output.</reason>
     <response></response>
   </message>
 
   <message id="DOTX030W" type="WARN">
-    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a '%4' '%2'. This may cause your links to sort incorrectly in the output.</reason>
+    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a '%4' '%2'. This may cause links to sort incorrectly in the output.</reason>
     <response></response>
   </message>
 
@@ -660,12 +660,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX039W" type="WARN">
     <reason>Required cleanup area found.</reason>
-    <response>To remove this message and hide the content, build your content without using the DRAFT parameter.</response>
+    <response>To remove this message and hide the content, build without the DRAFT parameter.</response>
   </message>
 
   <message id="DOTX040I" type="INFO">
     <reason>Draft comment area found.</reason>
-    <response>To remove this message and hide the comments, build your content without using the DRAFT parameter.</response>
+    <response>To remove this message and hide the comments, build without the DRAFT parameter.</response>
   </message>
 
   <message id="DOTX041W" type="WARN">
@@ -709,8 +709,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX050W" type="WARN">
-    <reason>Default ID "org.sample.help.doc" is used for Eclipse plug-in.</reason>
-    <response>If you want to use your own plug-in ID, please specify it using the @id attribute on your map.</response>
+    <reason>The default ID "org.sample.help.doc" is used for the Eclipse plug-in.</reason>
+    <response>To use your own plug-in ID, specify it using the @id attribute on the map.</response>
   </message>
 
   <message id="DOTX052W" type="WARN">
@@ -764,8 +764,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX063W" type="WARN">
-    <reason>The DITA document '%1' is linked to from your content, but not referenced by a &lt;topicref&gt; element in the map.</reason>
-    <response>Include the topic in your map to avoid a broken link.</response>
+    <reason>The DITA document '%1' is linked to from the content, but not referenced by a &lt;topicref&gt; element in the map.</reason>
+    <response>Include the topic in the map to avoid a broken link.</response>
   </message>
 
   <message id="DOTX064W" type="WARN">
@@ -781,7 +781,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX066W" type="WARN">
     <reason>Template '%1' is deprecated.</reason>
-    <response>Remove references to this template from your custom XSLT or plug-ins.</response>
+    <response>Remove references to this template from the custom XSLT or plug-ins.</response>
   </message>
 
   <message id="DOTX067E" type="ERROR">
@@ -796,12 +796,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX069W" type="WARN">
     <reason>Template mode '%1' is deprecated.</reason>
-    <response>Remove references to this template mode from your custom XSLT or plug-ins.</response>
+    <response>Remove references to this template mode from the custom XSLT or plug-ins.</response>
   </message>
 
   <message id="DOTX070W" type="WARN">
     <reason>Target '%1' is deprecated.</reason>
-    <response>Remove references to this target from your custom Ant files.</response>
+    <response>Remove references to this target from the custom Ant files.</response>
   </message>
 
   <message id="DOTX071E" type="ERROR">
