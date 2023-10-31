@@ -36,7 +36,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Appendix with number">Dodatak <param ref-name="number"/></variable>
   <variable id="Part with number">Dio <param ref-name="number"/></variable>
   <variable id="Required-Cleanup">[Potrebno čišćenje]</variable>
-  <variable id="On the page"> on page <param ref-name="pagenum"/></variable><!--TODO:On the page-->
+  <variable id="On the page"> na stranici <param ref-name="pagenum"/></variable>
   <variable id="Page"> page <param ref-name="pagenum"/></variable><!--TODO:page-->
   <variable id="This link"/><!--UNUSED-->
   <variable id="Child topics"/><!--UNUSED-->
