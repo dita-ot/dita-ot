@@ -29,6 +29,9 @@ if "%DITA_HOME%"=="" goto setDefaultDitaHome
 rem %~dp0 is expanded pathname of the current script under NT
 set DITA_HOME=%~dp0..
 
+rem Save subcommand
+set DITA_CMD_SUBCOMMAND=%1
+
 rem Slurp the command line arguments. This loop allows for an unlimited number
 rem of arguments (up to the command line limit, anyway).
 set DITA_CMD_LINE_ARGS=
@@ -43,10 +46,15 @@ rem and for NT handling to skip to.
 
 :doneStart
 
-:checkJava
+rem No plug-in libraries in classpath
+set CLASSPATH=""
+if "%DITA_CMD_SUBCOMMAND%" == "install" goto checkJava
+if "%DITA_CMD_SUBCOMMAND%" == "uninstall" goto checkJava
+
 rem Set environment variables
 call "%DITA_HOME%\config\env.bat"
 
+:checkJava
 set _JAVACMD=%JAVACMD%
 
 if "%JAVA_HOME%" == "" goto noJavaHome

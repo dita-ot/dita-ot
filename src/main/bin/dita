@@ -67,7 +67,14 @@ if [ -z "$DITA_HOME" -o ! -d "$DITA_HOME" ] ; then
 fi
 
 # Set environment variables
-. "$DITA_HOME/config/env.sh"
+case "$1" in
+  install|uninstall)
+    # No plug-in libraries in classpath
+    ;;
+  *)
+    . "$DITA_HOME/config/env.sh"
+    ;;
+esac
 
 # Add build script to arguments
 ant_exec_args="$ant_exec_args \"-buildfile\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
