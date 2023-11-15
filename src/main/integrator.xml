@@ -21,27 +21,21 @@ See the accompanying LICENSE file for applicable license.
     </and>
   </condition>
 
-  <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask"/>
-  <taskdef name="install" classname="org.dita.dost.ant.PluginInstallTask"/>
 
   <target name="integrate">
+    <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask"/>
     <integrate ditadir="${dita.dir}" />
   </target>
 
   <target name="install" description="Install plug-in" >
     <property name="force" value="false"/>
+    <taskdef name="install" classname="org.dita.dost.ant.PluginInstallTask"/>
     <install pluginFile="${plugin.file}" force="${force}"/>
   </target>
-  
+
   <target name="uninstall" description="Uninstall plug-in">
-    <fail unless="plugin.id"/>
-    <available property="plugin.exists" file="${dita.dir}/plugins/${plugin.id}"/>
-    <fail unless="plugin.exists">Plug-in ${dita.dir}/plugins/${plugin.id} doesn't exist.</fail>
-    <antcall target="uninstall.delete"/>
+    <taskdef name="uninstall" classname="org.dita.dost.ant.PluginUninstallTask"/>
+    <uninstall id="${plugin.id}"/>
   </target>
-  <target name="uninstall.delete" if="plugin.exists">
-    <delete dir="${dita.dir}/plugins/${plugin.id}"/>
-    <antcall target="integrate"/>
-  </target>
-  
+
 </project>
