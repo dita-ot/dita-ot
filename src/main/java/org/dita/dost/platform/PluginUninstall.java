@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
+import org.dita.dost.invoker.CliException;
+import org.dita.dost.invoker.Main;
 import org.dita.dost.log.DITAOTLogger;
 
 public final class PluginUninstall {
@@ -35,7 +37,7 @@ public final class PluginUninstall {
 
     final File pluginDir = Paths.get(ditaDir.getAbsolutePath(), "plugins", id).toFile();
     if (!pluginDir.exists()) {
-      throw new Exception("Plug-in directory %s doesn't exist".formatted(pluginDir));
+      throw new CliException(Main.locale.getString("uninstall.error.plugin_not_found").formatted(id));
     }
 
     logger.debug("Delete plug-in directory {0}", pluginDir);

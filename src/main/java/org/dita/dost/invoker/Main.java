@@ -54,6 +54,8 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.log.StandardLogger;
+import org.dita.dost.platform.PluginUninstall;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
@@ -128,7 +130,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
   private final ArgumentParser argumentParser = new ArgumentParser();
   private Arguments args;
-  static final ResourceBundle locale = ResourceBundle.getBundle("cli", new Locale("en", "US"));
+  public static final ResourceBundle locale = ResourceBundle.getBundle("cli", new Locale("en", "US"));
 
   /**
    * Prints the message of the Throwable if it (the message) is not {@code null}.
@@ -358,10 +360,18 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       if (installArgs.uninstallId == null) {
         throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
       }
-      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
-      targets.clear();
-      targets.add("uninstall");
-      definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
+      final PluginUninstall pluginUninstall = new PluginUninstall();
+      pluginUninstall.setId(installArgs.uninstallId);
+      pluginUninstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
+      pluginUninstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
+      try {
+        pluginUninstall.execute();
+      } catch (CliException e) {
+        throw e;
+      } catch (Exception e) {
+        throw new CliException(e.getMessage(), e);
+      }
+      return;
     } else if (args instanceof final ConversionArguments conversionArgs) {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
