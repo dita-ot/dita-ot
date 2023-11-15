@@ -8,14 +8,11 @@
 package org.dita.dost.ant;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
-import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTAntLogger;
-import org.dita.dost.platform.Integrator;
+import org.dita.dost.platform.PluginUninstall;
 
 public final class PluginUninstallTask extends Task {
 
@@ -27,36 +24,23 @@ public final class PluginUninstallTask extends Task {
       throw new BuildException(new IllegalStateException("id argument not set"));
     }
 
-    final File pluginDir = getPluginDir(id);
-    if (!pluginDir.exists()) {
-      throw new BuildException("Plug-in directory %s doesn't exist".formatted(pluginDir));
-    }
-
-    log("Delete plug-in directory %s".formatted(pluginDir), Project.MSG_DEBUG);
-    try {
-      FileUtils.deleteDirectory(pluginDir);
-    } catch (IOException e) {
-      throw new BuildException("Failed to delete plug-in directory %s".formatted(pluginDir), e);
-    }
-
+    final PluginUninstall pluginUninstall = new PluginUninstall();
     final DITAOTAntLogger logger = new DITAOTAntLogger(getProject());
     logger.setTarget(getOwningTarget());
     logger.setTask(this);
-    final Integrator integrator = new Integrator(getDitaDir());
-    integrator.setLogger(logger);
+    pluginUninstall.setLogger(logger);
+    pluginUninstall.setId(id);
+    pluginUninstall.setDitaDir(getDitaDir());
+
     try {
-      integrator.execute();
-    } catch (final Exception e) {
-      throw new BuildException("Integration failed: " + e.getMessage(), e);
+      pluginUninstall.execute();
+    } catch (Exception e) {
+      throw new BuildException("Failed to uninstall %s: %s".formatted(id, e.getMessage()), e);
     }
   }
 
   private File getDitaDir() {
     return Paths.get(getProject().getProperty("dita.dir")).toFile();
-  }
-
-  private File getPluginDir(final String id) {
-    return Paths.get(getDitaDir().getAbsolutePath(), "plugins", id).toFile();
   }
 
   public void setId(final String id) {
