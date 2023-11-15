@@ -1,23 +1,22 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2018 Jarno Elovirta
+ * Copyright 2023 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
 
-package org.dita.dost.ant;
+package org.dita.dost.platform;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.dita.dost.platform.Registry;
 import org.dita.dost.platform.Registry.Dependency;
 import org.junit.jupiter.api.Test;
 
-public class PluginInstallTaskTest {
+public class PluginInstallTest {
 
-  final PluginInstallTask registryTask = new PluginInstallTask();
+  final PluginInstall registryTask = new PluginInstall();
 
   @Test
   public void matchingPlatformVersion() {
