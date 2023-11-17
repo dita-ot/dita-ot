@@ -37,7 +37,9 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -55,8 +57,10 @@ import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.log.StandardLogger;
+import org.dita.dost.platform.PluginInstall;
 import org.dita.dost.platform.PluginUninstall;
 import org.dita.dost.platform.Plugins;
+import org.dita.dost.platform.SemVerMatch;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
@@ -337,40 +341,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       printTranstypes();
       return;
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
-      if (deliverablesArgs.projectFile == null) {
-        throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
-      }
-      printDeliverables(deliverablesArgs.projectFile);
+      printDeliverables(deliverablesArgs);
       return;
     } else if (args instanceof final InstallArguments installArgs) {
-      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
-      targets.clear();
-      if (installArgs.installFile != null) {
-        targets.add("install");
-        final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
-        if (f.exists()) {
-          definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
-        } else {
-          definedProps.put(ANT_PLUGIN_FILE, installArgs.installFile);
-        }
-      } else {
-        targets.add("integrate");
-      }
+      install(installArgs);
+      return;
     } else if (args instanceof final UninstallArguments installArgs) {
-      if (installArgs.uninstallId == null) {
-        throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
-      }
-      final PluginUninstall pluginUninstall = new PluginUninstall();
-      pluginUninstall.setId(installArgs.uninstallId);
-      pluginUninstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
-      pluginUninstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
-      try {
-        pluginUninstall.execute();
-      } catch (CliException e) {
-        throw e;
-      } catch (Exception e) {
-        throw new CliException(e.getMessage(), e);
-      }
+      uninstall(installArgs);
       return;
     } else if (args instanceof final ConversionArguments conversionArgs) {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
@@ -450,6 +427,66 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       System.setErr(err);
     }
     readyToRun = true;
+  }
+
+  private void uninstall(UninstallArguments installArgs) {
+    if (installArgs.uninstallId == null) {
+      throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
+    }
+    final PluginUninstall pluginUninstall = new PluginUninstall();
+    pluginUninstall.setId(installArgs.uninstallId);
+    pluginUninstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
+    pluginUninstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
+
+    try {
+      pluginUninstall.execute();
+    } catch (CliException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new CliException(e.getMessage(), e);
+    }
+  }
+
+  private void install(InstallArguments installArgs) {
+    final PluginInstall pluginInstall = new PluginInstall();
+    pluginInstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
+    pluginInstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
+    if (installArgs.definedProps.containsKey("force")) {
+      pluginInstall.setForce(Boolean.parseBoolean(installArgs.definedProps.get("force").toString()));
+    }
+    if (installArgs.installFile != null) {
+      final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+      final String pluginFile = f.exists() ? f.getAbsolutePath() : installArgs.installFile;
+      try {
+        pluginInstall.setPluginFile(Paths.get(pluginFile));
+      } catch (InvalidPathException e) {
+        // Ignore
+      }
+      try {
+        final URI uri = new URI(pluginFile);
+        if (uri.isAbsolute()) {
+          pluginInstall.setPluginUri(uri);
+        }
+      } catch (URISyntaxException e) {
+        // Ignore
+      }
+      if (pluginFile.contains("@")) {
+        final String[] tokens = pluginFile.split("@");
+        pluginInstall.setPluginName(tokens[0]);
+        pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+      } else {
+        pluginInstall.setPluginName(pluginFile);
+        pluginInstall.setPluginVersion(null);
+      }
+    }
+
+    try {
+      pluginInstall.execute();
+    } catch (CliException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new CliException(e.getMessage(), e);
+    }
   }
 
   private Map<String, Object> getLocalProperties(File ditaDir) {
@@ -629,16 +666,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
   }
 
-  /**
-   * Handle the --deliverables argument
-   */
-  private void printDeliverables(final File projectFile) {
-    final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile)
+  private void printDeliverables(DeliverablesArguments deliverablesArgs) {
+    if (deliverablesArgs.projectFile == null) {
+      throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
+    }
+    final List<Map.Entry<String, String>> pairs = readProjectFile(deliverablesArgs.projectFile)
       .deliverables()
       .stream()
       .filter(deliverable -> deliverable.id() != null)
       .map(deliverable -> pair(deliverable.id(), deliverable.name()))
-      .collect(Collectors.toList());
+      .toList();
     final int length = pairs.stream().map(Map.Entry::getKey).map(String::length).reduce(Integer::max).orElse(0);
     for (Map.Entry<String, String> pair : pairs) {
       System.out.println(
