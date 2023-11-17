@@ -149,14 +149,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private void printErrorMessage(final String msg) {
-    if (args != null && args.useColor) {
-      System.err.print(DefaultLogger.ANSI_RED);
-      System.err.print(locale.getString("error_msg").formatted(msg));
-      System.err.println(DefaultLogger.ANSI_RESET);
-    } else {
-      System.err.println(locale.getString("error_msg").formatted(msg));
-    }
-    System.err.println();
+    //    if (args != null && args.useColor) {
+    //      System.err.print(DefaultLogger.ANSI_RED);
+    //      System.err.print(locale.getString("error_msg").formatted(msg));
+    //      System.err.println(DefaultLogger.ANSI_RESET);
+    //    } else {
+    //      System.err.println(locale.getString("error_msg").formatted(msg));
+    //    }
+    //    System.err.println();
+    logger.error(msg);
   }
 
   /**
@@ -198,7 +199,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       handleLogfile();
       printMessage(exc);
       if (exc.info != null) {
-        System.out.println(exc.info);
+        logger.info(exc.info);
       }
       exit(1);
       return;
@@ -305,10 +306,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     start(args, null, null);
   }
 
+  final StandardLogger logger;
+
   /**
    * Constructor used when creating Main for later arg processing and startup
    */
-  public Main() {}
+  public Main() {
+    logger = new StandardLogger(System.out, System.err, Project.MSG_INFO, true);
+  }
 
   /**
    * Process command line arguments. When ant is started from Launcher,
@@ -322,9 +327,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
     projectProps = Collections.singletonList(definedProps);
     buildFile = args.buildFile;
+    logger.setOutputLevel(args.msgOutputLevel);
+    logger.setUseColor(args.useColor);
 
     if (args.justPrintUsage) {
-      System.out.println(args.getUsage(false));
+      logger.setOutputLevel(Project.MSG_INFO);
+      logger.info(args.getUsage(false));
       return;
     } else if (args.justPrintDiagnostics) {
       Diagnostics.doReport(System.out, args.msgOutputLevel);
@@ -436,7 +444,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final PluginUninstall pluginUninstall = new PluginUninstall();
     pluginUninstall.setId(installArgs.uninstallId);
     pluginUninstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
-    pluginUninstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
+    pluginUninstall.setLogger(logger);
 
     try {
       pluginUninstall.execute();
@@ -450,7 +458,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void install(InstallArguments installArgs) {
     final PluginInstall pluginInstall = new PluginInstall();
     pluginInstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
-    pluginInstall.setLogger(new StandardLogger(System.out, System.err, args.msgOutputLevel));
+    pluginInstall.setLogger(logger);
     if (installArgs.definedProps.containsKey("force")) {
       pluginInstall.setForce(Boolean.parseBoolean(installArgs.definedProps.get("force").toString()));
     }
@@ -646,14 +654,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * Handle the --plugins argument
    */
   private void printPlugins() {
+    logger.setOutputLevel(Project.MSG_INFO);
     final List<Map.Entry<String, String>> installedPlugins = Plugins.getInstalledPlugins();
     for (final Map.Entry<String, String> entry : installedPlugins) {
-      System.out.print(entry.getKey());
       if (entry.getValue() != null) {
-        System.out.print('@');
-        System.out.print(entry.getValue());
+        logger.info("{0}@{1}", entry.getKey(), entry.getValue());
+      } else {
+        logger.info(entry.getKey());
       }
-      System.out.println();
     }
   }
 
@@ -661,12 +669,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * Handle the --transtypes argument
    */
   private void printTranstypes() {
+    logger.setOutputLevel(Project.MSG_INFO);
     for (final String transtype : transtypes) {
-      System.out.println(transtype);
+      logger.info(transtype);
     }
   }
 
   private void printDeliverables(DeliverablesArguments deliverablesArgs) {
+    logger.setOutputLevel(Project.MSG_INFO);
     if (deliverablesArgs.projectFile == null) {
       throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
     }
@@ -678,7 +688,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .toList();
     final int length = pairs.stream().map(Map.Entry::getKey).map(String::length).reduce(Integer::max).orElse(0);
     for (Map.Entry<String, String> pair : pairs) {
-      System.out.println(
+      logger.info(
         Strings.padEnd(pair.getKey(), length, ' ') + (pair.getValue() != null ? ("  " + pair.getValue()) : "")
       );
     }
@@ -935,6 +945,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * @throws BuildException if the version information is unavailable
    */
   private void printVersion() throws BuildException {
-    System.out.println(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
+    logger.setOutputLevel(Project.MSG_INFO);
+    logger.info(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
   }
 }

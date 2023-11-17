@@ -395,7 +395,7 @@ public class ConversionArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     final UsageBuilder buf = UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("conversion.usage.input"))
       .usage(locale.getString("conversion.usage.project"))
       //                .usage("dita --propertyfile=<file> [options]")

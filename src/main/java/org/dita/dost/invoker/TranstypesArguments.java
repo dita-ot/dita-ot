@@ -13,11 +13,13 @@ import static org.dita.dost.invoker.Main.locale;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import org.apache.tools.ant.Project;
 
 public class TranstypesArguments extends Arguments {
 
   @Override
   TranstypesArguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_INFO;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -32,6 +34,6 @@ public class TranstypesArguments extends Arguments {
 
   @Override
   String getUsage(final boolean compact) {
-    return UsageBuilder.builder(compact).usage(locale.getString("transtypes.usage")).build();
+    return UsageBuilder.builder(compact, useColor).usage(locale.getString("transtypes.usage")).build();
   }
 }

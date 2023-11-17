@@ -10,6 +10,7 @@ package org.dita.dost.log;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import org.apache.tools.ant.Project;
+import org.dita.dost.invoker.Main;
 import org.slf4j.helpers.MarkerIgnoringBase;
 
 /**
@@ -17,14 +18,40 @@ import org.slf4j.helpers.MarkerIgnoringBase;
  */
 public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLogger {
 
+  public static final String ANSI_RESET = "\u001B[0m";
+  public static final String ANSI_BLACK = "\u001B[30m";
+  public static final String ANSI_RED = "\u001B[31m";
+  public static final String ANSI_GREEN = "\u001B[32m";
+  public static final String ANSI_YELLOW = "\u001B[33m";
+  public static final String ANSI_BLUE = "\u001B[34m";
+  public static final String ANSI_PURPLE = "\u001B[35m";
+  public static final String ANSI_CYAN = "\u001B[36m";
+  public static final String ANSI_WHITE = "\u001B[37m";
+  public static final String ANSI_BOLD = "\u001b[1m";
+
   private final PrintStream err;
   private final PrintStream out;
-  private final int msgOutputLevel;
+  private int msgOutputLevel;
+  private boolean useColor;
 
-  public StandardLogger(final PrintStream out, final PrintStream err, final int msgOutputLevel) {
+  public StandardLogger(
+    final PrintStream out,
+    final PrintStream err,
+    final int msgOutputLevel,
+    final boolean useColor
+  ) {
     this.out = out;
     this.err = err;
     this.msgOutputLevel = msgOutputLevel;
+    this.useColor = useColor;
+  }
+
+  public void setOutputLevel(final int msgOutputLevel) {
+    this.msgOutputLevel = msgOutputLevel;
+  }
+
+  public void setUseColor(final boolean useColor) {
+    this.useColor = useColor;
   }
 
   @Override
@@ -196,8 +223,16 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
     if (level > msgOutputLevel) {
       return;
     }
-    if (level == Project.MSG_ERR || level == Project.MSG_WARN) {
+    if (useColor && level == Project.MSG_ERR) {
+      err.print(ANSI_RED);
+      err.print(Main.locale.getString("error_msg").formatted(""));
       err.println(msg);
+      err.print(ANSI_RESET);
+    } else if (useColor && level == Project.MSG_WARN) {
+      err.print(ANSI_YELLOW);
+      err.print(Main.locale.getString("warn_msg").formatted(""));
+      err.println(msg);
+      err.print(ANSI_RESET);
     } else {
       out.println(msg);
     }

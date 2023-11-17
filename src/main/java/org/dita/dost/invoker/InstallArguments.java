@@ -77,7 +77,7 @@ public class InstallArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     return UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("install.usage"))
       .arguments(null, null, "id", locale.getString("install.argument.id"))
       .arguments(null, null, "url", locale.getString("install.argument.url"))

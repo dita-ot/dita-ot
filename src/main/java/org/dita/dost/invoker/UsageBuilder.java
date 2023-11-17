@@ -22,8 +22,10 @@ public class UsageBuilder {
   private final Map<Key, String> options = new HashMap<>();
   private final Map<Key, String> arguments = new LinkedHashMap<>();
   private final List<String> footers = new ArrayList<>();
+  private final boolean useColor;
 
-  private UsageBuilder(final boolean compact) {
+  private UsageBuilder(final boolean compact, final boolean useColor) {
+    this.useColor = useColor;
     options("h", "help", null, locale.getString("help.option.help"));
     if (!compact) {
       options("d", "debug", null, locale.getString("help.option.debug"));
@@ -32,8 +34,8 @@ public class UsageBuilder {
     }
   }
 
-  public static UsageBuilder builder(final boolean compact) {
-    return new UsageBuilder(compact);
+  public static UsageBuilder builder(final boolean compact, final boolean useColor) {
+    return new UsageBuilder(compact, useColor);
   }
 
   public UsageBuilder usage(final String usage) {
@@ -64,12 +66,15 @@ public class UsageBuilder {
   public String build() {
     final String padding = getPadding();
 
-    buf.append(ANSI_BOLD).append("Usage").append(ANSI_RESET).append(":\n");
+    bold("Usage");
+    buf.append(":\n");
     for (String usage : usages) {
       buf.append("  ").append(usage).append("\n");
     }
     if (!subcommands.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Subcommands");
+      buf.append(":\n");
       for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
         buf
           .append("  ")
@@ -81,7 +86,9 @@ public class UsageBuilder {
       buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
     }
     if (!arguments.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Arguments");
+      buf.append(":\n");
       for (Map.Entry<Key, String> argument : arguments.entrySet()) {
         buf
           .append("  ")
@@ -92,7 +99,9 @@ public class UsageBuilder {
       }
     }
     if (!options.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Options");
+      buf.append(":\n");
       for (Map.Entry<Key, String> option : sort(options)) {
         buf
           .append("  ")
@@ -115,6 +124,14 @@ public class UsageBuilder {
     final List<Map.Entry<Key, String>> entries = new ArrayList<>(arguments.entrySet());
     entries.sort(Map.Entry.comparingByKey());
     return entries;
+  }
+
+  private void bold(final String text) {
+    if (useColor) {
+      buf.append(ANSI_BOLD).append(text).append(ANSI_RESET);
+    } else {
+      buf.append(text);
+    }
   }
 
   private List<Map.Entry<String, String>> sortSubCommands(Map<String, String> arguments) {
