@@ -154,17 +154,9 @@ public class UsageBuilder {
     return " ".repeat(Math.max(0, max + 2));
   }
 
-  private static class Key implements Comparable<Key> {
-
-    final String shortKey;
-    final String longKey;
-    final String value;
-    final String string;
-
-    private Key(String shortKey, String longKey, String value) {
-      this.shortKey = shortKey;
-      this.longKey = longKey;
-      this.value = value;
+  private record Key(String shortKey, String longKey, String value) implements Comparable<Key> {
+    @Override
+    public String toString() {
       final StringBuilder buf = new StringBuilder();
       if (shortKey != null) {
         buf.append("-").append(shortKey);
@@ -184,29 +176,7 @@ public class UsageBuilder {
       if (shortKey == null && longKey == null & value != null) {
         buf.append("<").append(value).append(">");
       }
-      string = buf.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Key key = (Key) o;
-      return (
-        Objects.equals(shortKey, key.shortKey) &&
-        Objects.equals(longKey, key.longKey) &&
-        Objects.equals(value, key.value)
-      );
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(shortKey, longKey, value);
-    }
-
-    @Override
-    public String toString() {
-      return string;
+      return buf.toString();
     }
 
     @Override
