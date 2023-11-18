@@ -226,13 +226,13 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
     if (useColor && level == Project.MSG_ERR) {
       err.print(ANSI_RED);
       err.print(Main.locale.getString("error_msg").formatted(""));
-      err.println(msg);
       err.print(ANSI_RESET);
+      err.println(msg);
     } else if (useColor && level == Project.MSG_WARN) {
       err.print(ANSI_YELLOW);
       err.print(Main.locale.getString("warn_msg").formatted(""));
-      err.println(msg);
       err.print(ANSI_RESET);
+      err.println(msg);
     } else {
       out.println(msg);
     }

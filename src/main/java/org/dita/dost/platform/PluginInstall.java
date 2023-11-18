@@ -19,6 +19,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
@@ -34,6 +35,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.tools.ant.BuildException;
+import org.dita.dost.invoker.Main;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.platform.Registry.Dependency;
 import org.dita.dost.util.Configuration;
@@ -110,9 +112,8 @@ public final class PluginInstall {
             integrator.addRemoved(name);
             FileUtils.deleteDirectory(pluginDir);
           } else {
-            throw new BuildException(
-              new IllegalStateException(String.format("Plug-in %s already installed: %s", name, pluginDir))
-            );
+            logger.warn(String.format(Main.locale.getString("install.error.exists"), name));
+            throw new BuildException();
           }
         }
         FileUtils.copyDirectory(tempPluginDir.toFile(), pluginDir);
@@ -212,7 +213,7 @@ public final class PluginInstall {
       }
     }
     if (res == null) {
-      throw new BuildException("Unable to find plugin " + pluginFile + " in any configured registry.");
+      throw new BuildException(Main.locale.getString("install.error.not_found_from_registry").formatted(pluginFile));
     }
 
     Set<Registry> results = new HashSet<>();
@@ -239,16 +240,14 @@ public final class PluginInstall {
       logger.info("Download %s".formatted(request.uri()));
       client.send(request, HttpResponse.BodyHandlers.ofFile(tempPluginFile.toPath()));
     } catch (IOException | InterruptedException e) {
-      throw new Exception("Failed to download %s".formatted(uri), e);
+      throw new Exception(Main.locale.getString("install.error.download_failure").formatted(uri), e);
     }
 
     if (expectedChecksum != null) {
       final String checksum = getFileHash(tempPluginFile);
       if (!checksum.equalsIgnoreCase(expectedChecksum)) {
         throw new BuildException(
-          new IllegalArgumentException(
-            "Downloaded plugin file checksum %s does not match expected value %s".formatted(checksum, expectedChecksum)
-          )
+          Main.locale.getString("install.error.checksum_mismatch").formatted(checksum, expectedChecksum)
         );
       }
     }
@@ -284,12 +283,16 @@ public final class PluginInstall {
     return findBaseDir(tempPluginDir);
   }
 
-  private Path findBaseDir(final Path tempPluginDir) throws IOException {
-    return Files
-      .find(tempPluginDir, 256, (path, attributes) -> path.getFileName().toString().equals("plugin.xml"))
-      .findFirst()
-      .orElseThrow(() -> new IOException("plugin.xml not found"))
-      .getParent();
+  private Path findBaseDir(final Path tempPluginDir) throws Exception {
+    try {
+      return Files
+        .find(tempPluginDir, 256, (path, attributes) -> path.getFileName().toString().equals("plugin.xml"))
+        .findFirst()
+        .orElseThrow(() -> new IOException("plugin.xml not found"))
+        .getParent();
+    } catch (NoSuchFileException e) {
+      throw new Exception(Main.locale.getString("install.error.plugin_xml_not_found"));
+    }
   }
 
   private Optional<Registry> findPlugin(final Collection<Registry> regs, final SemVerMatch version) {
