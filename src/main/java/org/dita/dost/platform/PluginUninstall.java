@@ -40,7 +40,7 @@ public final class PluginUninstall {
       throw new CliException(Main.locale.getString("uninstall.error.plugin_not_found").formatted(id));
     }
 
-    logger.debug("Delete plug-in directory {0}", pluginDir);
+    logger.info("Delete plug-in directory {0}", pluginDir);
     try {
       FileUtils.deleteDirectory(pluginDir);
     } catch (IOException e) {

@@ -181,13 +181,13 @@ public final class PluginInstall {
   }
 
   private Set<Registry> readRegistry(final String name, final SemVerMatch version) {
-    logger.info(String.format("Reading registries for %s@%s", name, version));
+    logger.info("Reading registries for {0} {1}", name, Objects.requireNonNullElse(version, ""));
     Registry res = null;
     for (final String registry : registries) {
       final URI registryUrl = URI.create(registry + name + ".json");
-      logger.info(String.format("Read registry %s", registry));
+      logger.debug("Read registry {0}", registry);
       try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
-        logger.info("Parse registry");
+        logger.debug("Parse registry");
         final JsonFactory factory = mapper.getFactory();
         final JsonParser parser = factory.createParser(in);
         final JsonNode obj = mapper.readTree(parser);
@@ -200,14 +200,14 @@ public final class PluginInstall {
         final Optional<Registry> reg = findPlugin(regs, version);
         if (reg.isPresent()) {
           final Registry plugin = reg.get();
-          logger.info("Plugin found at {0}@{1}", registryUrl, plugin.vers);
+          logger.debug("Plugin found at {0}@{1}", registryUrl, plugin.vers);
           res = plugin;
           break;
         }
       } catch (MalformedURLException e) {
-        logger.error("Invalid registry URL %s: %s", registryUrl, e.getMessage(), e);
+        logger.error("Invalid registry URL {0}: {1}", registryUrl, e.getMessage(), e);
       } catch (FileNotFoundException e) {
-        logger.info("Registry configuration %s not found", registryUrl, e);
+        // Ignore
       } catch (IOException e) {
         logger.error("Failed to read registry configuration {0}: {1}", registryUrl, e.getMessage(), e);
       }
@@ -237,7 +237,7 @@ public final class PluginInstall {
     final HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
     final HttpRequest request = HttpRequest.newBuilder().GET().uri(uri).build();
     try {
-      logger.info("Download %s".formatted(request.uri()));
+      logger.info("Download {0}", request.uri());
       client.send(request, HttpResponse.BodyHandlers.ofFile(tempPluginFile.toPath()));
     } catch (IOException | InterruptedException e) {
       throw new Exception(Main.locale.getString("install.error.download_failure").formatted(uri), e);
@@ -261,7 +261,7 @@ public final class PluginInstall {
   private Path unzip(final File input) throws Exception {
     final Path tempPluginDir = new File(tempDir, "plugin").toPath();
 
-    logger.debug("Expanding %s to %s".formatted(input, tempPluginDir));
+    logger.debug("Expanding {0} to {1}", input, tempPluginDir);
     try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(input.toPath()))) {
       for (ZipEntry ze; (ze = zipIn.getNextEntry()) != null;) {
         Path resolvedPath = tempPluginDir.resolve(ze.getName()).normalize();
@@ -272,7 +272,7 @@ public final class PluginInstall {
           Files.createDirectories(resolvedPath);
         } else {
           Files.createDirectories(resolvedPath.getParent());
-          logger.debug("Write %s".formatted(resolvedPath));
+          logger.debug("Write {0}", resolvedPath);
           Files.copy(zipIn, resolvedPath);
         }
       }

@@ -21,6 +21,7 @@ public class InstallArguments extends Arguments {
 
   @Override
   Arguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_INFO;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
