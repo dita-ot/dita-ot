@@ -9,6 +9,8 @@ package org.dita.dost.log;
 
 import java.io.PrintStream;
 import java.text.MessageFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.tools.ant.Project;
 import org.dita.dost.invoker.Main;
 import org.slf4j.helpers.MarkerIgnoringBase;
@@ -61,17 +63,17 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
 
   @Override
   public void info(String format, Object arg) {
-    log(MessageFormat.format(format, arg), null, Project.MSG_INFO);
+    log(format, new Object[] { arg }, null, Project.MSG_INFO);
   }
 
   @Override
   public void info(String format, Object arg1, Object arg2) {
-    log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_INFO);
+    log(format, new Object[] { arg1, arg2 }, null, Project.MSG_INFO);
   }
 
   @Override
   public void info(String format, Object... arguments) {
-    log(MessageFormat.format(format, arguments), null, Project.MSG_INFO);
+    log(format, arguments, null, Project.MSG_INFO);
   }
 
   @Override
@@ -91,17 +93,17 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
 
   @Override
   public void warn(String format, Object arg) {
-    log(MessageFormat.format(format, arg), null, Project.MSG_WARN);
+    log(format, new Object[] { arg }, null, Project.MSG_WARN);
   }
 
   @Override
   public void warn(String format, Object... arguments) {
-    log(MessageFormat.format(format, arguments), null, Project.MSG_WARN);
+    log(format, arguments, null, Project.MSG_WARN);
   }
 
   @Override
   public void warn(String format, Object arg1, Object arg2) {
-    log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_WARN);
+    log(format, new Object[] { arg1, arg2 }, null, Project.MSG_WARN);
   }
 
   @Override
@@ -124,16 +126,16 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
     if (arg instanceof Throwable) {
       log(format, (Throwable) arg, Project.MSG_ERR);
     } else {
-      log(MessageFormat.format(format, arg), null, Project.MSG_ERR);
+      log(format, new Object[] { arg }, null, Project.MSG_ERR);
     }
   }
 
   @Override
   public void error(String format, Object arg1, Object arg2) {
     if (arg2 instanceof Throwable) {
-      log(MessageFormat.format(format, arg1), (Throwable) arg2, Project.MSG_ERR);
+      log(format, new Object[] { arg1 }, (Throwable) arg2, Project.MSG_ERR);
     } else {
-      log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_ERR);
+      log(format, new Object[] { arg1, arg2 }, null, Project.MSG_ERR);
     }
   }
 
@@ -141,11 +143,11 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
   public void error(String format, Object... arguments) {
     final Object last = arguments[arguments.length - 1];
     if (last instanceof Throwable) {
-      final Object[] init = new Object[arguments.length - 1];
-      System.arraycopy(arguments, 0, init, 0, init.length);
-      log(MessageFormat.format(format, init), (Throwable) last, Project.MSG_ERR);
+      final Object[] args = new Object[arguments.length - 1];
+      System.arraycopy(arguments, 0, args, 0, args.length);
+      log(format, args, (Throwable) last, Project.MSG_ERR);
     } else {
-      log(MessageFormat.format(format, arguments), null, Project.MSG_ERR);
+      log(format, arguments, null, Project.MSG_ERR);
     }
   }
 
@@ -196,17 +198,17 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
 
   @Override
   public void debug(String format, Object arg) {
-    log(MessageFormat.format(format, arg), null, Project.MSG_VERBOSE);
+    log(format, new Object[] { arg }, null, Project.MSG_VERBOSE);
   }
 
   @Override
   public void debug(String format, Object arg1, Object arg2) {
-    log(MessageFormat.format(format, arg1, arg2), null, Project.MSG_VERBOSE);
+    log(format, new Object[] { arg1, arg2 }, null, Project.MSG_VERBOSE);
   }
 
   @Override
   public void debug(String format, Object... arguments) {
-    log(MessageFormat.format(format, arguments), null, Project.MSG_VERBOSE);
+    log(format, arguments, null, Project.MSG_VERBOSE);
   }
 
   @Override
@@ -220,21 +222,49 @@ public final class StandardLogger extends MarkerIgnoringBase implements DITAOTLo
   }
 
   private void log(final String msg, final Throwable t, final int level) {
+    log(msg, new Object[] {}, t, level);
+  }
+
+  private void log(final String msg, final Object[] args, final Throwable t, final int level) {
     if (level > msgOutputLevel) {
       return;
     }
     if (useColor && level == Project.MSG_ERR) {
       err.print(ANSI_RED);
-      err.print(Main.locale.getString("error_msg").formatted(""));
+      err.printf(Main.locale.getString("error_msg"), "");
       err.print(ANSI_RESET);
-      err.println(msg);
     } else if (useColor && level == Project.MSG_WARN) {
       err.print(ANSI_YELLOW);
-      err.print(Main.locale.getString("warn_msg").formatted(""));
+      err.printf(Main.locale.getString("warn_msg"), "");
       err.print(ANSI_RESET);
-      err.println(msg);
+    }
+    if (args.length > 0) {
+      if (msg.contains("{}") || msg.contains("%s")) {
+        out.println(MessageFormat.format(addIndex(msg), args));
+      } else {
+        out.println(MessageFormat.format(msg, args));
+      }
     } else {
       out.println(msg);
     }
+  }
+
+  private static final Pattern ARGUMENT = Pattern.compile("\\{}|%s");
+
+  private String addIndex(String msg) {
+    final Matcher matcher = ARGUMENT.matcher(msg);
+    final StringBuilder buf = new StringBuilder();
+    int start = 0;
+    for (int i = 0; matcher.find(start); i++) {
+      buf.append(msg, start, matcher.start());
+      buf.append("{");
+      buf.append(i);
+      buf.append("}");
+      start = matcher.end();
+    }
+    if (start < msg.length()) {
+      buf.append(msg, start, msg.length());
+    }
+    return buf.toString();
   }
 }
