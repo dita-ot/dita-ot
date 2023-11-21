@@ -13,13 +13,11 @@ import static org.dita.dost.invoker.Main.locale;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import org.apache.tools.ant.Project;
 
 public class PluginsArguments extends Arguments {
 
   @Override
   PluginsArguments parse(final String[] arguments) {
-    msgOutputLevel = Project.MSG_WARN;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();

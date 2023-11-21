@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.Map;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 public class DeliverablesArguments extends Arguments {
 
@@ -24,7 +23,6 @@ public class DeliverablesArguments extends Arguments {
 
   @Override
   DeliverablesArguments parse(final String[] arguments) {
-    msgOutputLevel = Project.MSG_INFO;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();

@@ -78,16 +78,16 @@ class StandardLoggerTest {
   void warn() {
     logger.warn(MSG);
 
-    assertOut(MSG);
-    assertErr();
+    assertOut();
+    assertErr(MSG);
   }
 
   @Test
   void error() {
     logger.error(MSG);
 
-    assertOut(MSG);
-    assertErr();
+    assertOut();
+    assertErr(MSG);
   }
 
   private void assertOut() {

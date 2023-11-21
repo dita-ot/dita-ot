@@ -78,10 +78,17 @@ public final class PluginInstall {
 
   public void execute() throws Exception {
     init();
-    if (pluginFile == null && pluginUri == null && pluginName == null) {
-      throw new BuildException(new IllegalStateException("pluginName argument not set"));
+    if (pluginFile != null || pluginUri != null || pluginName != null) {
+      installPlugin();
     }
+    try {
+      integrator.execute();
+    } catch (final Exception e) {
+      throw new BuildException("Integration failed: " + e.getMessage(), e);
+    }
+  }
 
+  private void installPlugin() throws Exception {
     try {
       final Map<String, Path> installs = new HashMap<>();
       if (pluginFile != null && Files.exists(pluginFile)) {
@@ -112,7 +119,7 @@ public final class PluginInstall {
             integrator.addRemoved(name);
             FileUtils.deleteDirectory(pluginDir);
           } else {
-            logger.warn(String.format(Main.locale.getString("install.error.exists"), name));
+            logger.warn(Main.locale.getString("install.error.exists"), name);
             throw new BuildException();
           }
         }
@@ -123,16 +130,12 @@ public final class PluginInstall {
     } finally {
       cleanUp();
     }
-    try {
-      integrator.execute();
-    } catch (final Exception e) {
-      throw new BuildException("Integration failed: " + e.getMessage(), e);
-    }
   }
 
   private void cleanUp() {
     if (tempDir != null) {
       try {
+        logger.trace("Delete {}", tempDir);
         FileUtils.deleteDirectory(tempDir);
       } catch (IOException e) {
         throw new BuildException(e);
@@ -181,13 +184,13 @@ public final class PluginInstall {
   }
 
   private Set<Registry> readRegistry(final String name, final SemVerMatch version) {
-    logger.info("Reading registries for {0} {1}", name, Objects.requireNonNullElse(version, ""));
+    logger.trace("Reading registries for {0} {1}", name, Objects.requireNonNullElse(version, ""));
     Registry res = null;
     for (final String registry : registries) {
       final URI registryUrl = URI.create(registry + name + ".json");
       logger.debug("Read registry {0}", registry);
       try (BufferedInputStream in = new BufferedInputStream(registryUrl.toURL().openStream())) {
-        logger.debug("Parse registry");
+        logger.trace("Parse registry");
         final JsonFactory factory = mapper.getFactory();
         final JsonParser parser = factory.createParser(in);
         final JsonNode obj = mapper.readTree(parser);
@@ -200,7 +203,7 @@ public final class PluginInstall {
         final Optional<Registry> reg = findPlugin(regs, version);
         if (reg.isPresent()) {
           final Registry plugin = reg.get();
-          logger.debug("Plugin found at {0}@{1}", registryUrl, plugin.vers);
+          logger.trace("Plugin found at {0}@{1}", registryUrl, plugin.vers);
           res = plugin;
           break;
         }
@@ -237,7 +240,7 @@ public final class PluginInstall {
     final HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
     final HttpRequest request = HttpRequest.newBuilder().GET().uri(uri).build();
     try {
-      logger.info("Download {0}", request.uri());
+      logger.debug("Download {}", request.uri());
       client.send(request, HttpResponse.BodyHandlers.ofFile(tempPluginFile.toPath()));
     } catch (IOException | InterruptedException e) {
       throw new Exception(Main.locale.getString("install.error.download_failure").formatted(uri), e);
@@ -261,7 +264,7 @@ public final class PluginInstall {
   private Path unzip(final File input) throws Exception {
     final Path tempPluginDir = new File(tempDir, "plugin").toPath();
 
-    logger.debug("Expanding {0} to {1}", input, tempPluginDir);
+    logger.trace("Expanding {0} to {1}", input, tempPluginDir);
     try (ZipInputStream zipIn = new ZipInputStream(Files.newInputStream(input.toPath()))) {
       for (ZipEntry ze; (ze = zipIn.getNextEntry()) != null;) {
         Path resolvedPath = tempPluginDir.resolve(ze.getName()).normalize();
@@ -272,7 +275,7 @@ public final class PluginInstall {
           Files.createDirectories(resolvedPath);
         } else {
           Files.createDirectories(resolvedPath.getParent());
-          logger.debug("Write {0}", resolvedPath);
+          logger.trace("Write {0}", resolvedPath);
           Files.copy(zipIn, resolvedPath);
         }
       }

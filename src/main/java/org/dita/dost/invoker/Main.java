@@ -149,14 +149,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private void printErrorMessage(final String msg) {
-    //    if (args != null && args.useColor) {
-    //      System.err.print(DefaultLogger.ANSI_RED);
-    //      System.err.print(locale.getString("error_msg").formatted(msg));
-    //      System.err.println(DefaultLogger.ANSI_RESET);
-    //    } else {
-    //      System.err.println(locale.getString("error_msg").formatted(msg));
-    //    }
-    //    System.err.println();
     logger.error(msg);
   }
 

@@ -246,13 +246,13 @@ public final class Integrator {
     removed.removeAll(mod);
     removed.sort(Comparator.naturalOrder());
     for (final String p : removed) {
-      logger.info("Removed " + p);
+      logger.info("Removed {}", p);
     }
     final List<String> added = new ArrayList<>(mod);
     added.removeAll(orig);
     added.sort(Comparator.naturalOrder());
     for (final String p : added) {
-      logger.info("Added " + p);
+      logger.info("Added {}", p);
     }
   }
 
@@ -272,7 +272,7 @@ public final class Integrator {
     // generate the files from template
     for (final Entry<String, Value> template : templateSet.entrySet()) {
       final File templateFile = new File(ditaDir, template.getKey());
-      logger.debug("Process template " + templateFile.getPath());
+      logger.trace("Process template " + templateFile.getPath());
       //            fileGen.setPluginId(template.getValue().id);
       fileGen.generate(templateFile);
     }
@@ -355,7 +355,7 @@ public final class Integrator {
       if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
-      logger.debug("Generate configuration properties " + outFile.getPath());
+      logger.trace("Generate configuration properties {}", outFile.getPath());
       out = new BufferedOutputStream(new FileOutputStream(outFile));
       configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
     } catch (final Exception e) {
@@ -459,7 +459,7 @@ public final class Integrator {
       try {
         customIntegrator.process();
       } catch (final Exception e) {
-        logger.error("Custom integrator " + customIntegrator.getClass().getName() + " failed: " + e.getMessage(), e);
+        logger.error("Custom integrator {} failed: {}", customIntegrator.getClass().getName(), e.getMessage(), e);
       }
     }
   }
@@ -526,7 +526,7 @@ public final class Integrator {
       if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
-      logger.debug("Generate environment shell " + outFile.getPath());
+      logger.trace("Generate environment shell " + outFile.getPath());
       out = new BufferedWriter(new FileWriter(outFile));
 
       out.write("#!/bin/sh\n");
@@ -557,7 +557,7 @@ public final class Integrator {
       if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
-      logger.debug("Generate environment batch " + outFile.getPath());
+      logger.trace("Generate environment batch " + outFile.getPath());
       out = new BufferedWriter(new FileWriter(outFile));
 
       for (final File relativeLib : jars) {
@@ -583,7 +583,7 @@ public final class Integrator {
       if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
-      logger.debug("Generate start command shell " + outFile.getPath());
+      logger.trace("Generate start command shell {}", outFile.getPath());
       out = new BufferedWriter(new FileWriter(outFile));
 
       out.write(
@@ -656,7 +656,7 @@ public final class Integrator {
       if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
-      logger.debug("Generate start command batch " + outFile.getPath());
+      logger.trace("Generate start command batch {}", outFile.getPath());
       out = new BufferedWriter(new FileWriter(outFile));
 
       out.write(
@@ -732,8 +732,7 @@ public final class Integrator {
           .map(val -> new Value(plugin, val))
           .collect(Collectors.toList());
         if (!extensionPoints.contains(key)) {
-          final String msg = "Plug-in " + plugin + " uses an undefined extension point " + key;
-          throw new RuntimeException(msg);
+          throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
         }
         if (featureTable.containsKey(key)) {
           final List<Value> value = featureTable.get(key);
@@ -827,7 +826,7 @@ public final class Integrator {
     if (!descSet.isEmpty()) {
       final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
       for (final File descFile : descSet) {
-        logger.debug("Read plug-in configuration " + descFile.getPath());
+        logger.trace("Read plug-in configuration {}", descFile.getPath());
         final Element plugin = parseDesc(descFile);
         if (plugin != null) {
           final URI base = getRelativePath(b, descFile.toURI());
@@ -840,7 +839,7 @@ public final class Integrator {
 
   private void writePlugins() throws TransformerException {
     final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
-    logger.debug("Writing " + plugins);
+    logger.trace("Writing {}", plugins);
     try {
       new XMLUtils().writeDocument(pluginsDoc, plugins);
     } catch (final IOException e) {
@@ -904,13 +903,11 @@ public final class Integrator {
   private void validatePlugin(final Features f) {
     final String id = f.getPluginId();
     if (!ID_PATTERN.matcher(id).matches()) {
-      final String msg = "Plug-in ID '" + id + "' doesn't follow syntax rules.";
-      throw new IllegalArgumentException(msg);
+      throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
     }
     final List<String> version = f.getFeature("package.version");
     if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-      final String msg = "Plug-in version '" + version.get(0) + "' doesn't follow syntax rules.";
-      throw new IllegalArgumentException(msg);
+      throw new IllegalArgumentException("Plug-in version '%s' doesn't follow syntax rules.".formatted(version.get(0)));
     }
   }
 

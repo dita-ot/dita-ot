@@ -105,6 +105,7 @@ public class ConversionArguments extends Arguments {
 
   @Override
   ConversionArguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_WARN;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
