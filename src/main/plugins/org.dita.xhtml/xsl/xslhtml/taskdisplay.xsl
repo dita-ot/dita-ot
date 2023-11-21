@@ -709,16 +709,8 @@ See the accompanying LICENSE file for applicable license.
 <xsl:template match="*" mode="generate-task-label">
   <xsl:param name="use-label"/>
   <xsl:if test="$GENERATE-TASK-LABELS='YES'">
-    <xsl:variable name="headLevel">
-      <xsl:variable name="headCount" select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1"
-        as="xs:integer"/>
-      <xsl:choose>
-        <xsl:when test="$headCount > 6">h6</xsl:when>
-        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
     <div class="tasklabel">
-      <xsl:element name="{$headLevel}">
+      <xsl:element name="h{dita2html:get-heading-level(.)}">
         <xsl:attribute name="class">sectiontitle tasklabel</xsl:attribute>
         <xsl:value-of select="$use-label"/>
       </xsl:element>

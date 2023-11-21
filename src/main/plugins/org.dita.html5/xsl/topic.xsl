@@ -257,12 +257,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Condensed topic title into single template without priorities; use $headinglevel to set heading.
        If desired, somebody could pass in the value to manually set the heading level -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
-    <xsl:param name="headinglevel" as="xs:integer">
-        <xsl:choose>
-            <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
-            <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
-        </xsl:choose>
-    </xsl:param>
+    <xsl:param name="headinglevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
     <xsl:element name="h{$headinglevel}">
         <xsl:attribute name="class" select="concat('topictitle', $headinglevel)"/>
         <xsl:call-template name="commonattributes">
@@ -289,6 +284,35 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/titlealts ')]"/>
   
   
+  <!-- =========== HEADING LEVELS =========== -->
+
+  <!-- returns heading level (1 through 6) appropriate at the specified element -->
+  <xsl:function name="dita2html:get-heading-level" as="xs:integer">
+    <xsl:param name="element" as="element()"/>
+    <xsl:sequence select="min((6, count($element/ancestor-or-self::*[dita2html:is-heading-level(.)])))"/>
+  </xsl:function>
+
+  <!-- returns true() for elements that count as a heading level -->
+  <!-- (this is an accessor function to the moded templates below) -->
+  <xsl:function name="dita2html:is-heading-level" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:apply-templates select="$element" mode="dita2html:is-heading-level"/>
+  </xsl:function>
+  <xsl:template match="*" mode="dita2html:is-heading-level">
+    <xsl:sequence select="false()"/>
+  </xsl:template>
+
+  <!-- <topic> always increments the heading level (title or not) -->
+  <xsl:template match="*[contains(@class, 'topic/topic ')]" mode="dita2html:is-heading-level">
+    <xsl:sequence select="true()"/>
+  </xsl:template>
+
+  <!-- <section> and <example> with titles increment the heading level -->
+  <xsl:template match="*[contains(@class, 'topic/section ') or contains(@class, 'topic/example ')][*[contains(@class, 'topic/title ')] or @spectitle]" mode="dita2html:is-heading-level">
+    <xsl:sequence select="true()"/>
+  </xsl:template>
+
+
   <!-- =========== BODY/SECTION (not sensitive to nesting depth) =========== -->
   
   <xsl:template match="*[contains(@class, ' topic/body ')]" name="topic.body">
@@ -2040,15 +2064,8 @@ See the accompanying LICENSE file for applicable license.
        </xsl:choose>
     </xsl:variable>
   
-    <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')]) + 1"/>
-    <xsl:variable name="headLevel">
-      <xsl:choose>
-        <xsl:when test="$headCount > 6">h6</xsl:when>
-        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-  
     <!-- based on graceful defaults, build an appropriate section-level heading -->
+    <xsl:variable name="headLevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
     <xsl:choose>
       <xsl:when test="not($heading = '')">
         <xsl:if test="normalize-space($heading) = ''">
@@ -2059,14 +2076,14 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="headLevel" select="$headLevel"/>
         </xsl:apply-templates>
         <xsl:if test="@spectitle and not(*[contains(@class, ' topic/title ')])">
-          <xsl:element name="{$headLevel}">
+          <xsl:element name="h{$headLevel}">
             <xsl:attribute name="class">sectiontitle</xsl:attribute>
             <xsl:value-of select="@spectitle"/>
           </xsl:element>
         </xsl:if>
       </xsl:when>
       <xsl:when test="$defaulttitle">
-        <xsl:element name="{$headLevel}">
+        <xsl:element name="h{$headLevel}">
           <xsl:attribute name="class">sectiontitle</xsl:attribute>
           <xsl:value-of select="$defaulttitle"/>
         </xsl:element>
@@ -2076,14 +2093,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' topic/section ')]/*[contains(@class, ' topic/title ')] | 
     *[contains(@class, ' topic/example ')]/*[contains(@class, ' topic/title ')]" name="topic.section_title">
-    <xsl:param name="headLevel">
-      <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')])+1"/>
-      <xsl:choose>
-        <xsl:when test="$headCount > 6">h6</xsl:when>
-        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:param>
-    <xsl:element name="{$headLevel}">
+    <xsl:param name="headLevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
+    <xsl:element name="h{$headLevel}">
       <xsl:attribute name="class">sectiontitle</xsl:attribute>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'sectiontitle'"/>
