@@ -55,7 +55,7 @@ public final class DITAOTAntLogger extends AbstractLogger {
   }
 
   @Override
-  void log(final String msg, final Throwable t, final int level) {
+  public void log(final String msg, final Throwable t, final int level) {
     if (task != null) {
       project.log(task, msg, level);
     } else if (target != null) {

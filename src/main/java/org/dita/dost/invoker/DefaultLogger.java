@@ -37,24 +37,14 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.StringUtils;
+import org.dita.dost.log.AbstractLogger;
 
 /**
  * Writes build events to a PrintStream. Currently, it only writes which targets
  * are being executed, and any messages that get logged.
  *
  */
-class DefaultLogger implements BuildLogger {
-
-  public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_BLACK = "\u001B[30m";
-  public static final String ANSI_RED = "\u001B[31m";
-  public static final String ANSI_GREEN = "\u001B[32m";
-  public static final String ANSI_YELLOW = "\u001B[33m";
-  public static final String ANSI_BLUE = "\u001B[34m";
-  public static final String ANSI_PURPLE = "\u001B[35m";
-  public static final String ANSI_CYAN = "\u001B[36m";
-  public static final String ANSI_WHITE = "\u001B[37m";
-  public static final String ANSI_BOLD = "\u001b[1m";
+class DefaultLogger extends AbstractLogger implements BuildLogger {
 
   /**
    * Size of left-hand column for right-justified task name.
@@ -71,26 +61,29 @@ class DefaultLogger implements BuildLogger {
   private PrintStream err;
 
   /** Lowest level of message to write out */
-  private int msgOutputLevel = Project.MSG_ERR;
+  //  private int msgOutputLevel = Project.MSG_ERR;
 
   /** Time of the start of the build */
   private long startTime = System.currentTimeMillis();
 
   // CheckStyle:ConstantNameCheck OFF - bc
   /** Line separator */
-  protected static final String lSep = StringUtils.LINE_SEP;
+  //  protected static final String lSep = StringUtils.LINE_SEP;
   // CheckStyle:ConstantNameCheck ON
 
   /** Whether or not to use emacs-style output */
   private boolean emacsMode = false;
-  private boolean useColor = false;
+
+  //  private boolean useColor = false;
 
   // CheckStyle:VisibilityModifier ON
 
   /**
    * Sole constructor.
    */
-  public DefaultLogger() {}
+  public DefaultLogger() {
+    msgOutputLevel = Project.MSG_ERR;
+  }
 
   /**
    * Sets the highest level of message this logger should respond to.
@@ -187,7 +180,13 @@ class DefaultLogger implements BuildLogger {
       // message.append(StringUtils.LINE_SEP);
       // message.append(getBuildFailedMessage());
       //            message.append(StringUtils.LINE_SEP);
+      if (useColor) {
+        message.append(ANSI_RED);
+      }
       message.append("Error: ");
+      if (useColor) {
+        message.append(ANSI_RESET);
+      }
       throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
     }
     // message.append(StringUtils.LINE_SEP);
@@ -198,7 +197,11 @@ class DefaultLogger implements BuildLogger {
     if (error == null && !msg.trim().isEmpty()) {
       printMessage(msg, out, Project.MSG_VERBOSE);
     } else if (!msg.isEmpty()) {
-      printMessage(msg, err, Project.MSG_ERR);
+      if (useColor) {
+        printMessage(removeLevelPrefix(message).toString(), err, Project.MSG_ERR);
+      } else {
+        printMessage(msg, err, Project.MSG_ERR);
+      }
     }
     log(msg);
   }
@@ -325,7 +328,7 @@ class DefaultLogger implements BuildLogger {
       if (priority != Project.MSG_ERR) {
         printMessage(msg, out, priority);
       } else {
-        printMessage(msg, err, priority);
+        printMessage(removeLevelPrefix(new StringBuilder(msg)).toString(), err, priority);
       }
       log(msg);
     }
@@ -355,21 +358,21 @@ class DefaultLogger implements BuildLogger {
    */
   private void printMessage(final String message, final PrintStream stream, final int priority) {
     if (useColor && priority == Project.MSG_ERR) {
-      stream.print(ANSI_RED);
+      //      stream.print(ANSI_RED);
       stream.print(message);
-      stream.println(ANSI_RESET);
+      //      stream.println(ANSI_RESET);
     } else {
       stream.println(message);
     }
     //    if (useColor && priority == Project.MSG_ERR) {
     //      stream.print(ANSI_RED);
     //      stream.print("Error");
-    //      stream.println(ANSI_RESET);
+    //      stream.print(ANSI_RESET);
     //      stream.print(": ");
     //    } else if (useColor && priority == Project.MSG_WARN) {
     //      stream.print(ANSI_YELLOW);
     //      stream.print("Warning");
-    //      stream.println(ANSI_RESET);
+    //      stream.print(ANSI_RESET);
     //      stream.print(": ");
     //    }
     //    stream.println(message);
@@ -405,5 +408,10 @@ class DefaultLogger implements BuildLogger {
   protected String extractProjectName(final BuildEvent event) {
     final Project project = event.getProject();
     return (project != null) ? project.getName() : null;
+  }
+
+  @Override
+  public void log(String msg, Throwable t, int level) {
+    throw new UnsupportedOperationException();
   }
 }

@@ -145,12 +145,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void printMessage(final Throwable t) {
     final String message = t.getMessage();
     if (message != null && !message.trim().isEmpty()) {
-      printErrorMessage(message);
+      printErrorMessage(message, t);
     }
   }
 
-  private void printErrorMessage(final String msg) {
-    logger.error(msg);
+  private void printErrorMessage(final String msg, final Throwable t) {
+    logger.error(msg, t);
   }
 
   /**
@@ -637,7 +637,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       for (Publication.Param param : deliverable.publication().params()) {
         if (RESERVED_PARAMS.containsKey(param.name())) {
           printErrorMessage(
-            MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString()
+            MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString(),
+            null
           );
         }
       }
@@ -845,10 +846,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (final Throwable t) {
         // yes, I know it is bad style to catch Throwable,
         // but if we don't, we lose valuable information
-        printErrorMessage("Caught an exception while logging the end of the build. Exception was:");
+        printErrorMessage("Caught an exception while logging the end of the build. Exception was:", null);
         t.printStackTrace();
         if (error != null) {
-          printErrorMessage("There has been an error prior to that:");
+          printErrorMessage("There has been an error prior to that:", null);
           error.printStackTrace();
         }
         throw new BuildException(t);
@@ -916,7 +917,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         logger = ClasspathUtils.newInstance(args.loggerClassname, Main.class.getClassLoader(), BuildLogger.class);
       } catch (final BuildException e) {
         printErrorMessage(
-          "The specified logger class " + args.loggerClassname + " could not be used because " + e.getMessage()
+          "The specified logger class " + args.loggerClassname + " could not be used because " + e.getMessage(),
+          e
         );
         throw new RuntimeException();
       }
