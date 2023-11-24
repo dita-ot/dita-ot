@@ -18,6 +18,8 @@ import org.apache.tools.ant.Task;
  */
 public final class DITAOTAntLogger extends AbstractLogger {
 
+  public static final String USE_COLOR = "dita.use-color";
+
   private final Project project;
   private Task task;
   private Target target;
@@ -33,6 +35,7 @@ public final class DITAOTAntLogger extends AbstractLogger {
       throw new NullPointerException();
     }
     this.project = project;
+    this.useColor = Boolean.parseBoolean(project.getProperty(USE_COLOR));
   }
 
   /**

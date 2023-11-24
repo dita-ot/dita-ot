@@ -27,6 +27,7 @@
 package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.Arguments.*;
+import static org.dita.dost.log.DITAOTAntLogger.USE_COLOR;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.LangUtils.pair;
@@ -354,6 +355,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
       definedProps.putAll(getLocalProperties(ditaDir));
+      definedProps.put(USE_COLOR, Boolean.toString(conversionArgs.useColor));
       if (conversionArgs.projectFile == null) {
         projectProps = Collections.singletonList(definedProps);
       } else {

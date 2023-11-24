@@ -250,8 +250,43 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
       } else {
         buf.append(MessageFormat.format(msg, args));
       }
+    } else if (buf != null) {
+      buf.append(msg);
     }
-    log(buf != null ? buf.toString() : msg, t, level);
+    final String res;
+    if (!useColor) {
+      res = buf != null ? buf.toString() : msg;
+    } else if (buf != null) {
+      res = removeLevelPrefix(buf).toString();
+    } else {
+      res = removeLevelPrefix(msg);
+    }
+    log(res, t, level);
+  }
+
+  private static String removeLevelPrefix(String msg) {
+    var start = msg.indexOf("][");
+    if (start == -1) {
+      return msg;
+    }
+    var end = msg.indexOf("] ", start);
+    if (end == -1) {
+      return msg;
+    }
+    return msg.substring(0, start) + msg.substring(end);
+  }
+
+  private static StringBuilder removeLevelPrefix(StringBuilder msg) {
+    var start = msg.indexOf("][");
+    if (start == -1) {
+      return msg;
+    }
+    var end = msg.indexOf("] ", start);
+    if (end == -1) {
+      return msg;
+    }
+    msg.replace(start, end, "");
+    return msg;
   }
 
   private static final Pattern ARGUMENT = Pattern.compile("\\{}|%s");

@@ -361,6 +361,18 @@ class DefaultLogger implements BuildLogger {
     } else {
       stream.println(message);
     }
+    //    if (useColor && priority == Project.MSG_ERR) {
+    //      stream.print(ANSI_RED);
+    //      stream.print("Error");
+    //      stream.println(ANSI_RESET);
+    //      stream.print(": ");
+    //    } else if (useColor && priority == Project.MSG_WARN) {
+    //      stream.print(ANSI_YELLOW);
+    //      stream.print("Warning");
+    //      stream.println(ANSI_RESET);
+    //      stream.print(": ");
+    //    }
+    //    stream.println(message);
   }
 
   /**
