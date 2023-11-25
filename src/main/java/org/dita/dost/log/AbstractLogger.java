@@ -224,7 +224,7 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
   public abstract void log(final String msg, final Throwable t, final int level);
 
   protected void log(final String msg, final Object[] args, final Throwable t, final int level) {
-    if (level <= msgOutputLevel) {
+    if (level > msgOutputLevel) {
       return;
     }
     StringBuilder buf = null;
@@ -264,12 +264,12 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
     log(res, t, level);
   }
 
-  private static String removeLevelPrefix(String msg) {
+  protected static String removeLevelPrefix(String msg) {
     var start = msg.indexOf("][");
     if (start == -1) {
       return msg;
     }
-    var end = msg.indexOf("] ", start);
+    var end = msg.indexOf("]", start + 1);
     if (end == -1) {
       return msg;
     }
@@ -281,7 +281,7 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
     if (start == -1) {
       return msg;
     }
-    var end = msg.indexOf("] ", start);
+    var end = msg.indexOf("]", start + 1);
     if (end == -1) {
       return msg;
     }
