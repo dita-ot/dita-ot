@@ -236,9 +236,29 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void targetStarted(final BuildEvent event) {
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
-      final String msg = StringUtils.LINE_SEP + event.getTarget().getName() + ":";
-      printMessage(msg, out, event.getPriority());
-      log(msg);
+      final String msg;
+      if (useColor) {
+        if (event.getTarget().getDescription() == null) {
+          msg = null;
+        } else {
+          msg =
+            new StringBuilder()
+              .append(StringUtils.LINE_SEP)
+              .append(ANSI_BLUE)
+              .append("==> ")
+              .append(ANSI_RESET)
+              .append(ANSI_BOLD)
+              .append(event.getTarget().getDescription())
+              .append(ANSI_RESET)
+              .toString();
+        }
+      } else {
+        msg = StringUtils.LINE_SEP + event.getTarget().getName() + ":";
+      }
+      if (msg != null) {
+        printMessage(msg, out, event.getPriority());
+        log(msg);
+      }
     }
   }
 
