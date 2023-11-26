@@ -94,10 +94,10 @@ See the accompanying LICENSE file for applicable license.
     </pathconvert>
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
     
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echo level="info">${log-prefix}input = ${args.input}</echo>
     <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
-    <echo level="info">*****************************************************************</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
     
     <echoxml file="${dita.temp.dir}/.job.xml">
       <job>

@@ -42,8 +42,7 @@ See the accompanying LICENSE file for applicable license.
                   clean-preprocess,
                   copy-files,
                   {depend.preprocess.post}"
-    dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    description="Preprocessing ended" />
+    dita:extension="depends org.dita.dost.platform.InsertDependsAction" />
   
   <target name="preprocess.init">
     <dita-ot-fail id="DOTA002F">
@@ -90,10 +89,10 @@ See the accompanying LICENSE file for applicable license.
     </pathconvert>
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
     
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
-    <echo level="info">* resources = ${args.resources}</echo>
-    <echo level="info">*****************************************************************</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echo level="info">${log-prefix}input = ${args.input}</echo>
+    <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
   </target>
   
   <!-- clean-temp
