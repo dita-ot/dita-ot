@@ -249,7 +249,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
       if (this.args.repeat > 1) {
         for (int i = 0; i < durations.length; i++) {
-          System.out.println(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
+          logger.info(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
         }
       }
     } catch (final BuildException be) {
@@ -409,10 +409,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // Normalize buildFile for re-import detection
     buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
-
-    if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Buildfile " + buildFile);
-    }
+    logger.debug("Buildfile " + buildFile);
 
     if (args.logFile != null) {
       PrintStream logTo;
@@ -507,9 +504,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private Map<String, Object> readProperties(File localPropertiesFile) {
-    if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Reading " + localPropertiesFile);
-    }
+    logger.debug("Reading " + localPropertiesFile);
     try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
       final Properties localProperties = new Properties();
       localProperties.load(in);
@@ -518,7 +513,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .stream()
         .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
     } catch (IOException e) {
-      System.err.println("Failed to read " + localPropertiesFile);
+      logger.error("Failed to read " + localPropertiesFile, e);
       return Collections.emptyMap();
     }
   }
@@ -702,8 +697,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private File getParentFile(final File file) {
     final File parent = file.getParentFile();
 
-    if (parent != null && args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Searching in " + parent.getAbsolutePath());
+    if (parent != null) {
+      logger.trace("Searching in " + parent.getAbsolutePath());
     }
 
     return parent;
@@ -936,7 +931,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   /**
-   * Prints the Ant version information to <code>System.out</code>.
+   * Prints the Ant version information logger.
    *
    * @throws BuildException if the version information is unavailable
    */
