@@ -195,12 +195,12 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
 
     final String msg = message.toString();
     if (error == null && !msg.trim().isEmpty()) {
-      printMessage(msg, out, Project.MSG_VERBOSE);
+      out.println(msg);
     } else if (!msg.isEmpty()) {
       if (legacyFormat) {
-        printMessage(msg, err, Project.MSG_ERR);
+        err.println(msg);
       } else {
-        printMessage(removeLevelPrefix(message).toString(), err, Project.MSG_ERR);
+        err.println(removeLevelPrefix(message));
       }
     }
     log(msg);
@@ -256,7 +256,7 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
         msg = StringUtils.LINE_SEP + event.getTarget().getName() + ":";
       }
       if (msg != null) {
-        printMessage(msg, out, event.getPriority());
+        out.println(msg);
         log(msg);
       }
     }
@@ -347,9 +347,9 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
       final String msg = message.toString();
       final PrintStream dst = priority == Project.MSG_ERR ? err : out;
       if (legacyFormat) {
-        printMessage(msg, dst, priority);
+        dst.println(msg);
       } else {
-        printMessage(removeLevelPrefix(new StringBuilder(msg)).toString(), dst, priority);
+        dst.println(removeLevelPrefix(new StringBuilder(msg)));
       }
       log(msg);
     }
@@ -366,37 +366,6 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
    */
   protected static String formatTime(final long millis) {
     return DateUtils.formatElapsedTime(millis);
-  }
-
-  /**
-   * Prints a message to a PrintStream.
-   *
-   * @param message The message to print. Should not be <code>null</code>.
-   * @param stream A PrintStream to print the message to. Must not be
-   *            <code>null</code>.
-   * @param priority The priority of the message. (Ignored in this
-   *            implementation.)
-   */
-  private void printMessage(final String message, final PrintStream stream, final int priority) {
-    if (useColor && priority == Project.MSG_ERR) {
-      //      stream.print(ANSI_RED);
-      stream.print(message);
-      //      stream.println(ANSI_RESET);
-    } else {
-      stream.println(message);
-    }
-    //    if (useColor && priority == Project.MSG_ERR) {
-    //      stream.print(ANSI_RED);
-    //      stream.print("Error");
-    //      stream.print(ANSI_RESET);
-    //      stream.print(": ");
-    //    } else if (useColor && priority == Project.MSG_WARN) {
-    //      stream.print(ANSI_YELLOW);
-    //      stream.print("Warning");
-    //      stream.print(ANSI_RESET);
-    //      stream.print(": ");
-    //    }
-    //    stream.println(message);
   }
 
   /**

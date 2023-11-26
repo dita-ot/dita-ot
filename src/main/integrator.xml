@@ -21,7 +21,6 @@ See the accompanying LICENSE file for applicable license.
     </and>
   </condition>
 
-
   <target name="integrate">
     <taskdef name="integrate" classname="org.dita.dost.ant.IntegratorTask"/>
     <integrate ditadir="${dita.dir}" />
