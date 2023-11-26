@@ -47,6 +47,8 @@ class AbstractLoggerTest extends AbstractLogger {
 
   @BeforeEach
   void setUp() {
+    useColor = true;
+    msgOutputLevel = Project.MSG_DEBUG;
     expMessage = null;
     expThrowable = null;
     expLevel = null;
@@ -55,7 +57,17 @@ class AbstractLoggerTest extends AbstractLogger {
   @Test
   void logArguments_filter() {
     msgOutputLevel = Project.MSG_WARN;
+
     log("Message", null, null, Project.MSG_INFO);
+  }
+
+  @Test
+  void logArguments_filter_default() {
+    expMessage = "Message";
+    expThrowable = null;
+    expLevel = Project.MSG_DEBUG;
+
+    log("Message", new Object[] {}, null, Project.MSG_DEBUG);
   }
 
   @ParameterizedTest

@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.tools.ant.Project;
 import org.dita.dost.invoker.Main;
+import org.dita.dost.util.Configuration;
 import org.slf4j.helpers.MarkerIgnoringBase;
 
 /**
@@ -30,8 +31,9 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
   public static final String ANSI_WHITE = "\u001B[37m";
   public static final String ANSI_BOLD = "\u001b[1m";
 
-  protected int msgOutputLevel;
+  protected int msgOutputLevel = Project.MSG_DEBUG;
   protected boolean useColor;
+  protected boolean legacyFormat = Configuration.configuration.getOrDefault("cli.log-format", "fancy").equals("legacy");
 
   public void setOutputLevel(final int msgOutputLevel) {
     this.msgOutputLevel = msgOutputLevel;
@@ -228,18 +230,20 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
       return;
     }
     StringBuilder buf = null;
-    if (useColor && level == Project.MSG_ERR) {
-      buf =
-        new StringBuilder()
-          .append(ANSI_RED)
-          .append(Main.locale.getString("error_msg").formatted(""))
-          .append(ANSI_RESET);
-    } else if (useColor && level == Project.MSG_WARN) {
-      buf =
-        new StringBuilder()
-          .append(ANSI_YELLOW)
-          .append(Main.locale.getString("warn_msg").formatted(""))
-          .append(ANSI_RESET);
+    if (!legacyFormat) {
+      if (useColor && level == Project.MSG_ERR) {
+        buf =
+          new StringBuilder()
+            .append(ANSI_RED)
+            .append(Main.locale.getString("error_msg").formatted(""))
+            .append(ANSI_RESET);
+      } else if (useColor && level == Project.MSG_WARN) {
+        buf =
+          new StringBuilder()
+            .append(ANSI_YELLOW)
+            .append(Main.locale.getString("warn_msg").formatted(""))
+            .append(ANSI_RESET);
+      }
     }
     if (args.length > 0) {
       if (buf == null) {
@@ -254,7 +258,7 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
       buf.append(msg);
     }
     final String res;
-    if (!useColor) {
+    if (legacyFormat) {
       res = buf != null ? buf.toString() : msg;
     } else if (buf != null) {
       res = removeLevelPrefix(buf).toString();

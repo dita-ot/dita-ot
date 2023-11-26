@@ -197,10 +197,10 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     if (error == null && !msg.trim().isEmpty()) {
       printMessage(msg, out, Project.MSG_VERBOSE);
     } else if (!msg.isEmpty()) {
-      if (useColor) {
-        printMessage(removeLevelPrefix(message).toString(), err, Project.MSG_ERR);
-      } else {
+      if (legacyFormat) {
         printMessage(msg, err, Project.MSG_ERR);
+      } else {
+        printMessage(removeLevelPrefix(message).toString(), err, Project.MSG_ERR);
       }
     }
     log(msg);
@@ -345,10 +345,11 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
       }
 
       final String msg = message.toString();
-      if (priority != Project.MSG_ERR) {
-        printMessage(msg, out, priority);
+      final PrintStream dst = priority == Project.MSG_ERR ? err : out;
+      if (legacyFormat) {
+        printMessage(msg, dst, priority);
       } else {
-        printMessage(removeLevelPrefix(new StringBuilder(msg)).toString(), err, priority);
+        printMessage(removeLevelPrefix(new StringBuilder(msg)).toString(), dst, priority);
       }
       log(msg);
     }
