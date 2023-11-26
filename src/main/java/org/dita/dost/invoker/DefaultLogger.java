@@ -174,8 +174,17 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     final Throwable error = event.getException();
     final StringBuilder message = new StringBuilder();
     if (error == null) {
-      // message.append(StringUtils.LINE_SEP);
-      // message.append(getBuildSuccessfulMessage());
+      if (msgOutputLevel >= Project.MSG_INFO) {
+        message.append(StringUtils.LINE_SEP);
+        if (useColor) {
+          message.append(ANSI_BOLD).append(ANSI_GREEN);
+        }
+        message.append(getBuildSuccessfulMessage());
+        if (useColor) {
+          message.append(ANSI_RESET);
+        }
+        message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
+      }
     } else {
       // message.append(StringUtils.LINE_SEP);
       // message.append(getBuildFailedMessage());
@@ -188,6 +197,17 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
         message.append(ANSI_RESET);
       }
       throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
+      if (msgOutputLevel >= Project.MSG_INFO) {
+        message.append(StringUtils.LINE_SEP).append(StringUtils.LINE_SEP);
+        if (useColor) {
+          message.append(ANSI_BOLD).append(ANSI_RED);
+        }
+        message.append(getBuildFailedMessage());
+        if (useColor) {
+          message.append(ANSI_RESET);
+        }
+        message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
+      }
     }
     // message.append(StringUtils.LINE_SEP);
     // message.append("Total time: ");
