@@ -723,9 +723,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * not
    */
   private File findBuildFile(final String start, final String suffix) {
-    if (args.msgOutputLevel >= Project.MSG_INFO) {
-      System.out.println("Searching for " + suffix + " ...");
-    }
+    logger.debug("Searching for " + suffix);
 
     File parent = new File(new File(start).getAbsolutePath());
     File file = new File(parent, suffix);
