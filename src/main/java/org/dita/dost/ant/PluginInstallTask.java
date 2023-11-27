@@ -337,12 +337,14 @@ public final class PluginInstallTask extends Task {
     } catch (MalformedURLException | URISyntaxException e) {
       // Ignore
     }
-    if (pluginFile.contains("@")) {
-      final String[] tokens = pluginFile.split("@");
+
+    final String pluginFileName = this.pluginFile.getFileName().toString();
+    if (pluginFileName.contains("@")) {
+      final String[] tokens = pluginFileName.split("@");
       pluginName = tokens[0];
       pluginVersion = new SemVerMatch(tokens[1]);
     } else {
-      pluginName = pluginFile;
+      pluginName = pluginFileName;
       pluginVersion = null;
     }
   }
