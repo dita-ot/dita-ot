@@ -130,14 +130,16 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="html5.topics.common" unless="noTopic" if="old.transform">
+  <target name="html5.topics.common" unless="noTopic" if="old.transform"
+          description="Build HTML">
     <html5.topics>
       <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
       <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
     </html5.topics>
   </target>
 
-  <target name="html5.topics.common.inner" unless="noTopic" if="inner.transform">
+  <target name="html5.topics.common.inner" unless="noTopic" if="inner.transform"
+          description="Build HTML">
     <html5.topics>
       <dita:extension id="dita.conductor.html5.param" behavior="org.dita.dost.platform.InsertAction"/>
       <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>

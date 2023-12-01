@@ -246,6 +246,15 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     return "BUILD SUCCESSFUL";
   }
 
+  private boolean evaluate(final Project project, final String condition) {
+    final String value = project.replaceProperties(condition);
+    return switch (value) {
+      case "true" -> true;
+      case "false" -> false;
+      default -> project.getProperty(value) != null || project.getUserProperty(value) != null;
+    };
+  }
+
   /**
    * Logs a message to say that the target has started if this logger allows
    * information-level messages.
@@ -255,6 +264,12 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
    */
   @Override
   public void targetStarted(final BuildEvent event) {
+    if (event.getTarget().getIf() != null && !evaluate(event.getProject(), event.getTarget().getIf())) {
+      return;
+    }
+    if (event.getTarget().getUnless() != null && evaluate(event.getProject(), event.getTarget().getUnless())) {
+      return;
+    }
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
       final String msg;
       if (useColor) {
