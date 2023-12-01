@@ -611,11 +611,11 @@ public abstract class AbstractIntegrationTest {
 
   static class TestListener implements BuildListener {
 
-    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]|\\[FATAL\\]");
-    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]|\\[ERROR\\]");
-    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]|\\[WARN\\]");
-    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]|\\[INFO\\]");
-    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]|\\[DEBUG\\]");
+    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]");
+    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]");
+    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]");
+    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]");
+    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]");
 
     public final List<TestListener.Message> messages = new ArrayList<>();
     final PrintStream out;
