@@ -25,10 +25,7 @@
 
 package org.dita.dost.invoker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.StringReader;
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 import org.apache.tools.ant.BuildEvent;
@@ -186,19 +183,23 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
         message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
       }
     } else {
-      // message.append(StringUtils.LINE_SEP);
-      // message.append(getBuildFailedMessage());
-      //            message.append(StringUtils.LINE_SEP);
       if (useColor) {
         message.append(ANSI_RED);
       }
-      message.append("Error: ");
+      message.append(Main.locale.getString("error_msg").formatted(""));
       if (useColor) {
         message.append(ANSI_RESET);
       }
-      throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
+      try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
+        error.printStackTrace(printWriter);
+        printWriter.flush();
+        message.append(Main.locale.getString("exception_msg").formatted(buf));
+      } catch (IOException e) {
+        // Failed to print stack trace
+      }
+
       if (msgOutputLevel >= Project.MSG_INFO) {
-        message.append(StringUtils.LINE_SEP).append(StringUtils.LINE_SEP);
+        message.append(StringUtils.LINE_SEP);
         if (useColor) {
           message.append(ANSI_BOLD).append(ANSI_RED);
         }
