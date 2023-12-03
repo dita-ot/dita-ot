@@ -94,7 +94,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     if (destDir != null) {
-      logger.info("Transforming into " + destDir.getAbsolutePath());
+      logger.debug("Transforming into " + destDir.getAbsolutePath());
     }
     processor = xmlUtils.getProcessor();
     final XsltCompiler xsltCompiler = processor.newXsltCompiler();
