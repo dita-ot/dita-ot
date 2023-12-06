@@ -10,11 +10,7 @@ package org.dita.dost.util;
 import static org.dita.dost.platform.Integrator.CONF_PARSER_FORMAT;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import org.dita.dost.platform.Integrator;
 
@@ -114,6 +110,10 @@ public final class Configuration {
     }
     for (final Map.Entry<Object, Object> e : properties.entrySet()) {
       c.put(e.getKey().toString(), e.getValue().toString());
+    }
+    // Override with system properties
+    for (var systemProperty : new String[] { "cli.log-format", "cli.color" }) {
+      c.put(systemProperty, System.getProperty(systemProperty, c.get(systemProperty)));
     }
 
     configuration = Collections.unmodifiableMap(c);

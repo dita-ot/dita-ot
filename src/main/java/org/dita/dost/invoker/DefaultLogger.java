@@ -273,23 +273,22 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     }
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
       final String msg;
-      if (useColor) {
-        if (event.getTarget().getDescription() == null) {
-          msg = null;
-        } else {
-          msg =
-            new StringBuilder()
-              .append(StringUtils.LINE_SEP)
-              .append(ANSI_BLUE)
-              .append("==> ")
-              .append(ANSI_RESET)
-              .append(ANSI_BOLD)
-              .append(event.getTarget().getDescription())
-              .append(ANSI_RESET)
-              .toString();
-        }
+      if (event.getTarget().getDescription() == null) {
+        msg = null;
       } else {
-        msg = StringUtils.LINE_SEP + event.getTarget().getName() + ":";
+        var buf = new StringBuilder().append(StringUtils.LINE_SEP);
+        if (useColor) {
+          buf.append(ANSI_BLUE);
+        }
+        buf.append("==> ");
+        if (useColor) {
+          buf.append(ANSI_RESET).append(ANSI_BOLD);
+        }
+        buf.append(event.getTarget().getDescription());
+        if (useColor) {
+          buf.append(ANSI_RESET);
+        }
+        msg = buf.toString();
       }
       if (msg != null) {
         out.println(msg);

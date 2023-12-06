@@ -10,6 +10,7 @@ package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -184,6 +185,8 @@ public class ConversionArguments extends Arguments {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }
     definedProps.putAll(loadPropertyFiles());
+
+    definedProps.put("cli.log-format", configuration.get("cli.log-format"));
 
     return this;
   }

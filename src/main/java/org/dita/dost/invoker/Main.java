@@ -166,6 +166,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    *                                 <code>null</code> in which case the system classloader is
    *                                 used.
    */
+  @Deprecated
   public static void start(
     final String[] args,
     final Properties additionalUserProperties,
@@ -295,6 +296,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    *
    * @param args Command line arguments. Must not be <code>null</code>.
    */
+  @Deprecated
   public static void main(final String[] args) {
     start(args, null, null);
   }
