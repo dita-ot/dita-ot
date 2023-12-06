@@ -34,6 +34,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.StringUtils;
+import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.AbstractLogger;
 
 /**
@@ -168,7 +169,13 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
    */
   @Override
   public void buildFinished(final BuildEvent event) {
-    final Throwable error = event.getException();
+    Throwable error = event.getException();
+    for (var e = error; e != null; e = e.getCause()) {
+      if (e instanceof DITAOTException) {
+        error = e;
+        break;
+      }
+    }
     final StringBuilder message = new StringBuilder();
     if (error == null) {
       if (msgOutputLevel >= Project.MSG_INFO) {
@@ -190,12 +197,16 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
       if (useColor) {
         message.append(ANSI_RESET);
       }
-      try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
-        error.printStackTrace(printWriter);
-        printWriter.flush();
-        message.append(Main.locale.getString("exception_msg").formatted(buf));
-      } catch (IOException e) {
-        // Failed to print stack trace
+      if (error instanceof DITAOTException && msgOutputLevel < Project.MSG_INFO) {
+        message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
+      } else {
+        try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
+          error.printStackTrace(printWriter);
+          printWriter.flush();
+          message.append(Main.locale.getString("exception_msg").formatted(buf));
+        } catch (IOException e) {
+          // Failed to print stack trace
+        }
       }
 
       if (msgOutputLevel >= Project.MSG_INFO) {
