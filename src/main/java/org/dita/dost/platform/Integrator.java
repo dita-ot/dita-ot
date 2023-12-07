@@ -26,12 +26,17 @@ import com.google.common.collect.ImmutableSet;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLInputFactory;
@@ -386,8 +391,49 @@ public final class Integrator {
     final Collection<File> libJars = ImmutableList.<File>builder().addAll(getLibJars()).addAll(jars).build();
     writeStartcmdShell(libJars);
     writeStartcmdBatch(libJars);
+    writeConfigurationJar();
 
     customIntegration();
+  }
+
+  /**
+   * Create legacy configuration JAR. The configuration JAR is used by e.g. DITA-OT Gradle plug-in so we have to keep on
+   * generating it.
+   */
+  private void writeConfigurationJar() throws IOException {
+    final Path outFile = ditaDir.toPath().resolve("lib").resolve("dost-configuration.jar");
+    logger.trace("Generate configuration JAR {}", outFile);
+    try (OutputStream out = Files.newOutputStream(outFile); final ZipOutputStream zip = new ZipOutputStream(out)) {
+      var config = ditaDir.toPath().resolve("config");
+      Consumer<Path> copy = (Path path) -> {
+        final Path file = config.resolve(path);
+        if (!Files.exists(file)) {
+          return;
+        }
+        try {
+          ZipEntry entry = new ZipEntry(path.toString().replace('\\', '/'));
+          zip.putNextEntry(entry);
+          Files.copy(file, zip);
+          zip.flush();
+          zip.closeEntry();
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      };
+
+      copy.accept(Paths.get("messages.xml"));
+      Files
+        .list(config)
+        .map(Path::getFileName)
+        .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
+        .forEach(copy);
+      copy.accept(Paths.get("plugins.xml"));
+      copy.accept(Paths.get("configuration.properties"));
+      copy.accept(Paths.get("CatalogManager.properties"));
+      copy.accept(Paths.get("org.dita.dost.platform", "plugin.properties"));
+    } catch (IOException e) {
+      throw new IOException("Failed to write configuration JAR", e);
+    }
   }
 
   private Properties readMessageBundle() throws IOException, XMLStreamException {
