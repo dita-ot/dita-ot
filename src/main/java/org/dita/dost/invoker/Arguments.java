@@ -63,7 +63,7 @@ abstract class Arguments {
   /**
    * Whether or not output to the log is to be unadorned.
    */
-  boolean emacsMode = Configuration.configuration.getOrDefault("cli.log-format", "fancy").equals("fancy");
+  boolean emacsMode = Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("fancy");
   /**
    * optional thread priority
    */

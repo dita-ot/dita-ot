@@ -917,7 +917,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         );
         throw new RuntimeException();
       }
-    } else if (Configuration.configuration.getOrDefault("cli.log-format", "fancy").equals("legacy")) {
+    } else if (Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("legacy")) {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
       logger = new DefaultLogger();

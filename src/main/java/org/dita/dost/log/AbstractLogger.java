@@ -33,7 +33,9 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
 
   protected int msgOutputLevel = Project.MSG_DEBUG;
   protected boolean useColor;
-  protected boolean legacyFormat = Configuration.configuration.getOrDefault("cli.log-format", "fancy").equals("legacy");
+  protected boolean legacyFormat = Configuration.configuration
+    .getOrDefault("cli.log-format", "legacy")
+    .equals("legacy");
 
   public void setOutputLevel(final int msgOutputLevel) {
     this.msgOutputLevel = msgOutputLevel;

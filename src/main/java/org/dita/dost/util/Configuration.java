@@ -113,7 +113,10 @@ public final class Configuration {
     }
     // Override with system properties
     for (var systemProperty : new String[] { "cli.log-format", "cli.color" }) {
-      c.put(systemProperty, System.getProperty(systemProperty, c.get(systemProperty)));
+      var value = System.getProperty(systemProperty);
+      if (value != null) {
+        c.put(systemProperty, value);
+      }
     }
 
     configuration = Collections.unmodifiableMap(c);
