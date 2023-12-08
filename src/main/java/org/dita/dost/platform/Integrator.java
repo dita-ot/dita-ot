@@ -174,20 +174,10 @@ public final class Integrator {
     // Read the properties file, if it exists.
     properties = new Properties();
     if (propertiesFile != null) {
-      FileInputStream propertiesStream = null;
-      try {
-        propertiesStream = new FileInputStream(propertiesFile);
+      try (InputStream propertiesStream = Files.newInputStream(propertiesFile.toPath())) {
         properties.load(propertiesStream);
       } catch (final Exception e) {
         throw new RuntimeException(e);
-      } finally {
-        if (propertiesStream != null) {
-          try {
-            propertiesStream.close();
-          } catch (final IOException e) {
-            logger.error(e.getMessage(), e);
-          }
-        }
       }
     } else {
       properties.putAll(Configuration.configuration);
@@ -351,39 +341,11 @@ public final class Integrator {
     }
     configuration.putAll(getParserConfiguration());
 
-    OutputStream out = null;
-    try {
-      final File outFile = new File(
-        ditaDir,
-        CONFIG_DIR + File.separator + getClass().getPackage().getName() + File.separator + GEN_CONF_PROPERTIES
-      );
-      if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
-        throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
-      }
-      logger.trace("Generate configuration properties {}", outFile.getPath());
-      out = new BufferedOutputStream(new FileOutputStream(outFile));
-      configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
-    } catch (final Exception e) {
-      throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (final IOException e) {
-          logger.error(e.getMessage(), e);
-        }
-      }
-    }
-
-    // Write messages properties
-    final Properties messages = readMessageBundle();
-    final File messagesFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages_en_US.properties").toFile();
-    try (final OutputStream messagesOut = new FileOutputStream(messagesFile)) {
-      messages.store(messagesOut, null);
-    }
+    writePluginProperties(configuration);
+    writeMessageBundle();
 
     final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS)
-      ? relativize(new LinkedHashSet<>(featureTable.get(FEAT_LIB_EXTENSIONS)))
+      ? relativize(featureTable.get(FEAT_LIB_EXTENSIONS))
       : Collections.emptySet();
     writeEnvShell(jars);
     writeEnvBatch(jars);
@@ -394,6 +356,34 @@ public final class Integrator {
     writeConfigurationJar();
 
     customIntegration();
+  }
+
+  private void writeMessageBundle() throws IOException, XMLStreamException {
+    // Write messages properties
+    final Properties messages = readMessageBundle();
+    final Path messagesFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages_en_US.properties");
+    try (final OutputStream messagesOut = Files.newOutputStream(messagesFile)) {
+      messages.store(messagesOut, null);
+    }
+  }
+
+  private void writePluginProperties(Properties configuration) {
+    final Path outFile = ditaDir
+      .toPath()
+      .resolve(CONFIG_DIR)
+      .resolve(getClass().getPackage().getName())
+      .resolve(GEN_CONF_PROPERTIES);
+    try {
+      Files.createDirectories(outFile.getParent());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to make directory " + outFile.getParent());
+    }
+    logger.trace("Generate configuration properties {}", outFile);
+    try (OutputStream out = Files.newOutputStream(outFile)) {
+      configuration.store(out, "DITA-OT runtime configuration, do not edit manually");
+    } catch (final Exception e) {
+      throw new RuntimeException("Failed to write configuration properties: " + e.getMessage(), e);
+    }
   }
 
   /**
@@ -440,9 +430,9 @@ public final class Integrator {
     final Properties messages = new Properties();
     //        final Path basePluginDir = pluginTable.get("org.dita.base").getPluginDir().toPath();
     //        final File messagesXmlFile = basePluginDir.resolve(CONFIG_DIR).resolve("messages.xml").toFile();
-    final File messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml").toFile();
-    if (messagesXmlFile.exists()) {
-      try (final InputStream in = new FileInputStream(messagesXmlFile)) {
+    final Path messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml");
+    if (Files.exists(messagesXmlFile)) {
+      try (final InputStream in = Files.newInputStream(messagesXmlFile)) {
         final XMLStreamReader src = XMLInputFactory.newInstance().createXMLStreamReader(new StreamSource(in));
         String id = null;
         final StringBuilder buf = new StringBuilder();
@@ -553,28 +543,28 @@ public final class Integrator {
   }
 
   private Collection<File> relativize(final Collection<Value> src) {
-    final Collection<File> res = new ArrayList<>(src.size());
     final File base = new File(ditaDir, "dummy");
-    for (final Value lib : src) {
-      final File libFile = toFile(lib.value());
-      if (!libFile.exists()) {
-        throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
-      }
-      res.add(FileUtils.getRelativePath(base, libFile));
-    }
-    return res;
+    return src
+      .stream()
+      .map(lib -> toFile(lib.value()))
+      .map(libFile -> {
+        if (!libFile.exists()) {
+          throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
+        }
+        return FileUtils.getRelativePath(base, libFile);
+      })
+      .toList();
   }
 
   private void writeEnvShell(final Collection<File> jars) {
-    Writer out = null;
+    final Path outFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("env.sh");
     try {
-      final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.sh");
-      if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
-        throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
-      }
-      logger.trace("Generate environment shell " + outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
-
+      Files.createDirectories(outFile.getParent());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to make directory " + outFile.getParent());
+    }
+    logger.trace("Generate environment shell {}", outFile);
+    try (Writer out = Files.newBufferedWriter(outFile)) {
       out.write("#!/bin/sh\n");
       for (final File relativeLib : jars) {
         out.write("CLASSPATH=\"$CLASSPATH:");
@@ -585,27 +575,24 @@ public final class Integrator {
         out.write("\"\n");
       }
       try {
-        Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
+        Files.setPosixFilePermissions(outFile, PERMISSIONS);
       } catch (final UnsupportedOperationException e) {
         // not supported
       }
     } catch (final IOException e) {
       throw new RuntimeException("Failed to write environment shell: " + e.getMessage(), e);
-    } finally {
-      closeQuietly(out);
     }
   }
 
   private void writeEnvBatch(final Collection<File> jars) {
-    Writer out = null;
+    final Path outFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("env.bat");
     try {
-      final File outFile = new File(ditaDir, CONFIG_DIR + File.separator + "env.bat");
-      if (!(outFile.getParentFile().exists()) && !outFile.getParentFile().mkdirs()) {
-        throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
-      }
-      logger.trace("Generate environment batch " + outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
-
+      Files.createDirectories(outFile.getParent());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to make directory " + outFile.getParent());
+    }
+    logger.trace("Generate environment batch {}", outFile);
+    try (Writer out = Files.newBufferedWriter(outFile)) {
       for (final File relativeLib : jars) {
         out.write("set \"CLASSPATH=%CLASSPATH%;");
         if (!relativeLib.isAbsolute()) {
@@ -614,11 +601,9 @@ public final class Integrator {
         out.write(relativeLib.toString().replace(File.separator, WINDOWS_SEPARATOR));
         out.write("\"\r\n");
       }
-      outFile.setExecutable(true);
+      outFile.toFile().setExecutable(true);
     } catch (final IOException e) {
       throw new RuntimeException("Failed to write environment batch: " + e.getMessage(), e);
-    } finally {
-      closeQuietly(out);
     }
   }
 
