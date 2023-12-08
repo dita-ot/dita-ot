@@ -3,7 +3,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   exclude-result-prefixes="xs dita-ot"
-  version="2.0">
+  version="3.0">
   
   <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/cfg/fo/attrs/basic-settings.xsl"/>
   <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/xsl/fo/topic.xsl"/>

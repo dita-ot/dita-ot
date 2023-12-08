@@ -17,7 +17,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="dita-ot opentopic opentopic-index dita2xslfo ot-placeholder"
-    version="2.0">
+    version="3.0">
   
   <xsl:variable name="tableset">
     <xsl:for-each select="//*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]">

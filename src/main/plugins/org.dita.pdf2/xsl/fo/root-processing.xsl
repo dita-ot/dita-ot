@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     exclude-result-prefixes="opentopic-index opentopic opentopic-i18n opentopic-func dita-ot xs ot-placeholder"
-    version="2.0">
+    version="3.0">
     
     <xsl:param name="bookmap-order" select="'discard'" as="xs:string"/>
   

@@ -4,7 +4,7 @@ This file is part of the DITA Open Toolkit project.
 See the accompanying license.txt file for applicable licenses.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="2.0">
+                version="3.0">
 
   <!-- Source: https://www.nema.org/Standards/ComplimentaryDocuments/ANSI%20Z535_1-2017%20CONTENTS%20AND%20SCOPE.pdf -->
   <xsl:variable name="hazard.ansi.red" select="'#C8102E'"/>

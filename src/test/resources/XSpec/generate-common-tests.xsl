@@ -14,7 +14,7 @@
                 xmlns:x="http://www.jenitennison.com/xslt/xspec"
                 xmlns:pkg="http://expath.org/ns/pkg"
                 exclude-result-prefixes="xs test x pkg"
-                version="2.0">
+                version="3.0">
 
    <pkg:import-uri>http://www.jenitennison.com/xslt/xspec/generate-common-tests.xsl</pkg:import-uri>
 

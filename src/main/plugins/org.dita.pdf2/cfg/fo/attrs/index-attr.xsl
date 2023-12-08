@@ -33,7 +33,7 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:opentopic-index="http://www.idiominc.com/opentopic/index" xmlns:fo="http://www.w3.org/1999/XSL/Format"
-  exclude-result-prefixes="opentopic-index" version="2.0">
+  exclude-result-prefixes="opentopic-index" version="3.0">
 
     <xsl:attribute-set name="__index__label">
         <xsl:attribute name="space-before">20pt</xsl:attribute>

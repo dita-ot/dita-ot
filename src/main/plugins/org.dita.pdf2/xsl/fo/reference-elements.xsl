@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
   exclude-result-prefixes="xs dita2xslfo"
-  version="2.0">
+  version="3.0">
 
   <xsl:template match="*[contains(@class, ' reference/reference ')]" mode="processTopic"
                 name="processReference">

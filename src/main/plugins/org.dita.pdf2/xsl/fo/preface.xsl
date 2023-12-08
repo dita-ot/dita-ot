@@ -36,7 +36,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     exclude-result-prefixes="opentopic xs"
-    version="2.0">
+    version="3.0">
 
      <xsl:template name="processTopicPreface">
          <xsl:variable name="expectedPrefaceContext" as="xs:boolean" 

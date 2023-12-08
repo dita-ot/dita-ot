@@ -39,7 +39,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     exclude-result-prefixes="dita-ot opentopic-mapmerge opentopic-func related-links xs"
-    version="2.0">
+    version="3.0">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
 

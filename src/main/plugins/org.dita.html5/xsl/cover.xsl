@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot ditamsg">
 
   <!-- optional @class attribute for TOC <body> element

@@ -12,7 +12,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:opentopic="http://www.idiominc.com/opentopic"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs opentopic dita-ot ditamsg">
   
   <xsl:param name="first-use-scope" select="'document'"/>
