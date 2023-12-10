@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <project name="dita.integrator" default="integrate">
 
-  <echo level="warn">WARN: Ant integrator has been deprecated. Use dita command instead.</echo>
+  <echo level="warn">WARN: The Ant integration process is deprecated. Use the 'dita install' command instead.</echo>
   
   <dirname property="ant.file.dita.integrator.dir" file="${ant.file.dita.integrator}"/>
   
