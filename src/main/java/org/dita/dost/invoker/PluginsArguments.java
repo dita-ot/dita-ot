@@ -32,6 +32,6 @@ public class PluginsArguments extends Arguments {
 
   @Override
   String getUsage(final boolean compact) {
-    return UsageBuilder.builder(compact).usage(locale.getString("plugins.usage")).build();
+    return UsageBuilder.builder(compact, useColor).usage(locale.getString("plugins.usage")).build();
   }
 }

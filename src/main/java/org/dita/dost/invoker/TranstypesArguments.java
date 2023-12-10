@@ -32,6 +32,6 @@ public class TranstypesArguments extends Arguments {
 
   @Override
   String getUsage(final boolean compact) {
-    return UsageBuilder.builder(compact).usage(locale.getString("transtypes.usage")).build();
+    return UsageBuilder.builder(compact, useColor).usage(locale.getString("transtypes.usage")).build();
   }
 }

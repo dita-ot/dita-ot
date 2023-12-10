@@ -23,7 +23,6 @@ public class DeliverablesArguments extends Arguments {
 
   @Override
   DeliverablesArguments parse(final String[] arguments) {
-    useColor = getUseColor();
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -67,7 +66,7 @@ public class DeliverablesArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     return UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("deliverables.usage"))
       .arguments(null, null, "file", locale.getString("deliverables.argument.file"))
       .build();

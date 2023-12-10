@@ -13,7 +13,6 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="preprocess2"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    description="Map-first preprocessing"
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   ditaval-merge,
@@ -28,7 +27,6 @@ See the accompanying LICENSE file for applicable license.
                   {depend.preprocess.post}"/>
 
   <target name="preprocess2.maps"
-          description="Map-first preprocessing map steps"
           depends="map-reader,
                   map-mapref,
                   map-reader-profile,
@@ -94,10 +92,10 @@ See the accompanying LICENSE file for applicable license.
     </pathconvert>
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
     
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echo level="info">${log-prefix}input = ${args.input}</echo>
     <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
-    <echo level="info">*****************************************************************</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
     
     <echoxml file="${dita.temp.dir}/.job.xml">
       <job>

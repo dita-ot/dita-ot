@@ -10,6 +10,7 @@ package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -105,6 +106,7 @@ public class ConversionArguments extends Arguments {
 
   @Override
   ConversionArguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_WARN;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -183,6 +185,8 @@ public class ConversionArguments extends Arguments {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }
     definedProps.putAll(loadPropertyFiles());
+
+    definedProps.put("cli.log-format", configuration.get("cli.log-format"));
 
     return this;
   }
@@ -395,7 +399,7 @@ public class ConversionArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     final UsageBuilder buf = UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("conversion.usage.input"))
       .usage(locale.getString("conversion.usage.project"))
       //                .usage("dita --propertyfile=<file> [options]")

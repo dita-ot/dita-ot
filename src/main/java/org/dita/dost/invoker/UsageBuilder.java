@@ -22,8 +22,10 @@ public class UsageBuilder {
   private final Map<Key, String> options = new HashMap<>();
   private final Map<Key, String> arguments = new LinkedHashMap<>();
   private final List<String> footers = new ArrayList<>();
+  private final boolean useColor;
 
-  private UsageBuilder(final boolean compact) {
+  private UsageBuilder(final boolean compact, final boolean useColor) {
+    this.useColor = useColor;
     options("h", "help", null, locale.getString("help.option.help"));
     if (!compact) {
       options("d", "debug", null, locale.getString("help.option.debug"));
@@ -32,8 +34,8 @@ public class UsageBuilder {
     }
   }
 
-  public static UsageBuilder builder(final boolean compact) {
-    return new UsageBuilder(compact);
+  public static UsageBuilder builder(final boolean compact, final boolean useColor) {
+    return new UsageBuilder(compact, useColor);
   }
 
   public UsageBuilder usage(final String usage) {
@@ -64,12 +66,15 @@ public class UsageBuilder {
   public String build() {
     final String padding = getPadding();
 
-    buf.append(ANSI_BOLD).append("Usage").append(ANSI_RESET).append(":\n");
+    bold("Usage");
+    buf.append(":\n");
     for (String usage : usages) {
       buf.append("  ").append(usage).append("\n");
     }
     if (!subcommands.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Subcommands").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Subcommands");
+      buf.append(":\n");
       for (Map.Entry<String, String> subcommand : sortSubCommands(subcommands)) {
         buf
           .append("  ")
@@ -81,7 +86,9 @@ public class UsageBuilder {
       buf.append("\n  See 'dita <subcommand> --help' for details about a specific subcommand.\n");
     }
     if (!arguments.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Arguments").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Arguments");
+      buf.append(":\n");
       for (Map.Entry<Key, String> argument : arguments.entrySet()) {
         buf
           .append("  ")
@@ -92,7 +99,9 @@ public class UsageBuilder {
       }
     }
     if (!options.isEmpty()) {
-      buf.append("\n").append(ANSI_BOLD).append("Options").append(ANSI_RESET).append(":\n");
+      buf.append("\n");
+      bold("Options");
+      buf.append(":\n");
       for (Map.Entry<Key, String> option : sort(options)) {
         buf
           .append("  ")
@@ -117,6 +126,14 @@ public class UsageBuilder {
     return entries;
   }
 
+  private void bold(final String text) {
+    if (useColor) {
+      buf.append(ANSI_BOLD).append(text).append(ANSI_RESET);
+    } else {
+      buf.append(text);
+    }
+  }
+
   private List<Map.Entry<String, String>> sortSubCommands(Map<String, String> arguments) {
     final List<Map.Entry<String, String>> entries = new ArrayList<>(arguments.entrySet());
     entries.sort(Map.Entry.comparingByKey());
@@ -137,17 +154,9 @@ public class UsageBuilder {
     return " ".repeat(Math.max(0, max + 2));
   }
 
-  private static class Key implements Comparable<Key> {
-
-    final String shortKey;
-    final String longKey;
-    final String value;
-    final String string;
-
-    private Key(String shortKey, String longKey, String value) {
-      this.shortKey = shortKey;
-      this.longKey = longKey;
-      this.value = value;
+  private record Key(String shortKey, String longKey, String value) implements Comparable<Key> {
+    @Override
+    public String toString() {
       final StringBuilder buf = new StringBuilder();
       if (shortKey != null) {
         buf.append("-").append(shortKey);
@@ -167,29 +176,7 @@ public class UsageBuilder {
       if (shortKey == null && longKey == null & value != null) {
         buf.append("<").append(value).append(">");
       }
-      string = buf.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Key key = (Key) o;
-      return (
-        Objects.equals(shortKey, key.shortKey) &&
-        Objects.equals(longKey, key.longKey) &&
-        Objects.equals(value, key.value)
-      );
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(shortKey, longKey, value);
-    }
-
-    @Override
-    public String toString() {
-      return string;
+      return buf.toString();
     }
 
     @Override

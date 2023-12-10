@@ -33,7 +33,7 @@ abstract class Arguments {
   /**
    * Our current message output status. Follows Project.MSG_XXX.
    */
-  int msgOutputLevel = Project.MSG_WARN;
+  int msgOutputLevel = Project.MSG_INFO;
   /**
    * File that we are using for configuration.
    */
@@ -63,7 +63,7 @@ abstract class Arguments {
   /**
    * Whether or not output to the log is to be unadorned.
    */
-  boolean emacsMode;
+  boolean emacsMode = Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("fancy");
   /**
    * optional thread priority
    */
@@ -107,9 +107,9 @@ abstract class Arguments {
     if (isLongForm(arg, "-help") || arg.equals("-h")) {
       justPrintUsage = true;
     } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
-      msgOutputLevel = Project.MSG_INFO;
-    } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
       msgOutputLevel = Project.MSG_VERBOSE;
+    } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
+      msgOutputLevel = Project.MSG_DEBUG;
     } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
       emacsMode = true;
     } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
