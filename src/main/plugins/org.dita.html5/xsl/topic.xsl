@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot dita2html ditamsg">
   
   <xsl:include href="plugin:org.dita.html5:xsl/get-meta.xsl"/>

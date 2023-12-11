@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="dita-ot ot-placeholder opentopic opentopic-index opentopic-func dita2xslfo xs"
-    version="2.0">
+    version="3.0">
 
     <!-- FIXME these imports should be moved to shell -->
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic.xsl"/>

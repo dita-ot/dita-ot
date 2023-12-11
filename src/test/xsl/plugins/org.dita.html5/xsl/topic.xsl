@@ -5,7 +5,7 @@
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
                 xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
                 xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot table simpletable">
   
   <xsl:import href="../../../../../main/plugins/org.dita.base/xsl/common/output-message.xsl"/>

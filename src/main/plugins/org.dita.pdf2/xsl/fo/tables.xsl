@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
   xmlns:dita2xslfo="http://dita-ot.sourceforge.net/ns/200910/dita2xslfo"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   exclude-result-prefixes="opentopic-func xs dita2xslfo dita-ot"
-  version="2.0">
+  version="3.0">
 
     <xsl:variable name="tableAttrs" select="'../../cfg/fo/attrs/tables-attr.xsl'"/>
 

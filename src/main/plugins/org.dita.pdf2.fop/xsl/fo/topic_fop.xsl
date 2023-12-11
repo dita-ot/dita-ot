@@ -12,7 +12,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:fox="http://xmlgraphics.apache.org/fop/extensions"
     xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
     exclude-result-prefixes="dita-ot xs"
-    version="2.0">
+    version="3.0">
 
     <xsl:template match="*|@alt" mode="graphicAlternateText">
         <xsl:attribute name="fox:alt-text"><xsl:apply-templates select="." mode="text-only"/></xsl:attribute>

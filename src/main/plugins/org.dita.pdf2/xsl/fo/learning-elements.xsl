@@ -37,7 +37,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:opentopic="http://www.idiominc.com/opentopic"
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     exclude-result-prefixes="opentopic opentopic-index dita2xslfo"
-    version="2.0">
+    version="3.0">
 
 
     <xsl:template match="*[contains(@class, ' learningBase/lcTime ')]">
