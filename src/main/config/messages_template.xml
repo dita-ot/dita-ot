@@ -115,7 +115,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ020W" type="WARN">
     <reason>At least one plug-in in '%1' is required by plug-in '%2'. Plug-in '%2' cannot be loaded.</reason>
-    <response>Check and see whether all prerequisite plug-ins are installed.</response>
+    <response>Check if all prerequisite plug-ins are properly installed.</response>
   </message>
 
   <message id="DOTJ021E" type="ERROR">
@@ -403,12 +403,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ078F" type="FATAL">
     <reason>The input resource '%1' cannot be loaded.</reason>
-    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+    <response>Check if grammar files for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ079E" type="ERROR">
     <reason>The '%1' resource cannot be loaded.</reason>
-    <response>Ensure that grammar files for this document type are referenced and installed properly.</response>
+    <response>Check if grammar files for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ080W" type="WARN">
