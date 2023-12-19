@@ -120,13 +120,13 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ021E" type="ERROR">
     <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
-    <response>Please check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
+    <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
     <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
-    <response>Please check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
+    <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <message id="DOTJ022F" type="FATAL">
@@ -278,7 +278,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Obsolete since 2.3 -->
   <message id="DOTJ053W" type="WARN">
     <reason>The input resource '%1' is not a valid DITA filename.</reason>
-    <response>Please check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
+    <response>Check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
   </message>
 
   <message id="DOTJ054E" type="ERROR">
@@ -725,7 +725,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX054W" type="WARN">
     <reason>Conflict text style is applied on the current element based on DITAVAL flagging rules.</reason>
-    <response>Please check the DITAVAL and DITA source files to make sure there is no style conflict on the element that needs to be flagged.</response>
+    <response>Check the DITAVAL and DITA source files to make sure there is no style conflict on the element that needs to be flagged.</response>
   </message>
 
   <message id="DOTX055W" type="WARN">
