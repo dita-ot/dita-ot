@@ -170,7 +170,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
           if (res == null) {
             res = new AttributesImpl(atts);
           }
-          attValue = ATTR_FORMAT_VALUE_DITA;
+          attValue = MAPGROUP_D_MAPREF.matches(atts) ? ATTR_FORMAT_VALUE_DITAMAP : ATTR_FORMAT_VALUE_DITA;
           if (!format.equals(ATTR_FORMAT_VALUE_DITA)) {
             XMLUtils.addOrSetAttribute(
               res,
