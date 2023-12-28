@@ -637,8 +637,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
     <ul>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'compact'[current()/@compact = 'yes']"/>
+      </xsl:call-template>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </ul>
@@ -652,9 +653,12 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setaname"/>
     <ul>
       <xsl:call-template name="commonattributes">
-        <xsl:with-param name="default-output-class" select="'simple'"/>
+        <xsl:with-param name="default-output-class">
+          <xsl:value-of select="'simple',
+                                'compact'[current()/@compact = 'yes']"
+                        separator=" "/>
+        </xsl:with-param>
       </xsl:call-template>
-      <xsl:apply-templates select="@compact"/>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </ul>
@@ -668,8 +672,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
     <ol>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'compact'[current()/@compact = 'yes']"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="$olcount mod 3 = 1"/>
         <xsl:when test="$olcount mod 3 = 2"><xsl:attribute name="type">a</xsl:attribute></xsl:when>
@@ -753,12 +758,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setaname"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <dl>
-      <!-- handle DL compacting - default=yes -->
-      <xsl:if test="@compact = 'no'">
-        <xsl:attribute name="class">dlexpand</xsl:attribute>
-      </xsl:if>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class">
+          <xsl:value-of select="'compact'[current()/@compact = 'yes']"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </dl>
@@ -1958,13 +1962,6 @@ See the accompanying LICENSE file for applicable license.
   <!-- If an element has @dir, copy it to the output -->
   <xsl:template match="@dir">
     <xsl:attribute name="dir" select="."/>
-  </xsl:template>
-  
-  <!-- if the element has a compact=yes attribute, assert it in XHTML form -->
-  <xsl:template match="@compact">
-    <xsl:if test=". = 'yes'">
-     <xsl:attribute name="compact">compact</xsl:attribute><!-- assumes that no compaction is default -->
-    </xsl:if>
   </xsl:template>
   
   <xsl:template name="setscale">
