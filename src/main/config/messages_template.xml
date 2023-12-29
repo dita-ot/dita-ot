@@ -119,13 +119,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ021E" type="ERROR">
-    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
+    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
     <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
-    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL "exclude" conditions, or the resource is not valid DITA.</reason>
+    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
     <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
@@ -140,18 +140,18 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ025E" type="ERROR">
-    <reason>The input to the "topic merge" process cannot be found.</reason>
+    <reason>The input to the 'topic merge' process cannot be found.</reason>
     <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ026E" type="ERROR">
-    <reason>The "topic merge" process did not generate any output.</reason>
+    <reason>The 'topic merge' process did not generate any output.</reason>
     <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
     <reason>No @format attribute was found on a reference to the '%1' resource, which does not appear to be DITA.</reason>
-    <response>If this is not a DITA resource, set the @format attribute to an appropriate value; otherwise set the @format attribute to "dita".</response>
+    <response>If this is not a DITA resource, set the @format attribute to an appropriate value; otherwise set the @format attribute to 'dita'.</response>
   </message>
 
   <!-- Deprecated since 3.5 -->
@@ -183,7 +183,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ035F" type="FATAL">
     <reason>The '%1' resource is outside the scope of the input directory.</reason>
-    <response>To lower the severity level, use the Ant parameter 'outer.control', and set the value to "warn" or "quiet". Otherwise, move the '%1' resource to the directory where the input map or topic is stored.</response>
+    <response>To lower the severity level, use the Ant parameter 'outer.control', and set the value to 'warn' or 'quiet'. Otherwise, move the '%1' resource to the directory where the input map or topic is stored.</response>
   </message>
 
   <message id="DOTJ036W" type="WARN">
@@ -203,24 +203,24 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ039E" type="ERROR">
-    <reason>There is no target specified for the conref push action "pushafter".</reason>
+    <reason>There is no target specified for the conref push action 'pushafter'.</reason>
     <response>Please specify @conref="pushtarget" and @conaction="mark" on the element that precedes the current element.</response>
   </message>
 
   <message id="DOTJ040E" type="ERROR">
-    <reason>An element uses @conaction="replace", but a @conref attribute is not found in the expected location.</reason>
+    <reason>An element uses the conref action 'pushreplace', but no @conref attribute is found in the expected location.</reason>
     <response></response>
   </message>
 
   <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
   <message id="DOTJ041E" type="ERROR">
-    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
-    <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
+    <response>The value must contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
   <message id="DOTJ042E" type="ERROR">
     <reason>Two elements both use conref push to replace the target '%1'.</reason>
-    <response>Please delete one of the duplicate "replace" actions.</response>
+    <response>Please delete one of the duplicate 'replace' actions.</response>
   </message>
 
   <message id="DOTJ043W" type="WARN">
@@ -228,10 +228,9 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
-  <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ044W" type="WARN">
-    <reason>There is a redundant conref action "pushbefore".</reason>
-    <response>Please make sure that "mark" and "pushbefore" occur in pairs.</response>
+    <reason>There is a redundant conref action 'pushbefore'.</reason>
+    <response>Please make sure that 'mark' and 'pushbefore' occur in pairs.</response>
   </message>
 
   <message id="DOTJ045I" type="INFO">
@@ -240,7 +239,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ046E" type="ERROR">
-    <reason>The @conkeyref attribute value "%1" cannot be resolved because it does not contain a key or the key is not defined.</reason>
+    <reason>The @conkeyref attribute value '%1' cannot be resolved because it does not contain a key or the key is not defined.</reason>
     <response>The build will use the @conref attribute for fallback, if one exists.</response>
   </message>
 
@@ -278,7 +277,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Obsolete since 2.3 -->
   <message id="DOTJ053W" type="WARN">
     <reason>The input resource '%1' is not a valid DITA filename.</reason>
-    <response>Check '%1' to see if it is correct. The extensions ".dita" or ".xml" are supported for DITA topics.</response>
+    <response>Check '%1' to see if it is correct. The '.dita' and '.xml' extensions are supported for DITA topics.</response>
   </message>
 
   <message id="DOTJ054E" type="ERROR">
@@ -297,7 +296,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ057E" type="ERROR">
-    <reason>The @id attribute value "%1" is not unique within the topic that contains it.</reason>
+    <reason>The @id attribute value '%1' is not unique within the topic that contains it.</reason>
     <response></response>
   </message>
 
@@ -318,7 +317,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ061E" type="ERROR">
     <reason>Topic reference target is a DITA map but the @format attribute has not been set.</reason>
-    <response>Set the @format attribute value to "ditamap".</response>
+    <response>Set the @format attribute value to 'ditamap'.</response>
   </message>
 
   <message id="DOTJ062E" type="ERROR">
@@ -332,8 +331,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ064W" type="WARN">
-    <reason>The @chunk attribute uses both "to-content" and "by-topic" that conflict with each other.</reason>
-    <response>Ignoring the "by-topic" token.</response>
+    <reason>The @chunk attribute uses both 'to-content' and 'by-topic' that conflict with each other.</reason>
+    <response>Ignoring the 'by-topic' token.</response>
   </message>
 
   <message id="DOTJ065I" type="INFO">
@@ -352,7 +351,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ068E" type="ERROR">
-    <reason>Conref action "mark" without conref target.</reason>
+    <reason>Conref action 'mark' without conref target.</reason>
     <response></response>
   </message>
 
@@ -373,12 +372,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ072E" type="ERROR">
     <reason>Email link without correct @format attribute.</reason>
-    <response>Using @format attribute value "email".</response>
+    <response>Using @format attribute value 'email'.</response>
   </message>
 
   <message id="DOTJ073E" type="ERROR">
     <reason>Email link without correct @scope attribute.</reason>
-    <response>Using @scope attribute value "external".</response>
+    <response>Using @scope attribute value 'external'.</response>
   </message>
 
   <message id="DOTJ074W" type="WARN">
@@ -388,7 +387,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ075W" type="WARN">
     <reason>Absolute link '%1' without correct @scope attribute.</reason>
-    <response>Using @scope attribute value "external".</response>
+    <response>Using @scope attribute value 'external'.</response>
   </message>
 
   <message id="DOTJ076W" type="WARN">
@@ -417,7 +416,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ081W" type="WARN">
-    <reason>Ignoring empty @conref attribute: conref="".</reason>
+    <reason>Ignoring empty @conref attribute.</reason>
     <response></response>
   </message>
 
@@ -447,7 +446,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ087W" type="WARN">
-    <reason>Found @chunk attribute with value "%1" inside combine chunk.</reason>
+    <reason>Found @chunk attribute with value '%1' inside combine chunk.</reason>
     <response>Ignoring chunk operation.</response>
   </message>
 
@@ -467,7 +466,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX003I" type="INFO">
     <reason>The @anchorref attribute should either reference another DITA map or an Eclipse XML TOC file.</reason>
-    <response>The value "%1" does not appear to reference either.</response>
+    <response>The value '%1' does not appear to reference either.</response>
   </message>
 
   <message id="DOTX004I" type="INFO">
@@ -481,13 +480,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX006E" type="ERROR">
-    <reason>Unknown file name extension in @href attribute value "%1".</reason>
+    <reason>Unknown file name extension in @href attribute value '%1'.</reason>
     <response>References to non-DITA resources should set the @format attribute to match the resource (for example, 'txt', 'pdf', or 'html').</response>
   </message>
 
   <message id="DOTX007I" type="INFO">
     <reason>Only DITA topics, HTML files, and images may be included in the compiled CHM file. The reference to '%1' will be ignored.</reason>
-    <response>To remove this message, set the @toc attribute to "no" or the @processing-role attribute to "resource-only" on the topic reference.</response>
+    <response>To remove this message, set the @toc attribute to 'no' or the @processing-role attribute to 'resource-only' on the topic reference.</response>
   </message>
 
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
@@ -509,12 +508,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX010E" type="ERROR">
-    <reason>Unable to find target for @conref="%1".</reason>
-    <response></response>
+    <reason>Unable to find the @conref attribute value '%1'.</reason>
+    <response>Check '%1' to see if the target exists.</response>
   </message>
 
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for the @conref attribute value "%1". Only the first will be used.</reason>
+    <reason>There is more than one possible target for the @conref attribute value '%1'. Only the first will be used.</reason>
     <response>Remove the duplicate ID in the referenced resource.</response>
   </message>
 
@@ -531,13 +530,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX014E" type="ERROR">
-    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
     <response>Conref references to a map element should contain '#' followed by an ID, such as 'mymap.ditamap#mytopicrefid'.</response>
   </message>
 
   <message id="DOTX015E" type="ERROR">
-    <reason>The @conref attribute value "%1" uses invalid syntax.</reason>
-    <response>The value should contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
+    <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
+    <response>The value must contain '#' followed by a topic or map ID, optionally followed by '/elemID' for a sub-topic element.</response>
   </message>
 
   <message id="DOTX016W" type="WARN">
@@ -548,18 +547,18 @@ See the accompanying LICENSE file for applicable license.
   <!-- Should likely be "warning" instead of "error", as related toolkit problems were fixed in very early releases.
        Now this serves only to catch likely problems with the source content. Keeping as "error" to avoid meaningless churn. -->
   <message id="DOTX017E" type="ERROR">
-    <reason>Found a link or cross reference with an empty @href attribute: href="".</reason>
+    <reason>Found a link or cross reference with an empty @href attribute.</reason>
     <response>Remove the empty @href attribute or provide a value.</response>
   </message>
 
   <!-- 018 currently not used, commented out due to SF bug 1771123 -->
   <message id="DOTX018I" type="INFO">
-    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a more specific '%2' topic. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
+    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a more specific '%2' topic. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
     <response></response>
   </message>
 
   <message id="DOTX019W" type="WARN">
-    <reason>The @type attribute on a topicref was set to "%1", but the topicref references a '%2' topic. This may cause links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value "%1" may come from an ancestor topicref.</reason>
+    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a '%2' topic. This may cause links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
     <response></response>
   </message>
 
@@ -649,7 +648,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX037W" type="WARN">
-    <reason>No title found for this document; using "***" as HTML page title.</reason>
+    <reason>No title found for this document; using '***' as HTML page title.</reason>
     <response></response>
   </message>
 
@@ -709,7 +708,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX050W" type="WARN">
-    <reason>The default ID "org.sample.help.doc" is used for the Eclipse plug-in.</reason>
+    <reason>The default ID 'org.sample.help.doc' is used for the Eclipse plug-in.</reason>
     <response>To use your own plug-in ID, specify it using the @id attribute on the map.</response>
   </message>
 
@@ -729,8 +728,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX055W" type="WARN">
-    <reason>A customized stylesheet uses the deprecated "flagit" template. Conditional processing is no longer supported using this template.</reason>
-    <response>Please update the stylesheet to use the "start-flagit" template instead of the "flagit" template.</response>
+    <reason>A customized stylesheet uses the deprecated 'flagit' template. Conditional processing is no longer supported using this template.</reason>
+    <response>Please update the stylesheet to use the 'start-flagit' template instead of the 'flagit' template.</response>
   </message>
 
   <message id="DOTX056W" type="WARN">
@@ -754,7 +753,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX061W" type="WARN">
-    <reason>The @id attribute value "%1" was used on a &lt;topicref&gt; element, but it did not reference a topic element.</reason>
+    <reason>The @id attribute value '%1' was used on a &lt;topicref&gt; element, but it did not reference a topic element.</reason>
     <response>The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</response>
   </message>
 
@@ -769,13 +768,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX064W" type="WARN">
-    <reason>The @copy-to attribute value "%1" uses the name of a resource that already exists, so this attribute is ignored.</reason>
+    <reason>The @copy-to attribute value '%1' uses the name of a resource that already exists, so this attribute is ignored.</reason>
     <response></response>
   </message>
 
   <message id="DOTX065W" type="WARN">
-    <reason>Two unique source files each specify a @copy-to attribute value "%2", which results in a collision. The value associated with
-      @href value "%1" will be ignored.</reason>
+    <reason>Two unique source files each specify a @copy-to attribute value '%2', which results in a collision. The value associated with
+      @href value '%1' will be ignored.</reason>
     <response></response>
   </message>
 
@@ -811,7 +810,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX071W" type="WARN">
     <reason>Parameter '%1' on template '%2' is deprecated.</reason>
-    <response>Use parameter "%3" instead.</response>
+    <response>Use parameter '%3' instead.</response>
   </message>
 
   <message id="DOTX072I" type="INFO">
@@ -825,7 +824,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX074W" type="WARN">
-    <reason>No formatting defined for unknown @class attribute value "%1".</reason>
+    <reason>No formatting defined for unknown @class attribute value '%1'.</reason>
     <response></response>
   </message>
 
