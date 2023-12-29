@@ -18,12 +18,12 @@ See the accompanying LICENSE file for applicable license.
   <!-- DOTA067W and DOTA068W actually come from Java code inside the PDF plug-in.
        DOTA prefix is innacurate. No reason to change at this point. -->
   <message id="DOTA067W" type="WARN">
-    <reason>Ignoring index-see '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <reason>Ignoring &lt;index-see&gt; '%1' inside parent index entry '%2' because the parent term contains term children.</reason>
     <response></response>
   </message>
 
   <message id="DOTA068W" type="WARN">
-    <reason>Ignoring index-see-also '%1' inside parent index entry '%2' because the parent indexterm contains indexterm children.</reason>
+    <reason>Ignoring &lt;index-see-also&gt; '%1' inside parent index entry '%2' because the parent term contains term children.</reason>
     <response></response>
   </message>
 
@@ -47,18 +47,18 @@ See the accompanying LICENSE file for applicable license.
   <!-- Start of XSL Messages -->
 
   <message id="PDFX001W" type="WARN">
-    <reason>There is an index term specified with start="%1", but there is no matching end for this term.</reason>
-    <response>Add an index term in a valid location with end="%1".</response>
+    <reason>An index term range is specified with a @start attribute value of '%1', but there is no matching @end attribute.</reason>
+    <response>To end the range, add an index term in a valid location with the @end attribute set to '%1'.</response>
   </message>
 
   <message id="PDFX002W" type="WARN">
-    <reason>There are multiple index terms specified with start="%1", but there is only one term to end this range, or the ranges for this term overlap.</reason>
-    <response>Ensure that each term with this start value has a matching end value, and that the specified ranges for this value do not overlap</response>
+    <reason>There are multiple index terms specified with a @start attribute value of '%1', but there is only one term to end this range, or the ranges for this term overlap.</reason>
+    <response>Make sure that each term with this start value has a matching end value, and that the specified ranges for this value do not overlap.</response>
   </message>
 
   <message id="PDFX003W" type="WARN">
-    <reason>There are multiple index entries found to close the index range for "%1".</reason>
-    <response>Ensure that any index term with start="%1" has only one matching end term with end="%1".</response>
+    <reason>Multiple index entries close the index range '%1'.</reason>
+    <response>Make sure that each index term with with a @start attribute value of '%1' has only one matching term with an @end attribute value of '%1'.</response>
   </message>
 
   <message id="PDFX004F" type="ERROR">
