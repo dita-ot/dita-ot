@@ -37,7 +37,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA012W" type="WARN">
     <reason>The '%1' argument is deprecated.</reason>
-    <response>Please use the argument '%2' instead.</response>
+    <response>Use the argument '%2' instead.</response>
   </message>
 
   <message id="DOTA013F" type="FATAL">
@@ -57,7 +57,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA069F" type="FATAL">
     <reason>The input resource '%1' cannot be located or read.</reason>
-    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- Start of Java Messages -->
@@ -68,7 +68,7 @@ See the accompanying LICENSE file for applicable license.
        toolkit development team. -->
   <message id="DOTJ005F" type="FATAL">
     <reason>Failed to create new instance for '%1'.</reason>
-    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- Deprecated since 4.2 -->
@@ -136,7 +136,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ023E" type="ERROR">
     <reason>The specified image file '%1' is not available. It will not be included in the output.</reason>
-    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ025E" type="ERROR">
@@ -172,13 +172,13 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ033E" type="ERROR">
     <reason>No valid content found in topicref '%1' during chunk processing.</reason>
-    <response>Please specify an existing and valid topic for the topic reference.</response>
+    <response>Specify an existing and valid topic for the topic reference.</response>
   </message>
 
   <!-- 2012-06-12: Still need to reproduce and edit this message -->
   <message id="DOTJ034F" type="FATAL">
     <reason>Failed to parse the input resource '%1' (the content is not valid).</reason>
-    <response>If '%1' does not have a DOCTYPE declaration, please make sure that all @class attributes are present.</response>
+    <response>If '%1' does not have a DOCTYPE declaration, make sure that all @class attributes are present.</response>
   </message>
 
   <message id="DOTJ035F" type="FATAL">
@@ -194,22 +194,22 @@ See the accompanying LICENSE file for applicable license.
   <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ037W" type="WARN">
     <reason>The XML schema and DTD validation function of the parser is turned off.</reason>
-    <response>Please make sure the input is normalized DITA with @class attributes included, otherwise it will not be processed correctly.</response>
+    <response>Make sure the input is normalized DITA with @class attributes included, otherwise it will not be processed correctly.</response>
   </message>
 
   <message id="DOTJ038E" type="ERROR">
     <reason>The &lt;%1&gt; element is specialized from unrecognized metadata.</reason>
-    <response>Please make sure that the &lt;%1&gt; element is specialized from an existing metadata element in the core DITA vocabulary.</response>
+    <response>Make sure that the &lt;%1&gt; element is specialized from an existing metadata element in the core DITA vocabulary.</response>
   </message>
 
   <message id="DOTJ039E" type="ERROR">
     <reason>There is no target specified for the conref push action 'pushafter'.</reason>
-    <response>Please specify a @conref target and set the 'mark' @conaction on the element that precedes the current element.</response>
+    <response>Specify a @conref target and set the 'mark' @conaction on the element that precedes the current element.</response>
   </message>
 
   <message id="DOTJ040E" type="ERROR">
     <reason>An element uses the conref push action 'pushreplace', but no @conref attribute is defined.</reason>
-    <response>Please specify a @conref target with the ID of the content you want to replace.</response>
+    <response>Specify a @conref target with the ID of the content you want to replace.</response>
   </message>
 
   <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
@@ -220,7 +220,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ042E" type="ERROR">
     <reason>Two elements both use conref push to replace the target '%1'.</reason>
-    <response>Please delete one of the duplicate 'replace' actions.</response>
+    <response>Delete one of the duplicate 'replace' actions.</response>
   </message>
 
   <message id="DOTJ043W" type="WARN">
@@ -230,7 +230,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ044W" type="WARN">
     <reason>There is a redundant conref push action 'pushbefore'.</reason>
-    <response>Please make sure that 'mark' and 'pushbefore' occur in pairs.</response>
+    <response>Make sure that 'mark' and 'pushbefore' occur in pairs.</response>
   </message>
 
   <message id="DOTJ045I" type="INFO">
@@ -266,7 +266,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
     <reason>Unable to load target for coderef '%1'.</reason>
-    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ052E" type="ERROR">
@@ -327,7 +327,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ063E" type="ERROR">
     <reason>The @cols attribute is set to '%1' but the number of &lt;colspec&gt; elements was '%2'.</reason>
-    <response>Please verify the number of columns in the table.</response>
+    <response>Verify the number of columns in the table.</response>
   </message>
 
   <message id="DOTJ064W" type="WARN">
@@ -492,7 +492,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
   <message id="DOTX008E" type="ERROR">
     <reason>The resource '%1' cannot be loaded.</reason>
-    <response>Please ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- As of 2012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
@@ -540,7 +540,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX016W" type="WARN">
-    <reason>A reference to '%2' appears to reference a DITA document, but the @format attribute has inherited a value of '%1'. The document will not be processed as DITA.</reason>
+    <reason>'%2' appears to reference a DITA document, but the @format attribute has inherited a value of '%1'. The document will not be processed as DITA.</reason>
     <response></response>
   </message>
 
@@ -684,7 +684,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX044E" type="ERROR">
     <reason>The &lt;area&gt; element in an image map does not specify a link target.</reason>
-    <response>Please add an &lt;xref&gt; element with a link target to the &lt;area&gt; element.</response>
+    <response>Add an &lt;xref&gt; element with a link target to the &lt;area&gt; element.</response>
   </message>
 
   <message id="DOTX045W" type="WARN">
@@ -729,7 +729,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX055W" type="WARN">
     <reason>A customized stylesheet uses the deprecated 'flagit' template. Conditional processing is no longer supported using this template.</reason>
-    <response>Please update the stylesheet to use the 'start-flagit' template instead of the 'flagit' template.</response>
+    <response>Update the stylesheet to use the 'start-flagit' template instead of the 'flagit' template.</response>
   </message>
 
   <message id="DOTX056W" type="WARN">
@@ -759,7 +759,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX062I" type="INFO">
     <reason>It appears that this document uses constraints, but the conref processor cannot validate that the target of a conref is valid.</reason>
-    <response>To enable constraint checking, please upgrade to an XSLT 2.0 processor.</response>
+    <response>To enable constraint checking, upgrade to an XSLT 2.0 processor.</response>
   </message>
 
   <message id="DOTX063W" type="WARN">
