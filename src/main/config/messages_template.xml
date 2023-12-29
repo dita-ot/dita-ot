@@ -105,17 +105,17 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ014W" type="WARN">
     <reason>Found an &lt;indexterm&gt; element with no content.</reason>
-    <response>Setting the term to ***.</response>
+    <response>Setting the term to '***'.</response>
   </message>
 
   <message id="DOTJ018I" type="INFO">
-    <reason>Log file '%1' was generated successfully in directory '%2'.</reason>
-    <response>Any messages from the transformation process are available in the log file; additional details about each message are available in the documentation.</response>
+    <reason>The '%1' log file was written to the '%2' directory.</reason>
+    <response>Any messages from the transformation process are available in the log; additional details about each message may be available in the documentation.</response>
   </message>
 
   <message id="DOTJ020W" type="WARN">
-    <reason>At least one plug-in in '%1' is required by plug-in '%2'. Plug-in '%2' cannot be loaded.</reason>
-    <response>Check if all prerequisite plug-ins are properly installed.</response>
+    <reason>The '%2' plug-in cannot be loaded because it requires at least one plug-in in '%1'.</reason>
+    <response>Make sure all prerequisite plug-ins are properly installed.</response>
   </message>
 
   <message id="DOTJ021E" type="ERROR">
@@ -219,7 +219,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ042E" type="ERROR">
     <reason>Two elements both use conref push to replace the target '%1'.</reason>
-    <response>Delete one of the duplicate 'replace' actions.</response>
+    <response>Delete one of the duplicate 'pushreplace' actions.</response>
   </message>
 
   <message id="DOTJ043W" type="WARN">
@@ -254,7 +254,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ049W" type="WARN">
     <reason>The @%1 attribute value '%3' on the &lt;%2&gt; element does not comply with the specified subject scheme.</reason>
-    <response>According to the subject scheme map, the following values are valid for the @%1 attribute: '%4'</response>
+    <response>According to the subject scheme map, the following values are valid for the @%1 attribute: '%4'.</response>
   </message>
 
   <message id="DOTJ050W" type="WARN">
@@ -300,7 +300,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ058E" type="ERROR">
-    <reason>Both '%1' and '%2' attributes defined.</reason>
+    <reason>Both the @%1 and @%2 attributes are defined.</reason>
     <response>A single element may not contain both generalized and specialized values for the same attribute.</response>
   </message>
 
@@ -310,8 +310,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ060W" type="WARN">
-    <reason>Key '%1' was used in conkeyref but is not bound to a DITA topic or map.</reason>
-    <response>Cannot resolve conkeyref value '%2' as a valid content reference.</response>
+    <reason>The '%1' key is used in a @conkeyref attribute but it is not bound to a DITA topic or map.</reason>
+    <response>Cannot resolve '%2' as a valid content key reference.</response>
   </message>
 
   <message id="DOTJ061E" type="ERROR">
@@ -360,7 +360,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ070I" type="INFO">
-    <reason>An invalid @class attribute '%1' for was found for the &lt;%2&gt; element.</reason>
+    <reason>An invalid @class attribute '%1' was found for the &lt;%2&gt; element.</reason>
     <response>Processing as an unknown or non-DITA element.</response>
   </message>
 
@@ -401,12 +401,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ078F" type="FATAL">
     <reason>The input resource '%1' cannot be loaded.</reason>
-    <response>Check if grammar files for this document type are properly referenced and installed.</response>
+    <response>Make sure the grammar files for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ079E" type="ERROR">
     <reason>The '%1' resource cannot be loaded.</reason>
-    <response>Check if grammar files for this document type are properly referenced and installed.</response>
+    <response>Make sure the grammar files for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ080W" type="WARN">
@@ -520,7 +520,7 @@ See the accompanying LICENSE file for applicable license.
        Support for mismatched domains was added in release 1.5 or earlier. -->
   <message id="DOTX012W" type="WARN">
     <reason>When you conref another topic or an item in another topic, the @domains attribute of the target topic must be equal to or a subset of the current topic's @domains attribute.</reason>
-    <response>Put the target under an appropriate domain. You can see the messages guide for more help.</response>
+    <response>Put the target under an appropriate domain.</response>
   </message>
 
   <message id="DOTX013E" type="ERROR">
@@ -563,16 +563,16 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX020E" type="ERROR">
     <reason>Missing @navtitle attribute or element for peer topic '%1'.</reason>
-    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+    <response>References must provide a navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX021E" type="ERROR">
     <reason>Missing @navtitle attribute or element for non-DITA resource '%1'.</reason>
-    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+    <response>References must provide a navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX022W" type="WARN">
-    <reason>Unable to retrieve navtitle from target: '%1'. Using linktext (specified in topicmeta) as the navigation title.</reason>
+    <reason>Unable to retrieve navtitle from target: '%1'. Using topicmeta linktext as the navigation title.</reason>
     <response></response>
   </message>
 
@@ -583,12 +583,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX024E" type="ERROR">
     <reason>Missing linktext and navtitle for peer topic '%1'.</reason>
-    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+    <response>References must provide a navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX025E" type="ERROR">
     <reason>Missing linktext and navtitle for non-DITA resource '%1'.</reason>
-    <response>References must provide a local navigation title when the target is not a local DITA resource.</response>
+    <response>References must provide a navigation title when the target is not a local DITA resource.</response>
   </message>
 
   <message id="DOTX026W" type="WARN">
@@ -747,12 +747,12 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX060W" type="WARN">
-    <reason>The '%1' key was used in an &lt;abbreviated-form&gt; element, but the key is not associated with a glossary entry.</reason>
-    <response>Abbreviated-form should ONLY be used to reference to a glossary entry.</response>
+    <reason>The '%1' key is used in an &lt;abbreviated-form&gt; element, but the key is not associated with a glossary entry.</reason>
+    <response>Abbreviated-form should ONLY be used to reference a glossary entry.</response>
   </message>
 
   <message id="DOTX061W" type="WARN">
-    <reason>The @id attribute value '%1' was used on a &lt;topicref&gt; element, but it did not reference a topic element.</reason>
+    <reason>The @id attribute value '%1' is defined on a &lt;topicref&gt; element, but it does not reference a topic element.</reason>
     <response>The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</response>
   </message>
 
@@ -777,7 +777,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX066W" type="WARN">
-    <reason>Template '%1' is deprecated.</reason>
+    <reason>The '%1' template is deprecated.</reason>
     <response>Remove references to this template from the custom XSLT or plug-ins.</response>
   </message>
 
@@ -788,27 +788,27 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX068W" type="WARN">
     <reason>A &lt;topicref&gt; element that references a map contains child &lt;topicref&gt; elements.</reason>
-    <response>Child &lt;topicref&gt; elements are ignored.</response>
+    <response>Ignoring child topic references.</response>
   </message>
 
   <message id="DOTX069W" type="WARN">
-    <reason>Template mode '%1' is deprecated.</reason>
-    <response>Remove references to this template mode from the custom XSLT or plug-ins.</response>
+    <reason>The '%1' template mode is deprecated.</reason>
+    <response>Remove references to this template mode from custom XSLT or plug-ins.</response>
   </message>
 
   <message id="DOTX070W" type="WARN">
-    <reason>Target '%1' is deprecated.</reason>
-    <response>Remove references to this target from the custom Ant files.</response>
+    <reason>The '%1' target is deprecated.</reason>
+    <response>Remove references to this target from custom Ant files.</response>
   </message>
 
   <message id="DOTX071E" type="ERROR">
-    <reason>Conref range: Unable to find conref range end element with ID '%1'.</reason>
+    <reason>Unable to find conref range end element with ID '%1'.</reason>
     <response></response>
   </message>
 
   <message id="DOTX071W" type="WARN">
-    <reason>Parameter '%1' on template '%2' is deprecated.</reason>
-    <response>Use parameter '%3' instead.</response>
+    <reason>The '%1' parameter on the '%2' template is deprecated.</reason>
+    <response>Use the '%3' parameter instead.</response>
   </message>
 
   <message id="DOTX072I" type="INFO">

@@ -36,11 +36,11 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFJ002E" type="ERROR">
     <reason>The build failed due to problems encountered when sorting the PDF index.</reason>
-    <response>Please address any messages located earlier in the log.</response>
+    <response>Address any messages located earlier in the log.</response>
   </message>
 
   <message id="PDFJ003I" type="INFO">
-    <reason>Index entry '%1' will be sorted under the "Special characters" heading.</reason>
+    <reason>Index entry '%1' will be sorted under the 'Special characters' heading.</reason>
     <response></response>
   </message>
 
@@ -58,17 +58,17 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFX003W" type="WARN">
     <reason>Multiple index entries close the index range '%1'.</reason>
-    <response>Make sure that each index term with with a @start attribute value of '%1' has only one matching term with an @end attribute value of '%1'.</response>
+    <response>Make sure that each index term with a @start attribute value of '%1' has only one matching term with a corresponding @end attribute value.</response>
   </message>
 
   <message id="PDFX004F" type="ERROR">
-    <reason>A topic reference was found with href="".</reason>
+    <reason>Found a topic reference with an empty @href attribute value.</reason>
     <response>Please specify a target or remove the @href attribute.</response>
   </message>
 
   <message id="PDFX005F" type="ERROR">
-    <reason>The topic reference href="%1" cannot be found.</reason>
-    <response>Please correct the reference, or set the @scope or @format attribute if the target is not a local DITA topic.</response>
+    <reason>The '%1' topic reference cannot be found.</reason>
+    <response>Please correct the @href attribute value, or set the @scope or @format attribute if the target is not a local DITA topic.</response>
   </message>
 
   <!-- PDFX006E cannot appear with version 2.2; commenting out. Should be removed when it is removed from the code.
@@ -78,7 +78,7 @@ See the accompanying LICENSE file for applicable license.
   </message>-->
 
   <message id="PDFX007W" type="WARN">
-    <reason>Found an index term with end="%1", but no starting term was found for this entry.</reason>
+    <reason>Found an index term with @end attribute value '%1', but no start term was found for this entry.</reason>
     <response></response>
   </message>
 

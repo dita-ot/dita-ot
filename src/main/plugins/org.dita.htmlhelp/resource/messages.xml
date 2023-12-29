@@ -9,7 +9,7 @@ See the accompanying LICENSE file for applicable license.
 <messages>
 
   <message id="DOTX048I" type="INFO">
-    <reason>In order to include peer or external topic '%1' in your help file, you may need to recompile the CHM file after making the file available.</reason>
+    <reason>To include the peer or external topic '%1' in your help file, you may need to recompile the CHM file after making the resource available.</reason>
     <response></response>
   </message>
 
