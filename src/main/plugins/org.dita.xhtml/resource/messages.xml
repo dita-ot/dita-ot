@@ -12,22 +12,22 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA006W" type="WARN">
     <reason>Absolute paths on the local file system are not supported for the CSSPATH parameter.</reason>
-    <response>Please use a relative path or full URI instead.</response>
+    <response>Use a relative path or full URI instead.</response>
   </message>
 
   <message id="DOTA007E" type="ERROR">
     <reason>Cannot find the running-footer file '%1'.</reason>
-    <response>Please double check the value to ensure it is specified correctly.</response>
+    <response>Check the value to ensure it is specified correctly.</response>
   </message>
 
   <message id="DOTA008E" type="ERROR">
     <reason>Cannot find the running-header file '%1'.</reason>
-    <response>Please double check the value to ensure it is specified correctly.</response>
+    <response>Check the value to ensure it is specified correctly.</response>
   </message>
 
   <message id="DOTA009E" type="ERROR">
     <reason>Cannot find the specified heading file '%1'.</reason>
-    <response>Please double check the value to ensure it is specified correctly.</response>
+    <response>Check the value to ensure it is specified correctly.</response>
   </message>
 
   <message id="DOTA069W" type="WARN">
