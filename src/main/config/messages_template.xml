@@ -204,12 +204,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ039E" type="ERROR">
     <reason>There is no target specified for the conref push action 'pushafter'.</reason>
-    <response>Please specify @conref="pushtarget" and @conaction="mark" on the element that precedes the current element.</response>
+    <response>Please specify a @conref target and set the 'mark' @conaction on the element that precedes the current element.</response>
   </message>
 
   <message id="DOTJ040E" type="ERROR">
-    <reason>An element uses the conref action 'pushreplace', but no @conref attribute is found in the expected location.</reason>
-    <response></response>
+    <reason>An element uses the conref push action 'pushreplace', but no @conref attribute is defined.</reason>
+    <response>Please specify a @conref target with the ID of the content you want to replace.</response>
   </message>
 
   <!-- Note, the following message comes from the Java conref-push module, XSL based message later catches regular conref (DOTX014E and DOTX015)-->
@@ -229,7 +229,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ044W" type="WARN">
-    <reason>There is a redundant conref action 'pushbefore'.</reason>
+    <reason>There is a redundant conref push action 'pushbefore'.</reason>
     <response>Please make sure that 'mark' and 'pushbefore' occur in pairs.</response>
   </message>
 
@@ -531,7 +531,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX014E" type="ERROR">
     <reason>The @conref attribute value '%1' uses invalid syntax.</reason>
-    <response>Conref references to a map element should contain '#' followed by an ID, such as 'mymap.ditamap#mytopicrefid'.</response>
+    <response>Content references to a map element should contain '#' followed by an ID, such as 'mymap.ditamap#mytopicrefid'.</response>
   </message>
 
   <message id="DOTX015E" type="ERROR">
