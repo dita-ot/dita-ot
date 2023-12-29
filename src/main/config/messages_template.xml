@@ -74,18 +74,18 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 4.2 -->
   <message id="DOTJ007E" type="ERROR">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
-    <response>The first encountered condition will be used.</response>
+    <response>Using the first condition found.</response>
   </message>
 
   <message id="DOTJ007I" type="INFO">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
-    <response>The first encountered condition will be used.</response>
+    <response>Using the first condition found.</response>
   </message>
 
   <!-- Deprecated since 4.2 -->
   <message id="DOTJ007W" type="WARN">
     <reason>Duplicate condition in filter file for rule '%1'.</reason>
-    <response>The first encountered condition will be used.</response>
+    <response>Using the first condition found.</response>
   </message>
 
   <message id="DOTJ009E" type="ERROR">
@@ -119,23 +119,23 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ021E" type="ERROR">
-    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
+    <reason>No output generated for '%1' because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
     <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <!-- Message DOTJ021W deprecated in 3.4, replaced with DOTJ021E -->
   <message id="DOTJ021W" type="WARN">
-    <reason>The '%1' resource will not generate output because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
+    <reason>No output generated for '%1' because all content has been filtered out by DITAVAL 'exclude' conditions, or the resource is not valid DITA.</reason>
     <response>Check the '%1' resource and the DITAVAL file to see if this is the intended result.</response>
   </message>
 
   <message id="DOTJ022F" type="FATAL">
     <reason>Failed to parse the input resource '%1' because all of its content has been filtered out.</reason>
-    <response>This will happen if the resource has filter conditions on the root element, and a DITAVAL file excludes all content based on those conditions.</response>
+    <response>This can happen if the resource has filter conditions on the root element, and a DITAVAL file excludes all content based on those conditions.</response>
   </message>
 
   <message id="DOTJ023E" type="ERROR">
-    <reason>The specified image file '%1' is not available. It will not be included in the output.</reason>
+    <reason>The specified image file '%1' is not available. It is not included in the output.</reason>
     <response>Ensure that '%1' exists and that you have permission to access it.</response>
   </message>
 
@@ -162,11 +162,11 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ030I" type="INFO">
     <reason>No @class attribute was found for the &lt;%1&gt; element.</reason>
-    <response>The element will be processed as an unknown or non-DITA element.</response>
+    <response>Processing as an unknown or non-DITA element.</response>
   </message>
 
   <message id="DOTJ031I" type="INFO">
-    <reason>No rule for '%1' was found in the DITAVAL file. This value will use the default action, or a parent prop action if specified.</reason>
+    <reason>No rule for '%1' was found in the DITAVAL file. Using the default action, or a parent prop action if specified.</reason>
     <response>To remove this message, specify a rule for '%1' in the DITAVAL file.</response>
   </message>
 
@@ -191,10 +191,9 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
-  <!-- 2012-06-12: Still need to edit this message -->
   <message id="DOTJ037W" type="WARN">
     <reason>The XML schema and DTD validation function of the parser is turned off.</reason>
-    <response>Make sure the input is normalized DITA with @class attributes included, otherwise it will not be processed correctly.</response>
+    <response>For correct processing, make sure the input is normalized DITA with @class attributes included.</response>
   </message>
 
   <message id="DOTJ038E" type="ERROR">
@@ -240,17 +239,17 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ046E" type="ERROR">
     <reason>The @conkeyref attribute value '%1' cannot be resolved because it does not contain a key or the key is not defined.</reason>
-    <response>The build will use the @conref attribute for fallback, if one exists.</response>
+    <response>Using the @conref attribute as fallback if it exists.</response>
   </message>
 
   <message id="DOTJ047I" type="INFO">
     <reason>Unable to find key definition for key reference '%1' in root scope.</reason>
-    <response>The @href attribute may be used as fallback if it exists.</response>
+    <response>Using the @href attribute as fallback if it exists.</response>
   </message>
 
   <message id="DOTJ048I" type="INFO">
     <reason>Unable to find key definition for key reference '%1' in scope '%2'.</reason>
-    <response>The @href attribute may be used as fallback if it exists.</response>
+    <response>Using the @href attribute as fallback if it exists.</response>
   </message>
 
   <message id="DOTJ049W" type="WARN">
@@ -362,7 +361,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ070I" type="INFO">
     <reason>An invalid @class attribute '%1' for was found for the &lt;%2&gt; element.</reason>
-    <response>The element will be processed as an unknown or non-DITA element.</response>
+    <response>Processing as an unknown or non-DITA element.</response>
   </message>
 
   <message id="DOTJ071E" type="ERROR">
@@ -476,7 +475,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX005E" type="ERROR">
     <reason>Unable to find navigation title for reference to '%1'.</reason>
-    <response>The build will use '%1' as the title in the Eclipse Table of Contents.</response>
+    <response>Using '%1' as the title in the Eclipse Table of Contents.</response>
   </message>
 
   <message id="DOTX006E" type="ERROR">
@@ -485,7 +484,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX007I" type="INFO">
-    <reason>Only DITA topics, HTML files, and images may be included in the compiled CHM file. The reference to '%1' will be ignored.</reason>
+    <reason>Only DITA topics, HTML files, and images may be included in the compiled CHM file. Ignoring reference to '%1'.</reason>
     <response>To remove this message, set the @toc attribute to 'no' or the @processing-role attribute to 'resource-only' on the topic reference.</response>
   </message>
 
@@ -513,7 +512,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX011W" type="WARN">
-    <reason>There is more than one possible target for the @conref attribute value '%1'. Only the first will be used.</reason>
+    <reason>There is more than one possible target for the @conref attribute value '%1'. Using the first value found.</reason>
     <response>Remove the duplicate ID in the referenced resource.</response>
   </message>
 
@@ -540,8 +539,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX016W" type="WARN">
-    <reason>'%2' appears to reference a DITA document, but the @format attribute has inherited a value of '%1'. The document will not be processed as DITA.</reason>
-    <response></response>
+    <reason>'%2' appears to reference a DITA document, but the @format attribute has inherited a value of '%1'.</reason>
+    <response>Processing as a non-DITA element. To process as DITA, set the @format attribute to 'dita'.</response>
   </message>
 
   <!-- Should likely be "warning" instead of "error", as related toolkit problems were fixed in very early releases.
@@ -653,7 +652,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX038I" type="INFO">
-    <reason>The @longdescref attribute on the &lt;%1&gt; element will be ignored.</reason>
+    <reason>Ignoring the @longdescref attribute on the &lt;%1&gt; element.</reason>
     <response>Accessibility for object elements needs to be handled another way.</response>
   </message>
 
@@ -703,7 +702,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX049I" type="INFO">
-    <reason>References to non-DITA files will be ignored by the PDF, ODT, and RTF output transforms.</reason>
+    <reason>References to non-DITA files are ignored by the PDF, ODT, and RTF transformations.</reason>
     <response></response>
   </message>
 
@@ -743,8 +742,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX058W" type="WARN">
-    <reason>No glossary entry was found associated with key '%1' on '%2' element. The build will try to determine the best display text and hover text for terms and abbreviations.</reason>
-    <response></response>
+    <reason>No glossary entry found for the '%1' key on the '%2' element.</reason>
+    <response>Verify display text and hover text for terms and abbreviations.</response>
   </message>
 
   <message id="DOTX060W" type="WARN">
@@ -773,9 +772,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX065W" type="WARN">
-    <reason>Two unique source files each specify a @copy-to attribute value '%2', which results in a collision. The value associated with
-      @href value '%1' will be ignored.</reason>
-    <response></response>
+    <reason>Two unique source files each specify a @copy-to attribute value '%2', which results in a collision.</reason>
+    <response>Ignoring the @copy-to value associated with the @href value '%1'.</response>
   </message>
 
   <message id="DOTX066W" type="WARN">
@@ -829,8 +827,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX075W" type="WARN">
-    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type. The reference will resolve, but may result in content that violates one of the document constraints in '%1'.</reason>
-    <response></response>
+    <reason>A content reference in a constrained document type is pulling content from an unconstrained document type.</reason>
+    <response>Resolving this reference may result in content that violates one of the document constraints in '%1'.</response>
   </message>
 
   <message id="DOTX076E" type="ERROR">
