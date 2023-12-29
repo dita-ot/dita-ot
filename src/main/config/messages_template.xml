@@ -26,8 +26,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTA004F" type="FATAL">
-    <reason>Invalid DITA topic extension '%1'.</reason>
-    <response>Supported values are '.dita' and '.xml'.</response>
+    <reason>Invalid file name extension '%1'.</reason>
+    <response>The '.dita' and '.xml' file name extensions are supported for DITA topics.</response>
   </message>
 
   <message id="DOTA011W" type="WARN">
@@ -37,7 +37,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA012W" type="WARN">
     <reason>The '%1' argument is deprecated.</reason>
-    <response>Use the argument '%2' instead.</response>
+    <response>Use the '%2' argument instead.</response>
   </message>
 
   <message id="DOTA013F" type="FATAL">
@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA014W" type="WARN">
     <reason>The @%1 attribute is deprecated.</reason>
-    <response>Use @%2 instead.</response>
+    <response>Use the @%2 attribute instead.</response>
   </message>
 
   <message id="DOTA015F" type="FATAL">
@@ -223,8 +223,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ043W" type="WARN">
-    <reason>The conref push function is trying to replace an element that does not exist ('%1' element in the '%2' resource).</reason>
-    <response></response>
+    <reason>The conref push function is trying to replace an element &lt;%1&gt; that does not exist in the '%2' resource.</reason>
+    <response>Update the reference to point to a valid target.</response>
   </message>
 
   <message id="DOTJ044W" type="WARN">
@@ -269,14 +269,14 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ052E" type="ERROR">
-    <reason>Code reference charset '%1' not supported.</reason>
+    <reason>Unsupported code reference charset '%1'.</reason>
     <response>See the documentation for supported character set values on the @format attribute.</response>
   </message>
 
   <!-- Obsolete since 2.3 -->
   <message id="DOTJ053W" type="WARN">
     <reason>The input resource '%1' is not a valid DITA filename.</reason>
-    <response>Check '%1' to see if it is correct. The '.dita' and '.xml' extensions are supported for DITA topics.</response>
+    <response>Check '%1' to see if it is correct. The '.dita' and '.xml' file name extensions are supported for DITA topics.</response>
   </message>
 
   <message id="DOTJ054E" type="ERROR">
@@ -286,12 +286,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ055E" type="ERROR">
     <reason>Invalid key name '%1'.</reason>
-    <response></response>
+    <response>Check the reference to see if the target exists.</response>
   </message>
 
   <message id="DOTJ056E" type="ERROR">
-    <reason>Invalid xml:lang '%1'.</reason>
-    <response></response>
+    <reason>Invalid @xml:lang attribute value '%1'.</reason>
+    <response>Check the correct value for the target language.</response>
   </message>
 
   <message id="DOTJ057E" type="ERROR">
@@ -326,7 +326,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ063E" type="ERROR">
     <reason>The @cols attribute is set to '%1' but the number of &lt;colspec&gt; elements was '%2'.</reason>
-    <response>Verify the number of columns in the table.</response>
+    <response>Check the number of columns in the table.</response>
   </message>
 
   <message id="DOTJ064W" type="WARN">
@@ -743,7 +743,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX058W" type="WARN">
     <reason>No glossary entry found for the '%1' key on the '%2' element.</reason>
-    <response>Verify display text and hover text for terms and abbreviations.</response>
+    <response>Check display text and hover text for terms and abbreviations.</response>
   </message>
 
   <message id="DOTX060W" type="WARN">
