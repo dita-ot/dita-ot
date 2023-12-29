@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Start of Ant Messages -->
 
   <message id="DOTA066F" type="FATAL">
-    <reason>Cannot find the user specified XSLT stylesheet '%1'.</reason>
+    <reason>Cannot find the user-specified XSLT stylesheet '%1'.</reason>
     <response></response>
   </message>
 

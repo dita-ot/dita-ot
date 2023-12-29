@@ -57,7 +57,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTA069F" type="FATAL">
     <reason>The input resource '%1' cannot be located or read.</reason>
-    <response>Ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Make sure '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- Start of Java Messages -->
@@ -68,7 +68,7 @@ See the accompanying LICENSE file for applicable license.
        toolkit development team. -->
   <message id="DOTJ005F" type="FATAL">
     <reason>Failed to create new instance for '%1'.</reason>
-    <response>Ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Make sure '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- Deprecated since 4.2 -->
@@ -136,7 +136,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ023E" type="ERROR">
     <reason>The specified image file '%1' is not available. It is not included in the output.</reason>
-    <response>Ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Make sure '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ025E" type="ERROR">
@@ -265,7 +265,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Long term, would like to split this into two messages. One for file not found, another for file outside the scope of the map. -->
   <message id="DOTJ051E" type="ERROR">
     <reason>Unable to load target for coderef '%1'.</reason>
-    <response>Ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Make sure '%1' exists and that you have permission to access it.</response>
   </message>
 
   <message id="DOTJ052E" type="ERROR">
@@ -491,7 +491,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- DOTX008E uses the XSLT prefix DOTX, but generated only from Java code. -->
   <message id="DOTX008E" type="ERROR">
     <reason>The resource '%1' cannot be loaded.</reason>
-    <response>Ensure that '%1' exists and that you have permission to access it.</response>
+    <response>Make sure '%1' exists and that you have permission to access it.</response>
   </message>
 
   <!-- As of 2012-06-13, DOTX008W is only called for HTML Help and map2htmtoc -->
