@@ -552,13 +552,13 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- 018 currently not used, commented out due to SF bug 1771123 -->
   <message id="DOTX018I" type="INFO">
-    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a more specific '%2' topic. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
-    <response></response>
+    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a more specific '%2' topic.</reason>
+    <response>Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</response>
   </message>
 
   <message id="DOTX019W" type="WARN">
-    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a '%2' topic. This may cause links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</reason>
-    <response></response>
+    <reason>The @type attribute on a topicref was set to '%1', but the topicref references a '%2' topic.</reason>
+    <response>This may cause links to sort incorrectly in the output. Note that the @type attribute cascades in maps, so the value '%1' may come from an ancestor topicref.</response>
   </message>
 
   <message id="DOTX020E" type="ERROR">
@@ -607,13 +607,13 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX029I" type="INFO">
-    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a more specific '%4' '%2'. This may cause links to sort incorrectly in the output.</reason>
-    <response></response>
+    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a more specific '%4' '%2'.</reason>
+    <response>This may cause links to sort incorrectly in the output.</response>
   </message>
 
   <message id="DOTX030W" type="WARN">
-    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a '%4' '%2'. This may cause links to sort incorrectly in the output.</reason>
-    <response></response>
+    <reason>The @type attribute on a &lt;%1&gt; element was set to '%3', but the reference is to a '%4' '%2'.</reason>
+    <response>This may cause links to sort incorrectly in the output.</response>
   </message>
 
   <message id="DOTX031E" type="ERROR">
@@ -717,8 +717,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX053E" type="ERROR">
-    <reason>A element that references another map indirectly includes itself, which results in an infinite loop. The original map reference is to '%1'.</reason>
-    <response></response>
+    <reason>A element that references another map indirectly includes itself, which results in an infinite loop.</reason>
+    <response>The original map reference is to '%1'.</response>
   </message>
 
   <message id="DOTX054W" type="WARN">
