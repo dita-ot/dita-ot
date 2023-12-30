@@ -99,7 +99,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="PDFX012E" type="ERROR">
     <reason>Found a table row with more entries than allowed.</reason>
-    <response></response>
+    <response>Check the number of columns in the table.</response>
   </message>
 
   <message id="PDFX013F" type="FATAL">
