@@ -141,12 +141,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ025E" type="ERROR">
     <reason>The input to the 'topic merge' process cannot be found.</reason>
-    <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
+    <response>Correct any earlier errors and try the build again, or see the documentation for additional details.</response>
   </message>
 
   <message id="DOTJ026E" type="ERROR">
     <reason>The 'topic merge' process did not generate any output.</reason>
-    <response>Correct any earlier errors and try the build again, or see the documentation for additional causes.</response>
+    <response>Correct any earlier errors and try the build again, or see the documentation for additional details.</response>
   </message>
 
   <message id="DOTJ028E" type="ERROR">
