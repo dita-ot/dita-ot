@@ -754,7 +754,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX061W" type="WARN">
-    <reason>The @id attribute value '%1' is defined on a &lt;topicref&gt; element, but it does not reference a topic element.</reason>
+    <reason>The @href attribute value '%1' contains a fragment identifier, but it does not reference a topic element.</reason>
     <response>The @href attribute on a &lt;topicref&gt; element should only reference topic-level elements.</response>
   </message>
 
