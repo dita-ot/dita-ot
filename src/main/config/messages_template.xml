@@ -540,7 +540,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTX016W" type="WARN">
     <reason>'%2' appears to reference a DITA document, but the @format attribute has inherited a value of '%1'.</reason>
-    <response>Processing as a non-DITA element. To process as DITA, set the @format attribute to 'dita'.</response>
+    <response>Processing as a non-DITA resource. To process as DITA, set the @format attribute to 'dita'.</response>
   </message>
 
   <!-- Should likely be "warning" instead of "error", as related toolkit problems were fixed in very early releases.
