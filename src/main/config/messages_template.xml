@@ -196,6 +196,7 @@ See the accompanying LICENSE file for applicable license.
     <response>For correct processing, make sure the input is normalized DITA with @class attributes included.</response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTJ038E" type="ERROR">
     <reason>The &lt;%1&gt; element is specialized from unrecognized metadata.</reason>
     <response>Make sure that the &lt;%1&gt; element is specialized from an existing metadata element in the core DITA vocabulary.</response>
