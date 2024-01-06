@@ -507,8 +507,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX010E" type="ERROR">
-    <reason>Unable to find the @conref attribute value '%1'.</reason>
-    <response>Check '%1' to see if the target exists.</response>
+    <reason>Unable to find the @conref target '%1'.</reason>
+    <response>Check '%1' to see if the target resource exists.</response>
   </message>
 
   <message id="DOTX011W" type="WARN">
