@@ -744,7 +744,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX058W" type="WARN">
-    <reason>No glossary entry found for the '%1' key on the '%2' element.</reason>
+    <reason>No glossary entry found for the '%1' key on the &lt;%2&gt; element.</reason>
     <response>Check display text and hover text for terms and abbreviations.</response>
   </message>
 
