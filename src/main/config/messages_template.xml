@@ -808,6 +808,7 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTX071W" type="WARN">
     <reason>The '%1' parameter on the '%2' template is deprecated.</reason>
     <response>Use the '%3' parameter instead.</response>
