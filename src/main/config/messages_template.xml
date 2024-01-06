@@ -286,7 +286,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ055E" type="ERROR">
     <reason>Invalid key name '%1'.</reason>
-    <response>Check the reference to see if the target exists.</response>
+    <response>Key names consist of URI characters and may not contain '{', '}', '[', ']', '/', '#', '?' or whitespace.</response>
   </message>
 
   <message id="DOTJ056E" type="ERROR">
