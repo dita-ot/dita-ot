@@ -335,7 +335,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ065I" type="INFO">
-    <reason>Branch filter generated topic '%1' used more than once.</reason>
+    <reason>Branch filter generated topic '%1' is used more than once.</reason>
     <response>Renaming '%1' to '%2'.</response>
   </message>
 
