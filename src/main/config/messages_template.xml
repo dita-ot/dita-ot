@@ -572,8 +572,8 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTX022W" type="WARN">
-    <reason>Unable to retrieve navtitle from target: '%1'. Using topicmeta linktext as the navigation title.</reason>
-    <response></response>
+    <reason>Unable to retrieve navtitle from target: '%1'.</reason>
+    <response>Using topicmeta linktext as the navigation title.</response>
   </message>
 
   <message id="DOTX023W" type="WARN">
