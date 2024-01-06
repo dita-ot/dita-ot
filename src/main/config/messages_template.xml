@@ -157,7 +157,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 3.5 -->
   <message id="DOTJ029I" type="INFO">
     <reason>No @domains attribute was found for the &lt;%1&gt; element.</reason>
-    <response>This generally indicates that the DTD or schema was not developed properly according to the DITA specification.</response>
+    <response>This generally indicates that the grammar files (such as DTDs or schemas) were not developed properly according to the DITA specification.</response>
   </message>
 
   <message id="DOTJ030I" type="INFO">
@@ -401,12 +401,12 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ078F" type="FATAL">
     <reason>The input resource '%1' cannot be loaded.</reason>
-    <response>Make sure the grammar files for this document type are properly referenced and installed.</response>
+    <response>Make sure the grammar files (such as DTDs or schemas) for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ079E" type="ERROR">
     <reason>The '%1' resource cannot be loaded.</reason>
-    <response>Make sure the grammar files for this document type are properly referenced and installed.</response>
+    <response>Make sure the grammar files (such as DTDs or schemas) for this document type are properly referenced and installed.</response>
   </message>
 
   <message id="DOTJ080W" type="WARN">
