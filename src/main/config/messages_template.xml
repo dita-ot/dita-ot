@@ -171,7 +171,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ033E" type="ERROR">
-    <reason>No valid content found in topicref '%1' during chunk processing.</reason>
+    <reason>No valid content found in the referenced resource '%1' during chunk processing.</reason>
     <response>Specify an existing and valid topic for the topic reference.</response>
   </message>
 
