@@ -671,6 +671,7 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTX042I" type="INFO">
     <reason>DITAVAL-based flagging is not currently supported for inline phrases in XHTML; ignoring flag value on '%1' attribute.</reason>
     <response></response>
@@ -726,6 +727,7 @@ See the accompanying LICENSE file for applicable license.
     <response>Check the DITAVAL and DITA source files to make sure there is no style conflict on the element that needs to be flagged.</response>
   </message>
 
+  <!-- Deprecated since 4.2 -->
   <message id="DOTX055W" type="WARN">
     <reason>A customized stylesheet uses the deprecated 'flagit' template. Conditional processing is no longer supported using this template.</reason>
     <response>Update the stylesheet to use the 'start-flagit' template instead of the 'flagit' template.</response>
