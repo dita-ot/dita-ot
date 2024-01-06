@@ -224,7 +224,7 @@ See the accompanying LICENSE file for applicable license.
 
   <message id="DOTJ043W" type="WARN">
     <reason>The conref push function is trying to replace an element &lt;%1&gt; that does not exist in the '%2' resource.</reason>
-    <response>Update the reference to point to a valid target.</response>
+    <response>Update the reference to refer to a valid target.</response>
   </message>
 
   <message id="DOTJ044W" type="WARN">
