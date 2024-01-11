@@ -58,7 +58,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:variable>
         <xsl:choose>
             <!--  Disable chapter title processing when mini TOC is created -->
-            <xsl:when test="(topicType = 'topicChapter') or (topicType = 'topicAppendix')" />
+            <xsl:when test="($topicType = 'topicChapter') or ($topicType = 'topicAppendix')" />
             <!--   Normal processing         -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="processTopicTitle"/>

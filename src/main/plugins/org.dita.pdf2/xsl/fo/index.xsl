@@ -387,7 +387,6 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
                     <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
                     <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
-                    <xsl:variable name="refID" select="opentopic-index:refID/@value"/>
                     <xsl:choose>
                       <xsl:when test="$following-idx">
                         <xsl:apply-templates select="." mode="make-index-ref">
@@ -456,7 +455,6 @@ See the accompanying LICENSE file for applicable license.
           <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
             <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
           </xsl:if>
-          <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
           <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
             <xsl:variable name="page-setting" select="(ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
             <xsl:variable name="isNoPage" select="$page-setting = 'true' and name($page-setting) = 'no-page' "/>
@@ -596,4 +594,4 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
 
-</xsl:stylesheet>    
+</xsl:stylesheet>

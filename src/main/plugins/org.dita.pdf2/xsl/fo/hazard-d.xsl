@@ -12,7 +12,6 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="*[contains(@class, ' hazard-d/hazardstatement ')]">
     <xsl:variable name="type" select="(@type, 'caution')[1]" as="xs:string"/>
-    <xsl:variable name="number-cells" as="xs:integer" select="2"/>
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     <fo:table xsl:use-attribute-sets="hazardstatement">
       <xsl:call-template name="commonattributes"/>

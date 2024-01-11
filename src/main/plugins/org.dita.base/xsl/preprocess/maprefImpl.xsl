@@ -433,7 +433,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:param name="parentMaprefKeyscope" tunnel="yes" as="attribute()?"/>
-    <xsl:variable name="mapID" select="@id"/>
     <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
       <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
       <xsl:with-param name="keyscope" select="string-join((@keyscope, $parentMaprefKeyscope), ' ')"/>

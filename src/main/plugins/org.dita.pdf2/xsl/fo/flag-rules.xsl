@@ -93,11 +93,6 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
         <xsl:if test="not($propsValue='')">
           <xsl:call-template name="ext-gen-prop">
             <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
@@ -111,11 +106,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:otherwise>
         <xsl:variable name="propsValue">
           <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
             <xsl:with-param name="propsPath" select="$props"/>
           </xsl:call-template>
         </xsl:variable>
@@ -204,11 +194,6 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
         <xsl:if test="not($propsValue='')">
          
         </xsl:if>
@@ -220,11 +205,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:otherwise>
         <xsl:variable name="propsValue">
           <xsl:call-template name="getPropsValue">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
             <xsl:with-param name="propsPath" select="$props"/>
           </xsl:call-template>
         </xsl:variable>
@@ -297,11 +277,6 @@ See the accompanying LICENSE file for applicable license.
             <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
-            <xsl:with-param name="propsPath" select="substring-before($props,',')"/>
-          </xsl:call-template>
-        </xsl:variable>
         <xsl:if test="not($propsValue='')">
           <xsl:call-template name="ext-gen-prop">
             <xsl:with-param name="flag-att-path" select="substring-before($props,',')"/>
@@ -316,11 +291,6 @@ See the accompanying LICENSE file for applicable license.
       <xsl:otherwise>
         <xsl:variable name="propsValue">
           <xsl:call-template name="getPropsValue-parent">
-            <xsl:with-param name="propsPath" select="$props"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="propName">
-          <xsl:call-template name="getLastPropName">
             <xsl:with-param name="propsPath" select="$props"/>
           </xsl:call-template>
         </xsl:variable>

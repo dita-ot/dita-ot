@@ -525,8 +525,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:apply-templates select="@*"/>
           <!--create variables for attributes that will be passed by parameter to the getstuff template (which is shared with link, which needs the attributes in variables to save doing inheritance checks for each one)-->
           <xsl:variable name="type" as="xs:string?" select="@type"/>
-          <xsl:variable name="format" as="xs:string?" select="@format"/>
-          <xsl:variable name="scope" as="xs:string?" select="@format"/>
           <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
           <xsl:apply-templates select="." mode="topicpull:get-stuff">
             <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
@@ -607,13 +605,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="localtype" select="$localtype"/>
           <xsl:with-param name="targetElement" select="$targetElement" as="element()"/>
         </xsl:apply-templates>
-        
-        <!--create class value string implied by the link's type, used for comparison with class strings in the target topic for validation-->
-        <xsl:variable name="classval" as="xs:string" 
-          select="if (dita-ot:is-topic($targetElement))
-                     then tokenize(substring($targetElement/@class, 3), ' ')[1]
-                     else concat('/', substring-after(tokenize(substring($targetElement/@class, 3), ' ')[1], '/'))
-          "/>
         
         <!--linktext-->
         <xsl:apply-templates select="." mode="topicpull:get-stuff_get-linktext">
