@@ -6,6 +6,26 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
+
+<!-- This stylesheet is called twice during preprocessing:
+
+     * In the "mapref" stage, applied to each .ditamap file
+     * In the "keyref" stage, applied only to the root .ditamap file
+
+     "mapref" processing behaves as follows:
+
+     * Each .ditamap file independently and recursively inlines all of its descendant .ditamap files.
+     * A .ditamap file will never inline another .ditamap file that was already processed by "mapref".
+       * The DITA-OT uses a custom <xslt> Ant task (XsltModule.java) that avoids overwriting the
+         original files until all files are processed.
+     * $relative-path tracks the "current directory" as submaps are recursively inlined.
+       * The initial value is '#none#', which is relative to the location of the $file-being-processed.
+       * An empty string also represents the location of the $file-being-processed.
+       * Other values are the relative paths of files being inlined, including the trailing '/'
+         (to allow direct concatenation of subsequent path components).
+     * $mapref-id-path contains the sequence of encountered map-reference node IDs.
+       * If a previously encountered node ID is encountered again, there is a reference loop. -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 version="3.0"
@@ -27,6 +47,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@format"/>
   <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@dita-ot:orig-format"/>
 
+  <!-- baseline identity transform -->
   <xsl:template match="@* | node()">
     <xsl:copy>
       <xsl:apply-templates select="@* | node()">
@@ -38,9 +59,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="conref">
       <xsl:choose>
+        <!-- path is relative to $file-being-processed or is a bare fragment reference - use as-is -->
         <xsl:when test="$relative-path = ('#none#', '') or starts-with(.,'#')">
           <xsl:sequence select="."/>
         </xsl:when>
+        <!-- path is relative to the current map/submap file - resolve it -->
         <xsl:otherwise>
           <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:otherwise>
@@ -52,9 +75,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="href">
       <xsl:choose>
+        <!-- path is relative to the current map/submap file - resolve it -->
         <xsl:when test="not(contains(.,'://') or ../@scope = 'external' or $relative-path = ('#none#', ''))">
           <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:when>
+        <!-- path is relative to $file-being-processed or is external - use as-is -->
         <xsl:otherwise>
           <xsl:sequence select="."/>
         </xsl:otherwise>
@@ -62,6 +87,12 @@ See the accompanying LICENSE file for applicable license.
     </xsl:attribute>
   </xsl:template>
 
+  <!-- This template processes:
+
+       * References to @scope=('peer', 'external') .ditamap files
+       * In "keyref" stage, <submap> containers previously created by "mapref" stage
+
+       The referenced map is not inlined, but templates are applied to the contents. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href(: | @dita-ot:orig-href:)) or
                          (:@processing-role = 'resource-only' or:)
@@ -72,6 +103,20 @@ See the accompanying LICENSE file for applicable license.
     </xsl:copy>
   </xsl:template>
 
+  <!-- This template processes:
+
+       * References to local .ditamap files included for processing
+         * @scope=('peer', 'external') references are handled by the preceding template
+
+       The element is processed as follows:
+
+       * The referenced map is inlined into a temporary <submap> container.
+         * The <submap> is a specialization of <topicgroup>.
+         * The <submap> is unwrapped at the end of preprocessing.
+       * Templates are applied to the inlined map content.
+         * This results in recursive inlining of any descendant map references.
+       * The submap title is preserved in a <submap-title> element.
+       * The submap metadata is preserved in a <submap-topicmeta-container> element. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']" priority="10">
     <xsl:param name="refclass" select="(@dita-ot:orig-class, @class)[1]" as="xs:string"/>
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
@@ -81,7 +126,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="href" select="(@href, @dita-ot:orig-href)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="generate-id(.) = $mapref-id-path">
-        <!-- it is mapref but it didn't pass the loop dependency check -->
+        <!-- this element was already processed during earlier recursive processing - inform the user of a reference loop -->
         <xsl:call-template name="output-message">
           <xsl:with-param name="id" select="'DOTX053E'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="$href"/></xsl:with-param>
@@ -175,9 +220,11 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:apply-templates select="@* except (@class | @processing-role | @href)"/>
                 <xsl:if test="@href">
                   <xsl:choose>
+                    <!-- path is relative to the current map/submap file - resolve it -->
                     <xsl:when test="$relative-path != '#none#'">
                       <xsl:attribute name="href" select="concat($relative-path, @href)"/>
                     </xsl:when>
+                    <!-- path is relative to $file-being-processed - use as-is -->
                     <xsl:otherwise>
                       <xsl:apply-templates select="@href"/>
                     </xsl:otherwise>
@@ -192,6 +239,7 @@ See the accompanying LICENSE file for applicable license.
                     dita-ot:orig-format="{(@format, @dita-ot:orig-format)[1]}"
                     dita-ot:orig-class="{(@class, @dita-ot:orig-class)[1]}">
               <xsl:attribute name="dita-ot:orig-href">
+                <!-- if path is relative to the current map/submap file, remember it -->
                 <xsl:if test="not($relative-path = ('#none#', ''))">
                   <xsl:value-of select="$relative-path"/>
                 </xsl:if>
@@ -211,6 +259,7 @@ See the accompanying LICENSE file for applicable license.
               <xsl:apply-templates select="$targetTitleAndTopicmeta" mode="preserve-submap-title-and-topicmeta">
                 <xsl:with-param name="relative-path" tunnel="yes">
                   <xsl:choose>
+                    <!-- path is relative to the current map/submap file - resolve it -->
                     <xsl:when test="not($relative-path = ('#none#', ''))">
                       <xsl:value-of select="$relative-path"/>
                       <xsl:call-template name="find-relative-path">
@@ -218,6 +267,7 @@ See the accompanying LICENSE file for applicable license.
                       </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
+                    <!-- path is relative to $file-being-processed - use as-is -->
                       <xsl:call-template name="find-relative-path">
                         <xsl:with-param name="remainingpath" select="$href"/>
                       </xsl:call-template>
@@ -231,12 +281,14 @@ See the accompanying LICENSE file for applicable license.
                 <xsl:with-param name="mapref-id-path" select="$updated-id-path"/>
                 <xsl:with-param name="relative-path" tunnel="yes">
                   <xsl:choose>
+                    <!-- path is relative to the current map/submap file - resolve it -->
                     <xsl:when test="not($relative-path = ('#none#', ''))">
                       <xsl:value-of select="$relative-path"/>
                       <xsl:call-template name="find-relative-path">
                         <xsl:with-param name="remainingpath" select="$href"/>
                       </xsl:call-template>
                     </xsl:when>
+                    <!-- path is relative to $file-being-processed - use as-is -->
                     <xsl:otherwise>
                       <xsl:call-template name="find-relative-path">
                         <xsl:with-param name="remainingpath" select="$href"/>
@@ -258,20 +310,37 @@ See the accompanying LICENSE file for applicable license.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
+  <!-- This template processes:
+
+       * Non-.ditamap file references and elements, such as:
+         * References to .dita files
+         * References to other files (.pdf, .mp4, etc.)
+         * <ditaval> references
+         * <keydef> key definitions
+         * Elements with no @href reference (such as <topicgroup> and <topichead>)
+         * Subject scheme elements (such as <subjectdef> and <enumerationdef>)
+
+       The element is processed as follows:
+
+       * @href and @copy-to references are resolved relative to the current file being processed, if needed.
+       * For first-level elements in submaps, @class inherits the value of any non-<mapref> submap reference element. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="5">
+    <!-- if we're not inheriting the enclosing submap's @class, then use this element's class -->
     <xsl:param name="refclass" select="@class"/>
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
-
     <xsl:copy>
       <xsl:for-each select="@href | @copy-to">
         <xsl:choose>
+          <!-- empty attribute value - delete the attribute -->
           <xsl:when test=". = ''"/>
+          <!-- path is relative to $file-being-processed or is external - use as-is -->
           <xsl:when test="$relative-path = '#none#' or dita-ot:is-external(.)">
             <xsl:attribute name="{name()}" select="."/>
           </xsl:when>
+          <!-- path is relative to the current map/submap file - resolve it -->
           <xsl:otherwise>
             <xsl:attribute name="{name()}" select="dita-ot:normalize-uri(concat($relative-path, .))"/>
           </xsl:otherwise>
@@ -279,19 +348,22 @@ See the accompanying LICENSE file for applicable license.
       </xsl:for-each>
       <xsl:attribute name="class">
         <xsl:choose>
+          <!-- for first-level elements inside <mapref> submaps (and its specializations), keep the element's original @class value; don't inherit the <mapref> class -->
           <xsl:when test="contains($refclass, ' mapgroup-d/mapref ')">
            <xsl:value-of select="@class"/>
           </xsl:when>
-          <!-- if the element is not at the top level of reference target, @class equals to $refclass -->
+          <!-- for first-level elements inside a more specific submap reference (like a <topicref> inside a <chapter> submap), inherit the submap reference's @class value -->
           <xsl:when test="not(contains(@class, substring($refclass, 3)))">
             <xsl:value-of select="$refclass"/>
           </xsl:when>
+          <!-- not either special case above; just copy this element's @class value -->
           <xsl:otherwise>
             <xsl:value-of select="@class"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
-      <!-- linking and following attributes processed in the same way -->
+      <!-- first-level elements inside a submap inherit the following attributes from the submap's root element
+           (because the root submap element is dissolved and only the contents are inlined -->
       <xsl:call-template name="generate-attribute">
         <xsl:with-param name="referTypeFlag" select="$referTypeFlag"/>
         <xsl:with-param name="name" select="'linking'"/>
@@ -341,14 +413,14 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="name" select="'rev'"/>
       </xsl:call-template>
       <xsl:apply-templates select="@*[not(local-name() = $special-atts)] | node()">
-        <!--<xsl:with-param name="relative-path" select="$relative-path"/>-->
-        <!-- pass the relative-path to sub elements -->
         <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
-        <!-- pass the mapref-id-path to sub elements -->
+        <!-- don't propagate 'refclass'; it is used only for the first-level elements inside a submap -->
+        <!-- don't propagate 'referTypeFlag'; it is used only for the first-level elements inside a submap -->
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
-  
+
+  <!-- when inlining a submap, inherit attributes from submap's root map element -->
   <xsl:template name="generate-attribute">
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
     <xsl:param name="name"/>
@@ -398,6 +470,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="generate-id(.) = $mapref-id-path">
+        <!-- this element was already processed during earlier recursive processing - inform the user of a reference loop -->
         <xsl:call-template name="output-message">
           <xsl:with-param name="id" select="'DOTX053E'"/>
           <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
@@ -410,12 +483,14 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="parentMaprefKeyscope" select="@keyscope" tunnel="yes"/>
           <xsl:with-param name="relative-path">
             <xsl:choose>
+              <!-- path is relative to the current map/submap file - resolve it -->
               <xsl:when test="not($relative-path = '#none#' or $relative-path='')">
                 <xsl:value-of select="$relative-path"/>
                 <xsl:call-template name="find-relative-path">
                   <xsl:with-param name="remainingpath" select="@href"/>
                 </xsl:call-template>
               </xsl:when>
+              <!-- path is relative to $file-being-processed - use as-is -->
               <xsl:otherwise>
                 <xsl:call-template name="find-relative-path">
                   <xsl:with-param name="remainingpath" select="@href"/>
@@ -423,7 +498,7 @@ See the accompanying LICENSE file for applicable license.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:with-param>
-          <xsl:with-param name="mapref-id-path" select="$update-id-path"/>
+          <xsl:with-param name="mapref-id-path" select="$update-id-path"/>  <!-- propagate the updated mapref-id-path downward -->
         </xsl:apply-templates>
       </xsl:when>
     </xsl:choose>
@@ -483,9 +558,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="{name()}">
       <xsl:choose>
+        <!-- path is relative to $file-being-processed - use as-is -->
         <xsl:when test="dita-ot:is-external(.) or $relative-path = ('#none#', '')">
           <xsl:value-of select="."/>
         </xsl:when>
+        <!-- path is relative to the current map/submap file - resolve it -->
         <xsl:otherwise>
           <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:otherwise>
@@ -497,9 +574,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="conref">
       <xsl:choose>
+        <!-- path is relative to the current map/submap file - resolve it -->
         <xsl:when test="not($relative-path = ('#none#', ''))">
           <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
         </xsl:when>
+        <!-- path is relative to $file-being-processed - use as-is -->
         <xsl:otherwise>
           <xsl:value-of select="."/>
         </xsl:otherwise>
@@ -650,7 +729,11 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- RDA: END FUNCTIONS TO IMPROVE OVERRIDE CAPABILITIES FOR INHERITING ATTRIBUTES -->
 
-  <!-- Find the relative path to another topic or map -->
+  <!-- Returns the directory path of a file reference (typically a relative path)
+       * Given '/a/b/c.dita', returns '/a/b/'
+       * Given 'a/b/c.dita', returns 'a/b/'
+       * Given 'a/b/c.dita#fragment', returns 'a/b/'
+       * Given 'c.dita', returns '' -->
   <xsl:template name="find-relative-path">
     <xsl:param name="remainingpath"/>
     <xsl:if test="contains($remainingpath,'/')">
