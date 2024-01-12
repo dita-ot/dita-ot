@@ -265,9 +265,6 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "docsrc/.*"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
-        exclude "docsrc/build"
-        exclude "docsrc/node_modules/**"
-        exclude "docsrc/out"
         exclude "docsrc/package*.json"
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
@@ -336,6 +333,9 @@ generateDocs.onlyIf { skipDocs() }
 task cleanGenerateDocs(type: Delete) {
     delete "${distTempDir}/temp"
     delete "${distTempDir}/docsrc/.gradle"
+    delete "${distTempDir}/docsrc/build"
+    delete "${distTempDir}/docsrc/node_modules"
+    delete "${distTempDir}/docsrc/out"
     delete "${distTempDir}/docsrc/platform.ditaval"
     delete "${distTempDir}/docsrc/temp"
 }
