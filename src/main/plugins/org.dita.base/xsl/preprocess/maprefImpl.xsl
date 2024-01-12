@@ -326,7 +326,8 @@ See the accompanying LICENSE file for applicable license.
        * @href and @copy-to references are resolved relative to the current file being processed, if needed.
        * For first-level elements in submaps, @class inherits the value of any non-<mapref> submap reference element. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')]" priority="5">
-    <xsl:param name="refclass" select="@class"/>  <!-- if we're not inheriting the enclosing submap's @class, then use this element's class -->
+    <!-- if we're not inheriting the enclosing submap's @class, then use this element's class -->
+    <xsl:param name="refclass" select="@class"/>
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
