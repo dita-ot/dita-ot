@@ -7,7 +7,9 @@ Copyright 2004, 2005 IBM Corporation
 See the accompanying LICENSE file for applicable license.
 -->
 <xsl:stylesheet version="3.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="xs">
 
   <!-- Get each value in each <keywords>. Nested indexterms should have unique entries. Other
        elements (based on keyword) cannot nest. -->
@@ -216,21 +218,28 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/abstract ')]" mode="gen-shortdesc-metadata">
-    <xsl:variable name="shortmeta">
-      <xsl:for-each select="*[contains(@class,' topic/shortdesc ')]">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="*|text()" mode="text-only"/>
-      </xsl:for-each>
+    <xsl:variable name="shortmeta" as="xs:string">
+      <xsl:value-of>
+        <xsl:for-each select="*[contains(@class,' topic/shortdesc ')]">
+          <xsl:text> </xsl:text>
+          <xsl:apply-templates select="*|text()" mode="text-only"/>
+        </xsl:for-each>
+      </xsl:value-of>
     </xsl:variable>
-    <xsl:if test="normalize-space($shortmeta)!=''">
+    <xsl:if test="normalize-space($shortmeta)">
       <meta name="abstract" content="{normalize-space($shortmeta)}"/>
       <meta name="description" content="{normalize-space($shortmeta)}"/>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' map/shortdesc ')]" mode="gen-metadata">
-    <xsl:if test="normalize-space(.)!=''">
-      <meta name="description" content="{normalize-space(.)}"/>
+    <xsl:variable name="content" as="xs:string">
+      <xsl:value-of>
+        <xsl:apply-templates mode="text-only"/>
+      </xsl:value-of>
+    </xsl:variable>
+    <xsl:if test="normalize-space($content)">
+      <meta name="description" content="{normalize-space($content)}"/>
     </xsl:if>
   </xsl:template>
 
