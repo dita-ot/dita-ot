@@ -61,16 +61,16 @@ See the accompanying LICENSE file for applicable license.
   
     <xsl:template match="*[contains(@class, ' task/taskbody ')]">
         <fo:block xsl:use-attribute-sets="taskbody">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/prereq ')]">
         <fo:block xsl:use-attribute-sets="prereq">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                   <xsl:with-param name="use-label">
                     <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
@@ -87,8 +87,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/context ')]">
         <fo:block xsl:use-attribute-sets="context">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
@@ -105,8 +105,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/cmd ')]" priority="1">
         <fo:block xsl:use-attribute-sets="cmd">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:if test="../@importance='optional'">
                 <xsl:call-template name="getVariable">
                     <xsl:with-param name="id" select="'Optional Step'"/>
@@ -125,32 +125,32 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/info ')]">
         <fo:block xsl:use-attribute-sets="info">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/tutorialinfo ')]">
         <fo:block xsl:use-attribute-sets="tutorialinfo">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/stepresult ')]">
         <fo:block xsl:use-attribute-sets="stepresult">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/result ')]">
         <fo:block xsl:use-attribute-sets="result">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
@@ -168,8 +168,8 @@ See the accompanying LICENSE file for applicable license.
     <!-- If example has a title, process it first; otherwise, create default title (if needed) -->
     <xsl:template match="*[contains(@class, ' task/taskbody ')]/*[contains(@class, ' topic/example ')]">
         <fo:block xsl:use-attribute-sets="task.example">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:choose>
               <xsl:when test="*[contains(@class, ' topic/title ')]">
                 <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
@@ -193,8 +193,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/postreq ')]">
         <fo:block xsl:use-attribute-sets="postreq">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="dita2xslfo:task-heading">
                 <xsl:with-param name="use-label">
                     <xsl:apply-templates select="." mode="dita2xslfo:retrieve-task-heading">
@@ -211,8 +211,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/stepxmp ')]">
         <fo:block xsl:use-attribute-sets="stepxmp">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
     </xsl:template>
@@ -230,15 +230,15 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="count(*[contains(@class, ' task/step ')]) eq 1 and
                         not(contains(parent::*/@class, ' task/step '))">
           <fo:block>
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates mode="onestep"/>
           </fo:block>
         </xsl:when>
         <xsl:otherwise>
           <fo:list-block xsl:use-attribute-sets="steps">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
           </fo:list-block>
         </xsl:otherwise>
@@ -255,8 +255,8 @@ See the accompanying LICENSE file for applicable license.
       </xsl:with-param>
     </xsl:apply-templates>
     <fo:list-block xsl:use-attribute-sets="steps-unordered">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
@@ -269,8 +269,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="steps.step">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps.step__label">
                 <fo:block xsl:use-attribute-sets="steps.step__label__content">
                     <xsl:if test="$depth > 1 or 
@@ -298,8 +298,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/steps-unordered ')]/*[contains(@class, ' task/step ')]">
         <fo:list-item xsl:use-attribute-sets="steps-unordered.step">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="steps-unordered.step__label">
                 <fo:block xsl:use-attribute-sets="steps-unordered.step__label__content">
                     <xsl:call-template name="getVariable">
@@ -319,8 +319,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' task/step ')]" mode="onestep">
     <fo:block xsl:use-attribute-sets="steps.step__content--onestep">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
@@ -328,8 +328,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' task/stepsection ')]">
         <fo:list-item xsl:use-attribute-sets="stepsection">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="stepsection__label">
               <fo:block xsl:use-attribute-sets="stepsection__label__content">
               </fo:block>
@@ -349,8 +349,8 @@ See the accompanying LICENSE file for applicable license.
   
     <xsl:template match="*[contains(@class, ' task/substeps ')]">
         <fo:list-block xsl:use-attribute-sets="substeps">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
@@ -362,8 +362,8 @@ See the accompanying LICENSE file for applicable license.
           </xsl:call-template>
         </xsl:variable>
         <fo:list-item xsl:use-attribute-sets="substeps.substep">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="substeps.substep__label">
                 <fo:block xsl:use-attribute-sets="substeps.substep__label__content">
                     <xsl:call-template name="getVariable">
@@ -388,16 +388,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' task/choices ')][empty(*[contains(@class,' task/choice ')])]" priority="10"/>
     <xsl:template match="*[contains(@class, ' task/choices ')]">
         <fo:list-block xsl:use-attribute-sets="choices">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:list-block>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' task/choice ')]">
         <fo:list-item xsl:use-attribute-sets="choices.choice">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="choices.choice__label">
                 <fo:block xsl:use-attribute-sets="choices.choice__label__content">
                     <xsl:call-template name="getVariable">
@@ -420,8 +420,8 @@ See the accompanying LICENSE file for applicable license.
     [empty(*[contains(@class,' task/choption ') or contains(@class,' task/chdesc ')])]" priority="10"/>
   <xsl:template match="*[contains(@class, ' task/choicetable ')]">
     <fo:table xsl:use-attribute-sets="choicetable">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="univAttrs"/>
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="displayAtts">
@@ -487,8 +487,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' task/chhead ')]">
     <fo:table-header xsl:use-attribute-sets="chhead">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <fo:table-row xsl:use-attribute-sets="chhead__row">
         <xsl:if test="empty(*[contains(@class,' task/choptionhd ')])">
           <xsl:apply-templates select="." mode="emptyChoptionHd"/>
@@ -503,16 +503,16 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' task/chrow ')]">
     <fo:table-row xsl:use-attribute-sets="chrow">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:table-row>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/choptionhd ')]">
     <fo:table-cell xsl:use-attribute-sets="chhead.choptionhd">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
       <xsl:apply-templates select="." mode="simpletableTopBorder"/>
       <xsl:apply-templates select="." mode="simpletableVerticalBorders"/>
@@ -524,8 +524,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' task/chhead ')]/*[contains(@class, ' task/chdeschd ')]">
     <fo:table-cell xsl:use-attribute-sets="chhead.chdeschd">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
       <xsl:apply-templates select="." mode="simpletableTopBorder"/>
       <fo:block xsl:use-attribute-sets="chhead.chdeschd__content">
@@ -537,8 +537,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/choption ')]">
     <xsl:variable name="keyCol" select="ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol"/>
     <fo:table-cell xsl:use-attribute-sets="chrow.choption">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:if test="../following-sibling::*[contains(@class, ' task/chrow ')]">
         <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
       </xsl:if>
@@ -561,8 +561,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' task/chrow ')]/*[contains(@class, ' task/chdesc ')]">
     <xsl:variable name="keyCol" select="number(ancestor::*[contains(@class, ' task/choicetable ')][1]/@keycol)"/>
     <fo:table-cell xsl:use-attribute-sets="chrow.chdesc">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:if test="../following-sibling::*[contains(@class, ' task/chrow ')]">
         <xsl:apply-templates select="." mode="simpletableHorizontalBorders"/>
       </xsl:if>

@@ -745,8 +745,8 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="@href">
         <br/><div style="text-align:right"><a>
           <xsl:attribute name="href">
-            <!--<xsl:apply-templates select="." mode="determine-final-href"/>--><!-- #4207 -->
-            <xsl:call-template name="href"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="determine-final-href" -->
+            <xsl:call-template name="href"/>
           </xsl:attribute>
           <xsl:choose>
             <xsl:when test="@type = 'external'">
@@ -1108,8 +1108,8 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Test for TM area's language -->
     <xsl:variable name="tmtest">
-      <!--<xsl:apply-templates select="." mode="mark-tm-in-this-area"/>--><!-- #4207 -->
-      <xsl:call-template name="tm-area"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="mark-tm-in-this-area" -->
+      <xsl:call-template name="tm-area"/>
     </xsl:variable>
 
     <!-- If this language should get trademark markers, continue... -->
@@ -2564,10 +2564,10 @@ See the accompanying LICENSE file for applicable license.
 <html>
   <xsl:call-template name="setTopicLanguage"/>
   <xsl:value-of select="$newline"/>
-  <!--<xsl:apply-templates select="." mode="chapterHead"/>--><!-- #4207 -->
-  <xsl:call-template name="chapterHead"/><!-- #4207 -->
-  <!--<xsl:apply-templates select="." mode="chapterBody"/>--><!-- #4207 -->
-  <xsl:call-template name="chapterBody"/><!-- #4207 -->
+  <!-- TODO: Replace with mode="chapterHead" -->
+  <xsl:call-template name="chapterHead"/>
+  <!-- TODO: Replace with mode="chapterBody" -->
+  <xsl:call-template name="chapterBody"/>
 </html>
 </xsl:template>
 
@@ -2601,12 +2601,12 @@ See the accompanying LICENSE file for applicable license.
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
       <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
-      <!--<xsl:apply-templates select="." mode="gen-user-head"/>-->    <!-- include user's XSL HEAD processing here --><!-- #4207 -->
-      <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here --><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="gen-user-scripts"/>--> <!-- include user's XSL javascripts here --><!-- #4207 -->
-      <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here --><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="gen-user-styles"/>-->  <!-- include user's XSL style element and content here --><!-- #4207 -->
-      <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here --><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-head" -->
+      <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+      <!-- TODO: Replace with mode="gen-user-scripts" -->
+      <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+      <!-- TODO: Replace with mode="gen-user-styles" -->
+      <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
     </head>
     <xsl:value-of select="$newline"/>
@@ -2705,8 +2705,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="generateChapterTitle">
     <!-- Title processing - special handling for short descriptions -->
     <title>
-      <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--> <!-- hook for a user-XSL title prefix --><!-- #4207 -->
-      <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix --><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+      <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:choose>
@@ -2737,8 +2737,8 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="addHeaderToHtmlBodyElement"/>
 
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
-      <!--<xsl:apply-templates select="." name="gen-user-sidetoc"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-sidetoc"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-sidetoc" -->
+      <xsl:call-template name="gen-user-sidetoc"/>
 
       <xsl:apply-templates select="." mode="addContentToHtmlBodyElement"/>
       <xsl:apply-templates select="." mode="addFooterToHtmlBodyElement"/>
@@ -2773,8 +2773,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
     <xsl:variable name="header-content" as="node()*">
       <xsl:call-template name="generateBreadcrumbs"/>
-      <!--<xsl:apply-templates select="." mode="gen-user-header"/>-->  <!-- include user's XSL running header here --><!-- #4207 -->
-      <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here --><!-- #4207 -->
+        <!-- include user's XSL running header here -->
+      <!-- TODO: Replace with mode="gen-user-header" -->
+      <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
       <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
         <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
@@ -2811,8 +2812,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*" mode="addFooterToHtmlBodyElement">
     <xsl:variable name="footer-content" as="node()*">
-      <!--<xsl:apply-templates select="." mode="gen-user-footer"/>--> <!-- include user's XSL running footer here --><!-- #4207 -->
-      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here --><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-footer" -->
+      <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
       <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
     </xsl:variable>
     <xsl:if test="exists($footer-content)">

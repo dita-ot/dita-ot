@@ -35,8 +35,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="ot-placeholder:glossarylist//*[contains(@class, ' glossentry/glossentry ')]">
     <fo:block>
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <fo:block>
         <xsl:attribute name="id">
           <xsl:call-template name="generate-toc-id"/>

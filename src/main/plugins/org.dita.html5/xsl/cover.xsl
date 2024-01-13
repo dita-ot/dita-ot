@@ -137,17 +137,17 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="addAttributesToBody"/>
       <xsl:call-template name="setidaname"/>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
-      <!--<xsl:apply-templates select="." mode="generateBreadcrumbs"/>--><!-- #4207 -->
-      <xsl:call-template name="generateBreadcrumbs"/><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="gen-user-header"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-header"/><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="processHDR"/>--><!-- #4207 -->
-      <xsl:call-template name="processHDR"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="generateBreadcrumbs" -->
+      <xsl:call-template name="generateBreadcrumbs"/>
+      <!-- TODO: Replace with mode="gen-user-header" -->
+      <xsl:call-template name="gen-user-header"/>
+      <!-- TODO: Replace with mode="processHDR" -->
+      <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
         <xsl:apply-templates select="/*/*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')]"/>
       </xsl:if>
-      <!--<xsl:apply-templates select="." mode="gen-user-sidetoc"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-sidetoc"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-sidetoc" -->
+      <xsl:call-template name="gen-user-sidetoc"/>
       <xsl:choose>
         <xsl:when test="*[contains(@class, ' topic/title ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
@@ -160,36 +160,36 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="." mode="normalize-map"/>
       </xsl:variable>
       <xsl:apply-templates select="$map" mode="toc"/>
-      <!--<xsl:apply-templates select="." mode="gen-endnotes"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-endnotes"/><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="gen-user-footer"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-footer"/><!-- #4207 -->
-      <!--<xsl:apply-templates select="." mode="processFTR"/>--><!-- #4207 -->
-      <xsl:call-template name="processFTR"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-endnotes" -->
+      <xsl:call-template name="gen-endnotes"/>
+      <!-- TODO: Replace with mode="gen-user-footer" -->
+      <xsl:call-template name="gen-user-footer"/>
+      <!-- TODO: Replace with mode="processFTR" -->
+      <xsl:call-template name="processFTR"/>
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
     </body>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/map ')]/*[contains(@class, ' topic/title ')]">
     <h1 class="title topictitle1">
-      <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:apply-templates/>
     </h1>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' map/map ')]/@title">
     <h1 class="title topictitle1">
-      <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:value-of select="."/>
     </h1>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]" priority="10">
     <h1 class="title topictitle1">
-      <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-      <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+      <xsl:call-template name="gen-user-panel-title-pfx"/>
       <xsl:apply-templates select="*[contains(@class, ' bookmap/mainbooktitle ')]/node()"/>
     </h1>
   </xsl:template>
@@ -198,18 +198,18 @@ See the accompanying LICENSE file for applicable license.
     <title>
       <xsl:choose>
         <xsl:when test="/*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]">
-          <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-          <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+          <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
           <xsl:value-of select="/*[contains(@class,' bookmap/bookmap ')]/*[contains(@class,' bookmap/booktitle ')]/*[contains(@class, ' bookmap/mainbooktitle ')]"/>
         </xsl:when>
         <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">
-          <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-          <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+          <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
           <xsl:value-of select="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]"/>
         </xsl:when>
         <xsl:when test="/*[contains(@class,' map/map ')]/@title">
-          <!--<xsl:apply-templates select="." mode="gen-user-panel-title-pfx"/>--><!-- #4207 -->
-          <xsl:call-template name="gen-user-panel-title-pfx"/><!-- #4207 -->
+          <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
+          <xsl:call-template name="gen-user-panel-title-pfx"/>
           <xsl:value-of select="/*[contains(@class,' map/map ')]/@title"/>
         </xsl:when>
       </xsl:choose>

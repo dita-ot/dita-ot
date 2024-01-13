@@ -61,22 +61,22 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="not(node())"/>
         <xsl:when test="$level = 1">
             <fo:block xsl:use-attribute-sets="body__toplevel conbody">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:when>
         <xsl:when test="$level = 2">
             <fo:block xsl:use-attribute-sets="body__secondLevel conbody">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:when>
         <xsl:otherwise>
             <fo:block xsl:use-attribute-sets="conbody">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
                 <xsl:apply-templates/>
             </fo:block>
         </xsl:otherwise>

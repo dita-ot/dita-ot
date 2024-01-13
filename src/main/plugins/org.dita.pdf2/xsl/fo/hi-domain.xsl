@@ -37,64 +37,64 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/b ')]">
         <fo:inline xsl:use-attribute-sets="b">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' hi-d/i ')]">
       <fo:inline xsl:use-attribute-sets="i">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' hi-d/u ')]">
       <fo:inline xsl:use-attribute-sets="u">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' hi-d/tt ')]">
       <fo:inline xsl:use-attribute-sets="tt">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' hi-d/sup ')]">
       <fo:inline xsl:use-attribute-sets="sup">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' hi-d/sub ')]">
       <fo:inline xsl:use-attribute-sets="sub">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
   <xsl:template match="*[contains(@class,' hi-d/line-through ')]">
     <fo:inline xsl:use-attribute-sets="line-through">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' hi-d/overline ')]">
     <fo:inline xsl:use-attribute-sets="overline">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>

@@ -1136,8 +1136,8 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="linkElement" as="element()" tunnel="yes"/>
     
     <xsl:for-each select="$linkElement">
-      <!--<xsl:apply-templates select="." mode="ditamsg:crossref-unordered-listitem"/>--><!-- #4207 -->
-      <xsl:call-template name="topicpull:referenced-invalid-list-item"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="ditamsg:crossref-unordered-listitem" -->
+      <xsl:call-template name="topicpull:referenced-invalid-list-item"/>
     </xsl:for-each>
   </xsl:template>
   

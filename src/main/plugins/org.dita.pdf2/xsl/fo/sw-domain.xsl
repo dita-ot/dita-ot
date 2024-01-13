@@ -37,8 +37,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/msgph ')]">
       <fo:inline xsl:use-attribute-sets="msgph">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
@@ -46,8 +46,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' sw-d/msgblock ')]">
       <xsl:call-template name="generateAttrLabel"/>
       <fo:block xsl:use-attribute-sets="msgblock">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="setFrame"/>
         <xsl:call-template name="setScale"/>
         <xsl:call-template name="setExpanse"/>
@@ -75,24 +75,24 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/filepath ')]">
       <fo:inline xsl:use-attribute-sets="filepath">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/userinput ')]">
       <fo:inline xsl:use-attribute-sets="userinput">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>
 
     <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]">
       <fo:inline xsl:use-attribute-sets="systemoutput">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
     </xsl:template>

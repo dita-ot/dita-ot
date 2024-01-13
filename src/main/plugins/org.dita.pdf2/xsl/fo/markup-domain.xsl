@@ -12,8 +12,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' markup-d/markupname ')]">
     <fo:inline xsl:use-attribute-sets="markupname">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:template>

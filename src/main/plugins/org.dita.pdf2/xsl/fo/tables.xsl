@@ -32,8 +32,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/dl ')]">
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <fo:table xsl:use-attribute-sets="dl">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/dlhead ')]"/>
             <fo:table-body xsl:use-attribute-sets="dl__body">
                 <xsl:choose>
@@ -56,8 +56,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dl ')]/*[contains(@class, ' topic/dlhead ')]">
         <fo:table-header xsl:use-attribute-sets="dl.dlhead">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="dl.dlhead__row">
                 <xsl:apply-templates/>
             </fo:table-row>
@@ -66,8 +66,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/dthd ')]">
         <fo:table-cell xsl:use-attribute-sets="dlhead.dthd__cell">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.dthd__content">
                 <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
                 <xsl:apply-templates/>
@@ -77,8 +77,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dlhead ')]/*[contains(@class, ' topic/ddhd ')]">
         <fo:table-cell xsl:use-attribute-sets="dlhead.ddhd__cell">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:block xsl:use-attribute-sets="dlhead.ddhd__content">
                 <xsl:apply-templates/>
                 <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
@@ -88,8 +88,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dlentry ')]">
         <fo:table-row xsl:use-attribute-sets="dlentry">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:table-cell xsl:use-attribute-sets="dlentry.dt">
                 <xsl:apply-templates select="*[contains(@class, ' topic/dt ')]"/>
                 <xsl:if test="empty(*[contains(@class, ' topic/dt ')])"><fo:block/></xsl:if>
@@ -112,8 +112,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/dd ')]">
         <fo:block xsl:use-attribute-sets="dlentry.dd__content">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
             <xsl:if test="not(following-sibling::*[contains(@class,' topic/dd ')])">
               <xsl:apply-templates select="../*[contains(@class,' ditaot-d/ditaval-endprop ')]" mode="outofline"/>
@@ -286,8 +286,8 @@ See the accompanying LICENSE file for applicable license.
 
         <fo:block-container xsl:use-attribute-sets="table__container">
             <fo:block xsl:use-attribute-sets="table">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
                 <xsl:if test="not(@id)">
                   <xsl:attribute name="id">
                     <xsl:call-template name="get-id"/>
@@ -305,8 +305,8 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/table ')]/*[contains(@class, ' topic/title ')]">
         <fo:block xsl:use-attribute-sets="table.title">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:call-template name="getVariable">
                 <xsl:with-param name="id" select="'Table.title'"/>
@@ -341,8 +341,8 @@ See the accompanying LICENSE file for applicable license.
 
         <xsl:variable name="table" as="element()">
             <fo:table xsl:use-attribute-sets="table.tgroup">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
 
                 <xsl:call-template name="displayAtts">
                     <xsl:with-param name="element" select=".."/>
@@ -400,32 +400,32 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]">
         <fo:table-header xsl:use-attribute-sets="tgroup.thead">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-header>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]">
         <fo:table-body xsl:use-attribute-sets="tgroup.tbody">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-body>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]">
         <fo:table-row xsl:use-attribute-sets="thead.row">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
 
     <xsl:template match="*[contains(@class, ' topic/tbody ')]/*[contains(@class, ' topic/row ')]">
         <fo:table-row xsl:use-attribute-sets="tbody.row">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:table-row>
     </xsl:template>
@@ -441,8 +441,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class, ' topic/thead ')]/*[contains(@class, ' topic/row ')]/*[contains(@class, ' topic/entry ')]">
         <xsl:apply-templates select="." mode="validate-entry-position"/>
         <fo:table-cell xsl:use-attribute-sets="thead.row.entry">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="applySpansAttrs"/>
             <xsl:call-template name="applyAlignAttrs"/>
             <xsl:call-template name="generateTableEntryBorder"/>
@@ -485,8 +485,8 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
 
     <xsl:template match="*" mode="processTableEntry">
-        <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-        <xsl:call-template name="commonattributes"/><!-- #4207 -->
+        <!-- TODO: Replace with mode="commonattributes" -->
+        <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="applySpansAttrs"/>
         <xsl:call-template name="applyAlignAttrs"/>
         <xsl:call-template name="generateTableEntryBorder"/>
@@ -927,8 +927,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
         <xsl:apply-templates select="*[contains(@class, ' topic/title ')]"/>
         <fo:table xsl:use-attribute-sets="simpletable">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="globalAtts"/>
             <xsl:call-template name="displayAtts">
                 <xsl:with-param name="element" select="."/>
@@ -973,8 +973,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]/*[contains(@class, ' topic/title ')]">
     <fo:block xsl:use-attribute-sets="table.title">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="." mode="customTitleAnchor"/>
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'Table.title'"/>
@@ -1022,8 +1022,8 @@ See the accompanying LICENSE file for applicable license.
         <xsl:for-each select="1 to $fill-in-count">
           <xsl:for-each select="$current">
             <fo:table-cell xsl:use-attribute-sets="strow.stentry">
-                <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-                <xsl:call-template name="commonattributes"/><!-- #4207 -->
+                <!-- TODO: Replace with mode="commonattributes" -->
+                <xsl:call-template name="commonattributes"/>
                 <xsl:variable name="frame" as="xs:string" select="(../@frame, $table.frame-default)[1]"/>
                 <xsl:if test="following-sibling::*[contains(@class, ' topic/strow ')]">
                     <xsl:apply-templates select="." mode="simpletableHorizontalBorders">
@@ -1061,8 +1061,8 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
         </xsl:param>
         <fo:table-header xsl:use-attribute-sets="sthead">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <fo:table-row xsl:use-attribute-sets="sthead__row">
                 <xsl:apply-templates select="*[contains(@class, ' topic/stentry ')]"/>
                 <!--
@@ -1086,8 +1086,8 @@ See the accompanying LICENSE file for applicable license.
             <xsl:apply-templates select="../*[1]" mode="count-max-simpletable-cells"/>
         </xsl:param>
         <fo:table-row xsl:use-attribute-sets="strow">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="*[contains(@class, ' topic/stentry ')]"/>
             <!--
             <xsl:variable name="row-cell-count" as="xs:integer">
@@ -1109,8 +1109,8 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="../.." mode="count-max-simpletable-cells"/>
         </xsl:param>
         <fo:table-cell xsl:use-attribute-sets="sthead.stentry">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="simpletableApplySpansAttrs"/>
             <xsl:variable name="entryCol" select="@dita-ot:x"/>
             <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>
@@ -1156,8 +1156,8 @@ See the accompanying LICENSE file for applicable license.
           <xsl:apply-templates select="../.." mode="count-max-simpletable-cells"/>
         </xsl:param>
         <fo:table-cell xsl:use-attribute-sets="strow.stentry">
-            <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-            <xsl:call-template name="commonattributes"/><!-- #4207 -->
+            <!-- TODO: Replace with mode="commonattributes" -->
+            <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="simpletableApplySpansAttrs"/>
             <xsl:variable name="entryCol" select="@dita-ot:x"/>
             <xsl:variable name="frame" as="xs:string" select="(ancestor::*[contains(@class, ' topic/simpletable ')][1]/@frame, $table.frame-default)[1]"/>

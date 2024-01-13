@@ -14,8 +14,8 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="type" select="(@type, 'caution')[1]" as="xs:string"/>
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     <fo:table xsl:use-attribute-sets="hazardstatement">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="displayAtts">
         <xsl:with-param name="element" select="."/>
@@ -101,24 +101,24 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/typeofhazard ')]">
     <fo:block xsl:use-attribute-sets="p">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="*[contains(@class, ' hazard-d/consequence ')]">
     <fo:block xsl:use-attribute-sets="p">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
   
   <xsl:template match="*[contains(@class, ' hazard-d/howtoavoid ')]">
     <fo:block xsl:use-attribute-sets="p">
-      <!--<xsl:apply-templates select="." mode="commonattributes"/>--><!-- #4207 -->
-      <xsl:call-template name="commonattributes"/><!-- #4207 -->
+      <!-- TODO: Replace with mode="commonattributes" -->
+      <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
