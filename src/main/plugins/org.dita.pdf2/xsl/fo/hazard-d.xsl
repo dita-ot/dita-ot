@@ -14,6 +14,7 @@ See the accompanying license.txt file for applicable licenses.
     <xsl:variable name="type" select="(@type, 'caution')[1]" as="xs:string"/>
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     <fo:table xsl:use-attribute-sets="hazardstatement">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="displayAtts">
@@ -100,6 +101,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/typeofhazard ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
@@ -107,6 +109,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="*[contains(@class, ' hazard-d/consequence ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
@@ -114,6 +117,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/howtoavoid ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>

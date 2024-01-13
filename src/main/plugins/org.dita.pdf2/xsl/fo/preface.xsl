@@ -57,6 +57,7 @@ See the accompanying LICENSE file for applicable license.
      </xsl:template>
      <xsl:template match="*" mode="processTopicPrefaceInsideFlow">
          <fo:block xsl:use-attribute-sets="topic">
+             <!-- TODO: Replace with mode="commonattributes" -->
              <xsl:call-template name="commonattributes"/>
              <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                  <fo:marker marker-class-name="current-topic-number">

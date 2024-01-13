@@ -80,6 +80,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="topicNumbers">
         <xsl:for-each select="//*[contains(@class, ' topic/topic ')]">
             <topic guid="{generate-id()}">
+                <!-- TODO: Replace with mode="commonattributes" -->
                 <xsl:call-template name="commonattributes"/>
             </topic>
         </xsl:for-each>

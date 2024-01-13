@@ -37,6 +37,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/msgph ')]">
       <fo:inline xsl:use-attribute-sets="msgph">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -45,6 +46,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' sw-d/msgblock ')]">
       <xsl:call-template name="generateAttrLabel"/>
       <fo:block xsl:use-attribute-sets="msgblock">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:call-template name="setFrame"/>
         <xsl:call-template name="setScale"/>
@@ -73,6 +75,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/filepath ')]">
       <fo:inline xsl:use-attribute-sets="filepath">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -80,6 +83,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/userinput ')]">
       <fo:inline xsl:use-attribute-sets="userinput">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -87,6 +91,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' sw-d/systemoutput ')]">
       <fo:inline xsl:use-attribute-sets="systemoutput">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>

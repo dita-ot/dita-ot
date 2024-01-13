@@ -597,6 +597,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="@href">
           <br/><div><a>
             <xsl:attribute name="href">
+              <!-- TODO: Replace with mode="determine-final-href" -->
               <xsl:call-template name="href"/>
             </xsl:attribute>
             <xsl:choose>
@@ -2328,9 +2329,12 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:template name="chapter-setup">
 <html>
+  <!-- TODO: Replace with mode="setTopicLanguage" -->
   <xsl:call-template name="setTopicLanguage"/>
+  <!-- TODO: Replace with mode="chapterHead" -->
   <xsl:call-template name="chapterHead"/>
-  <xsl:call-template name="chapterBody"/> 
+  <!-- TODO: Replace with mode="chapterBody" -->
+  <xsl:call-template name="chapterBody"/>
 </html>
 </xsl:template>
 
@@ -2357,16 +2361,25 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="chapterHead">
     <head>
       <!-- initial meta information -->
+      <!-- TODO: Replace with mode="generateCharset" -->
       <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
       <xsl:apply-templates select="." mode="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
+      <!-- TODO: Replace with mode="generateDefaultMeta" -->
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
       <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
+      <!-- TODO: Replace with mode="copyright" -->
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
+      <!-- TODO: Replace with mode="generateChapterTitle" -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
+      <!-- TODO: Replace with mode="gen-user-head" -->
       <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+      <!-- TODO: Replace with mode="gen-user-scripts" -->
       <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+      <!-- TODO: Replace with mode="gen-user-styles" -->
       <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
+      <!-- TODO: Replace with mode="processHDF" -->
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
+      <!-- TODO: Replace with mode="generateCssLinks" -->
       <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     </head>
   </xsl:template>
@@ -2468,6 +2481,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="/ | @* | node()" mode="generateChapterTitle">
     <!-- Title processing - special handling for short descriptions -->
     <title>
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
@@ -2502,6 +2516,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="addHeaderToHtmlBodyElement"/>
 
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
+      <!-- TODO: Replace with mode="gen-user-sidetoc" -->
       <xsl:call-template name="gen-user-sidetoc"/>
 
       <xsl:apply-templates select="." mode="addContentToHtmlBodyElement"/>
@@ -2539,8 +2554,12 @@ See the accompanying LICENSE file for applicable license.
   <!-- Process <body> content that is appropriate for HTML5 header section. -->
   <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
     <xsl:variable name="header-content" as="node()*">
+      <!-- TODO: Replace with mode="generateBreadcrumbs" -->
       <xsl:call-template name="generateBreadcrumbs"/>
+        <!-- include user's XSL running header here -->
+      <!-- TODO: Replace with mode="gen-user-header" -->
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
+      <!-- TODO: Replace with mode="processHDR" -->
       <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
         <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
@@ -2578,6 +2597,7 @@ See the accompanying LICENSE file for applicable license.
                                <!-- followed by body content, again by fall-through in document order -->
                                <!-- followed by related links -->
                                <!-- followed by child topics by fall-through -->
+        <!-- TODO: Replace with mode="gen-endnotes" -->
         <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
         <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
       </article>
@@ -2591,7 +2611,9 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*" mode="addFooterToHtmlBodyElement">
     <xsl:variable name="footer-content" as="node()*">
+      <!-- TODO: Replace with mode="gen-user-footer" -->
       <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
+      <!-- TODO: Replace with mode="processFTR" -->
       <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
     </xsl:variable>
     <xsl:if test="exists($footer-content)">

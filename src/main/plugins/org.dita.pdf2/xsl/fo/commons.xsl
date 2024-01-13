@@ -254,6 +254,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
     <xsl:template match="*" mode="processTopicChapterInsideFlow">
         <fo:block xsl:use-attribute-sets="topic">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="level" as="xs:integer">
               <xsl:apply-templates select="." mode="get-topic-level"/>
@@ -329,6 +330,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
     <xsl:template match="*" mode="processTopicAppendixInsideFlow">
         <fo:block xsl:use-attribute-sets="topic">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:variable name="level" as="xs:integer">
               <xsl:apply-templates select="." mode="get-topic-level"/>
@@ -406,6 +408,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   <xsl:template match="*" mode="processTopicAppendicesInsideFlow">
     <fo:block xsl:use-attribute-sets="topic">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
         <fo:marker marker-class-name="current-topic-number">
@@ -488,6 +491,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
     <xsl:template match="*" mode="processTopicPartInsideFlow">
         <fo:block xsl:use-attribute-sets="topic">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
                 <fo:marker marker-class-name="current-topic-number">
@@ -557,6 +561,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="insertPrefaceStaticContents"/>
             <fo:flow flow-name="xsl-region-body">
                 <fo:block xsl:use-attribute-sets="topic">
+                    <!-- TODO: Replace with mode="commonattributes" -->
                     <xsl:call-template name="commonattributes"/>
                     <xsl:if test="empty(ancestor::*[contains(@class, ' topic/topic ')])">
                         <fo:marker marker-class-name="current-topic-number">
@@ -628,6 +633,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:template>
     <xsl:template match="*" mode="processTopicFrontMatterInsideFlow">
                  <fo:block xsl:use-attribute-sets="topic">
+                     <!-- TODO: Replace with mode="commonattributes" -->
                      <xsl:call-template name="commonattributes"/>
                      <xsl:if test="not(ancestor::*[contains(@class, ' topic/topic ')])">
                          <fo:marker marker-class-name="current-topic-number">

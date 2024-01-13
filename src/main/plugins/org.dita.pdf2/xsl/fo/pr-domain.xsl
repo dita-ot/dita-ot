@@ -39,6 +39,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/codeph ')]">
         <fo:inline xsl:use-attribute-sets="codeph">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -65,6 +66,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' pr-d/codeblock ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="codeblock">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>
@@ -222,6 +224,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/var ') or contains(@class,' syntaxdiagram-d/var ')]">
         <fo:inline xsl:use-attribute-sets="var">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -235,6 +238,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/synph ') or contains(@class,' syntaxdiagram-d/synph ')]">
         <fo:inline xsl:use-attribute-sets="synph">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -242,6 +246,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/oper ') or contains(@class,' syntaxdiagram-d/oper ')]">
         <fo:inline xsl:use-attribute-sets="oper">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -249,6 +254,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/delim ') or contains(@class,' syntaxdiagram-d/delim ')]">
         <fo:inline xsl:use-attribute-sets="delim">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -256,6 +262,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/sep ') or contains(@class,' syntaxdiagram-d/sep ')]">
         <fo:inline xsl:use-attribute-sets="sep">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -270,6 +277,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' pr-d/parml ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="parml">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -277,6 +285,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/plentry ')]">
         <fo:block xsl:use-attribute-sets="plentry">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -300,6 +309,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/pd ')]">
         <fo:block xsl:use-attribute-sets="pd">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -307,6 +317,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/synblk ') or contains(@class,' syntaxdiagram-d/synblk ')]">
         <fo:inline xsl:use-attribute-sets="synblk">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -314,6 +325,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/synnoteref ') or contains(@class,' syntaxdiagram-d/synnoteref ')]">
         <fo:inline xsl:use-attribute-sets="synnoteref">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         [<xsl:value-of select="@refid"/>] <!--TODO: synnoteref-->
         </fo:inline>
@@ -321,6 +333,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/synnote ') or contains(@class,' syntaxdiagram-d/synnote ')]">
         <fo:inline xsl:use-attribute-sets="synnote"> <!--TODO: synnote-->
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:choose>
                 <xsl:when test="not(@id='')"> <!-- case of an explicit id -->
@@ -338,6 +351,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram"> <!--TODO: syntaxdiagram-->
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -345,6 +359,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]">
         <fo:block xsl:use-attribute-sets="fragment">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:value-of select="*[contains(@class,' topic/title ')]"/>
             <xsl:text> </xsl:text>
@@ -354,6 +369,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.title">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="." mode="customTitleAnchor"/>
             <xsl:apply-templates/>
@@ -362,6 +378,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/kwd ') or contains(@class,' syntaxdiagram-d/kwd ')]">
         <fo:inline xsl:use-attribute-sets="kwd">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
                 <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
@@ -383,6 +400,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/fragref ')]">
         <fo:inline xsl:use-attribute-sets="fragref">     <!--TODO: fragref-->
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:text>&lt;</xsl:text>
             <xsl:apply-templates/>
@@ -392,6 +410,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' topic/title ')]">
         <fo:block xsl:use-attribute-sets="fragment.title">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:block>
@@ -399,6 +418,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ')]|*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]|*[contains(@class,' pr-d/fragment ') or contains(@class,' syntaxdiagram-d/fragment ')]/*[contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]">
         <fo:block xsl:use-attribute-sets="fragment.group">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
@@ -406,6 +426,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ')]|*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]|*[contains(@class,' pr-d/syntaxdiagram ') or contains(@class,' syntaxdiagram-d/syntaxdiagram ')]/*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
         <fo:block xsl:use-attribute-sets="syntaxdiagram.group">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:block>
@@ -414,6 +435,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ') or contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]/
         *[contains(@class,' pr-d/groupcomp ') or contains(@class,' syntaxdiagram-d/groupcomp ') or contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ') or contains(@class,' pr-d/groupseq ') or contains(@class,' syntaxdiagram-d/groupseq ')]">
         <fo:inline>
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="makeGroup"/>
         </fo:inline>

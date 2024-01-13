@@ -272,6 +272,7 @@ See the accompanying LICENSE file for applicable license.
     </xsl:variable>
 
     <fo:basic-link xsl:use-attribute-sets="xref">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="buildBasicLinkDestination">
         <xsl:with-param name="scope" select="@scope"/>
@@ -339,6 +340,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class,' topic/xref ')][empty(@href)]" priority="2">
     <fo:inline>
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))] | text()" />
     </fo:inline>
@@ -420,6 +422,7 @@ See the accompanying LICENSE file for applicable license.
       <fo:list-block xsl:use-attribute-sets="related-links.ul">
         <xsl:for-each select="$children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])]">
           <fo:list-item xsl:use-attribute-sets="related-links.ul.li">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="related-links.ul.li__label">
               <fo:block xsl:use-attribute-sets="related-links.ul.li__label__content">
@@ -449,6 +452,7 @@ See the accompanying LICENSE file for applicable license.
       <fo:list-block xsl:use-attribute-sets="related-links.ol">
         <xsl:for-each select="($children[generate-id(.) = generate-id(key('link', related-links:link(.))[1])])">
           <fo:list-item xsl:use-attribute-sets="related-links.ol.li">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="related-links.ol.li__label">
               <fo:block xsl:use-attribute-sets="related-links.ol.li__label__content">
