@@ -16,7 +16,7 @@ ul.simple {
   font-weight: bold;
 }
 
-/* Use CSS to expand lists with @compact="no" */
+/* Use CSS to expand compact lists */
 .dltermexpand {
   font-weight: bold;
   margin-top: 1em;
@@ -24,14 +24,16 @@ ul.simple {
 
 /* Compact lists use attributes up to DITA-OT 4.1.2 */
 *[compact="yes"] > li {
+  @warn "Compact attributes are deprecated since v4.2.";
   margin-top: 0;
 }
 
 *[compact="no"] > li {
+  @warn "Compact attributes are deprecated since v4.2.";
   margin-top: 0.53em;
 }
 
-/* Compact lists use classes starting in DITA-OT 4.1.3 */
+/* Compact lists use classes starting in DITA-OT 4.2 */
 .compact > li {
   margin-top: 0;
 }
