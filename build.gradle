@@ -47,7 +47,7 @@ dependencies {
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
     }
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.7'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.8'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.15.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.15.2'
