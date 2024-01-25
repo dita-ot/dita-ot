@@ -39,9 +39,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
@@ -342,6 +340,7 @@ public final class Integrator {
     configuration.putAll(getParserConfiguration());
 
     writePluginProperties(configuration);
+    processMessages();
     writeMessageBundle();
 
     final Collection<File> jars = featureTable.containsKey(FEAT_LIB_EXTENSIONS)
@@ -356,6 +355,105 @@ public final class Integrator {
     writeConfigurationJar();
 
     customIntegration();
+  }
+
+  private record Message(String id, String severity, String reason, String response) {}
+
+  private void processMessages() throws IOException {
+    final Path messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml");
+    if (Files.exists(messagesXmlFile)) {
+      final Map<String, Message> messages = readMessages(messagesXmlFile);
+      writeMessages(messages, messagesXmlFile);
+    }
+  }
+
+  private void writeMessages(Map<String, Message> messages, Path messagesXmlFile) throws IOException {
+    try (final OutputStream messagesOut = Files.newOutputStream(messagesXmlFile)) {
+      final XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(messagesOut);
+      out.writeStartDocument();
+      out.writeStartElement("messages");
+      for (Message message : messages.values()) {
+        out.writeStartElement("message");
+        out.writeAttribute("id", message.id());
+        out.writeAttribute("type", message.severity());
+        out.writeStartElement("reason");
+        if (message.reason() != null) {
+          out.writeCharacters(message.reason());
+        }
+        out.writeEndElement();
+        out.writeStartElement("response");
+        if (message.response() != null) {
+          out.writeCharacters(message.response());
+        }
+        out.writeEndElement();
+        out.writeEndElement();
+      }
+      out.writeEndElement();
+      out.writeEndDocument();
+      out.close();
+    } catch (XMLStreamException e) {
+      throw new IOException(e);
+    }
+  }
+
+  /** Read and merge messages. */
+  private Map<String, Message> readMessages(Path messagesXmlFile) throws IOException {
+    final Map<String, Message> messages = new HashMap<>();
+    try (final InputStream in = Files.newInputStream(messagesXmlFile)) {
+      final XMLStreamReader src = XMLInputFactory.newInstance().createXMLStreamReader(new StreamSource(in));
+      String id = null;
+      String severity = null;
+      String reason = null;
+      String response = null;
+      while (src.hasNext()) {
+        final int type = src.next();
+        switch (type) {
+          case XMLEvent.START_ELEMENT:
+            switch (src.getLocalName()) {
+              case "message":
+                id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
+                severity = src.getAttributeValue(XMLConstants.NULL_NS_URI, "type");
+                break;
+              case "reason":
+                reason = src.getElementText();
+                break;
+              case "response":
+                response = src.getElementText();
+                break;
+            }
+            break;
+          case XMLEvent.END_ELEMENT:
+            if (src.getLocalName().equals("message")) {
+              final Message prev = messages.get(id);
+              if (prev == null) {
+                messages.put(id, new Message(id, severity, reason, response));
+              } else {
+                logger.trace("Override message {}", id);
+                messages.put(
+                  id,
+                  new Message(
+                    id,
+                    Objects.requireNonNullElse(severity, prev.severity()),
+                    Objects.requireNonNullElse(reason, prev.reason()),
+                    Objects.requireNonNullElse(response, prev.response())
+                  )
+                );
+              }
+              id = null;
+              severity = null;
+              reason = null;
+              response = null;
+            }
+            break;
+          case XMLStreamConstants.CHARACTERS:
+            break;
+        }
+      }
+      src.close();
+    } catch (XMLStreamException e) {
+      throw new IOException(e);
+    }
+    return messages;
   }
 
   private void writeMessageBundle() throws IOException, XMLStreamException {
