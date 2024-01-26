@@ -530,19 +530,19 @@ See the accompanying LICENSE file for applicable license.
     <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
       <submap-title class="+ topic/navtitle ditaot-d/submap-title ">
         <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
-        <xsl:apply-templates select="*|processing-instruction()|text()"/>
+        <xsl:apply-templates/>
       </submap-title>
     </submap-topicmeta>
   </xsl:template>
   <xsl:template match="*[contains(@class,' map/topicmeta ')]" mode="preserve-submap-title-and-topicmeta">
     <submap-topicmeta-container class="+ topic/foreign ditaot-d/submap-topicmeta-container ">
       <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
-      <xsl:apply-templates select="*|processing-instruction()|text()"/>
+      <xsl:apply-templates/>
     </submap-topicmeta-container>
   </xsl:template>
   <xsl:template match="*[contains(@class,' map/topicmeta ')]" mode="preserve-mapref-topicmeta">
     <mapref-topicmeta-container class="+ topic/foreign ditaot-d/mapref-topicmeta-container ">
-      <xsl:apply-templates select="*|processing-instruction()|text()"/>
+      <xsl:apply-templates/>
     </mapref-topicmeta-container>
   </xsl:template>
 
