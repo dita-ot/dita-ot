@@ -2835,7 +2835,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="default-output-class" select="string-join(($type, concat('note_', $type)), ' ')"/>
       </xsl:call-template>
       <xsl:call-template name="setidaname"/>
-      <!-- Normal flags go before the generated title; revision flags only go on the content. -->
+      <!-- Normal flags go around the entire note (including before the generated title) -->
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
       <span class="note__title">
         <xsl:copy-of select="$title"/>
@@ -2844,10 +2844,13 @@ See the accompanying LICENSE file for applicable license.
         </xsl:call-template>
       </span>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
-      <xsl:apply-templates/>
-      <!-- Normal end flags and revision end flags both go out after the content. -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      <div class="note__body">
+        <!-- Revision flags go around only the content -->
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
+        <xsl:apply-templates/>
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]/revprop" mode="ditaval-outputflag"/>
+      </div>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]/prop" mode="ditaval-outputflag"/>
     </div>
   </xsl:template>
   
