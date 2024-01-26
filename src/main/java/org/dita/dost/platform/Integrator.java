@@ -362,17 +362,17 @@ public final class Integrator {
   private void processMessages() throws IOException {
     final Path messagesXmlFile = ditaDir.toPath().resolve(CONFIG_DIR).resolve("messages.xml");
     if (Files.exists(messagesXmlFile)) {
-      final Map<String, Message> messages = readMessages(messagesXmlFile);
+      final List<Message> messages = readMessages(messagesXmlFile);
       writeMessages(messages, messagesXmlFile);
     }
   }
 
-  private void writeMessages(Map<String, Message> messages, Path messagesXmlFile) throws IOException {
+  private void writeMessages(List<Message> messages, Path messagesXmlFile) throws IOException {
     try (final OutputStream messagesOut = Files.newOutputStream(messagesXmlFile)) {
       final XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(messagesOut);
       out.writeStartDocument();
       out.writeStartElement("messages");
-      for (Message message : messages.values()) {
+      for (Message message : messages) {
         out.writeStartElement("message");
         out.writeAttribute("id", message.id());
         out.writeAttribute("type", message.severity());
@@ -397,7 +397,7 @@ public final class Integrator {
   }
 
   /** Read and merge messages. */
-  private Map<String, Message> readMessages(Path messagesXmlFile) throws IOException {
+  private List<Message> readMessages(Path messagesXmlFile) throws IOException {
     final Map<String, Message> messages = new HashMap<>();
     try (final InputStream in = Files.newInputStream(messagesXmlFile)) {
       final XMLStreamReader src = XMLInputFactory.newInstance().createXMLStreamReader(new StreamSource(in));
@@ -453,7 +453,7 @@ public final class Integrator {
     } catch (XMLStreamException e) {
       throw new IOException(e);
     }
-    return messages;
+    return messages.values().stream().sorted(Comparator.comparing(Message::id)).toList();
   }
 
   private void writeMessageBundle() throws IOException, XMLStreamException {
