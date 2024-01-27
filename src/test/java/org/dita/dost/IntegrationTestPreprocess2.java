@@ -50,18 +50,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Test
-  public void testmapref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("test.ditamap"))
-      .put("generate-debug-attributes", "false")
-      .errorCount(3)
-      .warnCount(1)
-      .test();
-  }
-
   @Disabled
   @Test
   public void testcopyto_linktarget() throws Throwable {

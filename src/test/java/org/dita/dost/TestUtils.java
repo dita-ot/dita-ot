@@ -282,9 +282,13 @@ public class TestUtils {
       .build();
     if (d.hasDifferences()) {
       try {
-        TransformerFactory.newInstance().newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-      } catch (TransformerException e) {
-        throw new RuntimeException(e);
+        var transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
+        System.out.println();
+        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
+        System.out.println();
+      } catch (TransformerException ex) {
+        //
       }
       throw new AssertionError(d.toString());
     }

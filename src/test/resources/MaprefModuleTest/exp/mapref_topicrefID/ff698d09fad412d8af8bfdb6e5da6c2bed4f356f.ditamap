@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmap xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+         xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge"
+         class="- map/map bookmap/bookmap " ditaarch:DITAArchVersion="1.3"
+         domains="(map mapgroup-d) (map bookmap) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic xnal-d) (topic markup-d xml-d)"
+         id="book" specializations="@props/deliveryTarget">
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+          dita-ot:orig-class="- map/topicref bookmap/chapter " dita-ot:orig-format="ditamap"
+          dita-ot:orig-href="c4ccbe11b58d24a18ce41f7c9d44000cf9b7c282.ditamap#rootElementId"
+          dita-ot:submap-DITAArchVersion="1.3" dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map "
+          dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+          dita-ot:submap-id="rootElementId" dita-ot:submap-specializations="@props/deliveryTarget">
+    <topicref class="- map/topicref bookmap/chapter " id="tr1"/>
+    <topicref class="- map/topicref bookmap/chapter " id="tr2"/>
+  </submap>
+</bookmap>

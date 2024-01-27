@@ -331,17 +331,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
   }
 
   @Test
-  public void testmapref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("test.ditamap"))
-      .put("generate-debug-attributes", "false")
-      .errorCount(0)
-      .test();
-  }
-
-  @Test
   public void testsubjectschema_case() throws Throwable {
     builder()
       .name("subjectschema_case")
