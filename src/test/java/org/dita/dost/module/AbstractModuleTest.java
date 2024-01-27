@@ -23,6 +23,10 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.TestUtils.CachingLogger.Message;
@@ -50,7 +54,7 @@ public abstract class AbstractModuleTest {
   @TempDir
   protected File tempBaseDir;
 
-  private final DocumentBuilder builder;
+  protected final DocumentBuilder builder;
   protected String testCase;
   protected Map<String, String> params = Collections.emptyMap();
   protected boolean parallel;
@@ -231,8 +235,20 @@ public abstract class AbstractModuleTest {
         try {
           assertXMLEqual(expDoc, actDoc);
         } catch (AssertionError e) {
-          System.out.println(exp);
-          Files.copy(act.toPath(), System.out);
+          try {
+            System.out.println("\nEXP:\n");
+            TransformerFactory
+              .newInstance()
+              .newTransformer()
+              .transform(new DOMSource(expDoc), new StreamResult(System.out));
+            System.out.println("\nACT:\n");
+            TransformerFactory
+              .newInstance()
+              .newTransformer()
+              .transform(new DOMSource(actDoc), new StreamResult(System.out));
+          } catch (TransformerException ex) {
+            throw new RuntimeException(ex);
+          }
           throw e;
         }
       }
