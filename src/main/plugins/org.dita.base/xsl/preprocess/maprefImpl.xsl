@@ -202,7 +202,9 @@ See the accompanying LICENSE file for applicable license.
               </xsl:choose>
             </xsl:variable>
             <xsl:variable name="targetTitleAndTopicmeta" as="element()*"
-              select="$file/*/*[contains(@class,' topic/title ') or contains(@class,' map/topicmeta ')]"/>
+              select="$file/*/*[contains(@class,' topic/title ') or contains(@class,' map/topicmeta ')]"/>  <!-- submap title and topicmeta -->
+            <xsl:variable name="maprefTopicmeta" as="element()?"
+              select="*[contains(@class,' map/topicmeta ')]"/>  <!-- mapref topicmeta -->
             <xsl:variable name="contents" as="node()*">
               <xsl:choose>
                 <xsl:when test="not(contains($href,'://') or empty($element-id) or $file/*[contains(@class,' map/map ')][@id = $element-id])">
@@ -275,6 +277,7 @@ See the accompanying LICENSE file for applicable license.
                   </xsl:choose>
                 </xsl:with-param>
               </xsl:apply-templates>
+              <xsl:apply-templates select="$maprefTopicmeta" mode="preserve-mapref-topicmeta"/>
               <xsl:apply-templates select="*[contains(@class, ' ditavalref-d/ditavalref ')]"/>
               <xsl:apply-templates select="$contents">
                 <xsl:with-param name="refclass" select="$refclass"/>
@@ -527,15 +530,20 @@ See the accompanying LICENSE file for applicable license.
     <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
       <submap-title class="+ topic/navtitle ditaot-d/submap-title ">
         <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
-        <xsl:apply-templates select="*|processing-instruction()|text()"/>
+        <xsl:apply-templates/>
       </submap-title>
     </submap-topicmeta>
   </xsl:template>
   <xsl:template match="*[contains(@class,' map/topicmeta ')]" mode="preserve-submap-title-and-topicmeta">
     <submap-topicmeta-container class="+ topic/foreign ditaot-d/submap-topicmeta-container ">
       <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
-      <xsl:apply-templates select="*|processing-instruction()|text()"/>
+      <xsl:apply-templates/>
     </submap-topicmeta-container>
+  </xsl:template>
+  <xsl:template match="*[contains(@class,' map/topicmeta ')]" mode="preserve-mapref-topicmeta">
+    <mapref-topicmeta-container class="+ topic/foreign ditaot-d/mapref-topicmeta-container ">
+      <xsl:apply-templates/>
+    </mapref-topicmeta-container>
   </xsl:template>
 
   <xsl:template match="*" mode="reltable-copy" priority="10">
