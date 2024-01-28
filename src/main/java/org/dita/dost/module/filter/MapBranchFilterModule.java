@@ -48,7 +48,7 @@ import org.w3c.dom.*;
  */
 public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
-  private static final String BRANCH_COPY_TO = "filter-copy-to";
+  public static final String BRANCH_COPY_TO = "filter-copy-to";
 
   /** Current map being processed, relative to temporary directory */
   private URI map;

@@ -615,6 +615,7 @@ public class TestKeyrefReader {
 
     assertEquals("topic-original.dita", root.get("original").href.toString());
     assertEquals("topic-copy.dita", root.get("copy").href.toString());
+    assertEquals("topic-branch-copy.dita", root.get("branch-copy").href.toString());
   }
 
   @Test
