@@ -697,7 +697,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="use-label"/>
     <xsl:if test="$GENERATE-TASK-LABELS='YES'">
       <div class="tasklabel">
-        <xsl:element name="h{dita2html:get-heading-level(.)}">
+        <xsl:element name="h{min((6, dita2html:get-heading-level(.) + 1))}">
           <xsl:attribute name="class">sectiontitle tasklabel</xsl:attribute>
           <xsl:value-of select="$use-label"/>
         </xsl:element>
