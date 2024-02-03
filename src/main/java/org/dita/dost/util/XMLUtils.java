@@ -201,7 +201,7 @@ public final class XMLUtils {
               .negate()
           )
         )
-        .map(XdmNode::toString)
+        .map(XdmNode::getStringValue)
         .collect(Collectors.joining());
       switch (level) {
         case "FATAL" -> {
