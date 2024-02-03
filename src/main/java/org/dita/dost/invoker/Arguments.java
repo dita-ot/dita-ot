@@ -9,6 +9,7 @@
 /* Derived from Apache Ant. */
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.LangUtils.pair;
 
 import java.io.File;
@@ -123,7 +124,7 @@ abstract class Arguments {
     } else if (isLongForm(arg, "-no-color")) {
       useColor = false;
     } else {
-      throw new BuildException("Unsupported argument: %s", arg);
+      throw new CliException(locale.getString("help.error.unsupported_argument").formatted(arg), this.getUsage(false));
     }
   }
 
