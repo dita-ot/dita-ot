@@ -191,6 +191,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       processArgs(args);
     } catch (final CliException exc) {
       handleLogfile();
+      logger.setOutputLevel(Project.MSG_INFO);
       printMessage(exc);
       if (exc.info != null) {
         logger.info(exc.info);
