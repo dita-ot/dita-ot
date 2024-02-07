@@ -19,7 +19,7 @@ dependencies {
     implementation rootProject
     implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
     implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.4'
-    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.13'
+    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.14'
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.7'
     testImplementation rootProject
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.3'
