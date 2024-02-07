@@ -438,7 +438,11 @@ public class XMLUtilsTest {
     loc.setLineNumber(1);
     loc.setColumnNumber(2);
     loc.setSystemId("foo:///bar");
-    errorReporter.report(new XmlProcessingException(new XPathException("msg", null, Loc.makeFromSax(loc))));
+    errorReporter.report(
+      new XmlProcessingException(
+        new XPathException("msg", null, new Loc(loc.getSystemId(), loc.getLineNumber(), loc.getColumnNumber()))
+      )
+    );
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
@@ -456,7 +460,7 @@ public class XMLUtilsTest {
     loc.setColumnNumber(2);
     loc.setSystemId("foo:///bar");
     final XPathException exception = new XPathException("msg", new FileNotFoundException("cause"));
-    exception.setLocation(Loc.makeFromSax(loc));
+    exception.setLocation(new Loc(loc.getSystemId(), loc.getLineNumber(), loc.getColumnNumber()));
     errorReporter.report(new XmlProcessingException(exception));
 
     assertEquals(1, logger.getMessages().size());
