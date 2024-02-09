@@ -188,7 +188,15 @@ public class ConversionArguments extends Arguments {
 
     definedProps.put("cli.log-format", configuration.get("cli.log-format"));
 
+    validate();
+
     return this;
+  }
+
+  private void validate() {
+    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+      throw new CliException(locale.getString("conversion.error.project_not_defined"));
+    }
   }
 
   /**
