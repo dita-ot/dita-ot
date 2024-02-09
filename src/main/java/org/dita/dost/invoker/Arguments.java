@@ -95,6 +95,8 @@ abstract class Arguments {
       return false;
     } else if (Objects.equals(System.getenv("TERM"), "dumb")) {
       return false;
+    } else if (System.console() == null) {
+      return false;
     }
     return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
   }
