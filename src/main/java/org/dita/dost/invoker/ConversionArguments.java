@@ -188,7 +188,15 @@ public class ConversionArguments extends Arguments {
 
     definedProps.put("cli.log-format", configuration.get("cli.log-format"));
 
+    validate();
+
     return this;
+  }
+
+  private void validate() {
+    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+      throw new CliException(locale.getString("conversion.error.project_not_defined"));
+    }
   }
 
   /**
@@ -417,6 +425,7 @@ public class ConversionArguments extends Arguments {
       .options("o", "output", "dir", locale.getString("conversion.option.output"));
     if (!compact) {
       buf
+        .options(null, "deliverable", "name", locale.getString("conversion.option.deliverable"))
         .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
         .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
         .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))

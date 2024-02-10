@@ -191,6 +191,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       processArgs(args);
     } catch (final CliException exc) {
       handleLogfile();
+      logger.setOutputLevel(Project.MSG_INFO);
       printMessage(exc);
       if (exc.info != null) {
         logger.info(exc.info);
@@ -490,18 +491,41 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
   }
 
+  /**
+   * Read configuration files and return combined map of properties. Files have the following priority:
+   *
+   * <ol>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in current directory and recursively ancestor directories</li>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in user home directory.</li>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in DITA-OT installation directory.</li>
+   *     <li><code>{@link #CONFIGURATION_FILE local.properties}</code> in DITA-OT installation directory.</li>
+   * </ol>
+   *
+   * <p>Duplicate properties are overridden.</p>
+   *
+   * @param ditaDir DITA-OT installation directory
+   * @return combined properties from configuration files
+   */
   private Map<String, Object> getLocalProperties(File ditaDir) {
     final Map<String, Object> res = new HashMap<>();
-    Stream
-      .of(
-        new File(ditaDir, CONFIGURATION_FILE_OLD),
-        new File(ditaDir, CONFIGURATION_FILE),
-        new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE),
-        new File(new File("."), CONFIGURATION_FILE)
-      )
-      .filter(File::exists)
-      .map(this::readProperties)
-      .forEach(res::putAll);
+    var files = Stream
+      .iterate(new File("").getAbsoluteFile(), Objects::nonNull, File::getParentFile)
+      .map(dir -> new File(dir, CONFIGURATION_FILE))
+      .collect(Collectors.toList());
+    final File homeFile = new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE);
+    if (!files.contains(homeFile)) {
+      files.add(homeFile);
+    }
+    final File installDirFile = new File(ditaDir, CONFIGURATION_FILE);
+    if (!files.contains(installDirFile)) {
+      files.add(installDirFile);
+    }
+    final File installDirFileLegacy = new File(ditaDir, CONFIGURATION_FILE_OLD);
+    if (!files.contains(installDirFileLegacy)) {
+      files.add(installDirFileLegacy);
+    }
+    Collections.reverse(files);
+    files.stream().filter(File::exists).map(this::readProperties).forEach(res::putAll);
     return res;
   }
 

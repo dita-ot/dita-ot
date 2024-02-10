@@ -30,7 +30,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' ditaot-d/mapref-topicmeta-container ')]"/>
   
   <xsl:template match="*[contains(@class, ' ditaot-d/keydef ')]"/>
-  
+
+  <xsl:template match="@filter-copy-to"/>
+
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX072I'"/>
