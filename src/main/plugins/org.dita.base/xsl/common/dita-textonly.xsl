@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
      includes index terms, etc. 
 
      To use, process any content with mode="dita-ot:text-only" -->
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="3.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
   exclude-result-prefixes="dita-ot"

@@ -31,7 +31,7 @@ class VersionArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
-    UsageBuilder.builder(compact).usage(locale.getString("version.usage")).print();
+  String getUsage(final boolean compact) {
+    return UsageBuilder.builder(compact, useColor).usage(locale.getString("version.usage")).build();
   }
 }

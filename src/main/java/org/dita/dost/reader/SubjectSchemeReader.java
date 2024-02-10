@@ -14,16 +14,16 @@ import static org.dita.dost.util.URLUtils.toURI;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.function.Predicate;
 import javax.xml.namespace.QName;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.XMLUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Subject scheme reader.
@@ -32,9 +32,20 @@ import org.w3c.dom.NodeList;
  */
 public class SubjectSchemeReader {
 
+  public static final String ANY_ELEMENT = "*";
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYREF = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_KEYREF
+  );
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYS = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_KEYS
+  );
+  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_NAME = net.sf.saxon.s9api.QName.fromClarkName(
+    ATTRIBUTE_NAME_NAME
+  );
+
   private DITAOTLogger logger;
   private Job job;
-  private final Map<QName, Map<String, Set<Element>>> bindingMap;
+  private final Map<QName, Map<String, Set<SubjectDefinition>>> bindingMap;
   private final Map<QName, Map<String, Set<String>>> validValuesMap;
   private final Map<QName, Map<String, String>> defaultValueMap;
 
@@ -133,7 +144,7 @@ public class SubjectSchemeReader {
    * <p>The serialization format is XML properties format where values are comma
    * separated lists.</p>
    *
-   * @param m map to serialize
+   * @param m          map to serialize
    * @param outputFile output filename, relative to temporary directory
    */
   public void writeMapToXML(final Map<URI, Set<URI>> m, final File outputFile) throws IOException {
@@ -166,8 +177,8 @@ public class SubjectSchemeReader {
     logger.debug("Load subject scheme " + scheme);
 
     try {
-      final Document doc = job.getStore().getDocument(scheme.toURI());
-      final Element schemeRoot = doc.getDocumentElement();
+      final XdmNode doc = job.getStore().getImmutableNode(scheme.toURI());
+      final XdmNode schemeRoot = doc.getOutermostElement();
       if (schemeRoot == null) {
         return;
       }
@@ -179,143 +190,156 @@ public class SubjectSchemeReader {
     }
   }
 
-  public void loadSubjectScheme(final Element schemeRoot) {
-    final List<Element> rootChildren = XMLUtils.getChildElements(schemeRoot);
-    for (Element child : rootChildren) {
-      final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
-      if (SUBJECTSCHEME_ENUMERATIONDEF.matches(attrValue)) {
-        processEnumerationDef(schemeRoot, child);
+  public void loadSubjectScheme(final XdmNode schemeRoot) {
+    final Map<String, SubjectDefinition> subjectDefinitionsByKey = getSubjectDefinition(schemeRoot);
+    for (XdmNode child : schemeRoot.children(SUBJECTSCHEME_ENUMERATIONDEF::matches)) {
+      processEnumerationDef(subjectDefinitionsByKey, child);
+    }
+  }
+
+  public Map<String, SubjectDefinition> getSubjectDefinition(final XdmNode schemeRoot) {
+    final List<SubjectDefinition> subjectDefinitions = readSubjectDefinitions(schemeRoot);
+    final Map<String, SubjectDefinition> buf = new HashMap<>();
+    getSubjectDefinition(subjectDefinitions, buf);
+    return Collections.unmodifiableMap(buf);
+  }
+
+  private void getSubjectDefinition(List<SubjectDefinition> subjectDefinitions, Map<String, SubjectDefinition> buf) {
+    for (SubjectDefinition subjectDefinition : subjectDefinitions) {
+      for (String key : subjectDefinition.keys()) {
+        buf.putIfAbsent(key, subjectDefinition);
+      }
+      getSubjectDefinition(subjectDefinition.children(), buf);
+    }
+  }
+
+  private List<SubjectDefinition> readSubjectDefinitions(final XdmNode elem) {
+    final List<SubjectDefinition> res = new ArrayList<>();
+    readSubjectDefinitions(elem, res);
+    return Collections.unmodifiableList(res);
+  }
+
+  private void readSubjectDefinitions(final XdmNode elem, List<SubjectDefinition> buf) {
+    for (XdmNode child : elem.children()) {
+      if (SUBJECTSCHEME_SUBJECTDEF.matches(child)) {
+        String keyref = child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF);
+        if (keyref == null || keyref.isEmpty()) {
+          keyref = null;
+        }
+        final List<SubjectDefinition> childBuf = new ArrayList<>();
+        readSubjectDefinitions(child, childBuf);
+        final SubjectDefinition res = new SubjectDefinition(Set.copyOf(getKeyValues(child)), keyref, childBuf);
+        buf.add(res);
+      } else {
+        readSubjectDefinitions(child, buf);
       }
     }
   }
 
-  public void processEnumerationDef(final Element schemeRoot, final Element enumerationDef) {
-    final List<Element> enumChildren = XMLUtils.getChildElements(enumerationDef);
-    String elementName = "*";
-    QName attributeName = null;
-    for (Element child : enumChildren) {
-      final String attrValue = child.getAttribute(ATTRIBUTE_NAME_CLASS);
-      if (SUBJECTSCHEME_ELEMENTDEF.matches(attrValue)) {
-        elementName = child.getAttribute(ATTRIBUTE_NAME_NAME);
-      } else if (SUBJECTSCHEME_ATTRIBUTEDEF.matches(attrValue)) {
-        final String name = child.getAttribute(ATTRIBUTE_NAME_NAME);
-        attributeName = name != null ? QName.valueOf(name) : null;
-        Map<String, Set<Element>> S = bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
-      } else if (SUBJECTSCHEME_DEFAULTSUBJECT.matches(attrValue)) {
-        // Put default values.
-        final String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
-        if (keyValue != null) {
-          Map<String, String> S = defaultValueMap.get(attributeName);
-          if (S == null) {
-            S = new HashMap<>();
+  public void processEnumerationDef(
+    final Map<String, SubjectDefinition> subjectDefinitions,
+    final XdmNode enumerationDef
+  ) {
+    final String elementName = enumerationDef
+      .select(
+        Steps
+          .child(SUBJECTSCHEME_ELEMENTDEF::matches)
+          .then(Steps.attribute(ATTRIBUTE_NAME_NAME).where(Predicate.not(isEmptyAttribute())))
+      )
+      .findFirst()
+      .map(XdmItem::getStringValue)
+      .orElse(ANY_ELEMENT);
+
+    final Optional<XdmNode> attributeDefElement = enumerationDef
+      .select(Steps.child(SUBJECTSCHEME_ATTRIBUTEDEF::matches).first())
+      .findFirst();
+    final QName attributeName = attributeDefElement
+      .map(child -> child.getAttributeValue(ATTRIBUTE_QNAME_NAME))
+      .filter(name -> name != null && !name.isEmpty())
+      .map(QName::valueOf)
+      .orElse(null);
+    if (attributeDefElement.isPresent()) {
+      bindingMap.computeIfAbsent(attributeName, k -> new HashMap<>());
+    }
+
+    enumerationDef
+      .select(Steps.child(SUBJECTSCHEME_DEFAULTSUBJECT::matches))
+      .map(child -> child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF))
+      .filter(keyref -> keyref != null && !keyref.isEmpty())
+      .findFirst()
+      .ifPresent(keyValue -> {
+        final Map<String, String> S = defaultValueMap.getOrDefault(attributeName, new HashMap<>());
+        S.put(elementName, keyValue);
+        defaultValueMap.put(attributeName, S);
+      });
+
+    for (XdmNode child : enumerationDef.children(SUBJECTSCHEME_SUBJECTDEF::matches)) {
+      final List<String> keyValues = Optional
+        .ofNullable(child.getAttributeValue(ATTRIBUTE_QNAME_KEYREF))
+        .filter(Predicate.not(String::isBlank))
+        .or(() -> Optional.ofNullable(child.getAttributeValue(ATTRIBUTE_QNAME_KEYS)))
+        .map(String::trim)
+        .filter(Predicate.not(String::isEmpty))
+        .map(value -> Arrays.asList(value.split("\\s+")))
+        .orElse(List.of());
+      if (!subjectDefinitions.isEmpty() && !keyValues.isEmpty()) {
+        for (String keyValue : keyValues) {
+          final SubjectDefinition subTree = subjectDefinitions.get(keyValue);
+          if (subTree != null) {
+            final Map<String, Set<SubjectDefinition>> S = bindingMap.getOrDefault(attributeName, new HashMap<>());
+            final Set<SubjectDefinition> A = S.getOrDefault(elementName, new HashSet<>());
+            if (!A.contains(subTree)) {
+              if (attributeName != null) {
+                putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
+              }
+            }
+            A.add(subTree);
+            S.put(elementName, A);
+            bindingMap.put(attributeName, S);
           }
-          S.put(elementName, keyValue);
-          defaultValueMap.put(attributeName, S);
-        }
-      } else if (SUBJECTSCHEME_SUBJECTDEF.matches(attrValue)) {
-        // Search for attributeName in schemeRoot
-        String keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYREF);
-        if (StringUtils.isEmptyString(keyValue)) {
-          keyValue = child.getAttribute(ATTRIBUTE_NAME_KEYS);
-        }
-        final Element subTree = searchForKey(schemeRoot, keyValue);
-        if (subTree != null) {
-          Map<String, Set<Element>> S = bindingMap.get(attributeName);
-          if (S == null) {
-            S = new HashMap<>();
-          }
-          Set<Element> A = S.get(elementName);
-          if (A == null) {
-            A = new HashSet<>();
-          }
-          if (!A.contains(subTree)) {
-            // Add sub-tree to valid values map
-            putValuePairsIntoMap(subTree, elementName, attributeName, keyValue);
-          }
-          A.add(subTree);
-          S.put(elementName, A);
-          bindingMap.put(attributeName, S);
         }
       }
     }
   }
 
-  /**
-   * Search subject scheme elements for a given key
-   * @param root subject scheme element tree to search through
-   * @param keyValue key to locate
-   * @return element that matches the key, otherwise {@code null}
-   */
-  private Element searchForKey(final Element root, final String keyValue) {
-    if (root == null || keyValue == null) {
-      return null;
+  private static Predicate<XdmNode> isEmptyAttribute() {
+    return attr -> attr.getStringValue().isEmpty();
+  }
+
+  private static List<String> getKeyValues(XdmNode child) {
+    var value = child.getAttributeValue(ATTRIBUTE_QNAME_KEYS);
+    if (value == null) {
+      return List.of();
     }
-    final LinkedList<Element> queue = new LinkedList<>();
-    queue.add(root);
-    while (!queue.isEmpty()) {
-      final Element node = queue.removeFirst();
-      final NodeList children = node.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          queue.add((Element) children.item(i));
-        }
-      }
-      if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (keyValue.equals(key)) {
-          return node;
-        }
-      }
+    value = value.trim();
+    if (value.isEmpty()) {
+      return List.of();
     }
-    return null;
+    return Arrays.asList(value.split("\\s+"));
   }
 
   /**
    * Populate valid values map
    *
-   * @param subtree subject scheme definition element
+   * @param subtree     subject scheme definition element
    * @param elementName element name
-   * @param attName attribute name
-   * @param category enumeration category name
+   * @param attName     attribute name
+   * @param category    enumeration category name
    */
   private void putValuePairsIntoMap(
-    final Element subtree,
+    final SubjectDefinition subtree,
     final String elementName,
     final QName attName,
     final String category
   ) {
-    if (subtree == null || attName == null) {
-      return;
-    }
-
-    Map<String, Set<String>> valueMap = validValuesMap.get(attName);
-    if (valueMap == null) {
-      valueMap = new HashMap<>();
-    }
-
-    Set<String> valueSet = valueMap.get(elementName);
-    if (valueSet == null) {
-      valueSet = new HashSet<>();
-    }
-
-    final LinkedList<Element> queue = new LinkedList<>();
-    queue.offer(subtree);
-
-    while (!queue.isEmpty()) {
-      final Element node = queue.poll();
-      final NodeList children = node.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          queue.offer((Element) children.item(i));
-        }
-      }
-      if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (!(key == null || key.trim().isEmpty() || key.equals(category))) {
-          valueSet.add(key);
-        }
-      }
-    }
+    final Map<String, Set<String>> valueMap = validValuesMap.getOrDefault(attName, new HashMap<>());
+    final Set<String> valueSet = valueMap.getOrDefault(elementName, new HashSet<>());
+    subtree
+      .flatten()
+      .stream()
+      .flatMap(child -> child.keys().stream())
+      .filter(key -> !key.equals(category))
+      .forEach(valueSet::add);
     valueMap.put(elementName, valueSet);
     validValuesMap.put(attName, valueMap);
   }

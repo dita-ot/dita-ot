@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<messages>
+  <message id="DOTJ0001" type="INFO">
+    <reason>Reason</reason>
+    <response>Response</response>
+  </message>
+
+  <message id="DOTJ0002" type="WARN">
+    <reason>Reason</reason>
+    <response>Response</response>
+  </message>
+
+  <message id="DOTJ0003" type="INFO">
+    <reason>Reason</reason>
+    <response>Response override</response>
+  </message>
+
+  <message id="DOTJ0004" type="INFO">
+    <reason>Reason override</reason>
+    <response>Response</response>
+  </message>
+
+  <message id="DOTJ0005" type="WARN">
+    <reason>Reason override</reason>
+    <response>Response override</response>
+  </message>
+</messages>

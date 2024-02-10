@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+    domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    title="Mapref testing!!!!!" ditaarch:DITAArchVersion="1.3" cascade="nomerge"
+    specializations="@props/deliveryTarget">
+  <topicref class="- map/topicref " href="7d9c393b9fd65ec006ff895bfacb2b2d72b2b2d5.dita"/>
+  <topicref class="- map/topicref " format="ditamap" href="903279a9031fdfa6dfe10756351109359cf43a66.ditamap"
+            linking="none">
+  </topicref>
+  <topicref class="- map/topicref " href="49a5dce33129558b4aae9c7f9d9a981d30bb4167.dita">
+    <topicref class="- map/topicref " href="cb60e6ba043fda3f7971b297b1dead3156a7215d.dita">
+      <topicref class="- map/topicref " href="ab586fdcdbf671b62e5c0f4d354b06da7c2e2382.dita"/>
+      <topicref class="- map/topicref " format="ditamap" href="50d2534ac23af573e9a8841cca99e8012596dd28.ditamap"
+                linking="none"/>
+      <topicref class="- map/topicref " href="0fe9d0f9d634e546ea8d0c76c106b4ea04ca8893.dita"/>
+    </topicref>
+  </topicref>
+  <topicref class="- map/topicref " href="10447933540fe0709eeb4644c7aaf6f3fc4b1294.dita"/>
+  <topicref class="- map/topicref " format="ditamap" href="a45819c16ffeb82641204202dd90cde2717e4102.ditamap"/>
+  <reltable class="- map/reltable " toc="no">
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no">
+        <topicref class="- map/topicref " href="7d9c393b9fd65ec006ff895bfacb2b2d72b2b2d5.dita"/>
+        <topicref class="- map/topicref " href="49a5dce33129558b4aae9c7f9d9a981d30bb4167.dita"/>
+        <topicref class="- map/topicref " href="cb60e6ba043fda3f7971b297b1dead3156a7215d.dita"/>
+        <topicref class="- map/topicref " href="ab586fdcdbf671b62e5c0f4d354b06da7c2e2382.dita"/>
+        <topicref class="- map/topicref " href="0fe9d0f9d634e546ea8d0c76c106b4ea04ca8893.dita"/>
+        <topicref class="- map/topicref " href="10447933540fe0709eeb4644c7aaf6f3fc4b1294.dita"/>
+      </relcell>
+      <relcell class="- map/relcell " format="html" scope="external" toc="no">
+
+        <topicref class="- map/topicref " format="html" href="http://www.ibm.com" navtitle="ibm: From the main map"
+                  scope="external">
+        </topicref>
+      </relcell>
+    </relrow>
+  </reltable>
+</map>

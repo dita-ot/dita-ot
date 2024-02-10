@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs">
   
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
@@ -27,9 +27,12 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' ditaot-d/submap-title ')]"/>
   <xsl:template match="*[contains(@class, ' ditaot-d/submap-topicmeta ')]"/>
   <xsl:template match="*[contains(@class, ' ditaot-d/submap-topicmeta-container ')]"/>
+  <xsl:template match="*[contains(@class, ' ditaot-d/mapref-topicmeta-container ')]"/>
   
   <xsl:template match="*[contains(@class, ' ditaot-d/keydef ')]"/>
-  
+
+  <xsl:template match="@filter-copy-to"/>
+
   <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX072I'"/>

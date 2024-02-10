@@ -8,6 +8,7 @@
 package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
+import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
@@ -45,7 +46,6 @@ import org.xml.sax.XMLFilter;
 public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
   private static final String SKIP_FILTER = "skip-filter";
-  private static final String BRANCH_COPY_TO = "filter-copy-to";
 
   /** Current map being processed, relative to temporary directory */
   private URI map;
@@ -76,6 +76,15 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     currentFile = job.tempDirURI.resolve(map);
 
     logger.info("Processing " + currentFile);
+    final SubjectScheme subjectSchemeMap;
+    try {
+      logger.debug("Reading " + currentFile);
+      subjectSchemeMap = getSubjectScheme(job.getStore().getImmutableNode(currentFile).getOutermostElement());
+    } catch (final IOException e) {
+      logger.error("Failed to parse " + currentFile, e);
+      return;
+    }
+
     final Document doc;
     try {
       logger.debug("Reading " + currentFile);
@@ -84,8 +93,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
       logger.error("Failed to parse " + currentFile, e);
       return;
     }
-
-    final SubjectScheme subjectSchemeMap = getSubjectScheme(doc.getDocumentElement());
     logger.debug("Filter topics and generate copies");
     generateCopies(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
     logger.debug("Filter existing topics");

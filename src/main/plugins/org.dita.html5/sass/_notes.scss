@@ -20,4 +20,8 @@
   .notelisttitle {
     @extend .notetitle;
   }
+
+  .note__body {
+    display: inline;
+  }
 }

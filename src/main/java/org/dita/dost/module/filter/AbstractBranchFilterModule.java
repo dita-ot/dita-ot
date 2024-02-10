@@ -11,18 +11,22 @@ package org.dita.dost.module.filter;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.getChildElement;
 
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.reader.DitaValReader;
 import org.dita.dost.reader.SubjectSchemeReader;
-import org.dita.dost.util.*;
+import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -69,18 +73,22 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
   /**
    * Read subject scheme definitions.
    */
-  SubjectScheme getSubjectScheme(final Element root) {
+  SubjectScheme getSubjectScheme(final XdmNode root) {
     subjectSchemeReader.reset();
     logger.debug("Loading subject schemes");
-    final List<Element> subjectSchemes = toList(root.getElementsByTagName("*"));
-    subjectSchemes
-      .stream()
-      .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-      .forEach(enumerationDef -> {
-        final Element schemeRoot = ancestors(enumerationDef).filter(SUBMAP::matches).findFirst().orElse(root);
-        subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
-      });
-    return subjectSchemeReader.getSubjectSchemeMap();
+    var enumerationDefs = root.select(Steps.descendant(SUBJECTSCHEME_ENUMERATIONDEF::matches)).toList();
+    if (!enumerationDefs.isEmpty()) {
+      enumerationDefs
+        .stream()
+        .forEach(enumerationDef -> {
+          final XdmNode schemeRoot = enumerationDef.select(Steps.ancestor(SUBMAP::matches)).findFirst().orElse(root);
+          var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
+          subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+        });
+      return subjectSchemeReader.getSubjectSchemeMap();
+    } else {
+      return new SubjectScheme(Map.of());
+    }
   }
 
   /**

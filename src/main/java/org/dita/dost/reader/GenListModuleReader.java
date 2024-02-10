@@ -530,27 +530,21 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   }
 
   private void handleSubjectScheme(final Attributes atts) {
-    final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
     // Generate Scheme relationship graph
     if (SUBJECTSCHEME_SUBJECTSCHEME.matches(classValue)) {
       // Make it easy to do the BFS later.
-      final URI key = ROOT_URI;
-      final Set<URI> children = schemeRelationGraph.containsKey(key)
-        ? schemeRelationGraph.get(key)
-        : new LinkedHashSet<>();
+      final Set<URI> children = schemeRelationGraph.getOrDefault(ROOT_URI, new LinkedHashSet<>());
       children.add(currentFile);
-      schemeRelationGraph.put(key, children);
+      schemeRelationGraph.put(ROOT_URI, children);
       schemeRefSet.add(currentFile);
     } else if (SUBJECTSCHEME_SCHEMEREF.matches(classValue)) {
+      final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
       if (href != null) {
-        final URI key = currentFile;
-        final Set<URI> children = schemeRelationGraph.containsKey(key)
-          ? schemeRelationGraph.get(key)
-          : new LinkedHashSet<>();
+        final Set<URI> children = schemeRelationGraph.getOrDefault(currentFile, new LinkedHashSet<>());
         final URI child = currentFile.resolve(href);
         children.add(child);
-        schemeRelationGraph.put(key, children);
+        schemeRelationGraph.put(currentFile, children);
       }
     }
   }

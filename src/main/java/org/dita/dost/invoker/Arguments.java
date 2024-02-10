@@ -9,6 +9,7 @@
 /* Derived from Apache Ant. */
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.LangUtils.pair;
 
 import java.io.File;
@@ -33,7 +34,7 @@ abstract class Arguments {
   /**
    * Our current message output status. Follows Project.MSG_XXX.
    */
-  int msgOutputLevel = Project.MSG_WARN;
+  int msgOutputLevel = Project.MSG_INFO;
   /**
    * File that we are using for configuration.
    */
@@ -63,7 +64,7 @@ abstract class Arguments {
   /**
    * Whether or not output to the log is to be unadorned.
    */
-  boolean emacsMode;
+  boolean emacsMode = Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("fancy");
   /**
    * optional thread priority
    */
@@ -82,7 +83,7 @@ abstract class Arguments {
     useColor = getUseColor();
   }
 
-  abstract void printUsage(boolean compact);
+  abstract String getUsage(boolean compact);
 
   abstract Arguments parse(String[] arguments);
 
@@ -93,6 +94,8 @@ abstract class Arguments {
     } else if (System.getenv("NO_COLOR") != null) {
       return false;
     } else if (Objects.equals(System.getenv("TERM"), "dumb")) {
+      return false;
+    } else if (System.console() == null) {
       return false;
     }
     return Boolean.parseBoolean(Configuration.configuration.getOrDefault("cli.color", "true"));
@@ -107,9 +110,9 @@ abstract class Arguments {
     if (isLongForm(arg, "-help") || arg.equals("-h")) {
       justPrintUsage = true;
     } else if (isLongForm(arg, "-verbose") || arg.equals("-v")) {
-      msgOutputLevel = Project.MSG_INFO;
-    } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
       msgOutputLevel = Project.MSG_VERBOSE;
+    } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
+      msgOutputLevel = Project.MSG_DEBUG;
     } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
       emacsMode = true;
     } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {
@@ -123,7 +126,7 @@ abstract class Arguments {
     } else if (isLongForm(arg, "-no-color")) {
       useColor = false;
     } else {
-      throw new BuildException("Unsupported argument: %s", arg);
+      throw new CliException(locale.getString("help.error.unsupported_argument").formatted(arg), this.getUsage(false));
     }
   }
 

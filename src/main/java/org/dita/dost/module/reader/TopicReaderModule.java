@@ -8,30 +8,27 @@
 
 package org.dita.dost.module.reader;
 
+import static java.util.stream.Collectors.mapping;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
-import static org.dita.dost.util.XMLUtils.ancestors;
-import static org.dita.dost.util.XMLUtils.toList;
 import static org.dita.dost.writer.DitaWriterFilter.ATTRIBUTE_NAME_ORIG_FORMAT;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.module.filter.SubjectScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.GenListModuleReader.Reference;
@@ -43,8 +40,6 @@ import org.dita.dost.writer.DebugFilter;
 import org.dita.dost.writer.NormalizeFilter;
 import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
@@ -61,6 +56,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
   static final QName QNAME_FORMAT = new QName(ATTRIBUTE_NAME_FORMAT);
   static final QName QNAME_CLASS = new QName(ATTRIBUTE_NAME_CLASS);
   static final QName QNAME_ORIG_FORMAT = new QName(DITA_OT_NS, ATTRIBUTE_NAME_ORIG_FORMAT);
+
+  private Map<javax.xml.namespace.QName, Map<String, Set<String>>> validateMap = Map.of();
+  private Map<javax.xml.namespace.QName, Map<String, String>> defaultValueMap = Map.of();
 
   public TopicReaderModule() {
     super();
@@ -91,29 +89,42 @@ public final class TopicReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
 
-    if (filterUtils != null) {
-      final Document doc = getMapDocument();
-      if (doc != null) {
-        final SubjectSchemeReader subjectSchemeReader = new SubjectSchemeReader();
-        subjectSchemeReader.setLogger(logger);
-        subjectSchemeReader.setJob(job);
-        logger.debug("Loading subject schemes");
-        final List<Element> subjectSchemes = toList(doc.getDocumentElement().getElementsByTagName("*"));
-        subjectSchemes
+    initSubjectScheme();
+  }
+
+  private void initSubjectScheme() throws DITAOTException {
+    var doc = getMapDocument();
+    if (doc != null) {
+      var subjectSchemeReader = new SubjectSchemeReader();
+      subjectSchemeReader.setLogger(logger);
+      subjectSchemeReader.setJob(job);
+      var enumerationDefList = doc.select(Steps.descendant(SUBJECTSCHEME_ENUMERATIONDEF::matches)).toList();
+      if (!enumerationDefList.isEmpty()) {
+        logger.info("Loading subject schemes");
+        enumerationDefList
           .stream()
-          .filter(SUBJECTSCHEME_ENUMERATIONDEF::matches)
-          .forEach(enumerationDef -> {
-            final Element schemeRoot = ancestors(enumerationDef)
-              .filter(SUBMAP::matches)
-              .findFirst()
-              .orElse(doc.getDocumentElement());
-            subjectSchemeReader.processEnumerationDef(schemeRoot, enumerationDef);
+          .map(enumerationDef ->
+            Map.entry(
+              enumerationDef.select(Steps.ancestor(SUBMAP::matches)).findFirst().orElse(doc.getOutermostElement()),
+              enumerationDef
+            )
+          )
+          .collect(Collectors.groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, Collectors.toList())))
+          .forEach((schemeRoot, enumerationDefs) -> {
+            var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
+            for (XdmNode enumerationDef : enumerationDefs) {
+              subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+            }
           });
-        final SubjectScheme subjectScheme = subjectSchemeReader.getSubjectSchemeMap();
-        filterUtils = filterUtils.refine(subjectScheme);
+        var subjectSchemeMap = subjectSchemeReader.getSubjectSchemeMap();
+        if (filterUtils != null) {
+          filterUtils = filterUtils.refine(subjectSchemeMap);
+        }
+        validateMap = subjectSchemeReader.getValidValuesMap();
+        defaultValueMap = subjectSchemeReader.getDefaultValueMap();
       }
     }
   }
@@ -155,7 +166,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
   }
 
-  private Document getMapDocument() throws SAXException {
+  private XdmNode getMapDocument() throws DITAOTException {
     final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
     if (fi == null || isFormatDita(fi.format)) {
       return null;
@@ -163,9 +174,9 @@ public final class TopicReaderModule extends AbstractReaderModule {
     final URI currentFile = job.tempDirURI.resolve(fi.uri);
     try {
       logger.debug("Reading " + currentFile);
-      return job.getStore().getDocument(currentFile);
+      return job.getStore().getImmutableNode(currentFile);
     } catch (final IOException e) {
-      throw new SAXException("Failed to parse " + currentFile, e);
+      throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
     }
   }
 

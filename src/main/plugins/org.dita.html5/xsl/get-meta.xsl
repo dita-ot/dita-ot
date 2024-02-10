@@ -6,8 +6,10 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<xsl:stylesheet version="2.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                exclude-result-prefixes="xs">
 
   <!-- Get each value in each <keywords>. Nested indexterms should have unique entries. Other
        elements (based on keyword) cannot nest. -->
@@ -37,16 +39,22 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- CONTENT: Description - shortdesc -->
     <xsl:apply-templates select="*[contains(@class,' topic/shortdesc ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' map/shortdesc ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/shortdesc ')]" mode="gen-metadata"/>
+
+    <!-- CONTENT: Abstract - abstract -->
     <xsl:apply-templates select="*[contains(@class,' topic/abstract ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/abstract ')]" mode="gen-shortdesc-metadata"/>
 
     <!-- CONTENT: Source - prolog/source/@href -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/source ')]/@href |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/source ')]/@href |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/source ')]/@href" mode="gen-metadata"/>
 
     <!-- CONTENT: Coverage prolog/metadata/category -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/category ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/category ')]" mode="gen-metadata"/>
 
     <!-- CONTENT: Subject - prolog/metadata/keywords -->
@@ -60,46 +68,76 @@ See the accompanying LICENSE file for applicable license.
     <!-- Audience -->
     <!-- prolog/metadata/audience/@experiencelevel and other attributes -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@experiencelevel |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/audience ')]/@experiencelevel |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@experiencelevel |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@experiencelevel" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@importance |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/audience ')]/@importance |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@importance |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@importance" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@job |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/audience ')]/@job |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@job |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@job" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@name |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/audience ')]/@name |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@name |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@name" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@type |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/audience ')]/@type |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@type |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/audience ')]/@type" mode="gen-metadata"/>
 
 
     <!-- <prodname> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prodname ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prodname ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prodname ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prodname ')]" mode="gen-metadata"/>
 
     <!-- <vrmlist><vrm modification="3" release="2" version="5"/></vrmlist> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@version |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@version |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@version |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@version" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@release |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@release |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@release |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@release" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@modification |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@modification |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@modification |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/vrmlist ')]/*[contains(@class,' topic/vrm ')]/@modification" mode="gen-metadata"/>
 
     <!-- <brand> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/brand ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/brand ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/brand ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/brand ')]" mode="gen-metadata"/>
     <!-- <component> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/component ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/component ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/component ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/component ')]" mode="gen-metadata"/>
     <!-- <featnum> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/featnum ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/featnum ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/featnum ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/featnum ')]" mode="gen-metadata"/>
     <!-- <prognum> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prognum ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prognum ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prognum ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/prognum ')]" mode="gen-metadata"/>
     <!-- <platform> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/platform ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/platform ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/platform ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/platform ')]" mode="gen-metadata"/>
     <!-- <series> -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/series ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/series ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/series ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/prodinfo ')]/*[contains(@class,' topic/series ')]" mode="gen-metadata"/>
 
     <!-- = = = = = = = = = = = INTELLECTUAL PROPERTY = = = = = = = = = = = -->
@@ -107,45 +145,57 @@ See the accompanying LICENSE file for applicable license.
     <!-- INTELLECTUAL PROPERTY: Contributor - prolog/author -->
     <!-- INTELLECTUAL PROPERTY: Creator -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/author ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/author ')]" mode="gen-metadata"/>
 
     <!-- INTELLECTUAL PROPERTY: Publisher - prolog/publisher -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/publisher ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/publisher ')]" mode="gen-metadata"/>
 
     <!-- INTELLECTUAL PROPERTY: Rights - prolog/copyright -->
     <!-- Put primary first, then secondary, then remainder -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][@type='primary'] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/copyright ')][@type='primary'] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][@type='primary']" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][@type='secondary'] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/copyright ')][@type='secondary'] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][@type='seconday']" mode="gen-metadata"/>
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][not(@type)] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/copyright ')][not(@type)] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/copyright ')][not(@type)]" mode="gen-metadata"/>
 
     <!-- Usage Rights - prolog/permissions -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/permissions ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/permissions ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/permissions ')]" mode="gen-metadata"/>
 
     <!-- = = = = = = = = = = = INSTANTIATION = = = = = = = = = = = -->
 
     <!-- INSTANTIATION: Date - prolog/critdates/created -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/created ')]" mode="gen-metadata"/>
 
     <!-- prolog/critdates/revised/@modified -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@modified" mode="gen-metadata"/>
 
     <!-- prolog/critdates/revised/@golive -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@golive" mode="gen-metadata"/>
 
     <!-- prolog/critdates/revised/@expiry -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/critdates ')]/*[contains(@class,' topic/revised ')]/@expiry" mode="gen-metadata"/>
 
     <!-- prolog/metadata/othermeta -->
     <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/othermeta ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/othermeta ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/othermeta ')] |
                                  self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/othermeta ')]" mode="gen-metadata"/>
 
     <!-- INSTANTIATION: Format -->
@@ -168,15 +218,28 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <xsl:template match="*[contains(@class,' topic/abstract ')]" mode="gen-shortdesc-metadata">
-    <xsl:variable name="shortmeta">
-      <xsl:for-each select="*[contains(@class,' topic/shortdesc ')]">
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="*|text()" mode="text-only"/>
-      </xsl:for-each>
+    <xsl:variable name="shortmeta" as="xs:string">
+      <xsl:value-of>
+        <xsl:for-each select="*[contains(@class,' topic/shortdesc ')]">
+          <xsl:text> </xsl:text>
+          <xsl:apply-templates select="*|text()" mode="text-only"/>
+        </xsl:for-each>
+      </xsl:value-of>
     </xsl:variable>
-    <xsl:if test="normalize-space($shortmeta)!=''">
+    <xsl:if test="normalize-space($shortmeta)">
       <meta name="abstract" content="{normalize-space($shortmeta)}"/>
       <meta name="description" content="{normalize-space($shortmeta)}"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' map/shortdesc ')]" mode="gen-metadata">
+    <xsl:variable name="content" as="xs:string">
+      <xsl:value-of>
+        <xsl:apply-templates mode="text-only"/>
+      </xsl:value-of>
+    </xsl:variable>
+    <xsl:if test="normalize-space($content)">
+      <meta name="description" content="{normalize-space($content)}"/>
     </xsl:if>
   </xsl:template>
 
@@ -184,7 +247,9 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="gen-keywords-metadata">
     <xsl:variable name="keywords-content">
       <!-- for each item inside keywords (including nested index terms) -->
-      <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
+      <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
+                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
+                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
         <!-- If this is the first term or keyword with this value -->
         <xsl:if test="generate-id(key('meta-keywords',text()[1])[1]) = generate-id(.)">
           <xsl:if test="position() > 2">

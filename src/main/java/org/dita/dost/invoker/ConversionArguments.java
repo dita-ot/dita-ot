@@ -10,6 +10,7 @@ package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -23,7 +24,9 @@ import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.FileUtils;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
+import org.dita.dost.util.Configuration;
 import org.w3c.dom.Element;
 
 public class ConversionArguments extends Arguments {
@@ -103,6 +106,7 @@ public class ConversionArguments extends Arguments {
 
   @Override
   ConversionArguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_WARN;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -141,6 +145,8 @@ public class ConversionArguments extends Arguments {
         handleArgNice(args);
       } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+      } else if (isLongForm(arg, "-format") || arg.equals("-f")) {
+        handleArgFormat(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-filter")) {
         handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
@@ -180,7 +186,17 @@ public class ConversionArguments extends Arguments {
     }
     definedProps.putAll(loadPropertyFiles());
 
+    definedProps.put("cli.log-format", configuration.get("cli.log-format"));
+
+    validate();
+
     return this;
+  }
+
+  private void validate() {
+    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+      throw new CliException(locale.getString("conversion.error.project_not_defined"));
+    }
   }
 
   /**
@@ -233,6 +249,17 @@ public class ConversionArguments extends Arguments {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     inputs.add(argument.getValue(entry.getValue()));
+  }
+
+  private void handleArgFormat(final String arg, final Deque<String> args, final Argument argument) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null) {
+      throw new BuildException("Missing value for transtype " + entry.getKey());
+    }
+    if (!Configuration.transtypes.contains(entry.getValue())) {
+      throw new BuildException(MessageUtils.getMessage("DOTA001F", entry.getValue()).toString());
+    }
+    definedProps.put(argument.property, entry.getValue());
   }
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
@@ -378,9 +405,9 @@ public class ConversionArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
+  String getUsage(final boolean compact) {
     final UsageBuilder buf = UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("conversion.usage.input"))
       .usage(locale.getString("conversion.usage.project"))
       //                .usage("dita --propertyfile=<file> [options]")
@@ -398,6 +425,7 @@ public class ConversionArguments extends Arguments {
       .options("o", "output", "dir", locale.getString("conversion.option.output"));
     if (!compact) {
       buf
+        .options(null, "deliverable", "name", locale.getString("conversion.option.deliverable"))
         .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
         .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
         .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
@@ -426,6 +454,6 @@ public class ConversionArguments extends Arguments {
     } else {
       buf.footer(locale.getString("conversion.footer"));
     }
-    buf.print();
+    return buf.build();
   }
 }

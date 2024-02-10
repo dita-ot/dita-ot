@@ -200,55 +200,62 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="log-arg">
-    <condition property="xml.parser" value="XMLReader ${org.xml.sax.driver}">
+    <condition property="legacy-format" value="true" else="false">
+      <equals arg1="${cli.log-format}" arg2="legacy"/>
+    </condition>
+    <condition property="log-prefix" value="* " else="">
+      <equals arg1="${cli.log-format}" arg2="legacy"/>
+    </condition>
+
+    <condition property="xml.parser" value="XMLReader ${org.xml.sax.driver}" if:true="${legacy-format}">
       <and>
         <isset property="org.xml.sax.driver"/>
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
-    <condition property="xml.parser" value="Xerces">
+    <condition property="xml.parser" value="Xerces" if:true="${legacy-format}">
       <and>
         <available classname="org.apache.xerces.parsers.SAXParser"/>
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
-    <condition property="xml.parser" value="Xerces in Sun JDK 1.5">
+    <condition property="xml.parser" value="Xerces in Sun JDK 1.5" if:true="${legacy-format}">
       <and>
         <available classname="com.sun.org.apache.xerces.internal.parsers.SAXParser"/>
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
-    <condition property="xml.parser" value="Crimson">
+    <condition property="xml.parser" value="Crimson" if:true="${legacy-format}">
       <and>
         <available classname="org.apache.crimson.parser.XMLReaderImpl"/>
         <not><isset property="xml.parser"/></not>
       </and>
     </condition>
-    <condition property="xslt.parser" value="Saxon" else="Xalan">
+    <condition property="xslt.parser" value="Saxon" else="Xalan" if:true="${legacy-format}">
       <or>
         <available classname="net.sf.saxon.StyleSheet"/>
         <available classname="net.sf.saxon.Transform"/>
       </or>
     </condition>
-    <condition property="collator" value="ICU" else="JDL">
+    <condition property="collator" value="ICU" else="JDL" if:true="${legacy-format}">
       <available classname="com.ibm.icu.text.Collator"/>
     </condition>
     <!-- output parameters info -->
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* basedir = ${basedir}</echo>
-    <echo level="info">* dita.dir = ${dita.dir}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echo level="info" if:true="${legacy-format}">* basedir = ${basedir}</echo>
+    <echo level="info" if:true="${legacy-format}">* dita.dir = ${dita.dir}</echo>
     <!--echo level="info">* input = ${args.input}</echo-->
-    <echo level="info">* transtype = ${transtype}</echo>
-    <echo level="info">* tempdir = ${dita.temp.dir}</echo>
-    <echo level="info">* outputdir = ${output.dir}</echo>
-    <echo level="info">* clean.temp = ${clean.temp}</echo>
-    <echo level="info">* DITA-OT version = ${otversion}</echo>
-    <echo level="info">* XML parser = ${xml.parser}</echo>
-    <echo level="info">* XSLT processor = ${xslt.parser}</echo>
-    <echo level="info">* collator = ${collator}</echo>
-    <echo level="info">*****************************************************************</echo>
-    <echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false"/>
-    <echo level="info">*****************************************************************</echo>
+    <echo level="info">${log-prefix}transtype = ${transtype}</echo>
+    <echo level="info">${log-prefix}tempdir = ${dita.temp.dir}</echo>
+    <echo level="info">${log-prefix}outputdir = ${output.dir}</echo>
+    <echo level="info" if:true="${legacy-format}">* clean.temp = ${clean.temp}</echo>
+    <echo level="info">${log-prefix}DITA-OT version = ${otversion}</echo>
+    <echo level="info" if:true="${legacy-format}">* XML parser = ${xml.parser}</echo>
+    <echo level="info" if:true="${legacy-format}">* XSLT processor = ${xslt.parser}</echo>
+    <echo level="info" if:true="${legacy-format}">* collator = ${collator}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echoproperties regex="^(arg|preprocess|dita)" taskname="echo" failonerror="false" if:true="${legacy-format}"/>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
   </target>
 
 </project>

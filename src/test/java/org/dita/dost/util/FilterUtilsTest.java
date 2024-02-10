@@ -19,13 +19,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.util.*;
+import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.dita.dost.TestUtils;
+import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -48,6 +53,8 @@ public class FilterUtilsTest {
     .put(new FilterKey(AUDIENCE, "expert"), Action.INCLUDE)
     .put(new FilterKey(AUDIENCE, "novice"), Action.EXCLUDE)
     .build();
+
+  private XMLUtils xmlUtils = new XMLUtils();
 
   @Test
   public void testNeedExcludeNoAttribute() {
@@ -485,5 +492,53 @@ public class FilterUtilsTest {
   @Test
   public void filterKey_arguments() {
     assertThrows(NullPointerException.class, () -> new FilterKey(null, null));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "arch redhat", "arch,redhat" })
+  public void refine(String values) {
+    final FilterUtils f = new FilterUtils(
+      Map.of(new FilterKey(QName.valueOf("platform"), "linux"), Action.INCLUDE),
+      null,
+      null
+    );
+    var act = f.refine(
+      new SubjectScheme(
+        Map.of(
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createSubjectDef(
+                "os",
+                createSubjectDef(
+                  "linux",
+                  Stream.of(values.split(",")).map(this::createSubjectDef).toArray(SubjectDefinition[]::new)
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+    assertEquals(
+      Map.of(
+        new FilterKey(QName.valueOf("platform"), "arch"),
+        Action.INCLUDE,
+        new FilterKey(QName.valueOf("platform"), "linux"),
+        Action.INCLUDE,
+        new FilterKey(QName.valueOf("platform"), "redhat"),
+        Action.INCLUDE
+      ),
+      act.filterMap
+    );
+  }
+
+  private SubjectDefinition createSubjectDef(String keys) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Collections.emptyList());
+  }
+
+  private SubjectDefinition createSubjectDef(String keys, SubjectDefinition... children) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Arrays.asList(children));
   }
 }

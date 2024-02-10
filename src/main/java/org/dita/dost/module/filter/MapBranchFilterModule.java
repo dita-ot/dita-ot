@@ -22,6 +22,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
+import net.sf.saxon.s9api.XdmNode;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
@@ -47,7 +48,7 @@ import org.w3c.dom.*;
  */
 public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
-  private static final String BRANCH_COPY_TO = "filter-copy-to";
+  public static final String BRANCH_COPY_TO = "filter-copy-to";
 
   /** Current map being processed, relative to temporary directory */
   private URI map;
@@ -82,9 +83,12 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
     logger.info("Processing " + currentFile);
     final Document doc;
+    final SubjectScheme subjectSchemeMap;
     try {
       logger.debug("Reading " + currentFile);
-      doc = job.getStore().getDocument(currentFile);
+      final XdmNode node = job.getStore().getImmutableNode(currentFile);
+      subjectSchemeMap = getSubjectScheme(node.getOutermostElement());
+      doc = xmlUtils.cloneDocument(node);
     } catch (final IOException e) {
       logger.error("Failed to parse " + currentFile, e);
       return;
@@ -93,7 +97,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     logger.debug("Split branches and generate copy-to");
     splitBranches(doc.getDocumentElement(), Branch.EMPTY);
     logger.debug("Filter map");
-    filterBranches(doc.getDocumentElement());
+    filterBranches(doc.getDocumentElement(), subjectSchemeMap);
     logger.debug("Rewrite duplicate topic references");
     rewriteDuplicates(doc.getDocumentElement());
 
@@ -225,17 +229,16 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   /** Filter map and remove excluded content. */
-  private void filterBranches(final Element root) {
+  private void filterBranches(final Element root, final SubjectScheme subjectSchemeMap) {
     final String domains = root.getAttribute(ATTRIBUTE_NAME_DOMAINS);
     final String specializations = root.getAttribute(ATTRIBUTE_NAME_SPECIALIZATIONS);
     final QName[][] props = !domains.isEmpty() ? getExtProps(domains) : getExtPropsFromSpecializations(specializations);
-    final SubjectScheme subjectSchemeMap = getSubjectScheme(root);
     final List<FilterUtils> baseFilter = getBaseFilter(subjectSchemeMap);
     filterBranches(root, baseFilter, props, subjectSchemeMap);
   }
 
   private List<FilterUtils> getBaseFilter(final SubjectScheme subjectSchemeMap) {
-    if (ditavalFile != null && !subjectSchemeMap.isEmpty()) {
+    if (ditavalFile != null && !subjectSchemeMap.subjectSchemeMap().isEmpty()) {
       final FilterUtils f = getFilterUtils(ditavalFile).refine(subjectSchemeMap);
       return singletonList(f);
     }

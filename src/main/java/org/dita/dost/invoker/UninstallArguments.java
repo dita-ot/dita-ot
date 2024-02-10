@@ -73,11 +73,11 @@ public class UninstallArguments extends Arguments {
   }
 
   @Override
-  void printUsage(final boolean compact) {
-    UsageBuilder
-      .builder(compact)
+  String getUsage(final boolean compact) {
+    return UsageBuilder
+      .builder(compact, useColor)
       .usage(locale.getString("uninstall.usage"))
       .arguments(null, null, "id", locale.getString("uninstall.argument.id"))
-      .print();
+      .build();
   }
 }

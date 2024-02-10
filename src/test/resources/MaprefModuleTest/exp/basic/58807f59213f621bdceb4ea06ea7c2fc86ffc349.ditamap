@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" audience="novice" cascade="nomerge"
+     class="- map/map " ditaarch:DITAArchVersion="1.3"
+     domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+     specializations="@props/deliveryTarget">
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            dita-ot:orig-class="+ map/topicref mapgroup-d/mapref " dita-ot:orig-format="ditamap"
+            dita-ot:orig-href="f1de8cb986a52d8ed0133cb2cc44d4823f150e93.ditamap" dita-ot:submap-DITAArchVersion="1.3"
+            dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map "
+            dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+            dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget" product="osx">
+      <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+          Map
+        </submap-title>
+      </submap-topicmeta>
+      <topicref class="- map/topicref " href="93cd2060f88749614d44c00dade0e78c437afbc8.dita" otherprops="other"
+                props="props"/>
+    </submap>
+    <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " format="ditamap"
+            href="f1de8cb986a52d8ed0133cb2cc44d4823f150e93.ditamap" keys="A" processing-role="resource-only"/>
+    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            dita-ot:orig-class="+ map/topicref mapgroup-d/mapref " dita-ot:orig-format="ditamap"
+            dita-ot:orig-href="f1de8cb986a52d8ed0133cb2cc44d4823f150e93.ditamap" dita-ot:submap-DITAArchVersion="1.3"
+            dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map "
+            dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+            dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget">
+      <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+          Map
+        </submap-title>
+      </submap-topicmeta>
+      <topicref class="- map/topicref " href="93cd2060f88749614d44c00dade0e78c437afbc8.dita" otherprops="other"
+                props="props"/>
+    </submap>
+    <mapref class="+ map/topicref mapgroup-d/mapref " format="ditamap" keyref="A"/>
+    <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " format="ditamap"
+            href="f1de8cb986a52d8ed0133cb2cc44d4823f150e93.ditamap" keys="B" processing-role="resource-only"/>
+    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            dita-ot:orig-class="+ map/topicref mapgroup-d/mapref " dita-ot:orig-format="ditamap"
+            dita-ot:orig-href="f1de8cb986a52d8ed0133cb2cc44d4823f150e93.ditamap" dita-ot:submap-DITAArchVersion="1.3"
+            dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map "
+            dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+            dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget">
+      <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+          Map
+        </submap-title>
+      </submap-topicmeta>
+      <topicref class="- map/topicref " href="93cd2060f88749614d44c00dade0e78c437afbc8.dita" otherprops="other"
+                props="props"/>
+    </submap>
+    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+            dita-ot:orig-class="+ map/topicref mapgroup-d/mapref " dita-ot:orig-format="ditamap"
+            dita-ot:orig-href="907876965ae3c4f4a6a10fd90639d07d5b82d618.ditamap" dita-ot:submap-DITAArchVersion="1.3"
+            dita-ot:submap-cascade="nomerge" dita-ot:submap-class="- map/map "
+            dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+            dita-ot:submap-specializations="@props/deliveryTarget" keyref="B">
+      <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+          Map
+        </submap-title>
+      </submap-topicmeta>
+      <topicref class="- map/topicref " href="37661754edbfa28e7abc3f45365e412f3e0a14cd.dita"/>
+    </submap>
+    <mapref class="+ map/topicref mapgroup-d/mapref " format="ditamap" href="peer.ditamap" scope="peer"/>
+  </topicgroup>
+</map>

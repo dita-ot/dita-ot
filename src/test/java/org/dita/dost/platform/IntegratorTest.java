@@ -143,6 +143,10 @@ public class IntegratorTest {
           .toString()
       )
     );
+    assertXMLEqual(
+      new InputSource(Paths.get(expDir.getAbsolutePath(), "config", "messages.xml").toUri().toString()),
+      new InputSource(Paths.get(tempDir.getAbsolutePath(), "config", "messages.xml").toUri().toString())
+    );
   }
 
   @Test

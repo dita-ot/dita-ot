@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
 -->
 <!-- write technique adapted from Norman Walsh's DocBook XSLT
      first instance technique adapted from Jeni Tennison and Steve Muench -->
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:key name="topicref"

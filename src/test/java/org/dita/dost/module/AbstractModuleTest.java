@@ -50,7 +50,7 @@ public abstract class AbstractModuleTest {
   @TempDir
   protected File tempBaseDir;
 
-  private final DocumentBuilder builder;
+  protected final DocumentBuilder builder;
   protected String testCase;
   protected Map<String, String> params = Collections.emptyMap();
   protected boolean parallel;
@@ -226,15 +226,7 @@ public abstract class AbstractModuleTest {
       } else {
         final Document expDoc = getDocument(exp);
         final Document actDoc = store.getDocument(act.toURI());
-        //                assertXMLEqual("Comparing " + exp + " to " + act + ":",
-        //                        expDoc, actDoc);
-        try {
-          assertXMLEqual(expDoc, actDoc);
-        } catch (AssertionError e) {
-          System.out.println(exp);
-          Files.copy(act.toPath(), System.out);
-          throw e;
-        }
+        assertXMLEqual(expDoc, actDoc);
       }
     }
     if (new File(expDir, ".job.xml").exists()) {

@@ -611,11 +611,11 @@ public abstract class AbstractIntegrationTest {
 
   static class TestListener implements BuildListener {
 
-    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
-    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");
-    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]\\[WARN\\]");
-    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
-    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
+    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]");
+    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]");
+    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]");
+    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]");
+    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]");
 
     public final List<TestListener.Message> messages = new ArrayList<>();
     final PrintStream out;
@@ -626,37 +626,37 @@ public abstract class AbstractIntegrationTest {
       this.err = err;
     }
 
-    //@Override
+    @Override
     public void buildStarted(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
     }
 
-    //@Override
+    @Override
     public void buildFinished(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
     }
 
-    //@Override
+    @Override
     public void targetStarted(BuildEvent event) {
       messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
     }
 
-    //@Override
+    @Override
     public void targetFinished(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
     }
 
-    //@Override
+    @Override
     public void taskStarted(BuildEvent event) {
       messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
     }
 
-    //@Override
+    @Override
     public void taskFinished(BuildEvent event) {
       messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
     }
 
-    //@Override
+    @Override
     public void messageLogged(BuildEvent event) {
       final String message = event.getMessage();
       int level;

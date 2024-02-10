@@ -90,9 +90,9 @@ public abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
       final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
       try {
         reader.setProperty(FEATURE_GRAMMAR_POOL, grammarPool);
-        logger.info("Using Xerces grammar pool for DTD and schema caching.");
+        logger.debug("Using Xerces grammar pool for DTD and schema caching.");
       } catch (final NoClassDefFoundError e) {
-        logger.debug("Xerces not available, not using grammar caching");
+        logger.warn("Xerces not available, not using grammar caching");
       } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
         logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
       }

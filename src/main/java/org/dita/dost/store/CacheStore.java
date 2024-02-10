@@ -219,7 +219,7 @@ public class CacheStore extends AbstractStore implements Store {
         if (entry.doc != null) {
           return (Document) entry.doc.cloneNode(true);
         } else if (entry.node != null) {
-          return cloneDocument(entry.node);
+          return xmlUtils.cloneDocument(entry.node);
         } else if (entry.bytes != null) {
           try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
             final InputSource inputSource = new InputSource(in);
@@ -611,22 +611,6 @@ public class CacheStore extends AbstractStore implements Store {
       return source;
     } else {
       throw new IllegalArgumentException();
-    }
-  }
-
-  private Document cloneDocument(final XdmNode node) throws IOException {
-    try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
-      final DOMDestination destination = new DOMDestination(doc);
-      final Receiver receiver = destination.getReceiver(
-        xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
-        new SerializationProperties()
-      );
-      Sender.send(node.asSource(), receiver, new ParseOptions());
-      // Don't save mutable doc into cache
-      return doc;
-    } catch (XPathException e) {
-      throw new IOException(e);
     }
   }
 

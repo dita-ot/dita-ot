@@ -12,7 +12,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot related-links dita2html ditamsg ">
   
   <!-- Determines whether to generate titles for task sections. Values are YES and NO. -->
@@ -696,16 +696,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="generate-task-label">
     <xsl:param name="use-label"/>
     <xsl:if test="$GENERATE-TASK-LABELS='YES'">
-      <xsl:variable name="headLevel">
-        <xsl:variable name="headCount" select="count(ancestor::*[contains(@class,' topic/topic ')]) + 1"
-          as="xs:integer"/>
-        <xsl:choose>
-          <xsl:when test="$headCount > 6">h6</xsl:when>
-          <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
       <div class="tasklabel">
-        <xsl:element name="{$headLevel}">
+        <xsl:element name="h{min((6, dita2html:get-heading-level(.) + 1))}">
           <xsl:attribute name="class">sectiontitle tasklabel</xsl:attribute>
           <xsl:value-of select="$use-label"/>
         </xsl:element>
