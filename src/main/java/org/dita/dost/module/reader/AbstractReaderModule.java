@@ -221,8 +221,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } catch (final SAXNotRecognizedException e) {
           // Not Xerces, ignore exception
         }
-      } else {
-        logger.warn(MessageUtils.getMessage("DOTJ037W").toString());
       }
       if (gramcache) {
         final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
