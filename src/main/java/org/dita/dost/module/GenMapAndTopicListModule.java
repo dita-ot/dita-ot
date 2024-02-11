@@ -811,21 +811,21 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
     for (final URI file : fullTopicSet) {
       final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
-      if (ff.format == null) {
-        ff.format = sourceFormat.getOrDefault(ff.src, ATTR_FORMAT_VALUE_DITA);
+      if (ff.format() == null) {
+        ff.format = sourceFormat.getOrDefault(ff.src(), ATTR_FORMAT_VALUE_DITA);
       }
     }
     for (final URI file : fullMapSet) {
       final FileInfo ff = getOrCreateFileInfo(fileinfos, file);
-      if (ff.format == null) {
-        ff.format = sourceFormat.getOrDefault(ff.src, ATTR_FORMAT_VALUE_DITAMAP);
+      if (ff.format() == null) {
+        ff.format = sourceFormat.getOrDefault(ff.src(), ATTR_FORMAT_VALUE_DITAMAP);
       }
     }
     for (final URI file : hrefTopicSet) {
       final FileInfo f = getOrCreateFileInfo(fileinfos, file);
       f.hasLink = true;
-      if (f.format == null && sourceFormat.containsKey(f.src)) {
-        f.format = sourceFormat.get(f.src);
+      if (f.format() == null && sourceFormat.containsKey(f.src())) {
+        f.format = sourceFormat.get(f.src());
       }
     }
     for (final URI file : conrefSet) {
@@ -847,8 +847,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     for (final URI file : hrefTargetSet) {
       final FileInfo f = getOrCreateFileInfo(fileinfos, file);
       f.isTarget = true;
-      if (f.format == null && sourceFormat.containsKey(f.src)) {
-        f.format = sourceFormat.get(f.src);
+      if (f.format() == null && sourceFormat.containsKey(f.src())) {
+        f.format = sourceFormat.get(f.src());
       }
     }
     for (final URI file : schemeSet) {
@@ -857,7 +857,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     for (final URI file : coderefTargetSet) {
       final FileInfo f = getOrCreateFileInfo(fileinfos, file);
       f.isSubtarget = true;
-      if (f.format == null) {
+      if (f.format() == null) {
         f.format = PR_D_CODEREF.localName;
       }
     }
@@ -882,8 +882,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     final Map<URI, URI> filteredCopyTo = filterConflictingCopyTo(copyTo, fileinfos.values());
 
     for (final FileInfo fs : fileinfos.values()) {
-      if (!failureList.contains(fs.src)) {
-        final URI src = filteredCopyTo.get(fs.src);
+      if (!failureList.contains(fs.src())) {
+        final URI src = filteredCopyTo.get(fs.src());
         // correct copy-to
         if (src != null) {
           final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
@@ -933,8 +933,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
   private Map<URI, URI> filterConflictingCopyTo(final Map<URI, URI> copyTo, final Collection<FileInfo> fileInfos) {
     final Set<URI> fileinfoTargets = fileInfos
       .stream()
-      .filter(fi -> fi.src.equals(fi.result))
-      .map(fi -> fi.result)
+      .filter(fi -> fi.src().equals(fi.result()))
+      .map(fi -> fi.result())
       .collect(Collectors.toSet());
     return copyTo
       .entrySet()
@@ -989,7 +989,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
     b = b.uri(tempFileNameScheme.generateTempFileName(file));
     final FileInfo i = b.build();
-    fileInfos.put(i.src, i);
+    fileInfos.put(i.src(), i);
     return i;
   }
 

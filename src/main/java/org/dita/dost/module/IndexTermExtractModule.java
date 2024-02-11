@@ -87,8 +87,8 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     final String encoding = input.getAttribute(ANT_INVOKER_EXT_PARAM_ENCODING);
     final String indextype = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXTYPE);
     final String indexclass = input.getAttribute(ANT_INVOKER_EXT_PARAM_INDEXCLASS);
-    final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    inputMap = new File(job.tempDirURI.resolve(in.uri));
+    final FileInfo in = job.getFileInfo(fi -> fi.isInput()).iterator().next();
+    inputMap = new File(job.tempDirURI.resolve(in.uri()));
     targetExt = input.getAttribute(ANT_INVOKER_EXT_PARAM_TARGETEXT);
 
     /*
@@ -96,14 +96,14 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
      */
     topicList = new ArrayList<>();
     for (final FileInfo f : job.getFileInfo()) {
-      if (ATTR_FORMAT_VALUE_DITA.equals(f.format) && !f.isResourceOnly) {
-        topicList.add(job.tempDirURI.resolve(f.uri));
+      if (ATTR_FORMAT_VALUE_DITA.equals(f.format()) && !f.isResourceOnly()) {
+        topicList.add(job.tempDirURI.resolve(f.uri()));
       }
     }
     ditamapList = new ArrayList<>();
     for (final FileInfo f : job.getFileInfo()) {
-      if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format) && !f.isResourceOnly) {
-        ditamapList.add(job.tempDirURI.resolve(f.uri));
+      if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format()) && !f.isResourceOnly()) {
+        ditamapList.add(job.tempDirURI.resolve(f.uri()));
       }
     }
 
@@ -127,8 +127,8 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     final DitamapIndexTermReader ditamapIndexTermReader = new DitamapIndexTermReader(indexTermCollection, true);
     ditamapIndexTermReader.setLogger(logger);
 
-    final FileInfo fileInfo = job.getFileInfo(f -> f.isInput).iterator().next();
-    final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri);
+    final FileInfo fileInfo = job.getFileInfo(f -> f.isInput()).iterator().next();
+    final URI tempInputMap = job.tempDirURI.resolve(fileInfo.uri());
     for (final URI aTopicList : topicList) {
       URI target;
       String targetPathFromMap;

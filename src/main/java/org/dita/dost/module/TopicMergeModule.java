@@ -54,8 +54,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
     if (logger == null) {
       throw new IllegalStateException("Logger not set");
     }
-    final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    final File ditaInput = new File(job.tempDirURI.resolve(in.uri));
+    final FileInfo in = job.getFileInfo(fi -> fi.isInput()).iterator().next();
+    final File ditaInput = new File(job.tempDirURI.resolve(in.uri()));
     if (!job.getStore().exists(ditaInput.toURI())) {
       logger.error(MessageUtils.getMessage("DOTJ025E").toString());
       return null;

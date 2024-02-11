@@ -49,11 +49,11 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
    */
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+    final FileInfo fi = job.getFileInfo(f -> f.isInput()).iterator().next();
+    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
       return null;
     }
-    final File inputFile = new File(job.tempDirURI.resolve(fi.uri));
+    final File inputFile = new File(job.tempDirURI.resolve(fi.uri()));
     final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
     Document doc;

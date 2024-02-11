@@ -8,12 +8,16 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.URLUtils.setFragment;
+import static org.dita.dost.util.URLUtils.stripFragment;
 
 import java.net.URI;
 import java.util.Optional;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.*;
+import org.dita.dost.util.KeyDef;
+import org.dita.dost.util.KeyScope;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -75,7 +79,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
    * @return updated href URI
    */
   private URI getRelativePath(final URI keyMap, final URI href) {
-    final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap)).map(fi -> fi.uri).orElse(null);
+    final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap)).map(fi -> fi.uri()).orElse(null);
     final URI keyValue;
     if (inputMap != null) {
       final URI tmpMap = job.tempDirURI.resolve(inputMap);

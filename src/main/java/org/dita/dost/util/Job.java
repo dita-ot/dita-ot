@@ -14,10 +14,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -28,16 +25,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
 import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -245,9 +239,12 @@ public final class Job {
           final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
           FileInfo i;
           if (uri != null) {
-            i = new FileInfo(src, uri, toFile(uri));
+            i = new FileInfo(uri, toFile(uri));
           } else {
-            i = new FileInfo(src, toURI(path), path);
+            i = new FileInfo(toURI(path), path);
+          }
+          if (src != null) {
+            i.src = src;
           }
           i.result = toURI(atts.getValue(ATTRIBUTE_RESULT));
           if (i.result == null) {
@@ -577,7 +574,7 @@ public final class Job {
     }
     FileInfo i = getFileInfo(file);
     if (i == null) {
-      i = new FileInfo(f);
+      i = FileInfo.builder().uri(f).file(toFile(f)).build();
       add(i);
     }
     return i;
@@ -638,20 +635,86 @@ public final class Job {
     /** Additional input resource. */
     public boolean isInputResource;
 
-    FileInfo(final URI src, final URI uri, final File file) {
+    FileInfo(final URI uri, final File file) {
       if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = src;
       this.uri = uri != null ? uri : toURI(file);
       this.file = uri != null ? toFile(uri) : file;
-      this.result = src;
     }
 
-    FileInfo(final URI uri) {
-      if (uri == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = null;
-      this.uri = uri;
-      this.file = toFile(uri);
-      this.result = src;
+    public URI src() {
+      return src;
+    }
+
+    public URI uri() {
+      return uri;
+    }
+
+    public File file() {
+      return file;
+    }
+
+    public URI result() {
+      return result;
+    }
+
+    public String format() {
+      return format;
+    }
+
+    public boolean hasConref() {
+      return hasConref;
+    }
+
+    public boolean isChunked() {
+      return isChunked;
+    }
+
+    public boolean hasLink() {
+      return hasLink;
+    }
+
+    public boolean isResourceOnly() {
+      return isResourceOnly;
+    }
+
+    public boolean isTarget() {
+      return isTarget;
+    }
+
+    public boolean isConrefPush() {
+      return isConrefPush;
+    }
+
+    public boolean hasKeyref() {
+      return hasKeyref;
+    }
+
+    public boolean hasCoderef() {
+      return hasCoderef;
+    }
+
+    public boolean isSubjectScheme() {
+      return isSubjectScheme;
+    }
+
+    public boolean isSubtarget() {
+      return isSubtarget;
+    }
+
+    public boolean isFlagImage() {
+      return isFlagImage;
+    }
+
+    public boolean isOutDita() {
+      return isOutDita;
+    }
+
+    public boolean isInput() {
+      return isInput;
+    }
+
+    public boolean isInputResource() {
+      return isInputResource;
     }
 
     @Override
@@ -808,6 +871,82 @@ public final class Job {
         isInputResource = orig.isInputResource;
       }
 
+      public URI src() {
+        return src;
+      }
+
+      public URI uri() {
+        return uri;
+      }
+
+      public File file() {
+        return file;
+      }
+
+      public URI result() {
+        return result;
+      }
+
+      public String format() {
+        return format;
+      }
+
+      public boolean hasConref() {
+        return hasConref;
+      }
+
+      public boolean isChunked() {
+        return isChunked;
+      }
+
+      public boolean hasLink() {
+        return hasLink;
+      }
+
+      public boolean isResourceOnly() {
+        return isResourceOnly;
+      }
+
+      public boolean isTarget() {
+        return isTarget;
+      }
+
+      public boolean isConrefPush() {
+        return isConrefPush;
+      }
+
+      public boolean hasKeyref() {
+        return hasKeyref;
+      }
+
+      public boolean hasCoderef() {
+        return hasCoderef;
+      }
+
+      public boolean isSubjectScheme() {
+        return isSubjectScheme;
+      }
+
+      public boolean isSubtarget() {
+        return isSubtarget;
+      }
+
+      public boolean isFlagImage() {
+        return isFlagImage;
+      }
+
+      public boolean isOutDita() {
+        return isOutDita;
+      }
+
+      public boolean isInput() {
+        return isInput;
+      }
+
+      public boolean isInputResource() {
+        return isInputResource;
+      }
+
       /**
        * Add file info to this builder. Only non-null and true values will be added.
        */
@@ -957,10 +1096,9 @@ public final class Job {
         if (uri == null && file == null) {
           throw new IllegalStateException("uri and file may not be null");
         }
-        final FileInfo fi = new FileInfo(src, uri, file);
-        if (result != null) {
-          fi.result = result;
-        }
+        final FileInfo fi = new FileInfo(uri, file);
+        fi.src = src;
+        fi.result = result != null ? result : src;
         fi.format = format;
         fi.hasConref = hasConref;
         fi.isChunked = isChunked;

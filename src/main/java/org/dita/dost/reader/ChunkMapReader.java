@@ -480,13 +480,13 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     URI outputFileName;
     if (copyTo != null) {
-      outputFileName = curr.result.resolve(copyTo);
+      outputFileName = curr.result().resolve(copyTo);
     } else if (id != null) {
-      outputFileName = curr.result.resolve(id + FILE_EXTENSION_DITA);
+      outputFileName = curr.result().resolve(id + FILE_EXTENSION_DITA);
     } else {
-      final Set<URI> results = job.getFileInfo().stream().map(fi -> fi.result).collect(Collectors.toSet());
+      final Set<URI> results = job.getFileInfo().stream().map(fi -> fi.result()).collect(Collectors.toSet());
       do {
-        outputFileName = curr.result.resolve(generateFilename());
+        outputFileName = curr.result().resolve(generateFilename());
       } while (results.contains(outputFileName));
     }
     return outputFileName;

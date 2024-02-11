@@ -7,7 +7,7 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.URI_SEPARATOR;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.Job.FileInfo.Builder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +21,17 @@ public final class FileInfoTest {
 
   @Test
   public void testURIConstructor() throws URISyntaxException {
-    final FileInfo f = new FileInfo(new URI("foo" + URI_SEPARATOR + "bar"));
+    final URI uri = new URI("foo" + URI_SEPARATOR + "bar");
+    final FileInfo f = new FileInfo(uri, null);
     assertEquals(new File("foo" + File.separator + "bar"), f.file);
+    assertEquals(uri, f.uri);
+  }
+
+  @Test
+  public void testFileConstructor() throws URISyntaxException {
+    final File file = new File("foo" + File.separator + "bar");
+    final FileInfo f = new FileInfo(null, file);
+    assertEquals(file, f.file);
     assertEquals(new URI("foo" + URI_SEPARATOR + "bar"), f.uri);
   }
 

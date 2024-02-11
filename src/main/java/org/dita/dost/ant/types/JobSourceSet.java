@@ -58,26 +58,26 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
       final Job job = getJob();
       res = new ArrayList<>();
       for (final FileInfo f : job.getFileInfo(this::filter)) {
-        log("Scanning for " + f.file.getPath(), Project.MSG_VERBOSE);
-        final File tempFile = new File(job.tempDirURI.resolve(f.uri));
+        log("Scanning for " + f.file().getPath(), Project.MSG_VERBOSE);
+        final File tempFile = new File(job.tempDirURI.resolve(f.uri()));
         if (job.getStore().exists(tempFile.toURI())) {
           log("Found temporary directory file " + tempFile, Project.MSG_VERBOSE);
-          res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri)));
-        } else if (f.src != null && Objects.equals(f.src.getScheme(), "file")) {
-          final File srcFile = new File(URLUtils.setQuery(f.src, null));
+          res.add(new StoreResource(job, job.tempDirURI.relativize(f.uri())));
+        } else if (f.src() != null && Objects.equals(f.src().getScheme(), "file")) {
+          final File srcFile = new File(URLUtils.setQuery(f.src(), null));
           if (srcFile.exists()) {
             log("Found source directory file " + srcFile, Project.MSG_VERBOSE);
             final File rel = FileUtils.getRelativePath(new File(new File(job.getInputDir()), "dummy"), srcFile);
             res.add(new FileResource(toFile(job.getInputDir()), rel.getPath()));
           } else {
-            log("File " + f.src + " not found", Project.MSG_ERR);
+            log("File " + f.src() + " not found", Project.MSG_ERR);
           }
-        } else if (f.src != null && Objects.equals(f.src.getScheme(), "data")) {
+        } else if (f.src() != null && Objects.equals(f.src().getScheme(), "data")) {
           log("Ignore data URI", Project.MSG_VERBOSE);
         } else {
-          log("Found source URI " + f.src, Project.MSG_VERBOSE);
+          log("Found source URI " + f.src(), Project.MSG_VERBOSE);
           try {
-            final JobResource r = new JobResource(job.getInputDir().toURL(), f.uri.toString());
+            final JobResource r = new JobResource(job.getInputDir().toURL(), f.uri().toString());
             res.add(r);
           } catch (final MalformedURLException e) {
             throw new IllegalArgumentException(e);
@@ -162,13 +162,13 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
   }
 
   private boolean filter(final FileInfo f, final SelectorElem incl) {
-    final String format = f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA;
+    final String format = f.format() != null ? f.format() : ATTR_FORMAT_VALUE_DITA;
     return (
       (incl.formats.isEmpty() || (incl.formats.contains(format))) &&
-      (incl.hasConref == null || f.hasConref == incl.hasConref) &&
-      (incl.isInput == null || f.isInput == incl.isInput) &&
-      (incl.isInputResource == null || f.isInputResource == incl.isInputResource) &&
-      (incl.isResourceOnly == null || f.isResourceOnly == incl.isResourceOnly)
+      (incl.hasConref == null || f.hasConref() == incl.hasConref) &&
+      (incl.isInput == null || f.isInput() == incl.isInput) &&
+      (incl.isInputResource == null || f.isInputResource() == incl.isInputResource) &&
+      (incl.isResourceOnly == null || f.isResourceOnly() == incl.isResourceOnly)
     );
   }
 

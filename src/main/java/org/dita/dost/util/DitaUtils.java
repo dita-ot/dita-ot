@@ -20,7 +20,7 @@ public class DitaUtils {
   }
 
   public static boolean isDitaFormat(final Job.FileInfo fi) {
-    return isDitaFormat(fi.format);
+    return isDitaFormat(fi.format());
   }
 
   public static boolean isDitaFormat(final String format) {

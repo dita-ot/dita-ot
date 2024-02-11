@@ -739,8 +739,8 @@ public final class FilterUtils {
       final Job.FileInfo flagFi = job.getFileInfo(img.href);
       if (flagFi != null) {
         final Job.FileInfo current = job.getFileInfo(currentFile);
-        final URI flag = job.tempDirURI.resolve(flagFi.uri);
-        final URI curr = job.tempDirURI.resolve(current.uri);
+        final URI flag = job.tempDirURI.resolve(flagFi.uri());
+        final URI curr = job.tempDirURI.resolve(current.uri());
         rel = URLUtils.getRelativePath(curr, flag);
       } else {
         rel = img.href;

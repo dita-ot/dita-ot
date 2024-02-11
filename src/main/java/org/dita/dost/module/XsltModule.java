@@ -80,7 +80,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
       final Collection<Job.FileInfo> res = job.getFileInfo(fileInfoFilter);
       includes = new ArrayList<>(res.size());
       for (final Job.FileInfo f : res) {
-        includes.add(f.file);
+        includes.add(f.file());
       }
       baseDir = job.tempDir;
     }

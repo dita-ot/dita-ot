@@ -53,8 +53,8 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    processMap(in.uri);
+    final FileInfo in = job.getFileInfo(fi -> fi.isInput()).iterator().next();
+    processMap(in.uri());
 
     addFlagImagesSetToProperties(job, relFlagImagesSet);
 

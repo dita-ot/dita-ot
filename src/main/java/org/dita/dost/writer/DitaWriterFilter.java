@@ -239,8 +239,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         final FileInfo f = job.getFileInfo(current);
         if (f != null) {
           final FileInfo cfi = job.getFileInfo(currentFile);
-          final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
-          final URI targetTemp = job.tempDirURI.resolve(f.uri);
+          final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri());
+          final URI targetTemp = job.tempDirURI.resolve(f.uri());
           attValue = getRelativePath(currrentFileTemp, targetTemp);
         } else if (tempFileNameScheme != null) {
           final URI currrentFileTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(currentFile));

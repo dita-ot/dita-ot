@@ -117,7 +117,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
     final URI tmp = currentFile.resolve(href);
     final FileInfo fi = job.getFileInfo(tmp);
-    final URI ditaval = fi.src;
+    final URI ditaval = fi.src();
     return filterCache.computeIfAbsent(ditaval, this::getFilterUtils);
   }
 

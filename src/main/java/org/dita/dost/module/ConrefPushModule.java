@@ -32,14 +32,14 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
     final Collection<FileInfo> fis = job
       .getFileInfo(fileInfoFilter)
       .stream()
-      .filter(f -> f.isConrefPush)
+      .filter(f -> f.isConrefPush())
       .collect(Collectors.toList());
     if (!fis.isEmpty()) {
       final ConrefPushReader reader = new ConrefPushReader();
       reader.setLogger(logger);
       reader.setJob(job);
       for (final FileInfo f : fis) {
-        final File file = new File(job.tempDirURI.resolve(f.uri));
+        final File file = new File(job.tempDirURI.resolve(f.uri()));
         logger.info("Reading " + file.toURI());
         //FIXME: this reader calculate parent directory
         reader.read(file.getAbsoluteFile());

@@ -33,15 +33,15 @@ public class TopicCleanFilter extends AbstractXMLFilter {
 
   @Override
   public void startDocument() throws SAXException {
-    final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
+    final int stepsToRootDir = fi.result().getPath().split("/").length - 1;
     pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
     pathToMapDir =
       job
-        .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
+        .getFileInfo(fi -> fi.isInput() && Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP))
         .stream()
         .findAny()
         .map(startFile -> {
-          final String relativePath = getRelativePath(fi.uri, startFile.uri).resolve(".").getPath();
+          final String relativePath = getRelativePath(fi.uri(), startFile.uri()).resolve(".").getPath();
           //          return relativePath.getPath().split("/").length;
           return relativePath;
         })

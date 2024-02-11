@@ -79,7 +79,7 @@ public class LinkFilter extends AbstractXMLFilter {
     final FileInfo targetFileInfo = job.getFileInfo(targetAbs);
     final FileInfo sourceFileInfo = job.getFileInfo(currentFile);
     if (targetFileInfo != null && sourceFileInfo != null) {
-      final URI relTarget = URLUtils.getRelativePath(sourceFileInfo.result, targetFileInfo.result);
+      final URI relTarget = URLUtils.getRelativePath(sourceFileInfo.result(), targetFileInfo.result());
       return setFragment(relTarget, target.getFragment());
     } else {
       return target;
