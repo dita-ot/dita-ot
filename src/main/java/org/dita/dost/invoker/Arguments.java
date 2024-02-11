@@ -305,4 +305,15 @@ abstract class Arguments {
       }
     }
   }
+
+  /**
+   * Get argument name
+   */
+  String getArgumentName(final String arg) {
+    int pos = arg.indexOf("=");
+    if (pos == -1) {
+      pos = arg.indexOf(":");
+    }
+    return arg.substring(0, pos != -1 ? pos : arg.length());
+  }
 }
