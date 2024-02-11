@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2024 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
+<plugin id="org.dita.validate" version="${version}">
+  <extension-point id="depend.validate" name="Validation target"/>
+  <template file="build_template.xml"/>
+  <feature extension="ant.import" file="build.xml"/>
+  <transtype name="validate" desc="Validate"/>
+</plugin>
