@@ -291,17 +291,6 @@ public class ConversionArguments extends Arguments {
   }
 
   /**
-   * Get argument name
-   */
-  private String getArgumentName(final String arg) {
-    int pos = arg.indexOf("=");
-    if (pos == -1) {
-      pos = arg.indexOf(":");
-    }
-    return arg.substring(0, pos != -1 ? pos : arg.length());
-  }
-
-  /**
    * Handle the --logger argument.
    */
   private void handleArgLogger(final Deque<String> args) {
@@ -414,6 +403,7 @@ public class ConversionArguments extends Arguments {
       .subcommands("plugins", locale.getString("conversion.subcommand.plugins"))
       .subcommands("transtypes", locale.getString("conversion.subcommand.transtypes"))
       .subcommands("uninstall", locale.getString("conversion.subcommand.uninstall"))
+      .subcommands("validate", locale.getString("conversion.subcommand.validate"))
       .subcommands("version", locale.getString("conversion.subcommand.version"))
       .arguments("i", "input", "file", locale.getString("conversion.argument.input"))
       .arguments("f", "format", "name", locale.getString("conversion.argument.format"))
