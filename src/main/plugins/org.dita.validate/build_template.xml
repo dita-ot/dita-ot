@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2024 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
+<project xmlns:dita="http://dita-ot.sourceforge.net">
+
+  <target name="dita2validate"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="build-init,
+                   preprocess2,
+                   {depend.validate}"/>
+
+</project>
