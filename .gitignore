@@ -57,6 +57,7 @@ src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_fop.xsl
 src/main/plugins/org.dita.pdf2/xsl/fo/topic2fo_shell_xep.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-ast-shell.xsl
 src/main/plugins/org.dita.troff/xsl/dita2troff-step2-shell.xsl
+src/main/plugins/org.dita.validate/build.xml
 src/main/plugins/org.dita.xhtml/build_dita2xhtml.xml
 src/main/plugins/org.dita.xhtml/build_general.xml
 src/main/plugins/org.dita.xhtml/xsl/dita2html-base.xsl
