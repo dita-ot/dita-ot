@@ -10,8 +10,17 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita2validate"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          dita:depends="build-init,
-                   preprocess2,
-                   {depend.validate}"/>
+          dita:depends="validate-init,
+                        build-init,
+                        preprocess2,
+                        {depend.validate}"/>
+
+  <target name="validate-init">
+    <property name="build-step.clean-map-check" value="false"/>
+    <property name="build-step.clean-preprocess" value="false"/>
+    <property name="build-step.copy-image" value="false"/>
+    <property name="build-step.copy-html" value="false"/>
+    <property name="build-step.copy-flag" value="false"/>
+  </target>
 
 </project>
