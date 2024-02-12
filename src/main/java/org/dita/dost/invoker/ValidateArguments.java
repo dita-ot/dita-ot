@@ -59,7 +59,7 @@ class ValidateArguments extends Arguments {
       } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-context")) {
-        handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+        handleContext(arg, args);
       } else if (isLongForm(arg, "-filter")) {
         handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
@@ -79,6 +79,14 @@ class ValidateArguments extends Arguments {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }
     return this;
+  }
+
+  private void handleContext(final String arg, final Deque<String> args) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null) {
+      throw new BuildException("Missing value for %s %s".formatted(arg, entry.getKey()));
+    }
+    definedProps.put(ARGUMENTS.get(getArgumentName(arg)).property, entry.getValue());
   }
 
   private void handleArgInput(final String arg, final Deque<String> args, final Argument argument) {
