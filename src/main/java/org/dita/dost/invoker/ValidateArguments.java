@@ -8,9 +8,11 @@
 
 package org.dita.dost.invoker;
 
+import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.util.*;
 import org.apache.tools.ant.BuildException;
@@ -68,6 +70,10 @@ class ValidateArguments extends Arguments {
         msgOutputLevel = Project.MSG_INFO;
       } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
         msgOutputLevel = Project.MSG_VERBOSE;
+      } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
+        definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
+      } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
+        definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
       } else {
         parseCommonOptions(arg, args);
       }
@@ -81,10 +87,21 @@ class ValidateArguments extends Arguments {
     return this;
   }
 
+  /**
+   * Handler parameter argument
+   */
+  private Map<String, Object> handleParameterArg(final String arg, final Deque<String> args, final Argument argument) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null) {
+      throw new BuildException("Missing value for property %s".formatted(entry.getKey()));
+    }
+    return ImmutableMap.of(argument.property, argument.getValue(entry.getValue()));
+  }
+
   private void handleContext(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null) {
-      throw new BuildException("Missing value for %s %s".formatted(arg, entry.getKey()));
+      throw new BuildException("Missing value for property %s".formatted(entry.getKey()));
     }
     definedProps.put(ARGUMENTS.get(getArgumentName(arg)).property, entry.getValue());
   }
