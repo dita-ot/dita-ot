@@ -113,7 +113,7 @@ public final class StringUtils {
    * Parse {@code props} attribute specializations
    *
    * @param domains input domain
-   * @return list of {@code props} attribute specializations
+   * @return array of {@code props} attribute specializations
    */
   public static QName[][] getExtProps(final String domains) {
     // FIXME Dont' mix arrays and collections
@@ -134,7 +134,7 @@ public final class StringUtils {
    * Parse {@code props} attribute specializations
    *
    * @param specializations input domain
-   * @return list of {@code props} attribute specializations
+   * @return array of {@code props} attribute specializations
    */
   public static QName[][] getExtPropsFromSpecializations(final String specializations) {
     // FIXME Dont' mix arrays and collections

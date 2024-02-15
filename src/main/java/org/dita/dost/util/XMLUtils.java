@@ -915,8 +915,8 @@ public final class XMLUtils {
    * Get reader for input format
    *
    * @param format         input document format
-   * @param processingMode
-   * @return reader for given forma
+   * @param processingMode processing mode
+   * @return reader for given format
    * @throws SAXException if creating reader failed
    */
   public static Optional<XMLReader> getXmlReader(final String format, Configuration.Mode processingMode)

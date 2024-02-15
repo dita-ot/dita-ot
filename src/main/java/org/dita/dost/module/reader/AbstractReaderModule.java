@@ -207,7 +207,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * Init xml reader used for pipeline parsing.
    *
    * @param validate whether validate input file
-   * @throws SAXException parsing exception
+   * @throws DITAOTException parsing exception
    */
   void initXMLReader(final boolean validate) throws DITAOTException {
     try {
