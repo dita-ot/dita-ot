@@ -204,8 +204,8 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
     }
 
     if (indexTerm.hasSubTerms()) {
-      for (final Object subTerm : indexTerm.getSubTerms()) {
-        assignTarget((IndexTerm) subTerm, target);
+      for (final IndexTerm subTerm : indexTerm.getSubTerms()) {
+        assignTarget(subTerm, target);
       }
     }
   }
