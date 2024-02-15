@@ -614,22 +614,9 @@ public class CacheStore extends AbstractStore implements Store {
     }
   }
 
-  private static class Entry {
-
-    private final Document doc;
-    private final XdmNode node;
-    private final byte[] bytes;
-    private final long lastModified;
-
+  private record Entry(Document doc, XdmNode node, byte[] bytes, long lastModified) {
     private Entry(final Document doc, final XdmNode node, final byte[] bytes) {
       this(doc, node, bytes, System.currentTimeMillis());
-    }
-
-    private Entry(final Document doc, final XdmNode node, final byte[] bytes, final long lastModified) {
-      this.doc = doc;
-      this.node = node;
-      this.bytes = bytes;
-      this.lastModified = lastModified;
     }
   }
 }
