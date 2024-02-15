@@ -50,23 +50,15 @@ public class TopicCleanFilter extends AbstractXMLFilter {
 
   @Override
   public void processingInstruction(String target, String data) throws SAXException {
-    switch (target) {
-      case "path2project":
-        getContentHandler()
-          .processingInstruction(
-            target,
-            pathToRootDir.equals(SINGLE_URI_STEP) ? "" : pathToRootDir.replace('/', File.separatorChar)
-          );
-        break;
-      case "path2project-uri":
-        getContentHandler().processingInstruction(target, pathToRootDir);
-        break;
-      case "path2rootmap-uri":
-        getContentHandler().processingInstruction(target, pathToMapDir != null ? pathToMapDir : data);
-        break;
-      default:
-        getContentHandler().processingInstruction(target, data);
-        break;
-    }
+    final String res =
+      switch (target) {
+        case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)
+          ? ""
+          : pathToRootDir.replace('/', File.separatorChar);
+        case "path2project-uri" -> pathToRootDir;
+        case "path2rootmap-uri" -> pathToMapDir != null ? pathToMapDir : data;
+        default -> data;
+      };
+    getContentHandler().processingInstruction(target, res);
   }
 }

@@ -761,18 +761,18 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
     for (final XdmNode node : elem.children()) {
       switch (node.getNodeKind()) {
-        case ELEMENT:
+        case ELEMENT -> {
           // retain tm and text elements
           if (TOPIC_TM.matches(node) || TOPIC_TEXT.matches(node)) {
             domToSax(node, true, swapMapClass);
           } else {
             domToSax(node, retainElements, swapMapClass);
           }
-          break;
-        case TEXT:
+        }
+        case TEXT -> {
           final char[] ch = node.getStringValue().toCharArray();
           getContentHandler().characters(ch, 0, ch.length);
-          break;
+        }
       }
     }
     if (retainElements) {

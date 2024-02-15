@@ -410,16 +410,12 @@ public final class Integrator {
         switch (type) {
           case XMLEvent.START_ELEMENT:
             switch (src.getLocalName()) {
-              case "message":
+              case "message" -> {
                 id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
                 severity = src.getAttributeValue(XMLConstants.NULL_NS_URI, "type");
-                break;
-              case "reason":
-                reason = src.getElementText();
-                break;
-              case "response":
-                response = src.getElementText();
-                break;
+              }
+              case "reason" -> reason = src.getElementText();
+              case "response" -> response = src.getElementText();
             }
             break;
           case XMLEvent.END_ELEMENT:
@@ -537,20 +533,20 @@ public final class Integrator {
         while (src.hasNext()) {
           final int type = src.next();
           switch (type) {
-            case XMLEvent.START_ELEMENT:
+            case XMLEvent.START_ELEMENT -> {
               if (src.getLocalName().equals("message")) {
                 id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
               } else if (id != null) {
                 buf.append(src.getElementText()).append(' ');
               }
-              break;
-            case XMLEvent.END_ELEMENT:
+            }
+            case XMLEvent.END_ELEMENT -> {
               if (src.getLocalName().equals("message")) {
                 messages.put(id, convertMessage(buf.toString()));
                 id = null;
                 buf.delete(0, buf.length());
               }
-              break;
+            }
           }
         }
         src.close();
