@@ -696,8 +696,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
     job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-    final Set<URI> res = new HashSet<>();
-    res.addAll(listFilter.getResourceOnlySet());
+    final Set<URI> res = new HashSet<>(listFilter.getResourceOnlySet());
     res.removeAll(listFilter.getNormalProcessingRoleSet());
     resourceOnlySet.addAll(res);
 
