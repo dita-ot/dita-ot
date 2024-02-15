@@ -20,7 +20,6 @@ import com.thaiopensource.util.PropertyMap;
 import com.thaiopensource.util.VoidValue;
 import com.thaiopensource.validate.SchemaReader;
 import javax.xml.transform.sax.SAXSource;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.Locator;
 

@@ -15,7 +15,6 @@ import static org.dita.dost.util.URLUtils.toURI;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.dita.dost.exception.DITAOTException;
