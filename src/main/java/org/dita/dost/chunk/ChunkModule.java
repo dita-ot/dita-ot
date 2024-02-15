@@ -504,7 +504,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       .stream()
       .filter(chunk -> chunk.operation() == COMBINE)
       .map(chunk -> rewriteCombineChunk(mapFile, mapDoc, normalTopicRefs, rewriteMap, chunk).build())
-      .collect(Collectors.toUnmodifiableList());
+      .toList();
   }
 
   private ChunkBuilder rewriteCombineChunk(

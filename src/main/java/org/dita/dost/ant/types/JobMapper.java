@@ -12,7 +12,6 @@ import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.EnumeratedAttribute;
@@ -91,7 +90,7 @@ public class JobMapper implements FileNameMapper {
       return Arrays
         .stream(Type.values())
         .map(t -> t.toString().toLowerCase())
-        .collect(Collectors.toList())
+        .toList()
         .toArray(new String[Type.values().length]);
     }
   }

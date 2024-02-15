@@ -27,7 +27,7 @@ final class ListTranstypeAction extends ImportAction {
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
     final String separator = paramTable.getOrDefault("separator", "|");
-    final List<String> v = valueSet.stream().map(Value::value).distinct().sorted().collect(Collectors.toList());
+    final List<String> v = valueSet.stream().map(Value::value).distinct().sorted().toList();
     final StringBuilder retBuf = new StringBuilder();
     for (final Iterator<String> i = v.iterator(); i.hasNext();) {
       retBuf.append(i.next());

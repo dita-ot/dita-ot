@@ -122,7 +122,7 @@ public final class StringUtils {
     int propsEnd = domains.indexOf(")", propsStart);
     while (propsStart != -1 && propsEnd != -1) {
       final String propPath = domains.substring(propsStart + 2, propsEnd).trim();
-      final List<QName> propList = Stream.of(propPath.split("\\s+")).map(QName::valueOf).collect(Collectors.toList());
+      final List<QName> propList = Stream.of(propPath.split("\\s+")).map(QName::valueOf).toList();
       propsBuffer.add(propList.toArray(new QName[0]));
       propsStart = domains.indexOf("a(" + ATTRIBUTE_NAME_PROPS, propsEnd);
       propsEnd = domains.indexOf(")", propsStart);
@@ -141,14 +141,8 @@ public final class StringUtils {
     return Arrays
       .stream(specializations.trim().split("\\s+"))
       .filter(s -> !s.isEmpty())
-      .map(token ->
-        Arrays
-          .stream(token.substring(1).split("/"))
-          .map(QName::valueOf)
-          .collect(Collectors.toList())
-          .toArray(new QName[0])
-      )
-      .collect(Collectors.toList())
+      .map(token -> Arrays.stream(token.substring(1).split("/")).map(QName::valueOf).toList().toArray(new QName[0]))
+      .toList()
       .toArray(new QName[0][]);
   }
 

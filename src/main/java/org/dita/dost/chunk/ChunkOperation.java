@@ -8,8 +8,6 @@
 
 package org.dita.dost.chunk;
 
-import static java.util.Collections.unmodifiableList;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,8 +107,8 @@ record ChunkOperation(
     public ChunkOperation build() {
       final URI src = this.src;
       final URI dst = this.dst;
-      final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).collect(Collectors.toList());
-      return new ChunkOperation(operation, src, dst, id, topicref, unmodifiableList(cos));
+      final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).toList();
+      return new ChunkOperation(operation, src, dst, id, topicref, cos);
     }
   }
 }

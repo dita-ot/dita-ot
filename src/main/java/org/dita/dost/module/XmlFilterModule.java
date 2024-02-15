@@ -75,12 +75,11 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
       .stream()
       .filter(p -> p.predicate.test(fi))
       .map(FilterPair::newInstance)
-      .map(f -> {
+      .peek(f -> {
         logger.debug("Configure filter " + f.getClass().getCanonicalName());
         f.setCurrentFile(fileToParse);
         f.setJob(job);
         f.setLogger(logger);
-        return f;
       })
       .collect(Collectors.toList());
   }

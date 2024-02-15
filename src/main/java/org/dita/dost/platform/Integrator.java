@@ -623,12 +623,9 @@ public final class Integrator {
           final List<String> fsv = fs
             .stream()
             .map(f -> f.getAttribute("name") + "=" + f.getAttribute("value"))
-            .collect(Collectors.toList());
+            .toList();
           if (!fsv.isEmpty()) {
-            res.put(
-              CONF_PARSER_FORMAT + format + ".features",
-              fsv.stream().collect(Collectors.joining(PARAM_VALUE_SEPARATOR))
-            );
+            res.put(CONF_PARSER_FORMAT + format + ".features", String.join(PARAM_VALUE_SEPARATOR, fsv));
           }
         }
       }
