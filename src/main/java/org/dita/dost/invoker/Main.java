@@ -98,8 +98,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   );
   private static final String CONFIGURATION_FILE = ".ditaotrc";
 
-  @Deprecated
   /** @deprecated since 4.2 */
+  @Deprecated
   private static final String CONFIGURATION_FILE_OLD = "local.properties";
 
   /**
@@ -609,7 +609,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           });
         final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream
           .concat(publications.profiles().ditavals().stream(), context.profiles().ditavals().stream())
-          .collect(Collectors.toList());
+          .toList();
         if (!ditavals.isEmpty()) {
           final String filters = ditavals
             .stream()

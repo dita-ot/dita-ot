@@ -207,7 +207,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * Init xml reader used for pipeline parsing.
    *
    * @param validate whether validate input file
-   * @throws SAXException parsing exception
+   * @throws DITAOTException parsing exception
    */
   void initXMLReader(final boolean validate) throws DITAOTException {
     try {
@@ -696,8 +696,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
     job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-    final Set<URI> res = new HashSet<>();
-    res.addAll(listFilter.getResourceOnlySet());
+    final Set<URI> res = new HashSet<>(listFilter.getResourceOnlySet());
     res.removeAll(listFilter.getNormalProcessingRoleSet());
     resourceOnlySet.addAll(res);
 

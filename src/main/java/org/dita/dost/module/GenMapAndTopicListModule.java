@@ -780,9 +780,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     job.setInputMap(rootTemp);
 
     //If root input file is marked resource only due to conref or other feature, remove that designation
-    if (resourceOnlySet.contains(rootFile)) {
-      resourceOnlySet.remove(rootFile);
-    }
+    resourceOnlySet.remove(rootFile);
 
     job.setProperty(INPUT_DITAMAP_LIST_FILE_LIST, USER_INPUT_FILE_LIST_FILE);
     final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);

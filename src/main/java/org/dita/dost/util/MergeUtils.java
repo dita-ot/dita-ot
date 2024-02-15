@@ -10,12 +10,10 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.URLUtils.*;
 
-import java.io.File;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import org.dita.dost.log.DITAOTLogger;
-import org.xml.sax.XMLReader;
 
 /**
  * Utility that topic merge utilize. An instance can be reused by calling

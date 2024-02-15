@@ -108,7 +108,7 @@ public final class URLUtils {
       final char current = s.charAt(i);
       ch = current;
       switch (ch) {
-        case '%':
+        case '%' -> {
           if (i + 2 < s.length()) {
             // Avoid java.lang.StringIndexOutOfBoundsException...
             ch = s.charAt(++i);
@@ -120,10 +120,11 @@ public final class URLUtils {
             b = (hb << 4) | lb;
             applyUTF8dec = true;
           }
-          break;
-        default:
+        }
+        default -> {
           b = ch;
           applyUTF8dec = false;
+        }
       }
       // Decode byte b as UTF-8, sumb collects incomplete chars
       if (applyUTF8dec) {

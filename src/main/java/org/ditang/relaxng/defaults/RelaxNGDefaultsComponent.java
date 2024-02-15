@@ -469,24 +469,24 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
         //EXM-24143 it is possible that the namespace of the default attribute is empty
         //and the namespace of the attribute declared in the XMLAttributes is NULL.
         boolean alreadyDeclared = false;
-        alreadyDeclared = atts.getIndex(a.namespace, a.localName) >= 0;
+        alreadyDeclared = atts.getIndex(a.namespace(), a.localName()) >= 0;
         if (!alreadyDeclared) {
-          if ("".equals(a.namespace)) {
+          if ("".equals(a.namespace())) {
             //Extra check with NULL Namespace
-            alreadyDeclared = atts.getIndex(null, a.localName) >= 0;
+            alreadyDeclared = atts.getIndex(null, a.localName()) >= 0;
           }
         }
 
         if (!alreadyDeclared) {
           String prefix = null;
-          String rawname = a.localName;
-          if (a.namespace != null && a.namespace.length() > 0) {
-            prefix = context.getPrefix(a.namespace);
+          String rawname = a.localName();
+          if (a.namespace() != null && a.namespace().length() > 0) {
+            prefix = context.getPrefix(a.namespace());
             if (prefix == null) {
               for (int i = 0; i < atts.getLength(); i++) {
                 String attname = atts.getQName(i);
                 if (attname.startsWith("xmlns:")) {
-                  if (a.namespace.equals(atts.getValue(i))) {
+                  if (a.namespace().equals(atts.getValue(i))) {
                     prefix = attname.substring(6);
                   }
                 }
@@ -494,18 +494,18 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
             }
 
             if (prefix != null && prefix.length() > 0) {
-              rawname = prefix + ":" + a.localName;
+              rawname = prefix + ":" + a.localName();
               // double check in case of no namespace aware parsers.
               // if we want to fully handle this case we may need further
               // processing.
               if (atts.getIndex(rawname) < 0) {
                 QName attName = new QName(
                   fSymbolTable.addSymbol(prefix),
-                  fSymbolTable.addSymbol(a.localName),
+                  fSymbolTable.addSymbol(a.localName()),
                   fSymbolTable.addSymbol(rawname),
-                  fSymbolTable.addSymbol(a.namespace)
+                  fSymbolTable.addSymbol(a.namespace())
                 );
-                atts.addAttribute(attName, "CDATA", a.value);
+                atts.addAttribute(attName, "CDATA", a.value());
                 int attrIndex = atts.getIndex(attName.uri, attName.localpart);
                 atts.setSpecified(attrIndex, false);
               }
@@ -515,7 +515,7 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
                 //EXM-24494 Prefer this prefix
                 //See the implementation in: org.dita.dost.reader.MergeTopicParser.startElement(String, String, String, Attributes)
                 //If the file is a composite no attributes are copied from the root element.
-                "http://dita.oasis-open.org/architecture/2005/".equals(a.namespace)
+                "http://dita.oasis-open.org/architecture/2005/".equals(a.namespace())
               ) {
                 prefix = "ditaarch";
               } else {
@@ -525,7 +525,7 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
                 k++;
                 prefix = "ns" + k;
               }
-              rawname = prefix + ":" + a.localName;
+              rawname = prefix + ":" + a.localName();
 
               QName attNs = new QName(
                 fSymbolTable.addSymbol("xmlns"),
@@ -533,23 +533,23 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
                 fSymbolTable.addSymbol("xmlns:" + prefix),
                 fSymbolTable.addSymbol("http://www.w3.org/2000/xmlns/")
               );
-              atts.addAttribute(attNs, "CDATA", a.namespace);
-              context.declarePrefix(prefix, a.namespace);
+              atts.addAttribute(attNs, "CDATA", a.namespace());
+              context.declarePrefix(prefix, a.namespace());
 
               QName attName = new QName(
                 fSymbolTable.addSymbol(prefix),
-                fSymbolTable.addSymbol(a.localName),
+                fSymbolTable.addSymbol(a.localName()),
                 fSymbolTable.addSymbol(rawname),
-                fSymbolTable.addSymbol(a.namespace)
+                fSymbolTable.addSymbol(a.namespace())
               );
-              atts.addAttribute(attName, "CDATA", a.value);
+              atts.addAttribute(attName, "CDATA", a.value());
               int attrIndex = atts.getIndex(attName.uri, attName.localpart);
               atts.setSpecified(attrIndex, false);
             }
           } else {
-            String attname = fSymbolTable.addSymbol(a.localName);
+            String attname = fSymbolTable.addSymbol(a.localName());
             QName attName = new QName(null, attname, attname, null);
-            atts.addAttribute(attName, "CDATA", a.value);
+            atts.addAttribute(attName, "CDATA", a.value());
             int attrIndex = atts.getIndex(attname);
             atts.setSpecified(attrIndex, false);
           }

@@ -23,7 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public class SubjectSchemeFilter extends AbstractXMLFilter {
 
-  private static Pattern WHITESPACE = Pattern.compile("\\s+");
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
   private Map<QName, Map<String, String>> defaultValueMap = null;
   private Map<QName, Map<String, Set<String>>> validateMap = null;

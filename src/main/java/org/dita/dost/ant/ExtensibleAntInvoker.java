@@ -308,10 +308,7 @@ public final class ExtensibleAntInvoker extends Task {
     if (filters.isEmpty()) {
       return f -> true;
     }
-    final List<Predicate<FileInfo>> res = filters
-      .stream()
-      .map(FileInfoFilterElem::toFilter)
-      .collect(Collectors.toList());
+    final List<Predicate<FileInfo>> res = filters.stream().map(FileInfoFilterElem::toFilter).toList();
     return f -> {
       for (final Predicate<FileInfo> filter : res) {
         if (filter.test(f)) {

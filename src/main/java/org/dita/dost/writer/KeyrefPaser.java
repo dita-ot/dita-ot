@@ -268,7 +268,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
           // If current element name doesn't equal the key reference element
           // just grab the content from the matching element of key definition
           for (final XdmNode node : elem.select(descendant().where(hasLocalName(name))).asList()) {
-            for (final XdmNode n : node.select(child().where(isText())).collect(toList())) {
+            for (final XdmNode n : node.select(child().where(isText())).toList()) {
               final char[] ch = n.getStringValue().toCharArray();
               getContentHandler().characters(ch, 0, ch.length);
               break;
@@ -284,7 +284,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             final List<XdmNode> keywordsInKeywords = keywords
               .stream()
               .filter(item -> TOPIC_KEYWORDS.matches(item.getParent()))
-              .collect(toList());
+              .toList();
             // XXX: No need to look for term as content model for keywords doesn't allow it
             //                        if (nodeList.getLength() == 0) {
             //                            nodeList = elem.descendant(TOPIC_TERM.localName);
@@ -761,18 +761,18 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
     for (final XdmNode node : elem.children()) {
       switch (node.getNodeKind()) {
-        case ELEMENT:
+        case ELEMENT -> {
           // retain tm and text elements
           if (TOPIC_TM.matches(node) || TOPIC_TEXT.matches(node)) {
             domToSax(node, true, swapMapClass);
           } else {
             domToSax(node, retainElements, swapMapClass);
           }
-          break;
-        case TEXT:
+        }
+        case TEXT -> {
           final char[] ch = node.getStringValue().toCharArray();
           getContentHandler().characters(ch, 0, ch.length);
-          break;
+        }
       }
     }
     if (retainElements) {

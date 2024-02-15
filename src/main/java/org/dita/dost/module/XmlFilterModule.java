@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.dita.dost.exception.DITAOTException;
@@ -76,12 +75,11 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
       .stream()
       .filter(p -> p.predicate.test(fi))
       .map(FilterPair::newInstance)
-      .map(f -> {
+      .peek(f -> {
         logger.debug("Configure filter " + f.getClass().getCanonicalName());
         f.setCurrentFile(fileToParse);
         f.setJob(job);
         f.setLogger(logger);
-        return f;
       })
       .collect(Collectors.toList());
   }

@@ -33,13 +33,13 @@ import org.dita.dost.util.StringUtils;
 public class SubjectSchemeReader {
 
   public static final String ANY_ELEMENT = "*";
-  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYREF = net.sf.saxon.s9api.QName.fromClarkName(
+  private static final net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYREF = net.sf.saxon.s9api.QName.fromClarkName(
     ATTRIBUTE_NAME_KEYREF
   );
-  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYS = net.sf.saxon.s9api.QName.fromClarkName(
+  private static final net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_KEYS = net.sf.saxon.s9api.QName.fromClarkName(
     ATTRIBUTE_NAME_KEYS
   );
-  private static net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_NAME = net.sf.saxon.s9api.QName.fromClarkName(
+  private static final net.sf.saxon.s9api.QName ATTRIBUTE_QNAME_NAME = net.sf.saxon.s9api.QName.fromClarkName(
     ATTRIBUTE_NAME_NAME
   );
 

@@ -658,11 +658,9 @@ public final class FilterUtils {
       return;
     }
 
-    final LinkedList<SubjectDefinition> queue = new LinkedList<>();
-
     // Skip the sub-tree root because it has been added already.
     List<SubjectDefinition> children = subTree.children();
-    queue.addAll(children);
+    final LinkedList<SubjectDefinition> queue = new LinkedList<>(children);
 
     while (!queue.isEmpty()) {
       final SubjectDefinition node = queue.poll();

@@ -62,22 +62,21 @@ final class ArgumentParser {
     final String name = param.getAttribute("name");
     final String type = param.getAttribute("type");
     final String desc = param.getAttribute("desc");
-    switch (type) {
-      case "file":
-        return new Arguments.FileArgument(name, desc);
-      case "enum":
+    return switch (type) {
+      case "file" -> new Arguments.FileArgument(name, desc);
+      case "enum" -> {
         final Set<String> vals = getChildElements(param).stream().map(XMLUtils::getText).collect(Collectors.toSet());
         if (vals.size() == 2) {
           for (Map.Entry<String, String> pair : TRUTHY_VALUES.entrySet()) {
             if (vals.contains(pair.getKey()) && vals.contains(pair.getValue())) {
-              return new Arguments.BooleanArgument(name, desc, pair.getKey(), pair.getValue());
+              yield new Arguments.BooleanArgument(name, desc, pair.getKey(), pair.getValue());
             }
           }
         }
-        return new Arguments.EnumArgument(name, desc, vals);
-      default:
-        return new Arguments.StringArgument(name, desc);
-    }
+        yield new Arguments.EnumArgument(name, desc, vals);
+      }
+      default -> new Arguments.StringArgument(name, desc);
+    };
   }
 
   private static Map<String, Arguments.Argument> PLUGIN_ARGUMENTS;

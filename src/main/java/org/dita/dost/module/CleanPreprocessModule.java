@@ -273,7 +273,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
           return null;
         } else {
-          final String path = commons.stream().collect(Collectors.joining("/")) + "/";
+          final String path = String.join("/", commons) + "/";
           return URLUtils.setPath(left, path);
         }
       }

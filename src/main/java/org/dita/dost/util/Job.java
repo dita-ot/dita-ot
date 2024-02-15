@@ -14,10 +14,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -28,16 +25,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
 import javax.xml.transform.dom.DOMResult;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.store.Store;
 import org.w3c.dom.Document;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**

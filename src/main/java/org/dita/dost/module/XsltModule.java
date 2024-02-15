@@ -134,7 +134,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
           })
           .filter(Objects::nonNull)
-          .collect(Collectors.toList());
+          .toList();
         for (Entry<File, File> entry : tmps) {
           try {
             logger.info("Move " + entry.getKey().toURI() + " to " + entry.getValue().toURI());
