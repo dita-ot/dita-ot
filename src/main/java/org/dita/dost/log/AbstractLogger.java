@@ -233,18 +233,24 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
     }
     StringBuilder buf = null;
     if (!legacyFormat) {
-      if (useColor && level == Project.MSG_ERR) {
-        buf =
-          new StringBuilder()
-            .append(ANSI_RED)
-            .append(Main.locale.getString("error_msg").formatted(""))
-            .append(ANSI_RESET);
-      } else if (useColor && level == Project.MSG_WARN) {
-        buf =
-          new StringBuilder()
-            .append(ANSI_YELLOW)
-            .append(Main.locale.getString("warn_msg").formatted(""))
-            .append(ANSI_RESET);
+      if (level == Project.MSG_ERR) {
+        buf = new StringBuilder();
+        if (useColor) {
+          buf.append(ANSI_RED);
+        }
+        buf.append(Main.locale.getString("error_msg").formatted(""));
+        if (useColor) {
+          buf.append(ANSI_RESET);
+        }
+      } else if (level == Project.MSG_WARN) {
+        buf = new StringBuilder();
+        if (useColor) {
+          buf.append(ANSI_YELLOW);
+        }
+        buf.append(Main.locale.getString("warn_msg").formatted(""));
+        if (useColor) {
+          buf.append(ANSI_RESET);
+        }
       }
     }
     if (args.length > 0) {
