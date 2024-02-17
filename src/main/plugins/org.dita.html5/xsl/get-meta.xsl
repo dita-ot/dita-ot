@@ -246,10 +246,11 @@ See the accompanying LICENSE file for applicable license.
   <!-- CONTENT: Subject - prolog/metadata/keywords -->
   <xsl:template match="*" mode="gen-keywords-metadata">
     <xsl:variable name="keywords-content">
-      <!-- for each item inside keywords (including nested index terms) -->
+      <!-- consider keywords, including nested index terms
+           (but for map-level metadata, ignore keydef-specific or content-specific keywords) -->
       <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
-                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
-                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
+                            descendant::*[contains(@class,' map/topicmeta ')][not(ancestor::*[@href or @keys])]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
+                            descendant::*[contains(@class,' map/topicmeta ')][not(ancestor::*[@href or @keys])]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
         <!-- If this is the first term or keyword with this value -->
         <xsl:if test="generate-id(key('meta-keywords',text()[1])[1]) = generate-id(.)">
           <xsl:if test="position() > 2">
