@@ -285,7 +285,10 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
     if (end == -1) {
       return msg;
     }
-    return msg.substring(0, start) + msg.substring(end);
+    return switch (msg.substring(start + 2, end)) {
+      case "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" -> msg.substring(0, start) + msg.substring(end);
+      default -> msg;
+    };
   }
 
   protected static StringBuilder removeLevelPrefix(StringBuilder msg) {
@@ -297,8 +300,10 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
     if (end == -1) {
       return msg;
     }
-    msg.replace(start, end, "");
-    return msg;
+    return switch (msg.substring(start + 2, end)) {
+      case "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL" -> msg.replace(start, end, "");
+      default -> msg;
+    };
   }
 
   private static final Pattern ARGUMENT = Pattern.compile("\\{}|%s");
