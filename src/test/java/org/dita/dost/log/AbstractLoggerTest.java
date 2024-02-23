@@ -25,7 +25,10 @@ class AbstractLoggerTest extends AbstractLogger {
     return List.of(
       Arguments.of("[DOTJ037W][INFO] Message", "[DOTJ037W] Message"),
       Arguments.of("[DOTJ037W][INFO]: Message", "[DOTJ037W]: Message"),
-      Arguments.of("[DOTJ037W] Message", "[DOTJ037W] Message")
+      Arguments.of("[DOTJ037W] Message", "[DOTJ037W] Message"),
+      Arguments.of("[DOTJ037W][Warning]: Message", "[DOTJ037W][Warning]: Message"),
+      Arguments.of("[WARN][DOTJ037W]: Message", "[WARN][DOTJ037W]: Message"),
+      Arguments.of("[WARN] Message", "[WARN] Message")
     );
   }
 
