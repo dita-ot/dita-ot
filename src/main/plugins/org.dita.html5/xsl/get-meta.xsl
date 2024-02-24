@@ -258,7 +258,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="gen-keywords-metadata">
     <xsl:variable name="topicmeta" as="element()*"
-                  select="descendant::*[contains(@class,' map/topicmeta ')]"/>
+                  select="*[contains(@class,' map/topicmeta ')]"/>
     <xsl:variable name="keywords" as="element()*"
                   select="($topicmeta | $topicmeta/*[contains(@class,' topic/metadata ')])/
                             *[contains(@class,' topic/keywords ')]/
