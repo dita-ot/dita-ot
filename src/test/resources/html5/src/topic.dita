@@ -2,7 +2,27 @@
 <!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
 <topic id="topic">
   <title>Topic</title>
+  <prolog>
+    <metadata>
+      <keywords>
+        <keyword>topic</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
   <body>
     <p>Body.</p>
   </body>
+  <topic id="nested-topic">
+    <title>Nested Topic</title>
+    <prolog>
+      <metadata>
+        <keywords>
+          <keyword>nested topic</keyword>
+        </keywords>
+      </metadata>
+    </prolog>
+    <body>
+      <p>Body.</p>
+    </body>
+  </topic>
 </topic>

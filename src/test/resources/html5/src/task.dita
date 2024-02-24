@@ -2,6 +2,13 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="task">
   <title>Task</title>
+  <prolog>
+    <metadata>
+      <keywords>
+        <keyword>task</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
   <taskbody>
     <context>
       <p>Context.</p>
@@ -12,4 +19,24 @@
       </step>
     </steps>
   </taskbody>
+  <task id="nested-task">
+    <title>Nested Task</title>
+    <prolog>
+      <metadata>
+        <keywords>
+          <keyword>nested task</keyword>
+        </keywords>
+      </metadata>
+    </prolog>
+    <taskbody>
+      <context>
+        <p>Context.</p>
+      </context>
+      <steps>
+        <step>
+          <cmd>Command.</cmd>
+        </step>
+      </steps>
+    </taskbody>
+  </task>
 </task>

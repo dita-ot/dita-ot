@@ -2,7 +2,27 @@
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="concept">
   <title>Concept</title>
+  <prolog>
+    <metadata>
+      <keywords>
+        <keyword>concept</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
   <conbody>
     <p>Body.</p>
   </conbody>
+  <concept id="nested-concept">
+    <title>Nested Concept</title>
+    <prolog>
+      <metadata>
+        <keywords>
+          <keyword>nested concept</keyword>
+        </keywords>
+      </metadata>
+    </prolog>
+    <conbody>
+      <p>Body.</p>
+    </conbody>
+  </concept>
 </concept>
