@@ -13,6 +13,7 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- Get each value in each <keywords>. Nested indexterms should have unique entries. Other
        elements (based on keyword) cannot nest. -->
+  <!-- Deprecated since 4.2.1 -->
   <xsl:key name="meta-keywords" match="*[ancestor::*[contains(@class,' topic/keywords ')]]" use="text()[1]"/>
 
   <!-- Deprecated since 3.6 -->
@@ -244,24 +245,26 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
 
   <!-- CONTENT: Subject - prolog/metadata/keywords -->
-  <xsl:template match="*" mode="gen-keywords-metadata">
-    <xsl:variable name="keywords-content">
-      <!-- for each item inside keywords (including nested index terms) -->
-      <xsl:for-each select="descendant::*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
-                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::* |
-                            descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/keywords ')]/descendant-or-self::*">
-        <!-- If this is the first term or keyword with this value -->
-        <xsl:if test="generate-id(key('meta-keywords',text()[1])[1]) = generate-id(.)">
-          <xsl:if test="position() > 2">
-            <xsl:text>, </xsl:text>
-          </xsl:if>
-          <xsl:value-of select="normalize-space(text()[1])"/>
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="gen-keywords-metadata">
+    <xsl:variable name="keywords" as="element()*"
+                  select="descendant::*[contains(@class,' topic/prolog ')]/
+                            *[contains(@class,' topic/metadata ')]/
+                              *[contains(@class,' topic/keywords ')]/
+                                *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+    <xsl:if test="exists($keywords)">
+      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
+    </xsl:if>
+  </xsl:template>
 
-    <xsl:if test="string-length($keywords-content) > 0">
-      <meta name="keywords" content="{$keywords-content}"/>
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="gen-keywords-metadata">
+    <xsl:variable name="topicmeta" as="element()*"
+                  select="*[contains(@class,' map/topicmeta ')]"/>
+    <xsl:variable name="keywords" as="element()*"
+                  select="($topicmeta | $topicmeta/*[contains(@class,' topic/metadata ')])/
+                            *[contains(@class,' topic/keywords ')]/
+                              *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+    <xsl:if test="exists($keywords)">
+      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
     </xsl:if>
   </xsl:template>
 
