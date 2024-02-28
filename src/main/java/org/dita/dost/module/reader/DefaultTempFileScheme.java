@@ -25,7 +25,7 @@ public class DefaultTempFileScheme implements TempFileNameScheme {
   public URI generateTempFileName(final URI src) {
     assert src.isAbsolute();
     //final URI b = baseInputDir.toURI();
-    final URI rel = toURI(b.relativize(src).toString());
+    final URI rel = toURI(b.relativize(src).getPath());
     return rel;
   }
 }
