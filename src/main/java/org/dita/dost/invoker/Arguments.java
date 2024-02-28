@@ -10,6 +10,8 @@
 package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Constants.OS_NAME;
+import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
 import static org.dita.dost.util.LangUtils.pair;
 
 import java.io.File;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.dita.dost.util.Configuration;
+import org.dita.dost.util.URLUtils;
 
 /**
  * Command line arguments.
@@ -297,6 +300,10 @@ abstract class Arguments {
 
     @Override
     String getValue(final String value) {
+      String scheme = URLUtils.toURI(value).getScheme();
+      if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && scheme != null && !"file".equals(scheme)) {
+        return value;
+      }
       final Path f = Paths.get(value).toAbsolutePath().normalize();
       if (Files.exists(f)) {
         return f.toString();
