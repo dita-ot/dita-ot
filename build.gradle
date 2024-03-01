@@ -15,7 +15,7 @@ apply plugin: 'signing'
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
 /** Semver version number */
-version = '4.2.0'
+version = '4.2.1'
 
 description = """DITA Open Toolkit"""
 
