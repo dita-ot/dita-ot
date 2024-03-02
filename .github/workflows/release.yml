@@ -112,6 +112,9 @@ jobs:
     needs: dist
     runs-on: ubuntu-latest
     steps:
+      - name: Set tag name
+        run: |
+          echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2
         with:

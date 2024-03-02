@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - "release/**"
+      - "hotfix/**"
 jobs:
   distribution:
     if: ${{ github.repository == 'dita-ot/dita-ot' }}

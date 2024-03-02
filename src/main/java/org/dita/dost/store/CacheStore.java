@@ -301,6 +301,11 @@ public class CacheStore extends AbstractStore implements Store {
 
     final Destination dst = getDestination(outputFile);
     final Receiver receiver = dst.getReceiver(pipelineConfiguration, new SerializationProperties());
+    try {
+      receiver.open();
+    } catch (XPathException e) {
+      throw new SaxonApiException("Failed to open receiver for %s".formatted(outputFile), e);
+    }
 
     final ReceivingContentHandler receivingContentHandler = new ReceivingContentHandler();
     receivingContentHandler.setPipelineConfiguration(pipelineConfiguration);

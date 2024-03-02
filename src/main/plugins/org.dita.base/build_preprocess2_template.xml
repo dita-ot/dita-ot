@@ -96,7 +96,9 @@ See the accompanying LICENSE file for applicable license.
     <echo level="info">${log-prefix}input = ${args.input}</echo>
     <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
     <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
-    
+
+    <!-- TODO: change property initialization to not use physical files -->
+    <mkdir dir="${dita.temp.dir}"/>
     <echoxml file="${dita.temp.dir}/.job.xml">
       <job>
         <property name="temp-file-name-scheme">
