@@ -156,7 +156,14 @@ public class ConversionArguments extends Arguments {
       } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
         definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
       } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
-        definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
+        final String argument = getArgumentName(arg);
+        final String name = argument.substring(2);
+        if (RESERVED_PROPERTIES.containsKey(name)) {
+          throw new BuildException(
+            "Property %s cannot be set with --, use %s instead".formatted(name, RESERVED_PROPERTIES.get(name))
+          );
+        }
+        definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(argument)));
       } else if (LAUNCH_COMMANDS.contains(arg)) {
         // catch script/ant mismatch with a meaningful message
         // we could ignore it, but there are likely to be other
