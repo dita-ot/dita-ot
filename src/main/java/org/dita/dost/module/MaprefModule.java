@@ -32,7 +32,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * Recursively inline map references in maps.
+ * Recursively inline map references in maps. All maps need to be processed into temporary files first and then written
+ * into store.
  *
  * @since 3.1
  */
@@ -72,12 +73,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     }
 
     init(input);
-    for (FileInfo fileInfo : fileInfos) {
-      processMap(fileInfo);
-    }
-    for (FileInfo fileInfo : fileInfos) {
-      replace(fileInfo);
-    }
+    processMaps(fileInfos);
 
     try {
       job.write();
@@ -88,6 +84,21 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     return null;
   }
 
+  /**
+   * Resolve map references.
+   */
+  private void processMaps(Collection<FileInfo> fileInfos) throws DITAOTException {
+    for (FileInfo fileInfo : fileInfos) {
+      processMap(fileInfo);
+    }
+    for (FileInfo fileInfo : fileInfos) {
+      replace(fileInfo);
+    }
+  }
+
+  /**
+   * Process map references in a map and store the result to temporary file.
+   */
   private void processMap(final FileInfo input) throws DITAOTException {
     final File inputFile = new File(job.tempDirURI.resolve(input.uri));
     final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
@@ -167,6 +178,9 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     return builder.build();
   }
 
+  /**
+   * Store result map file to store.
+   */
   private void replace(final FileInfo input) throws DITAOTException {
     final File inputFile = new File(job.tempDirURI.resolve(input.uri + FILE_EXTENSION_TEMP));
     final File outputFile = new File(job.tempDirURI.resolve(input.uri));
