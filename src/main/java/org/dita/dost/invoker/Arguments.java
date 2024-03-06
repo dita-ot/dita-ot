@@ -14,6 +14,7 @@ import static org.dita.dost.util.LangUtils.pair;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -297,10 +298,14 @@ abstract class Arguments {
 
     @Override
     String getValue(final String value) {
-      final Path f = Paths.get(value).toAbsolutePath().normalize();
-      if (Files.exists(f)) {
-        return f.toString();
-      } else {
+      try {
+        final Path f = Paths.get(value).toAbsolutePath().normalize();
+        if (Files.exists(f)) {
+          return f.toString();
+        } else {
+          return value;
+        }
+      } catch (InvalidPathException e) {
         return value;
       }
     }
