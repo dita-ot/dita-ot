@@ -3,8 +3,8 @@
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
     <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="test.ditaval" processing-role="resource-only"></ditavalref>
     <topicref class="- map/topicref " href="t1-1.xml">
-      <topicref class="- map/topicref " filter-copy-to="t1-1.xml#nested" href="t1.xml#nested"/>
-      <topicref class="- map/topicref " filter-copy-to="t1-1.xml#nested2" href="t1.xml#nested2"/>
+      <topicref class="- map/topicref " href="t1-1.xml#nested"/>
+      <topicref class="- map/topicref " href="t1-1.xml#nested2"/>
     </topicref>
   </topicgroup>
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">

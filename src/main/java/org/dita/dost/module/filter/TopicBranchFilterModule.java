@@ -10,6 +10,7 @@ package org.dita.dost.module.filter;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
@@ -151,11 +152,11 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
         } catch (final DITAOTException e) {
           logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
         }
-        topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
-        topicref.removeAttribute(BRANCH_COPY_TO);
-        // disable filtering again
-        topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
       }
+      topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
+      topicref.removeAttribute(BRANCH_COPY_TO);
+      // disable filtering again
+      topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
     }
     for (final Element child : getChildElements(topicref, MAP_TOPICREF)) {
       if (DITAVAREF_D_DITAVALREF.matches(child)) {
@@ -175,7 +176,7 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
     final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-    final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
+    final URI srcAbsUri = stripFragment(job.tempDirURI.resolve(map.resolve(href)));
     if (
       !fs.isEmpty() &&
       skipFilter == null &&

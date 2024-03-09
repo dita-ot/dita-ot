@@ -195,9 +195,10 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
               attr.getOwnerElement().setAttribute(BRANCH_COPY_TO, gen);
             }
 
-            final URI dstUri = map.resolve(gen);
+            final URI dstUri = stripFragment(map.resolve(gen));
             if (dstUri != null) {
-              final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(attr.getValue()));
+              final URI absTarget = stripFragment(currentFile.resolve(attr.getValue()));
+              final FileInfo hrefFileInfo = job.getFileInfo(absTarget);
               if (hrefFileInfo != null) {
                 final URI newResult = addSuffix(hrefFileInfo.result, suffix);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).uri(dstUri).result(newResult);
