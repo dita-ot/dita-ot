@@ -43,7 +43,7 @@ import org.xml.sax.XMLFilter;
  *
  * @since 2.5
  */
-public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
+public class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
   private static final String SKIP_FILTER = "skip-filter";
 
