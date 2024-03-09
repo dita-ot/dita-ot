@@ -389,6 +389,6 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       new InputSource(new File(expDir, "orphan.ditamap").toURI().toString()),
       new InputSource(new File(tempDir, "orphan.ditamap").toURI().toString())
     );
-    assertTrue(job.getFileInfo(URI.create("configure.dita")) != null);
+    assertNull(job.getFileInfo(URI.create("configure.dita")));
   }
 }

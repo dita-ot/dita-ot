@@ -107,6 +107,44 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     } catch (final IOException e) {
       logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
     }
+
+    removeFilteredTopics(doc);
+  }
+
+  /** Remove orphan topic fileinfos where all topicrefs have been filtered out. */
+  private void removeFilteredTopics(Document doc) {
+    logger.debug("Prune orphan fileinfo topics");
+    Set<URI> allReferences = collectReferences(doc);
+    for (FileInfo fileInfo : job.getFileInfo()) {
+      if (fileInfo.format == null || fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+        var abs = job.tempDirURI.resolve(fileInfo.uri);
+        if (!allReferences.contains(abs)) {
+          logger.debug("Remove orphan fileinfo for {0}", abs);
+          job.remove(fileInfo);
+        }
+      }
+    }
+  }
+
+  private Set<URI> collectReferences(Document doc) {
+    var res = new HashSet<URI>();
+    var children = doc.getElementsByTagName("*");
+    for (int i = 0; i < children.getLength(); i++) {
+      final Element child = (Element) children.item(i);
+      if (
+        MAP_TOPICREF.matches(child) &&
+        isDitaFormat(child.getAttributeNode(ATTRIBUTE_NAME_FORMAT)) &&
+        !child.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)
+      ) {
+        for (var name : new String[] { ATTRIBUTE_NAME_HREF, ATTRIBUTE_NAME_COPY_TO, BRANCH_COPY_TO }) {
+          var value = child.getAttribute(name);
+          if (!value.isEmpty()) {
+            res.add(stripFragment(currentFile.resolve(value)));
+          }
+        }
+      }
+    }
+    return res;
   }
 
   /** Rewrite href or copy-to if duplicates exist. */
