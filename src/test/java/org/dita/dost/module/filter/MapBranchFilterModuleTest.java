@@ -10,8 +10,7 @@ package org.dita.dost.module.filter;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -345,5 +344,51 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       );
     }
     return res;
+  }
+
+  @Test
+  public void orphanTopic() throws IOException, SAXException {
+    final MapBranchFilterModule m = new MapBranchFilterModule();
+    final XMLUtils xmlUtils = new XMLUtils();
+    final Job job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+    job.setInputDir(tempDir.toURI());
+    job.add(
+      new Job.FileInfo.Builder()
+        .src(new File(tempDir, "orphan.ditamap").toURI())
+        .result(new File(tempDir, "orphan.ditamap").toURI())
+        .uri(URI.create("orphan.ditamap"))
+        .format(ATTR_FORMAT_VALUE_DITAMAP)
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .src(new File(tempDir, "test.ditaval").toURI())
+        .result(new File(tempDir, "test.ditaval").toURI())
+        .uri(URI.create("test.ditaval"))
+        .format(ATTR_FORMAT_VALUE_DITAMAP)
+        .build()
+    );
+    for (final String uri : Arrays.asList("install.dita", "configure.dita")) {
+      job.add(
+        new Job.FileInfo.Builder()
+          .src(new File(tempDir, uri).toURI())
+          .result(new File(tempDir, uri).toURI())
+          .uri(URI.create(uri))
+          .format(ATTR_FORMAT_VALUE_DITA)
+          .build()
+      );
+    }
+    m.setJob(job);
+    final CachingLogger logger = new CachingLogger();
+    m.setLogger(logger);
+    m.setXmlUtils(xmlUtils);
+
+    m.processMap(job.getFileInfo(URI.create("orphan.ditamap")));
+
+    assertXMLEqual(
+      new InputSource(new File(expDir, "orphan.ditamap").toURI().toString()),
+      new InputSource(new File(tempDir, "orphan.ditamap").toURI().toString())
+    );
+    assertTrue(job.getFileInfo(URI.create("configure.dita")) != null);
   }
 }
