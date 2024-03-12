@@ -1412,13 +1412,14 @@ See the accompanying LICENSE file for applicable license.
     <img>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class">
-          <xsl:if test="@placement = 'break'"><!--Align only works for break-->
-            <xsl:choose>
-              <xsl:when test="@align = 'left'">imageleft</xsl:when>
-              <xsl:when test="@align = 'right'">imageright</xsl:when>
-              <xsl:when test="@align = 'center'">imagecenter</xsl:when>
-            </xsl:choose>
-          </xsl:if>
+          <xsl:choose>
+            <!-- Align only works for break -->
+            <xsl:when test="@placement = 'break' and @align = 'left'">imageleft</xsl:when>
+            <xsl:when test="@placement = 'break' and @align = 'right'">imageright</xsl:when>
+            <xsl:when test="@placement = 'break' and @align = 'center'">imagecenter</xsl:when>
+            <!-- The default is inline -->
+            <xsl:when test="@placement = 'inline' or not(@placement)">inline</xsl:when>
+          </xsl:choose>
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setid"/>
