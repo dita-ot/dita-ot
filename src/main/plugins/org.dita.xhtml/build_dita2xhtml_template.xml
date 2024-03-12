@@ -18,7 +18,7 @@ See the accompanying LICENSE file for applicable license.
     <target name="dita2xhtml"
             depends="dita2xhtml.init,
                      build-init,
-                     preprocess, 
+                     preprocess2,
                      xhtml.topics,
                      dita.map.xhtml,
                      copy-css">
