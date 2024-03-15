@@ -171,6 +171,9 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
+    if (!exists(input)) {
+      return;
+    }
     Serializer result = null;
     try {
       XMLReader reader = xmlUtils.getXMLReader();
@@ -215,6 +218,9 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     final URI dst = toURI(src.toString() + FILE_EXTENSION_TEMP).normalize();
     transformUri(src, dst, transformer);
     try {
@@ -226,6 +232,9 @@ public class StreamStore extends AbstractStore implements Store {
 
   @Override
   void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     Destination result = null;
     try {
       final Source source = getSource(src);
