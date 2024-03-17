@@ -81,15 +81,27 @@ See the accompanying LICENSE file for applicable license.
     </dita-ot-fail>
 
     <property name="clean-preprocess.use-result-filename" value="true"/>
-    
-    <basename property="dita.input.filename" file="${args.input}" />
-    <pathconvert property="dita.map.filename.root">
-      <path path="${dita.input.filename}"/>
-      <chainedmapper>
-        <mapper type="flatten"/>
-        <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
-      </chainedmapper>
-    </pathconvert>
+
+    <local name="input.isFile"/>
+    <condition property="input.isFile" value="true">
+      <available file="${args.input}" type="file"/>
+    </condition>
+    <sequential if:true="${input.isFile}">
+      <basename property="dita.input.filename" file="${args.input}" />
+      <pathconvert property="dita.map.filename.root">
+        <path path="${dita.input.filename}"/>
+        <chainedmapper>
+          <mapper type="flatten"/>
+          <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
+        </chainedmapper>
+      </pathconvert>
+    </sequential>
+    <sequential unless:true="${input.isFile}">
+      <taskdef name="uriBasenameTask" classname="org.dita.dost.ant.UriBasenameTask"/>
+      <uriBasenameTask property="dita.input.filename" file="${args.input}" />
+      <uriBasenameTask property="dita.map.filename.root" file="${args.input}" suffix=".*"/>
+    </sequential>
+
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
     
     <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>

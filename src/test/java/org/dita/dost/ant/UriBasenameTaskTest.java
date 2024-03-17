@@ -1,18 +1,17 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2013 Jarno Elovirta
+ * Copyright 2024 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.util;
+package org.dita.dost.ant;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.tools.ant.Project;
-import org.dita.dost.ant.UriBasenameTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,6 +71,14 @@ public class UriBasenameTaskTest {
     basename.setSuffix(".*");
     basename.execute();
     assertEquals("bar", basename.getProject().getProperty("test"));
+  }
+
+  @Test
+  public void testWildcardSuffixWithEscapedCharacters() throws URISyntaxException {
+    basename.setFile(new URI("file:/foo/foo%20bar.baz"));
+    basename.setSuffix(".*");
+    basename.execute();
+    assertEquals("foo bar", basename.getProject().getProperty("test"));
   }
 
   @Test
