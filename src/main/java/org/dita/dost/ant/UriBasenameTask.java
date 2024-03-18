@@ -7,7 +7,7 @@
  */
 package org.dita.dost.ant;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.URI_SEPARATOR;
 
 import java.net.URI;
 import org.apache.tools.ant.BuildException;
@@ -75,7 +75,7 @@ public class UriBasenameTask extends Task {
     if (file == null) {
       throw new BuildException("file attribute required", getLocation());
     }
-    String value = getName(file.toString());
+    String value = getName(file.getPath());
     if (suffix != null && value.endsWith(suffix)) {
       // if the suffix does not starts with a '.' and the
       // char preceding the suffix is a '.', we assume the user
