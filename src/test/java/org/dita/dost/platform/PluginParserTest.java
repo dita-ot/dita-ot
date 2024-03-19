@@ -7,7 +7,7 @@
  */
 package org.dita.dost.platform;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
