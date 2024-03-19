@@ -9,14 +9,7 @@
 package org.dita.dost.platform;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import org.dita.dost.util.FileUtils;
 import org.w3c.dom.Element;
 
@@ -30,9 +23,9 @@ final class Features {
   private final File pluginDir;
   private final File ditaDir;
   private final Map<String, ExtensionPoint> extensionPoints;
-  private final Hashtable<String, List<String>> featureTable;
+  private final Map<String, List<String>> featureTable;
   private final List<PluginRequirement> requireList;
-  private final Hashtable<String, String> metaTable;
+  private final Map<String, String> metaTable;
   private final List<Value> templateList;
 
   /**
@@ -44,10 +37,10 @@ final class Features {
     this.pluginDir = pluginDir;
     this.ditaDir = ditaDir;
     extensionPoints = new HashMap<>();
-    featureTable = new Hashtable<>(16);
-    requireList = new ArrayList<>(8);
-    metaTable = new Hashtable<>(16);
-    templateList = new ArrayList<>(8);
+    featureTable = new HashMap<>();
+    requireList = new ArrayList<>();
+    metaTable = new HashMap<>();
+    templateList = new ArrayList<>();
   }
 
   /**
@@ -173,7 +166,7 @@ final class Features {
    * @param value value
    */
   public void addMeta(final String type, final String value) {
-    metaTable.put(type, value);
+    metaTable.put(type, Objects.requireNonNull(value));
   }
 
   /**

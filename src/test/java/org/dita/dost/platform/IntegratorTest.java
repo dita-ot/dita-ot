@@ -51,24 +51,24 @@ public class IntegratorTest {
 
   @Test
   public void testVersionPattern() {
-    assertTrue(Integrator.VERSION_PATTERN.matcher("0").matches());
-    assertTrue(Integrator.VERSION_PATTERN.matcher("1").matches());
-    assertTrue(Integrator.VERSION_PATTERN.matcher("1.0").matches());
-    assertTrue(Integrator.VERSION_PATTERN.matcher("1.0.0").matches());
-    assertTrue(Integrator.VERSION_PATTERN.matcher("1.0.0.abc123").matches());
-    assertTrue(Integrator.VERSION_PATTERN.matcher("012.012.012.ABCabc123-_").matches());
-    assertFalse(Integrator.VERSION_PATTERN.matcher("").matches());
-    assertFalse(Integrator.VERSION_PATTERN.matcher(" 1").matches());
-    assertFalse(Integrator.VERSION_PATTERN.matcher("A").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("0").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("1").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("1.0").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("1.0.0").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("1.0.0.abc123").matches());
+    assertTrue(PluginParser.VERSION_PATTERN.matcher("012.012.012.ABCabc123-_").matches());
+    assertFalse(PluginParser.VERSION_PATTERN.matcher("").matches());
+    assertFalse(PluginParser.VERSION_PATTERN.matcher(" 1").matches());
+    assertFalse(PluginParser.VERSION_PATTERN.matcher("A").matches());
   }
 
   @Test
   public void testIdPattern() {
-    assertTrue(Integrator.ID_PATTERN.matcher("foo").matches());
-    assertTrue(Integrator.ID_PATTERN.matcher("1foo.2-_.bar").matches());
-    assertFalse(Integrator.ID_PATTERN.matcher("").matches());
-    assertFalse(Integrator.ID_PATTERN.matcher(" foo ").matches());
-    assertFalse(Integrator.ID_PATTERN.matcher(".foo").matches());
+    assertTrue(PluginParser.ID_PATTERN.matcher("foo").matches());
+    assertTrue(PluginParser.ID_PATTERN.matcher("1foo.2-_.bar").matches());
+    assertFalse(PluginParser.ID_PATTERN.matcher("").matches());
+    assertFalse(PluginParser.ID_PATTERN.matcher(" foo ").matches());
+    assertFalse(PluginParser.ID_PATTERN.matcher(".foo").matches());
   }
 
   @Test

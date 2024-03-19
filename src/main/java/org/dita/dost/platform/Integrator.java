@@ -98,8 +98,6 @@ public final class Integrator {
     )
     .build();
 
-  public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
-  public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
   public static final String CONF_PARSER_FORMAT = "parser.";
 
   /** Plugin table which contains detected plugins. */
@@ -979,10 +977,8 @@ public final class Integrator {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
       final Features f = parser.getFeatures();
-      final String id = f.getPluginId();
-      validatePlugin(f);
       extensionPoints.addAll(f.getExtensionPoints().keySet());
-      pluginTable.put(id, f);
+      pluginTable.put(f.getPluginId(), f);
       return root;
     } catch (final RuntimeException e) {
       throw e;
@@ -994,42 +990,6 @@ public final class Integrator {
       throw ex;
     } catch (final Exception e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  /**
-   * Validate plug-in configuration.
-   * <p>
-   * Follow OSGi symbolic name syntax rules:
-   *
-   * <pre>
-   * digit         ::= [0..9]
-   * alpha         ::= [a..zA..Z]
-   * alphanum      ::= alpha | digit
-   * token         ::= ( alphanum | '_' | '-' )+
-   * symbolic-name ::= token('.'token)*
-   * </pre>
-   *
-   * Follow OSGi bundle version syntax rules:
-   *
-   * <pre>
-   * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-   * major     ::= number
-   * minor     ::=number
-   * micro     ::=number
-   * qualifier ::= ( alphanum | '_' | '-' )+
-   * </pre>
-   *
-   * @param f Features to validate
-   */
-  private void validatePlugin(final Features f) {
-    final String id = f.getPluginId();
-    if (!ID_PATTERN.matcher(id).matches()) {
-      throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
-    }
-    final List<String> version = f.getFeature("package.version");
-    if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-      throw new IllegalArgumentException("Plug-in version '%s' doesn't follow syntax rules.".formatted(version.get(0)));
     }
   }
 
