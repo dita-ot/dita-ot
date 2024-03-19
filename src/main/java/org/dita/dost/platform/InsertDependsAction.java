@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -55,7 +54,7 @@ final class InsertDependsAction implements IAction {
       }
     }
     if (!result.isEmpty()) {
-      return StringUtils.join(result, ",");
+      return String.join(",", result);
     } else {
       return "";
     }
