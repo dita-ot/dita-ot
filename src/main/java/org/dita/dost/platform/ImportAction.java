@@ -23,7 +23,7 @@ abstract class ImportAction implements IAction {
   /** Action values. */
   final Set<Value> valueSet;
   /** Action parameters. */
-  final Hashtable<String, String> paramTable;
+  final Map<String, String> paramTable;
   DITAOTLogger logger;
   /** Plug-in features. */
   Map<String, Features> featureTable = null;
@@ -33,7 +33,7 @@ abstract class ImportAction implements IAction {
    */
   ImportAction() {
     valueSet = new LinkedHashSet<>(16);
-    paramTable = new Hashtable<>();
+    paramTable = new HashMap<>();
   }
 
   @Override

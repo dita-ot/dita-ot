@@ -111,7 +111,7 @@ public final class Integrator {
   private final PluginParser parser;
   private DITAOTLogger logger;
   private final Set<String> loadedPlugin;
-  private final Hashtable<String, List<Value>> featureTable;
+  private final Map<String, List<Value>> featureTable;
 
   @Deprecated
   private File propertiesFile;
@@ -130,7 +130,7 @@ public final class Integrator {
     templateSet = new HashMap<>(16);
     descSet = new HashSet<>(16);
     loadedPlugin = new HashSet<>(16);
-    featureTable = new Hashtable<>(16);
+    featureTable = new HashMap<>(16);
     extensionPoints = new HashSet<>();
     try {
       final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
