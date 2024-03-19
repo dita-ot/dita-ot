@@ -7,8 +7,6 @@
  */
 package org.dita.dost.platform;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -27,15 +25,13 @@ final class ListTranstypeAction extends ImportAction {
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
     final String separator = paramTable.getOrDefault("separator", "|");
-    final List<String> v = valueSet.stream().map(Value::value).distinct().sorted().toList();
-    final StringBuilder retBuf = new StringBuilder();
-    for (final Iterator<String> i = v.iterator(); i.hasNext();) {
-      retBuf.append(i.next());
-      if (i.hasNext()) {
-        retBuf.append(separator);
-      }
-    }
-    final char[] ret = retBuf.toString().toCharArray();
+    final char[] ret = valueSet
+      .stream()
+      .map(Value::value)
+      .distinct()
+      .sorted()
+      .collect(Collectors.joining(separator))
+      .toCharArray();
     buf.characters(ret, 0, ret.length);
   }
 
