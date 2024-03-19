@@ -91,7 +91,7 @@ final class Features {
   }
 
   void addExtensionPoint(final ExtensionPoint extensionPoint) {
-    extensionPoints.put(extensionPoint.id, extensionPoint);
+    extensionPoints.put(extensionPoint.id(), extensionPoint);
   }
 
   /**
