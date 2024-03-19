@@ -8,24 +8,14 @@
 
 package org.dita.dost.platform;
 
-import static java.util.Collections.emptyList;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Registry {
-
-  public final String name;
-  public final SemVer vers;
-  public final List<Dependency> deps;
-  public final URL url;
-  public final String cksum;
-
+public record Registry(String name, SemVer vers, List<Dependency> deps, URI uri, String cksum) {
   @JsonCreator
   public Registry(
     @JsonProperty("name") String name,
@@ -34,26 +24,19 @@ public class Registry {
     @JsonProperty("url") String url,
     @JsonProperty("cksum") String cksum
   ) {
-    this.name = name;
-    this.vers = new SemVer(vers);
-    this.deps = deps == null ? emptyList() : List.of(deps);
-    try {
-      this.url = url != null ? new URL(url) : null;
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException(e);
-    }
-    this.cksum = cksum;
+    this(
+      name,
+      new SemVer(vers),
+      deps == null ? List.of() : List.of(deps),
+      (url != null ? URI.create(url) : null),
+      cksum
+    );
   }
 
-  public static class Dependency {
-
-    public final String name;
-    public final SemVerMatch req;
-
+  public record Dependency(String name, SemVerMatch req) {
     @JsonCreator
     public Dependency(@JsonProperty("name") String name, @JsonProperty("req") String req) {
-      this.name = name;
-      this.req = new SemVerMatch(req);
+      this(name, new SemVerMatch(req));
     }
   }
 }
