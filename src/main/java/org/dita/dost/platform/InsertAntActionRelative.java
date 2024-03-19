@@ -36,25 +36,18 @@ final class InsertAntActionRelative extends InsertAction {
 
     final int attLen = attributes.getLength();
     for (int i = 0; i < attLen; i++) {
-      String value;
+      final String name = attributes.getQName(i);
+      String value = attributes.getValue(i);
       if (
         RELATIVE_ATTRS.containsKey(localName) &&
-        RELATIVE_ATTRS.get(localName).equals(attributes.getQName(i)) &&
-        !FileUtils.isAbsolutePath(attributes.getValue(i))
+        RELATIVE_ATTRS.get(localName).equals(name) &&
+        !FileUtils.isAbsolutePath(value)
       ) {
         // Rewrite file path to be local to its final resting place.
-        final File targetFile = new File(new File(currentFile).getParentFile(), attributes.getValue(i));
+        final File targetFile = new File(new File(currentFile).getParentFile(), value);
         value = FileUtils.getRelativeUnixPath(paramTable.get(FileGenerator.PARAM_TEMPLATE), targetFile.toString());
-      } else {
-        value = attributes.getValue(i);
       }
-      attrBuf.addAttribute(
-        attributes.getURI(i),
-        attributes.getLocalName(i),
-        attributes.getQName(i),
-        attributes.getType(i),
-        value
-      );
+      attrBuf.addAttribute(attributes.getURI(i), attributes.getLocalName(i), name, attributes.getType(i), value);
     }
 
     super.startElement(uri, localName, qName, attrBuf);
