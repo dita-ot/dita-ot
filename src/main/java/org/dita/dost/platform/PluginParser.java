@@ -35,6 +35,7 @@ public class PluginParser {
   private static final String META_TYPE_ATTR = "type";
   private static final String REQUIRE_ELEM = "require";
   private static final String REQUIRE_IMPORTANCE_ATTR = "importance";
+  static final String REQUIRE_IMPORTANCE_VALUE_REQUIRED = "required";
   private static final String REQUIRE_PLUGIN_ATTR = "plugin";
   public static final String FEATURE_ELEM = "feature";
   private static final String TRANSTYPE_ELEM = "transtype";
@@ -42,6 +43,9 @@ public class PluginParser {
   private static final String TRANSTYPE_NAME_ATTR = "name";
   public static final String FEATURE_ID_ATTR = "extension";
   public static final String FEATURE_VALUE_ATTR = "value";
+  public static final String FEATURE_FILE_ATTR = "file";
+  public static final String FEATURE_TYPE_ATTR = "type";
+  public static final String FEATURE_TYPE_VALUE_FILE = "file";
   public static final String PLUGIN_ELEM = REQUIRE_PLUGIN_ATTR;
   private static final String PLUGIN_ID_ATTR = "id";
   private static final String PLUGIN_VERSION_ATTR = "version";

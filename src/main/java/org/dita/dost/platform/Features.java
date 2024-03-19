@@ -8,6 +8,8 @@
  */
 package org.dita.dost.platform;
 
+import static org.dita.dost.platform.PluginParser.*;
+
 import java.io.File;
 import java.util.*;
 import org.dita.dost.util.FileUtils;
@@ -97,14 +99,14 @@ final class Features {
    * @param id feature id
    * @param elem configuration element
    */
-  public final void addFeature(final String id, final Element elem) {
+  public void addFeature(final String id, final Element elem) {
     boolean isFile;
-    String value = elem.getAttribute("file");
+    String value = elem.getAttribute(FEATURE_FILE_ATTR);
     if (!value.isEmpty()) {
       isFile = true;
     } else {
-      value = elem.getAttribute("value");
-      isFile = "file".equals(elem.getAttribute("type"));
+      value = elem.getAttribute(FEATURE_VALUE_ATTR);
+      isFile = FEATURE_TYPE_VALUE_FILE.equals(elem.getAttribute(FEATURE_TYPE_ATTR));
     }
     final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
     final List<String> valueBuffer = new ArrayList<>();
@@ -147,7 +149,7 @@ final class Features {
     final PluginRequirement requirement = new PluginRequirement();
     requirement.addPlugins(id);
     if (importance != null) {
-      requirement.setRequired(importance.equals("required"));
+      requirement.setRequired(importance.equals(REQUIRE_IMPORTANCE_VALUE_REQUIRED));
     }
     requireList.add(requirement);
   }
