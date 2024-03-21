@@ -56,7 +56,7 @@ public class PluginParser {
   private final File ditaDir;
   private final DocumentBuilder builder;
   private File pluginDir;
-  private Features features;
+  private Features.Builder features;
 
   /**
    * Constructor initialize Feature with location.
@@ -85,7 +85,7 @@ public class PluginParser {
    * @return plug-in features
    */
   public Features getFeatures() {
-    return features;
+    return features.build();
   }
 
   /**
@@ -100,8 +100,8 @@ public class PluginParser {
     }
     final Element root = migrate(doc.getDocumentElement());
 
-    features = new Features(pluginDir, ditaDir);
-    features.setPluginId(root.getAttribute(PLUGIN_ID_ATTR));
+    features =
+      Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(root.getAttribute(PLUGIN_ID_ATTR));
     for (Element elem : getChildElements(root)) {
       final String qName = elem.getTagName();
       if (EXTENSION_POINT_ELEM.equals(qName)) {
@@ -120,45 +120,7 @@ public class PluginParser {
       }
     }
 
-    validatePlugin(features);
-
     return root;
-  }
-
-  /**
-   * Validate plug-in configuration.
-   * <p>
-   * Follow OSGi symbolic name syntax rules:
-   *
-   * <pre>
-   * digit         ::= [0..9]
-   * alpha         ::= [a..zA..Z]
-   * alphanum      ::= alpha | digit
-   * token         ::= ( alphanum | '_' | '-' )+
-   * symbolic-name ::= token('.'token)*
-   * </pre>
-   *
-   * Follow OSGi bundle version syntax rules:
-   *
-   * <pre>
-   * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-   * major     ::= number
-   * minor     ::=number
-   * micro     ::=number
-   * qualifier ::= ( alphanum | '_' | '-' )+
-   * </pre>
-   *
-   * @param f Features to validate
-   */
-  private void validatePlugin(final Features f) {
-    final String id = f.getPluginId();
-    if (!ID_PATTERN.matcher(id).matches()) {
-      throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
-    }
-    final List<String> version = f.getFeature("package.version");
-    if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-      throw new IllegalArgumentException("Plug-in version '%s' doesn't follow syntax rules.".formatted(version.get(0)));
-    }
   }
 
   /**
@@ -166,8 +128,8 @@ public class PluginParser {
    */
   private Element migrate(Element root) {
     if (root.getAttributeNode(PLUGIN_VERSION_ATTR) == null) {
-      final List<Element> features = toList(root.getElementsByTagName(FEATURE_ELEM));
-      final String version = features
+      final List<Element> featureElems = toList(root.getElementsByTagName(FEATURE_ELEM));
+      final String version = featureElems
         .stream()
         .filter(elem -> elem.getAttribute(FEATURE_ID_ATTR).equals("package.version"))
         .findFirst()
@@ -201,6 +163,6 @@ public class PluginParser {
       throw new IllegalArgumentException(EXTENSION_POINT_ID_ATTR + " attribute not set on extension-point");
     }
     final String name = elem.getAttribute(EXTENSION_POINT_NAME_ATTR);
-    features.addExtensionPoint(new ExtensionPoint(id, name, features.getPluginId()));
+    features.addExtensionPoint(id, name);
   }
 }

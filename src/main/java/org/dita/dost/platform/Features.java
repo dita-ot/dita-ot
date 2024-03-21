@@ -19,32 +19,16 @@ import org.w3c.dom.Element;
  * Collection of features.
  * @author Zhang, Yuan Peng
  */
-final class Features {
-
-  private String id;
-  private final File pluginDir;
-  private final File ditaDir;
-  private final Map<String, ExtensionPoint> extensionPoints;
-  private final Map<String, List<String>> featureTable;
-  private final List<PluginRequirement> requireList;
-  private final Map<String, String> metaTable;
-  private final List<Value> templateList;
-
-  /**
-   * Constructor init pluginDir.
-   * @param pluginDir absolute plugin directory path
-   * @param ditaDir base directory
-   */
-  public Features(final File pluginDir, final File ditaDir) {
-    this.pluginDir = pluginDir;
-    this.ditaDir = ditaDir;
-    extensionPoints = new HashMap<>();
-    featureTable = new HashMap<>();
-    requireList = new ArrayList<>();
-    metaTable = new HashMap<>();
-    templateList = new ArrayList<>();
-  }
-
+record Features(
+  String id,
+  File pluginDir,
+  File ditaDir,
+  Map<String, ExtensionPoint> extensionPoints,
+  Map<String, List<String>> featureTable,
+  List<PluginRequirement> requireList,
+  Map<String, String> metaTable,
+  List<Value> templateList
+) {
   /**
    * Return the feature pluginDir.
    * @return pluginDir
@@ -59,10 +43,6 @@ final class Features {
    */
   public File getDitaDir() {
     return ditaDir;
-  }
-
-  void setPluginId(final String id) {
-    this.id = id;
   }
 
   String getPluginId() {
@@ -90,85 +70,12 @@ final class Features {
     return featureTable;
   }
 
-  void addExtensionPoint(final ExtensionPoint extensionPoint) {
-    extensionPoints.put(extensionPoint.id(), extensionPoint);
-  }
-
-  /**
-   * Add feature to the feature table.
-   * @param id feature id
-   * @param elem configuration element
-   */
-  public void addFeature(final String id, final Element elem) {
-    boolean isFile;
-    String value = elem.getAttribute(FEATURE_FILE_ATTR);
-    if (!value.isEmpty()) {
-      isFile = true;
-    } else {
-      value = elem.getAttribute(FEATURE_VALUE_ATTR);
-      isFile = FEATURE_TYPE_VALUE_FILE.equals(elem.getAttribute(FEATURE_TYPE_ATTR));
-    }
-    final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
-    final List<String> valueBuffer = new ArrayList<>();
-    if (featureTable.containsKey(id)) {
-      valueBuffer.addAll(featureTable.get(id));
-    }
-    while (valueTokenizer.hasMoreElements()) {
-      final String valueElement = valueTokenizer.nextToken();
-      if (valueElement != null && valueElement.trim().length() != 0) {
-        if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
-          if (id.equals("ant.import")) {
-            valueBuffer.add("${dita.plugin." + this.id + ".dir}" + File.separator + valueElement.trim());
-          } else {
-            valueBuffer.add(pluginDir + File.separator + valueElement.trim());
-          }
-        } else {
-          valueBuffer.add(valueElement.trim());
-        }
-      }
-    }
-    featureTable.put(id, valueBuffer);
-  }
-
-  /**
-   * Add the required feature id.
-   * @param id feature id
-   */
-  public void addRequire(final String id) {
-    final PluginRequirement requirement = new PluginRequirement();
-    requirement.addPlugins(id);
-    requireList.add(requirement);
-  }
-
-  /**
-   * Add the required feature id.
-   * @param id feature id
-   * @param importance importance
-   */
-  public void addRequire(final String id, final String importance) {
-    final PluginRequirement requirement = new PluginRequirement();
-    requirement.addPlugins(id);
-    if (importance != null) {
-      requirement.setRequired(importance.equals(REQUIRE_IMPORTANCE_VALUE_REQUIRED));
-    }
-    requireList.add(requirement);
-  }
-
   /**
    * Get the iterator of required list.
    * @return iterator
    */
   public Iterator<PluginRequirement> getRequireListIter() {
     return requireList.iterator();
-  }
-
-  /**
-   * Add meta info to meta table.
-   * @param type type
-   * @param value value
-   */
-  public void addMeta(final String type, final String value) {
-    metaTable.put(type, Objects.requireNonNull(value));
   }
 
   /**
@@ -181,18 +88,189 @@ final class Features {
   }
 
   /**
-   * Add a template.
-   * @param file file name
-   */
-  public void addTemplate(final Value file) {
-    templateList.add(file);
-  }
-
-  /**
    * get all templates.
    * @return templates list
    */
   public List<Value> getAllTemplates() {
     return templateList;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  static class Builder {
+
+    private String id;
+    private File pluginDir;
+    private File ditaDir;
+    private final Map<String, ExtensionPoint> extensionPoints;
+    private final Map<String, List<String>> featureTable;
+    private final List<PluginRequirement> requireList;
+    private final Map<String, String> metaTable;
+    private final List<Value> templateList;
+
+    /**
+     * Constructor init pluginDir.
+     */
+    public Builder() {
+      this.extensionPoints = new HashMap<>();
+      this.featureTable = new HashMap<>();
+      this.requireList = new ArrayList<>();
+      this.metaTable = new HashMap<>();
+      this.templateList = new ArrayList<>();
+    }
+
+    public Features build() {
+      return new Features(id, pluginDir, ditaDir, extensionPoints, featureTable, requireList, metaTable, templateList);
+    }
+
+    /**
+     * Follow OSGi symbolic name syntax rules:
+     *
+     * <pre>
+     * digit         ::= [0..9]
+     * alpha         ::= [a..zA..Z]
+     * alphanum      ::= alpha | digit
+     * token         ::= ( alphanum | '_' | '-' )+
+     * symbolic-name ::= token('.'token)*
+     * </pre>
+     *
+     * @param id plug-in ID
+     */
+    Builder setPluginId(final String id) {
+      if (!ID_PATTERN.matcher(id).matches()) {
+        throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
+      }
+      this.id = id;
+      return this;
+    }
+
+    Builder addExtensionPoint(String extensionPointId, String name) {
+      extensionPoints.put(extensionPointId, new ExtensionPoint(extensionPointId, name, id));
+      return this;
+    }
+
+    //    Builder addExtensionPoint(final ExtensionPoint extensionPoint) {
+    //      extensionPoints.put(extensionPoint.id(), extensionPoint);
+    //      return this;
+    //    }
+
+    /**
+     * Add feature to the feature table.
+     *
+     * Follow OSGi bundle version syntax rules:
+     *
+     * <pre>
+     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+     * major     ::= number
+     * minor     ::=number
+     * micro     ::=number
+     * qualifier ::= ( alphanum | '_' | '-' )+
+     * </pre>
+     *
+     * @param id feature id
+     * @param elem configuration element
+     */
+    Builder addFeature(final String id, final Element elem) {
+      boolean isFile;
+      String value = elem.getAttribute(FEATURE_FILE_ATTR);
+      if (!value.isEmpty()) {
+        isFile = true;
+      } else {
+        value = elem.getAttribute(FEATURE_VALUE_ATTR);
+        isFile = FEATURE_TYPE_VALUE_FILE.equals(elem.getAttribute(FEATURE_TYPE_ATTR));
+      }
+      final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
+      final List<String> valueBuffer = new ArrayList<>();
+      if (featureTable.containsKey(id)) {
+        valueBuffer.addAll(featureTable.get(id));
+      }
+      while (valueTokenizer.hasMoreElements()) {
+        final String valueElement = valueTokenizer.nextToken();
+        if (valueElement != null && valueElement.trim().length() != 0) {
+          if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
+            if (id.equals("ant.import")) {
+              valueBuffer.add("${dita.plugin." + this.id + ".dir}" + File.separator + valueElement.trim());
+            } else {
+              valueBuffer.add(pluginDir + File.separator + valueElement.trim());
+            }
+          } else {
+            if (id.equals("package.version")) {
+              if (!VERSION_PATTERN.matcher(valueElement.trim()).matches()) {
+                throw new IllegalArgumentException(
+                  "Plug-in version '%s' doesn't follow syntax rules.".formatted(valueElement.trim())
+                );
+              }
+            }
+            valueBuffer.add(valueElement.trim());
+          }
+        }
+      }
+
+      featureTable.put(id, valueBuffer);
+      return this;
+    }
+
+    /**
+     * Add the required feature id.
+     * @param id feature id
+     */
+    Builder addRequire(final String id) {
+      final PluginRequirement requirement = new PluginRequirement();
+      requirement.addPlugins(id);
+      requireList.add(requirement);
+      return this;
+    }
+
+    /**
+     * Add the required feature id.
+     * @param id feature id
+     * @param importance importance
+     */
+    Builder addRequire(final String id, final String importance) {
+      final PluginRequirement requirement = new PluginRequirement();
+      requirement.addPlugins(id);
+      if (importance != null) {
+        requirement.setRequired(importance.equals(REQUIRE_IMPORTANCE_VALUE_REQUIRED));
+      }
+      requireList.add(requirement);
+      return this;
+    }
+
+    /**
+     * Add meta info to meta table.
+     * @param type type
+     * @param value value
+     */
+    Builder addMeta(final String type, final String value) {
+      metaTable.put(type, Objects.requireNonNull(value));
+      return this;
+    }
+
+    /**
+     * Add a template.
+     * @param file file name
+     */
+    Builder addTemplate(final Value file) {
+      templateList.add(file);
+      return this;
+    }
+
+    public Builder setDitaDir(File ditaDir) {
+      if (!ditaDir.isAbsolute()) {
+        throw new IllegalArgumentException("Installation base directory must be absolute: " + pluginDir.toString());
+      }
+      this.ditaDir = ditaDir;
+      return this;
+    }
+
+    public Builder setPluginDir(File pluginDir) {
+      if (!pluginDir.isAbsolute()) {
+        throw new IllegalArgumentException("Plug-in directory must be absolute: " + pluginDir.toString());
+      }
+      this.pluginDir = pluginDir;
+      return this;
+    }
   }
 }
