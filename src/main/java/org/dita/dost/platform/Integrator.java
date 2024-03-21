@@ -862,11 +862,10 @@ public final class Integrator {
         }
       }
 
-      for (final Value templateName : pluginFeatures.templates()) {
-        final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName.value()))
-          .getAbsolutePath();
+      for (final String templateName : pluginFeatures.templates()) {
+        final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName)).getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);
-        templateSet.put(templatePath, templateName);
+        templateSet.put(templatePath, new Value(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
       return true;

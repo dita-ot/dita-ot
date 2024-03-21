@@ -12,7 +12,10 @@ import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -212,9 +215,9 @@ public class FeaturesTest {
       .builder()
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
-      .addTemplate(new Value("base", "foo"))
-      .addTemplate(new Value("base", "foo"))
-      .addTemplate(new Value("base", "bar"))
+      .addTemplate("foo")
+      .addTemplate("foo")
+      .addTemplate("bar")
       .build();
   }
 
@@ -224,17 +227,13 @@ public class FeaturesTest {
       .builder()
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
-      .addTemplate(new Value("base", "foo"))
-      .addTemplate(new Value("base", "foo"))
-      .addTemplate(new Value("base", "bar"))
+      .addTemplate("foo")
+      .addTemplate("foo")
+      .addTemplate("bar")
       .build();
 
-    final List<Value> act = f
-      .templates()
-      .stream()
-      .sorted((a0, a1) -> Objects.compare(a0.value(), a1.value(), String::compareTo))
-      .toList();
-    assertEquals(Arrays.asList(new Value("base", "bar"), new Value("base", "foo"), new Value("base", "foo")), act);
+    final List<String> act = f.templates().stream().sorted().toList();
+    assertEquals(Arrays.asList("bar", "foo", "foo"), act);
   }
 
   private static Element createElement(final String value, final String type) {

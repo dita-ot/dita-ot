@@ -32,10 +32,7 @@ public class PluginParserTest {
   @Test
   public void testGetAllTemplates() {
     final Plugin f = p.getPlugin();
-    assertEquals(
-      Arrays.asList(new Value("dummy", "xsl/shell_template.xsl"), new Value("dummy", "xsl/shell2_template.xsl")),
-      f.templates()
-    );
+    assertEquals(Arrays.asList("xsl/shell_template.xsl", "xsl/shell2_template.xsl"), f.templates());
   }
 
   @Test

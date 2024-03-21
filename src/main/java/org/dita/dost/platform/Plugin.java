@@ -20,7 +20,7 @@ public interface Plugin {
   Map<String, List<String>> features();
   List<PluginRequirement> requiredPlugins();
   Map<String, String> metaTable();
-  List<Value> templates();
+  List<String> templates();
 
   /**
    * Return the feature name by id.

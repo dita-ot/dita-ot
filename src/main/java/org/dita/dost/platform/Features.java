@@ -28,7 +28,7 @@ record Features(
   Map<String, List<String>> features,
   List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
-  List<Value> templates
+  List<String> templates
 )
   implements Plugin {
   /**
@@ -62,7 +62,7 @@ record Features(
     private final Map<String, List<String>> featureTable;
     private final List<PluginRequirement> requireList;
     private final Map<String, String> metaTable;
-    private final List<Value> templateList;
+    private final List<String> templateList;
 
     /**
      * Constructor init pluginDir.
@@ -213,7 +213,7 @@ record Features(
      * Add a template.
      * @param file file name
      */
-    Builder addTemplate(final Value file) {
+    Builder addTemplate(final String file) {
       templateList.add(file);
       return this;
     }

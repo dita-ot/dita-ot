@@ -116,7 +116,7 @@ public class PluginParser {
       } else if (META_ELEM.equals(qName)) {
         features.addMeta(elem.getAttribute(META_TYPE_ATTR), elem.getAttribute(META_VALUE_ATTR));
       } else if (TEMPLATE_ELEM.equals(qName)) {
-        features.addTemplate(new Value(pluginId, elem.getAttribute(TEMPLATE_FILE_ATTR)));
+        features.addTemplate(elem.getAttribute(TEMPLATE_FILE_ATTR));
       }
     }
 
