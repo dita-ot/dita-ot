@@ -39,7 +39,7 @@ final class ImportXSLAction extends ImportAction {
   }
 
   private URI getHref(final Value value) {
-    Features features = featureTable.get(value.id());
+    Plugin features = featureTable.get(value.id());
     final URI pluginDir = features.pluginDir().toURI();
     final URI templateFile = URLUtils.toFile(value.value()).toURI().normalize();
     final URI template = pluginDir.relativize(templateFile);

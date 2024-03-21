@@ -101,7 +101,7 @@ public final class Integrator {
   public static final String CONF_PARSER_FORMAT = "parser.";
 
   /** Plugin table which contains detected plugins. */
-  private final Map<String, Features> pluginTable;
+  private final Map<String, Plugin> pluginTable;
   private final Map<String, Value> templateSet;
   private final File ditaDir;
   /** Plugin configuration file. */
@@ -318,8 +318,8 @@ public final class Integrator {
     }
     configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.join(printTranstypes, CONF_LIST_SEPARATOR));
 
-    for (final Entry<String, Features> e : pluginTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : pluginTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = "plugin." + e.getKey() + ".dir";
       final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
       if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
@@ -839,7 +839,7 @@ public final class Integrator {
    */
   private boolean loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
-      final Features pluginFeatures = pluginTable.get(plugin);
+      final Plugin pluginFeatures = pluginTable.get(plugin);
       final Map<String, List<String>> featureSet = pluginFeatures.features();
       for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
@@ -882,7 +882,7 @@ public final class Integrator {
    * @return {@code true} if plugin can be loaded, otherwise {@code false}
    */
   private boolean checkPlugin(final String currentPlugin) {
-    final Features pluginFeatures = pluginTable.get(currentPlugin);
+    final Plugin pluginFeatures = pluginTable.get(currentPlugin);
     // check whether dependcy is satisfied
     for (PluginRequirement requirement : pluginFeatures.requiredPlugins()) {
       boolean anyPluginFound = false;
@@ -969,7 +969,7 @@ public final class Integrator {
     try {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
-      final Features f = parser.getFeatures();
+      final Plugin f = parser.getPlugin();
       extensionPoints.addAll(f.extensionPoints().keySet());
       pluginTable.put(f.pluginId(), f);
       return root;
@@ -1012,9 +1012,9 @@ public final class Integrator {
    * @param extension extension ID
    * @return combined extension value, {@code null} if no value available
    */
-  static String getValue(final Map<String, Features> featureTable, final String extension) {
+  static String getValue(final Map<String, Plugin> featureTable, final String extension) {
     final List<String> buf = new ArrayList<>();
-    for (final Features f : featureTable.values()) {
+    for (final Plugin f : featureTable.values()) {
       final List<String> v = f.getFeature(extension);
       if (v != null) {
         buf.addAll(v);

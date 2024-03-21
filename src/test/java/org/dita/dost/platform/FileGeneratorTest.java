@@ -44,7 +44,7 @@ public class FileGeneratorTest {
     features.put("attribute", asList(new Value(null, "foo"), new Value(null, "bar"), new Value(null, "baz")));
   }
 
-  private static final Map<String, Features> plugins = new HashMap<>();
+  private static final Map<String, Plugin> plugins = new HashMap<>();
 
   static {
     Document doc;
@@ -94,7 +94,7 @@ public class FileGeneratorTest {
 
     protected List<Value> inputs = new ArrayList<>();
     protected Map<String, String> params = new HashMap<>();
-    protected Map<String, Features> features;
+    protected Map<String, Plugin> features;
 
     @Override
     public void setInput(final List<Value> input) {
@@ -107,7 +107,7 @@ public class FileGeneratorTest {
     }
 
     @Override
-    public void setFeatures(final Map<String, Features> features) {
+    public void setFeatures(final Map<String, Plugin> features) {
       this.features = features;
     }
 

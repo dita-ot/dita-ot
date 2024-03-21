@@ -84,7 +84,7 @@ public class PluginParser {
    *
    * @return plug-in features
    */
-  public Features getFeatures() {
+  public Plugin getPlugin() {
     return features.build();
   }
 

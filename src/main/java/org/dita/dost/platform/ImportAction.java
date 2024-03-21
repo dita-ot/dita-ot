@@ -26,7 +26,7 @@ abstract class ImportAction implements IAction {
   final Map<String, String> paramTable;
   DITAOTLogger logger;
   /** Plug-in features. */
-  Map<String, Features> featureTable = null;
+  Map<String, Plugin> featureTable = null;
 
   /**
    * Default Constructor.
@@ -66,7 +66,7 @@ abstract class ImportAction implements IAction {
    * @param h hastable
    */
   @Override
-  public void setFeatures(final Map<String, Features> h) {
+  public void setFeatures(final Map<String, Plugin> h) {
     featureTable = h;
   }
 

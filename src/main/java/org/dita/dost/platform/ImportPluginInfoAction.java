@@ -8,7 +8,7 @@
 package org.dita.dost.platform;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
 
 import java.io.File;
 import java.util.List;
@@ -33,8 +33,8 @@ final class ImportPluginInfoAction extends ImportAction {
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
     // plugin properties
-    for (final Entry<String, Features> e : featureTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : featureTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = "dita.plugin." + e.getKey() + ".dir";
       final StringBuilder location = new StringBuilder();
 

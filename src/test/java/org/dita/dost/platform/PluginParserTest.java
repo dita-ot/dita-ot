@@ -31,7 +31,7 @@ public class PluginParserTest {
 
   @Test
   public void testGetAllTemplates() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     assertEquals(
       Arrays.asList(new Value("dummy", "xsl/shell_template.xsl"), new Value("dummy", "xsl/shell2_template.xsl")),
       f.templates()
@@ -40,7 +40,7 @@ public class PluginParserTest {
 
   @Test
   public void testRequirements() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     final Map<String, Boolean> exp = new HashMap<>();
     exp.put("foo", true);
     exp.put("bar", true);
@@ -55,7 +55,7 @@ public class PluginParserTest {
 
   @Test
   public void testGetMeta() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     assertEquals("bar", f.getMeta("foo"));
     assertEquals("quxx", f.getMeta("baz"));
     assertNull(f.getMeta("undefined"));
@@ -63,7 +63,7 @@ public class PluginParserTest {
 
   @Test
   public void testValueFeature() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     assertEquals(asList("foo", "bar"), f.getFeature("type_text"));
     assertEquals(asList("foo", "bar"), f.getFeature("multiple_type_text"));
     assertNull(f.getFeature("undefined"));
@@ -71,7 +71,7 @@ public class PluginParserTest {
 
   @Test
   public void testFileValueFeature() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     assertEquals(
       asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
       f.getFeature("type_file")
@@ -84,7 +84,7 @@ public class PluginParserTest {
 
   @Test
   public void testFileFeature() {
-    final Features f = p.getFeatures();
+    final Plugin f = p.getPlugin();
     assertEquals(
       asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
       f.getFeature("file")

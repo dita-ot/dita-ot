@@ -47,7 +47,7 @@ final class FileGenerator extends XMLFilterImpl {
   private DITAOTLogger logger;
   /** Plug-in features. */
   private final Map<String, List<Value>> featureTable;
-  private final Map<String, Features> pluginTable;
+  private final Map<String, Plugin> pluginTable;
   /** Template file. */
   private File templateFile;
 
@@ -62,7 +62,7 @@ final class FileGenerator extends XMLFilterImpl {
    * Constructor init featureTable.
    * @param featureTbl featureTbl
    */
-  public FileGenerator(final Map<String, List<Value>> featureTbl, final Map<String, Features> pluginTable) {
+  public FileGenerator(final Map<String, List<Value>> featureTbl, final Map<String, Plugin> pluginTable) {
     featureTable = featureTbl;
     this.pluginTable = pluginTable;
     templateFile = null;

@@ -83,7 +83,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
   }
 
   @Override
-  public void setFeatures(final Map<String, Features> h) {}
+  public void setFeatures(final Map<String, Plugin> h) {}
 
   @Override
   public void setLogger(final DITAOTLogger logger) {

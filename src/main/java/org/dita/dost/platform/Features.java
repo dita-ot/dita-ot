@@ -29,7 +29,8 @@ record Features(
   List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
   List<Value> templates
-) {
+)
+  implements Plugin {
   /**
    * Return the feature name by id.
    * @param id feature id

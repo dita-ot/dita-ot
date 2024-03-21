@@ -7,7 +7,8 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.OASIS_CATALOG_NAMESPACE;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
 
 import java.io.File;
 import java.util.List;
@@ -33,10 +34,10 @@ final class ImportPluginCatalogAction extends ImportAction {
 
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
-    Features features = featureTable.get("org.dita.base");
+    Plugin features = featureTable.get("org.dita.base");
     final File basePluginDir = features.pluginDir();
-    for (final Entry<String, Features> e : featureTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : featureTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = PLUGIN_URI_SCHEME + ":" + e.getKey() + ":";
       final StringBuilder location = new StringBuilder();
 
