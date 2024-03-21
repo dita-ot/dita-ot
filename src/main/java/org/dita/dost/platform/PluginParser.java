@@ -100,8 +100,8 @@ public class PluginParser {
     }
     final Element root = migrate(doc.getDocumentElement());
 
-    features =
-      Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(root.getAttribute(PLUGIN_ID_ATTR));
+    final String pluginId = root.getAttribute(PLUGIN_ID_ATTR);
+    features = Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(pluginId);
     for (Element elem : getChildElements(root)) {
       final String qName = elem.getTagName();
       if (EXTENSION_POINT_ELEM.equals(qName)) {
@@ -116,7 +116,7 @@ public class PluginParser {
       } else if (META_ELEM.equals(qName)) {
         features.addMeta(elem.getAttribute(META_TYPE_ATTR), elem.getAttribute(META_VALUE_ATTR));
       } else if (TEMPLATE_ELEM.equals(qName)) {
-        features.addTemplate(new Value(root.getAttribute(PLUGIN_ID_ATTR), elem.getAttribute(TEMPLATE_FILE_ATTR)));
+        features.addTemplate(new Value(pluginId, elem.getAttribute(TEMPLATE_FILE_ATTR)));
       }
     }
 
