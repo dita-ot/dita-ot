@@ -25,7 +25,7 @@ record Features(
   File pluginDir,
   File ditaDir,
   Map<String, ExtensionPoint> extensionPoints,
-  Map<String, List<String>> featureTable,
+  Map<String, List<String>> features,
   List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
   List<Value> templates
@@ -36,15 +36,7 @@ record Features(
    * @return feature name
    */
   public List<String> getFeature(final String id) {
-    return featureTable.get(id);
-  }
-
-  /**
-   * Return the set of all features.
-   * @return features
-   */
-  public Map<String, List<String>> getAllFeatures() {
-    return featureTable;
+    return features.get(id);
   }
 
   /**
@@ -60,7 +52,7 @@ record Features(
    * get all templates.
    * @return templates list
    */
-  public List<Value> getAllTemplates() {
+  public List<Value> getTemplates() {
     return templates;
   }
 

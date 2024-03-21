@@ -840,7 +840,7 @@ public final class Integrator {
   private boolean loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
       final Features pluginFeatures = pluginTable.get(plugin);
-      final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
+      final Map<String, List<String>> featureSet = pluginFeatures.features();
       for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
         final List<Value> values = currentFeature
@@ -862,7 +862,7 @@ public final class Integrator {
         }
       }
 
-      for (final Value templateName : pluginFeatures.getAllTemplates()) {
+      for (final Value templateName : pluginFeatures.getTemplates()) {
         final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName.value()))
           .getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);

@@ -95,7 +95,7 @@ public class FeaturesTest {
     exp.put("foo", asList("bar", "baz"));
     exp.put("bar", asList("qux"));
 
-    assertEquals(exp, f.getAllFeatures());
+    assertEquals(exp, f.features());
   }
 
   @Test
@@ -230,7 +230,7 @@ public class FeaturesTest {
       .build();
 
     final List<Value> act = f
-      .getAllTemplates()
+      .getTemplates()
       .stream()
       .sorted((a0, a1) -> Objects.compare(a0.value(), a1.value(), String::compareTo))
       .toList();

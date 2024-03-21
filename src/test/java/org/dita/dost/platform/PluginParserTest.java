@@ -34,7 +34,7 @@ public class PluginParserTest {
     final Features f = p.getFeatures();
     assertEquals(
       Arrays.asList(new Value("dummy", "xsl/shell_template.xsl"), new Value("dummy", "xsl/shell2_template.xsl")),
-      f.getAllTemplates()
+      f.getTemplates()
     );
   }
 
