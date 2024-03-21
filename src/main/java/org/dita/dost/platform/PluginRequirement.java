@@ -10,7 +10,7 @@
 package org.dita.dost.platform;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -54,8 +54,8 @@ final class PluginRequirement {
    * Get plugins.
    * @return plugins
    */
-  public Iterator<String> getPlugins() {
-    return plugins.iterator();
+  public List<String> getPlugins() {
+    return plugins;
   }
 
   /**
@@ -64,14 +64,5 @@ final class PluginRequirement {
    */
   public boolean getRequired() {
     return required;
-  }
-
-  /**
-   * To String.
-   * @return string
-   */
-  @Override
-  public String toString() {
-    return plugins.toString();
   }
 }

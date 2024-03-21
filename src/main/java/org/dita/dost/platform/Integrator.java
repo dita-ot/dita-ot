@@ -328,10 +328,7 @@ public final class Integrator {
       } else {
         configuration.put(
           name,
-          FileUtils.getRelativeUnixPath(
-            new File(ditaDir, "dummy").getAbsolutePath(),
-            f.getPluginDir().getAbsolutePath()
-          )
+          FileUtils.getRelativeUnixPath(new File(ditaDir, "dummy").getAbsolutePath(), f.pluginDir().getAbsolutePath())
         );
       }
     }
@@ -866,7 +863,7 @@ public final class Integrator {
       }
 
       for (final Value templateName : pluginFeatures.getAllTemplates()) {
-        final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value()))
+        final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName.value()))
           .getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);
         templateSet.put(templatePath, templateName);
@@ -886,15 +883,11 @@ public final class Integrator {
    */
   private boolean checkPlugin(final String currentPlugin) {
     final Features pluginFeatures = pluginTable.get(currentPlugin);
-    final Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
     // check whether dependcy is satisfied
-    while (iter.hasNext()) {
+    for (PluginRequirement requirement : pluginFeatures.requiredPlugins()) {
       boolean anyPluginFound = false;
-      final PluginRequirement requirement = iter.next();
-      final Iterator<String> requiredPluginIter = requirement.getPlugins();
-      while (requiredPluginIter.hasNext()) {
-        // Iterate over all alternatives in plugin requirement.
-        final String requiredPlugin = requiredPluginIter.next();
+      // Iterate over all alternatives in plugin requirement.
+      for (String requiredPlugin : requirement.getPlugins()) {
         if (pluginTable.containsKey(requiredPlugin)) {
           if (!loadedPlugin.contains(requiredPlugin)) {
             // required plug-in is not loaded
@@ -977,8 +970,8 @@ public final class Integrator {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
       final Features f = parser.getFeatures();
-      extensionPoints.addAll(f.getExtensionPoints().keySet());
-      pluginTable.put(f.getPluginId(), f);
+      extensionPoints.addAll(f.extensionPoints().keySet());
+      pluginTable.put(f.pluginId(), f);
       return root;
     } catch (final RuntimeException e) {
       throw e;

@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import org.dita.dost.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,10 +45,8 @@ public class PluginParserTest {
     exp.put("foo", true);
     exp.put("bar", true);
     exp.put("baz", false);
-    for (final Iterator<PluginRequirement> i = f.getRequireListIter(); i.hasNext();) {
-      final PluginRequirement r = i.next();
-      for (final Iterator<String> ps = r.getPlugins(); ps.hasNext();) {
-        final String p = ps.next();
+    for (final PluginRequirement r : f.requiredPlugins()) {
+      for (String p : r.getPlugins()) {
         assertTrue(exp.containsKey(p));
         assertEquals(exp.get(p), r.getRequired());
       }

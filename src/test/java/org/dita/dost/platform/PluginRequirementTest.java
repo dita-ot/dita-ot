@@ -9,8 +9,6 @@ package org.dita.dost.platform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -43,10 +41,7 @@ public class PluginRequirementTest {
     final PluginRequirement pr = new PluginRequirement();
     pr.addPlugins("foo | bar | baz");
 
-    final List<String> act = new ArrayList<>();
-    for (final Iterator<String> i = pr.getPlugins(); i.hasNext();) {
-      act.add(i.next());
-    }
+    final List<String> act = pr.getPlugins();
 
     assertArrayEquals(new String[] { "foo ", " bar ", " baz" }, act.toArray(new String[0]));
   }
@@ -59,12 +54,5 @@ public class PluginRequirementTest {
     assertTrue(pr.getRequired());
     pr.setRequired(false);
     assertFalse(pr.getRequired());
-  }
-
-  @Test
-  public void testToString() {
-    final PluginRequirement pr = new PluginRequirement();
-    pr.addPlugins("foo | bar | baz");
-    assertEquals("[foo ,  bar ,  baz]", pr.toString());
   }
 }

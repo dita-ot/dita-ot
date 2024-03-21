@@ -30,15 +30,12 @@ public class FeaturesTest {
 
   @Test
   public void testGetLocation() {
-    assertEquals(
-      new File("base", "plugins").getAbsoluteFile(),
-      Features
-        .builder()
-        .setPluginDir(new File("base", "plugins").getAbsoluteFile())
-        .setDitaDir(new File("base").getAbsoluteFile())
-        .build()
-        .getPluginDir()
-    );
+    Features features = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .build();
+    assertEquals(new File("base", "plugins").getAbsoluteFile(), features.pluginDir());
   }
 
   @Test
@@ -66,7 +63,7 @@ public class FeaturesTest {
       .addExtensionPoint("id2", "name2")
       .build();
 
-    assertEquals(2, f.getExtensionPoints().size());
+    assertEquals(2, f.extensionPoints().size());
     //    assertEquals(e, f.getExtensionPoints().get("id"));
     //    assertEquals(e2, f.getExtensionPoints().get("id2"));
   }
@@ -77,7 +74,7 @@ public class FeaturesTest {
       .builder()
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
-      .addFeature("foo", getElement("bar", null))
+      .addFeature("foo", createElement("bar", null))
       .build();
 
     assertEquals(asList("bar"), f.getFeature("foo"));
@@ -89,9 +86,9 @@ public class FeaturesTest {
       .builder()
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
-      .addFeature("foo", getElement("bar", null))
-      .addFeature("foo", getElement("baz", null))
-      .addFeature("bar", getElement("qux", null))
+      .addFeature("foo", createElement("bar", null))
+      .addFeature("foo", createElement("baz", null))
+      .addFeature("bar", createElement("qux", null))
       .build();
 
     final Map<String, List<String>> exp = new HashMap<>();
@@ -107,9 +104,9 @@ public class FeaturesTest {
       .builder()
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
-      .addFeature("foo", getElement(null, null))
-      .addFeature("foo", getElement(" bar, baz ", null))
-      .addFeature("foo", getElement("bar, baz", "file"))
+      .addFeature("foo", createElement(null, null))
+      .addFeature("foo", createElement(" bar, baz ", null))
+      .addFeature("foo", createElement("bar, baz", "file"))
       .build();
 
     assertEquals(
@@ -164,14 +161,8 @@ public class FeaturesTest {
       .build();
 
     final Map<List<String>, Boolean> act = new HashMap<>();
-    final Iterator<PluginRequirement> requirements = f.getRequireListIter();
-    while (requirements.hasNext()) {
-      final PluginRequirement requirement = requirements.next();
-      final List<String> plugins = new ArrayList<>();
-      for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext();) {
-        plugins.add(ps.next());
-      }
-      Collections.sort(plugins);
+    for (PluginRequirement requirement : f.requiredPlugins()) {
+      final List<String> plugins = requirement.getPlugins().stream().sorted().toList();
       act.put(plugins, requirement.getRequired());
     }
 
@@ -224,7 +215,6 @@ public class FeaturesTest {
       .addTemplate(new Value("base", "foo"))
       .addTemplate(new Value("base", "foo"))
       .addTemplate(new Value("base", "bar"))
-      .addTemplate(null)
       .build();
   }
 
@@ -237,23 +227,17 @@ public class FeaturesTest {
       .addTemplate(new Value("base", "foo"))
       .addTemplate(new Value("base", "foo"))
       .addTemplate(new Value("base", "bar"))
-      .addTemplate(null)
       .build();
 
-    final List<Value> act = f.getAllTemplates();
-    act.sort((a0, a1) -> {
-      if (a0 == null || a1 == null) {
-        return -1;
-      }
-      return Objects.compare(a0.value(), a1.value(), String::compareTo);
-    });
-    assertEquals(
-      Arrays.asList(null, new Value("base", "bar"), new Value("base", "foo"), new Value("base", "foo")),
-      act
-    );
+    final List<Value> act = f
+      .getAllTemplates()
+      .stream()
+      .sorted((a0, a1) -> Objects.compare(a0.value(), a1.value(), String::compareTo))
+      .toList();
+    assertEquals(Arrays.asList(new Value("base", "bar"), new Value("base", "foo"), new Value("base", "foo")), act);
   }
 
-  private static Element getElement(final String value, final String type) {
+  private static Element createElement(final String value, final String type) {
     final Element feature = doc.createElement(FEATURE_ELEM);
     if (value != null) {
       feature.setAttribute("value", value);

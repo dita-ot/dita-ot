@@ -12,6 +12,7 @@ import static org.dita.dost.platform.PluginParser.*;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.dita.dost.util.FileUtils;
 import org.w3c.dom.Element;
 
@@ -20,39 +21,15 @@ import org.w3c.dom.Element;
  * @author Zhang, Yuan Peng
  */
 record Features(
-  String id,
+  String pluginId,
   File pluginDir,
   File ditaDir,
   Map<String, ExtensionPoint> extensionPoints,
   Map<String, List<String>> featureTable,
-  List<PluginRequirement> requireList,
+  List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
-  List<Value> templateList
+  List<Value> templates
 ) {
-  /**
-   * Return the feature pluginDir.
-   * @return pluginDir
-   */
-  public File getPluginDir() {
-    return pluginDir;
-  }
-
-  /**
-   * Get DITA-OT base directory
-   * @return base directory
-   */
-  public File getDitaDir() {
-    return ditaDir;
-  }
-
-  String getPluginId() {
-    return id;
-  }
-
-  Map<String, ExtensionPoint> getExtensionPoints() {
-    return Collections.unmodifiableMap(extensionPoints);
-  }
-
   /**
    * Return the feature name by id.
    * @param id feature id
@@ -71,14 +48,6 @@ record Features(
   }
 
   /**
-   * Get the iterator of required list.
-   * @return iterator
-   */
-  public Iterator<PluginRequirement> getRequireListIter() {
-    return requireList.iterator();
-  }
-
-  /**
    * Return meat info specifying type.
    * @param type type
    * @return meat info
@@ -92,7 +61,7 @@ record Features(
    * @return templates list
    */
   public List<Value> getAllTemplates() {
-    return templateList;
+    return templates;
   }
 
   public static Builder builder() {
@@ -122,7 +91,19 @@ record Features(
     }
 
     public Features build() {
-      return new Features(id, pluginDir, ditaDir, extensionPoints, featureTable, requireList, metaTable, templateList);
+      return new Features(
+        id,
+        pluginDir,
+        ditaDir,
+        Map.copyOf(extensionPoints),
+        featureTable
+          .entrySet()
+          .stream()
+          .collect(Collectors.toMap(Map.Entry::getKey, entry -> List.copyOf(entry.getValue()))),
+        List.copyOf(requireList),
+        Map.copyOf(metaTable),
+        List.copyOf(templateList)
+      );
     }
 
     /**
@@ -150,11 +131,6 @@ record Features(
       extensionPoints.put(extensionPointId, new ExtensionPoint(extensionPointId, name, id));
       return this;
     }
-
-    //    Builder addExtensionPoint(final ExtensionPoint extensionPoint) {
-    //      extensionPoints.put(extensionPoint.id(), extensionPoint);
-    //      return this;
-    //    }
 
     /**
      * Add feature to the feature table.
