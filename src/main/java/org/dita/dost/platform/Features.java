@@ -48,14 +48,6 @@ record Features(
     return metaTable.get(type);
   }
 
-  /**
-   * get all templates.
-   * @return templates list
-   */
-  public List<Value> getTemplates() {
-    return templates;
-  }
-
   public static Builder builder() {
     return new Builder();
   }

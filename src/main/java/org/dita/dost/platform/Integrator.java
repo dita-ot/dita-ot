@@ -862,7 +862,7 @@ public final class Integrator {
         }
       }
 
-      for (final Value templateName : pluginFeatures.getTemplates()) {
+      for (final Value templateName : pluginFeatures.templates()) {
         final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName.value()))
           .getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);

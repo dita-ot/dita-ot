@@ -230,7 +230,7 @@ public class FeaturesTest {
       .build();
 
     final List<Value> act = f
-      .getTemplates()
+      .templates()
       .stream()
       .sorted((a0, a1) -> Objects.compare(a0.value(), a1.value(), String::compareTo))
       .toList();
