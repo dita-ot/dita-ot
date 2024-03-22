@@ -14,13 +14,11 @@ import java.util.Objects;
  *
  * @param id extension point ID
  * @param name extension point name, may be {@code null}
- * @param plugin ID of the plugin that defines the extension point
  * @since 1.5.3
  * @author Jarno Elovirta
  */
-record ExtensionPoint(String id, String name, String plugin) {
+record ExtensionPoint(String id, String name) {
   public ExtensionPoint {
     Objects.requireNonNull(id);
-    Objects.requireNonNull(plugin);
   }
 }

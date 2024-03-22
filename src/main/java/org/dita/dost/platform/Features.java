@@ -113,7 +113,7 @@ record Features(
     }
 
     Builder addExtensionPoint(String extensionPointId, String name) {
-      extensionPoints.put(extensionPointId, new ExtensionPoint(extensionPointId, name, id));
+      extensionPoints.put(extensionPointId, new ExtensionPoint(extensionPointId, name));
       return this;
     }
 
