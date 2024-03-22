@@ -165,8 +165,8 @@ public class FeaturesTest {
 
     final Map<List<String>, Boolean> act = new HashMap<>();
     for (PluginRequirement requirement : f.requiredPlugins()) {
-      final List<String> plugins = requirement.getPlugins().stream().sorted().toList();
-      act.put(plugins, requirement.getRequired());
+      final List<String> plugins = requirement.plugins().stream().sorted().toList();
+      act.put(plugins, requirement.required());
     }
 
     final Map<List<String>, Boolean> exp = new HashMap<>();

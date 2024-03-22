@@ -886,7 +886,7 @@ public final class Integrator {
     for (PluginRequirement requirement : pluginFeatures.requiredPlugins()) {
       boolean anyPluginFound = false;
       // Iterate over all alternatives in plugin requirement.
-      for (String requiredPlugin : requirement.getPlugins()) {
+      for (String requiredPlugin : requirement.plugins()) {
         if (pluginTable.containsKey(requiredPlugin)) {
           if (!loadedPlugin.contains(requiredPlugin)) {
             // required plug-in is not loaded
@@ -896,7 +896,7 @@ public final class Integrator {
           anyPluginFound = true;
         }
       }
-      if (!anyPluginFound && requirement.getRequired()) {
+      if (!anyPluginFound && requirement.required()) {
         // not contain any plugin required by current plugin
         final String msg = MessageUtils.getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
         throw new RuntimeException(msg);

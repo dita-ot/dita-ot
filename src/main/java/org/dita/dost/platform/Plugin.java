@@ -16,6 +16,7 @@ public interface Plugin {
   String pluginId();
   File pluginDir();
   File ditaDir();
+  SemVer pluginVersion();
   Map<String, ExtensionPoint> extensionPoints();
   Map<String, List<String>> features();
   List<PluginRequirement> requiredPlugins();

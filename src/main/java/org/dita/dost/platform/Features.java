@@ -22,6 +22,7 @@ import org.w3c.dom.Element;
  */
 record Features(
   String pluginId,
+  SemVer pluginVersion,
   File pluginDir,
   File ditaDir,
   Map<String, ExtensionPoint> extensionPoints,
@@ -56,6 +57,7 @@ record Features(
   static class Builder {
 
     private String id;
+    private SemVer pluginVersion;
     private File pluginDir;
     private File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
@@ -78,6 +80,7 @@ record Features(
     public Features build() {
       return new Features(
         id,
+        pluginVersion,
         pluginDir,
         ditaDir,
         Map.copyOf(extensionPoints),
@@ -120,16 +123,6 @@ record Features(
     /**
      * Add feature to the feature table.
      *
-     * Follow OSGi bundle version syntax rules:
-     *
-     * <pre>
-     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-     * major     ::= number
-     * minor     ::=number
-     * micro     ::=number
-     * qualifier ::= ( alphanum | '_' | '-' )+
-     * </pre>
-     *
      * @param id feature id
      * @param elem configuration element
      */
@@ -158,11 +151,7 @@ record Features(
             }
           } else {
             if (id.equals("package.version")) {
-              if (!VERSION_PATTERN.matcher(valueElement.trim()).matches()) {
-                throw new IllegalArgumentException(
-                  "Plug-in version '%s' doesn't follow syntax rules.".formatted(valueElement.trim())
-                );
-              }
+              setPluginVersion(valueElement.trim());
             }
             valueBuffer.add(valueElement.trim());
           }
@@ -174,13 +163,33 @@ record Features(
     }
 
     /**
+     * Follow OSGi bundle version syntax rules:
+     *
+     * <pre>
+     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+     * major     ::= number
+     * minor     ::=number
+     * micro     ::=number
+     * qualifier ::= ( alphanum | '_' | '-' )+
+     * </pre>
+     */
+    public Builder setPluginVersion(String pluginVersion) {
+      if (!VERSION_PATTERN.matcher(pluginVersion).matches()) {
+        throw new IllegalArgumentException(
+          "Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion)
+        );
+      }
+      this.pluginVersion = new SemVer(pluginVersion);
+      return this;
+    }
+
+    /**
      * Add the required feature id.
      * @param id feature id
      */
     Builder addRequire(final String id) {
-      final PluginRequirement requirement = new PluginRequirement();
-      requirement.addPlugins(id);
-      requireList.add(requirement);
+      final PluginRequirement.Builder requirement = PluginRequirement.builder().addPlugins(id);
+      requireList.add(requirement.build());
       return this;
     }
 
@@ -190,12 +199,12 @@ record Features(
      * @param importance importance
      */
     Builder addRequire(final String id, final String importance) {
-      final PluginRequirement requirement = new PluginRequirement();
+      final PluginRequirement.Builder requirement = PluginRequirement.builder();
       requirement.addPlugins(id);
       if (importance != null) {
         requirement.setRequired(importance.equals(REQUIRE_IMPORTANCE_VALUE_REQUIRED));
       }
-      requireList.add(requirement);
+      requireList.add(requirement.build());
       return this;
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -102,6 +103,10 @@ public class PluginParser {
 
     final String pluginId = root.getAttribute(PLUGIN_ID_ATTR);
     features = Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(pluginId);
+    final Attr pluginVersion = root.getAttributeNode(PLUGIN_VERSION_ATTR);
+    if (pluginVersion != null) {
+      features.setPluginVersion(pluginVersion.getValue());
+    }
     for (Element elem : getChildElements(root)) {
       final String qName = elem.getTagName();
       if (EXTENSION_POINT_ELEM.equals(qName)) {
