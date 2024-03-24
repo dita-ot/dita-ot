@@ -163,22 +163,10 @@ record Features(
     }
 
     /**
-     * Follow OSGi bundle version syntax rules:
-     *
-     * <pre>
-     * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-     * major     ::= number
-     * minor     ::=number
-     * micro     ::=number
-     * qualifier ::= ( alphanum | '_' | '-' )+
-     * </pre>
+     * Add plugin-verion.
+     * @param pluginVersion plug-in version
      */
     public Builder setPluginVersion(String pluginVersion) {
-      if (!VERSION_PATTERN.matcher(pluginVersion).matches()) {
-        throw new IllegalArgumentException(
-          "Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion)
-        );
-      }
       this.pluginVersion = new SemVer(pluginVersion);
       return this;
     }

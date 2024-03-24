@@ -1002,6 +1002,7 @@ public final class Integrator {
    */
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+    this.parser.setLogger(logger);
   }
 
   /**

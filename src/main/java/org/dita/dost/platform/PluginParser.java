@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -58,6 +59,7 @@ public class PluginParser {
   private final DocumentBuilder builder;
   private File pluginDir;
   private Features.Builder features;
+  private DITAOTLogger logger;
 
   /**
    * Constructor initialize Feature with location.
@@ -68,6 +70,10 @@ public class PluginParser {
     assert ditaDir.isAbsolute();
     this.ditaDir = ditaDir;
     builder = XMLUtils.getDocumentBuilder();
+  }
+
+  public void setLogger(final DITAOTLogger logger) {
+    this.logger = logger;
   }
 
   /**
@@ -105,7 +111,11 @@ public class PluginParser {
     features = Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(pluginId);
     final Attr pluginVersion = root.getAttributeNode(PLUGIN_VERSION_ATTR);
     if (pluginVersion != null) {
-      features.setPluginVersion(pluginVersion.getValue());
+      if (!VERSION_PATTERN.matcher(pluginVersion.getValue()).matches()) {
+        logger.error("Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion.getValue()));
+      } else {
+        features.setPluginVersion(pluginVersion.getValue());
+      }
     }
     for (Element elem : getChildElements(root)) {
       final String qName = elem.getTagName();
