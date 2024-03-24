@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
+import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
@@ -35,6 +37,7 @@ public class PluginParser {
   private static final String META_TYPE_ATTR = "type";
   private static final String REQUIRE_ELEM = "require";
   private static final String REQUIRE_IMPORTANCE_ATTR = "importance";
+  static final String REQUIRE_IMPORTANCE_VALUE_REQUIRED = "required";
   private static final String REQUIRE_PLUGIN_ATTR = "plugin";
   public static final String FEATURE_ELEM = "feature";
   private static final String TRANSTYPE_ELEM = "transtype";
@@ -42,6 +45,9 @@ public class PluginParser {
   private static final String TRANSTYPE_NAME_ATTR = "name";
   public static final String FEATURE_ID_ATTR = "extension";
   public static final String FEATURE_VALUE_ATTR = "value";
+  public static final String FEATURE_FILE_ATTR = "file";
+  public static final String FEATURE_TYPE_ATTR = "type";
+  public static final String FEATURE_TYPE_VALUE_FILE = "file";
   public static final String PLUGIN_ELEM = REQUIRE_PLUGIN_ATTR;
   private static final String PLUGIN_ID_ATTR = "id";
   private static final String PLUGIN_VERSION_ATTR = "version";
@@ -52,7 +58,8 @@ public class PluginParser {
   private final File ditaDir;
   private final DocumentBuilder builder;
   private File pluginDir;
-  private Features features;
+  private Features.Builder features;
+  private DITAOTLogger logger;
 
   /**
    * Constructor initialize Feature with location.
@@ -63,6 +70,10 @@ public class PluginParser {
     assert ditaDir.isAbsolute();
     this.ditaDir = ditaDir;
     builder = XMLUtils.getDocumentBuilder();
+  }
+
+  public void setLogger(final DITAOTLogger logger) {
+    this.logger = logger;
   }
 
   /**
@@ -80,8 +91,8 @@ public class PluginParser {
    *
    * @return plug-in features
    */
-  public Features getFeatures() {
-    return features;
+  public Plugin getPlugin() {
+    return features.build();
   }
 
   /**
@@ -96,8 +107,16 @@ public class PluginParser {
     }
     final Element root = migrate(doc.getDocumentElement());
 
-    features = new Features(pluginDir, ditaDir);
-    features.setPluginId(root.getAttribute(PLUGIN_ID_ATTR));
+    final String pluginId = root.getAttribute(PLUGIN_ID_ATTR);
+    features = Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(pluginId);
+    final Attr pluginVersion = root.getAttributeNode(PLUGIN_VERSION_ATTR);
+    if (pluginVersion != null) {
+      if (!VERSION_PATTERN.matcher(pluginVersion.getValue()).matches()) {
+        logger.error("Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion.getValue()));
+      } else {
+        features.setPluginVersion(pluginVersion.getValue());
+      }
+    }
     for (Element elem : getChildElements(root)) {
       final String qName = elem.getTagName();
       if (EXTENSION_POINT_ELEM.equals(qName)) {
@@ -112,49 +131,11 @@ public class PluginParser {
       } else if (META_ELEM.equals(qName)) {
         features.addMeta(elem.getAttribute(META_TYPE_ATTR), elem.getAttribute(META_VALUE_ATTR));
       } else if (TEMPLATE_ELEM.equals(qName)) {
-        features.addTemplate(new Value(root.getAttribute(PLUGIN_ID_ATTR), elem.getAttribute(TEMPLATE_FILE_ATTR)));
+        features.addTemplate(elem.getAttribute(TEMPLATE_FILE_ATTR));
       }
     }
 
-    validatePlugin(features);
-
     return root;
-  }
-
-  /**
-   * Validate plug-in configuration.
-   * <p>
-   * Follow OSGi symbolic name syntax rules:
-   *
-   * <pre>
-   * digit         ::= [0..9]
-   * alpha         ::= [a..zA..Z]
-   * alphanum      ::= alpha | digit
-   * token         ::= ( alphanum | '_' | '-' )+
-   * symbolic-name ::= token('.'token)*
-   * </pre>
-   *
-   * Follow OSGi bundle version syntax rules:
-   *
-   * <pre>
-   * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-   * major     ::= number
-   * minor     ::=number
-   * micro     ::=number
-   * qualifier ::= ( alphanum | '_' | '-' )+
-   * </pre>
-   *
-   * @param f Features to validate
-   */
-  private void validatePlugin(final Features f) {
-    final String id = f.getPluginId();
-    if (!ID_PATTERN.matcher(id).matches()) {
-      throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
-    }
-    final List<String> version = f.getFeature("package.version");
-    if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-      throw new IllegalArgumentException("Plug-in version '%s' doesn't follow syntax rules.".formatted(version.get(0)));
-    }
   }
 
   /**
@@ -162,8 +143,8 @@ public class PluginParser {
    */
   private Element migrate(Element root) {
     if (root.getAttributeNode(PLUGIN_VERSION_ATTR) == null) {
-      final List<Element> features = toList(root.getElementsByTagName(FEATURE_ELEM));
-      final String version = features
+      final List<Element> featureElems = toList(root.getElementsByTagName(FEATURE_ELEM));
+      final String version = featureElems
         .stream()
         .filter(elem -> elem.getAttribute(FEATURE_ID_ATTR).equals("package.version"))
         .findFirst()
@@ -197,6 +178,6 @@ public class PluginParser {
       throw new IllegalArgumentException(EXTENSION_POINT_ID_ATTR + " attribute not set on extension-point");
     }
     final String name = elem.getAttribute(EXTENSION_POINT_NAME_ATTR);
-    features.addExtensionPoint(new ExtensionPoint(id, name, features.getPluginId()));
+    features.addExtensionPoint(id, name);
   }
 }

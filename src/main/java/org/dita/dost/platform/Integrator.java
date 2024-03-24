@@ -101,7 +101,7 @@ public final class Integrator {
   public static final String CONF_PARSER_FORMAT = "parser.";
 
   /** Plugin table which contains detected plugins. */
-  private final Map<String, Features> pluginTable;
+  private final Map<String, Plugin> pluginTable;
   private final Map<String, Value> templateSet;
   private final File ditaDir;
   /** Plugin configuration file. */
@@ -111,7 +111,7 @@ public final class Integrator {
   private final PluginParser parser;
   private DITAOTLogger logger;
   private final Set<String> loadedPlugin;
-  private final Hashtable<String, List<Value>> featureTable;
+  private final Map<String, List<Value>> featureTable;
 
   @Deprecated
   private File propertiesFile;
@@ -130,7 +130,7 @@ public final class Integrator {
     templateSet = new HashMap<>(16);
     descSet = new HashSet<>(16);
     loadedPlugin = new HashSet<>(16);
-    featureTable = new Hashtable<>(16);
+    featureTable = new HashMap<>(16);
     extensionPoints = new HashSet<>();
     try {
       final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -318,8 +318,8 @@ public final class Integrator {
     }
     configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.join(printTranstypes, CONF_LIST_SEPARATOR));
 
-    for (final Entry<String, Features> e : pluginTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : pluginTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = "plugin." + e.getKey() + ".dir";
       final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
       if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
@@ -328,10 +328,7 @@ public final class Integrator {
       } else {
         configuration.put(
           name,
-          FileUtils.getRelativeUnixPath(
-            new File(ditaDir, "dummy").getAbsolutePath(),
-            f.getPluginDir().getAbsolutePath()
-          )
+          FileUtils.getRelativeUnixPath(new File(ditaDir, "dummy").getAbsolutePath(), f.pluginDir().getAbsolutePath())
         );
       }
     }
@@ -842,8 +839,8 @@ public final class Integrator {
    */
   private boolean loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
-      final Features pluginFeatures = pluginTable.get(plugin);
-      final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
+      final Plugin pluginFeatures = pluginTable.get(plugin);
+      final Map<String, List<String>> featureSet = pluginFeatures.features();
       for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
         final List<Value> values = currentFeature
@@ -865,11 +862,10 @@ public final class Integrator {
         }
       }
 
-      for (final Value templateName : pluginFeatures.getAllTemplates()) {
-        final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value()))
-          .getAbsolutePath();
+      for (final String templateName : pluginFeatures.templates()) {
+        final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName)).getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);
-        templateSet.put(templatePath, templateName);
+        templateSet.put(templatePath, new Value(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
       return true;
@@ -885,16 +881,12 @@ public final class Integrator {
    * @return {@code true} if plugin can be loaded, otherwise {@code false}
    */
   private boolean checkPlugin(final String currentPlugin) {
-    final Features pluginFeatures = pluginTable.get(currentPlugin);
-    final Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
+    final Plugin pluginFeatures = pluginTable.get(currentPlugin);
     // check whether dependcy is satisfied
-    while (iter.hasNext()) {
+    for (PluginRequirement requirement : pluginFeatures.requiredPlugins()) {
       boolean anyPluginFound = false;
-      final PluginRequirement requirement = iter.next();
-      final Iterator<String> requiredPluginIter = requirement.getPlugins();
-      while (requiredPluginIter.hasNext()) {
-        // Iterate over all alternatives in plugin requirement.
-        final String requiredPlugin = requiredPluginIter.next();
+      // Iterate over all alternatives in plugin requirement.
+      for (String requiredPlugin : requirement.plugins()) {
         if (pluginTable.containsKey(requiredPlugin)) {
           if (!loadedPlugin.contains(requiredPlugin)) {
             // required plug-in is not loaded
@@ -904,7 +896,7 @@ public final class Integrator {
           anyPluginFound = true;
         }
       }
-      if (!anyPluginFound && requirement.getRequired()) {
+      if (!anyPluginFound && requirement.required()) {
         // not contain any plugin required by current plugin
         final String msg = MessageUtils.getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
         throw new RuntimeException(msg);
@@ -976,9 +968,9 @@ public final class Integrator {
     try {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
-      final Features f = parser.getFeatures();
-      extensionPoints.addAll(f.getExtensionPoints().keySet());
-      pluginTable.put(f.getPluginId(), f);
+      final Plugin f = parser.getPlugin();
+      extensionPoints.addAll(f.extensionPoints().keySet());
+      pluginTable.put(f.pluginId(), f);
       return root;
     } catch (final RuntimeException e) {
       throw e;
@@ -1010,6 +1002,7 @@ public final class Integrator {
    */
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+    this.parser.setLogger(logger);
   }
 
   /**
@@ -1019,9 +1012,9 @@ public final class Integrator {
    * @param extension extension ID
    * @return combined extension value, {@code null} if no value available
    */
-  static String getValue(final Map<String, Features> featureTable, final String extension) {
+  static String getValue(final Map<String, Plugin> featureTable, final String extension) {
     final List<String> buf = new ArrayList<>();
-    for (final Features f : featureTable.values()) {
+    for (final Plugin f : featureTable.values()) {
       final List<String> v = f.getFeature(extension);
       if (v != null) {
         buf.addAll(v);

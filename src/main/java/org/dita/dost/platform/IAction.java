@@ -44,7 +44,7 @@ public interface IAction {
    * Set the feature table.
    * @param h hastable
    */
-  void setFeatures(Map<String, Features> h);
+  void setFeatures(Map<String, Plugin> h);
   /**
    * Set logger.
    * @param logger logger instance

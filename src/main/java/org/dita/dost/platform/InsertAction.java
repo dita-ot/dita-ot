@@ -29,7 +29,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
   private final XMLReader reader;
   private DITAOTLogger logger;
   private final Set<Value> fileNameSet;
-  final Hashtable<String, String> paramTable;
+  final Map<String, String> paramTable;
   private int elemLevel = 0;
   /** Current processing file. */
   String currentFile;
@@ -39,7 +39,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
    */
   public InsertAction() {
     fileNameSet = new LinkedHashSet<>(16);
-    paramTable = new Hashtable<>();
+    paramTable = new HashMap<>();
     try {
       final SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setNamespaceAware(true);
@@ -83,7 +83,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
   }
 
   @Override
-  public void setFeatures(final Map<String, Features> h) {}
+  public void setFeatures(final Map<String, Plugin> h) {}
 
   @Override
   public void setLogger(final DITAOTLogger logger) {

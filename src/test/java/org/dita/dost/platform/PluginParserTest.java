@@ -7,13 +7,10 @@
  */
 package org.dita.dost.platform;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.dita.dost.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,80 +18,62 @@ import org.junit.jupiter.api.Test;
 
 public class PluginParserTest {
 
-  final File resourceDir = TestUtils.getResourceDir(PluginParserTest.class);
-  final PluginParser p = new PluginParser(resourceDir);
+  private final File resourceDir = TestUtils.getResourceDir(PluginParserTest.class);
+
+  private PluginParser p;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void setUp() {
+    p = new PluginParser(resourceDir);
     p.setPluginDir(resourceDir);
+  }
+
+  @Test
+  public void test() throws Exception {
     p.parse(new File(resourceDir, "plugin.xml"));
-  }
-
-  @Test
-  public void testGetAllTemplates() {
-    final Features f = p.getFeatures();
-    assertEquals(
-      Arrays.asList(new Value("dummy", "xsl/shell_template.xsl"), new Value("dummy", "xsl/shell2_template.xsl")),
-      f.getAllTemplates()
+    var exp = new Features(
+      "dummy",
+      new SemVer(1, 2, 3),
+      resourceDir,
+      resourceDir,
+      Map.of(),
+      Map.of(
+        "type_file",
+        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        "file",
+        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        "multiple_type_file",
+        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        "multiple_file",
+        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        "multiple_type_text",
+        List.of("foo", "bar"),
+        "type_text",
+        List.of("foo", "bar")
+      ),
+      List.of(
+        new PluginRequirement(List.of("foo"), true),
+        new PluginRequirement(List.of("bar"), true),
+        new PluginRequirement(List.of("baz"), false)
+      ),
+      Map.of("foo", "bar", "baz", "quxx"),
+      List.of("xsl/shell_template.xsl", "xsl/shell2_template.xsl")
     );
+    final Plugin act = p.getPlugin();
+    assertEquals(exp.features(), act.features());
+    assertEquals(exp, act);
   }
 
   @Test
-  public void testRequirements() {
-    final Features f = p.getFeatures();
-    final Map<String, Boolean> exp = new HashMap<>();
-    exp.put("foo", true);
-    exp.put("bar", true);
-    exp.put("baz", false);
-    for (final Iterator<PluginRequirement> i = f.getRequireListIter(); i.hasNext();) {
-      final PluginRequirement r = i.next();
-      for (final Iterator<String> ps = r.getPlugins(); ps.hasNext();) {
-        final String p = ps.next();
-        assertTrue(exp.containsKey(p));
-        assertEquals(exp.get(p), r.getRequired());
-      }
-    }
-  }
-
-  @Test
-  public void testGetMeta() {
-    final Features f = p.getFeatures();
-    assertEquals("bar", f.getMeta("foo"));
-    assertEquals("quxx", f.getMeta("baz"));
-    assertNull(f.getMeta("undefined"));
-  }
-
-  @Test
-  public void testValueFeature() {
-    final Features f = p.getFeatures();
-    assertEquals(asList("foo", "bar"), f.getFeature("type_text"));
-    assertEquals(asList("foo", "bar"), f.getFeature("multiple_type_text"));
-    assertNull(f.getFeature("undefined"));
-  }
-
-  @Test
-  public void testFileValueFeature() {
-    final Features f = p.getFeatures();
-    assertEquals(
-      asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
-      f.getFeature("type_file")
-    );
-    assertEquals(
-      asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
-      f.getFeature("multiple_type_file")
-    );
-  }
-
-  @Test
-  public void testFileFeature() {
-    final Features f = p.getFeatures();
-    assertEquals(
-      asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
-      f.getFeature("file")
-    );
-    assertEquals(
-      asList(new File(resourceDir, "foo").toString(), new File(resourceDir, "bar").toString()),
-      f.getFeature("multiple_file")
-    );
+  public void testNull() throws Exception {
+    p.parse(new File(resourceDir, "plugin_null.xml"));
+    var exp = Features
+      .builder()
+      .setDitaDir(resourceDir)
+      .setPluginDir(resourceDir)
+      .setPluginId("dummy")
+      .setPluginVersion("0.0.0")
+      .build();
+    assertEquals(exp, p.getPlugin());
   }
 }
