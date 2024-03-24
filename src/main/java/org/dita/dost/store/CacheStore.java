@@ -318,6 +318,9 @@ public class CacheStore extends AbstractStore implements Store {
   public void transform(final URI src, final ContentHandler dst) throws DITAOTException {
     final URI f = src.normalize();
     if (isTempFile(f)) {
+      if (!exists(f)) {
+        return;
+      }
       if (cache.containsKey(f)) {
         try {
           final Source source = getSource(src);
@@ -338,6 +341,9 @@ public class CacheStore extends AbstractStore implements Store {
   public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
     final URI src = input.normalize();
     if (isTempFile(src)) {
+      if (!exists(src)) {
+        return;
+      }
       try {
         final Source source = getSource(src);
         final ContentHandler serializer = getContentHandler(src);
@@ -356,6 +362,9 @@ public class CacheStore extends AbstractStore implements Store {
   @Override
   void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
     if (isTempFile(input)) {
+      if (!exists(input)) {
+        return;
+      }
       try {
         ContentHandler dst = getContentHandler(output);
         ContentHandler pipe = getPipe(filters, dst);
@@ -381,6 +390,9 @@ public class CacheStore extends AbstractStore implements Store {
 
   @Override
   public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     final boolean useTmpBuf = !isTempFile(src.normalize());
     final URI dst = useTmpBuf ? toURI(src + FILE_EXTENSION_TEMP).normalize() : src;
     Destination result = null;
@@ -415,6 +427,9 @@ public class CacheStore extends AbstractStore implements Store {
 
   @Override
   void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     Destination result = null;
     try {
       final Source source = getSource(src);

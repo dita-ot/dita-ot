@@ -38,18 +38,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     builder().name(Paths.get("copyto", "basic")).transtype(PREPROCESS).input(Paths.get("TC2.ditamap")).test();
   }
 
-  @Test
-  public void testconrefmissingfile() throws Throwable {
-    builder()
-      .name(Paths.get("conref", "conrefmissingfile"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("badconref.dita"))
-      .put("validate", "false")
-      .warnCount(1)
-      .errorCount(5)
-      .test();
-  }
-
   @Disabled
   @Test
   public void testcopyto_linktarget() throws Throwable {

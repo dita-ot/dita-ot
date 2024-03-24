@@ -100,6 +100,9 @@ public abstract class AbstractStore implements Store {
     //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
     //        }
     final URI srcFile = setFragment(src, null);
+    if (!exists(srcFile)) {
+      return;
+    }
     final URI dst = toURI(srcFile.toString() + FILE_EXTENSION_TEMP).normalize();
     transformURI(srcFile, dst, filters);
     try {

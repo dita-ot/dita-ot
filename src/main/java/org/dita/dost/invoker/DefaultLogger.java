@@ -386,8 +386,8 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
         message.append(event.getMessage());
       }
       final Throwable ex = event.getException();
-      if (Project.MSG_DEBUG <= msgOutputLevel && ex != null) {
-        message.append(StringUtils.getStackTrace(ex));
+      if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
+        message.append('\n').append(StringUtils.getStackTrace(ex));
       }
 
       final String msg = message.toString();
