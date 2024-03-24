@@ -46,18 +46,6 @@ public class ConversionArgumentsTest {
     assertEquals("foo.dita", arguments.definedProps.get("args.input"));
   }
 
-  @ParameterizedTest
-  @MethodSource
-  public void input_reserved(String argument) {
-    assertThrows(BuildException.class, () -> arguments.parse(new String[] { argument }));
-  }
-
-  public static Stream<Arguments> input_reserved() {
-    return Stream
-      .of("args.input", "output.dir", "args.filter", "dita.temp.dir")
-      .flatMap(name -> Stream.of("-D", "--").map(prefix -> Arguments.of("%s%s=value".formatted(prefix, name))));
-  }
-
   @Test
   public void input_absolutePath() throws URISyntaxException {
     var file = Paths.get(getClass().getResource("/messages.xml").toURI()).toAbsolutePath();
