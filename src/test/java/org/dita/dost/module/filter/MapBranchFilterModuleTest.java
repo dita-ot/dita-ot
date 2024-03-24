@@ -296,6 +296,10 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
     m.processMap(job.getFileInfo(URI.create("test.ditamap")));
 
+    assertXMLEqual(
+      new InputSource(new File(expDir, "test.ditamap").toURI().toString()),
+      new InputSource(new File(tempDir, "test.ditamap").toURI().toString())
+    );
     final Set<FileInfo> exp = getDuplicateTopicFileInfos();
     exp.add(
       new Job.FileInfo.Builder()
