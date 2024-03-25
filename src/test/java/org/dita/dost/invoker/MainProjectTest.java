@@ -12,7 +12,6 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -49,19 +48,28 @@ public class MainProjectTest {
 
     final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
-    final Map<String, Object> exp = ImmutableMap
-      .<String, Object>builder()
-      .put("project.deliverable", "site")
-      .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
-      .put("args.input", baseDir.resolve("site.ditamap").toString())
-      .put("transtype", "html5")
-      .put("args.empty", "")
-      .put("args.rellinks", "noparent")
-      .put("args.path", Paths.get(baseDir).resolve("baz qux").toAbsolutePath().toString())
-      .put("args.filter", Paths.get(baseDir).resolve("site.ditaval").toAbsolutePath().toString())
-      .put("args.gen.task.lbl", "YES")
-      .put("args.uri", baseDir.resolve("foo%20bar").toString())
-      .build();
+    final Map<String, Object> exp = Map.of(
+      "project.deliverable",
+      "site",
+      "output.dir",
+      Paths.get("out", "site").toAbsolutePath().toString(),
+      "args.input",
+      baseDir.resolve("site.ditamap").toString(),
+      "transtype",
+      "html5",
+      "args.empty",
+      "",
+      "args.rellinks",
+      "noparent",
+      "args.path",
+      Paths.get(baseDir).resolve("baz qux").toAbsolutePath().toString(),
+      "args.filter",
+      Paths.get(baseDir).resolve("site.ditaval").toAbsolutePath().toString(),
+      "args.gen.task.lbl",
+      "YES",
+      "args.uri",
+      baseDir.resolve("foo%20bar").toString()
+    );
     assertEquals(singletonList(exp), act);
   }
 
@@ -73,20 +81,21 @@ public class MainProjectTest {
 
     final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
 
-    final Map<String, Object> exp = ImmutableMap
-      .<String, Object>builder()
-      .put("project.deliverable", "site")
-      .put("output.dir", Paths.get("out", "site").toAbsolutePath().toString())
-      .put("args.input", baseDir.resolve("site.ditamap").toString())
-      .put("transtype", "html5")
-      .put(
-        "args.filter",
-        Stream
-          .of("site-html5.ditaval", "site.ditaval")
-          .map(ditaval -> Paths.get(baseDir).resolve(ditaval).toAbsolutePath().toString())
-          .collect(Collectors.joining(File.pathSeparator))
-      )
-      .build();
+    final Map<String, Object> exp = Map.of(
+      "project.deliverable",
+      "site",
+      "output.dir",
+      Paths.get("out", "site").toAbsolutePath().toString(),
+      "args.input",
+      baseDir.resolve("site.ditamap").toString(),
+      "transtype",
+      "html5",
+      "args.filter",
+      Stream
+        .of("site-html5.ditaval", "site.ditaval")
+        .map(ditaval -> Paths.get(baseDir).resolve(ditaval).toAbsolutePath().toString())
+        .collect(Collectors.joining(File.pathSeparator))
+    );
     assertEquals(singletonList(exp), act);
   }
 }

@@ -21,8 +21,6 @@ import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
@@ -67,13 +65,21 @@ public final class Integrator {
   private static final String CONF_PLUGIN_ORDER = "plugin.order";
   private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
   private static final String CONF_PLUGIN_DIRS = "plugindirs";
-  /** Feature name for supported image extensions. */
+  /**
+   * Feature name for supported image extensions.
+   */
   private static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
-  /** Feature name for supported image extensions. */
+  /**
+   * Feature name for supported image extensions.
+   */
   private static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
-  /** Feature name for supported resource file extensions. */
+  /**
+   * Feature name for supported resource file extensions.
+   */
   private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
-  /** Feature name for print transformation types. */
+  /**
+   * Feature name for print transformation types.
+   */
   private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
   private static final String FEAT_TRANSTYPES = "dita.conductor.transtype.check";
   private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
@@ -85,18 +91,15 @@ public final class Integrator {
   public static final String FEAT_VALUE_SEPARATOR = ",";
   private static final String PARAM_VALUE_SEPARATOR = ";";
 
-  private static final Set<PosixFilePermission> PERMISSIONS = ImmutableSet
-    .<PosixFilePermission>builder()
-    .add(
-      PosixFilePermission.OWNER_READ,
-      PosixFilePermission.OWNER_WRITE,
-      PosixFilePermission.OWNER_EXECUTE,
-      PosixFilePermission.GROUP_READ,
-      PosixFilePermission.GROUP_EXECUTE,
-      PosixFilePermission.OTHERS_READ,
-      PosixFilePermission.OTHERS_EXECUTE
-    )
-    .build();
+  private static final Set<PosixFilePermission> PERMISSIONS = Set.of(
+    PosixFilePermission.OWNER_READ,
+    PosixFilePermission.OWNER_WRITE,
+    PosixFilePermission.OWNER_EXECUTE,
+    PosixFilePermission.GROUP_READ,
+    PosixFilePermission.GROUP_EXECUTE,
+    PosixFilePermission.OTHERS_READ,
+    PosixFilePermission.OTHERS_EXECUTE
+  );
 
   public static final String CONF_PARSER_FORMAT = "parser.";
 
@@ -104,7 +107,9 @@ public final class Integrator {
   private final Map<String, Plugin> pluginTable;
   private final Map<String, Value> templateSet;
   private final File ditaDir;
-  /** Plugin configuration file. */
+  /**
+   * Plugin configuration file.
+   */
   private final Set<File> descSet;
   private final XMLReader reader;
   private final Document pluginsDoc;
@@ -344,7 +349,9 @@ public final class Integrator {
     writeEnvShell(jars);
     writeEnvBatch(jars);
 
-    final Collection<File> libJars = ImmutableList.<File>builder().addAll(getLibJars()).addAll(jars).build();
+    final Collection<File> libJars = new ArrayList<>();
+    libJars.addAll(getLibJars());
+    libJars.addAll(jars);
     writeStartcmdShell(libJars);
     writeStartcmdBatch(libJars);
     writeConfigurationJar();
@@ -705,34 +712,34 @@ public final class Integrator {
 
       out.write(
         """
-                    #!/bin/sh
-                    # Generated file, do not edit manually"
-                    echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
+        #!/bin/sh
+        # Generated file, do not edit manually"
+        echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
 
-                    realpath() {
-                      case $1 in
-                        /*) echo "$1" ;;
-                        *) echo "$PWD/${1#./}" ;;
-                      esac
-                    }
+        realpath() {
+          case $1 in
+            /*) echo "$1" ;;
+            *) echo "$PWD/${1#./}" ;;
+          esac
+        }
 
-                    if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
-                      export DITA_DIR="$(realpath "$DITA_HOME")"
-                    else #elif [ "${DITA_HOME:+1}" != "1" ]; then
-                      export DITA_DIR="$(dirname "$(realpath "$0")")"
-                    fi
+        if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
+          export DITA_DIR="$(realpath "$DITA_HOME")"
+        else #elif [ "${DITA_HOME:+1}" != "1" ]; then
+          export DITA_DIR="$(dirname "$(realpath "$0")")"
+        fi
 
-                    if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
-                      chmod +x "$DITA_DIR"/bin/ant
-                    fi
+        if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
+          chmod +x "$DITA_DIR"/bin/ant
+        fi
 
-                    export ANT_OPTS="-Xmx512m $ANT_OPTS"
-                    export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
-                    export ANT_HOME="$DITA_DIR"
-                    export PATH="$DITA_DIR"/bin:"$PATH"
+        export ANT_OPTS="-Xmx512m $ANT_OPTS"
+        export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
+        export ANT_HOME="$DITA_DIR"
+        export PATH="$DITA_DIR"/bin:"$PATH"
 
-                    NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
-                    """
+        NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
+        """
       );
       for (final File relativeLib : jars) {
         out.write("NEW_CLASSPATH=\"");
@@ -744,15 +751,15 @@ public final class Integrator {
       }
       out.write(
         """
-                    if test -n "$CLASSPATH"; then
-                      export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
-                    else
-                      export CLASSPATH="$NEW_CLASSPATH"
-                    fi
+        if test -n "$CLASSPATH"; then
+          export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
+        else
+          export CLASSPATH="$NEW_CLASSPATH"
+        fi
 
-                    cd "$DITA_DIR"
-                    "$SHELL"
-                    """
+        cd "$DITA_DIR"
+        "$SHELL"
+        """
       );
       try {
         Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
@@ -778,21 +785,21 @@ public final class Integrator {
 
       out.write(
         """
-                    @echo off\r
-                    REM Generated file, do not edit manually\r
-                    echo "NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead."\r
-                    pause\r
-                    \r
-                    REM Get the absolute path of DITAOT's home directory\r
-                    set DITA_DIR=%~dp0\r
-                    \r
-                    REM Set environment variables\r
-                    set ANT_OPTS=-Xmx512m %ANT_OPTS%\r
-                    set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r
-                    set ANT_HOME=%DITA_DIR%\r
-                    set PATH=%DITA_DIR%\\bin;%PATH%\r
-                    set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r
-                    """
+        @echo off\r
+        REM Generated file, do not edit manually\r
+        echo "NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead."\r
+        pause\r
+        \r
+        REM Get the absolute path of DITAOT's home directory\r
+        set DITA_DIR=%~dp0\r
+        \r
+        REM Set environment variables\r
+        set ANT_OPTS=-Xmx512m %ANT_OPTS%\r
+        set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r
+        set ANT_HOME=%DITA_DIR%\r
+        set PATH=%DITA_DIR%\\bin;%PATH%\r
+        set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r
+        """
       );
       for (final File relativeLib : jars) {
         out.write("set CLASSPATH=");
@@ -1009,7 +1016,7 @@ public final class Integrator {
    * Get all and combine extension values
    *
    * @param featureTable plugin features
-   * @param extension extension ID
+   * @param extension    extension ID
    * @return combined extension value, {@code null} if no value available
    */
   static String getValue(final Map<String, Plugin> featureTable, final String extension) {

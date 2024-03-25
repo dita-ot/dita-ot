@@ -10,7 +10,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.net.URI;
 import java.text.MessageFormat;
@@ -56,7 +55,7 @@ public class CopyToReaderTest {
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 
-    final Map<URI, URI> exp = ImmutableMap.of(
+    final Map<URI, URI> exp = Map.of(
       inputFile.resolve("direct.dita"),
       inputFile.resolve("topic.dita"),
       inputFile.resolve("keyref.dita"),
@@ -77,7 +76,7 @@ public class CopyToReaderTest {
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 
-    final Map<URI, URI> exp = ImmutableMap.of(
+    final Map<URI, URI> exp = Map.of(
       inputFile.resolve("keyref-target.dita"),
       inputFile.resolve("keyref-source-a.dita")
     );
@@ -92,7 +91,7 @@ public class CopyToReaderTest {
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 
-    final Map<URI, URI> exp = ImmutableMap.of(inputFile.resolve("target.dita"), inputFile.resolve("source-a.dita"));
+    final Map<URI, URI> exp = Map.of(inputFile.resolve("target.dita"), inputFile.resolve("source-a.dita"));
 
     assertEquals(exp, reader.getCopyToMap());
     final List<Message> expLog = Arrays.asList(

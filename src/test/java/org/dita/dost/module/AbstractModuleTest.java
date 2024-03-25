@@ -10,7 +10,6 @@ package org.dita.dost.module;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -204,7 +203,7 @@ public abstract class AbstractModuleTest {
 
   protected abstract AbstractPipelineModule getModule();
 
-  private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
+  private static final Set<String> IGNORE = Set.of(".job.xml", ".DS_Store");
 
   private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
     final Set<String> names = new HashSet<>();

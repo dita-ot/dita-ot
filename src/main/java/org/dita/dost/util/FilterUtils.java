@@ -14,7 +14,6 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.net.URI;
@@ -45,16 +44,22 @@ import org.xml.sax.*;
  */
 public final class FilterUtils {
 
-  /** Subject scheme file extension */
+  /**
+   * Subject scheme file extension
+   */
   public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
   public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
   private static final String FLAG_STYLE_PREFIX = "flag__style--";
 
   private DITAOTLogger logger;
-  /** Actions for filter keys. */
+  /**
+   * Actions for filter keys.
+   */
   final Map<FilterKey, Action> filterMap;
-  /** Set of filter keys for which an error has already been thrown. */
+  /**
+   * Set of filter keys for which an error has already been thrown.
+   */
   private final Set<FilterKey> notMappingRules = new HashSet<>();
   private boolean logMissingAction;
   private final String foregroundConflictColor;
@@ -138,40 +143,34 @@ public final class FilterUtils {
   }
 
   private static Set<QName> getProfileAttributes(final String conf) {
-    final ImmutableSet.Builder<QName> res = ImmutableSet
-      .<QName>builder()
-      .add(
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
-      );
+    final Set<QName> res = new HashSet<>();
+    res.add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PLATFORM));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRODUCT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRINT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
     if (conf != null) {
       Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
     }
-    return res.build();
+    return Collections.unmodifiableSet(res);
   }
 
   private static Set<QName> getFlaggingAttributes(final String conf) {
-    final ImmutableSet.Builder<QName> res = ImmutableSet
-      .<QName>builder()
-      .add(
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
-        QName.valueOf(ATTRIBUTE_NAME_REV)
-      );
+    final Set<QName> res = new HashSet<>();
+    res.add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PLATFORM));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRODUCT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRINT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_REV));
     if (conf != null) {
       Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
     }
-    return res.build();
+    return Collections.unmodifiableSet(res);
   }
 
   public Set<Flag> getFlags(final Attributes atts, final QName[][] extProps) {
@@ -299,7 +298,7 @@ public final class FilterUtils {
   /**
    * Check if the given Attributes need to be excluded.
    *
-   * @param atts attributes
+   * @param atts     attributes
    * @param extProps {@code props} attribute specializations
    * @return {@code true} if any profiling attribute was excluded, otherwise {@code false}
    */
@@ -380,7 +379,7 @@ public final class FilterUtils {
   /**
    * Get labelled props value.
    *
-   * @param propName attribute name
+   * @param propName       attribute name
    * @param attrPropsValue attribute value
    * @return props value, {@code null} if not available
    */
@@ -475,7 +474,8 @@ public final class FilterUtils {
 
   /**
    * Check if attribute value has mapping in filter configuration and throw messages.
-   * @param attName attribute name
+   *
+   * @param attName  attribute name
    * @param attValue attribute value
    */
   private void checkRuleMapping(final QName attName, final List<String> attValue) {
@@ -583,7 +583,8 @@ public final class FilterUtils {
 
   /**
    * Search subject scheme elements for a given key
-   * @param root subject scheme element tree to search through
+   *
+   * @param root     subject scheme element tree to search through
    * @param keyValue key to locate
    * @return element that matches the key, otherwise {@code null}
    */
@@ -646,7 +647,7 @@ public final class FilterUtils {
    *
    * @param subTree subject scheme definition element
    * @param attName attribute name
-   * @param action action to insert
+   * @param action  action to insert
    */
   private void insertAction(
     final SubjectDefinition subTree,
