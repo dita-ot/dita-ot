@@ -8,19 +8,24 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.apache.tools.ant.taskdefs.condition.Os
 
+apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-group = 'org.dita-ot'
-archivesBaseName = 'dost'
-/** Semver version number */
-version = '4.3.0-SNAPSHOT'
+base {
+    group = 'org.dita-ot'
+    archivesName = 'dost'
+    /** Semver version number */
+    version = '4.3.0-SNAPSHOT'
 
-description = """DITA Open Toolkit"""
+    description = """DITA Open Toolkit"""
+}
 
-sourceCompatibility = 17
-targetCompatibility = 17
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
 
 repositories {
     mavenCentral()
