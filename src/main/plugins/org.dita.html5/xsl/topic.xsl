@@ -1414,9 +1414,9 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="default-output-class">
           <xsl:choose>
             <!-- Align only works for break -->
-            <xsl:when test="@placement = 'break' and @align = 'left'">imageleft</xsl:when>
-            <xsl:when test="@placement = 'break' and @align = 'right'">imageright</xsl:when>
-            <xsl:when test="@placement = 'break' and @align = 'center'">imagecenter</xsl:when>
+            <xsl:when test="@placement = 'break' and @align = 'left'">break imageleft</xsl:when>
+            <xsl:when test="@placement = 'break' and @align = 'right'">break imageright</xsl:when>
+            <xsl:when test="@placement = 'break' and @align = 'center'">break imagecenter</xsl:when>
             <!-- The default is inline -->
             <xsl:when test="@placement = 'inline' or not(@placement)">inline</xsl:when>
           </xsl:choose>
