@@ -451,7 +451,7 @@ See the accompanying LICENSE file for applicable license.
   </message>
 
   <message id="DOTJ088E" type="ERROR">
-    <reason>%1</reason>
+    <reason>XML parsing error: %1</reason>
     <response></response>
   </message>
 
