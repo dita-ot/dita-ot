@@ -1,34 +1,31 @@
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ * This file is part of the DITA Open Toolkit project.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * Copyright 2024 Jarno Elovirta
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * See the accompanying LICENSE file for applicable license.
  */
-package org.dita.dost.ant;
+package org.dita.dost.platform;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import static org.dita.dost.platform.FileGenerator.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.helper.AntXMLContext;
 import org.apache.tools.ant.helper.ProjectHelper2;
 import org.apache.tools.ant.util.FileUtils;
-import org.dita.dost.util.Constants;
+import org.apache.tools.ant.util.LoaderUtils;
+import org.dita.dost.log.DITAOTAntLogger;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -433,22 +430,156 @@ public class ProjectHelper3 extends ProjectHelper2 {
 
   public static class ExtensionRootHandler extends ProjectHelper2.RootHandler {
 
+    private final AntXMLContext context;
+    /** Plug-in features. */
+    private final Map<String, List<Value>> featureTable;
+    private final Map<String, Plugin> pluginTable;
+
     public ExtensionRootHandler(AntXMLContext context, AntHandler rootHandler) {
       super(context, rootHandler);
+      this.context = context;
+      featureTable = new HashMap<>();
+      pluginTable = new HashMap<>();
+      PluginParser parser = new PluginParser(new File("/Users/jelovirt/Work/dita-ot"));
+      parser.setPluginDir(new File("/Users/jelovirt/Work/dita-ot/src/main/plugins"));
+      parser.setLogger(new DITAOTAntLogger(context.getProject()));
+      try (InputStream in = LoaderUtils.getContextClassLoader().getResourceAsStream("plugins.xml")) {
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+        final List<Element> plugins = XMLUtils.toList(doc.getElementsByTagName("plugin"));
+        for (Element plugin : plugins) {
+          parser.parse(plugin);
+          final Plugin p = parser.getPlugin();
+          pluginTable.put(p.pluginId(), p);
+          for (Map.Entry<String, List<String>> f : p.features().entrySet()) {
+            var vs = f.getValue().stream().map(v -> new Value(null, v)).toList();
+            if (featureTable.containsKey(f.getKey())) {
+              var buf = new ArrayList<Value>(featureTable.get(f.getKey()));
+              buf.addAll(vs);
+              featureTable.put(f.getKey(), buf);
+            } else {
+              featureTable.put(f.getKey(), vs);
+            }
+          }
+        }
+      } catch (IOException | ParserConfigurationException | SAXException e) {
+        throw new RuntimeException(e);
+      }
+      //       final Plugin pluginFeatures = pluginTable.get(plugin);
+      //      final Map<String, List<String>> featureSet = pluginFeatures.features();
+      //      for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
+      //        final String key = currentFeature.getKey();
+      //        final List<Value> values = currentFeature
+      //          .getValue()
+      //          .stream()
+      //          .map(val -> new Value(plugin, val))
+      //          .collect(Collectors.toList());
+      //        if (!extensionPoints.contains(key)) {
+      //          throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
+      //        }
+      //        if (featureTable.containsKey(key)) {
+      //          final List<Value> value = featureTable.get(key);
+      //          value.addAll(values);
+      //          featureTable.put(key, value);
+      //        } else {
+      //          //Make shallow clone to avoid making modifications directly to list inside the current feature.
+      //          List<Value> currentFeatureValue = values;
+      //          featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
+      //        }
     }
 
     @Override
-    public void startElement(String uri, String tag, String qname, Attributes attrs) throws SAXParseException {
-      final int extensionIndex = attrs.getIndex(Constants.DITA_OT_NAMESPACE, "extension");
-      if (extensionIndex != -1) {
-        //        throw new RuntimeException("Got extension " + attrs.getValue(extensionIndex));
-        System.err.println("Got extension " + attrs.getValue(extensionIndex));
+    public void startElement(String uri, String localName, String qName, Attributes attributes)
+      throws SAXParseException {
+      try {
+        if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
+          final IAction action = (IAction) Class
+            .forName(attributes.getValue(BEHAVIOR_ATTR))
+            .getDeclaredConstructor()
+            .newInstance();
+          //          action.setLogger(logger);
+          action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
+          for (int i = 0; i < attributes.getLength(); i++) {
+            action.addParam(attributes.getLocalName(i), attributes.getValue(i));
+          }
+          final String extension = attributes.getValue(EXTENSION_ID_ATTR);
+          //action.addParam("extension", extension);
+          if (featureTable.containsKey(extension)) {
+            action.setInput(featureTable.get(extension));
+          }
+          action.setFeatures(pluginTable);
+          action.getResult(this);
+        } else {
+          final Map<String, String> extensions = parseExtensions(attributes.getValue(DITA_OT_NS, EXTENSION_ATTR));
+          final XMLUtils.AttributesBuilder atts = new XMLUtils.AttributesBuilder();
+          final int attLen = attributes.getLength();
+          for (int i = 0; i < attLen; i++) {
+            final String name = attributes.getLocalName(i);
+            if (DITA_OT_NS.equals(attributes.getURI(i))) {
+              if (!(EXTENSION_ATTR.equals(name))) {
+                if (extensions.containsKey(name)) {
+                  final IAction action = (IAction) Class.forName(extensions.get(name)).newInstance();
+                  //                  action.setLogger(logger);
+                  action.setFeatures(pluginTable);
+                  action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
+                  final List<Value> value = Stream
+                    .of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
+                    .map(val -> new Value(null, val.trim()))
+                    .collect(Collectors.toList());
+                  action.setInput(value);
+                  final String result = action.getResult();
+                  atts.add(name, result);
+                } else {
+                  throw new IllegalArgumentException("Extension attribute " + name + " not defined");
+                }
+              }
+            } else {
+              atts.add(
+                attributes.getURI(i),
+                name,
+                attributes.getQName(i),
+                attributes.getType(i),
+                attributes.getValue(i)
+              );
+            }
+          }
+          super.startElement(uri, localName, qName, atts.build());
+        }
+      } catch (SAXException | RuntimeException e) {
+        throw new RuntimeException(e);
+      } catch (final Exception e) {
+        throw new RuntimeException(e);
       }
-      //      AntHandler next = currentHandler.onStartChild(uri, tag, qname, attrs, context);
-      //      antHandlers.push(currentHandler);
-      //      currentHandler = next;
-      //      currentHandler.onStartElement(uri, tag, qname, attrs, context);
-      super.startElement(uri, tag, qname, attrs);
+      //      final int extensionIndex = attrs.getIndex(DITA_OT_NS, "extension");
+      //      if (extensionIndex != -1) {
+      //        //        throw new RuntimeException("Got extension " + attrs.getValue(extensionIndex));
+      //        System.err.println("Got extension " + attrs.getValue(extensionIndex));
+      //      }
+      //      //      AntHandler next = currentHandler.onStartChild(uri, tag, qname, attrs, context);
+      //      //      antHandlers.push(currentHandler);
+      //      //      currentHandler = next;
+      //      //      currentHandler.onStartElement(uri, tag, qname, attrs, context);
+      //      super.startElement(uri, tag, qname, attrs);
+    }
+
+    private Map<String, String> parseExtensions(final String extensions) {
+      if (extensions == null) {
+        return Map.of();
+      }
+      final Map<String, String> res = new HashMap<>();
+      final StringTokenizer extensionTokenizer = new StringTokenizer(extensions);
+      while (extensionTokenizer.hasMoreTokens()) {
+        final String thisExtension = extensionTokenizer.nextToken();
+        final String thisExtensionClass = extensionTokenizer.nextToken();
+        res.put(thisExtension, thisExtensionClass);
+      }
+      return res;
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+      if (!(DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName))) {
+        super.endElement(uri, localName, qName);
+      }
     }
   }
 

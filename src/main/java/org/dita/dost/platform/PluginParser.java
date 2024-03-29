@@ -114,6 +114,10 @@ public class PluginParser {
     }
     final Element root = migrate(doc.getDocumentElement());
 
+    return parse(root);
+  }
+
+  public Element parse(Element root) {
     final String pluginId = root.getAttribute(PLUGIN_ID_ATTR);
     features = Features.builder().setPluginDir(pluginDir).setDitaDir(ditaDir).setPluginId(pluginId);
     final Attr pluginVersion = root.getAttributeNode(PLUGIN_VERSION_ATTR);
