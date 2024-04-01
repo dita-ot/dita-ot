@@ -51,6 +51,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
   private static final AntHandler mainHandler = new MainHandler();
   /** Specific to ProjectHelper2 so not a true Ant "magic name:" */
   private static final String REFID_CONTEXT = "ant.parsing.context";
+  private static final String REFID_PLUGINS = "ant.parsing.plugins";
 
   /**
    * Parse a source xml input.
@@ -66,6 +67,13 @@ public class ProjectHelper3 extends ProjectHelper2 {
       context = new AntXMLContext(project);
       project.addReference(REFID_CONTEXT, context);
       project.addReference(REFID_TARGETS, context.getTargets());
+    }
+    List<Plugin> plugins = project.getReference(REFID_PLUGINS);
+    if (plugins == null) {
+      final Plugins pluginConfiguration = new Plugins();
+      pluginConfiguration.setDitaDir(context.getProject().getBaseDir());
+      pluginConfiguration.setLogger(new DITAOTAntLogger(context.getProject()));
+      project.addReference(REFID_PLUGINS, pluginConfiguration.getPlugins());
     }
     if (getImportStack().size() > 1) {
       // we are in an imported file.
@@ -113,10 +121,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
       pluginTable = new HashMap<>();
       logger = new DITAOTAntLogger(context.getProject());
 
-      final Plugins plugins = new Plugins();
-      plugins.setDitaDir(context.getProject().getBaseDir());
-      plugins.setLogger(logger);
-      for (Plugin p : plugins.getPlugins()) {
+      for (Plugin p : context.getProject().<List<Plugin>>getReference(REFID_PLUGINS)) {
         pluginTable.put(p.pluginId(), p);
         for (Map.Entry<String, List<String>> f : p.features().entrySet()) {
           var vs = f.getValue().stream().map(v -> new Value(null, v)).toList();
