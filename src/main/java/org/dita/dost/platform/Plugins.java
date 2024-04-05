@@ -82,6 +82,16 @@ public class Plugins {
       .toList();
   }
 
+  // FIXME
+  public Map<String, List<Value>> getFeatureTbl() {
+    return Map.of();
+  }
+
+  // FIXME
+  public final Map<String, Plugin> getPluginTable() {
+    return Map.of();
+  }
+
   public void setLogger(DITAOTLogger logger) {
     this.logger = logger;
   }

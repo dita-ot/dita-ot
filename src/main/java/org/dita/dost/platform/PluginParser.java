@@ -123,7 +123,8 @@ public class PluginParser {
     final Attr pluginVersion = root.getAttributeNode(PLUGIN_VERSION_ATTR);
     if (pluginVersion != null) {
       if (!VERSION_PATTERN.matcher(pluginVersion.getValue()).matches()) {
-        logger.error("Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion.getValue()));
+        // FIXME: Revert back to error
+        logger.debug("Plug-in version '%s' doesn't follow syntax rules.".formatted(pluginVersion.getValue()));
       } else {
         features.setPluginVersion(pluginVersion.getValue());
       }
