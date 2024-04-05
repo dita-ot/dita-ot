@@ -51,7 +51,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
   private static final AntHandler mainHandler = new MainHandler();
   /** Specific to ProjectHelper2 so not a true Ant "magic name:" */
   private static final String REFID_CONTEXT = "ant.parsing.context";
-  private static final String REFID_PLUGINS = "ant.parsing.plugins";
+  public static final String REFID_PLUGINS = "ant.parsing.plugins";
 
   /**
    * Parse a source xml input.
