@@ -211,6 +211,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
    * Get set of link targets which have normal processing role. Paths are relative to current file.
    */
   public Set<URI> getNormalProcessingRoleTargets() {
+    if (normalProcessingRoleTargets == null) {
+      return Set.of();
+    }
     return Collections.unmodifiableSet(normalProcessingRoleTargets);
   }
 
