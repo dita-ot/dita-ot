@@ -44,6 +44,7 @@ import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.tools.ant.ProjectHelper;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
@@ -105,6 +106,8 @@ public final class Integrator {
   );
 
   public static final String CONF_PARSER_FORMAT = "parser.";
+
+  public static final boolean COMPILE_TIME_RESOLVE = ServiceLoader.load(ProjectHelper.class).findFirst().isEmpty();
 
   /** Plugin table which contains detected plugins. */
   private final Map<String, Plugin> pluginTable;
@@ -279,7 +282,11 @@ public final class Integrator {
       final File templateFile = new File(ditaDir, template.getKey());
       logger.trace("Process template " + templateFile.getPath());
       //            fileGen.setPluginId(template.getValue().id);
-      fileGen.generate(templateFile);
+      if (COMPILE_TIME_RESOLVE) {
+        fileGen.generate(templateFile);
+      } else {
+        Files.copy(templateFile.toPath(), Paths.get(templateFile.toString().replaceAll("_template", "")));
+      }
     }
 
     // generate configuration properties

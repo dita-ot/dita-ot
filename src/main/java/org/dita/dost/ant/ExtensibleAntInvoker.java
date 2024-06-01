@@ -41,6 +41,7 @@ import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.platform.FileGenerator;
+import org.dita.dost.platform.Integrator;
 import org.dita.dost.platform.Plugin;
 import org.dita.dost.platform.Value;
 import org.dita.dost.store.Store;
@@ -243,7 +244,7 @@ public final class ExtensibleAntInvoker extends Task {
         throw new DITAOTException("Pipeline XSLT task with parallel=true cannot be used with Ant's xmlcatalog");
       }
       final XsltModule module = new XsltModule();
-      module.setStyle(toExtensibleSource(xm.xslResource));
+      module.setStyle(toSource(xm.xslResource));
       if (xm.in != null) {
         module.setSource(xm.in);
         module.setResult(xm.out);
@@ -314,6 +315,9 @@ public final class ExtensibleAntInvoker extends Task {
   }
 
   private Source toSource(final Resource style) {
+    if (!Integrator.COMPILE_TIME_RESOLVE) {
+      return toExtensibleSource(style);
+    }
     if (style instanceof FileResource) {
       return new StreamSource(((FileResource) style).getFile());
     } else {
