@@ -24,13 +24,9 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.*;
+import org.dita.dost.util.XMLUtils;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * This class reads a list of DITAVAL files, and merges
@@ -98,7 +94,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
 
   private void writeMergedDitaval() throws DITAOTException {
     final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
-    ditavalbuilder.setEntityResolver(CatalogUtils.getCatalogResolver());
+    ditavalbuilder.setEntityResolver(xmlUtils.getCatalogResolver());
     XMLStreamWriter export = null;
     try (
       OutputStream exportStream = job

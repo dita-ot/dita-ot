@@ -168,6 +168,10 @@ public final class XMLUtils {
     this.logger = logger;
   }
 
+  public Resolver getCatalogResolver() {
+    return catalogResolver;
+  }
+
   /**
    * Convert DOM NodeList to List.
    */

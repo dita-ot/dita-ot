@@ -24,7 +24,6 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -62,7 +61,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
 
       final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
       transformer.setErrorReporter(toErrorReporter(logger));
-      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
+      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), xmlUtils.getCatalogResolver()));
       transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       if (input.getAttribute("include.rellinks") != null) {

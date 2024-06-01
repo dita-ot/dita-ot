@@ -24,7 +24,6 @@ import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -109,7 +108,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
       doc = XMLUtils.getDocumentBuilder().newDocument();
       final XsltTransformer transformer = templates.load();
       transformer.setErrorReporter(toErrorReporter(logger));
-      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
+      transformer.setURIResolver(new ChainedURIResolver(job.getStore(), xmlUtils.getCatalogResolver()));
       transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));

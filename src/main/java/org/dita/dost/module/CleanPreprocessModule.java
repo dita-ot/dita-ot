@@ -32,7 +32,6 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -65,7 +64,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private void init(final Map<String, String> input) {
     useResultFilename =
       Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME)).map(Boolean::parseBoolean).orElse(false);
-    final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
+    final Resolver catalogResolver = xmlUtils.getCatalogResolver();
     rewriteTransformer =
       Optional
         .ofNullable(input.get("result.rewrite-rule.xsl"))

@@ -1,7 +1,6 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
-import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
-import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
+import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
@@ -16,7 +15,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.ant.XMLCatalogAdapter;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -82,7 +80,7 @@ public class PreprocessorTask extends Task {
         final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
         final URIResolver catalogResolver = xmlcatalog != null
           ? new XMLCatalogAdapter(xmlcatalog)
-          : CatalogUtils.getCatalogResolver();
+          : xmlUtils.getCatalogResolver();
         final URIResolver resolver = new ChainedURIResolver(job.getStore(), catalogResolver);
         xsltCompiler.setURIResolver(resolver);
         final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));
