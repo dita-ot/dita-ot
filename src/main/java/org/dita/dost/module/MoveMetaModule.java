@@ -192,6 +192,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     final MapMetaReader metaReader = new MapMetaReader();
     metaReader.setLogger(logger);
     metaReader.setJob(job);
+    metaReader.setXmlUtils(xmlUtils);
     for (final FileInfo f : fis) {
       final File mapFile = job.tempDir.toPath().resolve(f.file.toPath()).toFile();
       //FIXME: this reader gets the parent path of input file

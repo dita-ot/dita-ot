@@ -206,7 +206,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private Document serialize(final Collection<FileInfo> fis) throws IOException {
     try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final Document doc = xmlUtils.newDocument();
       final DOMResult result = new DOMResult(doc);
       XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
       job.serialize(out, emptyMap(), fis);

@@ -36,7 +36,10 @@ public class ChunkMapReaderTest {
   final File resourceDir = TestUtils.getResourceDir(ChunkMapReaderTest.class);
   final File srcDir = new File(resourceDir, "src");
 
-  File tempDir = null;
+  private File tempDir = null;
+  private XMLUtils xmlUtils;
+  private TestUtils.TestLogger logger;
+  private ChunkMapReader mapReader;
 
   @BeforeEach
   public void setUp() throws Exception {
@@ -44,16 +47,19 @@ public class ChunkMapReaderTest {
     new File(tempDir, "maps").mkdirs();
     new File(tempDir, "topics").mkdirs();
     new File(tempDir, "maps" + File.separator + "topics").mkdirs();
+    xmlUtils = new XMLUtils();
+    logger = new TestUtils.TestLogger();
+    mapReader = new ChunkMapReader();
+    mapReader.setLogger(logger);
+    mapReader.setXmlUtils(xmlUtils);
   }
 
   @Test
   public void testRead() throws Exception {
-    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+    final Job job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     job.setInputDir(srcDir.toURI());
     job.setInputMap(URI.create("maps/gen.ditamap"));
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
-    mapReader.setLogger(new TestUtils.TestLogger());
     mapReader.setJob(job);
 
     TestUtils.copy(new File(srcDir, "gen.ditamap"), new File(tempDir, "maps" + File.separator + "gen.ditamap"));
@@ -80,8 +86,6 @@ public class ChunkMapReaderTest {
   public void testMissingSource() throws Exception {
     final Job job = createJob("missing.ditamap", "2.dita");
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
-    mapReader.setLogger(new TestUtils.TestLogger());
     mapReader.setJob(job);
 
     mapReader.read(new File(tempDir, "missing.ditamap"));
@@ -96,7 +100,6 @@ public class ChunkMapReaderTest {
   public void testChunkFullMap() throws Exception {
     final Job job = createJob("map.ditamap", "1.dita", "2.dita", "3.dita");
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
     final CachingLogger logger = new CachingLogger();
     mapReader.setLogger(logger);
     mapReader.setJob(job);
@@ -124,7 +127,6 @@ public class ChunkMapReaderTest {
   public void testExistingGeneratedFile() throws Exception {
     final Job job = createJob("conflict.ditamap", "2.dita", "Chunk0.dita");
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
     final CachingLogger logger = new CachingLogger();
     mapReader.setLogger(logger);
     mapReader.setJob(job);
@@ -150,7 +152,7 @@ public class ChunkMapReaderTest {
   }
 
   private Job createJob(final String map, final String... topics) throws IOException {
-    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+    final Job job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     job.setInputDir(srcDir.toURI());
     job.setInputMap(URI.create(map));
 
@@ -798,8 +800,6 @@ public class ChunkMapReaderTest {
     TestUtils.copy(new File(srcDir, "chunkedTopic.dita"), new File(dst));
     job.add(new Job.FileInfo.Builder().src(new File(srcDir, srcFile).toURI()).uri(toURI(srcFile)).build());
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
-    mapReader.setLogger(new TestUtils.TestLogger());
     mapReader.setJob(job);
 
     mapReader.read(new File(tempDir, "chunkedMap.ditamap"));
@@ -833,9 +833,7 @@ public class ChunkMapReaderTest {
     job.setInputDir(srcDir.toURI());
     job.setInputMap(URI.create("mapNoChunk.ditamap"));
 
-    final ChunkMapReader mapReader = new ChunkMapReader();
     mapReader.setRootChunkOverride("to-content");
-    mapReader.setLogger(new TestUtils.TestLogger());
     mapReader.setJob(job);
 
     TestUtils.copy(new File(srcDir, "mapNoChunk.ditamap"), new File(tempDir, "mapNoChunk.ditamap"));

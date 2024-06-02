@@ -73,7 +73,7 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
       transformer.setParameter(new QName("INPUTMAP"), XdmItem.makeValue(job.getInputMap()));
 
       final Source source = job.getStore().getSource(inputFile.toURI());
-      doc = XMLUtils.getDocumentBuilder().newDocument();
+      doc = xmlUtils.newDocument();
       final DOMDestination result = new DOMDestination(doc);
 
       transformer.setSource(source);

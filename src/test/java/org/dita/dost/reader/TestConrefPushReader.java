@@ -51,7 +51,9 @@ public class TestConrefPushReader {
   public void testRead() throws IOException {
     final File filename = new File(srcDir, "conrefpush_stub.xml");
     final ConrefPushReader pushReader = new ConrefPushReader();
-    pushReader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+    final XMLUtils xmlUtils = new XMLUtils();
+    pushReader.setJob(new Job(tempDir, new StreamStore(tempDir, xmlUtils)));
+    pushReader.setXmlUtils(xmlUtils);
     pushReader.read(filename.getAbsoluteFile());
 
     final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();

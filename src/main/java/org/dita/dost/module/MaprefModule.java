@@ -105,7 +105,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     logger.info("Processing " + inputFile.toURI());
     Document doc;
     try {
-      doc = XMLUtils.getDocumentBuilder().newDocument();
+      doc = xmlUtils.newDocument();
       final XsltTransformer transformer = templates.load();
       transformer.setErrorReporter(toErrorReporter(logger));
       transformer.setURIResolver(new ChainedURIResolver(job.getStore(), xmlUtils.getCatalogResolver()));

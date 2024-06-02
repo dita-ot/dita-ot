@@ -981,6 +981,20 @@ public final class XMLUtils {
   }
 
   /**
+   * Create new DOM document.
+   *
+   * @return empty DOM document
+   * @throws RuntimeException if instantiating DocumentBuilder failed
+   */
+  public Document newDocument() {
+    try {
+      return factory.newDocumentBuilder().newDocument();
+    } catch (final ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
    * Write DOM document to file.
    *
    * @param doc document to store
@@ -1410,7 +1424,7 @@ public final class XMLUtils {
    */
   public Document cloneDocument(final XdmNode node) throws IOException {
     try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final Document doc = newDocument();
       final DOMDestination destination = new DOMDestination(doc);
       final Receiver receiver = destination.getReceiver(
         getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
