@@ -459,10 +459,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   private void rewriteTopicrefs(final URI mapFile, final List<ChunkOperation> chunks) {
     for (ChunkOperation chunk : chunks) {
       final URI dst = getRelativePath(mapFile.resolve("."), chunk.dst());
-      if (!MAP_MAP.matches(chunk.topicref())) {
+      if (!MAP_MAP.matches(chunk.topicref()) && !SUBMAP.matches(chunk.topicref())) {
         chunk.topicref().setAttribute(ATTRIBUTE_NAME_HREF, dst.toString());
       }
-      if (MAPGROUP_D_TOPICGROUP.matches(chunk.topicref())) {
+      if (MAPGROUP_D_TOPICGROUP.matches(chunk.topicref()) && !SUBMAP.matches(chunk.topicref())) {
         chunk.topicref().setAttribute(ATTRIBUTE_NAME_CLASS, MAP_TOPICREF.toString());
       }
       rewriteTopicrefs(mapFile, chunk.children());
@@ -710,7 +710,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     throws IOException {
     for (ChunkOperation child : chunk.children()) {
       Element added;
-      if (child.src() != null) {
+      if (
+        !isDitaFormat(child.topicref()) || !isNormalProcessRole(child.topicref()) || SUBMAP.matches(child.topicref())
+      ) {
+        mergeTopic(rootChunk, child, dstTopic);
+      } else if (child.src() != null) {
         final Element root = getElement(child.src());
         if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
           final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);

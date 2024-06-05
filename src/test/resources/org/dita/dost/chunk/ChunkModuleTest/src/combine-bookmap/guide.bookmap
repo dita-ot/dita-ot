@@ -1,0 +1,19 @@
+<bookmap xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map bookmap/bookmap "
+     ditaarch:DITAArchVersion="2.0"
+     chunk="combine">
+   <booktitle class="- topic/title bookmap/booktitle ">
+      <mainbooktitle class="- topic/ph bookmap/mainbooktitle ">Guide</mainbooktitle>
+   </booktitle>
+   <part class="- map/topicref bookmap/part ">
+      <keydef href="lib.dita" keys="lib" class="+ map/topicref mapgroup-d/keydef " processing-role="resource-only"/>
+      <submap xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" dita-ot:orig-class="+ map/topicref mapgroup-d/mapref "
+              dita-ot:orig-format="ditamap" dita-ot:orig-href="map.ditamap" dita-ot:submap-id="map"
+              class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap ">
+         <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
+            <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">Map</submap-title>
+         </submap-topicmeta>
+         <topicref class="- map/topicref " href="topic.dita"/>
+      </submap>
+   </part>
+</bookmap>
