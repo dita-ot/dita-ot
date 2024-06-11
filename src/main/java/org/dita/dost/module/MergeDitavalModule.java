@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -24,13 +23,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.*;
+import org.w3c.dom.*;
 
 /**
  * This class reads a list of DITAVAL files, and merges
@@ -97,8 +90,6 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
   }
 
   private void writeMergedDitaval() throws DITAOTException {
-    final DocumentBuilder ditavalbuilder = XMLUtils.getDocumentBuilder();
-    ditavalbuilder.setEntityResolver(CatalogUtils.getCatalogResolver());
     XMLStreamWriter export = null;
     try (
       OutputStream exportStream = job
@@ -110,10 +101,10 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
       export.writeStartElement("val");
       export.writeNamespace(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE);
       for (File curDitaVal : ditavalFiles) {
-        final Document doc = ditavalbuilder.parse(curDitaVal);
+        final Document doc = job.getStore().getDocument(curDitaVal.toURI());
         final Element ditavalRoot = doc.getDocumentElement();
         final NodeList rootChildren = ditavalRoot.getChildNodes();
-        logger.debug("Writing conditions from ditaval: " + curDitaVal);
+        logger.debug("Writing conditions from ditaval: {}", curDitaVal);
         writeConditions(export, rootChildren, curDitaVal.toURI().resolve("."));
       }
       export.writeEndElement();
@@ -122,8 +113,6 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
       throw new DITAOTException("Failed to merge ditaval files: " + e.getMessage(), e);
     } catch (final XMLStreamException e) {
       throw new DITAOTException("Failed to serialize merged ditaval file: " + e.getMessage(), e);
-    } catch (final SAXException e) {
-      throw new DITAOTException("Failed to parse ditaval file: " + e.getMessage(), e);
     } finally {
       if (export != null) {
         try {

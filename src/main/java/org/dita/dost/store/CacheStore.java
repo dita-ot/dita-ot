@@ -163,7 +163,7 @@ public class CacheStore extends AbstractStore implements Store {
           return doc;
         } else if (entry.bytes != null) {
           try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
-            final Document doc = XMLUtils.getDocumentBuilder().parse(in, f.toString());
+            final Document doc = xmlUtils.getDocumentBuilder().parse(in, f.toString());
             put(f, new Entry(doc, null, entry.bytes));
             return doc;
           } catch (SAXException e) {
@@ -224,7 +224,7 @@ public class CacheStore extends AbstractStore implements Store {
           try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
             final InputSource inputSource = new InputSource(in);
             inputSource.setSystemId(f.toString());
-            final Document doc = XMLUtils.getDocumentBuilder().parse(inputSource);
+            final Document doc = xmlUtils.getDocumentBuilder().parse(inputSource);
             put(f, new Entry(doc, entry.node, entry.bytes));
             return doc;
           } catch (SAXException e) {

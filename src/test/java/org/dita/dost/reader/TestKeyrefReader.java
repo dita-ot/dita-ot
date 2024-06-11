@@ -180,9 +180,9 @@ public class TestKeyrefReader {
     }
   }
 
-  private static Document keyDefToDoc(final String key) throws Exception {
+  private Document keyDefToDoc(final String key) throws Exception {
     final InputSource inputSource = new InputSource(new StringReader(key));
-    final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+    final DocumentBuilder documentBuilder = xmlUtils.getDocumentBuilder();
     return documentBuilder.parse(inputSource);
   }
 

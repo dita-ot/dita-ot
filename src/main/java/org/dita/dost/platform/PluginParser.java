@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,7 +70,13 @@ public class PluginParser {
     super();
     assert ditaDir.isAbsolute();
     this.ditaDir = ditaDir;
-    builder = XMLUtils.getDocumentBuilder();
+    final DocumentBuilderFactory factory = DocumentBuilderFactory.newDefaultInstance();
+    factory.setNamespaceAware(true);
+    try {
+      builder = factory.newDocumentBuilder();
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public void setLogger(final DITAOTLogger logger) {

@@ -32,11 +32,8 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGeneratorFactory;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLSerializer;
 import org.dita.dost.writer.AbstractDomFilter;
 import org.dita.dost.writer.ChunkTopicParser;
 import org.dita.dost.writer.SeparateChunkTopicParser;
@@ -61,6 +58,8 @@ public final class ChunkMapReader extends AbstractDomFilter {
   public static final String CHUNK_TO_CONTENT = "to-content";
   public static final String CHUNK_TO_NAVIGATION = "to-navigation";
   public static final String CHUNK_PREFIX = "Chunk";
+
+  private XMLUtils xmlUtils;
 
   private TempFileNameScheme tempFileNameScheme;
   private Collection<String> rootChunkOverride;
@@ -90,6 +89,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
       throw new RuntimeException(e);
     }
     tempFileNameScheme.setBaseDir(job.getInputDir());
+  }
+
+  public void setXmlUtils(final XMLUtils xmlUtils) {
+    this.xmlUtils = xmlUtils;
   }
 
   public void setRootChunkOverride(final String chunkValue) {
@@ -290,7 +293,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
   }
 
   private Document buildOutputDocument(final Element root) {
-    final Document doc = getDocumentBuilder().newDocument();
+    final Document doc = xmlUtils.newDocument();
     if (workdir != null) {
       doc.appendChild(doc.importNode(workdir, true));
     }

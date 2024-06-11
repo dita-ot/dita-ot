@@ -36,6 +36,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
@@ -163,7 +165,13 @@ public final class Integrator {
       }
     );
     parser = new PluginParser(ditaDir);
-    pluginsDoc = XMLUtils.getDocumentBuilder().newDocument();
+    try {
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+      pluginsDoc = factory.newDocumentBuilder().newDocument();
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+    }
 
     pluginList = getPluginIds(readPlugins());
   }
@@ -918,8 +926,10 @@ public final class Integrator {
       return null;
     }
     try {
-      return XMLUtils.getDocumentBuilder().parse(plugins);
-    } catch (SAXException | IOException e) {
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+      return factory.newDocumentBuilder().parse(plugins);
+    } catch (ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException(e);
     }
   }

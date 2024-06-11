@@ -233,7 +233,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
       }
-      reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+      reader.setEntityResolver(xmlUtils.getCatalogResolver());
     } catch (SAXException e) {
       throw new DITAOTException(e);
     }
@@ -386,7 +386,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       XMLReader xmlSource = parser;
       for (final XMLFilter f : getProcessingPipe(currentFile)) {
         f.setParent(xmlSource);
-        f.setEntityResolver(CatalogUtils.getCatalogResolver());
+        f.setEntityResolver(xmlUtils.getCatalogResolver());
         f.setErrorHandler(errorHandler);
         xmlSource = f;
       }
