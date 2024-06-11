@@ -976,7 +976,7 @@ public final class XMLUtils {
     if (Configuration.DEBUG) {
       builder = new DebugDocumentBuilder(builder);
     }
-    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+    builder.setEntityResolver(catalogResolver);
     return builder;
   }
 
