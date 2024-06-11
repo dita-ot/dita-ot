@@ -4,7 +4,6 @@ import static javax.xml.XMLConstants.XMLNS_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
@@ -46,6 +45,7 @@ public class MultilanguagePreprocessor {
   private static final String CHAR_SET = "char-set";
 
   private final Configuration configuration;
+  private XMLUtils xmlUtils;
 
   public MultilanguagePreprocessor(final Configuration theTheConfiguration) {
     if (null == theTheConfiguration) {
@@ -54,10 +54,12 @@ public class MultilanguagePreprocessor {
     this.configuration = theTheConfiguration;
   }
 
-  public Document process(final Document theInput) throws ProcessException {
-    final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+  public void setXmlUtils(XMLUtils xmlUtils) {
+    this.xmlUtils = xmlUtils;
+  }
 
-    final Document doc = documentBuilder.newDocument();
+  public Document process(final Document theInput) throws ProcessException {
+    final Document doc = xmlUtils.newDocument();
 
     final Node rootElement = theInput.getDocumentElement();
 

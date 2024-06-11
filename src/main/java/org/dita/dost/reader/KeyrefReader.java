@@ -72,7 +72,7 @@ public final class KeyrefReader implements AbstractReader {
 
   private DITAOTLogger logger;
   private Job job;
-  private final DocumentBuilder builder;
+  private DocumentBuilder builder;
   private KeyScope rootScope;
   private URI currentFile;
   private XMLUtils xmlUtils;
@@ -80,9 +80,7 @@ public final class KeyrefReader implements AbstractReader {
   /**
    * Constructor.
    */
-  public KeyrefReader() {
-    builder = XMLUtils.getDocumentBuilder();
-  }
+  public KeyrefReader() {}
 
   @Override
   public void read(final File filename) {
@@ -101,6 +99,7 @@ public final class KeyrefReader implements AbstractReader {
 
   public void setXmlUtils(XMLUtils xmlUtils) {
     this.xmlUtils = xmlUtils;
+    builder = xmlUtils.getDocumentBuilder();
   }
 
   /**

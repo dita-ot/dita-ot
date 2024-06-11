@@ -966,7 +966,7 @@ public final class XMLUtils {
    * @return DOM document builder instance.
    * @throws RuntimeException if instantiating DocumentBuilder failed
    */
-  public static DocumentBuilder getDocumentBuilder() {
+  public DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
       builder = factory.newDocumentBuilder();

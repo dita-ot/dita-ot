@@ -926,8 +926,10 @@ public final class Integrator {
       return null;
     }
     try {
-      return XMLUtils.getDocumentBuilder().parse(plugins);
-    } catch (SAXException | IOException e) {
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+      return factory.newDocumentBuilder().parse(plugins);
+    } catch (ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException(e);
     }
   }

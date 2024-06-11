@@ -68,7 +68,7 @@ public class StreamStore extends AbstractStore implements Store {
   public Document getDocument(final URI path) throws IOException {
     if (LOG) System.err.println("  getDocument:" + path);
     try {
-      return XMLUtils.getDocumentBuilder().parse(path.toString());
+      return xmlUtils.getDocumentBuilder().parse(path.toString());
     } catch (final Exception e) {
       throw new IOException("Failed to read document: " + e.getMessage(), e);
     }

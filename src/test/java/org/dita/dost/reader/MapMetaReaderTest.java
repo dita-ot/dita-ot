@@ -69,8 +69,7 @@ public class MapMetaReaderTest {
     reader.setJob(new Job(tempDir, new StreamStore(tempDir, xmlUtils)));
     reader.setXmlUtils(xmlUtils);
 
-    db = XMLUtils.getDocumentBuilder();
-    db.setEntityResolver(CatalogUtils.getCatalogResolver());
+    db = xmlUtils.getDocumentBuilder();
   }
 
   @ParameterizedTest

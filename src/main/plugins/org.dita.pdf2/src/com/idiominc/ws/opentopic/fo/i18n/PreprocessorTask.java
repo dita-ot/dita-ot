@@ -1,6 +1,7 @@
 package com.idiominc.ws.opentopic.fo.i18n;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_JOB;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 
 import java.io.File;
 import java.net.URI;
@@ -57,22 +58,24 @@ public class PreprocessorTask extends Task {
   private URI output = null;
   private URI style = null;
   private XMLCatalog xmlcatalog;
+  private XMLUtils xmlUtils;
 
   @Override
   public void execute() throws BuildException {
     final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-    final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+    xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
 
     checkParameters();
 
     log("Processing " + input + " to " + output, Project.MSG_INFO);
     try {
-      final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+      final DocumentBuilder documentBuilder = xmlUtils.getDocumentBuilder();
       documentBuilder.setEntityResolver(xmlcatalog);
 
       final Document doc = job.getStore().getDocument(input);
       final Document conf = documentBuilder.parse(config);
       final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
+      preprocessor.setXmlUtils(xmlUtils);
       final Document document = preprocessor.process(doc);
 
       if (style != null) {
