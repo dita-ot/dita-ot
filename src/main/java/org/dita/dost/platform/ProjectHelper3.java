@@ -146,6 +146,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
             .getDeclaredConstructor()
             .newInstance();
           action.setLogger(logger);
+          action.setUseClasspath(true);
           action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
           for (int i = 0; i < attributes.getLength(); i++) {
             action.addParam(attributes.getLocalName(i), attributes.getValue(i));

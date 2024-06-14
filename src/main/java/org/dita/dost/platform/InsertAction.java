@@ -28,6 +28,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
 
   private final XMLReader reader;
   private DITAOTLogger logger;
+  private boolean useClasspath;
   private final Set<Value> fileNameSet;
   final Map<String, String> paramTable;
   private int elemLevel = 0;
@@ -93,6 +94,11 @@ class InsertAction extends XMLFilterImpl implements IAction {
   @Override
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+  }
+
+  @Override
+  public void setUseClasspath(boolean useClasspath) {
+    this.useClasspath = useClasspath;
   }
 
   // XMLFilter methods

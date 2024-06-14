@@ -132,6 +132,7 @@ public final class FileGenerator extends XMLFilterImpl {
       if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
         final IAction action = (IAction) Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
         action.setLogger(logger);
+        action.setUseClasspath(false);
         action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
         for (int i = 0; i < attributes.getLength(); i++) {
           action.addParam(attributes.getLocalName(i), attributes.getValue(i));

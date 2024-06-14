@@ -27,6 +27,7 @@ abstract class ImportAction implements IAction {
   DITAOTLogger logger;
   /** Plug-in features. */
   Map<String, Plugin> featureTable = null;
+  boolean useClasspath;
 
   /**
    * Default Constructor.
@@ -73,5 +74,10 @@ abstract class ImportAction implements IAction {
   @Override
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+  }
+
+  @Override
+  public void setUseClasspath(boolean useClasspath) {
+    this.useClasspath = useClasspath;
   }
 }

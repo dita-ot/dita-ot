@@ -29,16 +29,26 @@ final class ImportAntAction extends ImportAction {
   public void getResult(final ContentHandler buf) throws SAXException {
     for (final Value value : valueSet) {
       buf.startElement(NULL_NS_URI, "import", "import", XMLUtils.EMPTY_ATTRIBUTES);
-      buf.startElement(
-        NULL_NS_URI,
-        "fileset",
-        "fileset",
-        new AttributesBuilder()
-          .add("dir", "${dita.plugin." + value.pluginId() + ".dir}")
-          .add("includes", value.value())
-          .build()
-      );
-      buf.endElement(NULL_NS_URI, "fileset", "fileset");
+      if (useClasspath) {
+        buf.startElement(
+          NULL_NS_URI,
+          "javaresource",
+          "javaresource",
+          new AttributesBuilder().add("name", value.pluginId() + "/" + value.value()).build()
+        );
+        buf.endElement(NULL_NS_URI, "javaresource", "javaresource");
+      } else {
+        buf.startElement(
+          NULL_NS_URI,
+          "fileset",
+          "fileset",
+          new AttributesBuilder()
+            .add("dir", "${dita.plugin." + value.pluginId() + ".dir}")
+            .add("includes", value.value())
+            .build()
+        );
+        buf.endElement(NULL_NS_URI, "fileset", "fileset");
+      }
       buf.endElement(NULL_NS_URI, "import", "import");
     }
   }
