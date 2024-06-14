@@ -16,10 +16,14 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   ditaval-merge,
-                  
+
+                  {depend.preprocess2.maps.pre},
                   preprocess2.maps,
+                  {depend.preprocess2.maps.post},
+                  {depend.preprocess2.topics.pre},
                   preprocess2.topics,
-                  
+                  {depend.preprocess2.topics.post},
+
                   map-clean-map,
                   clean-preprocess,
                   copy-files2,
