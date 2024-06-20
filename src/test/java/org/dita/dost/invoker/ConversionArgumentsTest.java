@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
 import org.apache.tools.ant.BuildException;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,18 +33,22 @@ public class ConversionArgumentsTest {
     arguments = new ConversionArguments();
   }
 
-  @Test
-  public void input_short() {
-    arguments.parse(new String[] { "-i", "foo.dita" });
-
-    assertEquals("foo.dita", arguments.definedProps.get("args.input"));
+  static Stream<Arguments> input() {
+    return Stream.of(
+      Arguments.of(List.of("-i", "foo.dita"), List.of("foo.dita")),
+      Arguments.of(List.of("--input=foo.dita"), List.of("foo.dita")),
+      Arguments.of(List.of("-i", "foo.dita", "-i", "bar.dita"), List.of("foo.dita", "bar.dita")),
+      Arguments.of(List.of("--input=foo.dita", "--input=bar.dita"), List.of("foo.dita", "bar.dita"))
+    );
   }
 
-  @Test
-  public void input_long() {
-    arguments.parse(new String[] { "--input=foo.dita" });
+  @ParameterizedTest
+  @MethodSource("input")
+  public void input(List<String> args, List<String> exp) {
+    arguments.parse(args.toArray(new String[] {}));
 
     assertEquals("foo.dita", arguments.definedProps.get("args.input"));
+    assertEquals(exp, arguments.inputs);
   }
 
   @Test
