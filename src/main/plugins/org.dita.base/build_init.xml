@@ -100,17 +100,20 @@ See the accompanying LICENSE file for applicable license.
   <target name="check-arg"
     description="Validate and init input arguments">
     <!-- begin to check input parameters -->
+    <!-- FIXME: Fix the availability check from classpath
     <dita-ot-fail id="DOTA003F">
       <condition>
         <and>
           <isset property="args.xsl" />
           <not>
-            <available file="${args.xsl}" type="file" />
+            <available resource="${args.xsl}" if:true="${useClasspath}"/>
+            <available file="${args.xsl}" type="file" unless:true="${useClasspath}"/>
           </not>
         </and>
       </condition>
-      <param name="1" location="${args.xsl}"/>
+      <param name="1" value="${args.xsl}"/>
     </dita-ot-fail>
+    -->
     <!-- end to check input parameters -->
 
     <!-- begin to init required parameters -->

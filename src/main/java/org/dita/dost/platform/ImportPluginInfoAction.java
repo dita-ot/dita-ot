@@ -41,7 +41,7 @@ final class ImportPluginInfoAction extends ImportAction {
           NULL_NS_URI,
           "property",
           "property",
-          new AttributesBuilder().add("name", name).add("value", e.getKey()).build()
+          new AttributesBuilder().add("name", name).add("value", "classpath:%s".formatted(e.getKey())).build()
         );
         buf.endElement(NULL_NS_URI, "property", "property");
       } else {

@@ -26,6 +26,9 @@ final class ImportAntLibAction extends ImportAction {
    */
   @Override
   public void getResult(final ContentHandler retBuf) throws SAXException {
+    if (useClasspath) {
+      return;
+    }
     final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
     for (final Value value : valueSet) {
       final String path;

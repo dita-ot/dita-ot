@@ -147,7 +147,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
             .newInstance();
           action.setLogger(logger);
           action.setUseClasspath(true);
-          action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
+          //          action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
           for (int i = 0; i < attributes.getLength(); i++) {
             action.addParam(attributes.getLocalName(i), attributes.getValue(i));
           }
@@ -169,7 +169,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
                   final IAction action = (IAction) Class.forName(extensions.get(name)).newInstance();
                   action.setLogger(logger);
                   action.setFeatures(pluginTable);
-                  action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
+                  //                  action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
                   final List<Value> value = Stream
                     .of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
                     .map(val -> new Value(null, val.trim()))
