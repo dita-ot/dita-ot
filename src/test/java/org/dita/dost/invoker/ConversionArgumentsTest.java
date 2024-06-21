@@ -87,47 +87,44 @@ public class ConversionArgumentsTest {
       .flatMap(name -> Stream.of("-D").map(prefix -> Arguments.of("%s%s=value".formatted(prefix, name))));
   }
 
-  @Test
-  public void format_short() {
-    arguments.parse(new String[] { "-f", "html5" });
-
-    assertEquals("html5", arguments.definedProps.get("transtype"));
+  static Stream<Arguments> format() {
+    return Stream.of(Arguments.of(List.of("-f", "html5")), Arguments.of(List.of("--format=html5")));
   }
 
-  @Test
-  public void format_long() {
-    arguments.parse(new String[] { "--format=html5" });
+  @ParameterizedTest
+  @MethodSource("format")
+  public void format(List<String> args) {
+    arguments.parse(args.toArray(new String[] {}));
 
-    assertEquals("html5", arguments.definedProps.get("transtype"));
+    assertEquals(List.of("html5"), arguments.formats);
   }
 
-  @Test
-  public void resource_short_multipleOptions() {
-    arguments.parse(new String[] { "-r", "foo.dita", "-r", "bar.dita" });
-
-    assertEquals("foo.dita" + pathSeparator + "bar.dita", arguments.definedProps.get("args.resources"));
-  }
-
-  @Test
-  public void resource_long_multipleOptions() {
-    arguments.parse(new String[] { "--resource=foo.dita", "--resource=bar.dita" });
-
-    assertEquals("foo.dita" + pathSeparator + "bar.dita", arguments.definedProps.get("args.resources"));
-  }
-
-  @Test
-  public void filter_multipleOptions() {
-    arguments.parse(new String[] { "--filter=foo.ditaval", "--filter=bar.ditaval" });
-
-    assertEquals(
-      new File("foo.ditaval").getAbsolutePath() + pathSeparator + new File("bar.ditaval").getAbsolutePath(),
-      arguments.definedProps.get("args.filter")
+  static Stream<Arguments> resource() {
+    return Stream.of(
+      Arguments.of(List.of("-r", "foo.dita", "-r", "bar.dita")),
+      Arguments.of(List.of("--resource=foo.dita", "--resource=bar.dita"))
     );
   }
 
-  @Test
-  public void filter_listValue() {
-    arguments.parse(new String[] { "--filter=foo.ditaval" + pathSeparator + "bar.ditaval" });
+  @ParameterizedTest
+  @MethodSource("resource")
+  public void resource(List<String> args) {
+    arguments.parse(args.toArray(new String[] {}));
+
+    assertEquals("foo.dita" + pathSeparator + "bar.dita", arguments.definedProps.get("args.resources"));
+  }
+
+  static Stream<Arguments> filter() {
+    return Stream.of(
+      Arguments.of(List.of("--filter=foo.ditaval", "--filter=bar.ditaval")),
+      Arguments.of(List.of("--filter=foo.ditaval" + pathSeparator + "bar.ditaval"))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("filter")
+  public void filter(List<String> args) {
+    arguments.parse(args.toArray(new String[] {}));
 
     assertEquals(
       new File("foo.ditaval").getAbsolutePath() + pathSeparator + new File("bar.ditaval").getAbsolutePath(),
