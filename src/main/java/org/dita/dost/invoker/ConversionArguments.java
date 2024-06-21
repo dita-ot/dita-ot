@@ -177,9 +177,6 @@ public class ConversionArguments extends Arguments {
         targets.addElement(arg);
       }
     }
-    if (!inputs.isEmpty()) {
-      definedProps.put("args.input", inputs.get(0));
-    }
     if (!resources.isEmpty()) {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }

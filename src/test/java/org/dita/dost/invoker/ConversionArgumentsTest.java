@@ -47,7 +47,6 @@ public class ConversionArgumentsTest {
   public void input(List<String> args, List<String> exp) {
     arguments.parse(args.toArray(new String[] {}));
 
-    assertEquals("foo.dita", arguments.definedProps.get("args.input"));
     assertEquals(exp, arguments.inputs);
   }
 
@@ -56,7 +55,7 @@ public class ConversionArgumentsTest {
     var file = Paths.get(getClass().getResource("/messages.xml").toURI()).toAbsolutePath();
     arguments.parse(new String[] { "--input=%s".formatted(file) });
 
-    assertEquals(file.toString(), arguments.definedProps.get("args.input"));
+    assertEquals(file.toString(), arguments.inputs.get(0));
   }
 
   @Test
@@ -66,14 +65,14 @@ public class ConversionArgumentsTest {
     var file = currentDir.relativize(absoluteFile);
     arguments.parse(new String[] { "--input=%s".formatted(file) });
 
-    assertEquals(absoluteFile.toString(), arguments.definedProps.get("args.input"));
+    assertEquals(absoluteFile.toString(), arguments.inputs.get(0));
   }
 
   @Test
   public void input_uri() {
     arguments.parse(new String[] { "--input=https://example.com/foo.dita" });
 
-    assertEquals("https://example.com/foo.dita", arguments.definedProps.get("args.input"));
+    assertEquals("https://example.com/foo.dita", arguments.inputs.get(0));
   }
 
   @ParameterizedTest
