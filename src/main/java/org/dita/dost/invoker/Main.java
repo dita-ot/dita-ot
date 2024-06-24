@@ -438,18 +438,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (inputs.isEmpty() || formats.isEmpty()) {
       return List.of(definedProps);
     }
+    final String input = inputs.get(inputs.size() - 1);
     return formats
       .stream()
-      .flatMap(format ->
-        inputs
-          .stream()
-          .map(input -> {
-            final Map<String, Object> res = new HashMap<>(definedProps);
-            res.put(ANT_ARGS_INPUT, input);
-            res.put(ANT_TRANSTYPE, format);
-            return res;
-          })
-      )
+      .map(format -> {
+        final Map<String, Object> res = new HashMap<>(definedProps);
+        res.put(ANT_ARGS_INPUT, input);
+        res.put(ANT_TRANSTYPE, format);
+        return res;
+      })
       .toList();
   }
 
