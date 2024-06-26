@@ -359,7 +359,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       definedProps.putAll(getLocalProperties(ditaDir));
       definedProps.put(USE_COLOR, Boolean.toString(conversionArgs.useColor));
       if (conversionArgs.projectFile == null) {
-        projectProps = Collections.singletonList(definedProps);
+        projectProps = collectArguments(conversionArgs.inputs, conversionArgs.formats, definedProps);
       } else {
         projectProps = collectProperties(conversionArgs.projectFile, definedProps);
       }
@@ -428,6 +428,26 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       System.setErr(err);
     }
     readyToRun = true;
+  }
+
+  private List<Map<String, Object>> collectArguments(
+    List<String> inputs,
+    List<String> formats,
+    Map<String, Object> definedProps
+  ) {
+    if (inputs.isEmpty() || formats.isEmpty()) {
+      return List.of(definedProps);
+    }
+    final String input = inputs.get(inputs.size() - 1);
+    return formats
+      .stream()
+      .map(format -> {
+        final Map<String, Object> res = new HashMap<>(definedProps);
+        res.put(ANT_ARGS_INPUT, input);
+        res.put(ANT_TRANSTYPE, format);
+        return res;
+      })
+      .toList();
   }
 
   private void uninstall(UninstallArguments installArgs) {
