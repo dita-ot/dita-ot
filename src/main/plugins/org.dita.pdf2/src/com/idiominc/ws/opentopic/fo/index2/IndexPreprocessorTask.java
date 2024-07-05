@@ -1,6 +1,7 @@
 package com.idiominc.ws.opentopic.fo.index2;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
+import static org.dita.dost.util.Constants.ARGS_DRAFT_NO;
 
 import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import java.io.FileOutputStream;
@@ -76,13 +77,16 @@ public class IndexPreprocessorTask extends Task {
   public void execute() throws BuildException {
     checkParameters();
 
+    final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+
     try {
-      final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+      final DocumentBuilder documentBuilder = xmlUtils.getDocumentBuilder();
       documentBuilder.setEntityResolver(xmlcatalog);
 
       final Document doc = documentBuilder.parse(input);
       final IndexPreprocessor preprocessor = new IndexPreprocessor(prefix, namespace_url, this.draft);
       preprocessor.setLogger(new DITAOTAntLogger(getProject()));
+      preprocessor.setXmlUtils(xmlUtils);
 
       // Walks through source document and builds an array of IndexEntry and builds
       // new Document with pre-processed index entries included.

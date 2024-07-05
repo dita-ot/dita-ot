@@ -33,6 +33,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
       final ConrefPushReader reader = new ConrefPushReader();
       reader.setLogger(logger);
       reader.setJob(job);
+      reader.setXmlUtils(xmlUtils);
       for (final FileInfo f : fis) {
         final File file = new File(job.tempDirURI.resolve(f.uri));
         logger.info("Reading " + file.toURI());

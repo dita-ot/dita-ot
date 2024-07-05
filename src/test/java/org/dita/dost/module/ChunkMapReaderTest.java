@@ -1124,6 +1124,7 @@ public class ChunkMapReaderTest {
       mapReader.setLogger(logger);
       final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
       mapReader.setJob(job);
+      mapReader.setXmlUtils(new XMLUtils());
       mapReader.supportToNavigation(false);
 
       final URI path = job.getInputMap();

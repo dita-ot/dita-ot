@@ -16,7 +16,6 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.XMLCatalog;
 import org.dita.dost.ant.XMLCatalogAdapter;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -59,22 +58,24 @@ public class PreprocessorTask extends Task {
   private URI output = null;
   private URI style = null;
   private XMLCatalog xmlcatalog;
+  private XMLUtils xmlUtils;
 
   @Override
   public void execute() throws BuildException {
     final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-    final XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+    xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
 
     checkParameters();
 
     log("Processing " + input + " to " + output, Project.MSG_INFO);
     try {
-      final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+      final DocumentBuilder documentBuilder = xmlUtils.getDocumentBuilder();
       documentBuilder.setEntityResolver(xmlcatalog);
 
       final Document doc = job.getStore().getDocument(input);
       final Document conf = documentBuilder.parse(config);
       final MultilanguagePreprocessor preprocessor = new MultilanguagePreprocessor(new Configuration(conf));
+      preprocessor.setXmlUtils(xmlUtils);
       final Document document = preprocessor.process(doc);
 
       if (style != null) {
@@ -82,7 +83,7 @@ public class PreprocessorTask extends Task {
         final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
         final URIResolver catalogResolver = xmlcatalog != null
           ? new XMLCatalogAdapter(xmlcatalog)
-          : CatalogUtils.getCatalogResolver();
+          : xmlUtils.getCatalogResolver();
         final URIResolver resolver = new ChainedURIResolver(job.getStore(), catalogResolver);
         xsltCompiler.setURIResolver(resolver);
         final XsltExecutable compile = xsltCompiler.compile(job.getStore().getSource(style));

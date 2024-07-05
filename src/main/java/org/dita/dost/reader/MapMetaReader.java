@@ -104,7 +104,7 @@ public final class MapMetaReader extends AbstractDomFilter {
   /** Current document. */
   private Document doc = null;
   /** Result metadata document. */
-  private final Document resultDoc;
+  private Document resultDoc;
   /** Current file. */
   private URI filePath;
 
@@ -114,7 +114,10 @@ public final class MapMetaReader extends AbstractDomFilter {
   public MapMetaReader() {
     super();
     globalMeta = new HashMap<>(16);
-    resultDoc = XMLUtils.getDocumentBuilder().newDocument();
+  }
+
+  public void setXmlUtils(XMLUtils xmlUtils) {
+    resultDoc = xmlUtils.newDocument();
   }
 
   /**

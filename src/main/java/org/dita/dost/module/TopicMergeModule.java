@@ -25,7 +25,6 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MergeMapParser;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 
@@ -113,7 +112,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
         final XsltCompiler xsltCompiler = processor.newXsltCompiler();
         final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(style)).load();
         transformer.setErrorReporter(toErrorReporter(logger));
-        transformer.setURIResolver(new ChainedURIResolver(job.getStore(), CatalogUtils.getCatalogResolver()));
+        transformer.setURIResolver(new ChainedURIResolver(job.getStore(), xmlUtils.getCatalogResolver()));
         transformer.setMessageListener(toMessageListener(logger, processingMode));
 
         final StreamSource source = new StreamSource(new ByteArrayInputStream(midBuffer.toByteArray()));

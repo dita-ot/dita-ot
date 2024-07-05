@@ -79,6 +79,7 @@ public class ConversionArguments extends Arguments {
   File projectFile;
 
   public final List<String> inputs = new ArrayList<>();
+  public final List<String> formats = new ArrayList<>();
   private final List<String> resources = new ArrayList<>();
 
   /**
@@ -177,9 +178,6 @@ public class ConversionArguments extends Arguments {
         targets.addElement(arg);
       }
     }
-    if (!inputs.isEmpty()) {
-      definedProps.put("args.input", inputs.get(0));
-    }
     if (!resources.isEmpty()) {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }
@@ -258,7 +256,7 @@ public class ConversionArguments extends Arguments {
     if (!Configuration.transtypes.contains(entry.getValue())) {
       throw new BuildException(MessageUtils.getMessage("DOTA001F", entry.getValue()).toString());
     }
-    definedProps.put(argument.property, entry.getValue());
+    formats.add(argument.getValue(entry.getValue()));
   }
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {

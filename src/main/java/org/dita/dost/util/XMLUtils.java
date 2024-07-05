@@ -168,6 +168,10 @@ public final class XMLUtils {
     this.logger = logger;
   }
 
+  public Resolver getCatalogResolver() {
+    return catalogResolver;
+  }
+
   /**
    * Convert DOM NodeList to List.
    */
@@ -962,7 +966,7 @@ public final class XMLUtils {
    * @return DOM document builder instance.
    * @throws RuntimeException if instantiating DocumentBuilder failed
    */
-  public static DocumentBuilder getDocumentBuilder() {
+  public DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
       builder = factory.newDocumentBuilder();
@@ -972,8 +976,22 @@ public final class XMLUtils {
     if (Configuration.DEBUG) {
       builder = new DebugDocumentBuilder(builder);
     }
-    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+    builder.setEntityResolver(catalogResolver);
     return builder;
+  }
+
+  /**
+   * Create new DOM document.
+   *
+   * @return empty DOM document
+   * @throws RuntimeException if instantiating DocumentBuilder failed
+   */
+  public Document newDocument() {
+    try {
+      return factory.newDocumentBuilder().newDocument();
+    } catch (final ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -1406,7 +1424,7 @@ public final class XMLUtils {
    */
   public Document cloneDocument(final XdmNode node) throws IOException {
     try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final Document doc = newDocument();
       final DOMDestination destination = new DOMDestination(doc);
       final Receiver receiver = destination.getReceiver(
         getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),

@@ -50,6 +50,7 @@ public class MapReaderModuleTest {
   public void setUp() {
     reader = new MapReaderModule();
     reader.setLogger(new TestUtils.TestLogger());
+    reader.setXmlUtils(new XMLUtils());
   }
 
   public static Stream<Arguments> data() {
