@@ -34,7 +34,7 @@ final class ImportAntAction extends ImportAction {
         NULL_NS_URI,
         "fileset",
         "fileset",
-        new AttributesBuilder().add("dir", tokens[0]).add("includes", tokens[1]).build()
+        new AttributesBuilder().add("dir", "${dita.plugin." + tokens[0] + ".dir}").add("includes", tokens[1]).build()
       );
       buf.endElement(NULL_NS_URI, "fileset", "fileset");
       buf.endElement(NULL_NS_URI, "import", "import");
