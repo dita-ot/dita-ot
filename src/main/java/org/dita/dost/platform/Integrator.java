@@ -334,8 +334,10 @@ public final class Integrator {
     for (final Entry<String, Plugin> e : pluginTable.entrySet()) {
       final Plugin f = e.getValue();
       final String name = "plugin." + e.getKey() + ".dir";
-      final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-      if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+      final List<Value> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+      if (
+        Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0).value())
+      ) {
         //configuration.put(name, ditaDir.getAbsolutePath());
         configuration.put(name, ".");
       } else {
@@ -647,7 +649,7 @@ public final class Integrator {
     final File base = new File(ditaDir, "dummy");
     return src
       .stream()
-      .map(lib -> toFile(lib.value()))
+      .map(lib -> toFile(((Value.PathValue) lib).baseDir() + File.separator + lib.value()))
       .map(libFile -> {
         if (!libFile.exists()) {
           throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
@@ -855,14 +857,10 @@ public final class Integrator {
   private boolean loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
       final Plugin pluginFeatures = pluginTable.get(plugin);
-      final Map<String, List<String>> featureSet = pluginFeatures.features();
-      for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
+      final Map<String, List<Value>> featureSet = pluginFeatures.features();
+      for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
-        final List<Value> values = currentFeature
-          .getValue()
-          .stream()
-          .map(val -> new Value(plugin, val))
-          .collect(Collectors.toList());
+        final List<Value> values = currentFeature.getValue();
         if (!extensionPoints.contains(key)) {
           throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
         }
@@ -880,7 +878,7 @@ public final class Integrator {
       for (final String templateName : pluginFeatures.templates()) {
         final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName)).getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);
-        templateSet.put(templatePath, new Value(pluginFeatures.pluginId(), templateName));
+        templateSet.put(templatePath, new Value.StringValue(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
       return true;
@@ -1030,9 +1028,9 @@ public final class Integrator {
    * @return combined extension value, {@code null} if no value available
    */
   static String getValue(final Map<String, Plugin> featureTable, final String extension) {
-    final List<String> buf = new ArrayList<>();
+    final List<Value> buf = new ArrayList<>();
     for (final Plugin f : featureTable.values()) {
-      final List<String> v = f.getFeature(extension);
+      final List<Value> v = f.getFeature(extension);
       if (v != null) {
         buf.addAll(v);
       }
@@ -1040,7 +1038,7 @@ public final class Integrator {
     if (buf.isEmpty()) {
       return null;
     } else {
-      return StringUtils.join(buf, ",");
+      return buf.stream().map(Value::value).collect(Collectors.joining(","));
     }
   }
 

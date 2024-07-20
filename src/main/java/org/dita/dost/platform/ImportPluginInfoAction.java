@@ -38,8 +38,10 @@ final class ImportPluginInfoAction extends ImportAction {
       final String name = "dita.plugin." + e.getKey() + ".dir";
       final StringBuilder location = new StringBuilder();
 
-      final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-      if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+      final List<Value> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+      if (
+        Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0).value())
+      ) {
         location.append("${dita.dir}");
       } else if (f.pluginDir().getAbsolutePath().startsWith(f.ditaDir().getAbsolutePath())) {
         location

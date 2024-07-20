@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.dita.dost.platform.Value.PathValue;
+import org.dita.dost.platform.Value.StringValue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -75,18 +77,20 @@ public class FeaturesTest {
   public void testGetFeature() {
     final Features f = Features
       .builder()
+      .setPluginId("plugin")
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
       .addFeature("foo", createElement("bar", null))
       .build();
 
-    assertEquals(asList("bar"), f.getFeature("foo"));
+    assertEquals(asList(new StringValue("plugin", "bar")), f.getFeature("foo"));
   }
 
   @Test
   public void testGetAllFeatures() {
     final Features f = Features
       .builder()
+      .setPluginId("plugin")
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
       .addFeature("foo", createElement("bar", null))
@@ -94,9 +98,12 @@ public class FeaturesTest {
       .addFeature("bar", createElement("qux", null))
       .build();
 
-    final Map<String, List<String>> exp = new HashMap<>();
-    exp.put("foo", asList("bar", "baz"));
-    exp.put("bar", asList("qux"));
+    final Map<String, List<Value>> exp = Map.of(
+      "foo",
+      asList(new StringValue("plugin", "bar"), new StringValue("plugin", "baz")),
+      "bar",
+      asList(new StringValue("plugin", "qux"))
+    );
 
     assertEquals(exp, f.features());
   }
@@ -105,6 +112,7 @@ public class FeaturesTest {
   public void testAddFeature() {
     final Features f = Features
       .builder()
+      .setPluginId("plugin")
       .setPluginDir(new File("base", "plugins").getAbsoluteFile())
       .setDitaDir(new File("base").getAbsoluteFile())
       .addFeature("foo", createElement(null, null))
@@ -114,10 +122,10 @@ public class FeaturesTest {
 
     assertEquals(
       asList(
-        "bar",
-        "baz",
-        new File("base", "plugins" + File.separator + "bar").getAbsolutePath(),
-        new File("base", "plugins" + File.separator + "baz").getAbsolutePath()
+        new StringValue("plugin", "bar"),
+        new StringValue("plugin", "baz"),
+        new PathValue("plugin", new File("base", "plugins").getAbsoluteFile(), "bar"),
+        new PathValue("plugin", new File("base", "plugins").getAbsoluteFile(), "baz")
       ),
       f.getFeature("foo")
     );

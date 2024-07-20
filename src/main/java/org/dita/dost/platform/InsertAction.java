@@ -8,6 +8,7 @@
  */
 package org.dita.dost.platform;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
@@ -70,7 +71,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
     setContentHandler(retBuf);
     try {
       for (final Value fileName : fileNameSet) {
-        currentFile = fileName.value();
+        currentFile = ((Value.PathValue) fileName).baseDir() + File.separator + fileName.value();
         reader.parse(currentFile);
       }
     } catch (SAXException | RuntimeException e) {

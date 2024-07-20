@@ -28,13 +28,15 @@ final class ImportAntAction extends ImportAction {
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
     for (final Value value : valueSet) {
-      final String[] tokens = value.value().split("[/\\\\]", 2);
       buf.startElement(NULL_NS_URI, "import", "import", XMLUtils.EMPTY_ATTRIBUTES);
       buf.startElement(
         NULL_NS_URI,
         "fileset",
         "fileset",
-        new AttributesBuilder().add("dir", "${dita.plugin." + tokens[0] + ".dir}").add("includes", tokens[1]).build()
+        new AttributesBuilder()
+          .add("dir", "${dita.plugin." + value.pluginId() + ".dir}")
+          .add("includes", value.value())
+          .build()
       );
       buf.endElement(NULL_NS_URI, "fileset", "fileset");
       buf.endElement(NULL_NS_URI, "import", "import");

@@ -51,7 +51,7 @@ public final class PluginUninstall {
     try {
       integrator.execute();
     } catch (final Exception e) {
-      throw new BuildException("Integration failed: " + e.getMessage(), e);
+      throw new BuildException("Integration failed: " + e.toString(), e);
     }
   }
 

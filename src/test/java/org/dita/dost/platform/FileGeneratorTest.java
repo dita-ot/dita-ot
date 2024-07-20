@@ -40,8 +40,14 @@ public class FileGeneratorTest {
   private static final Hashtable<String, List<Value>> features = new Hashtable<>();
 
   static {
-    features.put("element", asList(new Value(null, "foo"), new Value(null, "bar"), new Value(null, "baz")));
-    features.put("attribute", asList(new Value(null, "foo"), new Value(null, "bar"), new Value(null, "baz")));
+    features.put(
+      "element",
+      asList(new Value.StringValue(null, "foo"), new Value.StringValue(null, "bar"), new Value.StringValue(null, "baz"))
+    );
+    features.put(
+      "attribute",
+      asList(new Value.StringValue(null, "foo"), new Value.StringValue(null, "bar"), new Value.StringValue(null, "baz"))
+    );
   }
 
   private static final Map<String, Plugin> plugins = new HashMap<>();
@@ -130,9 +136,9 @@ public class FileGeneratorTest {
       paramsExp.put("behavior", this.getClass().getName());
       assertEquals(paramsExp, params);
       final List<Value> inputExp = Arrays.asList(
-        new Value(null, "foo"),
-        new Value(null, "bar"),
-        new Value(null, "baz")
+        new Value.StringValue(null, "foo"),
+        new Value.StringValue(null, "bar"),
+        new Value.StringValue(null, "baz")
       );
       assertEquals(inputExp, inputs);
       assertEquals(FileGeneratorTest.plugins, features);
@@ -154,7 +160,7 @@ public class FileGeneratorTest {
       final Map<String, String> paramsExp = new HashMap<>();
       paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
       assertEquals(paramsExp, params);
-      final List<Value> inputExp = List.of(new Value(null, "attribute"));
+      final List<Value> inputExp = List.of(new Value.StringValue(null, "attribute"));
       assertEquals(inputExp, inputs);
       assertEquals(FileGeneratorTest.plugins, features);
       return "bar";

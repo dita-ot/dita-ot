@@ -10,6 +10,7 @@ package org.dita.dost.platform;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
 
+import java.io.File;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
@@ -29,7 +30,8 @@ final class ImportStringsAction extends ImportAction {
     final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
     for (final Value value : valueSet) {
       buf.startElement(NULL_NS_URI, "stringfile", "stringfile", new AttributesBuilder().build());
-      final char[] location = FileUtils.getRelativeUnixPath(templateFilePath, value.value()).toCharArray();
+      final String path = ((Value.PathValue) value).baseDir() + File.separator + value.value();
+      final char[] location = FileUtils.getRelativeUnixPath(templateFilePath, path).toCharArray();
       buf.characters(location, 0, location.length);
       buf.endElement(NULL_NS_URI, "stringfile", "stringfile");
     }
