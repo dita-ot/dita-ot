@@ -8,7 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.*;
@@ -71,7 +70,12 @@ class InsertAction extends XMLFilterImpl implements IAction {
     setContentHandler(retBuf);
     try {
       for (final Value fileName : fileNameSet) {
-        currentFile = ((Value.PathValue) fileName).baseDir() + File.separator + fileName.value();
+        if (fileName instanceof Value.PathValue pathValue) {
+          currentFile = pathValue.getPath();
+        } else {
+          logger.error("Catalog import must be a file feature: " + fileName.value());
+          continue;
+        }
         reader.parse(currentFile);
       }
     } catch (SAXException | RuntimeException e) {

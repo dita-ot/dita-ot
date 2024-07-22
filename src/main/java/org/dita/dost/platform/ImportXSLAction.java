@@ -8,7 +8,6 @@
  */
 package org.dita.dost.platform;
 
-import java.io.File;
 import java.net.URI;
 import org.dita.dost.platform.Value.PathValue;
 import org.dita.dost.util.FileUtils;
@@ -47,7 +46,7 @@ final class ImportXSLAction extends ImportAction {
   private URI getHref(final PathValue value) {
     final Plugin features = featureTable.get(value.pluginId());
     final URI pluginDir = features.pluginDir().toURI();
-    final String path = value.baseDir() + File.separator + value.value();
+    final String path = value.getPath();
     final URI templateFile = URLUtils.toFile(path).toURI().normalize();
     final URI template = pluginDir.relativize(templateFile);
     if (value.pluginId() == null || template.isAbsolute()) {

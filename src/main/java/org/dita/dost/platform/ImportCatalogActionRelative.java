@@ -9,7 +9,6 @@ package org.dita.dost.platform;
 
 import static org.dita.dost.util.Constants.OASIS_CATALOG_NAMESPACE;
 
-import java.io.File;
 import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.xml.sax.ContentHandler;
@@ -27,7 +26,13 @@ final class ImportCatalogActionRelative extends ImportAction {
   public void getResult(final ContentHandler buf) throws SAXException {
     final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
     for (final Value value : valueSet) {
-      final String path = ((Value.PathValue) value).baseDir() + File.separator + value.value();
+      final String path;
+      if (value instanceof Value.PathValue pathValue) {
+        path = pathValue.getPath();
+      } else {
+        logger.error("Catalog import must be a file feature: " + value.value());
+        continue;
+      }
       buf.startElement(
         OASIS_CATALOG_NAMESPACE,
         "nextCatalog",

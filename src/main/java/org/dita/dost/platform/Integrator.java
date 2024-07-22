@@ -33,6 +33,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.XMLConstants;
@@ -649,7 +650,14 @@ public final class Integrator {
     final File base = new File(ditaDir, "dummy");
     return src
       .stream()
-      .map(lib -> toFile(((Value.PathValue) lib).baseDir() + File.separator + lib.value()))
+      .flatMap(lib -> {
+        if (lib instanceof Value.PathValue path) {
+          return Stream.of(toFile(path.getPath()));
+        } else {
+          logger.error("Library import must be a file feature: " + lib.value());
+          return Stream.empty();
+        }
+      })
       .map(libFile -> {
         if (!libFile.exists()) {
           throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());

@@ -16,5 +16,9 @@ public sealed interface Value {
 
   record StringValue(String pluginId, String value) implements Value {}
 
-  record PathValue(String pluginId, File baseDir, String value) implements Value {}
+  record PathValue(String pluginId, File baseDir, String value) implements Value {
+    public String getPath() {
+      return baseDir + File.separator + value;
+    }
+  }
 }
