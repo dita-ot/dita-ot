@@ -26,11 +26,18 @@ final class ImportCatalogActionRelative extends ImportAction {
   public void getResult(final ContentHandler buf) throws SAXException {
     final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
     for (final Value value : valueSet) {
+      final String path;
+      if (value instanceof Value.PathValue pathValue) {
+        path = pathValue.getPath();
+      } else {
+        logger.error("Catalog import must be a file feature: " + value.value());
+        continue;
+      }
       buf.startElement(
         OASIS_CATALOG_NAMESPACE,
         "nextCatalog",
         "nextCatalog",
-        new AttributesBuilder().add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, value.value())).build()
+        new AttributesBuilder().add("catalog", FileUtils.getRelativeUnixPath(templateFilePath, path)).build()
       );
       buf.endElement(OASIS_CATALOG_NAMESPACE, "nextCatalog", "nextCatalog");
     }

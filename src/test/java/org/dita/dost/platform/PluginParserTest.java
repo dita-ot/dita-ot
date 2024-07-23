@@ -13,6 +13,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 import org.dita.dost.TestUtils;
+import org.dita.dost.platform.Value.PathValue;
+import org.dita.dost.platform.Value.StringValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,17 +41,17 @@ public class PluginParserTest {
       Map.of(),
       Map.of(
         "type_file",
-        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        List.of(new PathValue("dummy", resourceDir, "foo"), new PathValue("dummy", resourceDir, "bar")),
         "file",
-        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        List.of(new PathValue("dummy", resourceDir, "foo"), new PathValue("dummy", resourceDir, "bar")),
         "multiple_type_file",
-        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        List.of(new PathValue("dummy", resourceDir, "foo"), new PathValue("dummy", resourceDir, "bar")),
         "multiple_file",
-        List.of(new File(resourceDir, "foo").getPath(), new File(resourceDir, "bar").getPath()),
+        List.of(new PathValue("dummy", resourceDir, "foo"), new PathValue("dummy", resourceDir, "bar")),
         "multiple_type_text",
-        List.of("foo", "bar"),
+        List.of(new StringValue("dummy", "foo"), new StringValue("dummy", "bar")),
         "type_text",
-        List.of("foo", "bar")
+        List.of(new StringValue("dummy", "foo"), new StringValue("dummy", "bar"))
       ),
       List.of(
         new PluginRequirement(List.of("foo"), true),

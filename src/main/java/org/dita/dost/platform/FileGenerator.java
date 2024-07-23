@@ -158,7 +158,7 @@ final class FileGenerator extends XMLFilterImpl {
                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
                 final List<Value> value = Stream
                   .of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
-                  .map(val -> new Value(null, val))
+                  .map(val -> new Value.StringValue(null, val))
                   .collect(Collectors.toList());
                 action.setInput(value);
                 final String result = action.getResult();

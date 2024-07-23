@@ -17,8 +17,11 @@ public interface Plugin {
   File pluginDir();
   File ditaDir();
   SemVer pluginVersion();
+  /** Extension point by extension point id.  */
   Map<String, ExtensionPoint> extensionPoints();
-  Map<String, List<String>> features();
+  /** List of feature values by feature id. */
+  Map<String, List<Value>> features();
+  /** Required plug-ins. */
   List<PluginRequirement> requiredPlugins();
   Map<String, String> metaTable();
   List<String> templates();
@@ -28,14 +31,14 @@ public interface Plugin {
    * @param id feature id
    * @return feature name
    */
-  default List<String> getFeature(final String id) {
+  default List<Value> getFeature(final String id) {
     return features().get(id);
   }
 
   /**
-   * Return meat info specifying type.
+   * Return meta info specifying type.
    * @param type type
-   * @return meat info
+   * @return meta info
    */
   default String getMeta(final String type) {
     return metaTable().get(type);

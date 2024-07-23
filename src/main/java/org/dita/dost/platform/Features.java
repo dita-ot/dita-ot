@@ -26,42 +26,24 @@ record Features(
   File pluginDir,
   File ditaDir,
   Map<String, ExtensionPoint> extensionPoints,
-  Map<String, List<String>> features,
+  Map<String, List<Value>> features,
   List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
   List<String> templates
 )
   implements Plugin {
-  /**
-   * Return the feature name by id.
-   * @param id feature id
-   * @return feature name
-   */
-  public List<String> getFeature(final String id) {
-    return features.get(id);
-  }
-
-  /**
-   * Return meat info specifying type.
-   * @param type type
-   * @return meat info
-   */
-  public String getMeta(final String type) {
-    return metaTable.get(type);
-  }
-
   public static Builder builder() {
     return new Builder();
   }
 
   static class Builder {
 
-    private String id;
+    private String pluginId;
     private SemVer pluginVersion;
     private File pluginDir;
     private File ditaDir;
     private final Map<String, ExtensionPoint> extensionPoints;
-    private final Map<String, List<String>> featureTable;
+    private final Map<String, List<Value>> featureTable;
     private final List<PluginRequirement> requireList;
     private final Map<String, String> metaTable;
     private final List<String> templateList;
@@ -79,7 +61,7 @@ record Features(
 
     public Features build() {
       return new Features(
-        id,
+        pluginId,
         pluginVersion,
         pluginDir,
         ditaDir,
@@ -111,7 +93,7 @@ record Features(
       if (!ID_PATTERN.matcher(id).matches()) {
         throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
       }
-      this.id = id;
+      this.pluginId = id;
       return this;
     }
 
@@ -123,10 +105,10 @@ record Features(
     /**
      * Add feature to the feature table.
      *
-     * @param id feature id
+     * @param featureId feature id
      * @param elem configuration element
      */
-    Builder addFeature(final String id, final Element elem) {
+    Builder addFeature(final String featureId, final Element elem) {
       boolean isFile;
       String value = elem.getAttribute(FEATURE_FILE_ATTR);
       if (!value.isEmpty()) {
@@ -136,29 +118,29 @@ record Features(
         isFile = FEATURE_TYPE_VALUE_FILE.equals(elem.getAttribute(FEATURE_TYPE_ATTR));
       }
       final StringTokenizer valueTokenizer = new StringTokenizer(value, Integrator.FEAT_VALUE_SEPARATOR);
-      final List<String> valueBuffer = new ArrayList<>();
-      if (featureTable.containsKey(id)) {
-        valueBuffer.addAll(featureTable.get(id));
+      final List<Value> valueBuffer = new ArrayList<>();
+      if (featureTable.containsKey(featureId)) {
+        valueBuffer.addAll(featureTable.get(featureId));
       }
       while (valueTokenizer.hasMoreElements()) {
         final String valueElement = valueTokenizer.nextToken();
         if (valueElement != null && valueElement.trim().length() != 0) {
           if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
-            if (id.equals("ant.import")) {
-              valueBuffer.add("${dita.plugin." + this.id + ".dir}" + File.separator + valueElement.trim());
+            if (featureId.equals("ant.import")) {
+              valueBuffer.add(new Value.PathValue(this.pluginId, pluginDir, valueElement.trim()));
             } else {
-              valueBuffer.add(pluginDir + File.separator + valueElement.trim());
+              valueBuffer.add(new Value.PathValue(this.pluginId, pluginDir, valueElement.trim()));
             }
           } else {
-            if (id.equals("package.version")) {
+            if (featureId.equals("package.version")) {
               setPluginVersion(valueElement.trim());
             }
-            valueBuffer.add(valueElement.trim());
+            valueBuffer.add(new Value.StringValue(this.pluginId, valueElement.trim()));
           }
         }
       }
 
-      featureTable.put(id, valueBuffer);
+      featureTable.put(featureId, valueBuffer);
       return this;
     }
 
