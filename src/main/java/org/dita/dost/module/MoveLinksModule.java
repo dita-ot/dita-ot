@@ -25,8 +25,8 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.ChainedURIResolver;
+import org.dita.dost.util.ClasspathURIResolver;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.DitaLinksWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,13 +53,17 @@ final class MoveLinksModule extends AbstractPipelineModuleImpl {
       return null;
     }
     final File inputFile = new File(job.tempDirURI.resolve(fi.uri));
-    final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
 
     Document doc;
     try {
       final XsltCompiler xsltCompiler = xmlUtils.getProcessor().newXsltCompiler();
+      final ClasspathURIResolver resolver = new ClasspathURIResolver();
 
-      final XsltTransformer transformer = xsltCompiler.compile(new StreamSource(styleFile)).load();
+      final String path = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE);
+      final Source style = path.startsWith("classpath:")
+        ? resolver.resolve(path, null)
+        : new StreamSource(new File(path));
+      final XsltTransformer transformer = xsltCompiler.compile(style).load();
       transformer.setErrorReporter(toErrorReporter(logger));
       transformer.setURIResolver(new ChainedURIResolver(job.getStore(), xmlUtils.getCatalogResolver()));
       transformer.setMessageListener(toMessageListener(logger, processingMode));

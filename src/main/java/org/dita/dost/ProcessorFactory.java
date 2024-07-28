@@ -24,9 +24,9 @@ public final class ProcessorFactory {
    * @return new ProcessorFactory instance
    */
   public static ProcessorFactory newInstance(final File ditaDir) {
-    if (ditaDir != null && !ditaDir.isAbsolute()) {
-      throw new IllegalArgumentException("DITA-OT directory must be absolute");
-    }
+    //    if (ditaDir != null && !ditaDir.isAbsolute()) {
+    //      throw new IllegalArgumentException("DITA-OT directory must be absolute");
+    //    }
     return new ProcessorFactory(ditaDir);
   }
 

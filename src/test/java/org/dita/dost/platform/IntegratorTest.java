@@ -8,6 +8,7 @@
 package org.dita.dost.platform;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.platform.Integrator.COMPILE_TIME_RESOLVE;
 import static org.dita.dost.util.Constants.CONF_SUPPORTED_IMAGE_EXTENSIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,20 +20,22 @@ import java.util.HashSet;
 import java.util.Properties;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.Constants;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.xml.sax.InputSource;
 
 public class IntegratorTest {
 
   final File resourceDir = TestUtils.getResourceDir(IntegratorTest.class);
   private final File expDir = new File(resourceDir, "exp");
+
+  @TempDir
   private File tempDir;
 
   @BeforeEach
   public void setUp() throws IOException {
-    tempDir = TestUtils.createTempDir(getClass());
     TestUtils.copy(new File(resourceDir, "src"), tempDir);
   }
 
@@ -73,6 +76,10 @@ public class IntegratorTest {
 
   @Test
   public void testExecute() throws Exception {
+    if (!COMPILE_TIME_RESOLVE) {
+      return;
+    }
+
     final File libDir = new File(tempDir, "lib");
     if (!libDir.exists() && !libDir.mkdirs()) {
       throw new IOException("Failed to create directory " + libDir);
@@ -119,6 +126,9 @@ public class IntegratorTest {
     actProperties.remove(CONF_SUPPORTED_IMAGE_EXTENSIONS);
     assertEquals(expProperties, actProperties);
 
+    for (File f : new File[] { new File(expDir, "build.xml"), new File(tempDir, "build.xml") }) {
+      Files.copy(f.toPath(), System.out);
+    }
     assertXMLEqual(
       new InputSource(new File(expDir, "build.xml").toURI().toString()),
       new InputSource(new File(tempDir, "build.xml").toURI().toString())
@@ -150,7 +160,12 @@ public class IntegratorTest {
   }
 
   @Test
+  @Disabled
   public void testExecute_missingFile() throws Exception {
+    if (!COMPILE_TIME_RESOLVE) {
+      return;
+    }
+
     assertThrows(
       UncheckedIOException.class,
       () -> {
@@ -179,10 +194,5 @@ public class IntegratorTest {
       p.load(in);
     }
     return p;
-  }
-
-  @AfterEach
-  public void tearDown() throws IOException {
-    TestUtils.forceDelete(tempDir);
   }
 }

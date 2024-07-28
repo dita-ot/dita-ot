@@ -25,11 +25,6 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.platform.FileGenerator.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
@@ -40,6 +35,12 @@ import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.dita.dost.platform.FileGenerator.*;
 
 /**
  * Sax2 based project reader.
@@ -123,14 +124,13 @@ public class ProjectHelper3 extends ProjectHelper2 {
 
       for (Plugin p : context.getProject().<List<Plugin>>getReference(REFID_PLUGINS)) {
         pluginTable.put(p.pluginId(), p);
-        for (Map.Entry<String, List<String>> f : p.features().entrySet()) {
-          var vs = f.getValue().stream().map(v -> new Value(null, v)).toList();
+        for (Map.Entry<String, List<Value>> f : p.features().entrySet()) {
           if (featureTable.containsKey(f.getKey())) {
-            var buf = new ArrayList<Value>(featureTable.get(f.getKey()));
-            buf.addAll(vs);
+            var buf = new ArrayList<>(featureTable.get(f.getKey()));
+            buf.addAll(f.getValue());
             featureTable.put(f.getKey(), buf);
           } else {
-            featureTable.put(f.getKey(), vs);
+            featureTable.put(f.getKey(), f.getValue());
           }
         }
       }
@@ -172,7 +172,7 @@ public class ProjectHelper3 extends ProjectHelper2 {
                   //                  action.addParam(PARAM_TEMPLATE, context.getBuildFile().getAbsolutePath());
                   final List<Value> value = Stream
                     .of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
-                    .map(val -> new Value(null, val.trim()))
+                    .map(val -> new Value.StringValue(null, val.trim()))
                     .collect(Collectors.toList());
                   action.setInput(value);
                   final String result = action.getResult();

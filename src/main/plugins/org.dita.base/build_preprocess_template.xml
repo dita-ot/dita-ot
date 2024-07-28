@@ -235,7 +235,8 @@ See the accompanying LICENSE file for applicable license.
     <pipeline message="Move metadata entries." taskname="move-meta"
       inputmap="${user.input.file}">
       <module class="org.dita.dost.module.MoveMetaModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl" if:true="${useClasspath}"/>
         <param name="conserve-memory" expression="${conserve-memory}" if:set="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
@@ -298,7 +299,8 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule" parallel="false">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" if:true="${useClasspath}"/>
         <ditafileset format="ditamap"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>

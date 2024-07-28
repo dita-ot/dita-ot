@@ -30,6 +30,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.*;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.JavaResource;
 import org.apache.tools.ant.types.resources.Resources;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
@@ -230,7 +231,7 @@ public final class ExtensibleAntInvoker extends Task {
         logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
       }
     } catch (final DITAOTException e) {
-      throw new BuildException(e.getMessage(), e);
+      throw new BuildException(e.getMessage() + ": " + modules.get(0).location, e);
     }
   }
 
@@ -328,14 +329,10 @@ public final class ExtensibleAntInvoker extends Task {
   private Map<String, List<Value>> getFeatureTbl(List<Plugin> plugins) {
     final Map<String, List<Value>> featureTable = new HashMap<>();
     for (Plugin pluginFeatures : plugins) {
-      final Map<String, List<String>> featureSet = pluginFeatures.features();
-      for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
+      final Map<String, List<Value>> featureSet = pluginFeatures.features();
+      for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
-        final List<Value> values = currentFeature
-          .getValue()
-          .stream()
-          .map(val -> new Value(pluginFeatures.pluginId(), val))
-          .collect(Collectors.toList());
+        final List<Value> values = currentFeature.getValue();
         //                if (!extensionPoints.contains(key)) {
         //                  throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(pluginFeatures.pluginId(), key));
         //                }
@@ -345,8 +342,7 @@ public final class ExtensibleAntInvoker extends Task {
           featureTable.put(key, value);
         } else {
           //Make shallow clone to avoid making modifications directly to list inside the current feature.
-          List<Value> currentFeatureValue = values;
-          featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
+          featureTable.put(key, values != null ? new ArrayList<>(values) : null);
         }
       }
     }
@@ -354,14 +350,22 @@ public final class ExtensibleAntInvoker extends Task {
   }
 
   private Source toExtensibleSource(final Resource style) {
-    if (style instanceof FileResource) {
+    if (style instanceof FileResource fileResource) {
       final FileGenerator fileGenerator = new FileGenerator(featureTbl, pluginTable);
       try {
         fileGenerator.setParent(XMLUtils.getXMLReader());
       } catch (SAXException e) {
         throw new BuildException("Failed to create source: " + e.getMessage(), e);
       }
-      return new SAXSource(fileGenerator, new InputSource(((FileResource) style).getFile().toURI().toString()));
+      return new SAXSource(fileGenerator, new InputSource(fileResource.getFile().toURI().toString()));
+    } else if (style instanceof JavaResource javaResource) {
+      final FileGenerator fileGenerator = new FileGenerator(featureTbl, pluginTable);
+      try {
+        fileGenerator.setParent(XMLUtils.getXMLReader());
+      } catch (SAXException e) {
+        throw new BuildException("Failed to create source: " + e.getMessage(), e);
+      }
+      return new SAXSource(fileGenerator, new InputSource(javaResource.getURL().toString()));
     } else {
       throw new BuildException(String.format("%s not supported", style.getClass().toString()));
     }

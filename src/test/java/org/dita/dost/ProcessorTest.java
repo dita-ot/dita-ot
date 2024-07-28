@@ -28,7 +28,10 @@ public class ProcessorTest {
     if (ditaDir == null) {
       ditaDir = new File("src" + File.separator + "main").getAbsolutePath();
     }
-    final ProcessorFactory pf = ProcessorFactory.newInstance(new File(ditaDir));
+    final ProcessorFactory pf = ProcessorFactory.newInstance(
+      null
+      //            new File(ditaDir)
+    );
     pf.setBaseTempDir(tempDir);
     p = pf.newProcessor("html5");
   }

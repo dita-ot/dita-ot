@@ -245,10 +245,10 @@ public final class Processor {
 
   // ProjectHelper.configureProject
   private void configureProject(Project project) {
-    final JavaResource resource = new JavaResource("build.xml", new Path(project, "/org.dita.base/build.xml"));
+    final JavaResource resource = new JavaResource("build.xml", new Path(project, "org.dita.base/build.xml"));
     final ProjectHelper helper = ProjectHelperRepository.getInstance().getProjectHelperForBuildFile(resource);
     project.addReference("ant.projectHelper", helper);
-    helper.parse(project, project.getCoreLoader().getResource("/org.dita.base/build.xml"));
+    helper.parse(project, project.getCoreLoader().getResource("org.dita.base/build.xml"));
   }
 
   private ch.qos.logback.classic.Logger openDebugLogger(File tempDir) {
