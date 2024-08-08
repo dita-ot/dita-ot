@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
   message in an installed plugin. Additional parameters to
   the message are optional.
 -->
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
@@ -41,7 +41,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="msgseverity" as="xs:string*">
       <xsl:value-of select="$msgdoc/messages/message[@id = $id]/@type"/>    
     </xsl:variable>
-    <xsl:variable name="localclass" select="$ctx/@class" as="attribute(class)?"/>
     <xsl:variable name="xtrf" select="$ctx/@xtrf" as="attribute(xtrf)?"/>
     <xsl:variable name="xtrc" select="$ctx/@xtrc" as="attribute(xtrc)?"/>
     <xsl:variable name="debugloc">
@@ -86,7 +85,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="params"/>
     <xsl:variable name="reason" select="reason/text()"/>
     <xsl:variable name="response" select="response/text()"/>    
-    <xsl:variable name="messageType" select="@type"/>
     <xsl:text>[</xsl:text><xsl:value-of select="@id"/><xsl:text>]</xsl:text>
     <xsl:text>[</xsl:text><xsl:value-of select="@type"/><xsl:text>]</xsl:text>
     <xsl:text>: </xsl:text>

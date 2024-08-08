@@ -293,7 +293,7 @@ public class XMLUtilsTest {
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals(new Message(Message.Level.INFO, "message <debug/>", null), act.get(0));
+    assertEquals(new Message(Message.Level.INFO, "message ", null), act.get(0));
   }
 
   @Test
@@ -315,7 +315,7 @@ public class XMLUtilsTest {
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals(new Message(Message.Level.WARN, "message <debug/>", null), act.get(0));
+    assertEquals(new Message(Message.Level.WARN, "message ", null), act.get(0));
   }
 
   @Test
@@ -332,7 +332,7 @@ public class XMLUtilsTest {
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals(new Message(Message.Level.INFO, "message <debug/>", null), act.get(0));
+    assertEquals(new Message(Message.Level.INFO, "message ", null), act.get(0));
   }
 
   @Test
@@ -356,7 +356,7 @@ public class XMLUtilsTest {
     } catch (SaxonApiUncheckedException e) {
       final TerminationException cause = (TerminationException) e.getCause();
       assertEquals("DOTX037W", cause.getErrorCodeQName().getLocalPart());
-      assertEquals("message <debug/>", cause.getMessage());
+      assertEquals("message ", cause.getMessage());
     }
   }
 
@@ -374,7 +374,7 @@ public class XMLUtilsTest {
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals(new Message(Message.Level.ERROR, "message <debug/>", null), act.get(0));
+    assertEquals(new Message(Message.Level.ERROR, "message ", null), act.get(0));
   }
 
   @Test
@@ -391,7 +391,7 @@ public class XMLUtilsTest {
       listener.message(msg, null, false, null);
       fail();
     } catch (UncheckedXPathException e) {
-      assertEquals("message <debug/>", e.getMessage());
+      assertEquals("message ", e.getMessage());
     } catch (Throwable e) {
       fail();
     }
@@ -404,17 +404,17 @@ public class XMLUtilsTest {
 
     final XdmNode msg = Saplings
       .doc()
-      .withChild(Saplings.text("abc "), Saplings.elem("def").withChild(Saplings.elem("hij")))
+      .withChild(
+        Saplings.text("abc "),
+        Saplings.elem("def").withChild(Saplings.elem("hij").withText("text"), Saplings.text(" suffix"))
+      )
       .toXdmNode(new XMLUtils().getProcessor());
 
     listener.message(msg, null, false, null);
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals("""
-                abc <def>
-                   <hij/>
-                </def>""", act.get(0).message);
+    assertEquals("abc text suffix", act.get(0).message);
   }
 
   @Test
@@ -438,7 +438,11 @@ public class XMLUtilsTest {
     loc.setLineNumber(1);
     loc.setColumnNumber(2);
     loc.setSystemId("foo:///bar");
-    errorReporter.report(new XmlProcessingException(new XPathException("msg", null, Loc.makeFromSax(loc))));
+    errorReporter.report(
+      new XmlProcessingException(
+        new XPathException("msg", null, new Loc(loc.getSystemId(), loc.getLineNumber(), loc.getColumnNumber()))
+      )
+    );
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
@@ -456,7 +460,7 @@ public class XMLUtilsTest {
     loc.setColumnNumber(2);
     loc.setSystemId("foo:///bar");
     final XPathException exception = new XPathException("msg", new FileNotFoundException("cause"));
-    exception.setLocation(Loc.makeFromSax(loc));
+    exception.setLocation(new Loc(loc.getSystemId(), loc.getLineNumber(), loc.getColumnNumber()));
     errorReporter.report(new XmlProcessingException(exception));
 
     assertEquals(1, logger.getMessages().size());

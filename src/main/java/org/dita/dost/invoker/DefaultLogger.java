@@ -25,10 +25,7 @@
 
 package org.dita.dost.invoker;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.StringReader;
+import java.io.*;
 import java.text.DateFormat;
 import java.util.Date;
 import org.apache.tools.ant.BuildEvent;
@@ -37,24 +34,15 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.StringUtils;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.AbstractLogger;
 
 /**
  * Writes build events to a PrintStream. Currently, it only writes which targets
  * are being executed, and any messages that get logged.
  *
  */
-class DefaultLogger implements BuildLogger {
-
-  public static final String ANSI_RESET = "\u001B[0m";
-  public static final String ANSI_BLACK = "\u001B[30m";
-  public static final String ANSI_RED = "\u001B[31m";
-  public static final String ANSI_GREEN = "\u001B[32m";
-  public static final String ANSI_YELLOW = "\u001B[33m";
-  public static final String ANSI_BLUE = "\u001B[34m";
-  public static final String ANSI_PURPLE = "\u001B[35m";
-  public static final String ANSI_CYAN = "\u001B[36m";
-  public static final String ANSI_WHITE = "\u001B[37m";
-  public static final String ANSI_BOLD = "\u001b[1m";
+class DefaultLogger extends AbstractLogger implements BuildLogger {
 
   /**
    * Size of left-hand column for right-justified task name.
@@ -70,27 +58,30 @@ class DefaultLogger implements BuildLogger {
   /** PrintStream to write error messages to */
   private PrintStream err;
 
-  /** Lowest level of message to write out */
-  private int msgOutputLevel = Project.MSG_ERR;
+  //** Lowest level of message to write out */
+  //  private int msgOutputLevel = Project.MSG_ERR;
 
   /** Time of the start of the build */
   private long startTime = System.currentTimeMillis();
 
   // CheckStyle:ConstantNameCheck OFF - bc
-  /** Line separator */
-  protected static final String lSep = StringUtils.LINE_SEP;
+  //** Line separator */
+  //  protected static final String lSep = StringUtils.LINE_SEP;
   // CheckStyle:ConstantNameCheck ON
 
   /** Whether or not to use emacs-style output */
   private boolean emacsMode = false;
-  private boolean useColor = false;
+
+  //  private boolean useColor = false;
 
   // CheckStyle:VisibilityModifier ON
 
   /**
    * Sole constructor.
    */
-  public DefaultLogger() {}
+  public DefaultLogger() {
+    msgOutputLevel = Project.MSG_ERR;
+  }
 
   /**
    * Sets the highest level of message this logger should respond to.
@@ -178,17 +169,57 @@ class DefaultLogger implements BuildLogger {
    */
   @Override
   public void buildFinished(final BuildEvent event) {
-    final Throwable error = event.getException();
+    Throwable error = event.getException();
+    for (var e = error; e != null; e = e.getCause()) {
+      if (e instanceof DITAOTException) {
+        error = e;
+        break;
+      }
+    }
     final StringBuilder message = new StringBuilder();
     if (error == null) {
-      // message.append(StringUtils.LINE_SEP);
-      // message.append(getBuildSuccessfulMessage());
+      if (msgOutputLevel >= Project.MSG_INFO) {
+        message.append(StringUtils.LINE_SEP);
+        if (useColor) {
+          message.append(ANSI_BOLD).append(ANSI_GREEN);
+        }
+        message.append(getBuildSuccessfulMessage());
+        if (useColor) {
+          message.append(ANSI_RESET);
+        }
+        message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
+      }
     } else {
-      // message.append(StringUtils.LINE_SEP);
-      // message.append(getBuildFailedMessage());
-      //            message.append(StringUtils.LINE_SEP);
-      message.append("Error: ");
-      throwableMessage(message, error, Project.MSG_VERBOSE <= msgOutputLevel);
+      if (useColor) {
+        message.append(ANSI_RED);
+      }
+      message.append(Main.locale.getString("error_msg").formatted(""));
+      if (useColor) {
+        message.append(ANSI_RESET);
+      }
+      if (error instanceof DITAOTException && msgOutputLevel < Project.MSG_INFO) {
+        message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
+      } else {
+        try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
+          error.printStackTrace(printWriter);
+          printWriter.flush();
+          message.append(Main.locale.getString("exception_msg").formatted(buf));
+        } catch (IOException e) {
+          // Failed to print stack trace
+        }
+      }
+
+      if (msgOutputLevel >= Project.MSG_INFO) {
+        message.append(StringUtils.LINE_SEP);
+        if (useColor) {
+          message.append(ANSI_BOLD).append(ANSI_RED);
+        }
+        message.append(getBuildFailedMessage());
+        if (useColor) {
+          message.append(ANSI_RESET);
+        }
+        message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
+      }
     }
     // message.append(StringUtils.LINE_SEP);
     // message.append("Total time: ");
@@ -196,9 +227,13 @@ class DefaultLogger implements BuildLogger {
 
     final String msg = message.toString();
     if (error == null && !msg.trim().isEmpty()) {
-      printMessage(msg, out, Project.MSG_VERBOSE);
+      out.println(msg);
     } else if (!msg.isEmpty()) {
-      printMessage(msg, err, Project.MSG_ERR);
+      if (legacyFormat) {
+        err.println(msg);
+      } else {
+        err.println(removeLevelPrefix(message));
+      }
     }
     log(msg);
   }
@@ -223,6 +258,15 @@ class DefaultLogger implements BuildLogger {
     return "BUILD SUCCESSFUL";
   }
 
+  private boolean evaluate(final Project project, final String condition) {
+    final String value = project.replaceProperties(condition);
+    return switch (value) {
+      case "true" -> true;
+      case "false" -> false;
+      default -> project.getProperty(value) != null || project.getUserProperty(value) != null;
+    };
+  }
+
   /**
    * Logs a message to say that the target has started if this logger allows
    * information-level messages.
@@ -232,10 +276,35 @@ class DefaultLogger implements BuildLogger {
    */
   @Override
   public void targetStarted(final BuildEvent event) {
+    if (event.getTarget().getIf() != null && !evaluate(event.getProject(), event.getTarget().getIf())) {
+      return;
+    }
+    if (event.getTarget().getUnless() != null && evaluate(event.getProject(), event.getTarget().getUnless())) {
+      return;
+    }
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
-      final String msg = StringUtils.LINE_SEP + event.getTarget().getName() + ":";
-      printMessage(msg, out, event.getPriority());
-      log(msg);
+      final String msg;
+      if (event.getTarget().getDescription() == null) {
+        msg = null;
+      } else {
+        var buf = new StringBuilder().append(StringUtils.LINE_SEP);
+        if (useColor) {
+          buf.append(ANSI_BLUE);
+        }
+        buf.append("==> ");
+        if (useColor) {
+          buf.append(ANSI_RESET).append(ANSI_BOLD);
+        }
+        buf.append(event.getTarget().getDescription());
+        if (useColor) {
+          buf.append(ANSI_RESET);
+        }
+        msg = buf.toString();
+      }
+      if (msg != null) {
+        out.println(msg);
+        log(msg);
+      }
     }
   }
 
@@ -317,15 +386,16 @@ class DefaultLogger implements BuildLogger {
         message.append(event.getMessage());
       }
       final Throwable ex = event.getException();
-      if (Project.MSG_DEBUG <= msgOutputLevel && ex != null) {
-        message.append(StringUtils.getStackTrace(ex));
+      if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
+        message.append('\n').append(StringUtils.getStackTrace(ex));
       }
 
       final String msg = message.toString();
-      if (priority != Project.MSG_ERR) {
-        printMessage(msg, out, priority);
+      final PrintStream dst = priority == Project.MSG_ERR ? err : out;
+      if (legacyFormat) {
+        dst.println(msg);
       } else {
-        printMessage(msg, err, priority);
+        dst.println(removeLevelPrefix(new StringBuilder(msg)));
       }
       log(msg);
     }
@@ -342,25 +412,6 @@ class DefaultLogger implements BuildLogger {
    */
   protected static String formatTime(final long millis) {
     return DateUtils.formatElapsedTime(millis);
-  }
-
-  /**
-   * Prints a message to a PrintStream.
-   *
-   * @param message The message to print. Should not be <code>null</code>.
-   * @param stream A PrintStream to print the message to. Must not be
-   *            <code>null</code>.
-   * @param priority The priority of the message. (Ignored in this
-   *            implementation.)
-   */
-  private void printMessage(final String message, final PrintStream stream, final int priority) {
-    if (useColor && priority == Project.MSG_ERR) {
-      stream.print(ANSI_RED);
-      stream.print(message);
-      stream.println(ANSI_RESET);
-    } else {
-      stream.println(message);
-    }
   }
 
   /**
@@ -393,5 +444,10 @@ class DefaultLogger implements BuildLogger {
   protected String extractProjectName(final BuildEvent event) {
     final Project project = event.getProject();
     return (project != null) ? project.getName() : null;
+  }
+
+  @Override
+  public void log(String msg, Throwable t, int level) {
+    throw new UnsupportedOperationException();
   }
 }

@@ -9,11 +9,10 @@ package org.dita.dost.writer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
@@ -86,17 +85,15 @@ public class ForceUniqueFilterTest {
     TestUtils.assertXMLEqual(exp, act);
 
     assertEquals(
-      new HashMap<>(
-        ImmutableMap.of(
-          createFileInfo("test.dita", "test_3.dita"),
-          createFileInfo("test.dita", "test.dita"),
-          createFileInfo("test.dita", "test_2.dita"),
-          createFileInfo("test.dita", "test.dita"),
-          createFileInfo(null, "copy-to_2.dita"),
-          createFileInfo(null, "copy-to.dita"),
-          createFileInfo("topic.dita", "topic_2.dita"),
-          createFileInfo("topic.dita", "topic.dita")
-        )
+      Map.of(
+        createFileInfo("test.dita", "test_3.dita"),
+        createFileInfo("test.dita", "test.dita"),
+        createFileInfo("test.dita", "test_2.dita"),
+        createFileInfo("test.dita", "test.dita"),
+        createFileInfo(null, "copy-to_2.dita"),
+        createFileInfo(null, "copy-to.dita"),
+        createFileInfo("topic.dita", "topic_2.dita"),
+        createFileInfo("topic.dita", "topic.dita")
       ),
       f.copyToMap
     );

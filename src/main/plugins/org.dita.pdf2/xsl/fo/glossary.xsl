@@ -10,7 +10,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
                 exclude-result-prefixes="ot-placeholder"
-                version="2.0">
+                version="3.0">
 
   <xsl:template match="ot-placeholder:glossarylist" name="createGlossary">
     <fo:page-sequence master-reference="glossary-sequence" xsl:use-attribute-sets="page-sequence.glossary">
@@ -35,6 +35,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="ot-placeholder:glossarylist//*[contains(@class, ' glossentry/glossentry ')]">
     <fo:block>
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <fo:block>
         <xsl:attribute name="id">

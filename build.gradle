@@ -15,7 +15,7 @@ apply plugin: 'signing'
 group = 'org.dita-ot'
 archivesBaseName = 'dost'
 /** Semver version number */
-version = '4.2.0-SNAPSHOT'
+version = '4.3.0-SNAPSHOT'
 
 description = """DITA Open Toolkit"""
 
@@ -33,10 +33,11 @@ dependencies {
     implementation group: 'xerces', name: 'xercesImpl', version:'2.12.2'
     implementation group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     implementation group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
-    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.3'
-    implementation group: 'com.ibm.icu', name: 'icu4j', version:'70.1'
-    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.13'
-    implementation group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.13'
+    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.4'
+    implementation group: 'org.xmlresolver', name: 'xmlresolver', version: '5.2.3'
+    implementation group: 'com.ibm.icu', name: 'icu4j', version:'74.2'
+    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.14'
+    implementation group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.14'
     implementation(group: 'com.google.guava', name: 'guava', version: '32.1.1-jre') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
@@ -45,16 +46,16 @@ dependencies {
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
     }
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.7'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.8'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.15.2'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.2'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.15.2'
-    implementation group: 'org.relaxng', name: 'jing', version: '20181222'
-    implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.13'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.12'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.16.1'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.16.1'
+    implementation group: 'org.relaxng', name: 'jing', version: '20220510'
+    implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.14'
     testImplementation  group: 'nu.validator.htmlparser', name: 'htmlparser', version:'1.4'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.9.3'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.3'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.10.2'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.9.1'
 }
 
@@ -85,9 +86,13 @@ artifacts {
 }
 
 test {
-    useJUnitPlatform()
-    exclude '**/IntegrationTest*.class'
-    exclude '**/EndToEndTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching "*Test"
+            excludeTestsMatching "IntegrationTest*"
+            excludeTestsMatching "EndToEndTest*"
+        }
+    }
 }
 
 test.maxParallelForks = 4
@@ -106,11 +111,16 @@ if (System.getProperty("log_level") != null) {
     integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
 }
 
-task integrationTest(type: Test, dependsOn: 'buildLocal') {
+tasks.register('integrationTest', Test) {
+    dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     systemProperties = integrationTestSystemProperties
-    include '**/IntegrationTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching 'IntegrationTest*'
+        }
+    }
 }
 tasks.named('check') {
     dependsOn('integrationTest')
@@ -134,12 +144,17 @@ if (System.getProperty("log_level") != null) {
     integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
 }
 
-task e2eTest(type: Test, dependsOn: 'buildLocal') {
+tasks.register('e2eTest', Test) {
+    dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
     maxParallelForks = 4
     systemProperties = e2eTestSystemProperties
-    include '**/EndToEndTest*.class'
+    useJUnitPlatform {
+        filter {
+            includeTestsMatching 'EndToEndTest*'
+        }
+    }
 }
 tasks.named('check') {
     dependsOn('e2eTest')
@@ -189,17 +204,17 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "${cleanVersion}"
 def bundled = [
         "eclipsehelp": "https://github.com/dita-ot/org.dita.eclipsehelp/releases/download/3.4/org.dita.eclipsehelp-3.4.0.zip",
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/5.5.0/org.lwdita-5.5.0.zip",
-        "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/refs/tags/1.1.0.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/5.7.0/org.lwdita-5.7.0.zip",
+        "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/refs/tags/2.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
-        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20230426/org.oasis-open.dita.v2_0.zip",
-        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20230426/org.oasis-open.dita.techcomm.v2_0.zip",
-        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.3.0.1/org.oasis-open.xdita.v0_3_0.zip",
+        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20240115/org.oasis-open.dita.v2_0.zip",
+        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20240122/org.oasis-open.dita.techcomm.v2_0.zip",
+        "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.3.0.2/org.oasis-open.xdita.v0_3_2.zip",
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",
         "xep": "https://github.com/dita-ot/org.dita.pdf2.xep/releases/download/3.6.3/org.dita.pdf2.xep-3.6.3.zip",
-        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.7.0/com.elovirta.pdf-0.7.0.zip",
+        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.7.2/com.elovirta.pdf-0.7.2.zip",
 ]
 
 apply from: 'gradle/dist.gradle'
@@ -247,19 +262,10 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         include "*.*"
         include "bin/dita"
         include "bin/dita.bat"
-        exclude "docsrc/.editorconfig"
-        exclude "docsrc/.github"
-        exclude "docsrc/.gradle"
-        exclude "docsrc/.husky"
-        exclude "docsrc/.oxygen"
-        exclude "docsrc/.prettier*"
+        exclude "docsrc/.*"
         exclude "docsrc/*.md"
         exclude "docsrc/*.xpr"
-        exclude "docsrc/build"
-        exclude "docsrc/out"
-        exclude "docsrc/platform.ditaval"
-        exclude "docsrc/temp"
-        exclude "docsrc/node_modules/**"
+        exclude "docsrc/package*.json"
         include "docsrc/**"
         exclude "plugins/*/plugin.xml"
         include "plugins/org.dita.base/**"
@@ -327,6 +333,10 @@ generateDocs.onlyIf { skipDocs() }
 task cleanGenerateDocs(type: Delete) {
     delete "${distTempDir}/temp"
     delete "${distTempDir}/docsrc/.gradle"
+    delete "${distTempDir}/docsrc/build"
+    delete "${distTempDir}/docsrc/node_modules"
+    delete "${distTempDir}/docsrc/out"
+    delete "${distTempDir}/docsrc/platform.ditaval"
     delete "${distTempDir}/docsrc/temp"
 }
 cleanGenerateDocs.mustRunAfter generateDocs

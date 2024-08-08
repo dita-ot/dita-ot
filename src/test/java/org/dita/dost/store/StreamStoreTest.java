@@ -44,7 +44,7 @@ public class StreamStoreTest {
 
   @Test
   public void getSerializer_subDirectory() throws IOException, SaxonApiException {
-    final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+    final Document doc = xmlUtils.newDocument();
     doc.appendChild(doc.createElement("foo"));
     final XdmNode source = xmlUtils.getProcessor().newDocumentBuilder().wrap(doc);
 

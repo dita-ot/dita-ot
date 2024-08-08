@@ -6,7 +6,7 @@ Copyright 2004, 2005 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
@@ -50,8 +50,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
     <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     <xsl:call-template name="generateMapTitle"/> <!-- Generate the <title> element -->
+    <!-- TODO: Replace with mode="gen-user-head" -->
     <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+    <!-- TODO: Replace with mode="gen-user-scripts" -->
     <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+    <!-- TODO: Replace with mode="gen-user-styles" -->
     <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
   </head><xsl:value-of select="$newline"/>
 
@@ -112,6 +115,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Title processing - special handling for short descriptions -->
   <xsl:if test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')] or /*[contains(@class,' map/map ')]/@title">
   <title>
+    <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
     <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
     <xsl:choose>
       <xsl:when test="/*[contains(@class,' map/map ')]/*[contains(@class,' topic/title ')]">

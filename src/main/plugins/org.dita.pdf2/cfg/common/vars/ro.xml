@@ -36,7 +36,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Appendix with number">Anexa <param ref-name="number"/></variable>
   <variable id="Part with number">Parte <param ref-name="number"/></variable>
   <variable id="Required-Cleanup"><!--TODO:[Required-Cleanup]--></variable>
-  <variable id="On the page"/>
+  <variable id="On the page"> pe pagina <param ref-name="pagenum"/></variable>
   <variable id="Page"><!--TODO: page <param ref-name="pagenum"/>--></variable>
   <variable id="This link"/><!--UNUSED-->
   <variable id="Child topics"/><!--UNUSED-->

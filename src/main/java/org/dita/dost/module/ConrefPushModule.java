@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.stream.Collectors;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
@@ -29,15 +28,12 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) {
-    final Collection<FileInfo> fis = job
-      .getFileInfo(fileInfoFilter)
-      .stream()
-      .filter(f -> f.isConrefPush)
-      .collect(Collectors.toList());
+    final Collection<FileInfo> fis = job.getFileInfo(fileInfoFilter).stream().filter(f -> f.isConrefPush).toList();
     if (!fis.isEmpty()) {
       final ConrefPushReader reader = new ConrefPushReader();
       reader.setLogger(logger);
       reader.setJob(job);
+      reader.setXmlUtils(xmlUtils);
       for (final FileInfo f : fis) {
         final File file = new File(job.tempDirURI.resolve(f.uri));
         logger.info("Reading " + file.toURI());

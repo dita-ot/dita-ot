@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
@@ -27,7 +26,7 @@ final class InsertDependsAction implements IAction {
   /** Action value. */
   private List<Value> value;
   /** Plug-in features. */
-  private Map<String, Features> featureTable = null;
+  private Map<String, Plugin> featureTable = null;
 
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
@@ -55,7 +54,7 @@ final class InsertDependsAction implements IAction {
       }
     }
     if (!result.isEmpty()) {
-      return StringUtils.join(result, ",");
+      return String.join(",", result);
     } else {
       return "";
     }
@@ -78,7 +77,7 @@ final class InsertDependsAction implements IAction {
    * @param h hastable
    */
   @Override
-  public void setFeatures(final Map<String, Features> h) {
+  public void setFeatures(final Map<String, Plugin> h) {
     featureTable = h;
   }
 

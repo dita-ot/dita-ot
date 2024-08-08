@@ -12,6 +12,7 @@ import static net.sf.saxon.s9api.streams.Predicates.isElement;
 import static net.sf.saxon.s9api.streams.Steps.child;
 import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
+import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.KeyScope.ROOT_ID;
 import static org.dita.dost.util.URLUtils.toURI;
@@ -71,7 +72,7 @@ public final class KeyrefReader implements AbstractReader {
 
   private DITAOTLogger logger;
   private Job job;
-  private final DocumentBuilder builder;
+  private DocumentBuilder builder;
   private KeyScope rootScope;
   private URI currentFile;
   private XMLUtils xmlUtils;
@@ -79,9 +80,7 @@ public final class KeyrefReader implements AbstractReader {
   /**
    * Constructor.
    */
-  public KeyrefReader() {
-    builder = XMLUtils.getDocumentBuilder();
-  }
+  public KeyrefReader() {}
 
   @Override
   public void read(final File filename) {
@@ -100,6 +99,7 @@ public final class KeyrefReader implements AbstractReader {
 
   public void setXmlUtils(XMLUtils xmlUtils) {
     this.xmlUtils = xmlUtils;
+    builder = xmlUtils.getDocumentBuilder();
   }
 
   /**
@@ -239,9 +239,11 @@ public final class KeyrefReader implements AbstractReader {
         if (!keyDefs.containsKey(key)) {
           final XdmNode copy = elem;
           final URI href = toURI(
-            copy.attribute(ATTRIBUTE_NAME_COPY_TO) == null
-              ? copy.attribute(ATTRIBUTE_NAME_HREF)
-              : copy.attribute(ATTRIBUTE_NAME_COPY_TO)
+            copy.attribute(BRANCH_COPY_TO) != null
+              ? copy.attribute(BRANCH_COPY_TO)
+              : copy.attribute(ATTRIBUTE_NAME_COPY_TO) != null
+                ? copy.attribute(ATTRIBUTE_NAME_COPY_TO)
+                : copy.attribute(ATTRIBUTE_NAME_HREF)
           );
           final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
           final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);

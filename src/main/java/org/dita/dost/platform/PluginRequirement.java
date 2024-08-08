@@ -10,68 +10,57 @@
 package org.dita.dost.platform;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
  * PluginRequirement class.
- *
  */
-final class PluginRequirement {
-
-  private static final String REQUIREMENT_SEPARATOR = "|";
-  private final ArrayList<String> plugins;
-  private boolean required;
-
-  /**
-   * Constructor.
-   */
-  public PluginRequirement() {
-    plugins = new ArrayList<>();
-    required = true;
+record PluginRequirement(List<String> plugins, boolean required) {
+  static Builder builder() {
+    return new Builder();
   }
 
-  /**
-   * Add plugins.
-   * @param s plugins name
-   */
-  public void addPlugins(final String s) {
-    final StringTokenizer t = new StringTokenizer(s, REQUIREMENT_SEPARATOR);
-    while (t.hasMoreTokens()) {
-      plugins.add(t.nextToken());
+  static class Builder {
+
+    private static final String REQUIREMENT_SEPARATOR = "|";
+
+    private final ArrayList<String> plugins;
+    private boolean required;
+
+    /**
+     * Constructor.
+     */
+    private Builder() {
+      plugins = new ArrayList<>();
+      required = true;
     }
-  }
 
-  /**
-   * Set require.
-   * @param r require
-   */
-  public void setRequired(final boolean r) {
-    required = r;
-  }
+    PluginRequirement build() {
+      return new PluginRequirement(plugins, required);
+    }
 
-  /**
-   * Get plugins.
-   * @return plugins
-   */
-  public Iterator<String> getPlugins() {
-    return plugins.iterator();
-  }
+    /**
+     * Add plugins.
+     *
+     * @param s plugins name
+     */
+    Builder addPlugins(final String s) {
+      final StringTokenizer t = new StringTokenizer(s, REQUIREMENT_SEPARATOR);
+      while (t.hasMoreTokens()) {
+        plugins.add(t.nextToken());
+      }
+      return this;
+    }
 
-  /**
-   * See whether this plugin is required.
-   * @return required
-   */
-  public boolean getRequired() {
-    return required;
-  }
-
-  /**
-   * To String.
-   * @return string
-   */
-  @Override
-  public String toString() {
-    return plugins.toString();
+    /**
+     * Set require.
+     *
+     * @param r require
+     */
+    Builder setRequired(final boolean r) {
+      required = r;
+      return this;
+    }
   }
 }

@@ -132,33 +132,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
   }
 
   @Test
-  public void testmapref_topicrefID() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "mapref_topicrefID"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("bookmap.ditamap"))
-      .test();
-  }
-
-  @Test
-  public void testmapref_to_conref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "mapref_to_conref"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("root.ditamap"))
-      .test();
-  }
-
-  @Test
-  public void testmapref_reltables() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "mapref_reltables"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("main.ditamap"))
-      .test();
-  }
-
-  @Test
   public void testcoderef_source() throws Throwable {
     builder()
       .name("coderef_source")
@@ -303,17 +276,6 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
   @Test
   public void testkeyrefKeywordConref() throws Throwable {
     builder().name(Paths.get("keyref", "keyword_conref")).transtype(PREPROCESS).input(Paths.get("test.ditamap")).test();
-  }
-
-  @Test
-  public void testmapref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("test.ditamap"))
-      .put("generate-debug-attributes", "false")
-      .errorCount(0)
-      .test();
   }
 
   @Test

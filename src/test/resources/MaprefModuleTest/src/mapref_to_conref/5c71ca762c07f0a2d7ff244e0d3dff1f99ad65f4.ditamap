@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    class="- map/map " cascade="nomerge" specializations="@props/deliveryTarget">
+  <title class="- topic/title ">Try the conref stuff</title>
+  <mapref href="343b6f79877e237d9e99d7ccb7c2c297c7f731e2.ditamap" format="ditamap"
+          class="+ map/topicref mapgroup-d/mapref "/>
+</map>

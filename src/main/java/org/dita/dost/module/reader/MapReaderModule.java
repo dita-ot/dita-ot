@@ -20,16 +20,33 @@ import org.dita.dost.exception.DITAOTXMLErrorHandler;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.reader.GenListModuleReader;
 import org.dita.dost.reader.GenListModuleReader.Reference;
+import org.dita.dost.reader.KeydefFilter;
 import org.dita.dost.writer.DebugFilter;
+import org.dita.dost.writer.DitaWriterFilter;
 import org.dita.dost.writer.NormalizeFilter;
-import org.dita.dost.writer.ProfilingFilter;
 import org.dita.dost.writer.ValidationFilter;
-import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 
 /**
- * ModuleElem for reading and serializing topics into temporary directory.
+ * Module for reading and serializing maps into temporary directory.
+ *
+ * <p>The processing is a SAX pipe split into.
+ * <dl>
+ *     <dt>{@link DebugFilter}
+ *     <dd>Add debugging attributes
+ *     <dt>{@link ValidationFilter}
+ *     <dd>Validation and optional error recovery filter
+ *     <dt>{@link NormalizeFilter}
+ *     <dd>Normalize content
+ *     <dt>{@link KeydefFilter}
+ *     <dd>Collect keys for Subject Scheme processing
+ *     <dt>{@link GenListModuleReader}
+ *     <dd>Collect link information
+ *     <dt>{@link DitaWriterFilter}
+ *     <dd>Insert document PIs and normalize attributes
+ * </dl>
  *
  * @since 2.5
  */
@@ -64,7 +81,7 @@ public final class MapReaderModule extends AbstractReaderModule {
   }
 
   @Override
-  void init() throws SAXException {
+  void init() throws DITAOTException {
     super.init();
     listFilter.setForceType(MAP_MAP);
   }
@@ -86,18 +103,8 @@ public final class MapReaderModule extends AbstractReaderModule {
       pipe.add(debugFilter);
     }
 
-    if (filterUtils != null) {
-      final ProfilingFilter profilingFilter = new ProfilingFilter();
-      profilingFilter.setLogger(logger);
-      profilingFilter.setJob(job);
-      profilingFilter.setFilterUtils(filterUtils);
-      profilingFilter.setCurrentFile(fileToParse);
-      pipe.add(profilingFilter);
-    }
-
     final ValidationFilter validationFilter = new ValidationFilter();
     validationFilter.setLogger(logger);
-    validationFilter.setValidateMap(validateMap);
     validationFilter.setCurrentFile(fileToParse);
     validationFilter.setJob(job);
     validationFilter.setProcessingMode(processingMode);
@@ -115,7 +122,6 @@ public final class MapReaderModule extends AbstractReaderModule {
     listFilter.setErrorHandler(new DITAOTXMLErrorHandler(fileToParse.toString(), logger, processingMode));
     pipe.add(listFilter);
 
-    ditaWriterFilter.setDefaultValueMap(defaultValueMap);
     ditaWriterFilter.setCurrentFile(currentFile);
     ditaWriterFilter.setOutputFile(outputFile);
     pipe.add(ditaWriterFilter);

@@ -7,14 +7,14 @@ See the accompanying license.txt file for applicable licenses.
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot">
 
   <xsl:template match="*[contains(@class, ' hazard-d/hazardstatement ')]">
     <xsl:variable name="type" select="(@type, 'caution')[1]" as="xs:string"/>
-    <xsl:variable name="number-cells" as="xs:integer" select="2"/>
     <xsl:apply-templates select="*[contains(@class,' ditaot-d/ditaval-startprop ')]" mode="outofline"/>
     <fo:table xsl:use-attribute-sets="hazardstatement">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:call-template name="globalAtts"/>
       <xsl:call-template name="displayAtts">
@@ -101,6 +101,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/typeofhazard ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
@@ -108,6 +109,7 @@ See the accompanying license.txt file for applicable licenses.
 
   <xsl:template match="*[contains(@class, ' hazard-d/consequence ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>
@@ -115,6 +117,7 @@ See the accompanying license.txt file for applicable licenses.
   
   <xsl:template match="*[contains(@class, ' hazard-d/howtoavoid ')]">
     <fo:block xsl:use-attribute-sets="p">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:block>

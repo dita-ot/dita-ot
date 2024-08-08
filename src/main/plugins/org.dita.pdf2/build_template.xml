@@ -67,7 +67,8 @@ with those set forth herein.
   <target name="dita2pdf" depends="dita2pdf2"/>
   <target name="dita2pdf2" depends="dita2pdf2.init, build-init, preprocess2, map2pdf2, topic2pdf2"/>
 
-  <target name="transform.topic2pdf.init">
+  <target name="transform.topic2pdf.init"
+          description="Build FO">
     <property name="pdf2.temp.dir" value="${dita.temp.dir}"/>
     
     <property name="customization.dir" value="${dita.plugin.org.dita.pdf2.dir}/Customization"/>
@@ -129,7 +130,8 @@ with those set forth herein.
     </path>
   </target>
 
-  <target name="topic2pdf2" if="noMap">
+  <target name="topic2pdf2" if="noMap"
+          description="Initialize PDF build">
     <antcall target="preview.topic.pdf" inheritRefs="true"/>
   </target>
 
@@ -146,7 +148,8 @@ with those set forth herein.
     <property name="artworkPrefix" value="${artwork.dir}"/>
   </target>
 
-  <target name="map2pdf2" unless="noMap">
+  <target name="map2pdf2" unless="noMap"
+          description="Merge topics">
     <dirname property="dita.temp.dir.fullpath" file="${dita.temp.dir}${file.separator}dummy.file"/>
     <pipeline message="topicmerge" taskname="topic-merge"
               inputmap="${dita.temp.dir.fullpath}${file.separator}${user.input.file}">
@@ -387,7 +390,11 @@ with those set forth herein.
 
   <target name="transform.fo2pdf"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          dita:depends="{depend.org.dita.pdf2.format}"/>
+          dita:depends="transform.fo2pdf.init,
+                        {depend.org.dita.pdf2.format}"/>
+
+  <target name="transform.fo2pdf.init"
+          description="Format PDF"/>
 
   <target name="copyCoreArtwork">
     <copy todir="${artwork.dir}/Configuration/OpenTopic" failonerror="false">

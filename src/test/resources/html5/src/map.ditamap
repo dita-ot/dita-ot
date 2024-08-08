@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <title>Map</title>
+  <topicmeta>
+    <metadata>
+      <keywords>
+        <keyword>metadata</keyword>
+      </keywords>
+    </metadata>
+    <keywords>
+      <keyword>topicmeta</keyword>
+    </keywords>
+  </topicmeta>
+  <topicref href="topic.dita">
+    <topicmeta>
+      <keywords>
+        <keyword>topicref topic</keyword>
+      </keywords>
+    </topicmeta>
+    <topicref href="concept.dita">
+    <topicmeta>
+      <keywords>
+        <keyword>topicref concept</keyword>
+      </keywords>
+    </topicmeta>
+    </topicref>
+    <topicref href="task.dita">
+      <topicmeta>
+        <keywords>
+          <keyword>topicref task</keyword>
+        </keywords>
+      </topicmeta>
+    </topicref>
+    <topicref href="reference.dita">
+      <topicmeta>
+        <keywords>
+          <keyword>topicref reference</keyword>
+        </keywords>
+      </topicmeta>
+    </topicref>
+  </topicref>
+</map>

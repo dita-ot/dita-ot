@@ -38,14 +38,15 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.event.Receiver;
+import net.sf.saxon.event.Sender;
 import net.sf.saxon.expr.instruct.TerminationException;
-import net.sf.saxon.lib.CatalogResourceResolver;
-import net.sf.saxon.lib.CollationURIResolver;
-import net.sf.saxon.lib.ErrorReporter;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
+import net.sf.saxon.lib.*;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.s9api.streams.Step;
+import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -167,10 +168,14 @@ public final class XMLUtils {
     this.logger = logger;
   }
 
+  public Resolver getCatalogResolver() {
+    return catalogResolver;
+  }
+
   /**
    * Convert DOM NodeList to List.
    */
-  public static <T> List<T> toList(final NodeList nodes) {
+  public static <T extends Node> List<T> toList(final NodeList nodes) {
     final List<T> res = new ArrayList<>(nodes.getLength());
     for (int i = 0; i < nodes.getLength(); i++) {
       res.add((T) nodes.item(i));
@@ -200,7 +205,7 @@ public final class XMLUtils {
               .negate()
           )
         )
-        .map(XdmNode::toString)
+        .map(XdmNode::getStringValue)
         .collect(Collectors.joining());
       switch (level) {
         case "FATAL" -> {
@@ -914,8 +919,8 @@ public final class XMLUtils {
    * Get reader for input format
    *
    * @param format         input document format
-   * @param processingMode
-   * @return reader for given forma
+   * @param processingMode processing mode
+   * @return reader for given format
    * @throws SAXException if creating reader failed
    */
   public static Optional<XMLReader> getXmlReader(final String format, Configuration.Mode processingMode)
@@ -961,7 +966,7 @@ public final class XMLUtils {
    * @return DOM document builder instance.
    * @throws RuntimeException if instantiating DocumentBuilder failed
    */
-  public static DocumentBuilder getDocumentBuilder() {
+  public DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
       builder = factory.newDocumentBuilder();
@@ -971,8 +976,22 @@ public final class XMLUtils {
     if (Configuration.DEBUG) {
       builder = new DebugDocumentBuilder(builder);
     }
-    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+    builder.setEntityResolver(catalogResolver);
     return builder;
+  }
+
+  /**
+   * Create new DOM document.
+   *
+   * @return empty DOM document
+   * @throws RuntimeException if instantiating DocumentBuilder failed
+   */
+  public Document newDocument() {
+    try {
+      return factory.newDocumentBuilder().newDocument();
+    } catch (final ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -1398,5 +1417,23 @@ public final class XMLUtils {
    */
   public static Predicate<XdmNode> isDitaFormat() {
     return attributeEq(ATTRIBUTE_NAME_FORMAT, ATTR_FORMAT_VALUE_DITA).or(empty(attribute(ATTRIBUTE_NAME_FORMAT)));
+  }
+
+  /**
+   * Convert S9API document into DOM document.
+   */
+  public Document cloneDocument(final XdmNode node) throws IOException {
+    try {
+      final Document doc = newDocument();
+      final DOMDestination destination = new DOMDestination(doc);
+      final Receiver receiver = destination.getReceiver(
+        getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
+        new SerializationProperties()
+      );
+      Sender.send(node.asSource(), receiver, new ParseOptions());
+      return doc;
+    } catch (XPathException e) {
+      throw new IOException(e);
+    }
   }
 }

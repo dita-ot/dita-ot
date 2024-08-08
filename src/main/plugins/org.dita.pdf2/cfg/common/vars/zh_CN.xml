@@ -59,7 +59,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Appendix with number">附录 <param ref-name="number"/></variable>
   <variable id="Part with number">第 <param ref-name="number"/> 部分</variable>
   <variable id="Required-Cleanup">[需要修正]</variable>
-  <variable id="On the page"> on page <param ref-name="pagenum"/></variable>
+  <variable id="On the page"> 在第 <param ref-name="pagenum"/> 页</variable>
   <variable id="Page"> page <param ref-name="pagenum"/></variable>
   <variable id="This link"/><!--UNUSED-->
   <variable id="Optional Step">可选：</variable>

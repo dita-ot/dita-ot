@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -155,7 +154,9 @@ public class ProjectFactory {
     }
     final Project project = Project.build(builder, file);
 
-    return resolveIncludes(project, file, ImmutableSet.<URI>builder().addAll(processed).add(file).build());
+    final Set<URI> res = new HashSet<>(processed);
+    res.add(file);
+    return resolveIncludes(project, file, Collections.unmodifiableSet(res));
   }
 
   private Project resolveIncludes(final Project project, final URI base, final Set<URI> processed)

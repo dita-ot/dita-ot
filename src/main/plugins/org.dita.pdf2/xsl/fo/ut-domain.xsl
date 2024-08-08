@@ -8,9 +8,10 @@ See the accompanying LICENSE file for applicable license.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
+    version="3.0">
 
     <xsl:template match="*[contains(@class,' ut-d/imagemap ')]">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:variable name="attributes" as="attribute()*"><xsl:call-template name="commonattributes"/></xsl:variable>
         <xsl:if test="exists($attributes)">
             <fo:inline><xsl:sequence select="$attributes"/></fo:inline>
@@ -23,6 +24,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ut-d/area ')]">
         <fo:list-item xsl:use-attribute-sets="ol.li">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <fo:list-item-label xsl:use-attribute-sets="ol.li__label">
                 <fo:block xsl:use-attribute-sets="ol.li__label__content">

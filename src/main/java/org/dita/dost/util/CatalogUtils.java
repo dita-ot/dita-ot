@@ -11,6 +11,7 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.FILE_NAME_CATALOG;
 
 import java.io.File;
+import org.xml.sax.InputSource;
 import org.xmlresolver.Resolver;
 import org.xmlresolver.ResolverFeature;
 import org.xmlresolver.XMLResolverConfiguration;
@@ -66,7 +67,7 @@ public final class CatalogUtils {
       config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
       config.setFeature(ResolverFeature.CACHE_DIRECTORY, null);
       config.setFeature(ResolverFeature.CACHE_UNDER_HOME, false);
-      config.addCatalog(catalogFilePath.toURI().toASCIIString());
+      config.addCatalog(catalogFilePath.toURI(), new InputSource(catalogFilePath.toURI().toString()));
       catalogResolver = new Resolver(config);
     }
 

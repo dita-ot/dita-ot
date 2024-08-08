@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
   xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
   xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  version="2.0"
+  version="3.0"
   exclude-result-prefixes="opentopic-index opentopic-func xs">
 
   <xsl:variable name="index.continued-enabled" select="false()"/>

@@ -13,7 +13,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:table="http://dita-ot.sourceforge.net/ns/201007/dita-ot/table"
                 xmlns:simpletable="http://dita-ot.sourceforge.net/ns/201007/dita-ot/simpletable"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita2html ditamsg dita-ot table simpletable">
 
   <xsl:template match="*[contains(@class, ' topic/simpletable ')]" mode="generate-table-summary-attribute">

@@ -7,7 +7,7 @@ Copyright 2004, 2005 IBM Corporation
 See the accompanying LICENSE file for applicable license.
 -->
 
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:conref="http://dita-ot.sourceforge.net/ns/200704/conref"
   xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
@@ -64,9 +64,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="ditamsg:duplicateConrefTarget"/>
   </xsl:template>
 
-  <!-- Determine the relative path to a conref'ed file. Start with the path and
-     filename. Output each single directory, and chop it off. Keep going until
-     only the filename is left. -->
+  <!-- Returns the directory path of a file reference (typically a relative path)
+       * Given '/a/b/c.dita', returns '/a/b/'
+       * Given 'a/b/c.dita', returns 'a/b/'
+       * Given 'a/b/c.dita#fragment', returns 'a/b/'
+       * Given 'c.dita', returns '' -->
   <xsl:template name="find-relative-path" as="xs:string">
     <xsl:param name="remainingpath" as="xs:string">
       <xsl:choose>
@@ -176,8 +178,6 @@ See the accompanying LICENSE file for applicable license.
        conref straight to conref, then just save the first one (in source-attributes) -->
 
     <!--get element local name, parent topic's domains, and then file name, topic id, element id from conref value-->
-    <xsl:variable name="element" select="local-name(.)"/>
-    <!--xsl:variable name="domains"><xsl:value-of select="ancestor-or-self::*[@domains][1]/@domains"/></xsl:variable-->
 
     <xsl:variable name="file-prefix" select="concat($WORKDIR, $current-relative-path)" as="xs:string"/>
 
@@ -215,9 +215,6 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- conref file name with relative path -->
     <xsl:variable name="filename" select="substring-after($file-origin, $file-prefix)"/>
-
-    <!-- replace the extension name -->
-    <xsl:variable name="FILENAME" select="concat(substring-before($filename, '.'), '.dita')"/>
 
     <xsl:variable name="topicid" select="dita-ot:get-topic-id(@conref)" as="xs:string?"/>
     <xsl:variable name="elemid" select="dita-ot:get-element-id(@conref)" as="xs:string?"/>
@@ -285,7 +282,6 @@ See the accompanying LICENSE file for applicable license.
               </xsl:variable>
               <xsl:choose>
                 <xsl:when test="$target">
-                  <xsl:variable name="firstTopicId" select="if (exists($topicid)) then $topicid else $target/@id"/>
                   <xsl:apply-templates select="$target[1]" mode="conref-target">
                     <xsl:with-param name="source-attributes" as="xs:string*">
                       <xsl:choose>

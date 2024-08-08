@@ -28,7 +28,14 @@ final class ImportAntLibAction extends ImportAction {
   public void getResult(final ContentHandler retBuf) throws SAXException {
     final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
     for (final Value value : valueSet) {
-      final String resolvedValue = FileUtils.getRelativeUnixPath(templateFilePath, value.value());
+      final String path;
+      if (value instanceof Value.PathValue pathValue) {
+        path = pathValue.getPath();
+      } else {
+        logger.error("Ant import must be a file feature: " + value.value());
+        continue;
+      }
+      final String resolvedValue = FileUtils.getRelativeUnixPath(templateFilePath, path);
       if (FileUtils.isAbsolutePath(resolvedValue)) {
         // if resolvedValue is absolute path
         retBuf.startElement(

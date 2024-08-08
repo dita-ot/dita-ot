@@ -163,7 +163,7 @@ public class CacheStore extends AbstractStore implements Store {
           return doc;
         } else if (entry.bytes != null) {
           try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
-            final Document doc = XMLUtils.getDocumentBuilder().parse(in, f.toString());
+            final Document doc = xmlUtils.getDocumentBuilder().parse(in, f.toString());
             put(f, new Entry(doc, null, entry.bytes));
             return doc;
           } catch (SAXException e) {
@@ -219,12 +219,12 @@ public class CacheStore extends AbstractStore implements Store {
         if (entry.doc != null) {
           return (Document) entry.doc.cloneNode(true);
         } else if (entry.node != null) {
-          return cloneDocument(entry.node);
+          return xmlUtils.cloneDocument(entry.node);
         } else if (entry.bytes != null) {
           try (InputStream in = new ByteArrayInputStream(entry.bytes)) {
             final InputSource inputSource = new InputSource(in);
             inputSource.setSystemId(f.toString());
-            final Document doc = XMLUtils.getDocumentBuilder().parse(inputSource);
+            final Document doc = xmlUtils.getDocumentBuilder().parse(inputSource);
             put(f, new Entry(doc, entry.node, entry.bytes));
             return doc;
           } catch (SAXException e) {
@@ -301,6 +301,11 @@ public class CacheStore extends AbstractStore implements Store {
 
     final Destination dst = getDestination(outputFile);
     final Receiver receiver = dst.getReceiver(pipelineConfiguration, new SerializationProperties());
+    try {
+      receiver.open();
+    } catch (XPathException e) {
+      throw new SaxonApiException("Failed to open receiver for %s".formatted(outputFile), e);
+    }
 
     final ReceivingContentHandler receivingContentHandler = new ReceivingContentHandler();
     receivingContentHandler.setPipelineConfiguration(pipelineConfiguration);
@@ -313,6 +318,9 @@ public class CacheStore extends AbstractStore implements Store {
   public void transform(final URI src, final ContentHandler dst) throws DITAOTException {
     final URI f = src.normalize();
     if (isTempFile(f)) {
+      if (!exists(f)) {
+        return;
+      }
       if (cache.containsKey(f)) {
         try {
           final Source source = getSource(src);
@@ -333,6 +341,9 @@ public class CacheStore extends AbstractStore implements Store {
   public void transform(final URI input, final List<XMLFilter> filters) throws DITAOTException {
     final URI src = input.normalize();
     if (isTempFile(src)) {
+      if (!exists(src)) {
+        return;
+      }
       try {
         final Source source = getSource(src);
         final ContentHandler serializer = getContentHandler(src);
@@ -351,6 +362,9 @@ public class CacheStore extends AbstractStore implements Store {
   @Override
   void transformURI(final URI input, final URI output, final List<XMLFilter> filters) throws DITAOTException {
     if (isTempFile(input)) {
+      if (!exists(input)) {
+        return;
+      }
       try {
         ContentHandler dst = getContentHandler(output);
         ContentHandler pipe = getPipe(filters, dst);
@@ -376,6 +390,9 @@ public class CacheStore extends AbstractStore implements Store {
 
   @Override
   public void transform(final URI src, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     final boolean useTmpBuf = !isTempFile(src.normalize());
     final URI dst = useTmpBuf ? toURI(src + FILE_EXTENSION_TEMP).normalize() : src;
     Destination result = null;
@@ -410,6 +427,9 @@ public class CacheStore extends AbstractStore implements Store {
 
   @Override
   void transformUri(final URI src, final URI dst, final XsltTransformer transformer) throws DITAOTException {
+    if (!exists(src)) {
+      return;
+    }
     Destination result = null;
     try {
       final Source source = getSource(src);
@@ -614,38 +634,9 @@ public class CacheStore extends AbstractStore implements Store {
     }
   }
 
-  private Document cloneDocument(final XdmNode node) throws IOException {
-    try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
-      final DOMDestination destination = new DOMDestination(doc);
-      final Receiver receiver = destination.getReceiver(
-        xmlUtils.getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),
-        new SerializationProperties()
-      );
-      Sender.send(node.asSource(), receiver, new ParseOptions());
-      // Don't save mutable doc into cache
-      return doc;
-    } catch (XPathException e) {
-      throw new IOException(e);
-    }
-  }
-
-  private static class Entry {
-
-    private final Document doc;
-    private final XdmNode node;
-    private final byte[] bytes;
-    private final long lastModified;
-
+  private record Entry(Document doc, XdmNode node, byte[] bytes, long lastModified) {
     private Entry(final Document doc, final XdmNode node, final byte[] bytes) {
       this(doc, node, bytes, System.currentTimeMillis());
-    }
-
-    private Entry(final Document doc, final XdmNode node, final byte[] bytes, final long lastModified) {
-      this.doc = doc;
-      this.node = node;
-      this.bytes = bytes;
-      this.lastModified = lastModified;
     }
   }
 }

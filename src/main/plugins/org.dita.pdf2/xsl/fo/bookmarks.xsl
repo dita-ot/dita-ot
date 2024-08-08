@@ -39,7 +39,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:opentopic-func="http://www.idiominc.com/opentopic/exsl/function"
                 xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
                 exclude-result-prefixes="xs opentopic-index opentopic opentopic-func ot-placeholder"
-                version="2.0">
+                version="3.0">
 
     <!-- Determines whether letter headings in an index generate bookmarks.
          0 = no bookmarks.

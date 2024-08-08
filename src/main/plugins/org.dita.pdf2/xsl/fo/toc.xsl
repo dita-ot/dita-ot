@@ -41,7 +41,7 @@ See the accompanying LICENSE file for applicable license.
     xmlns:opentopic-index="http://www.idiominc.com/opentopic/index"
     xmlns:ot-placeholder="http://suite-sol.com/namespaces/ot-placeholder"
     exclude-result-prefixes="xs dita-ot opentopic opentopic-func ot-placeholder opentopic-index"
-    version="2.0">
+    version="3.0">
   
     <xsl:variable name="map" select="//opentopic:map"/>
 

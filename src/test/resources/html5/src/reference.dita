@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="reference">
+  <title>Reference</title>
+  <prolog>
+    <metadata>
+      <keywords>
+        <keyword>reference</keyword>
+      </keywords>
+    </metadata>
+  </prolog>
+  <refbody>
+    <section>
+      <title>Section title</title>
+      <p>Body.</p>
+    </section>
+  </refbody>
+  <reference id="nested-reference">
+    <title>Nested Reference</title>
+    <prolog>
+      <metadata>
+        <keywords>
+          <keyword>nested reference</keyword>
+        </keywords>
+      </metadata>
+    </prolog>
+    <refbody>
+      <section>
+        <title>Section title</title>
+        <p>Body.</p>
+      </section>
+    </refbody>
+  </reference>
+</reference>

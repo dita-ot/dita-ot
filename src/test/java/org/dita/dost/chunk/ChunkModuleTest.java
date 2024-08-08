@@ -12,7 +12,6 @@ import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_TRANSTYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -41,7 +40,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
     return Stream.of(
       Arguments.of("combine", Collections.emptyMap(), 2),
       Arguments.of("duplicate", Collections.emptyMap(), 0),
-      Arguments.of("override", ImmutableMap.of("root-chunk-override", "combine"), 0),
+      Arguments.of("override", Map.of("root-chunk-override", "combine"), 0),
       Arguments.of("dita", Collections.emptyMap(), 0),
       Arguments.of("combine-empty-ditabase", Collections.emptyMap(), 0),
       Arguments.of("link", Collections.emptyMap(), 0),

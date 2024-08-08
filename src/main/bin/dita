@@ -67,7 +67,14 @@ if [ -z "$DITA_HOME" -o ! -d "$DITA_HOME" ] ; then
 fi
 
 # Set environment variables
-. "$DITA_HOME/config/env.sh"
+case "$1" in
+  install|uninstall)
+    # No plug-in libraries in classpath
+    ;;
+  *)
+    . "$DITA_HOME/config/env.sh"
+    ;;
+esac
 
 # Add build script to arguments
 ant_exec_args="$ant_exec_args \"-buildfile\" \"$DITA_HOME/build.xml\" \"-main\" \"org.dita.dost.invoker.Main\""
@@ -175,5 +182,5 @@ ant_sys_opts=
 if [ -n "$CYGHOME" ]; then
   ant_sys_opts="-Dcygwin.user.home=\"$CYGHOME\""
 fi
-ant_exec_command="exec \"$JAVACMD\" $ANT_OPTS -Djava.awt.headless=true -classpath \"$LOCALCLASSPATH\" -Dant.home=\"$DITA_HOME\" -Ddita.dir=\"$DITA_HOME\" -Dant.library.dir=\"$ANT_LIB\" $ant_sys_opts org.apache.tools.ant.launch.Launcher $ANT_ARGS -cp \"$CLASSPATH\""
+ant_exec_command="exec \"$JAVACMD\" $ANT_OPTS -Djava.awt.headless=true -Dcli.log-format=fancy -Dcli.color=true -classpath \"$LOCALCLASSPATH\" -Dant.home=\"$DITA_HOME\" -Ddita.dir=\"$DITA_HOME\" -Dant.library.dir=\"$ANT_LIB\" $ant_sys_opts org.apache.tools.ant.launch.Launcher $ANT_ARGS -cp \"$CLASSPATH\""
 eval $ant_exec_command "$ant_exec_args"

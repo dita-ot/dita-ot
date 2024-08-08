@@ -14,6 +14,17 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Follow OSGi bundle version syntax rules:
+ *
+ * <pre>
+ * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
+ * major     ::= number
+ * minor     ::=number
+ * micro     ::=number
+ * qualifier ::= ( alphanum | '_' | '-' )+
+ * </pre>
+ */
 public class SemVer implements Comparable<SemVer> {
 
   public final int major;

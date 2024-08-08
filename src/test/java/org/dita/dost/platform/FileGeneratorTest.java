@@ -7,22 +7,17 @@
  */
 package org.dita.dost.platform;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
-import static org.dita.dost.util.XMLUtils.*;
+import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.dita.dost.TestUtils;
@@ -45,11 +40,17 @@ public class FileGeneratorTest {
   private static final Hashtable<String, List<Value>> features = new Hashtable<>();
 
   static {
-    features.put("element", asList(new Value(null, "foo"), new Value(null, "bar"), new Value(null, "baz")));
-    features.put("attribute", asList(new Value(null, "foo"), new Value(null, "bar"), new Value(null, "baz")));
+    features.put(
+      "element",
+      asList(new Value.StringValue(null, "foo"), new Value.StringValue(null, "bar"), new Value.StringValue(null, "baz"))
+    );
+    features.put(
+      "attribute",
+      asList(new Value.StringValue(null, "foo"), new Value.StringValue(null, "bar"), new Value.StringValue(null, "baz"))
+    );
   }
 
-  private static final Map<String, Features> plugins = new HashMap<>();
+  private static final Map<String, Plugin> plugins = new HashMap<>();
 
   static {
     Document doc;
@@ -58,18 +59,18 @@ public class FileGeneratorTest {
     } catch (final ParserConfigurationException e) {
       throw new RuntimeException(e);
     }
-    final Features a = new Features(null, null);
+    final Features.Builder a = Features.builder();
     final Element aFeature = doc.createElement(FEATURE_ELEM);
     aFeature.setAttribute("value", "foo,bar,baz");
     aFeature.setAttribute("type", "text");
     a.addFeature("element", aFeature);
-    plugins.put("a", a);
-    final Features b = new Features(null, null);
+    plugins.put("a", a.build());
+    final Features.Builder b = Features.builder();
     final Element bFeature = doc.createElement(FEATURE_ELEM);
     bFeature.setAttribute("value", "foo,bar,baz");
     bFeature.setAttribute("type", "text");
     b.addFeature("attribute", bFeature);
-    plugins.put("b", b);
+    plugins.put("b", b.build());
   }
 
   @BeforeEach
@@ -99,7 +100,7 @@ public class FileGeneratorTest {
 
     protected List<Value> inputs = new ArrayList<>();
     protected Map<String, String> params = new HashMap<>();
-    protected Map<String, Features> features;
+    protected Map<String, Plugin> features;
 
     @Override
     public void setInput(final List<Value> input) {
@@ -112,7 +113,7 @@ public class FileGeneratorTest {
     }
 
     @Override
-    public void setFeatures(final Map<String, Features> features) {
+    public void setFeatures(final Map<String, Plugin> features) {
       this.features = features;
     }
 
@@ -135,9 +136,9 @@ public class FileGeneratorTest {
       paramsExp.put("behavior", this.getClass().getName());
       assertEquals(paramsExp, params);
       final List<Value> inputExp = Arrays.asList(
-        new Value(null, "foo"),
-        new Value(null, "bar"),
-        new Value(null, "baz")
+        new Value.StringValue(null, "foo"),
+        new Value.StringValue(null, "bar"),
+        new Value.StringValue(null, "baz")
       );
       assertEquals(inputExp, inputs);
       assertEquals(FileGeneratorTest.plugins, features);
@@ -159,7 +160,7 @@ public class FileGeneratorTest {
       final Map<String, String> paramsExp = new HashMap<>();
       paramsExp.put(FileGenerator.PARAM_TEMPLATE, tempFile.getAbsolutePath());
       assertEquals(paramsExp, params);
-      final List<Value> inputExp = List.of(new Value(null, "attribute"));
+      final List<Value> inputExp = List.of(new Value.StringValue(null, "attribute"));
       assertEquals(inputExp, inputs);
       assertEquals(FileGeneratorTest.plugins, features);
       return "bar";
