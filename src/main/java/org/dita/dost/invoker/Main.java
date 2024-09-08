@@ -346,6 +346,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
       printDeliverables(deliverablesArgs);
       return;
+    } else if (args instanceof final InitArguments initArgs) {
+      init(initArgs);
+      return;
     } else if (args instanceof final InstallArguments installArgs) {
       install(installArgs);
       return;
@@ -466,6 +469,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } catch (Exception e) {
       throw new CliException(e.getMessage(), e);
     }
+  }
+
+  private void init(InitArguments initArguments) {
+    logger.info("Init project");
   }
 
   private void install(InstallArguments installArgs) {

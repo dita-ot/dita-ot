@@ -409,6 +409,7 @@ public class ConversionArguments extends Arguments {
       .usage(locale.getString("conversion.usage.project"))
       //                .usage("dita --propertyfile=<file> [options]")
       .subcommands("deliverables", locale.getString("conversion.subcommand.deliverables"))
+      .subcommands("init", locale.getString("conversion.subcommand.init"))
       .subcommands("install", locale.getString("conversion.subcommand.install"))
       .subcommands("plugins", locale.getString("conversion.subcommand.plugins"))
       .subcommands("transtypes", locale.getString("conversion.subcommand.transtypes"))
