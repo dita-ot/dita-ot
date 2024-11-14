@@ -39,24 +39,18 @@ public class InitArguments extends Arguments {
         parseCommonOptions(arg, args);
       }
     }
-    if (template == null) {
-      throw new BuildException(locale.getString("init.error.template_not_defined"));
-    }
     if (msgOutputLevel < Project.MSG_INFO) {
       emacsMode = true;
     }
     return this;
   }
 
-  /**
-   * Handle the --uninstall argument
-   */
   private void handleArgTemplate(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null) {
       throw new BuildException("You must specify a template name");
     }
-    template = entry.getKey();
+    template = entry.getValue();
   }
 
   private void handleArgOutput(final String arg, final Deque<String> args) {
@@ -64,7 +58,7 @@ public class InitArguments extends Arguments {
     if (entry.getValue() == null) {
       throw new BuildException("You must specify an output directory");
     }
-    output = Paths.get(entry.getKey()).toAbsolutePath();
+    output = Paths.get(entry.getValue()).toAbsolutePath();
   }
 
   @Override
