@@ -30,9 +30,9 @@ public class InitArguments extends Arguments {
     while (!args.isEmpty()) {
       final String arg = args.pop();
       if (arg.equals("init")) {
-        // Ignore
-      } else if (isLongForm(arg, "-template") || arg.equals("-t")) {
-        handleArgTemplate(arg, args);
+        handleSubcommandInit(arg, args);
+        //      } else if (isLongForm(arg, "-template") || arg.equals("-t")) {
+        //        handleArgTemplate(arg, args);
       } else if (isLongForm(arg, "-output") || arg.equals("-o")) {
         handleArgOutput(arg, args);
       } else {
@@ -45,13 +45,13 @@ public class InitArguments extends Arguments {
     return this;
   }
 
-  private void handleArgTemplate(final String arg, final Deque<String> args) {
-    final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
-      throw new BuildException("You must specify a template name");
-    }
-    template = entry.getValue();
-  }
+  //  private void handleArgTemplate(final String arg, final Deque<String> args) {
+  //    final Map.Entry<String, String> entry = parse(arg, args);
+  //    if (entry.getValue() == null) {
+  //      throw new BuildException("You must specify a template name");
+  //    }
+  //    template = entry.getValue();
+  //  }
 
   private void handleArgOutput(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
@@ -61,13 +61,25 @@ public class InitArguments extends Arguments {
     output = Paths.get(entry.getValue()).toAbsolutePath();
   }
 
+  private void handleSubcommandInit(final String arg, final Deque<String> args) {
+    String value;
+    value = args.peek();
+    if (value != null && !value.startsWith("-")) {
+      value = args.pop();
+    } else {
+      value = null;
+    }
+    template = value;
+  }
+
   @Override
   String getUsage(final boolean compact) {
     return UsageBuilder
       .builder(compact, useColor)
       .usage(locale.getString("init.usage"))
-      .options("t", "template", "name", locale.getString("init.argument.template"))
-      .options("o", "output", "dir", locale.getString("init.argument.output"))
+      .arguments(null, null, "template", locale.getString("init.argument.template"))
+      //      .options("t", "template", "name", locale.getString("init.argument.template"))
+      .options("o", "output", "dir", locale.getString("init.option.output"))
       .build();
   }
 }
