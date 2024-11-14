@@ -39,6 +39,9 @@ public class InitArguments extends Arguments {
         parseCommonOptions(arg, args);
       }
     }
+    if (template == null) {
+      throw new BuildException(locale.getString("init.error.template_not_defined"));
+    }
     if (msgOutputLevel < Project.MSG_INFO) {
       emacsMode = true;
     }
@@ -51,7 +54,7 @@ public class InitArguments extends Arguments {
   private void handleArgTemplate(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null) {
-      throw new BuildException("You must specify an installation package when using the --uninstall argument");
+      throw new BuildException("You must specify a template name");
     }
     template = entry.getKey();
   }
@@ -59,7 +62,7 @@ public class InitArguments extends Arguments {
   private void handleArgOutput(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null) {
-      throw new BuildException("You must specify an installation package when using the --uninstall argument");
+      throw new BuildException("You must specify an output directory");
     }
     output = Paths.get(entry.getKey()).toAbsolutePath();
   }

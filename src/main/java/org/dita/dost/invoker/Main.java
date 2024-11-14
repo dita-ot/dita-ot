@@ -472,6 +472,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private void init(InitArguments initArguments) {
+    if (initArguments.template == null) {
+      throw new CliException(locale.getString("init.error.template_not_defined"), args.getUsage(true));
+    }
     logger.info("Init project");
   }
 
