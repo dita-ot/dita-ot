@@ -31,8 +31,8 @@ public class InitArguments extends Arguments {
       final String arg = args.pop();
       if (arg.equals("init")) {
         handleSubcommandInit(arg, args);
-        //      } else if (isLongForm(arg, "-template") || arg.equals("-t")) {
-        //        handleArgTemplate(arg, args);
+      } else if (isLongForm(arg, "-template") || arg.equals("-t")) {
+        handleArgTemplate(arg, args);
       } else if (isLongForm(arg, "-output") || arg.equals("-o")) {
         handleArgOutput(arg, args);
       } else {
@@ -45,13 +45,13 @@ public class InitArguments extends Arguments {
     return this;
   }
 
-  //  private void handleArgTemplate(final String arg, final Deque<String> args) {
-  //    final Map.Entry<String, String> entry = parse(arg, args);
-  //    if (entry.getValue() == null) {
-  //      throw new BuildException("You must specify a template name");
-  //    }
-  //    template = entry.getValue();
-  //  }
+  private void handleArgTemplate(final String arg, final Deque<String> args) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null) {
+      throw new BuildException("You must specify a template name");
+    }
+    template = entry.getValue();
+  }
 
   private void handleArgOutput(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
