@@ -72,6 +72,7 @@ public class KeyrefPaserTest {
 
   private static Stream<Arguments> testWriteArguments() {
     return Stream.of(
+      Arguments.of(Paths.get("whitespace.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("a.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("subdir", "subdirtopic.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("id.xml"), Paths.get("keys.ditamap")),
