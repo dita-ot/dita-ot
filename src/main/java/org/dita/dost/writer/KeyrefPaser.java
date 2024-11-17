@@ -177,9 +177,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   private Set<URI> normalProcessingRoleTargets;
   private MergeUtils mergeUtils;
 
-  private boolean compatibilityMode = Boolean.parseBoolean(
-    Configuration.configuration.get("compatibility.keyref.treat-whitespace-only-as-empty")
-  );
+  private boolean compatibilityMode;
 
   /**
    * Constructor.
@@ -193,6 +191,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     elemName = new ArrayDeque<>();
     hasSubElem = new ArrayDeque<>();
     mergeUtils = new MergeUtils();
+    compatibilityMode =
+      Boolean.parseBoolean(Configuration.configuration.get("compatibility.keyref.treat-blank-as-empty"));
   }
 
   @Override
@@ -205,6 +205,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   public void setJob(final Job job) {
     super.setJob(job);
     mergeUtils.setJob(job);
+  }
+
+  /**
+   * Set compatibility mode for {@code compatibility.keyref.treat-blank-as-empty}.
+   */
+  public void setCompatibilityMode(boolean compatibilityMode) {
+    this.compatibilityMode = compatibilityMode;
   }
 
   public void setKeyDefinition(final KeyScope definitionMap) {
@@ -242,11 +249,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   }
 
   private boolean isEmpty(final char[] ch, final int start, final int length) {
-    if (compatibilityMode) {
-      return length == 0 || new String(ch, start, length).isBlank();
-    } else {
-      return length == 0;
+    if (length == 0) {
+      return true;
     }
+    if (compatibilityMode) {
+      return new String(ch, start, length).isBlank();
+    }
+    return false;
   }
 
   @Override
