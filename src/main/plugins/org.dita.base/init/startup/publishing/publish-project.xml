@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="https://www.dita-ot.org/project">
+  <context name="Project" id="project">
+    <input href="../project.ditamap"/>
+  </context>
+
+  <deliverable name="Project to HTML5" id="html5">
+    <context idref="project"/>
+    <output href="output/html"/>
+    <publication transtype="html5">
+    </publication>
+  </deliverable>
+
+  <deliverable name="Project to PDF" id="pdf">
+    <context idref="project"/>
+    <output href="output/pdf"/>
+    <publication transtype="pdf2">
+      <param name="theme" href="themes/a4.yaml"/>
+    </publication>
+  </deliverable>
+</project>

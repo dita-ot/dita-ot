@@ -477,12 +477,15 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final var target = Optional
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
-    logger.info("Init project using %s template to %s".formatted(initArguments.template, target));
+    logger.info(locale.getString("init.info.create").formatted(initArguments.template, target));
     final var source = Paths
       .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
       .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
       .resolve("init")
       .resolve(initArguments.template);
+    if (!Files.exists(source)) {
+      throw new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template));
+    }
     try {
       Files.walkFileTree(
         source,
@@ -510,9 +513,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         }
       );
     } catch (FileAlreadyExistsException e) {
-      throw new BuildException("Failed to create project, file already exists: %s".formatted(e.getMessage()), e);
+      throw new BuildException(locale.getString("init.error.file_already_exists").formatted(e.getMessage()), e);
     } catch (IOException e) {
-      throw new BuildException("Failed to create project: %s".formatted(e.getMessage()), e);
+      throw new BuildException(locale.getString("init.error.create_failed").formatted(e.getMessage()), e);
     }
   }
 
