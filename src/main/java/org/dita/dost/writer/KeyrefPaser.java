@@ -177,6 +177,10 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   private Set<URI> normalProcessingRoleTargets;
   private MergeUtils mergeUtils;
 
+  private boolean compatibilityMode = Boolean.parseBoolean(
+    Configuration.configuration.get("compatibility.keyref.treat-whitespace-only-as-empty")
+  );
+
   /**
    * Constructor.
    */
@@ -237,9 +241,17 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     getContentHandler().startDocument();
   }
 
+  private boolean isEmpty(final char[] ch, final int start, final int length) {
+    if (compatibilityMode) {
+      return length == 0 || new String(ch, start, length).isBlank();
+    } else {
+      return length == 0;
+    }
+  }
+
   @Override
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
-    if (keyrefLevel != 0 && (length == 0 || new String(ch, start, length).trim().isEmpty())) {
+    if (keyrefLevel != 0 && isEmpty(ch, start, length)) {
       if (!hasChecked) {
         empty = true;
       }
