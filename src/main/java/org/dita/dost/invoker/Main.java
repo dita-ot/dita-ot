@@ -26,6 +26,7 @@
 
 package org.dita.dost.invoker;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.log.DITAOTAntLogger.USE_COLOR;
 import static org.dita.dost.util.Configuration.transtypes;
@@ -38,10 +39,8 @@ import com.google.common.base.Strings;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -475,11 +474,46 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (initArguments.template == null) {
       throw new CliException(locale.getString("init.error.template_not_defined"), args.getUsage(true));
     }
-    var outputDir = initArguments.output;
-    if (outputDir == null) {
-      outputDir = Paths.get(".").toAbsolutePath().normalize();
+    final var target = Optional
+      .ofNullable(initArguments.output)
+      .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
+    logger.info("Init project using %s template to %s".formatted(initArguments.template, target));
+    final var source = Paths
+      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
+      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
+      .resolve("init")
+      .resolve(initArguments.template);
+    try {
+      Files.walkFileTree(
+        source,
+        new SimpleFileVisitor<>() {
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            var targetDir = target.resolve(source.relativize(dir));
+            try {
+              Files.copy(dir, targetDir);
+            } catch (FileAlreadyExistsException e) {
+              if (!Files.isDirectory(targetDir)) {
+                throw e;
+              }
+            }
+            return CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            var dst = target.resolve(source.relativize(file));
+            logger.debug("Create {}", dst);
+            Files.copy(file, dst);
+            return CONTINUE;
+          }
+        }
+      );
+    } catch (FileAlreadyExistsException e) {
+      throw new BuildException("Failed to create project, file already exists: %s".formatted(e.getMessage()), e);
+    } catch (IOException e) {
+      throw new BuildException("Failed to create project: %s".formatted(e.getMessage()), e);
     }
-    logger.info("Init project using template %s to %s".formatted(initArguments.template, outputDir));
   }
 
   private void install(InstallArguments installArgs) {
