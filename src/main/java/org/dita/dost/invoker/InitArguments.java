@@ -23,6 +23,7 @@ public class InitArguments extends Arguments {
 
   String template;
   Path output;
+  boolean list = false;
 
   @Override
   InitArguments parse(final String[] arguments) {
@@ -35,6 +36,8 @@ public class InitArguments extends Arguments {
         handleArgTemplate(arg, args);
       } else if (isLongForm(arg, "-output") || arg.equals("-o")) {
         handleArgOutput(arg, args);
+      } else if (isLongForm(arg, "-list")) {
+        list = true;
       } else {
         parseCommonOptions(arg, args);
       }
@@ -80,6 +83,7 @@ public class InitArguments extends Arguments {
       .arguments(null, null, "template", locale.getString("init.argument.template"))
       //      .options("t", "template", "name", locale.getString("init.argument.template"))
       .options("o", "output", "dir", locale.getString("init.option.output"))
+      .options(null, "list", null, locale.getString("init.option.list"))
       .build();
   }
 }

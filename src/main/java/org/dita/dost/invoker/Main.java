@@ -471,6 +471,20 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private void init(InitArguments initArguments) {
+    final Path templatesDir = Paths
+      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
+      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
+      .resolve("init");
+
+    if (initArguments.list) {
+      try (var list = Files.list(templatesDir)) {
+        list.forEach(dir -> logger.info(dir.getFileName().toString()));
+        return;
+      } catch (IOException e) {
+        throw new BuildException(locale.getString("init.error.list_failed"), e);
+      }
+    }
+
     if (initArguments.template == null) {
       throw new CliException(locale.getString("init.error.template_not_defined"), args.getUsage(true));
     }
@@ -478,11 +492,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
     logger.info(locale.getString("init.info.create").formatted(initArguments.template, target));
-    final var source = Paths
-      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
-      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
-      .resolve("init")
-      .resolve(initArguments.template);
+    final var source = templatesDir.resolve(initArguments.template);
     if (!Files.exists(source)) {
       throw new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template));
     }
