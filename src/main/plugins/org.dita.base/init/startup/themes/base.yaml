@@ -1,0 +1,27 @@
+brand:
+  primary-color: orange
+  font:
+    header: Helvetica
+
+header:
+  border-after: solid 1pt black
+  odd:
+    content: '{title}'
+    text-align: end
+  even:
+    content: '{chapter}'
+    text-align: start
+
+style:
+  body:
+    font-family: serif
+    font-size: 12pt
+    space-after: 6pt
+    space-before: 6pt
+    start-indent: 25pt
+  topic:
+    color: $brand-primary-color
+    font-family: $brand-font-header
+  link:
+    color: blue
+    text-decoration: underline
