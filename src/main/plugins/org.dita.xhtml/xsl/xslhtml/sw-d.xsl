@@ -50,7 +50,7 @@ See the accompanying LICENSE file for applicable license.
  <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
+  <xsl:next-match/>
  </span>
 </xsl:template>
 
@@ -58,7 +58,7 @@ See the accompanying LICENSE file for applicable license.
  <span>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
+  <xsl:next-match/>
  </span>
 </xsl:template>
 
@@ -66,7 +66,7 @@ See the accompanying LICENSE file for applicable license.
  <var>
   <xsl:call-template name="commonattributes"/>
   <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
+  <xsl:next-match/>
  </var>
 </xsl:template>
 
