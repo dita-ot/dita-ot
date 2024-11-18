@@ -47,9 +47,10 @@ rem and for NT handling to skip to.
 :doneStart
 
 rem No plug-in libraries in classpath
-set CLASSPATH=""
-if "%DITA_CMD_SUBCOMMAND%" == "install" goto checkJava
-if "%DITA_CMD_SUBCOMMAND%" == "uninstall" goto checkJava
+setlocal enabledelayedexpansion
+if "!DITA_CMD_SUBCOMMAND!" == "install" goto checkJava
+if "!DITA_CMD_SUBCOMMAND!" == "uninstall" goto checkJava
+endlocal
 
 rem Set environment variables
 call "%DITA_HOME%\config\env.bat"
