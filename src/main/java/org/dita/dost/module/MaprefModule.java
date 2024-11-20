@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
@@ -25,6 +26,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.ChainedURIResolver;
+import org.dita.dost.util.ClasspathURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -45,14 +47,15 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
     processor = xmlUtils.getProcessor();
     final XsltCompiler xsltCompiler = processor.newXsltCompiler();
     xsltCompiler.setErrorReporter(toErrorReporter(logger));
-    final File style = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
+    final ClasspathURIResolver resolver = new ClasspathURIResolver();
+    final String path = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE);
     try {
-      templates = xsltCompiler.compile(new StreamSource(style));
-    } catch (SaxonApiException e) {
-      throw new RuntimeException(
-        "Failed to compile stylesheet '" + style.getAbsolutePath() + "': " + e.getMessage(),
-        e
-      );
+      final Source style = path.startsWith("classpath:")
+        ? resolver.resolve(path, null)
+        : new StreamSource(new File(path));
+      templates = xsltCompiler.compile(style);
+    } catch (SaxonApiException | TransformerException e) {
+      throw new RuntimeException("Failed to compile stylesheet '" + path + "': " + e.getMessage(), e);
     }
   }
 

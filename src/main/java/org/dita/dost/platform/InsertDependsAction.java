@@ -27,6 +27,7 @@ final class InsertDependsAction implements IAction {
   private List<Value> value;
   /** Plug-in features. */
   private Map<String, Plugin> featureTable = null;
+  private boolean useClasspath;
 
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
@@ -83,4 +84,9 @@ final class InsertDependsAction implements IAction {
 
   @Override
   public void setLogger(final DITAOTLogger logger) {}
+
+  @Override
+  public void setUseClasspath(boolean useClasspath) {
+    this.useClasspath = useClasspath;
+  }
 }

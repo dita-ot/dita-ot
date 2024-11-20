@@ -212,8 +212,12 @@ See the accompanying LICENSE file for applicable license.
         <isset property="inner.transform"/>
       </condition>
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
-      <xslt destdir="${html5.toc.output.dir}"
-            style="${args.html5.toc.xsl}">
+      <xslt destdir="${html5.toc.output.dir}">
+        <style>
+          <file file="${args.html5.toc.xsl}" unless:true="${useClasspath}" />
+          <!-- FIXME: should use <url> -->
+          <javaresource name="org.dita.html5/xsl/map2html5-cover.xsl" if:true="${useClasspath}"/>
+        </style>
         <ditafileset input="true" format="ditamap"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
@@ -223,7 +227,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="OUTPUTCLASS" expression="${args.html5.toc.class}" if:set="args.html5.toc.class"/>
         <params/>
         <mapper type="merge" to="${args.html5.toc}${out.ext}"/>
-        <xmlcatalog refid="dita.catalog"/>
+        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
       </pipeline>
     </sequential>

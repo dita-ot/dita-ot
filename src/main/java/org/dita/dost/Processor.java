@@ -15,6 +15,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
+import org.apache.tools.ant.ProjectHelperRepository;
+import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.resources.JavaResource;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.LoggerListener;
 import org.dita.dost.util.Configuration;
@@ -35,7 +38,7 @@ public final class Processor {
   Processor(final File ditaDir, final String transtype, final Map<String, String> args) {
     this.ditaDir = ditaDir;
     this.args = new HashMap<>(args);
-    this.args.put("dita.dir", ditaDir.getAbsolutePath());
+    //    this.args.put("dita.dir", ditaDir.getAbsolutePath());
     this.args.put("transtype", transtype);
   }
 
@@ -191,8 +194,6 @@ public final class Processor {
     final ch.qos.logback.classic.Logger debugLogger = createDebugLog ? openDebugLogger(tempDir) : null;
 
     try {
-      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
-      final File buildFile = new File(basePluginDir, "build.xml");
       final Project project = new Project();
       project.setCoreLoader(this.getClass().getClassLoader());
 
@@ -205,12 +206,20 @@ public final class Processor {
 
       project.fireBuildStarted();
       project.init();
-      project.setBaseDir(ditaDir);
       project.setKeepGoingMode(false);
       for (final Map.Entry<String, String> arg : args.entrySet()) {
         project.setUserProperty(arg.getKey(), arg.getValue());
       }
-      ProjectHelper.configureProject(project, buildFile);
+      if (ditaDir != null) {
+        final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
+        final File buildFile = new File(basePluginDir, "build.xml");
+        project.setBaseDir(ditaDir);
+        ProjectHelper.configureProject(project, buildFile);
+        project.setProperty("useClasspath", "false");
+      } else {
+        configureProject(project);
+        project.setProperty("useClasspath", "true");
+      }
       final Vector<String> targets = new Vector<>();
       //            targets.addElement(project.getDefaultTarget());
       targets.addElement("dita2" + args.get("transtype"));
@@ -232,6 +241,14 @@ public final class Processor {
         }
       }
     }
+  }
+
+  // ProjectHelper.configureProject
+  private void configureProject(Project project) {
+    final JavaResource resource = new JavaResource("build.xml", new Path(project, "org.dita.base/build.xml"));
+    final ProjectHelper helper = ProjectHelperRepository.getInstance().getProjectHelperForBuildFile(resource);
+    project.addReference("ant.projectHelper", helper);
+    helper.parse(project, project.getCoreLoader().getResource("org.dita.base/build.xml"));
   }
 
   private ch.qos.logback.classic.Logger openDebugLogger(File tempDir) {

@@ -180,7 +180,8 @@ See the accompanying LICENSE file for applicable license.
     <dirname property="mapref.workdir" file="${dita.temp.dir}/${user.input.file}" />
     <pipeline message="Resolve mapref in ditamap" taskname="mapref">
       <module class="org.dita.dost.module.MaprefModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" if:true="${useClasspath}"/>
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -209,7 +210,8 @@ See the accompanying LICENSE file for applicable license.
               taskname="mapref"
               unless:set="preprocess.mapref.skip">
       <module class="org.dita.dost.module.MaprefModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl" if:true="${useClasspath}"/>
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -429,7 +431,8 @@ See the accompanying LICENSE file for applicable license.
     description="Move metadata entries">
     <pipeline message="Move metadata entries." taskname="move-meta">
       <module class="org.dita.dost.module.MoveMetaModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mappull.xsl" if:true="${useClasspath}"/>
         <param name="conserve-memory" expression="${conserve-memory}" if:set="conserve-memory"/>
         <dita:extension id="dita.preprocess.mappull.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
@@ -442,7 +445,8 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.preprocess.reloadstylesheet.maplink" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Move related links" taskname="maplink">
       <module class="org.dita.dost.module.MoveLinksModule">
-        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl"/>
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl" unless:true="${useClasspath}"/>
+        <param name="style" value="${dita.plugin.org.dita.base.dir}/xsl/preprocess/maplink.xsl" if:true="${useClasspath}"/>
         <param name="include.rellinks" expression="${include.rellinks}" if:set="include.rellinks"/>
       </module>
     </pipeline>
@@ -473,10 +477,14 @@ See the accompanying LICENSE file for applicable license.
     <property name="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}"/>
     <pipeline message="Clean ditamap" taskname="clean-map">
       <xslt basedir="${dita.temp.dir}"
-            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}"
-            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl">
+            reloadstylesheet="${dita.preprocess.reloadstylesheet.clean-map}">
+        <style>
+          <file file="${dita.plugin.org.dita.base.dir}/xsl/preprocess/clean-map.xsl" unless:true="${useClasspath}" />
+          <!-- FIXME: should use <url> -->
+          <javaresource name="org.dita.base/xsl/preprocess/clean-map.xsl" if:true="${useClasspath}"/>
+        </style>
         <ditafileset format="ditamap"/>
-        <xmlcatalog refid="dita.catalog"/>
+        <!--xmlcatalog refid="dita.catalog"/-->
       </xslt>
     </pipeline>
   </target>

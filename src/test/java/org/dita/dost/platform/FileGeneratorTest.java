@@ -101,6 +101,7 @@ public class FileGeneratorTest {
     protected List<Value> inputs = new ArrayList<>();
     protected Map<String, String> params = new HashMap<>();
     protected Map<String, Plugin> features;
+    protected boolean useClasspath;
 
     @Override
     public void setInput(final List<Value> input) {
@@ -123,6 +124,11 @@ public class FileGeneratorTest {
     @Override
     public void setLogger(final DITAOTLogger logger) {
       // NOOP
+    }
+
+    @Override
+    public void setUseClasspath(boolean useClasspath) {
+      this.useClasspath = useClasspath;
     }
   }
 

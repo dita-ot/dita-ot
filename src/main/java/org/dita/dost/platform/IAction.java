@@ -50,4 +50,6 @@ public interface IAction {
    * @param logger logger instance
    */
   void setLogger(DITAOTLogger logger);
+
+  void setUseClasspath(boolean useClasspath);
 }

@@ -8,6 +8,7 @@
 package org.dita.dost.ant;
 
 import static java.util.Arrays.asList;
+import static org.dita.dost.platform.ProjectHelper3.REFID_PLUGINS;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.toFile;
@@ -17,9 +18,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Location;
@@ -27,6 +30,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.*;
 import org.apache.tools.ant.types.resources.FileResource;
+import org.apache.tools.ant.types.resources.JavaResource;
 import org.apache.tools.ant.types.resources.Resources;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTAntLogger;
@@ -37,6 +41,10 @@ import org.dita.dost.module.XmlFilterModule;
 import org.dita.dost.module.XmlFilterModule.FilterPair;
 import org.dita.dost.module.XsltModule;
 import org.dita.dost.pipeline.PipelineHashIO;
+import org.dita.dost.platform.FileGenerator;
+import org.dita.dost.platform.Integrator;
+import org.dita.dost.platform.Plugin;
+import org.dita.dost.platform.Value;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Configuration.Mode;
@@ -45,6 +53,8 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Ant task for executing pipeline modules.
@@ -72,6 +82,8 @@ public final class ExtensibleAntInvoker extends Task {
    */
   private File tempDir;
   private Mode processingMode;
+  private Map<String, List<Value>> featureTbl;
+  private Map<String, Plugin> pluginTable;
 
   /**
    * Constructor.
@@ -80,6 +92,14 @@ public final class ExtensibleAntInvoker extends Task {
     super();
     pipelineParams = new ArrayList<>();
     modules = new ArrayList<>();
+  }
+
+  @Override
+  public void init() {
+    super.init();
+    final List<Plugin> plugins = getProject().getReference(REFID_PLUGINS);
+    featureTbl = getFeatureTbl(plugins);
+    pluginTable = plugins.stream().collect(Collectors.toMap(Plugin::pluginId, Function.identity()));
   }
 
   /**
@@ -211,7 +231,7 @@ public final class ExtensibleAntInvoker extends Task {
         logger.debug("{0} processing took {1} ms", mod.getClass().getSimpleName(), end - start);
       }
     } catch (final DITAOTException e) {
-      throw new BuildException(e.getMessage(), e);
+      throw new BuildException(e.getMessage() + ": " + modules.get(0).location, e);
     }
   }
 
@@ -296,8 +316,56 @@ public final class ExtensibleAntInvoker extends Task {
   }
 
   private Source toSource(final Resource style) {
+    if (!Integrator.COMPILE_TIME_RESOLVE) {
+      return toExtensibleSource(style);
+    }
     if (style instanceof FileResource) {
       return new StreamSource(((FileResource) style).getFile());
+    } else {
+      throw new BuildException(String.format("%s not supported", style.getClass().toString()));
+    }
+  }
+
+  private Map<String, List<Value>> getFeatureTbl(List<Plugin> plugins) {
+    final Map<String, List<Value>> featureTable = new HashMap<>();
+    for (Plugin pluginFeatures : plugins) {
+      final Map<String, List<Value>> featureSet = pluginFeatures.features();
+      for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
+        final String key = currentFeature.getKey();
+        final List<Value> values = currentFeature.getValue();
+        //                if (!extensionPoints.contains(key)) {
+        //                  throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(pluginFeatures.pluginId(), key));
+        //                }
+        if (featureTable.containsKey(key)) {
+          final List<Value> value = featureTable.get(key);
+          value.addAll(values);
+          featureTable.put(key, value);
+        } else {
+          //Make shallow clone to avoid making modifications directly to list inside the current feature.
+          featureTable.put(key, values != null ? new ArrayList<>(values) : null);
+        }
+      }
+    }
+    return featureTable;
+  }
+
+  private Source toExtensibleSource(final Resource style) {
+    if (style instanceof FileResource fileResource) {
+      final FileGenerator fileGenerator = new FileGenerator(featureTbl, pluginTable);
+      try {
+        fileGenerator.setParent(XMLUtils.getXMLReader());
+      } catch (SAXException e) {
+        throw new BuildException("Failed to create source: " + e.getMessage(), e);
+      }
+      return new SAXSource(fileGenerator, new InputSource(fileResource.getFile().toURI().toString()));
+    } else if (style instanceof JavaResource javaResource) {
+      final FileGenerator fileGenerator = new FileGenerator(featureTbl, pluginTable);
+      try {
+        fileGenerator.setParent(XMLUtils.getXMLReader());
+      } catch (SAXException e) {
+        throw new BuildException("Failed to create source: " + e.getMessage(), e);
+      }
+      return new SAXSource(fileGenerator, new InputSource(javaResource.getURL().toString()));
     } else {
       throw new BuildException(String.format("%s not supported", style.getClass().toString()));
     }

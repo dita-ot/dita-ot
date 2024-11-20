@@ -36,10 +36,12 @@ public final class InitializeProjectTask extends Task {
   public void execute() throws BuildException {
     log("Initializing project", Project.MSG_INFO);
     final File ditaDir = toFile(getProject().getProperty("dita.dir"));
-    if (!ditaDir.isAbsolute()) {
-      throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
+    if (ditaDir != null) {
+      if (!ditaDir.isAbsolute()) {
+        throw new IllegalArgumentException("DITA-OT installation directory " + ditaDir + " must be absolute");
+      }
+      CatalogUtils.setDitaDir(ditaDir);
     }
-    CatalogUtils.setDitaDir(ditaDir);
     XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
     if (xmlUtils == null) {
       xmlUtils = new XMLUtils();

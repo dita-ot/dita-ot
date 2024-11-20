@@ -29,18 +29,18 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * Generate outputfile with templates.
  * @author Zhang, Yuan Peng
  */
-final class FileGenerator extends XMLFilterImpl {
+public final class FileGenerator extends XMLFilterImpl {
 
-  private static final String EXTENSION_ID_ATTR = "id";
-  private static final String EXTENSION_ELEM = "extension";
-  private static final String EXTENSION_ATTR = "extension";
-  private static final String BEHAVIOR_ATTR = "behavior";
+  public static final String EXTENSION_ID_ATTR = "id";
+  public static final String EXTENSION_ELEM = "extension";
+  public static final String EXTENSION_ATTR = "extension";
+  public static final String BEHAVIOR_ATTR = "behavior";
 
   public static final String PARAM_LOCALNAME = "localname";
   public static final String PARAM_TEMPLATE = "template";
 
-  private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
-  private static final String TEMPLATE_PREFIX = "_template.";
+  public static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
+  public static final String TEMPLATE_PREFIX = "_template.";
 
   private static final Map<String, String> DEFAULT_EXTENSIONS = Collections.emptyMap();
 
@@ -132,6 +132,7 @@ final class FileGenerator extends XMLFilterImpl {
       if (DITA_OT_NS.equals(uri) && EXTENSION_ELEM.equals(localName)) {
         final IAction action = (IAction) Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
         action.setLogger(logger);
+        action.setUseClasspath(false);
         action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
         for (int i = 0; i < attributes.getLength(); i++) {
           action.addParam(attributes.getLocalName(i), attributes.getValue(i));

@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.UncheckedXPathException;
@@ -29,6 +30,7 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.MapMetaReader;
 import org.dita.dost.util.ChainedURIResolver;
+import org.dita.dost.util.ClasspathURIResolver;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.writer.DitaMapMetaWriter;
 import org.dita.dost.writer.DitaMetaWriter;
@@ -70,14 +72,18 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
   private void pullTopicMetadata(final AbstractPipelineInput input, final Collection<FileInfo> fis)
     throws DITAOTException {
     // Pull metadata (such as navtitle) into the map from the referenced topics
-    final File styleFile = new File(input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE));
-    logger.info("Loading stylesheet " + styleFile);
+    final String path = input.getAttribute(ANT_INVOKER_EXT_PARAM_STYLE);
+    logger.info("Loading stylesheet " + path);
+    final ClasspathURIResolver resolver = new ClasspathURIResolver();
     final XsltExecutable xsltExecutable;
     try {
       final XsltCompiler xsltCompiler = xmlUtils.getXsltCompiler();
-      xsltExecutable = xsltCompiler.compile(new StreamSource(styleFile));
-    } catch (SaxonApiException e) {
-      throw new RuntimeException("Failed to compile stylesheet '" + styleFile.toURI() + "': " + e.getMessage(), e);
+      final Source style = path.startsWith("classpath:")
+        ? resolver.resolve(path, null)
+        : new StreamSource(new File(path));
+      xsltExecutable = xsltCompiler.compile(style);
+    } catch (SaxonApiException | TransformerException e) {
+      throw new RuntimeException("Failed to compile stylesheet '" + path + "': " + e.getMessage(), e);
     }
 
     for (final FileInfo f : fis) {

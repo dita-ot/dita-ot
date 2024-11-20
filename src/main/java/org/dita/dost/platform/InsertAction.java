@@ -13,10 +13,8 @@ import java.io.UncheckedIOException;
 import java.util.*;
 import javax.xml.parsers.SAXParserFactory;
 import org.dita.dost.log.DITAOTLogger;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.dita.dost.util.ClasspathURIResolver;
+import org.xml.sax.*;
 import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
@@ -28,6 +26,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
 
   private final XMLReader reader;
   private DITAOTLogger logger;
+  private boolean useClasspath;
   private final Set<Value> fileNameSet;
   final Map<String, String> paramTable;
   private int elemLevel = 0;
@@ -44,6 +43,11 @@ class InsertAction extends XMLFilterImpl implements IAction {
       final SAXParserFactory factory = SAXParserFactory.newInstance();
       factory.setNamespaceAware(true);
       reader = factory.newSAXParser().getXMLReader();
+      //      final XMLResolverConfiguration config = new XMLResolverConfiguration(List.of());
+      //      config.setFeature(ResolverFeature.PREFER_PUBLIC, true);
+      //      config.setFeature(ResolverFeature.CACHE_DIRECTORY, null);
+      //      config.setFeature(ResolverFeature.CACHE_UNDER_HOME, false);
+      reader.setEntityResolver(new ClasspathURIResolver());
       reader.setContentHandler(this);
     } catch (final Exception e) {
       throw new RuntimeException("Failed to initialize parser: " + e.getMessage(), e);
@@ -71,12 +75,17 @@ class InsertAction extends XMLFilterImpl implements IAction {
     try {
       for (final Value fileName : fileNameSet) {
         if (fileName instanceof Value.PathValue pathValue) {
-          currentFile = pathValue.getPath();
+          if (useClasspath) {
+            currentFile = "classpath:/%s/%s".formatted(pathValue.pluginId(), pathValue.value());
+          } else {
+            currentFile = pathValue.getPath();
+          }
         } else {
           logger.error("Catalog import must be a file feature: " + fileName.value());
           continue;
         }
-        reader.parse(currentFile);
+        final InputSource inputSource = reader.getEntityResolver().resolveEntity(null, currentFile);
+        reader.parse(inputSource);
       }
     } catch (SAXException | RuntimeException e) {
       throw e;
@@ -93,6 +102,11 @@ class InsertAction extends XMLFilterImpl implements IAction {
   @Override
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+  }
+
+  @Override
+  public void setUseClasspath(boolean useClasspath) {
+    this.useClasspath = useClasspath;
   }
 
   // XMLFilter methods

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.dita.dost.util.Configuration;
 
 /**
  * DITA-OT processer factory. Not thread-safe, but can be reused.
@@ -25,9 +24,9 @@ public final class ProcessorFactory {
    * @return new ProcessorFactory instance
    */
   public static ProcessorFactory newInstance(final File ditaDir) {
-    if (!ditaDir.isAbsolute()) {
-      throw new IllegalArgumentException("DITA-OT directory must be absolute");
-    }
+    //    if (ditaDir != null && !ditaDir.isAbsolute()) {
+    //      throw new IllegalArgumentException("DITA-OT directory must be absolute");
+    //    }
     return new ProcessorFactory(ditaDir);
   }
 
@@ -50,12 +49,12 @@ public final class ProcessorFactory {
    * @return new Processor instance
    */
   public Processor newProcessor(final String transtype) {
-    if (ditaDir == null) {
-      throw new IllegalStateException();
-    }
-    if (!Configuration.transtypes.contains(transtype)) {
-      throw new IllegalArgumentException("Transtype " + transtype + " not supported");
-    }
+    //    if (ditaDir == null) {
+    //      throw new IllegalStateException();
+    //    }
+    //    if (!Configuration.transtypes.contains(transtype)) {
+    //      throw new IllegalArgumentException("Transtype " + transtype + " not supported");
+    //    }
     return new Processor(ditaDir, transtype, Collections.unmodifiableMap(args));
   }
 }
