@@ -488,14 +488,23 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
     logger.info(locale.getString("init.info.create").formatted(initArguments.template, target));
-    final Path templatesDir = Paths
-      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
-      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
-      .resolve("init");
-    final var source = templatesDir.resolve(initArguments.template);
-    if (!Files.exists(source)) {
-      throw new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template));
-    }
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    final var source = plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Optional
+          .ofNullable(feature.getAttributeNode("file"))
+          .map(Attr::getValue)
+          .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)))
+          .orElse(null)
+      )
+      .filter(dir -> Objects.equals(initArguments.template, dir.getFileName().toString()))
+      .filter(Files::exists)
+      .findAny()
+      .orElseThrow(() ->
+        new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template))
+      );
     try {
       Files.walkFileTree(
         source,
