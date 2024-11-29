@@ -151,4 +151,17 @@ public class ArgumentParserTest {
     assertEquals("template", act.template);
     assertEquals(Paths.get("out").toAbsolutePath(), act.output);
   }
+
+  @Test
+  public void initSubcommand__withLongOption() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "template", "--output=out" });
+    assertEquals("template", act.template);
+    assertEquals(Paths.get("out").toAbsolutePath(), act.output);
+  }
+
+  @Test
+  public void initSubcommand__globalArgument() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "-v", "template" });
+    assertEquals("template", act.template);
+  }
 }

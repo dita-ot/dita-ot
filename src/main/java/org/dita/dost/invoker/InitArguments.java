@@ -31,13 +31,23 @@ public class InitArguments extends Arguments {
     while (!args.isEmpty()) {
       final String arg = args.pop();
       if (arg.equals("init")) {
-        handleSubcommandInit(arg, args);
-      } else if (isLongForm(arg, "-output") || arg.equals("-o")) {
+        break;
+      } else if (arg.startsWith("-")) {
+        parseCommonOptions(arg, args);
+      } else {
+        template = arg;
+      }
+    }
+    while (!args.isEmpty()) {
+      final String arg = args.pop();
+      if (isLongForm(arg, "-output") || arg.equals("-o")) {
         handleArgOutput(arg, args);
       } else if (isLongForm(arg, "-list")) {
         list = true;
-      } else {
+      } else if (arg.startsWith("-")) {
         parseCommonOptions(arg, args);
+      } else {
+        template = arg;
       }
     }
     if (msgOutputLevel < Project.MSG_INFO) {
