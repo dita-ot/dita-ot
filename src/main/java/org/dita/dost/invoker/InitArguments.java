@@ -32,8 +32,6 @@ public class InitArguments extends Arguments {
       final String arg = args.pop();
       if (arg.equals("init")) {
         handleSubcommandInit(arg, args);
-      } else if (isLongForm(arg, "-template") || arg.equals("-t")) {
-        handleArgTemplate(arg, args);
       } else if (isLongForm(arg, "-output") || arg.equals("-o")) {
         handleArgOutput(arg, args);
       } else if (isLongForm(arg, "-list")) {
@@ -45,21 +43,18 @@ public class InitArguments extends Arguments {
     if (msgOutputLevel < Project.MSG_INFO) {
       emacsMode = true;
     }
-    return this;
-  }
 
-  private void handleArgTemplate(final String arg, final Deque<String> args) {
-    final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
-      throw new BuildException("You must specify a template name");
+    if (template == null) {
+      throw new CliException(locale.getString("init.error.template_not_defined"), getUsage(true));
     }
-    template = entry.getValue();
+
+    return this;
   }
 
   private void handleArgOutput(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null) {
-      throw new BuildException("You must specify an output directory");
+      throw new BuildException(locale.getString("init.error.output"));
     }
     output = Paths.get(entry.getValue()).toAbsolutePath();
   }
@@ -81,7 +76,6 @@ public class InitArguments extends Arguments {
       .builder(compact, useColor)
       .usage(locale.getString("init.usage"))
       .arguments(null, null, "template", locale.getString("init.argument.template"))
-      //      .options("t", "template", "name", locale.getString("init.argument.template"))
       .options("o", "output", "dir", locale.getString("init.option.output"))
       .options(null, "list", null, locale.getString("init.option.list"))
       .build();

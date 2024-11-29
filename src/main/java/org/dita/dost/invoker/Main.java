@@ -481,30 +481,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       return;
     }
 
-    if (initArguments.template == null) {
-      throw new CliException(locale.getString("init.error.template_not_defined"), args.getUsage(true));
-    }
     final var target = Optional
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
-    logger.info(locale.getString("init.info.create").formatted(target, initArguments.template));
-    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
-    final var source = plugins
-      .stream()
-      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
-      .map(feature ->
-        Optional
-          .ofNullable(feature.getAttributeNode("file"))
-          .map(Attr::getValue)
-          .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)))
-          .orElse(null)
-      )
-      .filter(dir -> Objects.equals(initArguments.template, dir.getFileName().toString()))
-      .filter(Files::exists)
-      .findAny()
-      .orElseThrow(() ->
-        new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template))
-      );
+    final var source = getTemplateDir(initArguments.template);
     try {
       Files.walkFileTree(
         source,
@@ -531,11 +511,36 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           }
         }
       );
+      logger.info(locale.getString("init.info.create").formatted(target, initArguments.template));
     } catch (FileAlreadyExistsException e) {
       throw new BuildException(locale.getString("init.error.file_already_exists").formatted(e.getMessage()), e);
     } catch (IOException e) {
       throw new BuildException(locale.getString("init.error.create_failed").formatted(e.getMessage()), e);
     }
+  }
+
+  /**
+   * Get init template source directory.
+   * @param template template name
+   * @return template source directory
+   * @throws BuildException when template not found
+   */
+  private Path getTemplateDir(String template) {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    return plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Optional
+          .ofNullable(feature.getAttributeNode("file"))
+          .map(Attr::getValue)
+          .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)))
+          .orElse(null)
+      )
+      .filter(dir -> Objects.equals(template, dir.getFileName().toString()))
+      .filter(Files::exists)
+      .findAny()
+      .orElseThrow(() -> new BuildException(locale.getString("init.error.template_not_found").formatted(template)));
   }
 
   /**
