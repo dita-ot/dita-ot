@@ -487,7 +487,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final var target = Optional
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
-    logger.info(locale.getString("init.info.create").formatted(initArguments.template, target));
+    logger.info(locale.getString("init.info.create").formatted(target, initArguments.template));
     final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
     final var source = plugins
       .stream()
