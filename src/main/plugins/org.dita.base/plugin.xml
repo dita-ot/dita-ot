@@ -263,7 +263,6 @@ See the accompanying LICENSE file for applicable license.
   <feature extension="ant.import" file="build_preprocess.xml"/>
   <feature extension="ant.import" file="build_preprocess2.xml"/>
   <feature extension="dita.xsl.strings" file="xsl/common/common-strings.xml"/>
-  <feature extension="init.template" file="init/startup/" desc="Startup template"/>
   <template file="catalog-dita_template.xml"/>
   <template file="build_template.xml"/>
   <template file="build_preprocess_template.xml"/>
