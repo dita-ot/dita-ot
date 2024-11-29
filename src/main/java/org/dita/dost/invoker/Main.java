@@ -29,10 +29,13 @@ package org.dita.dost.invoker;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.log.DITAOTAntLogger.USE_COLOR;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.dita.dost.platform.PluginParser.FEATURE_ID_ATTR;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.LangUtils.pair;
 import static org.dita.dost.util.LangUtils.zipWithIndex;
+import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
@@ -65,6 +68,8 @@ import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.URLUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -471,18 +476,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private void init(InitArguments initArguments) {
-    final Path templatesDir = Paths
-      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
-      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
-      .resolve("init");
-
     if (initArguments.list) {
-      try (var list = Files.list(templatesDir)) {
-        list.forEach(dir -> logger.info(dir.getFileName().toString()));
-        return;
-      } catch (IOException e) {
-        throw new BuildException(locale.getString("init.error.list_failed"), e);
-      }
+      printInitList();
+      return;
     }
 
     if (initArguments.template == null) {
@@ -492,6 +488,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
     logger.info(locale.getString("init.info.create").formatted(initArguments.template, target));
+    final Path templatesDir = Paths
+      .get(System.getProperty(SYSTEM_PROPERTY_DITA_HOME))
+      .resolve(Configuration.pluginResourceDirs.get("org.dita.base").getPath())
+      .resolve("init");
     final var source = templatesDir.resolve(initArguments.template);
     if (!Files.exists(source)) {
       throw new BuildException(locale.getString("init.error.template_not_found").formatted(initArguments.template));
@@ -527,6 +527,37 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } catch (IOException e) {
       throw new BuildException(locale.getString("init.error.create_failed").formatted(e.getMessage()), e);
     }
+  }
+
+  /**
+   * Print list of init templates and their descriptions.
+   */
+  private void printInitList() {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    var templates = plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Map.entry(
+          Optional
+            .ofNullable(feature.getAttributeNode("file"))
+            .map(Attr::getValue)
+            .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)).getFileName().toString())
+            .orElse(null),
+          Optional.ofNullable(feature.getAttributeNode("desc")).map(Attr::getValue).orElse(null)
+        )
+      )
+      .filter(entry -> Objects.nonNull(entry.getKey()))
+      .sorted(Map.Entry.comparingByKey())
+      .toList();
+    var width = templates
+      .stream()
+      .map(stringStringEntry -> stringStringEntry.getKey().length())
+      .max(Integer::compare)
+      .get();
+    templates.forEach(dir ->
+      logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+    );
   }
 
   private void install(InstallArguments installArgs) {

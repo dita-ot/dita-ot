@@ -20,6 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class Plugins {
@@ -47,7 +48,9 @@ public class Plugins {
    */
   public static Document getPluginConfiguration() {
     try (final InputStream in = Plugins.class.getClassLoader().getResourceAsStream(PLUGIN_CONF)) {
-      return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
+      final InputSource is = new InputSource(in);
+      is.setSystemId(Plugins.class.getClassLoader().getResource(PLUGIN_CONF).toString());
+      return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
     } catch (final ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException("Failed to read plugin configuration: " + e.getMessage(), e);
     }
