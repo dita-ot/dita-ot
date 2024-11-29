@@ -65,6 +65,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
   <extension-point id="dita.parser" name="Custom DITA parser"/>
+  <extension-point id="init.template" name="Init subcommand template"/>
   <!-- extensions -->
   <transtype name="base" abstract="true" desc="Common">
     <param name="args.gen.task.lbl" desc="Specifies whether to generate headings for sections within task topics." type="enum">

@@ -12,6 +12,7 @@ plugin =
 feature =
   element feature {
     attribute extension { xsd:NCName },
+    attribute desc { text }?,
     (attribute file { text }
      | (attribute value { text },
         attribute type { "file" | "text" }?))?,

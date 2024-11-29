@@ -101,6 +101,8 @@ final class ArgumentParser {
           return new InstallArguments().parse(arguments);
         case "uninstall":
           return new UninstallArguments().parse(arguments);
+        case "init":
+          return new InitArguments().parse(arguments);
       }
     }
     return new ConversionArguments().parse(arguments);

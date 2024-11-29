@@ -26,22 +26,24 @@
 
 package org.dita.dost.invoker;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
 import static org.dita.dost.invoker.Arguments.*;
 import static org.dita.dost.log.DITAOTAntLogger.USE_COLOR;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.dita.dost.platform.PluginParser.FEATURE_ID_ATTR;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.LangUtils.pair;
 import static org.dita.dost.util.LangUtils.zipWithIndex;
+import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -66,6 +68,8 @@ import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.URLUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -346,6 +350,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
       printDeliverables(deliverablesArgs);
       return;
+    } else if (args instanceof final InitArguments initArgs) {
+      init(initArgs);
+      return;
     } else if (args instanceof final InstallArguments installArgs) {
       install(installArgs);
       return;
@@ -466,6 +473,105 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } catch (Exception e) {
       throw new CliException(e.getMessage(), e);
     }
+  }
+
+  private void init(InitArguments initArguments) {
+    if (initArguments.list) {
+      printInitList();
+      return;
+    }
+
+    final var target = Optional
+      .ofNullable(initArguments.output)
+      .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
+    final var source = getTemplateDir(initArguments.template);
+    try {
+      Files.walkFileTree(
+        source,
+        new SimpleFileVisitor<>() {
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            var targetDir = target.resolve(source.relativize(dir));
+            try {
+              Files.copy(dir, targetDir);
+            } catch (FileAlreadyExistsException e) {
+              if (!Files.isDirectory(targetDir)) {
+                throw e;
+              }
+            }
+            return CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            var dst = target.resolve(source.relativize(file));
+            logger.debug("Create {}", dst);
+            Files.copy(file, dst);
+            return CONTINUE;
+          }
+        }
+      );
+      logger.info(locale.getString("init.info.create").formatted(target, initArguments.template));
+    } catch (FileAlreadyExistsException e) {
+      throw new BuildException(locale.getString("init.error.file_already_exists").formatted(e.getMessage()), e);
+    } catch (IOException e) {
+      throw new BuildException(locale.getString("init.error.create_failed").formatted(e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Get init template source directory.
+   * @param template template name
+   * @return template source directory
+   * @throws BuildException when template not found
+   */
+  private Path getTemplateDir(String template) {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    return plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Optional
+          .ofNullable(feature.getAttributeNode("file"))
+          .map(Attr::getValue)
+          .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)))
+          .orElse(null)
+      )
+      .filter(dir -> Objects.equals(template, dir.getFileName().toString()))
+      .filter(Files::exists)
+      .findAny()
+      .orElseThrow(() -> new BuildException(locale.getString("init.error.template_not_found").formatted(template)));
+  }
+
+  /**
+   * Print list of init templates and their descriptions.
+   */
+  private void printInitList() {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    var templates = plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Map.entry(
+          Optional
+            .ofNullable(feature.getAttributeNode("file"))
+            .map(Attr::getValue)
+            .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)).getFileName().toString())
+            .orElse(null),
+          Optional.ofNullable(feature.getAttributeNode("desc")).map(Attr::getValue).orElse(null)
+        )
+      )
+      .filter(entry -> Objects.nonNull(entry.getKey()))
+      .sorted(Map.Entry.comparingByKey())
+      .toList();
+    var width = templates
+      .stream()
+      .map(stringStringEntry -> stringStringEntry.getKey().length())
+      .max(Integer::compare)
+      .get();
+    templates.forEach(dir ->
+      logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+    );
   }
 
   private void install(InstallArguments installArgs) {
