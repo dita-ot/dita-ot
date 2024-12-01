@@ -481,6 +481,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       return;
     }
 
+    if (initArguments.template == null) {
+      throw new CliException(locale.getString("init.error.template_not_defined"), initArguments.getUsage(true));
+    }
     final var target = Optional
       .ofNullable(initArguments.output)
       .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());

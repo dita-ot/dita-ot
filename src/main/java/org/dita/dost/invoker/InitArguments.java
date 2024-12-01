@@ -54,10 +54,6 @@ public class InitArguments extends Arguments {
       emacsMode = true;
     }
 
-    if (template == null) {
-      throw new CliException(locale.getString("init.error.template_not_defined"), getUsage(true));
-    }
-
     return this;
   }
 
