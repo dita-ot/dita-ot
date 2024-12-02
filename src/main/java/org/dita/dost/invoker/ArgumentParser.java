@@ -89,6 +89,8 @@ final class ArgumentParser {
   public Arguments processArgs(final String[] arguments) {
     for (final String subcommand : arguments) {
       switch (getName(subcommand)) {
+        case "help":
+          return new HelpArguments().parse(arguments);
         case "plugins":
           return new PluginsArguments().parse(arguments);
         case "version":
