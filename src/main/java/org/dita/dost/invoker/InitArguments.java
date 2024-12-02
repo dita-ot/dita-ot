@@ -81,6 +81,7 @@ public class InitArguments extends Arguments {
     return UsageBuilder
       .builder(compact, useColor)
       .usage(locale.getString("init.usage"))
+      .usage(locale.getString("init.usage.list"))
       .arguments(null, null, "template", locale.getString("init.argument.template"))
       .options("o", "output", "dir", locale.getString("init.option.output"))
       .options(null, "list", null, locale.getString("init.option.list"))
