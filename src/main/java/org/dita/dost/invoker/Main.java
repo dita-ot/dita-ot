@@ -567,14 +567,16 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .filter(entry -> Objects.nonNull(entry.getKey()))
       .sorted(Map.Entry.comparingByKey())
       .toList();
-    var width = templates
-      .stream()
-      .map(stringStringEntry -> stringStringEntry.getKey().length())
-      .max(Integer::compare)
-      .get();
-    templates.forEach(dir ->
-      logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
-    );
+    if (!templates.isEmpty()) {
+      var width = templates
+        .stream()
+        .map(stringStringEntry -> stringStringEntry.getKey().length())
+        .max(Integer::compare)
+        .get();
+      templates.forEach(dir ->
+        logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+      );
+    }
   }
 
   private void install(InstallArguments installArgs) {
