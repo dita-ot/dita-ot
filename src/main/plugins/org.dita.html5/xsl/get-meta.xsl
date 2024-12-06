@@ -271,7 +271,8 @@ See the accompanying LICENSE file for applicable license.
                               *[contains(@class,' topic/keywords ')]/
                                 child::*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join($keywords//text()/normalize-space()[string-length() > 0], ', ')}"/>
+      <xsl:variable name="keywords-content" select="$keywords//text()/normalize-space()[string-length() > 0]"/>
+      <meta name="keywords" content="{string-join($keywords-content, ', ')}"/>
     </xsl:if>
   </xsl:template>
 
@@ -283,7 +284,8 @@ See the accompanying LICENSE file for applicable license.
                             *[contains(@class,' topic/keywords ')]/
                               child::*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join($keywords//text()/normalize-space()[string-length() > 0], ', ')}"/>
+      <xsl:variable name="keywords-content" select="$keywords//text()/normalize-space()[string-length() > 0]"/>
+      <meta name="keywords" content="{string-join($keywords-content, ', ')}"/>
     </xsl:if>
   </xsl:template>
 
