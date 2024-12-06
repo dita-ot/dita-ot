@@ -56,7 +56,14 @@ class ValidateArguments extends Arguments {
       final String arg = args.pop();
       if (arg.equals("validate")) {
         definedProps.put("transtype", "validate");
-      } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
+        break;
+      } else if (arg.startsWith("-")) {
+        parseCommonOptions(arg, args);
+      }
+    }
+    while (!args.isEmpty()) {
+      final String arg = args.pop();
+      if (isLongForm(arg, "-project") || arg.equals("-p")) {
         handleArgProject(arg, args);
       } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
@@ -100,15 +107,15 @@ class ValidateArguments extends Arguments {
 
   private void handleContext(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
-      throw new BuildException("Missing value for property %s".formatted(entry.getKey()));
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
+      throw new BuildException("Missing value for context %s".formatted(entry.getKey()));
     }
     definedProps.put(ARGUMENTS.get(getArgumentName(arg)).property, entry.getValue());
   }
 
   private void handleArgInput(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     inputs.add(argument.getValue(entry.getValue()));
@@ -116,7 +123,7 @@ class ValidateArguments extends Arguments {
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     final Object prev = definedProps.get(argument.property);
@@ -128,7 +135,7 @@ class ValidateArguments extends Arguments {
 
   private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for resource " + entry.getKey());
     }
     resources.add(argument.getValue(entry.getValue()));
@@ -139,7 +146,7 @@ class ValidateArguments extends Arguments {
    */
   private void handleArgProject(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for project " + entry.getKey());
     }
     projectFile = new File(entry.getValue()).getAbsoluteFile();
