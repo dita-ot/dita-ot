@@ -16,6 +16,8 @@ See the accompanying LICENSE file for applicable license.
                         {depend.validate}"/>
 
   <target name="validate-init">
+    <property name="create-output-dir.skip" value="true"/>
+    <property name="build-step.create-output-dir" value="false"/>
     <property name="build-step.clean-map-check" value="false"/>
     <property name="build-step.clean-preprocess" value="false"/>
     <property name="build-step.copy-image" value="false"/>
