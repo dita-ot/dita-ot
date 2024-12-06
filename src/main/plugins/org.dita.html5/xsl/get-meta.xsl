@@ -268,10 +268,14 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="keywords" as="element()*"
                   select="descendant::*[contains(@class,' topic/prolog ')]/
                             *[contains(@class,' topic/metadata ')]/
-                              *[contains(@class,' topic/keywords ')]/
-                                *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+                              *[contains(@class,' topic/keywords ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
+      <xsl:for-each select="$keywords">
+        <xsl:variable name="keywords-content">
+          <xsl:apply-templates select="current()" mode="#current"/>
+        </xsl:variable>
+        <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
+      </xsl:for-each>
     </xsl:if>
   </xsl:template>
 
@@ -280,11 +284,26 @@ See the accompanying LICENSE file for applicable license.
                   select="*[contains(@class,' map/topicmeta ')]"/>
     <xsl:variable name="keywords" as="element()*"
                   select="($topicmeta | $topicmeta/*[contains(@class,' topic/metadata ')])/
-                            *[contains(@class,' topic/keywords ')]/
-                              *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+                            *[contains(@class,' topic/keywords ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
+      <xsl:for-each select="$keywords">
+        <xsl:variable name="keywords-content">
+          <xsl:apply-templates select="current()" mode="#current"/>
+        </xsl:variable>
+        <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
+      </xsl:for-each>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]" mode="gen-keywords-metadata">
+    <xsl:choose>
+      <xsl:when test="child::*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]">
+        <xsl:apply-templates select="child::node()" mode="#current"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="normalize-space()"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- CONTENT: User-defined - prolog/resourceid -->
