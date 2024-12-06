@@ -270,12 +270,12 @@ See the accompanying LICENSE file for applicable license.
                             *[contains(@class,' topic/metadata ')]/
                               *[contains(@class,' topic/keywords ')]"/>
     <xsl:if test="exists($keywords)">
-      <xsl:for-each select="$keywords">
-        <xsl:variable name="keywords-content">
+      <xsl:variable name="keywords-content">
+        <xsl:for-each select="$keywords">
           <xsl:apply-templates select="current()" mode="#current"/>
-        </xsl:variable>
-        <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
-      </xsl:for-each>
+        </xsl:for-each>
+      </xsl:variable>
+      <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
     </xsl:if>
   </xsl:template>
 
@@ -286,12 +286,12 @@ See the accompanying LICENSE file for applicable license.
                   select="($topicmeta | $topicmeta/*[contains(@class,' topic/metadata ')])/
                             *[contains(@class,' topic/keywords ')]"/>
     <xsl:if test="exists($keywords)">
-      <xsl:for-each select="$keywords">
-        <xsl:variable name="keywords-content">
+      <xsl:variable name="keywords-content">
+        <xsl:for-each select="$keywords">
           <xsl:apply-templates select="current()" mode="#current"/>
-        </xsl:variable>
-        <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
-      </xsl:for-each>
+        </xsl:for-each>
+      </xsl:variable>
+      <meta name="keywords" content="{string-join(tokenize($keywords-content/normalize-space(), ' '), ', ')}"/>
     </xsl:if>
   </xsl:template>
 
