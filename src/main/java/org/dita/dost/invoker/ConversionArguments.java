@@ -201,7 +201,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgProject(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for project " + entry.getKey());
     }
     projectFile = new File(entry.getValue()).getAbsoluteFile();
@@ -242,7 +242,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgInput(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     inputs.add(argument.getValue(entry.getValue()));
@@ -250,7 +250,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgFormat(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for transtype " + entry.getKey());
     }
     if (!Configuration.transtypes.contains(entry.getValue())) {
@@ -261,7 +261,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     final Object prev = definedProps.get(argument.property);
@@ -273,7 +273,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for resource " + entry.getKey());
     }
     resources.add(argument.getValue(entry.getValue()));
@@ -321,7 +321,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgPropertyFile(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg.substring(2), args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("You must specify a property filename when using the --propertyfile argument");
     }
     propertyFiles.addElement(entry.getValue());
@@ -329,7 +329,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgRepeat(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg.substring(2), args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("You must repeat number");
     }
     repeat = Integer.parseInt(entry.getValue());
