@@ -133,7 +133,7 @@ abstract class Arguments {
 
   void handleArgLogFile(String arg, Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for log file " + entry.getKey());
     }
     logFile = new File(entry.getValue());
@@ -309,5 +309,16 @@ abstract class Arguments {
         return value;
       }
     }
+  }
+
+  /**
+   * Get argument name
+   */
+  String getArgumentName(final String arg) {
+    int pos = arg.indexOf("=");
+    if (pos == -1) {
+      pos = arg.indexOf(":");
+    }
+    return arg.substring(0, pos != -1 ? pos : arg.length());
   }
 }
