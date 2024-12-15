@@ -61,6 +61,25 @@ See the accompanying LICENSE file for applicable license.
     <!-- CONTENT: Subject - prolog/metadata/keywords -->
     <xsl:apply-templates select="." mode="gen-keywords-metadata"/>
 
+    <!-- CONTENT: Resource IDs - prolog/resourceid -->
+    <xsl:apply-templates select="." mode="gen-resourceid-metadata"/>
+
+    <!-- CONTENT: User-defined - prolog/data -->
+    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/data ')] |
+                                 *[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/data ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data ')] |
+                                 self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/data ')] |
+                                 self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data ')]" mode="gen-metadata"/>
+
+    <!-- CONTENT: User-defined - prolog/data-about -->
+    <xsl:apply-templates select="*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/data-about ')] |
+                                 *[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data-about ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/data-about ')] |
+                                 *[contains(@class,' map/topicmeta ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data-about ')] |
+                                 self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/data-about ')] |
+                                 self::dita/*[1]/*[contains(@class,' topic/prolog ')]/*[contains(@class,' topic/metadata ')]/*[contains(@class,' topic/data-about ')]" mode="gen-metadata"/>
+
     <!-- CONTENT: Relation - related-links -->
     <xsl:apply-templates select="*[contains(@class,' topic/related-links ')]/descendant::*/@href |
                                  self::dita/*/*[contains(@class,' topic/related-links ')]/descendant::*/@href" mode="gen-metadata"/>
@@ -267,6 +286,10 @@ See the accompanying LICENSE file for applicable license.
       <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
     </xsl:if>
   </xsl:template>
+
+  <!-- CONTENT: User-defined - prolog/resourceid -->
+  <xsl:template match="*[contains(@class, ' topic/topic ')]" mode="gen-resourceid-metadata"/>
+  <xsl:template match="*[contains(@class, ' map/map ')]" mode="gen-resourceid-metadata"/>
 
   <!--  Rights - prolog/copyright -->
   <xsl:template match="*[contains(@class,' topic/copyright ')]" mode="gen-metadata">
