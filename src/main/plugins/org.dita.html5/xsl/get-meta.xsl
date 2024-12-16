@@ -269,9 +269,10 @@ See the accompanying LICENSE file for applicable license.
                   select="descendant::*[contains(@class,' topic/prolog ')]/
                             *[contains(@class,' topic/metadata ')]/
                               *[contains(@class,' topic/keywords ')]/
-                                *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+                                child::*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
+      <xsl:variable name="keywords-content" select="$keywords//text()/normalize-space()[string-length() > 0]"/>
+      <meta name="keywords" content="{string-join($keywords-content, ', ')}"/>
     </xsl:if>
   </xsl:template>
 
@@ -281,9 +282,10 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="keywords" as="element()*"
                   select="($topicmeta | $topicmeta/*[contains(@class,' topic/metadata ')])/
                             *[contains(@class,' topic/keywords ')]/
-                              *[contains(@class,' topic/keyword ')][normalize-space()]"/>
+                              child::*[contains(@class,' topic/keyword ') or contains(@class,' topic/indexterm ')]"/>
     <xsl:if test="exists($keywords)">
-      <meta name="keywords" content="{string-join(distinct-values($keywords/normalize-space()), ', ')}"/>
+      <xsl:variable name="keywords-content" select="$keywords//text()/normalize-space()[string-length() > 0]"/>
+      <meta name="keywords" content="{string-join($keywords-content, ', ')}"/>
     </xsl:if>
   </xsl:template>
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="nested">
+  <title>Nested</title>
+  <prolog>
+    <metadata>
+      <keywords>
+        <indexterm>indexterm
+          <indexterm>nested_indexterm</indexterm>
+          <keyword>nested_keyword</keyword>
+        </indexterm>
+      </keywords>
+    </metadata>
+  </prolog>
+  <body>
+    <p>Body.</p>
+  </body>
+</topic>
