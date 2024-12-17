@@ -1,0 +1,9 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+       class="- topic/topic "
+       id="topic_resource"
+       ditaarch:DITAArchVersion="2.0">
+   <title class="- topic/title ">Lib</title>
+   <body class="- topic/body ">
+      <p class="- topic/p " id="test">RESOLVED KEY</p>
+   </body>
+</topic>
