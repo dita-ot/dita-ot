@@ -11,7 +11,6 @@ package org.dita.dost.reader;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.Collection;
-
 import org.apache.xerces.impl.Constants;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
