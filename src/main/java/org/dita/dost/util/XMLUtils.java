@@ -79,12 +79,6 @@ public final class XMLUtils {
     saxParserFactory.setNamespaceAware(true);
   }
 
-  private static final SecurityManager securityManager;
-
-  static {
-    securityManager = new SecurityManager();
-  }
-
   private DITAOTLogger logger;
   private final Resolver catalogResolver;
   private final Processor processor;
@@ -914,6 +908,7 @@ public final class XMLUtils {
     try {
       final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
       try {
+        SecurityManager securityManager = new SecurityManager();
         reader.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
       } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
         // Some readers, especially non-XML, do not support security-manager property.
@@ -961,6 +956,7 @@ public final class XMLUtils {
             // Ignore
           }
           try {
+            SecurityManager securityManager = new SecurityManager();
             r.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
           } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
             // Ignore
@@ -983,6 +979,7 @@ public final class XMLUtils {
   public static DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
+      SecurityManager securityManager = new SecurityManager();
       factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
       builder = factory.newDocumentBuilder();
     } catch (final ParserConfigurationException e) {
