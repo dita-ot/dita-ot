@@ -35,7 +35,7 @@ public class CustomXMLReader extends XMLFilterImpl {
           };
         break;
       case Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY:
-    	throw new SAXNotSupportedException();
+        throw new SAXNotSupportedException();
       default:
         throw new IllegalArgumentException("%s=%s".formatted(name, value));
     }
