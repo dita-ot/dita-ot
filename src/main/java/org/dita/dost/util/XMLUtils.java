@@ -47,6 +47,8 @@ import net.sf.saxon.s9api.streams.Step;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -905,6 +907,12 @@ public final class XMLUtils {
   public static XMLReader getXMLReader() throws SAXException {
     try {
       final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
+      try {
+        SecurityManager securityManager = new SecurityManager();
+        reader.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Some readers, especially non-XML, do not support security-manager property.
+      }
       return Configuration.DEBUG ? new DebugXMLReader(reader) : reader;
     } catch (ParserConfigurationException e) {
       throw new SAXException(e);
@@ -947,6 +955,12 @@ public final class XMLUtils {
           } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
             // Ignore
           }
+          try {
+            SecurityManager securityManager = new SecurityManager();
+            r.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+          } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
+            // Ignore
+          }
           return Optional.of(r);
         } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
           throw new SAXException(ex);
@@ -965,6 +979,8 @@ public final class XMLUtils {
   public static DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
+      SecurityManager securityManager = new SecurityManager();
+      factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
       builder = factory.newDocumentBuilder();
     } catch (final ParserConfigurationException e) {
       throw new RuntimeException(e);

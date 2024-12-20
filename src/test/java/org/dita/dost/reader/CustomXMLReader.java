@@ -8,7 +8,10 @@
 
 package org.dita.dost.reader;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Collection;
+import org.apache.xerces.impl.Constants;
 import org.xml.sax.SAXNotRecognizedException;
 import org.xml.sax.SAXNotSupportedException;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -20,10 +23,10 @@ public class CustomXMLReader extends XMLFilterImpl {
 
   public void setProperty(String name, Object value) throws SAXNotRecognizedException, SAXNotSupportedException {
     switch (name) {
-      case "https://dita-ot.org/property/formats":
+      case PROPERTY_FORMATS:
         formats = (Collection<String>) value;
         break;
-      case "https://dita-ot.org/property/processing-mode":
+      case PROPERTY_PROCESSING_MODE:
         processingMode =
           switch ((String) value) {
             case "skip" -> throw new SAXNotRecognizedException();
@@ -31,6 +34,8 @@ public class CustomXMLReader extends XMLFilterImpl {
             default -> (String) value;
           };
         break;
+      case Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY:
+        throw new SAXNotSupportedException();
       default:
         throw new IllegalArgumentException("%s=%s".formatted(name, value));
     }
