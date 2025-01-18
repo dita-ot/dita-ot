@@ -51,6 +51,10 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 2.1 -->
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
+  <extension-point id="depend.preprocess2.maps.pre" name="Runs an Ant target before pre-processing maps"/>
+  <extension-point id="depend.preprocess2.maps.post" name="Runs an Ant target after pre-processing maps"/>
+  <extension-point id="depend.preprocess2.topics.pre" name="Runs an Ant target before pre-processing topics"/>
+  <extension-point id="depend.preprocess2.topics.post" name="Runs an Ant target after pre-processing topics"/>
   <extension-point id="dita.preprocess.debug-filter.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.map-reader.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.topic-reader.param" name="Debug filter module parameters"/>
