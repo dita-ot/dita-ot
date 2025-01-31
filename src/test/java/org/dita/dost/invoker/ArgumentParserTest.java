@@ -11,6 +11,7 @@ package org.dita.dost.invoker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import org.apache.tools.ant.Project;
@@ -136,5 +137,31 @@ public class ArgumentParserTest {
       new String[] { "--deliverables", "-p", "project.json" }
     );
     assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);
+  }
+
+  @Test
+  public void initSubcommand() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "template" });
+    assertEquals("template", act.template);
+  }
+
+  @Test
+  public void initSubcommand__withOption() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "template", "-o", "out" });
+    assertEquals("template", act.template);
+    assertEquals(Paths.get("out").toAbsolutePath(), act.output);
+  }
+
+  @Test
+  public void initSubcommand__withLongOption() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "template", "--output=out" });
+    assertEquals("template", act.template);
+    assertEquals(Paths.get("out").toAbsolutePath(), act.output);
+  }
+
+  @Test
+  public void initSubcommand__globalArgument() {
+    final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "-v", "template" });
+    assertEquals("template", act.template);
   }
 }

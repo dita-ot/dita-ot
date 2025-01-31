@@ -29,7 +29,7 @@ repositories {
     }
 }
 dependencies {
-    implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.14.0'
     implementation group: 'xerces', name: 'xercesImpl', version:'2.12.2'
     implementation group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     implementation group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
@@ -211,7 +211,7 @@ def bundled = [
         "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20240115/org.oasis-open.dita.v2_0.zip",
         "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20240122/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.3.0.2/org.oasis-open.xdita.v0_3_2.zip",
-        "index": "https://github.com/dita-ot/org.dita.index/releases/download/1.0.0/org.dita.index-1.0.0.zip",
+        "index": "https://github.com/dita-ot/org.dita.index/releases/download/2.0.0/org.dita.index-2.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",
         "xep": "https://github.com/dita-ot/org.dita.pdf2.xep/releases/download/3.6.3/org.dita.pdf2.xep-3.6.3.zip",
         "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.7.2/com.elovirta.pdf-0.7.2.zip",
