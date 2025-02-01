@@ -11,17 +11,17 @@ See the accompanying LICENSE file for applicable license.
   <!-- extensions -->
   <feature extension="depend.org.dita.pdf2.init.pre" value="transform.fo2pdf.fop.init"/>
   <feature extension="depend.org.dita.pdf2.format" value="transform.fo2pdf.fop"/>
-  <feature extension="dita.conductor.lib.import" file="lib/batik-all-1.17.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fontbox-2.0.28.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fop-core-2.9.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fop-events-2.9.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fop-pdf-images-2.9.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/fop-util-2.9.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/batik-all-1.18.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fontbox-2.0.33.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-core-2.10.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-events-2.10.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-pdf-images-2.10.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/fop-util-2.10.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/jcl-over-slf4j-2.0.7.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/pdfbox-2.0.28.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/pdfbox-2.0.33.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/slf4j-api-2.0.7.jar"/>
   <feature extension="dita.conductor.lib.import" file="lib/xml-apis-ext-1.3.04.jar"/>
-  <feature extension="dita.conductor.lib.import" file="lib/xmlgraphics-commons-2.9.jar"/>
+  <feature extension="dita.conductor.lib.import" file="lib/xmlgraphics-commons-2.10.jar"/>
   <transtype name="pdf" desc="PDF">
     <param name="pdf.formatter" desc="Specifies the XSL processor." type="enum">
       <val desc="Apache FOP" default="true">fop</val>
