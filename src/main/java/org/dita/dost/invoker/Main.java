@@ -356,15 +356,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } else {
         projectProps = collectContextProperties(validateArgs.projectFile, definedProps);
       }
-      final String tempDirToken = "temp" + LocalDateTime.now().format(dateTimeFormatter);
       for (Map<String, Object> projectProp : projectProps) {
-        // FIXME: This should run validation against every <context>
         String err = null;
-        //        if (!projectProp.containsKey(ANT_TRANSTYPE) && !projectProp.containsKey(ANT_ARGS_INPUT)) {
-        //          err = locale.getString("conversion.error.input_and_transformation_not_defined");
-        //        } else if (!projectProp.containsKey(ANT_TRANSTYPE)) {
-        //          err = locale.getString("conversion.error.transformation_not_defined");
-        //        } else
         if (!projectProp.containsKey(ANT_ARGS_INPUT)) {
           err = locale.getString("conversion.error.input_not_defined");
         }
@@ -372,28 +365,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           throw new CliException(err, args.getUsage(true));
         }
         // default values
-        //        if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
-        //          definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
-        //        }
         if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
           projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
         }
-        //        if (projectProp.containsKey(ANT_PROJECT_DELIVERABLE)) {
-        //          if (projectProp.containsKey(ANT_TEMP_DIR)) {
-        //            final Path tempDir = Paths.get(
-        //              projectProp.get(ANT_TEMP_DIR).toString(),
-        //              projectProp.get(ANT_PROJECT_DELIVERABLE).toString()
-        //            );
-        //            projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
-        //          } else {
-        //            final Path tempDir = Paths.get(
-        //              projectProp.get(ANT_BASE_TEMP_DIR).toString(),
-        //              tempDirToken,
-        //              projectProp.get(ANT_PROJECT_DELIVERABLE).toString()
-        //            );
-        //            projectProp.put(ANT_TEMP_DIR, tempDir.toAbsolutePath().toString());
-        //          }
-        //        }
       }
     } else if (args instanceof TranstypesArguments) {
       printTranstypes();
@@ -837,44 +811,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           ANT_PROJECT_CONTEXT,
           context.id() != null ? context.id() : String.format("context-%d", entry.getValue() + 1)
         );
-        //        final Context context = context.context();
         final URI input = base.resolve(context.inputs().inputs().get(0).href());
         props.put(ANT_ARGS_INPUT, input.toString());
-        //        final Path output = getOutputDir(context, props);
-        //        props.put(ANT_OUTPUT_DIR, output.toString());
-        //        final Publication publications = context.publication();
         props.put(ANT_TRANSTYPE, "validate");
-        //        publications
-        //          .params()
-        //          .forEach(param -> {
-        //            if (props.containsKey(param.name())) {
-        //              return;
-        //            }
-        //            if (param.value() != null) {
-        //              final Argument argument = ArgumentParser
-        //                .getPluginArguments()
-        //                .getOrDefault(param.name(), new StringArgument(param.name(), null));
-        //              final String value = argument.getValue(param.value());
-        //              props.put(param.name(), value);
-        //            } else {
-        //              final String value;
-        //              final Argument argument = ArgumentParser.getPluginArguments().get("--" + param.name());
-        //              if (argument != null && (argument instanceof FileArgument || argument instanceof AbsoluteFileArgument)) {
-        //                if (param.href() != null) {
-        //                  value = Paths.get(base.resolve(param.href())).toString();
-        //                } else {
-        //                  value = Paths.get(base).resolve(param.path()).toString();
-        //                }
-        //              } else {
-        //                if (param.href() != null) {
-        //                  value = param.href().toString();
-        //                } else {
-        //                  value = URLUtils.toFile(param.path().toString()).toString();
-        //                }
-        //              }
-        //              props.put(param.name(), value);
-        //            }
-        //          });
         final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = context
           .profiles()
           .ditavals()
