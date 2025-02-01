@@ -65,11 +65,13 @@ import org.xmlresolver.Resolver;
  */
 public final class XMLUtils {
 
+  private static final SecurityManager securityManager = new SecurityManager();
   private static final DocumentBuilderFactory factory;
 
   static {
     factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
+    factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
   }
 
   private static final SAXParserFactory saxParserFactory;
@@ -912,10 +914,9 @@ public final class XMLUtils {
     try {
       final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
       try {
-        SecurityManager securityManager = new SecurityManager();
         reader.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
       } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
-        // Some readers, especially non-XML, do not support security-manager property.
+        // Ignore
       }
       return Configuration.DEBUG ? new DebugXMLReader(reader) : reader;
     } catch (ParserConfigurationException e) {
@@ -960,7 +961,6 @@ public final class XMLUtils {
             // Ignore
           }
           try {
-            SecurityManager securityManager = new SecurityManager();
             r.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
           } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
             // Ignore
@@ -983,8 +983,6 @@ public final class XMLUtils {
   public DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
-      SecurityManager securityManager = new SecurityManager();
-      factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
       builder = factory.newDocumentBuilder();
     } catch (final ParserConfigurationException e) {
       throw new RuntimeException(e);
