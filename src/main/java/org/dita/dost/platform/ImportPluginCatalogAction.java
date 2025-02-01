@@ -7,7 +7,8 @@
  */
 package org.dita.dost.platform;
 
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.OASIS_CATALOG_NAMESPACE;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
 
 import java.io.File;
 import java.util.List;
@@ -33,24 +34,27 @@ final class ImportPluginCatalogAction extends ImportAction {
 
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
-    final File basePluginDir = featureTable.get("org.dita.base").getPluginDir();
-    for (final Entry<String, Features> e : featureTable.entrySet()) {
-      final Features f = e.getValue();
+    Plugin features = featureTable.get("org.dita.base");
+    final File basePluginDir = features.pluginDir();
+    for (final Entry<String, Plugin> e : featureTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = PLUGIN_URI_SCHEME + ":" + e.getKey() + ":";
       final StringBuilder location = new StringBuilder();
 
-      final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-      if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+      final List<Value> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+      if (
+        Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0).value())
+      ) {
         location.append("./");
-      } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
+      } else if (f.pluginDir().getAbsolutePath().startsWith(f.ditaDir().getAbsolutePath())) {
         location.append(
           FileUtils.getRelativeUnixPath(
             new File(basePluginDir, "plugin.xml").toURI().toString(),
-            f.getPluginDir().toURI().toString()
+            f.pluginDir().toURI().toString()
           )
         );
       } else {
-        location.append(f.getPluginDir().toURI());
+        location.append(f.pluginDir().toURI());
       }
       if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
         location.append(UNIX_SEPARATOR);

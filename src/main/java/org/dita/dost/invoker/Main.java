@@ -26,20 +26,24 @@
 
 package org.dita.dost.invoker;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
 import static org.dita.dost.invoker.Arguments.*;
+import static org.dita.dost.log.DITAOTAntLogger.USE_COLOR;
+import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
+import static org.dita.dost.platform.PluginParser.FEATURE_ID_ATTR;
 import static org.dita.dost.util.Configuration.transtypes;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.LangUtils.pair;
 import static org.dita.dost.util.LangUtils.zipWithIndex;
+import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableMap;
 import java.io.*;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,12 +58,18 @@ import org.apache.tools.ant.util.ClasspathUtils;
 import org.apache.tools.ant.util.FileUtils;
 import org.apache.tools.ant.util.ProxySetup;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.log.StandardLogger;
+import org.dita.dost.platform.PluginInstall;
+import org.dita.dost.platform.PluginUninstall;
 import org.dita.dost.platform.Plugins;
+import org.dita.dost.platform.SemVerMatch;
 import org.dita.dost.project.Project.Context;
 import org.dita.dost.project.Project.Publication;
 import org.dita.dost.project.ProjectFactory;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.URLUtils;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
 
 /**
  * Command line entry point into DITA-OT. This class is entered via the canonical
@@ -78,8 +88,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private static final String ANT_PLUGIN_FILE = "plugin.file";
   private static final String ANT_PLUGIN_ID = "plugin.id";
   private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+  private static final String ANT_PROJECT_CONTEXT = "project.context";
   private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-  private static final Map<String, String> RESERVED_PARAMS = ImmutableMap.of(
+  private static final Map<String, String> RESERVED_PARAMS = Map.of(
     "output.dir",
     "output",
     "transtype",
@@ -91,8 +102,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   );
   private static final String CONFIGURATION_FILE = ".ditaotrc";
 
-  @Deprecated
   /** @deprecated since 4.2 */
+  @Deprecated
   private static final String CONFIGURATION_FILE_OLD = "local.properties";
 
   /**
@@ -128,7 +139,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
   private final ArgumentParser argumentParser = new ArgumentParser();
   private Arguments args;
-  static final ResourceBundle locale = ResourceBundle.getBundle("cli", new Locale("en", "US"));
+  public static final ResourceBundle locale = ResourceBundle.getBundle("cli", new Locale("en", "US"));
 
   /**
    * Prints the message of the Throwable if it (the message) is not {@code null}.
@@ -138,19 +149,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private void printMessage(final Throwable t) {
     final String message = t.getMessage();
     if (message != null && !message.trim().isEmpty()) {
-      printErrorMessage(message);
+      printErrorMessage(message, t);
     }
   }
 
-  private void printErrorMessage(final String msg) {
-    if (args != null && args.useColor) {
-      System.err.print(DefaultLogger.ANSI_RED);
-      System.err.print(locale.getString("error_msg").formatted(msg));
-      System.err.println(DefaultLogger.ANSI_RESET);
-    } else {
-      System.err.println(locale.getString("error_msg").formatted(msg));
-    }
-    System.err.println();
+  private void printErrorMessage(final String msg, final Throwable t) {
+    logger.error(msg, t);
   }
 
   /**
@@ -166,6 +170,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    *                                 <code>null</code> in which case the system classloader is
    *                                 used.
    */
+  @Deprecated
   public static void start(
     final String[] args,
     final Properties additionalUserProperties,
@@ -190,9 +195,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       processArgs(args);
     } catch (final CliException exc) {
       handleLogfile();
+      logger.setOutputLevel(Project.MSG_INFO);
       printMessage(exc);
       if (exc.info != null) {
-        System.out.println(exc.info);
+        logger.info(exc.info);
       }
       exit(1);
       return;
@@ -249,7 +255,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       }
       if (this.args.repeat > 1) {
         for (int i = 0; i < durations.length; i++) {
-          System.out.println(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
+          logger.info(locale.getString("conversion.repeatDuration").formatted(i + 1, durations[i]));
         }
       }
     } catch (final BuildException be) {
@@ -295,14 +301,19 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    *
    * @param args Command line arguments. Must not be <code>null</code>.
    */
+  @Deprecated
   public static void main(final String[] args) {
     start(args, null, null);
   }
 
+  final StandardLogger logger;
+
   /**
    * Constructor used when creating Main for later arg processing and startup
    */
-  public Main() {}
+  public Main() {
+    logger = new StandardLogger(System.out, System.err, Project.MSG_INFO, true);
+  }
 
   /**
    * Process command line arguments. When ant is started from Launcher,
@@ -316,9 +327,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
     projectProps = Collections.singletonList(definedProps);
     buildFile = args.buildFile;
+    logger.setOutputLevel(args.msgOutputLevel);
+    logger.setUseColor(args.useColor);
 
     if (args.justPrintUsage) {
-      System.out.println(args.getUsage(false));
+      logger.setOutputLevel(Project.MSG_INFO);
+      logger.info(args.getUsage(false));
       return;
     } else if (args.justPrintDiagnostics) {
       Diagnostics.doReport(System.out, args.msgOutputLevel);
@@ -331,44 +345,53 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (args instanceof VersionArguments) {
       printVersion();
       return;
+    } else if (args instanceof final ValidateArguments validateArgs) {
+      final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
+      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
+      buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      definedProps.putAll(getLocalProperties(ditaDir));
+      definedProps.put(USE_COLOR, Boolean.toString(validateArgs.useColor));
+      if (validateArgs.projectFile == null) {
+        projectProps = Collections.singletonList(definedProps);
+      } else {
+        projectProps = collectContextProperties(validateArgs.projectFile, definedProps);
+      }
+      for (Map<String, Object> projectProp : projectProps) {
+        String err = null;
+        if (!projectProp.containsKey(ANT_ARGS_INPUT)) {
+          err = locale.getString("conversion.error.input_not_defined");
+        }
+        if (err != null) {
+          throw new CliException(err, args.getUsage(true));
+        }
+        // default values
+        if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
+          projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+        }
+      }
     } else if (args instanceof TranstypesArguments) {
       printTranstypes();
       return;
     } else if (args instanceof final DeliverablesArguments deliverablesArgs) {
-      if (deliverablesArgs.projectFile == null) {
-        throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
-      }
-      printDeliverables(deliverablesArgs.projectFile);
+      printDeliverables(deliverablesArgs);
+      return;
+    } else if (args instanceof final InitArguments initArgs) {
+      init(initArgs);
       return;
     } else if (args instanceof final InstallArguments installArgs) {
-      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
-      targets.clear();
-      if (installArgs.installFile != null) {
-        targets.add("install");
-        final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
-        if (f.exists()) {
-          definedProps.put(ANT_PLUGIN_FILE, f.getAbsolutePath());
-        } else {
-          definedProps.put(ANT_PLUGIN_FILE, installArgs.installFile);
-        }
-      } else {
-        targets.add("integrate");
-      }
+      install(installArgs);
+      return;
     } else if (args instanceof final UninstallArguments installArgs) {
-      if (installArgs.uninstallId == null) {
-        throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
-      }
-      buildFile = findBuildFile(System.getProperty(SYSTEM_PROPERTY_DITA_HOME), "integrator.xml");
-      targets.clear();
-      targets.add("uninstall");
-      definedProps.put(ANT_PLUGIN_ID, installArgs.uninstallId);
+      uninstall(installArgs);
+      return;
     } else if (args instanceof final ConversionArguments conversionArgs) {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
       definedProps.putAll(getLocalProperties(ditaDir));
+      definedProps.put(USE_COLOR, Boolean.toString(conversionArgs.useColor));
       if (conversionArgs.projectFile == null) {
-        projectProps = Collections.singletonList(definedProps);
+        projectProps = collectArguments(conversionArgs.inputs, conversionArgs.formats, definedProps);
       } else {
         projectProps = collectProperties(conversionArgs.projectFile, definedProps);
       }
@@ -420,10 +443,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // Normalize buildFile for re-import detection
     buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
-
-    if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Buildfile " + buildFile);
-    }
+    logger.debug("Buildfile " + buildFile);
 
     if (args.logFile != null) {
       PrintStream logTo;
@@ -442,25 +462,239 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     readyToRun = true;
   }
 
+  private List<Map<String, Object>> collectArguments(
+    List<String> inputs,
+    List<String> formats,
+    Map<String, Object> definedProps
+  ) {
+    if (inputs.isEmpty() || formats.isEmpty()) {
+      return List.of(definedProps);
+    }
+    final String input = inputs.get(inputs.size() - 1);
+    return formats
+      .stream()
+      .map(format -> {
+        final Map<String, Object> res = new HashMap<>(definedProps);
+        res.put(ANT_ARGS_INPUT, input);
+        res.put(ANT_TRANSTYPE, format);
+        return res;
+      })
+      .toList();
+  }
+
+  private void uninstall(UninstallArguments installArgs) {
+    if (installArgs.uninstallId == null) {
+      throw new CliException(locale.getString("uninstall.error.identifier_not_defined"), args.getUsage(true));
+    }
+    final PluginUninstall pluginUninstall = new PluginUninstall();
+    pluginUninstall.setId(installArgs.uninstallId);
+    pluginUninstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
+    pluginUninstall.setLogger(logger);
+
+    try {
+      pluginUninstall.execute();
+    } catch (CliException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new CliException(e.getMessage(), e);
+    }
+  }
+
+  private void init(InitArguments initArguments) {
+    if (initArguments.list) {
+      printInitList();
+      return;
+    }
+
+    if (initArguments.template == null) {
+      throw new CliException(locale.getString("init.error.template_not_defined"), initArguments.getUsage(true));
+    }
+    final var target = Optional
+      .ofNullable(initArguments.output)
+      .orElseGet(() -> Paths.get(".").toAbsolutePath().normalize());
+    final var source = getTemplateDir(initArguments.template);
+    try {
+      Files.walkFileTree(
+        source,
+        new SimpleFileVisitor<>() {
+          @Override
+          public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            var targetDir = target.resolve(source.relativize(dir));
+            try {
+              Files.copy(dir, targetDir);
+            } catch (FileAlreadyExistsException e) {
+              if (!Files.isDirectory(targetDir)) {
+                throw e;
+              }
+            }
+            return CONTINUE;
+          }
+
+          @Override
+          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            var dst = target.resolve(source.relativize(file));
+            logger.debug("Create {}", dst);
+            Files.copy(file, dst);
+            return CONTINUE;
+          }
+        }
+      );
+      logger.info(locale.getString("init.info.create").formatted(target, initArguments.template));
+    } catch (FileAlreadyExistsException e) {
+      throw new BuildException(locale.getString("init.error.file_already_exists").formatted(e.getMessage()), e);
+    } catch (IOException e) {
+      throw new BuildException(locale.getString("init.error.create_failed").formatted(e.getMessage()), e);
+    }
+  }
+
+  /**
+   * Get init template source directory.
+   * @param template template name
+   * @return template source directory
+   * @throws BuildException when template not found
+   */
+  private Path getTemplateDir(String template) {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    return plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Optional
+          .ofNullable(feature.getAttributeNode("file"))
+          .map(Attr::getValue)
+          .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)))
+          .orElse(null)
+      )
+      .filter(dir -> Objects.equals(template, dir.getFileName().toString()))
+      .filter(Files::exists)
+      .findAny()
+      .orElseThrow(() -> new BuildException(locale.getString("init.error.template_not_found").formatted(template)));
+  }
+
+  /**
+   * Print list of init templates and their descriptions.
+   */
+  private void printInitList() {
+    final List<Element> plugins = toList(Plugins.getPluginConfiguration().getElementsByTagName(FEATURE_ELEM));
+    var templates = plugins
+      .stream()
+      .filter(feature -> Objects.equals(feature.getAttribute(FEATURE_ID_ATTR), "init.template"))
+      .map(feature ->
+        Map.entry(
+          Optional
+            .ofNullable(feature.getAttributeNode("file"))
+            .map(Attr::getValue)
+            .map(value -> Paths.get(URI.create(feature.getBaseURI()).resolve(value)).getFileName().toString())
+            .orElse(null),
+          Optional.ofNullable(feature.getAttributeNode("desc")).map(Attr::getValue).orElse(null)
+        )
+      )
+      .filter(entry -> Objects.nonNull(entry.getKey()))
+      .sorted(Map.Entry.comparingByKey())
+      .toList();
+    if (!templates.isEmpty()) {
+      var width = templates
+        .stream()
+        .map(stringStringEntry -> stringStringEntry.getKey().length())
+        .max(Integer::compare)
+        .get();
+      templates.forEach(dir ->
+        logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+      );
+    }
+  }
+
+  private void install(InstallArguments installArgs) {
+    final PluginInstall pluginInstall = new PluginInstall();
+    pluginInstall.setDitaDir(new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME)));
+    pluginInstall.setLogger(logger);
+    if (installArgs.definedProps.containsKey("force")) {
+      pluginInstall.setForce(Boolean.parseBoolean(installArgs.definedProps.get("force").toString()));
+    }
+    if (installArgs.installFile != null) {
+      parseInstallFile(installArgs.installFile, pluginInstall);
+    }
+
+    try {
+      pluginInstall.execute();
+    } catch (CliException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new CliException(e.getMessage(), e);
+    }
+  }
+
+  private void parseInstallFile(String installFile, PluginInstall pluginInstall) {
+    final File pluginFile = new File(installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+    if (pluginFile.exists()) {
+      try {
+        pluginInstall.setPluginFile(pluginFile.toPath());
+        return;
+      } catch (InvalidPathException e) {
+        // Ignore
+      }
+    }
+
+    try {
+      final URI uri = new URI(installFile);
+      if (uri.isAbsolute()) {
+        pluginInstall.setPluginUri(uri);
+        return;
+      }
+    } catch (URISyntaxException e) {
+      // Ignore
+    }
+
+    if (installFile.contains("@")) {
+      final String[] tokens = installFile.split("@");
+      pluginInstall.setPluginName(tokens[0]);
+      pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+    } else {
+      pluginInstall.setPluginName(installFile);
+      pluginInstall.setPluginVersion(null);
+    }
+  }
+
+  /**
+   * Read configuration files and return combined map of properties. Files have the following priority:
+   *
+   * <ol>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in current directory and recursively ancestor directories</li>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in user home directory.</li>
+   *     <li><code>{@link #CONFIGURATION_FILE .ditaotrc}</code> in DITA-OT installation directory.</li>
+   *     <li><code>{@link #CONFIGURATION_FILE local.properties}</code> in DITA-OT installation directory.</li>
+   * </ol>
+   *
+   * <p>Duplicate properties are overridden.</p>
+   *
+   * @param ditaDir DITA-OT installation directory
+   * @return combined properties from configuration files
+   */
   private Map<String, Object> getLocalProperties(File ditaDir) {
     final Map<String, Object> res = new HashMap<>();
-    Stream
-      .of(
-        new File(ditaDir, CONFIGURATION_FILE_OLD),
-        new File(ditaDir, CONFIGURATION_FILE),
-        new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE),
-        new File(new File("."), CONFIGURATION_FILE)
-      )
-      .filter(File::exists)
-      .map(this::readProperties)
-      .forEach(res::putAll);
+    var files = Stream
+      .iterate(new File("").getAbsoluteFile(), Objects::nonNull, File::getParentFile)
+      .map(dir -> new File(dir, CONFIGURATION_FILE))
+      .collect(Collectors.toList());
+    final File homeFile = new File(new File(System.getProperty("user.home")), CONFIGURATION_FILE);
+    if (!files.contains(homeFile)) {
+      files.add(homeFile);
+    }
+    final File installDirFile = new File(ditaDir, CONFIGURATION_FILE);
+    if (!files.contains(installDirFile)) {
+      files.add(installDirFile);
+    }
+    final File installDirFileLegacy = new File(ditaDir, CONFIGURATION_FILE_OLD);
+    if (!files.contains(installDirFileLegacy)) {
+      files.add(installDirFileLegacy);
+    }
+    Collections.reverse(files);
+    files.stream().filter(File::exists).map(this::readProperties).forEach(res::putAll);
     return res;
   }
 
   private Map<String, Object> readProperties(File localPropertiesFile) {
-    if (args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Reading " + localPropertiesFile);
-    }
+    logger.debug("Reading " + localPropertiesFile);
     try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
       final Properties localProperties = new Properties();
       localProperties.load(in);
@@ -469,7 +703,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .stream()
         .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
     } catch (IOException e) {
-      System.err.println("Failed to read " + localPropertiesFile);
+      logger.error("Failed to read " + localPropertiesFile, e);
       return Collections.emptyMap();
     }
   }
@@ -539,7 +773,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           });
         final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = Stream
           .concat(publications.profiles().ditavals().stream(), context.profiles().ditavals().stream())
-          .collect(Collectors.toList());
+          .toList();
         if (!ditavals.isEmpty()) {
           final String filters = ditavals
             .stream()
@@ -553,6 +787,60 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .collect(Collectors.toList());
     if (runDeliverable != null && projectProps.isEmpty()) {
       throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
+    }
+
+    return projectProps;
+  }
+
+  private List<Map<String, Object>> collectContextProperties(
+    final File projectFile,
+    final Map<String, Object> definedProps
+  ) {
+    final URI base = projectFile.toURI();
+    final org.dita.dost.project.Project project = readProjectFile(projectFile);
+
+    return collectContextProperties(project, base, definedProps);
+  }
+
+  @VisibleForTesting
+  List<Map<String, Object>> collectContextProperties(
+    final org.dita.dost.project.Project project,
+    final URI base,
+    final Map<String, Object> definedProps
+  ) {
+    final String runContext = (String) definedProps.get(ANT_PROJECT_CONTEXT);
+
+    final List<Map<String, Object>> projectProps = zipWithIndex(project.contexts())
+      .filter(entry -> runContext == null || Objects.equals(entry.getKey().id(), runContext))
+      .map(entry -> {
+        final org.dita.dost.project.Project.Context context = entry.getKey();
+        final Map<String, Object> props = new HashMap<>(definedProps);
+
+        props.put(
+          ANT_PROJECT_CONTEXT,
+          context.id() != null ? context.id() : String.format("context-%d", entry.getValue() + 1)
+        );
+        final URI input = base.resolve(context.inputs().inputs().get(0).href());
+        props.put(ANT_ARGS_INPUT, input.toString());
+        props.put(ANT_TRANSTYPE, "validate");
+        final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = context
+          .profiles()
+          .ditavals()
+          .stream()
+          .toList();
+        if (!ditavals.isEmpty()) {
+          final String filters = ditavals
+            .stream()
+            .map(ditaVal -> Paths.get(base.resolve(ditaVal.href())).toString())
+            .collect(Collectors.joining(File.pathSeparator));
+          props.put("args.filter", filters);
+        }
+
+        return props;
+      })
+      .collect(Collectors.toList());
+    if (runContext != null && projectProps.isEmpty()) {
+      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runContext));
     }
 
     return projectProps;
@@ -588,7 +876,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       for (Publication.Param param : deliverable.publication().params()) {
         if (RESERVED_PARAMS.containsKey(param.name())) {
           printErrorMessage(
-            MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString()
+            MessageUtils.getMessage("DOTJ085E", param.name(), RESERVED_PARAMS.get(param.name())).toString(),
+            null
           );
         }
       }
@@ -599,14 +888,14 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * Handle the --plugins argument
    */
   private void printPlugins() {
+    logger.setOutputLevel(Project.MSG_INFO);
     final List<Map.Entry<String, String>> installedPlugins = Plugins.getInstalledPlugins();
     for (final Map.Entry<String, String> entry : installedPlugins) {
-      System.out.print(entry.getKey());
       if (entry.getValue() != null) {
-        System.out.print('@');
-        System.out.print(entry.getValue());
+        logger.info("{0}@{1}", entry.getKey(), entry.getValue());
+      } else {
+        logger.info(entry.getKey());
       }
-      System.out.println();
     }
   }
 
@@ -614,24 +903,26 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * Handle the --transtypes argument
    */
   private void printTranstypes() {
+    logger.setOutputLevel(Project.MSG_INFO);
     for (final String transtype : transtypes) {
-      System.out.println(transtype);
+      logger.info(transtype);
     }
   }
 
-  /**
-   * Handle the --deliverables argument
-   */
-  private void printDeliverables(final File projectFile) {
-    final List<Map.Entry<String, String>> pairs = readProjectFile(projectFile)
+  private void printDeliverables(DeliverablesArguments deliverablesArgs) {
+    logger.setOutputLevel(Project.MSG_INFO);
+    if (deliverablesArgs.projectFile == null) {
+      throw new CliException(locale.getString("deliverables.error.project_not_defined"), args.getUsage(true));
+    }
+    final List<Map.Entry<String, String>> pairs = readProjectFile(deliverablesArgs.projectFile)
       .deliverables()
       .stream()
       .filter(deliverable -> deliverable.id() != null)
       .map(deliverable -> pair(deliverable.id(), deliverable.name()))
-      .collect(Collectors.toList());
+      .toList();
     final int length = pairs.stream().map(Map.Entry::getKey).map(String::length).reduce(Integer::max).orElse(0);
     for (Map.Entry<String, String> pair : pairs) {
-      System.out.println(
+      logger.info(
         Strings.padEnd(pair.getKey(), length, ' ') + (pair.getValue() != null ? ("  " + pair.getValue()) : "")
       );
     }
@@ -650,8 +941,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private File getParentFile(final File file) {
     final File parent = file.getParentFile();
 
-    if (parent != null && args.msgOutputLevel >= Project.MSG_VERBOSE) {
-      System.out.println("Searching in " + parent.getAbsolutePath());
+    if (parent != null) {
+      logger.trace("Searching in " + parent.getAbsolutePath());
     }
 
     return parent;
@@ -671,9 +962,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * not
    */
   private File findBuildFile(final String start, final String suffix) {
-    if (args.msgOutputLevel >= Project.MSG_INFO) {
-      System.out.println("Searching for " + suffix + " ...");
-    }
+    logger.debug("Searching for " + suffix);
 
     File parent = new File(new File(start).getAbsolutePath());
     File file = new File(parent, suffix);
@@ -794,10 +1083,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       } catch (final Throwable t) {
         // yes, I know it is bad style to catch Throwable,
         // but if we don't, we lose valuable information
-        printErrorMessage("Caught an exception while logging the end of the build. Exception was:");
+        printErrorMessage("Caught an exception while logging the end of the build. Exception was:", null);
         t.printStackTrace();
         if (error != null) {
-          printErrorMessage("There has been an error prior to that:");
+          printErrorMessage("There has been an error prior to that:", null);
           error.printStackTrace();
         }
         throw new BuildException(t);
@@ -865,10 +1154,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         logger = ClasspathUtils.newInstance(args.loggerClassname, Main.class.getClassLoader(), BuildLogger.class);
       } catch (final BuildException e) {
         printErrorMessage(
-          "The specified logger class " + args.loggerClassname + " could not be used because " + e.getMessage()
+          "The specified logger class " + args.loggerClassname + " could not be used because " + e.getMessage(),
+          e
         );
         throw new RuntimeException();
       }
+    } else if (Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("legacy")) {
+      logger = new org.apache.tools.ant.DefaultLogger();
     } else {
       logger = new DefaultLogger();
       ((DefaultLogger) logger).useColor(args.useColor);
@@ -883,11 +1175,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   /**
-   * Prints the Ant version information to <code>System.out</code>.
+   * Prints the Ant version information logger.
    *
    * @throws BuildException if the version information is unavailable
    */
   private void printVersion() throws BuildException {
-    System.out.println(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
+    logger.setOutputLevel(Project.MSG_INFO);
+    logger.info(locale.getString("version").formatted(Configuration.configuration.get("otversion")));
   }
 }

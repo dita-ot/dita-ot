@@ -15,7 +15,6 @@ import static org.dita.dost.util.URLUtils.toURI;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import net.sf.saxon.s9api.XsltTransformer;
 import org.dita.dost.exception.DITAOTException;
@@ -101,6 +100,9 @@ public abstract class AbstractStore implements Store {
     //            throw new IllegalArgumentException("Only file URI scheme supported: " + input);
     //        }
     final URI srcFile = setFragment(src, null);
+    if (!exists(srcFile)) {
+      return;
+    }
     final URI dst = toURI(srcFile.toString() + FILE_EXTENSION_TEMP).normalize();
     transformURI(srcFile, dst, filters);
     try {

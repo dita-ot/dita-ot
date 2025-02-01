@@ -9,6 +9,7 @@
     </encoder>
   </appender>
   <logger name="org.apache.fop.apps.FopConfParser" level="WARN"/>
+  <logger name="org.apache.fop.fonts.truetype.TTFFile" level="INFO"/>
   <logger name="org.dita" level="DEBUG"/>
   <logger name="org.ditang" level="DEBUG"/>
   <logger name="com.idiominc" level="DEBUG"/>

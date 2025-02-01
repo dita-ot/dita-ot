@@ -23,7 +23,6 @@ public class DeliverablesArguments extends Arguments {
 
   @Override
   DeliverablesArguments parse(final String[] arguments) {
-    useColor = getUseColor();
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -58,7 +57,7 @@ public class DeliverablesArguments extends Arguments {
    */
   private void handleArgProject(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for project " + entry.getKey());
     }
     projectFile = new File(entry.getValue()).getAbsoluteFile();
@@ -67,7 +66,7 @@ public class DeliverablesArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     return UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("deliverables.usage"))
       .arguments(null, null, "file", locale.getString("deliverables.argument.file"))
       .build();

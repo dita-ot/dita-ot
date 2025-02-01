@@ -7,7 +7,7 @@ Copyright 2004, 2005 IBM Corporation
 See the accompanying LICENSE file for applicable license.
 -->
 
-<xsl:stylesheet version="2.0"
+<xsl:stylesheet version="3.0"
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 <!-- software-domain.ent domain: filepath | msgph | userinput | systemoutput | cmdname | msgnum | varname -->
@@ -47,19 +47,11 @@ See the accompanying LICENSE file for applicable license.
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/cmdname ')]" name="topic.sw-d.cmdname">
- <span>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
- </span>
+ <xsl:next-match/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/msgnum ')]" name="topic.sw-d.msgnum">
- <span>
-  <xsl:call-template name="commonattributes"/>
-  <xsl:call-template name="setidaname"/>
-  <xsl:apply-templates/>
- </span>
+ <xsl:next-match/>
 </xsl:template>
 
 <xsl:template match="*[contains(@class,' sw-d/varname ')]" name="topic.sw-d.varname">

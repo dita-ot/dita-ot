@@ -8,6 +8,7 @@
 package org.dita.dost.pdf2;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.ANT_REFERENCE_XML_UTILS;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,12 @@ public final class VariableFileTask extends Task {
 
   @Override
   public void execute() throws BuildException {
+    XMLUtils xmlUtils = getProject().getReference(ANT_REFERENCE_XML_UTILS);
+    if (xmlUtils == null) {
+      getProject().log("XML utils not found from Ant project reference", Project.MSG_ERR);
+      xmlUtils = new XMLUtils();
+    }
+
     final List<File> files = new ArrayList<>();
     for (final FileSet fs : filesets) {
       final DirectoryScanner ds = fs.getDirectoryScanner(getProject());
@@ -59,7 +66,7 @@ public final class VariableFileTask extends Task {
 
     OutputStream out = null;
     try {
-      final Document d = XMLUtils.getDocumentBuilder().parse(strings);
+      final Document d = xmlUtils.getDocumentBuilder().parse(strings);
       final Element root = d.getDocumentElement();
 
       final NodeList nl = root.getElementsByTagName("lang");
@@ -85,7 +92,7 @@ public final class VariableFileTask extends Task {
         root.appendChild(lang);
       }
 
-      new XMLUtils().writeDocument(d, file);
+      xmlUtils.writeDocument(d, file);
     } catch (final SAXException | IOException e) {
       throw new BuildException("Failed to write output file: " + e.getMessage(), e);
     } finally {

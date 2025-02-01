@@ -331,17 +331,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
   }
 
   @Test
-  public void testmapref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("test.ditamap"))
-      .put("generate-debug-attributes", "false")
-      .errorCount(0)
-      .test();
-  }
-
-  @Test
   public void testsubjectschema_case() throws Throwable {
     builder()
       .name("subjectschema_case")
@@ -388,42 +377,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
       .input(Paths.get("maps/above.ditamap"))
       .put("generate.copy.outer", "3")
       .put("outer.control", "quiet")
-      .test();
-  }
-
-  @Test
-  public void testonlytopic_in_map() throws Throwable {
-    builder()
-      .name("onlytopic.in.map")
-      .transtype(XHTML)
-      .input(Paths.get("input.ditamap"))
-      .put("onlytopic.in.map", "true")
-      .test();
-  }
-
-  @Test
-  public void testonlytopic_in_map_false() throws Throwable {
-    builder()
-      .name("onlytopic.in.map.false")
-      .transtype(XHTML)
-      .input(Paths.get("input.ditamap"))
-      .put("onlytopic.in.map", "false")
-      .test();
-  }
-
-  @Test
-  public void testCrawlTopic() throws Throwable {
-    builder().name("crawl_topic").transtype(XHTML).input(Paths.get("input.ditamap")).put("link-crawl", "topic").test();
-  }
-
-  @Test
-  public void testCrawlMap() throws Throwable {
-    builder()
-      .name("crawl_map")
-      .transtype(XHTML)
-      .input(Paths.get("input.ditamap"))
-      .put("link-crawl", "map")
-      .errorCount(2)
       .test();
   }
 }

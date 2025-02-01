@@ -177,6 +177,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   private Set<URI> normalProcessingRoleTargets;
   private MergeUtils mergeUtils;
 
+  private boolean compatibilityMode;
+
   /**
    * Constructor.
    */
@@ -189,6 +191,8 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     elemName = new ArrayDeque<>();
     hasSubElem = new ArrayDeque<>();
     mergeUtils = new MergeUtils();
+    compatibilityMode =
+      Boolean.parseBoolean(Configuration.configuration.get("compatibility.keyref.treat-blank-as-empty"));
   }
 
   @Override
@@ -203,6 +207,13 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     mergeUtils.setJob(job);
   }
 
+  /**
+   * Set compatibility mode for {@code compatibility.keyref.treat-blank-as-empty}.
+   */
+  public void setCompatibilityMode(boolean compatibilityMode) {
+    this.compatibilityMode = compatibilityMode;
+  }
+
   public void setKeyDefinition(final KeyScope definitionMap) {
     this.definitionMaps.push(definitionMap);
   }
@@ -211,6 +222,9 @@ public final class KeyrefPaser extends AbstractXMLFilter {
    * Get set of link targets which have normal processing role. Paths are relative to current file.
    */
   public Set<URI> getNormalProcessingRoleTargets() {
+    if (normalProcessingRoleTargets == null) {
+      return Set.of();
+    }
     return Collections.unmodifiableSet(normalProcessingRoleTargets);
   }
 
@@ -234,9 +248,19 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     getContentHandler().startDocument();
   }
 
+  private boolean isEmpty(final char[] ch, final int start, final int length) {
+    if (length == 0) {
+      return true;
+    }
+    if (compatibilityMode) {
+      return new String(ch, start, length).isBlank();
+    }
+    return false;
+  }
+
   @Override
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
-    if (keyrefLevel != 0 && (length == 0 || new String(ch, start, length).trim().isEmpty())) {
+    if (keyrefLevel != 0 && isEmpty(ch, start, length)) {
       if (!hasChecked) {
         empty = true;
       }
@@ -268,7 +292,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
           // If current element name doesn't equal the key reference element
           // just grab the content from the matching element of key definition
           for (final XdmNode node : elem.select(descendant().where(hasLocalName(name))).asList()) {
-            for (final XdmNode n : node.select(child().where(isText())).collect(toList())) {
+            for (final XdmNode n : node.select(child().where(isText())).toList()) {
               final char[] ch = n.getStringValue().toCharArray();
               getContentHandler().characters(ch, 0, ch.length);
               break;
@@ -284,7 +308,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
             final List<XdmNode> keywordsInKeywords = keywords
               .stream()
               .filter(item -> TOPIC_KEYWORDS.matches(item.getParent()))
-              .collect(toList());
+              .toList();
             // XXX: No need to look for term as content model for keywords doesn't allow it
             //                        if (nodeList.getLength() == 0) {
             //                            nodeList = elem.descendant(TOPIC_TERM.localName);
@@ -761,18 +785,18 @@ public final class KeyrefPaser extends AbstractXMLFilter {
     }
     for (final XdmNode node : elem.children()) {
       switch (node.getNodeKind()) {
-        case ELEMENT:
+        case ELEMENT -> {
           // retain tm and text elements
           if (TOPIC_TM.matches(node) || TOPIC_TEXT.matches(node)) {
             domToSax(node, true, swapMapClass);
           } else {
             domToSax(node, retainElements, swapMapClass);
           }
-          break;
-        case TEXT:
+        }
+        case TEXT -> {
           final char[] ch = node.getStringValue().toCharArray();
           getContentHandler().characters(ch, 0, ch.length);
-          break;
+        }
       }
     }
     if (retainElements) {

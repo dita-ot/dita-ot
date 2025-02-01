@@ -11,7 +11,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:related-links="http://dita-ot.sourceforge.net/ns/200709/related-links"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot dita2html related-links">
   
   <xsl:template match="*[contains(@class, ' reference/properties ')]
@@ -108,7 +108,6 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template name="gen-propdeschd">
-    <xsl:variable name="properties" select="ancestor-or-self::*[contains(@class,' reference/properties ')][1]"/>
     <propdeschd class="- topic/stentry reference/propdeschd ">
       <xsl:call-template name="getVariable">
         <xsl:with-param name="id" select="'Description'"/>
@@ -172,9 +171,6 @@ See the accompanying LICENSE file for applicable license.
            <xsl:apply-templates select="*[contains(@class,' reference/propdeschd ')]"/>
          </xsl:when>
          <xsl:when test="$hasDesc">
-           <xsl:variable name="propdeschd" as="element()">
-             <xsl:call-template name="gen-propdeschd"/>
-           </xsl:variable>
            <th scope="col">
              <xsl:call-template name="style">
                <xsl:with-param name="contents">

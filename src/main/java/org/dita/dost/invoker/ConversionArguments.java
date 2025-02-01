@@ -10,11 +10,10 @@ package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
 import static org.dita.dost.invoker.Main.locale;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,13 +33,7 @@ public class ConversionArguments extends Arguments {
    * A Set of args are are handled by the launcher and should not be seen by
    * Main.
    */
-  private static final Set<String> LAUNCH_COMMANDS = ImmutableSet.of(
-    "-lib",
-    "-cp",
-    "-noclasspath",
-    "-nouserlib",
-    "-main"
-  );
+  private static final Set<String> LAUNCH_COMMANDS = Set.of("-lib", "-cp", "-noclasspath", "-nouserlib", "-main");
 
   private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
 
@@ -67,7 +60,7 @@ public class ConversionArguments extends Arguments {
     }
   }
 
-  private static final Map<String, String> RESERVED_PROPERTIES = ImmutableMap.of(
+  private static final Map<String, String> RESERVED_PROPERTIES = Map.of(
     "transtype",
     "-f",
     "args.input",
@@ -86,6 +79,7 @@ public class ConversionArguments extends Arguments {
   File projectFile;
 
   public final List<String> inputs = new ArrayList<>();
+  public final List<String> formats = new ArrayList<>();
   private final List<String> resources = new ArrayList<>();
 
   /**
@@ -105,6 +99,7 @@ public class ConversionArguments extends Arguments {
 
   @Override
   ConversionArguments parse(final String[] arguments) {
+    msgOutputLevel = Project.MSG_WARN;
     final Deque<String> args = new ArrayDeque<>(Arrays.asList(arguments));
     while (!args.isEmpty()) {
       final String arg = args.pop();
@@ -154,7 +149,14 @@ public class ConversionArguments extends Arguments {
       } else if (ARGUMENTS.containsKey(getArgumentName(arg))) {
         definedProps.putAll(handleParameterArg(arg, args, ARGUMENTS.get(getArgumentName(arg))));
       } else if (getPluginArguments().containsKey(getArgumentName(arg))) {
-        definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(getArgumentName(arg))));
+        final String argument = getArgumentName(arg);
+        final String name = argument.substring(2);
+        if (RESERVED_PROPERTIES.containsKey(name)) {
+          throw new BuildException(
+            "Property %s cannot be set with --, use %s instead".formatted(name, RESERVED_PROPERTIES.get(name))
+          );
+        }
+        definedProps.putAll(handleParameterArg(arg, args, getPluginArguments().get(argument)));
       } else if (LAUNCH_COMMANDS.contains(arg)) {
         // catch script/ant mismatch with a meaningful message
         // we could ignore it, but there are likely to be other
@@ -176,15 +178,22 @@ public class ConversionArguments extends Arguments {
         targets.addElement(arg);
       }
     }
-    if (!inputs.isEmpty()) {
-      definedProps.put("args.input", inputs.get(0));
-    }
     if (!resources.isEmpty()) {
       definedProps.put("args.resources", String.join(File.pathSeparator, resources));
     }
     definedProps.putAll(loadPropertyFiles());
 
+    definedProps.put("cli.log-format", configuration.get("cli.log-format"));
+
+    validate();
+
     return this;
+  }
+
+  private void validate() {
+    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+      throw new CliException(locale.getString("conversion.error.project_not_defined"));
+    }
   }
 
   /**
@@ -192,7 +201,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgProject(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for project " + entry.getKey());
     }
     projectFile = new File(entry.getValue()).getAbsoluteFile();
@@ -225,7 +234,7 @@ public class ConversionArguments extends Arguments {
         " instead"
       );
     }
-    return ImmutableMap.of(entry.getKey(), entry.getValue());
+    return Map.of(entry.getKey(), entry.getValue());
   }
 
   /**
@@ -233,7 +242,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgInput(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     inputs.add(argument.getValue(entry.getValue()));
@@ -241,18 +250,18 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgFormat(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for transtype " + entry.getKey());
     }
     if (!Configuration.transtypes.contains(entry.getValue())) {
       throw new BuildException(MessageUtils.getMessage("DOTA001F", entry.getValue()).toString());
     }
-    definedProps.put(argument.property, entry.getValue());
+    formats.add(argument.getValue(entry.getValue()));
   }
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for input " + entry.getKey());
     }
     final Object prev = definedProps.get(argument.property);
@@ -264,7 +273,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgResource(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for resource " + entry.getKey());
     }
     resources.add(argument.getValue(entry.getValue()));
@@ -278,18 +287,7 @@ public class ConversionArguments extends Arguments {
     if (entry.getValue() == null) {
       throw new BuildException("Missing value for property " + entry.getKey());
     }
-    return ImmutableMap.of(argument.property, argument.getValue(entry.getValue()));
-  }
-
-  /**
-   * Get argument name
-   */
-  private String getArgumentName(final String arg) {
-    int pos = arg.indexOf("=");
-    if (pos == -1) {
-      pos = arg.indexOf(":");
-    }
-    return arg.substring(0, pos != -1 ? pos : arg.length());
+    return Map.of(argument.property, argument.getValue(entry.getValue()));
   }
 
   /**
@@ -323,7 +321,7 @@ public class ConversionArguments extends Arguments {
    */
   private void handleArgPropertyFile(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg.substring(2), args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("You must specify a property filename when using the --propertyfile argument");
     }
     propertyFiles.addElement(entry.getValue());
@@ -331,7 +329,7 @@ public class ConversionArguments extends Arguments {
 
   private void handleArgRepeat(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg.substring(2), args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("You must repeat number");
     }
     repeat = Integer.parseInt(entry.getValue());
@@ -395,15 +393,17 @@ public class ConversionArguments extends Arguments {
   @Override
   String getUsage(final boolean compact) {
     final UsageBuilder buf = UsageBuilder
-      .builder(compact)
+      .builder(compact, useColor)
       .usage(locale.getString("conversion.usage.input"))
       .usage(locale.getString("conversion.usage.project"))
       //                .usage("dita --propertyfile=<file> [options]")
       .subcommands("deliverables", locale.getString("conversion.subcommand.deliverables"))
+      .subcommands("init", locale.getString("conversion.subcommand.init"))
       .subcommands("install", locale.getString("conversion.subcommand.install"))
       .subcommands("plugins", locale.getString("conversion.subcommand.plugins"))
       .subcommands("transtypes", locale.getString("conversion.subcommand.transtypes"))
       .subcommands("uninstall", locale.getString("conversion.subcommand.uninstall"))
+      .subcommands("validate", locale.getString("conversion.subcommand.validate"))
       .subcommands("version", locale.getString("conversion.subcommand.version"))
       .arguments("i", "input", "file", locale.getString("conversion.argument.input"))
       .arguments("f", "format", "name", locale.getString("conversion.argument.format"))
@@ -413,6 +413,7 @@ public class ConversionArguments extends Arguments {
       .options("o", "output", "dir", locale.getString("conversion.option.output"));
     if (!compact) {
       buf
+        .options(null, "deliverable", "name", locale.getString("conversion.option.deliverable"))
         .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
         .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
         .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))

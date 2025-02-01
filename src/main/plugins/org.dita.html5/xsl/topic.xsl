@@ -8,7 +8,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:dita2html="http://dita-ot.sourceforge.net/ns/200801/dita2html"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
-                version="2.0"
+                version="3.0"
                 exclude-result-prefixes="xs dita-ot dita2html ditamsg">
   
   <xsl:include href="plugin:org.dita.html5:xsl/get-meta.xsl"/>
@@ -264,12 +264,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- Condensed topic title into single template without priorities; use $headinglevel to set heading.
        If desired, somebody could pass in the value to manually set the heading level -->
   <xsl:template match="*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]">
-    <xsl:param name="headinglevel" as="xs:integer">
-        <xsl:choose>
-            <xsl:when test="count(ancestor::*[contains(@class, ' topic/topic ')]) > 6">6</xsl:when>
-            <xsl:otherwise><xsl:sequence select="count(ancestor::*[contains(@class, ' topic/topic ')])"/></xsl:otherwise>
-        </xsl:choose>
-    </xsl:param>
+    <xsl:param name="headinglevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
     <xsl:element name="h{$headinglevel}">
         <xsl:attribute name="class" select="concat('topictitle', $headinglevel)"/>
         <xsl:call-template name="commonattributes">
@@ -296,6 +291,35 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class, ' topic/titlealts ')]"/>
   
   
+  <!-- =========== HEADING LEVELS =========== -->
+
+  <!-- returns heading level (1 through 6) appropriate at the specified element -->
+  <xsl:function name="dita2html:get-heading-level" as="xs:integer">
+    <xsl:param name="element" as="element()"/>
+    <xsl:sequence select="min((6, count($element/ancestor-or-self::*[dita2html:is-heading-level(.)])))"/>
+  </xsl:function>
+
+  <!-- returns true() for elements that count as a heading level -->
+  <!-- (this is an accessor function to the moded templates below) -->
+  <xsl:function name="dita2html:is-heading-level" as="xs:boolean">
+    <xsl:param name="element" as="element()"/>
+    <xsl:apply-templates select="$element" mode="dita2html:is-heading-level"/>
+  </xsl:function>
+  <xsl:template match="*" mode="dita2html:is-heading-level">
+    <xsl:sequence select="false()"/>
+  </xsl:template>
+
+  <!-- <topic> always increments the heading level (title or not) -->
+  <xsl:template match="*[contains(@class, 'topic/topic ')]" mode="dita2html:is-heading-level">
+    <xsl:sequence select="true()"/>
+  </xsl:template>
+
+  <!-- <section> and <example> with titles increment the heading level -->
+  <xsl:template match="*[contains(@class, 'topic/section ') or contains(@class, 'topic/example ')][*[contains(@class, 'topic/title ')] or @spectitle]" mode="dita2html:is-heading-level">
+    <xsl:sequence select="true()"/>
+  </xsl:template>
+
+
   <!-- =========== BODY/SECTION (not sensitive to nesting depth) =========== -->
   
   <xsl:template match="*[contains(@class, ' topic/body ')]" name="topic.body">
@@ -580,6 +604,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:when test="@href">
           <br/><div><a>
             <xsl:attribute name="href">
+              <!-- TODO: Replace with mode="determine-final-href" -->
               <xsl:call-template name="href"/>
             </xsl:attribute>
             <xsl:choose>
@@ -620,8 +645,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
     <ul>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'compact'[current()/@compact = 'yes']"/>
+      </xsl:call-template>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </ul>
@@ -635,9 +661,12 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setaname"/>
     <ul>
       <xsl:call-template name="commonattributes">
-        <xsl:with-param name="default-output-class" select="'simple'"/>
+        <xsl:with-param name="default-output-class">
+          <xsl:value-of select="'simple',
+                                'compact'[current()/@compact = 'yes']"
+                        separator=" "/>
+        </xsl:with-param>
       </xsl:call-template>
-      <xsl:apply-templates select="@compact"/>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </ul>
@@ -651,8 +680,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <xsl:call-template name="setaname"/>
     <ol>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class" select="'compact'[current()/@compact = 'yes']"/>
+      </xsl:call-template>
       <xsl:choose>
         <xsl:when test="$olcount mod 3 = 1"/>
         <xsl:when test="$olcount mod 3 = 2"><xsl:attribute name="type">a</xsl:attribute></xsl:when>
@@ -736,12 +766,11 @@ See the accompanying LICENSE file for applicable license.
     <xsl:call-template name="setaname"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
     <dl>
-      <!-- handle DL compacting - default=yes -->
-      <xsl:if test="@compact = 'no'">
-        <xsl:attribute name="class">dlexpand</xsl:attribute>
-      </xsl:if>
-      <xsl:call-template name="commonattributes"/>
-      <xsl:apply-templates select="@compact"/>
+      <xsl:call-template name="commonattributes">
+        <xsl:with-param name="default-output-class">
+          <xsl:value-of select="'compact'[current()/@compact = 'yes']"/>
+        </xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates/>
     </dl>
@@ -1400,6 +1429,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="." mode="set-image-loading"/>
       <xsl:choose>
         <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
@@ -1957,17 +1987,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="dir" select="."/>
   </xsl:template>
   
-  <!-- if the element has a compact=yes attribute, assert it in XHTML form -->
-  <xsl:template match="@compact">
-    <xsl:if test=". = 'yes'">
-     <xsl:attribute name="compact">compact</xsl:attribute><!-- assumes that no compaction is default -->
-    </xsl:if>
-  </xsl:template>
-  
   <xsl:template name="setscale">
     <xsl:if test="@scale">
   <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
     </xsl:if>
+  </xsl:template>
+  
+  <!-- leave @loading unset for local/peer images - defaults to "eager" -->    
+  <xsl:template match="*" mode="set-image-loading"/>
+  <xsl:template match="*[@scope='external']" mode="set-image-loading">
+    <xsl:attribute name="loading" select="'lazy'"/>
   </xsl:template>
   
     <xsl:template name="style">
@@ -2061,15 +2090,8 @@ See the accompanying LICENSE file for applicable license.
        </xsl:choose>
     </xsl:variable>
   
-    <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')]) + 1"/>
-    <xsl:variable name="headLevel">
-      <xsl:choose>
-        <xsl:when test="$headCount > 6">h6</xsl:when>
-        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-  
     <!-- based on graceful defaults, build an appropriate section-level heading -->
+    <xsl:variable name="headLevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
     <xsl:choose>
       <xsl:when test="not($heading = '')">
         <xsl:if test="normalize-space($heading) = ''">
@@ -2080,14 +2102,14 @@ See the accompanying LICENSE file for applicable license.
           <xsl:with-param name="headLevel" select="$headLevel"/>
         </xsl:apply-templates>
         <xsl:if test="@spectitle and not(*[contains(@class, ' topic/title ')])">
-          <xsl:element name="{$headLevel}">
+          <xsl:element name="h{$headLevel}">
             <xsl:attribute name="class">sectiontitle</xsl:attribute>
             <xsl:value-of select="@spectitle"/>
           </xsl:element>
         </xsl:if>
       </xsl:when>
       <xsl:when test="$defaulttitle">
-        <xsl:element name="{$headLevel}">
+        <xsl:element name="h{$headLevel}">
           <xsl:attribute name="class">sectiontitle</xsl:attribute>
           <xsl:value-of select="$defaulttitle"/>
         </xsl:element>
@@ -2097,14 +2119,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class, ' topic/section ')]/*[contains(@class, ' topic/title ')] | 
     *[contains(@class, ' topic/example ')]/*[contains(@class, ' topic/title ')]" name="topic.section_title">
-    <xsl:param name="headLevel">
-      <xsl:variable name="headCount" select="count(ancestor::*[contains(@class, ' topic/topic ')])+1"/>
-      <xsl:choose>
-        <xsl:when test="$headCount > 6">h6</xsl:when>
-        <xsl:otherwise>h<xsl:value-of select="$headCount"/></xsl:otherwise>
-      </xsl:choose>
-    </xsl:param>
-    <xsl:element name="{$headLevel}">
+    <xsl:param name="headLevel" as="xs:integer" select="dita2html:get-heading-level(.)"/>
+    <xsl:element name="h{$headLevel}">
       <xsl:attribute name="class">sectiontitle</xsl:attribute>
       <xsl:call-template name="commonattributes">
         <xsl:with-param name="default-output-class" select="'sectiontitle'"/>
@@ -2341,9 +2357,12 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:template name="chapter-setup">
 <html>
+  <!-- TODO: Replace with mode="setTopicLanguage" -->
   <xsl:call-template name="setTopicLanguage"/>
+  <!-- TODO: Replace with mode="chapterHead" -->
   <xsl:call-template name="chapterHead"/>
-  <xsl:call-template name="chapterBody"/> 
+  <!-- TODO: Replace with mode="chapterBody" -->
+  <xsl:call-template name="chapterBody"/>
 </html>
 </xsl:template>
 
@@ -2370,16 +2389,25 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*" mode="chapterHead">
     <head>
       <!-- initial meta information -->
+      <!-- TODO: Replace with mode="generateCharset" -->
       <xsl:call-template name="generateCharset"/>   <!-- Set the character set to UTF-8 -->
       <xsl:apply-templates select="." mode="generateDefaultCopyright"/> <!-- Generate a default copyright, if needed -->
+      <!-- TODO: Replace with mode="generateDefaultMeta" -->
       <xsl:call-template name="generateDefaultMeta"/> <!-- Standard meta for security, robots, etc -->
       <xsl:apply-templates select="." mode="getMeta"/> <!-- Process metadata from topic prolog -->
+      <!-- TODO: Replace with mode="copyright" -->
       <xsl:call-template name="copyright"/>         <!-- Generate copyright, if specified manually -->
+      <!-- TODO: Replace with mode="generateChapterTitle" -->
       <xsl:call-template name="generateChapterTitle"/> <!-- Generate the <title> element -->
+      <!-- TODO: Replace with mode="gen-user-head" -->
       <xsl:call-template name="gen-user-head" />    <!-- include user's XSL HEAD processing here -->
+      <!-- TODO: Replace with mode="gen-user-scripts" -->
       <xsl:call-template name="gen-user-scripts" /> <!-- include user's XSL javascripts here -->
+      <!-- TODO: Replace with mode="gen-user-styles" -->
       <xsl:call-template name="gen-user-styles" />  <!-- include user's XSL style element and content here -->
+      <!-- TODO: Replace with mode="processHDF" -->
       <xsl:call-template name="processHDF"/>        <!-- Add user HDF file, if specified -->
+      <!-- TODO: Replace with mode="generateCssLinks" -->
       <xsl:call-template name="generateCssLinks"/>  <!-- Generate links to CSS files -->
     </head>
   </xsl:template>
@@ -2481,6 +2509,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="/ | @* | node()" mode="generateChapterTitle">
     <!-- Title processing - special handling for short descriptions -->
     <title>
+      <!-- TODO: Replace with mode="gen-user-panel-title-pfx" -->
       <xsl:call-template name="gen-user-panel-title-pfx"/> <!-- hook for a user-XSL title prefix -->
       <xsl:variable name="maintitle"><xsl:apply-templates select="/*[contains(@class, ' topic/topic ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
       <xsl:variable name="ditamaintitle"><xsl:apply-templates select="/dita/*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/title ')]" mode="text-only"/></xsl:variable>
@@ -2515,6 +2544,7 @@ See the accompanying LICENSE file for applicable license.
       <xsl:apply-templates select="." mode="addHeaderToHtmlBodyElement"/>
 
       <!-- Include a user's XSL call here to generate a toc based on what's a child of topic -->
+      <!-- TODO: Replace with mode="gen-user-sidetoc" -->
       <xsl:call-template name="gen-user-sidetoc"/>
 
       <xsl:apply-templates select="." mode="addContentToHtmlBodyElement"/>
@@ -2552,8 +2582,12 @@ See the accompanying LICENSE file for applicable license.
   <!-- Process <body> content that is appropriate for HTML5 header section. -->
   <xsl:template match="*" mode="addHeaderToHtmlBodyElement">
     <xsl:variable name="header-content" as="node()*">
+      <!-- TODO: Replace with mode="generateBreadcrumbs" -->
       <xsl:call-template name="generateBreadcrumbs"/>
+        <!-- include user's XSL running header here -->
+      <!-- TODO: Replace with mode="gen-user-header" -->
       <xsl:call-template name="gen-user-header"/>  <!-- include user's XSL running header here -->
+      <!-- TODO: Replace with mode="processHDR" -->
       <xsl:call-template name="processHDR"/>
       <xsl:if test="$INDEXSHOW = 'yes'">
         <xsl:apply-templates select="/*/*[contains(@class, ' topic/prolog ')]/*[contains(@class, ' topic/metadata ')]/*[contains(@class, ' topic/keywords ')]/*[contains(@class, ' topic/indexterm ')] |
@@ -2591,6 +2625,7 @@ See the accompanying LICENSE file for applicable license.
                                <!-- followed by body content, again by fall-through in document order -->
                                <!-- followed by related links -->
                                <!-- followed by child topics by fall-through -->
+        <!-- TODO: Replace with mode="gen-endnotes" -->
         <xsl:call-template name="gen-endnotes"/>    <!-- include footnote-endnotes -->
         <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
       </article>
@@ -2604,7 +2639,9 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*" mode="addFooterToHtmlBodyElement">
     <xsl:variable name="footer-content" as="node()*">
+      <!-- TODO: Replace with mode="gen-user-footer" -->
       <xsl:call-template name="gen-user-footer"/> <!-- include user's XSL running footer here -->
+      <!-- TODO: Replace with mode="processFTR" -->
       <xsl:call-template name="processFTR"/>      <!-- Include XHTML footer, if specified -->
     </xsl:variable>
     <xsl:if test="exists($footer-content)">
@@ -2826,7 +2863,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="default-output-class" select="string-join(($type, concat('note_', $type)), ' ')"/>
       </xsl:call-template>
       <xsl:call-template name="setidaname"/>
-      <!-- Normal flags go before the generated title; revision flags only go on the content. -->
+      <!-- Normal flags go around the entire note (including before the generated title) -->
       <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/prop" mode="ditaval-outputflag"/>
       <span class="note__title">
         <xsl:copy-of select="$title"/>
@@ -2835,10 +2872,13 @@ See the accompanying LICENSE file for applicable license.
         </xsl:call-template>
       </span>
       <xsl:text> </xsl:text>
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
-      <xsl:apply-templates/>
-      <!-- Normal end flags and revision end flags both go out after the content. -->
-      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]" mode="out-of-line"/>
+      <div class="note__body">
+        <!-- Revision flags go around only the content -->
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/revprop" mode="ditaval-outputflag"/>
+        <xsl:apply-templates/>
+        <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]/revprop" mode="ditaval-outputflag"/>
+      </div>
+      <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-endprop ')]/prop" mode="ditaval-outputflag"/>
     </div>
   </xsl:template>
   

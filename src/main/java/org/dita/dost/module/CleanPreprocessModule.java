@@ -10,12 +10,14 @@ package org.dita.dost.module;
 
 import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,7 +32,6 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -63,7 +64,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private void init(final Map<String, String> input) {
     useResultFilename =
       Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME)).map(Boolean::parseBoolean).orElse(false);
-    final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
+    final Resolver catalogResolver = xmlUtils.getCatalogResolver();
     rewriteTransformer =
       Optional
         .ofNullable(input.get("result.rewrite-rule.xsl"))
@@ -165,6 +166,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
     if (start != null) {
       job.setInputMap(start.uri);
+
+      final File inputfile = new File(job.tempDir, USER_INPUT_FILE_LIST_FILE);
+      try {
+        Files.writeString(inputfile.toPath(), start.file.getPath());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     try {
@@ -198,7 +206,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private Document serialize(final Collection<FileInfo> fis) throws IOException {
     try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final Document doc = xmlUtils.newDocument();
       final DOMResult result = new DOMResult(doc);
       XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
       job.serialize(out, emptyMap(), fis);
@@ -264,7 +272,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
           return null;
         } else {
-          final String path = commons.stream().collect(Collectors.joining("/")) + "/";
+          final String path = String.join("/", commons) + "/";
           return URLUtils.setPath(left, path);
         }
       }

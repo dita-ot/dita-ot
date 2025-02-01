@@ -19,6 +19,7 @@ import org.dita.dost.exception.DITAOTException;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
+import org.xml.sax.SAXParseException;
 
 /**
  * Class description goes here.
@@ -230,6 +231,14 @@ public final class MessageBean {
     ret.srcFile = toURI(location.getFileName());
     ret.srcLine = location.getLineNumber();
     ret.srcColumn = location.getColumnNumber();
+    return ret;
+  }
+
+  public MessageBean setLocation(SAXParseException exception) {
+    final MessageBean ret = new MessageBean(this);
+    ret.srcFile = toURI(exception.getSystemId());
+    ret.srcLine = exception.getLineNumber();
+    ret.srcColumn = exception.getColumnNumber();
     return ret;
   }
 

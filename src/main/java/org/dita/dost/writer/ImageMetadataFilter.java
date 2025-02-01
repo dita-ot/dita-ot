@@ -11,7 +11,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.exists;
 import static org.dita.dost.util.URLUtils.toURI;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.io.BaseEncoding;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,8 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -32,7 +31,10 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
@@ -104,7 +106,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
    */
   @Deprecated
   public Collection<URI> getImages() {
-    return ImmutableList.copyOf(cache.keySet());
+    return List.copyOf(cache.keySet());
   }
 
   // XMLFilter methods -------------------------------------------------------

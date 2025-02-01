@@ -6,7 +6,7 @@ Copyright 2006 IBM Corporation
 
 See the accompanying LICENSE file for applicable license.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
   <xsl:import href="plugin:org.dita.base:xsl/preprocess/topicpullImpl.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/preprocess/topicpull-task.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/preprocess/topicpull-pr-d.xsl"/>

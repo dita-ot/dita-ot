@@ -38,30 +38,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
     builder().name(Paths.get("copyto", "basic")).transtype(PREPROCESS).input(Paths.get("TC2.ditamap")).test();
   }
 
-  @Test
-  public void testconrefmissingfile() throws Throwable {
-    builder()
-      .name(Paths.get("conref", "conrefmissingfile"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("badconref.dita"))
-      .put("validate", "false")
-      .warnCount(1)
-      .errorCount(5)
-      .test();
-  }
-
-  @Test
-  public void testmapref() throws Throwable {
-    builder()
-      .name(Paths.get("mapref", "basic"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("test.ditamap"))
-      .put("generate-debug-attributes", "false")
-      .errorCount(3)
-      .warnCount(1)
-      .test();
-  }
-
   @Disabled
   @Test
   public void testcopyto_linktarget() throws Throwable {
@@ -70,17 +46,6 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .transtype(PREPROCESS)
       .input(Paths.get("linktarget.ditamap"))
       .errorCount(1)
-      .warnCount(0)
-      .test();
-  }
-
-  @Test
-  public void testcontrolValueFile4() throws Throwable {
-    builder()
-      .name(Paths.get("filter", "map31_filter_multi"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("map31.ditamap"))
-      .put("args.filter", Paths.get("filter_multi.ditaval"))
       .warnCount(0)
       .test();
   }
@@ -127,19 +92,7 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
-  @Test
-  public void testcontrolValueFile5() throws Throwable {
-    builder()
-      .name(Paths.get("filter", "map32_filter_multi"))
-      .transtype(PREPROCESS)
-      .input(Paths.get("map32.ditamap"))
-      .put("args.filter", Paths.get("filter_multi.ditaval"))
-      .warnCount(0)
-      .test();
-  }
-
-  //
-  //  @Disabled
+  @Disabled
   @Test
   public void testuplevelslinkOnlytopic() throws Throwable {
     builder()

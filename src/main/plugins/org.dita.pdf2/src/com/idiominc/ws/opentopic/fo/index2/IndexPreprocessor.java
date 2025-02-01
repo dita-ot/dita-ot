@@ -7,7 +7,6 @@ import com.idiominc.ws.opentopic.fo.index2.configuration.IndexConfiguration;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexDitaProcessor;
 import com.idiominc.ws.opentopic.fo.index2.util.IndexStringProcessor;
 import java.util.*;
-import javax.xml.parsers.DocumentBuilder;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
@@ -58,6 +57,7 @@ public final class IndexPreprocessor {
   private final IndexGroupProcessor indexGroupProcessor;
   private boolean includeDraft = false;
   private DITAOTLogger logger;
+  private XMLUtils xmlUtils;
   private static final String elIndexRangeStartName = "start";
   private static final String elIndexRangeEndName = "end";
   private static final String hashPrefix = "indexid";
@@ -84,6 +84,10 @@ public final class IndexPreprocessor {
     indexGroupProcessor.setLogger(logger);
   }
 
+  public void setXmlUtils(final XMLUtils xmlUtils) {
+    this.xmlUtils = xmlUtils;
+  }
+
   /**
    * Process index terms.
    *
@@ -92,8 +96,7 @@ public final class IndexPreprocessor {
    * @throws ProcessException if processing index terms failed
    */
   public IndexPreprocessResult process(final Document theInput) throws ProcessException {
-    final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
-    final Document doc = documentBuilder.newDocument();
+    final Document doc = xmlUtils.newDocument();
 
     final Node rootElement = theInput.getDocumentElement();
 

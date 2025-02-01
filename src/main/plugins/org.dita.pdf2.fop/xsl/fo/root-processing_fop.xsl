@@ -15,7 +15,7 @@ See the accompanying LICENSE file for applicable license.
                 xmlns:xmp="http://ns.adobe.com/xap/1.0/"
                 xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-                version="2.0" exclude-result-prefixes="dita-ot xs">
+                version="3.0" exclude-result-prefixes="dita-ot xs">
     
   <xsl:template match="/" name="rootTemplate">
     <xsl:call-template name="validateTopicRefs"/>

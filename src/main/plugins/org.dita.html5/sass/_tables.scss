@@ -15,40 +15,6 @@ table .desc {
   font-style: italic;
 }
 
-// deprecated
-
-.cellrowborder {
-  @warn "The .cellrowborder class is deprecated since v2.3.";
-  border-bottom: solid 1px;
-  border-left: 0;
-  border-right: solid 1px;
-  border-top: 0;
-}
-
-.row-nocellborder {
-  @warn "The .row-nocellborder class is deprecated since v2.3.";
-  border-bottom: solid 1px;
-  border-left: 0;
-  border-top: 0;
-}
-
-.cell-norowborder {
-  @warn "The .cell-norowborder class is deprecated since v2.3.";
-  border-left: 0;
-  border-right: solid 1px;
-  border-top: 0;
-}
-
-.nocellnorowborder {
-  @warn "The .nocellnorowborder class is deprecated since v2.3.";
-  border: 0;
-}
-
-.firstcol {
-  @warn "The .firstcol class is deprecated since v2.3.";
-  font-weight: bold;
-}
-
 // @pgwide
 
 .table--pgwide-1 {

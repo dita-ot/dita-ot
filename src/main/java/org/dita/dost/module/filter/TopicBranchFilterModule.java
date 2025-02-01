@@ -8,7 +8,9 @@
 package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
+import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
@@ -42,10 +44,9 @@ import org.xml.sax.XMLFilter;
  *
  * @since 2.5
  */
-public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
+public class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
   private static final String SKIP_FILTER = "skip-filter";
-  private static final String BRANCH_COPY_TO = "filter-copy-to";
 
   /** Current map being processed, relative to temporary directory */
   private URI map;
@@ -76,6 +77,15 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
     currentFile = job.tempDirURI.resolve(map);
 
     logger.info("Processing " + currentFile);
+    final SubjectScheme subjectSchemeMap;
+    try {
+      logger.debug("Reading " + currentFile);
+      subjectSchemeMap = getSubjectScheme(job.getStore().getImmutableNode(currentFile).getOutermostElement());
+    } catch (final IOException e) {
+      logger.error("Failed to parse " + currentFile, e);
+      return;
+    }
+
     final Document doc;
     try {
       logger.debug("Reading " + currentFile);
@@ -84,8 +94,6 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
       logger.error("Failed to parse " + currentFile, e);
       return;
     }
-
-    final SubjectScheme subjectSchemeMap = getSubjectScheme(doc.getDocumentElement());
     logger.debug("Filter topics and generate copies");
     generateCopies(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
     logger.debug("Filter existing topics");
@@ -144,11 +152,11 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
         } catch (final DITAOTException e) {
           logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
         }
-        topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
-        topicref.removeAttribute(BRANCH_COPY_TO);
-        // disable filtering again
-        topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
       }
+      topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
+      topicref.removeAttribute(BRANCH_COPY_TO);
+      // disable filtering again
+      topicref.setAttribute(SKIP_FILTER, Boolean.TRUE.toString());
     }
     for (final Element child : getChildElements(topicref, MAP_TOPICREF)) {
       if (DITAVAREF_D_DITAVALREF.matches(child)) {
@@ -168,7 +176,7 @@ public final class TopicBranchFilterModule extends AbstractBranchFilterModule {
 
     final String href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
     final Attr skipFilter = topicref.getAttributeNode(SKIP_FILTER);
-    final URI srcAbsUri = job.tempDirURI.resolve(map.resolve(href));
+    final URI srcAbsUri = stripFragment(job.tempDirURI.resolve(map.resolve(href)));
     if (
       !fs.isEmpty() &&
       skipFilter == null &&

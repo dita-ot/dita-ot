@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the DITA Open Toolkit project.
+
+Copyright 2024 Jarno Elovirta
+
+See the accompanying LICENSE file for applicable license.
+-->
+<project xmlns:dita="http://dita-ot.sourceforge.net">
+
+  <target name="dita2validate"
+          dita:extension="depends org.dita.dost.platform.InsertDependsAction"
+          dita:depends="validate-init,
+                        build-init,
+                        preprocess2,
+                        {depend.validate}"/>
+
+  <target name="validate-init">
+    <property name="processing-mode" value="strict"/>
+    <property name="create-output-dir.skip" value="true"/>
+    <property name="build-step.create-output-dir" value="false"/>
+    <property name="build-step.clean-map-check" value="false"/>
+    <property name="build-step.clean-preprocess" value="false"/>
+    <property name="build-step.copy-image" value="false"/>
+    <property name="build-step.copy-html" value="false"/>
+    <property name="build-step.copy-flag" value="false"/>
+  </target>
+
+</project>

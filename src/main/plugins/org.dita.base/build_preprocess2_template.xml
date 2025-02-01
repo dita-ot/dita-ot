@@ -13,27 +13,27 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="preprocess2"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-    description="Preprocess"
     dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   ditaval-merge,
-                  
+
+                  {depend.preprocess2.maps.pre},
                   preprocess2.maps,
+                  {depend.preprocess2.maps.post},
+                  {depend.preprocess2.topics.pre},
                   preprocess2.topics,
-                  
+                  {depend.preprocess2.topics.post},
+
                   map-clean-map,
                   clean-preprocess,
                   copy-files2,
-                  {depend.preprocess.post}">
-    <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
-    <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
-    <property name="uplevels" value=""/>
-    <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-  </target>
+                  preprocess2.post,
+                  {depend.preprocess.post}"/>
 
   <target name="preprocess2.maps"
           depends="map-reader,
                   map-mapref,
+                  map-reader-profile,
                   map-branch-filter,
                   map-keyref,
                   map-conrefpush,
@@ -41,6 +41,7 @@ See the accompanying LICENSE file for applicable license.
                   map-profile"/>
 
   <target name="preprocess2.topics"
+          description="Map-first preprocessing topic steps"
           depends="topic-reader,
                   topic-branch-filter,
                   topic-map-conref,
@@ -57,7 +58,7 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="preprocess2-topic"
           dita:extension="depends org.dita.dost.platform.InsertDependsAction"
-          description="Preprocess topic"
+          description="Map-first preprocess for topic input"
           dita:depends="{depend.preprocess.pre},
                   preprocess2.init,
                   ditaval-merge,
@@ -73,14 +74,10 @@ See the accompanying LICENSE file for applicable license.
 
                   clean-preprocess,
                   copy-files2,
-                  {depend.preprocess.post}">
-    <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
-    <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
-    <property name="uplevels" value=""/>
-    <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
-  </target>
+                  {depend.preprocess.post}"/>
   
-  <target name="preprocess2.init">
+  <target name="preprocess2.init"
+          description="Initialize map-first preprocessing">
     <dita-ot-fail id="DOTA002F">
       <condition>
         <not><isset property="args.input"/></not>
@@ -88,22 +85,36 @@ See the accompanying LICENSE file for applicable license.
     </dita-ot-fail>
 
     <property name="clean-preprocess.use-result-filename" value="true"/>
-    
-    <basename property="dita.input.filename" file="${args.input}" />
-    <pathconvert property="dita.map.filename.root">
-      <path path="${dita.input.filename}"/>
-      <chainedmapper>
-        <mapper type="flatten"/>
-        <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
-      </chainedmapper>
-    </pathconvert>
+
+    <local name="input.isFile"/>
+    <condition property="input.isFile" value="true">
+      <available file="${args.input}" type="file"/>
+    </condition>
+    <sequential if:true="${input.isFile}">
+      <basename property="dita.input.filename" file="${args.input}" />
+      <pathconvert property="dita.map.filename.root">
+        <path path="${dita.input.filename}"/>
+        <chainedmapper>
+          <mapper type="flatten"/>
+          <mapper type="regexp" from="^(.+)(\..+?)$$" to="\1"/>
+        </chainedmapper>
+      </pathconvert>
+    </sequential>
+    <sequential unless:true="${input.isFile}">
+      <taskdef name="uriBasenameTask" classname="org.dita.dost.ant.UriBasenameTask"/>
+      <uriBasenameTask property="dita.input.filename" file="${args.input}" />
+      <uriBasenameTask property="dita.map.filename.root" file="${args.input}" suffix=".*"/>
+    </sequential>
+
     <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
     
-    <echo level="info">*****************************************************************</echo>
-    <echo level="info">* input = ${args.input}</echo>
-    <echo level="info">* resources = ${args.resources}</echo>
-    <echo level="info">*****************************************************************</echo>
-    
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+    <echo level="info">${log-prefix}input = ${args.input}</echo>
+    <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
+    <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
+
+    <!-- TODO: change property initialization to not use physical files -->
+    <mkdir dir="${dita.temp.dir}"/>
     <echoxml file="${dita.temp.dir}/.job.xml">
       <job>
         <property name="temp-file-name-scheme">
@@ -111,15 +122,11 @@ See the accompanying LICENSE file for applicable license.
         </property>
       </job>
     </echoxml>
-    <property name="map.filter-on-parse" value="false"/>
-    <condition property="topic.filter-on-parse" value="true" else="false">
+    <condition property="map.filter-on-parse" value="true" else="false">
       <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
-    <condition property="build-step.map-profile" value="false" else="true">
-      <istrue value="${map.filter-on-parse}"/>
-    </condition>
-    <condition property="build-step.topic-profile" value="false" else="true">
-      <istrue value="${topic.filter-on-parse}"/>
+    <condition property="topic.filter-on-parse" value="true" else="false">
+      <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
 
     <preprocess-skip-init name="preprocess.map-profile" step="map-profile"/>
@@ -142,7 +149,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
   
   <target name="map-reader"
-    description="Generate lists, debug, and filter input map files">
+    description="Read input map files to temporary store">
     <pipeline message="Generate maps" taskname="map-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.MapReaderModule">
@@ -156,7 +163,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="transtype" value="${transtype}"/>
         <param name="gramcache" value="${args.grammar.cache}"/>
         <param name="setsystemid" value="${args.xml.systemid.set}"/>
-        <param name="profiling.enable" value="${map.filter-on-parse}" unless:set="map.filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -245,12 +251,25 @@ See the accompanying LICENSE file for applicable license.
       </xslt>
     </pipeline>
   </target>
-  
+
+  <target name="map-reader-profile"
+          unless="preprocess.map-profile.skip"
+          description="Profile input map files">
+    <pipeline message="Profile filtering." taskname="profile" if:true="${map.filter-on-parse}">
+      <module class="org.dita.dost.module.ProfileModule">
+        <ditafileset format="ditamap" input="true"/>
+        <ditafileset format="ditamap" inputResource="true"/>
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
+      </module>
+    </pipeline>
+  </target>
+
   <target name="map-profile"
     unless="preprocess.map-profile.skip"
     description="Profile input map files">
-    <pipeline message="Profile filtering." taskname="profile">
-      <module class="org.dita.dost.module.FilterModule">
+    <pipeline message="Profile filtering." taskname="profile" unless:true="${map.filter-on-parse}">
+      <module class="org.dita.dost.module.ProfileModule">
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
@@ -260,7 +279,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="topic-reader"
-    description="Generate file list">
+    description="Read topic files to temporary store">
     <pipeline message="Generate topics" taskname="topic-reader"
               inputmap="${args.input}">
       <module class="org.dita.dost.module.reader.TopicReaderModule">
@@ -364,7 +383,7 @@ See the accompanying LICENSE file for applicable license.
   <target name="topic-profile"
           unless="preprocess.topic-profile.skip"
           description="Profile input files">
-    <pipeline message="Profile filtering." taskname="profile">
+    <pipeline message="Profile filtering." taskname="profile" unless:true="${map.filter-on-parse}">
       <module class="org.dita.dost.module.FilterModule">
         <ditafileset format="dita"/>
         <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
@@ -468,7 +487,6 @@ See the accompanying LICENSE file for applicable license.
 
   <!-- XXX: should this be inlined to make the target tree flatter? -->
   <target name="copy-files2"
-          description="Copy files to the output directory"
           depends="copy-image2,
                    copy-html2,
                    copy-flag"/>
@@ -484,7 +502,7 @@ See the accompanying LICENSE file for applicable license.
   
   <target name="copy-html2" 
           unless="preprocess.copy-html.skip" 
-		  description="Copy html files">
+          description="Copy html files">
     <copy todir="${dita.output.dir}" failonerror="false" overwrite="true">
       <ditafileset>
         <excludes format="dita"/>
@@ -496,4 +514,11 @@ See the accompanying LICENSE file for applicable license.
       <jobmapper/>
     </copy>
   </target>  
+
+  <target name="preprocess2.post"
+          description="Preprocess post">
+    <dirname property="_dita.map.output.dir" file="${dita.output.dir}/${user.input.file}" />
+    <dirname property="_dita.map.temp.dir" file="${dita.temp.dir}/${user.input.file}" />
+    <property name="dita.map.output.dir" location="${_dita.map.output.dir}/${uplevels}"/>
+  </target>
 </project>

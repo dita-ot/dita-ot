@@ -1,0 +1,175 @@
+<?xml version="1.0" ?>
+<job>
+  <property name="user.input.dir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src</string>
+  </property>
+  <property name="plugin.org.dita.odt.dir">
+    <string>plugins/org.dita.odt</string>
+  </property>
+  <property name="plugin.org.dita.eclipsecontent.dir">
+    <string>plugins/org.dita.eclipsecontent</string>
+  </property>
+  <property name="transtypes">
+    <string>pdf;pdf2;tocjs;xhtml;eclipsehelp;html5;htmlhelp;javahelp;troff</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita11.dir">
+    <string>plugins/org.dita.specialization.dita11</string>
+  </property>
+  <property name="crawl">
+    <string>topic</string>
+  </property>
+  <property name="plugin.org.dita.wordrtf.dir">
+    <string>plugins/org.dita.wordrtf</string>
+  </property>
+  <property name="parser.custom">
+    <string>org.dita.dost.reader.CustomXMLReader</string>
+  </property>
+  <property name="plugin.org.dita.specialization.eclipsemap.dir">
+    <string>plugins/org.dita.specialization.eclipsemap</string>
+  </property>
+  <property name="plugin.org.dita.pdf.dir">
+    <string>plugins/org.dita.pdf</string>
+  </property>
+  <property name="cli.color">
+    <string>false</string>
+  </property>
+  <property name="user.input.file">
+    <string>5c71ca762c07f0a2d7ff244e0d3dff1f99ad65f4.ditamap</string>
+  </property>
+  <property name="plugin.org.dita.pdf2.dir">
+    <string>plugins/org.dita.pdf2</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita132.dir">
+    <string>plugins/org.dita.specialization.dita132</string>
+  </property>
+  <property name="print_transtypes">
+    <string>pdf2;pdf;legacypdf;odt</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="supported_resource_extensions">
+    <string>.pdf;.swf</string>
+  </property>
+  <property name="plugin.org.dita.xhtml.dir">
+    <string>plugins/org.dita.xhtml</string>
+  </property>
+  <property name="plugin.org.dita.docbook.dir">
+    <string>plugins/org.dita.docbook</string>
+  </property>
+  <property name="chunk.id-generation-scheme">
+    <string>counter</string>
+  </property>
+  <property name="org.dita.pdf2.index.frame-markup">
+    <string>false</string>
+  </property>
+  <property name="plugin.org.dita.javahelp.dir">
+    <string>plugins/org.dita.javahelp</string>
+  </property>
+  <property name="relflagimagelist">
+    <string></string>
+  </property>
+  <property name="supported_html_extensions">
+    <string>.htm;.html</string>
+  </property>
+  <property name="otrelease">
+    <string>1.2</string>
+  </property>
+  <property name="supported_image_extensions">
+    <string>.bmp;.svg;.png;.tif;.jpg;.gif;.jpeg;.tiff;.eps</string>
+  </property>
+  <property name="cli.log-format">
+    <string>legacy</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/root.ditamap</string>
+  </property>
+  <property name="plugin.com.sophos.tocjs.dir">
+    <string>plugins/com.sophos.tocjs</string>
+  </property>
+  <property name="plugin.org.dita.troff.dir">
+    <string>plugins/org.dita.troff</string>
+  </property>
+  <property name="org.dita.pdf2.i18n.enabled">
+    <string>true</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/</string>
+  </property>
+  <property name="generatecopyouter">
+    <string>NOT_GENERATEOUTTER</string>
+  </property>
+  <property name="default.cascade">
+    <string>nomerge</string>
+  </property>
+  <property name="plugin.org.dita.eclipsehelp.dir">
+    <string>plugins/org.dita.eclipsehelp</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/build/tmp/integrationTest/mapref_to_conref/out/preprocess2</string>
+  </property>
+  <property name="plugin.org.dita.htmlhelp.dir">
+    <string>plugins/org.dita.htmlhelp</string>
+  </property>
+  <property name="temp-file-name-scheme">
+    <string>org.dita.dost.module.reader.HashTempFileScheme</string>
+  </property>
+  <property name="plugin.org.dita.base.dir">
+    <string>plugins/org.dita.base</string>
+  </property>
+  <property name="plugindirs">
+    <string>plugins;demo</string>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="plugin.ignores">
+    <string></string>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>5c71ca762c07f0a2d7ff244e0d3dff1f99ad65f4.ditamap</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/root.ditamap</string>
+  </property>
+  <property name="plugin.org.dita.np.dir">
+    <string>plugins/org.dita.np</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string></string>
+  </property>
+  <property name="plugin.org.dita-ot.html.dir">
+    <string>plugins/org.dita-ot.html</string>
+  </property>
+  <property name="otversion">
+    <string>1.2.3</string>
+  </property>
+  <files>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/indirect.ditamap"
+          uri="343b6f79877e237d9e99d7ccb7c2c297c7f731e2.ditamap" path="343b6f79877e237d9e99d7ccb7c2c297c7f731e2.ditamap"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/indirect.ditamap"
+          format="ditamap" has-conref="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/root.ditamap"
+          uri="5c71ca762c07f0a2d7ff244e0d3dff1f99ad65f4.ditamap" path="5c71ca762c07f0a2d7ff244e0d3dff1f99ad65f4.ditamap"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/root.ditamap"
+          format="ditamap" input="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/alsorealcontent.dita"
+          uri="90966b90cee3f20b6a26b332c1d0c29f0a817554.dita" path="90966b90cee3f20b6a26b332c1d0c29f0a817554.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/alsorealcontent.dita"
+          target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/indirectcontainer.dita"
+          uri="2b74d0fdd4c20584f94fecf059e6dd30c92f9269.dita" path="2b74d0fdd4c20584f94fecf059e6dd30c92f9269.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/indirectcontainer.dita"
+          target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/targetmap.ditamap"
+          uri="33c3d6029eab40107aabdda4b76a4806cc73a3ab.ditamap" path="33c3d6029eab40107aabdda4b76a4806cc73a3ab.ditamap"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/resources/mapref/mapref_to_conref/src/targetmap.ditamap"
+          format="ditamap" resource-only="true"></file>
+  </files>
+</job>

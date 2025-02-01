@@ -123,7 +123,7 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
             }
             return s.y > 1 ? new Span(s.x, s.y - 1) : null;
           })
-          .collect(Collectors.toList());
+          .toList();
         tableState.currentRow = new ArrayList<>(fromPrew);
       } else {
         tableState.currentRow = new ArrayList<>();

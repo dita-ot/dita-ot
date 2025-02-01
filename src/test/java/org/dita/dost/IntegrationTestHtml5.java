@@ -28,6 +28,11 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
   }
 
   @Test
+  public void html5() throws Throwable {
+    builder().name("html5").transtype(HTML5).input(Paths.get("map.ditamap")).put("args.gen.task.lbl", "YES").test();
+  }
+
+  @Test
   public void html5_cssNoCopy() throws Throwable {
     final File srcDir = new File(resourceDir, "html5_css" + File.separator + "src");
     final File actDir = builder()

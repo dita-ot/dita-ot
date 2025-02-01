@@ -50,10 +50,12 @@ public class TopicReaderModuleTest {
   }
 
   @BeforeEach
-  public void setUp() throws SAXException, IOException {
+  public void setUp() throws SAXException, IOException, DITAOTException {
     reader = new TopicReaderModule();
     reader.setLogger(new TestUtils.TestLogger());
-    job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+    final XMLUtils xmlUtils = new XMLUtils();
+    reader.setXmlUtils(xmlUtils);
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     job.setInputFile(ditamap);
     job.setInputMap(root.relativize(ditamap));
     job.setInputDir(root);
@@ -67,6 +69,15 @@ public class TopicReaderModuleTest {
     );
     job.add(new Job.FileInfo.Builder().src(root.resolve("mysite.dita")).uri(URI.create("mysite.dita")).build());
     job.add(new Job.FileInfo.Builder().src(root.resolve("myproduct.dita")).uri(URI.create("myproduct.dita")).build());
+    job
+      .getFileInfo(fi -> fi.isInput)
+      .forEach(fi -> {
+        try {
+          Files.copy(Paths.get(fi.src), Paths.get(job.tempDirURI.resolve(fi.uri)));
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+      });
     reader.setJob(job);
     final PipelineHashIO input = new PipelineHashIO();
     input.setAttribute(ANT_INVOKER_EXT_PARAM_DITADIR, tempDir.getAbsolutePath());
@@ -119,15 +130,6 @@ public class TopicReaderModuleTest {
 
   @Test
   public void readStartFile() throws DITAOTException {
-    job
-      .getFileInfo(fi -> fi.isInput)
-      .forEach(fi -> {
-        try {
-          Files.copy(Paths.get(fi.src), Paths.get(job.tempDirURI.resolve(fi.uri)));
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
-      });
     reader.readStartFile();
 
     assertEquals(1, reader.nonConrefCopytoTargetSet.size());

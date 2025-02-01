@@ -36,7 +36,7 @@ public final class ConrefPushReader extends AbstractXMLReader {
   /** push table.*/
   private final Hashtable<File, Hashtable<MoveKey, DocumentFragment>> pushtable;
   /** Document used to construct push table DocumentFragments. */
-  private final Document pushDocument;
+  private Document pushDocument;
 
   /**keep the file path of current file under parse
     filePath is useful to get the absolute path of the target file.*/
@@ -109,8 +109,10 @@ public final class ConrefPushReader extends AbstractXMLReader {
    */
   public ConrefPushReader() {
     pushtable = new Hashtable<>();
+  }
 
-    pushDocument = XMLUtils.getDocumentBuilder().newDocument();
+  public void setXmlUtils(XMLUtils xmlUtils) {
+    pushDocument = xmlUtils.newDocument();
   }
 
   @Override

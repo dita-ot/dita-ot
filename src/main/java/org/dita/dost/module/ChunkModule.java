@@ -61,6 +61,7 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     final ChunkMapReader mapReader = new ChunkMapReader();
     mapReader.setLogger(logger);
     mapReader.setJob(job);
+    mapReader.setXmlUtils(xmlUtils);
     mapReader.supportToNavigation(INDEX_TYPE_ECLIPSEHELP.equals(transtype));
     if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
       mapReader.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));

@@ -16,16 +16,19 @@ import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PLATFORM;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.util.*;
+import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 import org.dita.dost.TestUtils;
+import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -39,8 +42,8 @@ public class FilterUtilsTest {
   private static final QName OTHERPROPS = QName.valueOf("otherprops");
   private static final QName REV = QName.valueOf("rev");
 
-  private static final Map<FilterKey, Action> filterMap = ImmutableMap
-    .<FilterKey, Action>builder()
+  private static final Map<FilterKey, Action> filterMap = TestUtils
+    .<FilterKey, Action>mapBuilder()
     .put(new FilterKey(PLATFORM, "unix"), Action.INCLUDE)
     .put(new FilterKey(PLATFORM, "osx"), Action.INCLUDE)
     .put(new FilterKey(PLATFORM, "linux"), Action.INCLUDE)
@@ -48,6 +51,8 @@ public class FilterUtilsTest {
     .put(new FilterKey(AUDIENCE, "expert"), Action.INCLUDE)
     .put(new FilterKey(AUDIENCE, "novice"), Action.EXCLUDE)
     .build();
+
+  private XMLUtils xmlUtils = new XMLUtils();
 
   @Test
   public void testNeedExcludeNoAttribute() {
@@ -83,7 +88,7 @@ public class FilterUtilsTest {
       fm,
       null,
       null,
-      ImmutableSet.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality),
+      Set.of(QName.valueOf(ATTRIBUTE_NAME_REV), lang, confidentiality),
       emptySet()
     );
     f.setLogger(new TestUtils.TestLogger());
@@ -202,12 +207,7 @@ public class FilterUtilsTest {
   @Test
   public void testgetFlagsDefaultFlag() {
     final Flag flag = new Flag("prop", "red", null, null, null, null, null, null);
-    final FilterUtils f = new FilterUtils(
-      false,
-      ImmutableMap.<FilterKey, Action>builder().put(new FilterKey(PLATFORM, null), flag).build(),
-      null,
-      null
-    );
+    final FilterUtils f = new FilterUtils(false, Map.of(new FilterKey(PLATFORM, null), flag), null, null);
     f.setLogger(new TestUtils.TestLogger());
 
     assertEquals(emptySet(), f.getFlags(new AttributesImpl(), new QName[0][0]));
@@ -220,8 +220,8 @@ public class FilterUtilsTest {
     final Flag revflag = new Flag("revprop", null, null, null, "solid", null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(PLATFORM, "unix"), flag)
         .put(new FilterKey(PLATFORM, "osx"), flag)
         .put(new FilterKey(PLATFORM, "linux"), flag)
@@ -246,8 +246,8 @@ public class FilterUtilsTest {
     final Flag flagSpecialization = new Flag("prop", "blue", null, null, null, null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(PLATFORM, "unix"), flagBase)
         .put(new FilterKey(OS, "amiga"), flagSpecialization)
         .build(),
@@ -411,8 +411,8 @@ public class FilterUtilsTest {
 
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(OS, "amiga"), flagRed)
         .put(new FilterKey(OS, null), flagBlue)
         .build(),
@@ -446,8 +446,8 @@ public class FilterUtilsTest {
     final Flag flagBlue = new Flag("prop", "blue", null, null, null, null, null, null);
     final FilterUtils f = new FilterUtils(
       false,
-      ImmutableMap
-        .<FilterKey, Action>builder()
+      TestUtils
+        .<FilterKey, Action>mapBuilder()
         .put(new FilterKey(OS, "amiga"), flagRed)
         .put(new FilterKey(OS, null), flagBlue)
         .build(),
@@ -485,5 +485,53 @@ public class FilterUtilsTest {
   @Test
   public void filterKey_arguments() {
     assertThrows(NullPointerException.class, () -> new FilterKey(null, null));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "arch redhat", "arch,redhat" })
+  public void refine(String values) {
+    final FilterUtils f = new FilterUtils(
+      Map.of(new FilterKey(QName.valueOf("platform"), "linux"), Action.INCLUDE),
+      null,
+      null
+    );
+    var act = f.refine(
+      new SubjectScheme(
+        Map.of(
+          QName.valueOf("platform"),
+          Map.of(
+            "*",
+            Set.of(
+              createSubjectDef(
+                "os",
+                createSubjectDef(
+                  "linux",
+                  Stream.of(values.split(",")).map(this::createSubjectDef).toArray(SubjectDefinition[]::new)
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+    assertEquals(
+      Map.of(
+        new FilterKey(QName.valueOf("platform"), "arch"),
+        Action.INCLUDE,
+        new FilterKey(QName.valueOf("platform"), "linux"),
+        Action.INCLUDE,
+        new FilterKey(QName.valueOf("platform"), "redhat"),
+        Action.INCLUDE
+      ),
+      act.filterMap
+    );
+  }
+
+  private SubjectDefinition createSubjectDef(String keys) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Collections.emptyList());
+  }
+
+  private SubjectDefinition createSubjectDef(String keys, SubjectDefinition... children) {
+    return new SubjectDefinition(Set.of(keys.split("\\s+")), null, Arrays.asList(children));
   }
 }

@@ -33,7 +33,7 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
+    version="3.0">
 
     <xsl:template match="*[contains(@class,' ui-d/uicontrol ')]">
         <!-- insert an arrow before all but the first uicontrol in a menucascade -->
@@ -58,6 +58,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ui-d/menucascade ')]">
         <fo:inline xsl:use-attribute-sets="menucascade">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates select="* | processing-instruction() | comment()"/>
         </fo:inline>
@@ -65,6 +66,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' ui-d/shortcut ')]">
         <fo:inline xsl:use-attribute-sets="shortcut">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -73,6 +75,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:template match="*[contains(@class,' ui-d/screen ')]">
         <xsl:call-template name="generateAttrLabel"/>
         <fo:block xsl:use-attribute-sets="screen">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:call-template name="setFrame"/>
             <xsl:call-template name="setScale"/>

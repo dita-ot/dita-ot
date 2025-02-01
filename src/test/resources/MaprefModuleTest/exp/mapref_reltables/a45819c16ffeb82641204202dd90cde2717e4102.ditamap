@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+    domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    title="Reltable for mapref test" ditaarch:DITAArchVersion="1.3" cascade="nomerge"
+    specializations="@props/deliveryTarget">
+  <reltable class="- map/reltable " toc="no">
+    <relrow class="- map/relrow ">
+      <relcell class="- map/relcell " toc="no" type="concept">
+        <topicref class="- map/topicref " href="7d9c393b9fd65ec006ff895bfacb2b2d72b2b2d5.dita"/>
+        <topicref class="- map/topicref " href="49a5dce33129558b4aae9c7f9d9a981d30bb4167.dita"/>
+        <topicref class="- map/topicref " href="cb60e6ba043fda3f7971b297b1dead3156a7215d.dita"/>
+        <topicref class="- map/topicref " href="ab586fdcdbf671b62e5c0f4d354b06da7c2e2382.dita"/>
+        <topicref class="- map/topicref " href="0fe9d0f9d634e546ea8d0c76c106b4ea04ca8893.dita"/>
+        <topicref class="- map/topicref " href="10447933540fe0709eeb4644c7aaf6f3fc4b1294.dita"/>
+      </relcell>
+      <relcell class="- map/relcell " toc="no" type="task">
+        <topicref class="- map/topicref " href="d86b4a94c4b0b38f38a1a18872f13b2f4205aa0a.dita"/>
+        <topicref class="- map/topicref " href="eddeb38e139d6715a92fe5191b039f4da59cb600.dita"/>
+        <topicref class="- map/topicref " href="635cd0176a2d265e1c64d1f5dc9c2e792b4acea6.dita"/>
+        <topicref class="- map/topicref " href="02ff17ddbf1c52db6808d98ca6e9eb3fcddba980.dita"/>
+        <topicref class="- map/topicref " href="8bd13e374d1303f81c9c3f082ae07a78bc73cfd8.dita"/>
+      </relcell>
+      <relcell class="- map/relcell " toc="no" type="reference">
+        <topicref class="- map/topicref " href="5636b0efa2fc8eb167b73d30335c3703077fc1b8.dita"/>
+        <topicref class="- map/topicref " href="4456e0a95b068a5794fd479a72a40a19046280fb.dita"/>
+        <topicref class="- map/topicref " href="03bb4bcd5283bf5d4a4b976b1365ea5e216006ca.dita"/>
+        <topicref class="- map/topicref " href="6f538d5def500188845ad9fb4cc0b5aaa12ad736.dita"/>
+        <topicref class="- map/topicref " href="f8cf421b4d14c845f48f961632ec457487cf8247.dita"/>
+      </relcell>
+    </relrow>
+  </reltable>
+</map>

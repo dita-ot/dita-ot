@@ -10,7 +10,6 @@ package org.dita.dost.module;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -50,7 +49,7 @@ public abstract class AbstractModuleTest {
   @TempDir
   protected File tempBaseDir;
 
-  private final DocumentBuilder builder;
+  protected final DocumentBuilder builder;
   protected String testCase;
   protected Map<String, String> params = Collections.emptyMap();
   protected boolean parallel;
@@ -204,7 +203,7 @@ public abstract class AbstractModuleTest {
 
   protected abstract AbstractPipelineModule getModule();
 
-  private static final Set<String> IGNORE = ImmutableSet.of(".job.xml", ".DS_Store");
+  private static final Set<String> IGNORE = Set.of(".job.xml", ".DS_Store");
 
   private void compare(File actDir, File expDir, Store store) throws SAXException, IOException {
     final Set<String> names = new HashSet<>();
@@ -226,15 +225,7 @@ public abstract class AbstractModuleTest {
       } else {
         final Document expDoc = getDocument(exp);
         final Document actDoc = store.getDocument(act.toURI());
-        //                assertXMLEqual("Comparing " + exp + " to " + act + ":",
-        //                        expDoc, actDoc);
-        try {
-          assertXMLEqual(expDoc, actDoc);
-        } catch (AssertionError e) {
-          System.out.println(exp);
-          Files.copy(act.toPath(), System.out);
-          throw e;
-        }
+        assertXMLEqual(expDoc, actDoc);
       }
     }
     if (new File(expDir, ".job.xml").exists()) {

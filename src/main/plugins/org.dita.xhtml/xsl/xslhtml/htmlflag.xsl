@@ -14,7 +14,7 @@ See the accompanying LICENSE file for applicable license.
      must be explicitly requested by the HTML code by processing with the "process-exception" mode.
               -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  version="2.0">
+  version="3.0">
 
   <xsl:template match="*[contains(@class,' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style">
     <!-- Add the pre-calculated CSS style for this element -->

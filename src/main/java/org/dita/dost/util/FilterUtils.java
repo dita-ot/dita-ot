@@ -14,7 +14,6 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import java.io.IOException;
 import java.net.URI;
@@ -34,6 +33,7 @@ import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.filter.SubjectScheme;
+import org.dita.dost.module.filter.SubjectScheme.SubjectDefinition;
 import org.w3c.dom.*;
 import org.xml.sax.*;
 
@@ -44,16 +44,22 @@ import org.xml.sax.*;
  */
 public final class FilterUtils {
 
-  /** Subject scheme file extension */
+  /**
+   * Subject scheme file extension
+   */
   public static final String SUBJECT_SCHEME_EXTENSION = ".subm";
   public static final FilterKey DEFAULT = new FilterKey(QName.valueOf(DEFAULT_ACTION), null);
 
   private static final String FLAG_STYLE_PREFIX = "flag__style--";
 
   private DITAOTLogger logger;
-  /** Actions for filter keys. */
-  private final Map<FilterKey, Action> filterMap;
-  /** Set of filter keys for which an error has already been thrown. */
+  /**
+   * Actions for filter keys.
+   */
+  final Map<FilterKey, Action> filterMap;
+  /**
+   * Set of filter keys for which an error has already been thrown.
+   */
   private final Set<FilterKey> notMappingRules = new HashSet<>();
   private boolean logMissingAction;
   private final String foregroundConflictColor;
@@ -137,40 +143,34 @@ public final class FilterUtils {
   }
 
   private static Set<QName> getProfileAttributes(final String conf) {
-    final ImmutableSet.Builder<QName> res = ImmutableSet
-      .<QName>builder()
-      .add(
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET)
-      );
+    final Set<QName> res = new HashSet<>();
+    res.add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PLATFORM));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRODUCT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRINT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
     if (conf != null) {
       Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
     }
-    return res.build();
+    return Collections.unmodifiableSet(res);
   }
 
   private static Set<QName> getFlaggingAttributes(final String conf) {
-    final ImmutableSet.Builder<QName> res = ImmutableSet
-      .<QName>builder()
-      .add(
-        QName.valueOf(ATTRIBUTE_NAME_AUDIENCE),
-        QName.valueOf(ATTRIBUTE_NAME_PLATFORM),
-        QName.valueOf(ATTRIBUTE_NAME_PRODUCT),
-        QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PROPS),
-        QName.valueOf(ATTRIBUTE_NAME_PRINT),
-        QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET),
-        QName.valueOf(ATTRIBUTE_NAME_REV)
-      );
+    final Set<QName> res = new HashSet<>();
+    res.add(QName.valueOf(ATTRIBUTE_NAME_AUDIENCE));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PLATFORM));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRODUCT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_OTHERPROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PROPS));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_PRINT));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_DELIVERYTARGET));
+    res.add(QName.valueOf(ATTRIBUTE_NAME_REV));
     if (conf != null) {
       Stream.of(conf.trim().split("\\s*,\\s*")).map(QName::valueOf).forEach(res::add);
     }
-    return res.build();
+    return Collections.unmodifiableSet(res);
   }
 
   public Set<Flag> getFlags(final Attributes atts, final QName[][] extProps) {
@@ -298,7 +298,7 @@ public final class FilterUtils {
   /**
    * Check if the given Attributes need to be excluded.
    *
-   * @param atts attributes
+   * @param atts     attributes
    * @param extProps {@code props} attribute specializations
    * @return {@code true} if any profiling attribute was excluded, otherwise {@code false}
    */
@@ -379,7 +379,7 @@ public final class FilterUtils {
   /**
    * Get labelled props value.
    *
-   * @param propName attribute name
+   * @param propName       attribute name
    * @param attrPropsValue attribute value
    * @return props value, {@code null} if not available
    */
@@ -474,7 +474,8 @@ public final class FilterUtils {
 
   /**
    * Check if attribute value has mapping in filter configuration and throw messages.
-   * @param attName attribute name
+   *
+   * @param attName  attribute name
    * @param attValue attribute value
    */
   private void checkRuleMapping(final QName attName, final List<String> attValue) {
@@ -541,7 +542,7 @@ public final class FilterUtils {
    * @param bindingMap subject scheme bindings, {@code Map<AttName, Map<ElemName, Set<Element>>>}
    * @return new filter with subject scheme information
    */
-  private FilterUtils refine(final Map<QName, Map<String, Set<Element>>> bindingMap) {
+  private FilterUtils refine(final Map<QName, Map<String, Set<SubjectDefinition>>> bindingMap) {
     if (bindingMap != null && !bindingMap.isEmpty()) {
       final Map<FilterKey, Action> buf = new HashMap<>(filterMap);
       for (final Map.Entry<FilterKey, Action> e : filterMap.entrySet()) {
@@ -562,15 +563,15 @@ public final class FilterUtils {
   private void refineAction(
     final Action action,
     final FilterKey key,
-    final Map<QName, Map<String, Set<Element>>> bindingMap,
+    final Map<QName, Map<String, Set<SubjectDefinition>>> bindingMap,
     final Map<FilterKey, Action> destFilterMap
   ) {
     if (key.value != null) {
-      final Map<String, Set<Element>> schemeMap = bindingMap.get(key.attribute);
+      final Map<String, Set<SubjectDefinition>> schemeMap = bindingMap.get(key.attribute);
       if (schemeMap != null && !schemeMap.isEmpty()) {
-        for (final Set<Element> submap : schemeMap.values()) {
-          for (final Element e : submap) {
-            final Element subRoot = searchForKey(e, key.value);
+        for (final Set<SubjectDefinition> submap : schemeMap.values()) {
+          for (final SubjectDefinition e : submap) {
+            final SubjectDefinition subRoot = searchForKey(e, key.value);
             if (subRoot != null) {
               insertAction(subRoot, key.attribute, action, destFilterMap);
             }
@@ -582,7 +583,8 @@ public final class FilterUtils {
 
   /**
    * Search subject scheme elements for a given key
-   * @param root subject scheme element tree to search through
+   *
+   * @param root     subject scheme element tree to search through
    * @param keyValue key to locate
    * @return element that matches the key, otherwise {@code null}
    */
@@ -601,8 +603,7 @@ public final class FilterUtils {
         }
       }
       if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (keyValue.equals(key)) {
+        if (getKeyValues(node).contains(keyValue)) {
           return node;
         }
       }
@@ -611,14 +612,45 @@ public final class FilterUtils {
   }
 
   /**
+   * Search subject scheme elements for a given key
+   * @param root subject scheme element tree to search through
+   * @param keyValue key to locate
+   * @return element that matches the key, otherwise {@code null}
+   */
+  private SubjectDefinition searchForKey(final SubjectDefinition root, final String keyValue) {
+    if (root == null || keyValue == null) {
+      return null;
+    }
+    final LinkedList<SubjectDefinition> queue = new LinkedList<>();
+    queue.add(root);
+    while (!queue.isEmpty()) {
+      final SubjectDefinition node = queue.removeFirst();
+      final List<SubjectDefinition> children = node.children();
+      queue.addAll(children);
+      if (node.keys().contains(keyValue)) {
+        return node;
+      }
+    }
+    return null;
+  }
+
+  private static List<String> getKeyValues(Element child) {
+    var value = child.getAttribute(ATTRIBUTE_NAME_KEYS).trim();
+    if (value.isEmpty()) {
+      return List.of();
+    }
+    return Arrays.asList(value.split("\\s+"));
+  }
+
+  /**
    * Insert subject scheme based action into filetermap if key not present in the map
    *
    * @param subTree subject scheme definition element
    * @param attName attribute name
-   * @param action action to insert
+   * @param action  action to insert
    */
   private void insertAction(
-    final Element subTree,
+    final SubjectDefinition subTree,
     final QName attName,
     final Action action,
     final Map<FilterKey, Action> destFilterMap
@@ -627,31 +659,18 @@ public final class FilterUtils {
       return;
     }
 
-    final LinkedList<Element> queue = new LinkedList<>();
-
     // Skip the sub-tree root because it has been added already.
-    NodeList children = subTree.getChildNodes();
-    for (int i = 0; i < children.getLength(); i++) {
-      if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        queue.offer((Element) children.item(i));
-      }
-    }
+    List<SubjectDefinition> children = subTree.children();
+    final LinkedList<SubjectDefinition> queue = new LinkedList<>(children);
 
     while (!queue.isEmpty()) {
-      final Element node = queue.poll();
-      children = node.getChildNodes();
-      for (int i = 0; i < children.getLength(); i++) {
-        if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          queue.offer((Element) children.item(i));
-        }
-      }
-      if (SUBJECTSCHEME_SUBJECTDEF.matches(node)) {
-        final String key = node.getAttribute(ATTRIBUTE_NAME_KEYS);
-        if (key != null && !key.trim().isEmpty()) {
-          final FilterKey k = new FilterKey(attName, key);
-          if (!destFilterMap.containsKey(k)) {
-            destFilterMap.put(k, action);
-          }
+      final SubjectDefinition node = queue.poll();
+      children = node.children();
+      queue.addAll(children);
+      for (String key : node.keys()) {
+        final FilterKey k = new FilterKey(attName, key);
+        if (!destFilterMap.containsKey(k)) {
+          destFilterMap.put(k, action);
         }
       }
     }

@@ -12,7 +12,6 @@ import static org.dita.dost.util.Constants.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
-import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;

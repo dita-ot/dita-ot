@@ -32,7 +32,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
 
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
@@ -62,7 +62,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
   
   <xsl:key name="topic-by-id" match="*[contains(@class,' topic/topic ')]" use="@id"/>
 
-  <!-- Find the relative path to another topic or map -->
+  <!-- Returns the directory path of a file reference (typically a relative path)
+       * Given '/a/b/c.dita', returns '/a/b/'
+       * Given 'a/b/c.dita', returns 'a/b/'
+       * Given 'a/b/c.dita#fragment', returns 'a/b/'
+       * Given 'c.dita', returns '' -->
   <xsl:template name="find-relative-path">
     <xsl:param name="remainingpath" as="xs:string"/>
     <xsl:if test="contains($remainingpath,'/')">
@@ -196,9 +200,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:if test="@href and not(@href='')">
       <xsl:attribute name="href">
         <xsl:choose>
+          <!-- path is relative to the current map/submap file - resolve it -->
           <xsl:when test="not(contains(@href,'://') or @scope='external' or $relative-path='#none#' or $relative-path='')">
             <xsl:value-of select="concat($relative-path, @href)"/>
           </xsl:when>
+          <!-- path is relative to $file-being-processed - use as-is -->
           <xsl:otherwise>
             <xsl:value-of select="@href"/>
           </xsl:otherwise>
@@ -904,6 +910,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
                 <xsl:otherwise>
+                  <!-- TODO: Replace with mode="mappull:linktext-fallback" -->
                   <xsl:call-template name="linktext-fallback"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -920,6 +927,7 @@ Other modes can be found within the code, and may or may not prove useful for ov
                   <xsl:value-of select="normalize-space($grabbed-value)"/>
                 </xsl:when>
                 <xsl:otherwise>
+                  <!-- TODO: Replace with mode="mappull:linktext-fallback" -->
                   <xsl:call-template name="linktext-fallback"/>
                 </xsl:otherwise>
               </xsl:choose>

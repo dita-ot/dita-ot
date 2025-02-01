@@ -46,26 +46,32 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
 <!-- 20090903 RDA: added <?ditaot gentext?> and <?ditaot linktext?> PIs for RFE 1367897.
                    Allows downstream processes to identify original text vs. generated link text. -->
           
-<xsl:stylesheet version="2.0" 
+<xsl:stylesheet version="3.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:topicpull="http://dita-ot.sourceforge.net/ns/200704/topicpull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="dita-ot topicpull ditamsg xs">
+
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
+
   <!-- Deprecated since 2.4 -->
   <xsl:param name="DBG" select="'no'"/>
 
   <!-- Set the format for generated text for links to tables and figures.   -->
   <!-- Recognized values are 'NUMBER' (Table 5) and 'TITLE' (Table Caption) -->
-  <xsl:param name="TABLELINK">NUMBER</xsl:param>
-  <xsl:param name="FIGURELINK">NUMBER</xsl:param>
-  <xsl:param name="remove-broken-links" as="xs:string?"/>
+  <!-- DITA-OT parameter args.tablelink.style: 'NUMBER' or 'TITLE' -->
+  <xsl:param name="TABLELINK" as="xs:string" select="'NUMBER'"/>
+  <!-- DITA-OT parameter args.figurelink.style: 'NUMBER' or 'TITLE' -->
+  <xsl:param name="FIGURELINK" as="xs:string" select="'NUMBER'"/>
+  <!-- DITA-OT parameter remove-broken-links: 'false' or 'true' -->
+  <xsl:param name="remove-broken-links" as="xs:string" select="'false'"/>
   <!-- Check whether the onlytopicinmap is turned on -->
-  <xsl:param name="ONLYTOPICINMAP" select="'false'"/>
+  <!-- DITA-OT parameter onlytopic.in.map: 'false' or 'true' -->
+  <xsl:param name="ONLYTOPICINMAP" as="xs:string" select="'false'"/>
   
   <!-- Establish keys for the counting of figures, tables, and anything else -->
   <!-- To remove something from the figure count, create the same key in an override.
@@ -79,8 +85,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   
   <xsl:key name="nontopicElementsById" match="*[@id][not(dita-ot:is-topic(.))]" use="@id"/>
   <xsl:key name="topicsById" match="*[contains(@class, ' topic/topic ')][@id]" use="@id"/>
-  
-  
+
   <!-- ========================
        Functions
        ======================== -->
@@ -101,7 +106,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       select="if (exists($specifiedValue)) 
       then $specifiedValue 
       else $defaultValue"/>
-    
   </xsl:function>
   
   <xsl:function name="dita-ot:get-link-scope" as="xs:string?">
@@ -525,8 +529,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:apply-templates select="@*"/>
           <!--create variables for attributes that will be passed by parameter to the getstuff template (which is shared with link, which needs the attributes in variables to save doing inheritance checks for each one)-->
           <xsl:variable name="type" as="xs:string?" select="@type"/>
-          <xsl:variable name="format" as="xs:string?" select="@format"/>
-          <xsl:variable name="scope" as="xs:string?" select="@format"/>
           <!--grab type, text and metadata, as long there's an href to grab from, otherwise error-->
           <xsl:apply-templates select="." mode="topicpull:get-stuff">
             <xsl:with-param name="localtype" select="$type" as="xs:string?"/>
@@ -607,13 +609,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
           <xsl:with-param name="localtype" select="$localtype"/>
           <xsl:with-param name="targetElement" select="$targetElement" as="element()"/>
         </xsl:apply-templates>
-        
-        <!--create class value string implied by the link's type, used for comparison with class strings in the target topic for validation-->
-        <xsl:variable name="classval" as="xs:string" 
-          select="if (dita-ot:is-topic($targetElement))
-                     then tokenize(substring($targetElement/@class, 3), ' ')[1]
-                     else concat('/', substring-after(tokenize(substring($targetElement/@class, 3), ' ')[1], '/'))
-          "/>
         
         <!--linktext-->
         <xsl:apply-templates select="." mode="topicpull:get-stuff_get-linktext">
@@ -952,18 +947,23 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
   </xsl:template>
 
-  <!-- Determine the text for a link to a figure. Currently uses "Figure N". A node set
-       containing the figure's <title> element is also passed in, an override may choose
-       to use this in the figure's reference text. -->
+  <!-- Compute the text for a link to a figure:
+       * When $FIGURELINK = 'NUMBER', use "Figure N".
+       * When $FIGURELINK = 'TITLE', use "Figure Caption/Title". -->
   <xsl:template match="*" mode="topicpull:figure-linktext">
+    <!-- for $FIGURELINK = 'NUMBER' -->
     <xsl:param name="figtext"/>
+    <!-- for $FIGURELINK = 'NUMBER' -->
     <xsl:param name="figcount"/>
+    <!-- for $FIGURELINK = 'TITLE' -->
     <xsl:param name="figtitle"/>
+
     <xsl:choose>
-      <xsl:when test="$FIGURELINK='TITLE'">
+      <xsl:when test="$FIGURELINK = 'TITLE'">
         <xsl:apply-templates select="$figtitle" mode="text-only"/>
       </xsl:when>
-      <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
+      <!-- $FIGURELINK = 'NUMBER' -->
+      <xsl:otherwise>
         <xsl:value-of select="$figtext"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'figure-number-separator'"/>
@@ -972,17 +972,21 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <!-- XXX: Remove I18N processing from here and move to transtype specific code -->
   <xsl:template match="*[lang('hu')]" mode="topicpull:figure-linktext">
     <!-- Hungarian: "1. Figure " -->
     <xsl:param name="figtext"/>
     <xsl:param name="figcount"/>
-    <xsl:param name="figtitle"/> <!-- Currently unused, but may be picked up by an override -->
+    <!-- Currently unused, but may be picked up by an override -->
+    <xsl:param name="figtitle"/>
+
     <xsl:choose>
       <xsl:when test="$FIGURELINK='TITLE'">
         <xsl:apply-templates select="$figtitle" mode="text-only"/>
       </xsl:when>
-      <xsl:otherwise> <!-- Default: FIGURELINK='NUMBER' -->
+      <!-- Default: FIGURELINK='NUMBER' -->
+      <xsl:otherwise>
         <xsl:value-of select="$figcount"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'figure-number-separator'"/>
@@ -991,6 +995,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <!-- If the figure is unavailable or we're not sure what to do with it, generate fallback text -->
   <xsl:template match="*" mode="topicpull:figure-linktext-fallback">
     <xsl:choose>
@@ -1044,16 +1049,23 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:apply-templates>
   </xsl:template>
 
-  <!-- Determine the text for a link to a table. Currently uses table title. -->
+  <!-- Compute the text for a link to a table:
+       * When $TABLELINK = 'NUMBER', use "Table N".
+       * When $TABLELINK = 'TITLE', use "Table Caption/Title". -->
   <xsl:template match="*" mode="topicpull:table-linktext">
+    <!-- for $TABLELINK = 'NUMBER' -->
     <xsl:param name="tbltext"/>
+    <!-- for $TABLELINK = 'NUMBER' -->
     <xsl:param name="tblcount"/>
-    <xsl:param name="tbltitle"/> <!-- Currently unused, but may be picked up by an override -->
+    <!-- for $TABLELINK = 'TITLE' -->
+    <xsl:param name="tbltitle"/>
+
     <xsl:choose>
-      <xsl:when test="$TABLELINK='TITLE'">
+      <xsl:when test="$TABLELINK = 'TITLE'">
         <xsl:apply-templates select="$tbltitle" mode="text-only"/>
       </xsl:when>
-      <xsl:otherwise> <!-- Default: TABLELINK='NUMBER' -->
+      <!-- $TABLELINK = 'NUMBER' -->
+      <xsl:otherwise>
         <xsl:value-of select="$tbltext"/>
         <xsl:call-template name="getVariable">
           <xsl:with-param name="id" select="'figure-number-separator'"/>
@@ -1062,11 +1074,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <xsl:template match="*[lang('hu')]" mode="topicpull:table-linktext">
     <!-- Hungarian: "1. Table" -->
     <xsl:param name="tbltext"/>
     <xsl:param name="tblcount"/>
-    <xsl:param name="tbltitle"/> <!-- Currently unused, but may be picked up by an override -->
+    <!-- Currently unused, but may be picked up by an override -->
+    <xsl:param name="tbltitle"/>
+
     <xsl:choose>
       <xsl:when test="$TABLELINK='TITLE'">
         <xsl:apply-templates select="$tbltitle" mode="text-only"/>
@@ -1080,6 +1095,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <!-- Fallback text if a table target cannot be found, or there is some other problem -->
   <xsl:template match="*" mode="topicpull:table-linktext-fallback">
     <xsl:choose>
@@ -1112,7 +1128,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template mode="topicpull:resolvelinktext" priority="10" 
     match="*[contains(@class, ' topic/ol ')]/*[contains(@class, ' topic/li ')]" 
     >
-    
     <xsl:apply-templates mode="topicpull:li-linktext" 
       select="."/>
   </xsl:template>  
@@ -1121,6 +1136,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:param name="linkElement" as="element()" tunnel="yes"/>
     
     <xsl:for-each select="$linkElement">
+      <!-- TODO: Replace with mode="ditamsg:crossref-unordered-listitem" -->
       <xsl:call-template name="topicpull:referenced-invalid-list-item"/>
     </xsl:for-each>
   </xsl:template>
@@ -1130,6 +1146,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:number level="multiple"
       count="*[contains(@class,' topic/ol ')]/*[contains(@class,' topic/li ')]" format="1.a.i.1.a.i.1.a.i"/>
   </xsl:template>
+
   <!-- Instead of matching an unordered list item, we will call this template; that way
      the error points to the XREF, not to the list item. -->
   <xsl:template name="topicpull:referenced-invalid-list-item">
@@ -1140,7 +1157,6 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*[contains(@class,' topic/fn ')]" mode="topicpull:resolvelinktext">
     <xsl:apply-templates mode="topicpull:fn-linktext" 
       select="."/>
-    
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/fn ')]" mode="topicpull:fn-linktext">
@@ -1180,6 +1196,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       has been determined to be appropriate-->
   <xsl:template match="*" mode="topicpull:getshortdesc">
     <xsl:param name="targetElement" as="element()?"/>
+
     <xsl:choose>
       <xsl:when test="not(dita-ot:is-topic($targetElement))">
         <xsl:apply-templates select="." mode="topicpull:getshortdesc_element">
@@ -1213,6 +1230,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Get the shortdesc from a specific topic in another file -->
   <xsl:template match="*" mode="topicpull:getshortdesc_topic">
     <xsl:param name="targetElement" as="element()?"/>
+
     <xsl:choose>
       <xsl:when test="$targetElement/*[contains(@class, ' topic/shortdesc ')] |
                       $targetElement/*[contains(@class, ' topic/abstract ')]/*[contains(@class, ' topic/shortdesc ')]">
@@ -1225,41 +1243,25 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     </xsl:choose>
   </xsl:template>
 
+  <!-- use common "dita-ot:text-only" templates for link text computation -->
   <xsl:template match="*|text()|processing-instruction()" mode="text-only">
-    <!-- Redirect to common dita-ot module -->
     <xsl:apply-templates select="." mode="dita-ot:text-only"/>
   </xsl:template>
+
   <xsl:template match="*|@*|comment()|processing-instruction()|text()">
     <xsl:copy>
       <xsl:apply-templates select="*|@*|comment()|processing-instruction()|text()"/>
     </xsl:copy>
   </xsl:template>
-  
-  
+
+  <!-- in link text computation, do not resolve footnote numbers
+       (the numbering space might differ between the source and target documents) -->
+  <xsl:template match="*[contains(@class,' topic/fn ')]" mode="dita-ot:text-only"/>
+
   <xsl:template match="*[contains(@class,' topic/xref ')]" mode="copy-shortdesc">
-    <xsl:choose>
-      <xsl:when test="empty(@href) or @scope='peer' or @scope='external'">
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="@format and not(@format='dita')">
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="not(contains(@href,'/'))"><!-- May be DITA, but in the same directory -->
-        <xsl:copy>
-          <xsl:apply-templates select="@*|text()|*" mode="#current" />
-        </xsl:copy>
-      </xsl:when>
-      <xsl:when test="text()|*[not(contains(@class,' topic/desc '))]">
-        <xsl:apply-templates select="*[not(contains(@class,' topic/desc '))]|text()|comment()|processing-instruction()" mode="#current" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>***</xsl:text><!-- go get the target text -->
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:copy>
+      <xsl:apply-templates select="@*|text()|*" mode="#current"/>
+    </xsl:copy>
   </xsl:template>
   
   <xsl:template match="text()" mode="copy-shortdesc">
@@ -1282,6 +1284,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="@id" mode="copy-shortdesc" />
   
   <xsl:template match="*[contains(@class,' topic/indexterm ')]" mode="copy-shortdesc" />
+
   <xsl:template match="*[contains(@class,' topic/draft-comment ') or contains(@class,' topic/required-cleanup ')]" mode="copy-shortdesc"/>
   
   <xsl:template match="*|@*|processing-instruction()" mode="copy-shortdesc">
@@ -1294,6 +1297,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template name="compute-number">
     <xsl:param name="except"/>
     <xsl:param name="all"/>
+
     <xsl:choose>
       <xsl:when test="$except != ''">
         <xsl:value-of select="number($all) - number($except)"/>
@@ -1315,38 +1319,46 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:empty-href">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX017E'"/>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:missing-href">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX028E'"/>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:type-attribute-not-specific">
     <xsl:param name="elem-name" select="name()"/>
     <xsl:param name="targetting"/>
     <xsl:param name="type"/>
     <xsl:param name="actual-name"/>
+
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX029I'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$elem-name"/>;%2=<xsl:value-of select="$targetting"/>;%3=<xsl:value-of select="$type"/>;%4=<xsl:value-of select="$actual-name"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:type-attribute-incorrect">
     <xsl:param name="elem-name" select="name()"/>
     <xsl:param name="targetting"/>
     <xsl:param name="type"/>
     <xsl:param name="actual-name"/>
+
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX030W'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="$elem-name"/>;%2=<xsl:value-of select="$targetting"/>;%3=<xsl:value-of select="$type"/>;%4=<xsl:value-of select="$actual-name"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:missing-href-target">
     <xsl:param name="file"/>
+
     <xsl:choose>
        <xsl:when test="$ONLYTOPICINMAP='true'">
           <xsl:call-template name="output-message">
@@ -1362,30 +1374,35 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
          </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:cannot-retrieve-linktext">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX032E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:cannot-retrieve-list-number">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX033E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:crossref-unordered-listitem">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX034E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:cannot-retrieve-footnote-number">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX035E'"/>
       <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
     </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="*" mode="ditamsg:cannot-find-dlentry-target">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX036E'"/>
@@ -1411,6 +1428,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <xsl:template match="*" mode="topicpull:add-usertext-PI">
     <xsl:choose>
       <xsl:when test="processing-instruction()[name()='ditaot'][.='usertext' or .='gentext']">
@@ -1425,12 +1443,14 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <!-- Added for RFE 3001750. -->
   <!-- Returns a <?ditaot dita-ot:genshortdesc?> if context element does not already have a *shortdesc PI -->
   <xsl:template match="*" mode="topicpull:add-genshortdesc-PI"/>
+
   <xsl:template match="*[not(processing-instruction('ditaot')[. = ('usershortdesc' ,'genshortdesc')])]" mode="topicpull:add-genshortdesc-PI" priority="10">
     <xsl:processing-instruction name="ditaot">genshortdesc</xsl:processing-instruction>
   </xsl:template>
 
   <!-- Returns a <?ditaot dita-ot:usershortdesc?> if context element does not already have a *shortdesc PI -->
   <xsl:template match="*" mode="topicpull:add-usershortdesc-PI"/>
+
   <xsl:template match="*[not(processing-instruction('ditaot')[. = ('usershortdesc' ,'genshortdesc')])]" mode="topicpull:add-usershortdesc-PI" priority="10">
     <xsl:processing-instruction name="ditaot">usershortdesc</xsl:processing-instruction>
   </xsl:template>

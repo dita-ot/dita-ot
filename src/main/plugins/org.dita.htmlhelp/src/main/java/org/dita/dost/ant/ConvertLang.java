@@ -7,28 +7,16 @@
  */
 package org.dita.dost.ant;
 
-import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
+import static org.apache.commons.io.FileUtils.moveFile;
 import static org.dita.dost.util.Constants.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.dita.dost.log.DITAOTAntLogger;
@@ -83,6 +71,7 @@ public final class ConvertLang extends Task {
   private String exceptionCharset;
 
   private DITAOTLogger logger;
+  private XMLUtils xmlUtils;
 
   /**
    * Executes the Ant task.
@@ -137,7 +126,7 @@ public final class ConvertLang extends Task {
 
   private void createCharsetMap() {
     try (InputStream in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/util/codepages.xml")) {
-      final DocumentBuilder builder = XMLUtils.getDocumentBuilder();
+      final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
       final Document doc = builder.parse(in);
       final Element root = doc.getDocumentElement();
       final NodeList childNodes = root.getChildNodes();

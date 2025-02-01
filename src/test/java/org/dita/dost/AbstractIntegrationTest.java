@@ -14,8 +14,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -51,7 +49,7 @@ public abstract class AbstractIntegrationTest {
     PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
     XHTML("xhtml", false, "xhtml", "dita2xhtml"),
     HTML5("html5", false, "html5", "dita2html5"),
-    PDF("pdf", true, ImmutableSet.of("fo"), "pdf", "dita2pdf2"),
+    PDF("pdf", true, Set.of("fo"), "pdf", "dita2pdf2"),
     ECLIPSEHELP("eclipsehelp", false, "eclipsehelp", "dita2eclipsehelp"),
     HTMLHELP("htmlhelp", false, "htmlhelp", "dita2htmlhelp"),
     PREPROCESS2("xhtml", true, "preprocess", "build-init", "preprocess2"),
@@ -76,7 +74,7 @@ public abstract class AbstractIntegrationTest {
       this(
         name,
         compareTemp,
-        ImmutableSet.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
+        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
         exp,
         targets
       );
@@ -232,7 +230,7 @@ public abstract class AbstractIntegrationTest {
     final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
     final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
 
-    final ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    final Map<String, String> builder = new HashMap<>();
     args.forEach((k, v) -> {
       if (v instanceof Path) {
         builder.put(k, new File(srcDir, v.toString()).getAbsolutePath());
@@ -243,7 +241,7 @@ public abstract class AbstractIntegrationTest {
       }
     });
     builder.put("args.input", new File(srcDir, input.toFile().toString()).getAbsolutePath());
-    final Map<String, String> params = builder.build();
+    final Map<String, String> params = Collections.unmodifiableMap(builder);
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
@@ -457,7 +455,7 @@ public abstract class AbstractIntegrationTest {
     }
   }
 
-  final Set<String> ignorable = ImmutableSet.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");
+  final Set<String> ignorable = Set.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");
 
   private Collection<String> getFiles(File expDir, File actDir) {
     final FileFilter filter = f ->
@@ -611,11 +609,11 @@ public abstract class AbstractIntegrationTest {
 
   static class TestListener implements BuildListener {
 
-    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]\\[FATAL\\]");
-    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]\\[ERROR\\]");
-    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]\\[WARN\\]");
-    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]\\[INFO\\]");
-    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]\\[DEBUG\\]");
+    private final Pattern fatalPattern = Pattern.compile("\\[\\w+F\\]");
+    private final Pattern errorPattern = Pattern.compile("\\[\\w+E\\]");
+    private final Pattern warnPattern = Pattern.compile("\\[\\w+W\\]");
+    private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]");
+    private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]");
 
     public final List<TestListener.Message> messages = new ArrayList<>();
     final PrintStream out;
@@ -626,37 +624,37 @@ public abstract class AbstractIntegrationTest {
       this.err = err;
     }
 
-    //@Override
+    @Override
     public void buildStarted(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
     }
 
-    //@Override
+    @Override
     public void buildFinished(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
     }
 
-    //@Override
+    @Override
     public void targetStarted(BuildEvent event) {
       messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
     }
 
-    //@Override
+    @Override
     public void targetFinished(BuildEvent event) {
       messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
     }
 
-    //@Override
+    @Override
     public void taskStarted(BuildEvent event) {
       messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
     }
 
-    //@Override
+    @Override
     public void taskFinished(BuildEvent event) {
       messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
     }
 
-    //@Override
+    @Override
     public void messageLogged(BuildEvent event) {
       final String message = event.getMessage();
       int level;

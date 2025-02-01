@@ -33,10 +33,11 @@ See the accompanying LICENSE file for applicable license.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    version="2.0">
+    version="3.0">
 
     <xsl:template match="*[contains(@class,' hi-d/b ')]">
         <fo:inline xsl:use-attribute-sets="b">
+            <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:apply-templates/>
         </fo:inline>
@@ -44,6 +45,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/i ')]">
       <fo:inline xsl:use-attribute-sets="i">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -51,6 +53,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/u ')]">
       <fo:inline xsl:use-attribute-sets="u">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -58,6 +61,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/tt ')]">
       <fo:inline xsl:use-attribute-sets="tt">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -65,6 +69,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/sup ')]">
       <fo:inline xsl:use-attribute-sets="sup">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -72,6 +77,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template match="*[contains(@class,' hi-d/sub ')]">
       <fo:inline xsl:use-attribute-sets="sub">
+        <!-- TODO: Replace with mode="commonattributes" -->
         <xsl:call-template name="commonattributes"/>
         <xsl:apply-templates/>
       </fo:inline>
@@ -79,6 +85,7 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="*[contains(@class,' hi-d/line-through ')]">
     <fo:inline xsl:use-attribute-sets="line-through">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:inline>
@@ -86,6 +93,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' hi-d/overline ')]">
     <fo:inline xsl:use-attribute-sets="overline">
+      <!-- TODO: Replace with mode="commonattributes" -->
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates/>
     </fo:inline>

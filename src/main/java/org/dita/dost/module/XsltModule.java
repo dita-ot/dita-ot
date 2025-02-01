@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
@@ -31,7 +30,6 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.exception.UncheckedDITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.CatalogUtils;
 import org.dita.dost.util.ChainedURIResolver;
 import org.dita.dost.util.Job;
 import org.xmlresolver.Resolver;
@@ -71,7 +69,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
   private void init() {
     if (catalog == null) {
-      final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
+      final Resolver catalogResolver = xmlUtils.getCatalogResolver();
       catalog = catalogResolver;
     }
     uriResolver = new ChainedURIResolver(job.getStore(), catalog);
@@ -94,7 +92,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     if (destDir != null) {
-      logger.info("Transforming into " + destDir.getAbsolutePath());
+      logger.debug("Transforming into " + destDir.getAbsolutePath());
     }
     processor = xmlUtils.getProcessor();
     final XsltCompiler xsltCompiler = processor.newXsltCompiler();
@@ -134,7 +132,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
             }
           })
           .filter(Objects::nonNull)
-          .collect(Collectors.toList());
+          .toList();
         for (Entry<File, File> entry : tmps) {
           try {
             logger.info("Move " + entry.getKey().toURI() + " to " + entry.getValue().toURI());

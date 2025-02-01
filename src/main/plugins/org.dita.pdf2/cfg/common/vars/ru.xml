@@ -36,7 +36,7 @@ See the accompanying LICENSE file for applicable license.
   <variable id="Appendix with number">Приложение <param ref-name="number"/></variable>
   <variable id="Part with number">Часть <param ref-name="number"/></variable>
   <variable id="Required-Cleanup"><!--TODO:[Required-Cleanup]--></variable>
-  <variable id="On the page"><!--TODO: on page <param ref-name="pagenum"/>--></variable>
+  <variable id="On the page">на странице <param ref-name="pagenum"/></variable>
   <variable id="Page"><!--TODO: page <param ref-name="pagenum"/>--></variable>
   <variable id="This link"/><!--UNUSED-->
   <variable id="Child topics"/><!--UNUSED-->

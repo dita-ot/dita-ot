@@ -29,6 +29,9 @@ if "%DITA_HOME%"=="" goto setDefaultDitaHome
 rem %~dp0 is expanded pathname of the current script under NT
 set DITA_HOME=%~dp0..
 
+rem Save subcommand
+set DITA_CMD_SUBCOMMAND=%1
+
 rem Slurp the command line arguments. This loop allows for an unlimited number
 rem of arguments (up to the command line limit, anyway).
 set DITA_CMD_LINE_ARGS=
@@ -43,10 +46,16 @@ rem and for NT handling to skip to.
 
 :doneStart
 
-:checkJava
+rem No plug-in libraries in classpath
+setlocal enabledelayedexpansion
+if "!DITA_CMD_SUBCOMMAND!" == "install" goto checkJava
+if "!DITA_CMD_SUBCOMMAND!" == "uninstall" goto checkJava
+endlocal
+
 rem Set environment variables
 call "%DITA_HOME%\config\env.bat"
 
+:checkJava
 set _JAVACMD=%JAVACMD%
 
 if "%JAVA_HOME%" == "" goto noJavaHome
@@ -58,7 +67,7 @@ if "%_JAVACMD%" == "" set _JAVACMD=java.exe
 
 :runAnt
 rem sun.io.useCanonCaches improves performance in Java 12+ (see https://bugs.openjdk.java.net/browse/JDK-8207005)
-"%_JAVACMD%" %ANT_OPTS% -Djava.awt.headless=true -Dsun.io.useCanonCaches=true -classpath "%DITA_HOME%\lib\ant-launcher.jar;%DITA_HOME%\config" "-Dant.home=%DITA_HOME%"  "-Ddita.dir=%DITA_HOME%" org.apache.tools.ant.launch.Launcher %ANT_ARGS% -cp "%CLASSPATH%" %DITA_CMD_LINE_ARGS% -buildfile "%DITA_HOME%\build.xml" -main "org.dita.dost.invoker.Main"
+"%_JAVACMD%" -Djava.awt.headless=true -Dcli.log-format=fancy -Dcli.color=true -Dsun.io.useCanonCaches=true %ANT_OPTS% -classpath "%DITA_HOME%\lib\ant-launcher.jar;%DITA_HOME%\config" "-Dant.home=%DITA_HOME%"  "-Ddita.dir=%DITA_HOME%" org.apache.tools.ant.launch.Launcher %ANT_ARGS% -cp "%CLASSPATH%" %DITA_CMD_LINE_ARGS% -buildfile "%DITA_HOME%\build.xml" -main "org.dita.dost.invoker.Main"
 rem Check the error code of the Ant build
 if not "%OS%"=="Windows_NT" goto onError
 set ANT_ERROR=%ERRORLEVEL%
