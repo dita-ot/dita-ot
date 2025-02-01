@@ -59,7 +59,7 @@ public class InitArguments extends Arguments {
 
   private void handleArgOutput(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException(locale.getString("init.error.output"));
     }
     output = Paths.get(entry.getValue()).toAbsolutePath();

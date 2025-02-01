@@ -88,6 +88,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private static final String ANT_PLUGIN_FILE = "plugin.file";
   private static final String ANT_PLUGIN_ID = "plugin.id";
   private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+  private static final String ANT_PROJECT_CONTEXT = "project.context";
   private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
   private static final Map<String, String> RESERVED_PARAMS = Map.of(
     "output.dir",
@@ -344,6 +345,30 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (args instanceof VersionArguments) {
       printVersion();
       return;
+    } else if (args instanceof final ValidateArguments validateArgs) {
+      final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
+      final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
+      buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      definedProps.putAll(getLocalProperties(ditaDir));
+      definedProps.put(USE_COLOR, Boolean.toString(validateArgs.useColor));
+      if (validateArgs.projectFile == null) {
+        projectProps = Collections.singletonList(definedProps);
+      } else {
+        projectProps = collectContextProperties(validateArgs.projectFile, definedProps);
+      }
+      for (Map<String, Object> projectProp : projectProps) {
+        String err = null;
+        if (!projectProp.containsKey(ANT_ARGS_INPUT)) {
+          err = locale.getString("conversion.error.input_not_defined");
+        }
+        if (err != null) {
+          throw new CliException(err, args.getUsage(true));
+        }
+        // default values
+        if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
+          projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
+        }
+      }
     } else if (args instanceof TranstypesArguments) {
       printTranstypes();
       return;
@@ -753,6 +778,60 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       .collect(Collectors.toList());
     if (runDeliverable != null && projectProps.isEmpty()) {
       throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
+    }
+
+    return projectProps;
+  }
+
+  private List<Map<String, Object>> collectContextProperties(
+    final File projectFile,
+    final Map<String, Object> definedProps
+  ) {
+    final URI base = projectFile.toURI();
+    final org.dita.dost.project.Project project = readProjectFile(projectFile);
+
+    return collectContextProperties(project, base, definedProps);
+  }
+
+  @VisibleForTesting
+  List<Map<String, Object>> collectContextProperties(
+    final org.dita.dost.project.Project project,
+    final URI base,
+    final Map<String, Object> definedProps
+  ) {
+    final String runContext = (String) definedProps.get(ANT_PROJECT_CONTEXT);
+
+    final List<Map<String, Object>> projectProps = zipWithIndex(project.contexts())
+      .filter(entry -> runContext == null || Objects.equals(entry.getKey().id(), runContext))
+      .map(entry -> {
+        final org.dita.dost.project.Project.Context context = entry.getKey();
+        final Map<String, Object> props = new HashMap<>(definedProps);
+
+        props.put(
+          ANT_PROJECT_CONTEXT,
+          context.id() != null ? context.id() : String.format("context-%d", entry.getValue() + 1)
+        );
+        final URI input = base.resolve(context.inputs().inputs().get(0).href());
+        props.put(ANT_ARGS_INPUT, input.toString());
+        props.put(ANT_TRANSTYPE, "validate");
+        final List<org.dita.dost.project.Project.Deliverable.Profile.DitaVal> ditavals = context
+          .profiles()
+          .ditavals()
+          .stream()
+          .toList();
+        if (!ditavals.isEmpty()) {
+          final String filters = ditavals
+            .stream()
+            .map(ditaVal -> Paths.get(base.resolve(ditaVal.href())).toString())
+            .collect(Collectors.joining(File.pathSeparator));
+          props.put("args.filter", filters);
+        }
+
+        return props;
+      })
+      .collect(Collectors.toList());
+    if (runContext != null && projectProps.isEmpty()) {
+      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runContext));
     }
 
     return projectProps;

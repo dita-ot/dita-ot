@@ -95,6 +95,8 @@ final class ArgumentParser {
           return new PluginsArguments().parse(arguments);
         case "version":
           return new VersionArguments().parse(arguments);
+        case "validate":
+          return new ValidateArguments().parse(arguments);
         case "transtypes":
           return new TranstypesArguments().parse(arguments);
         case "deliverables":

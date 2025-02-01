@@ -96,6 +96,24 @@ public class ArgumentParserTest {
   }
 
   @Test
+  public void validateSubcommand() {
+    final ValidateArguments act = (ValidateArguments) parser.processArgs(new String[] { "validate", "-i", "root.map" });
+    assertEquals("validate", act.definedProps.get("transtype"));
+    assertEquals("root.map", act.definedProps.get("args.input"));
+  }
+
+  @Test
+  public void validateSubcommand_context() {
+    final ValidateArguments act = (ValidateArguments) parser.processArgs(
+      new String[] { "validate", "-p", "project.yml", "--context=book" }
+    );
+    System.out.println(act.definedProps);
+    assertEquals("validate", act.definedProps.get("transtype"));
+    assertEquals(new File("project.yml").getAbsoluteFile(), act.projectFile);
+    assertEquals("book", act.definedProps.get("project.context"));
+  }
+
+  @Test
   public void pluginsSubcommand() {
     final PluginsArguments act = (PluginsArguments) parser.processArgs(new String[] { "plugins" });
   }
