@@ -31,6 +31,7 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.util.XMLUtils;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -72,6 +73,7 @@ public class KeyrefPaserTest {
 
   private static Stream<Arguments> testWriteArguments() {
     return Stream.of(
+      Arguments.of(Paths.get("whitespace.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("a.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("subdir", "subdirtopic.xml"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("id.xml"), Paths.get("keys.ditamap")),
@@ -80,6 +82,28 @@ public class KeyrefPaserTest {
       Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap"))
+    );
+  }
+
+  @Test
+  public void compatibulityMode() throws Exception {
+    Path file = Paths.get("compatibility.xml");
+    Path map = Paths.get("keys.ditamap");
+
+    TestUtils.copy(srcDir, tempDir);
+
+    final KeyScope keyDefinition = readKeyMap(map);
+    final KeyrefPaser parser = new KeyrefPaser();
+    parser.setLogger(new TestUtils.TestLogger());
+    parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+    parser.setKeyDefinition(keyDefinition);
+    parser.setCurrentFile(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri());
+    parser.setCompatibilityMode(false);
+    parser.write(Paths.get(tempDir.getAbsolutePath(), file.toString()).toFile());
+
+    assertXMLEqual(
+      new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
+      new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
     );
   }
 

@@ -141,7 +141,17 @@ See the accompanying LICENSE file for applicable license.
     <!-- end to init required parameters -->
 
     <!-- create required directories -->
-    <mkdir dir="${output.dir}" />
+    <local name="createOutputDir"/>
+    <condition property="createOutputDir" value="true" else="false">
+      <or>
+        <not>
+          <isset property="build-step.create-output-dir"/>
+        </not>
+        <istrue value="${build-step.create-output-dir}"/>
+      </or>
+    </condition>
+    <mkdir dir="${output.dir}" if:true="${createOutputDir}" />
+
     <local name="createTempDir"/>
     <condition property="createTempDir" value="true">
       <equals arg1="${store-type}" arg2="file"/>
@@ -242,6 +252,15 @@ See the accompanying LICENSE file for applicable license.
     <condition property="collator" value="ICU" else="JDL" if:true="${legacy-format}">
       <available classname="com.ibm.icu.text.Collator"/>
     </condition>
+    <local name="createOutputDir"/>
+    <condition property="createOutputDir" value="true" else="false">
+      <or>
+        <not>
+          <isset property="build-step.create-output-dir"/>
+        </not>
+        <istrue value="${build-step.create-output-dir}"/>
+      </or>
+    </condition>
     <!-- output parameters info -->
     <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
     <echo level="info" if:true="${legacy-format}">* basedir = ${basedir}</echo>
@@ -249,7 +268,7 @@ See the accompanying LICENSE file for applicable license.
     <!--echo level="info">* input = ${args.input}</echo-->
     <echo level="info">${log-prefix}transtype = ${transtype}</echo>
     <echo level="info">${log-prefix}tempdir = ${dita.temp.dir}</echo>
-    <echo level="info">${log-prefix}outputdir = ${output.dir}</echo>
+    <echo level="info" if:true="${createOutputDir}">${log-prefix}outputdir = ${output.dir}</echo>
     <echo level="info" if:true="${legacy-format}">* clean.temp = ${clean.temp}</echo>
     <echo level="info">${log-prefix}DITA-OT version = ${otversion}</echo>
     <echo level="info" if:true="${legacy-format}">* XML parser = ${xml.parser}</echo>

@@ -89,10 +89,14 @@ final class ArgumentParser {
   public Arguments processArgs(final String[] arguments) {
     for (final String subcommand : arguments) {
       switch (getName(subcommand)) {
+        case "help":
+          return new HelpArguments().parse(arguments);
         case "plugins":
           return new PluginsArguments().parse(arguments);
         case "version":
           return new VersionArguments().parse(arguments);
+        case "validate":
+          return new ValidateArguments().parse(arguments);
         case "transtypes":
           return new TranstypesArguments().parse(arguments);
         case "deliverables":
@@ -101,6 +105,8 @@ final class ArgumentParser {
           return new InstallArguments().parse(arguments);
         case "uninstall":
           return new UninstallArguments().parse(arguments);
+        case "init":
+          return new InitArguments().parse(arguments);
       }
     }
     return new ConversionArguments().parse(arguments);

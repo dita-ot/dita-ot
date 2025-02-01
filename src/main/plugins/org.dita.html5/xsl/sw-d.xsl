@@ -44,19 +44,11 @@ See the accompanying LICENSE file for applicable license.
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' sw-d/cmdname ')]" name="topic.sw-d.cmdname">
-   <span>
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates/>
-   </span>
+   <xsl:next-match/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' sw-d/msgnum ')]" name="topic.sw-d.msgnum">
-   <span>
-    <xsl:call-template name="commonattributes"/>
-    <xsl:call-template name="setidaname"/>
-    <xsl:apply-templates/>
-   </span>
+   <xsl:next-match/>
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' sw-d/varname ')]" name="topic.sw-d.varname">

@@ -1,0 +1,10 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  id="a" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Whitespace</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <keyword class="- topic/keyword " keyref="keyword">keyword keyword</keyword>
+    </p>
+  </body>
+</topic>
