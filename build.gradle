@@ -8,19 +8,24 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.apache.tools.ant.taskdefs.condition.Os
 
+apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-group = 'org.dita-ot'
-archivesBaseName = 'dost'
-/** Semver version number */
-version = '4.3.0-SNAPSHOT'
+base {
+    group = 'org.dita-ot'
+    archivesName = 'dost'
+    /** Semver version number */
+    version = '4.3.0-SNAPSHOT'
 
-description = """DITA Open Toolkit"""
+    description = """DITA Open Toolkit"""
+}
 
-sourceCompatibility = 17
-targetCompatibility = 17
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
 
 repositories {
     mavenCentral()
@@ -67,16 +72,16 @@ jar {
 processResources {
     filter ReplaceTokens, tokens: [
             'version': project.version,
-            'release': "${project.version.split('\\.').toList().subList(0, 2).join('.').toString()}".toString()
+            'release': "${project.version.toString().split('\\.').toList().subList(0, 2).join('.').toString()}".toString()
     ]
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     from javadoc
     archiveClassifier = 'javadoc'
 }
@@ -105,13 +110,14 @@ def integrationTestSystemProperties = [
         basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("test") != null) {
-    integrationTestSystemProperties["test"] = System.getProperty("test")
+    integrationTestSystemProperties["test"] = "${System.getProperty("test")}"
 }
 if (System.getProperty("log_level") != null) {
-    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+    integrationTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 }
 
 tasks.register('integrationTest', Test) {
+    description "Integration tests"
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -141,10 +147,11 @@ def e2eTestSystemProperties = [
         basedir : "${projectDir}/src/test"
 ]
 if (System.getProperty("log_level") != null) {
-    integrationTestSystemProperties["log_level"] = System.getProperty("log_level")
+    integrationTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 }
 
 tasks.register('e2eTest', Test) {
+    description "End to end tests"
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -171,16 +178,19 @@ clean {
     delete "src/main/plugins/org.dita.pdf2.fop/lib/"
 }
 
-task copyInstall(type: Copy) {
-    from (jar)
-    from (configurations.runtimeClasspath.allArtifacts.files)
-    from (configurations.runtimeClasspath) {
+tasks.register('copyInstall', Copy) {
+    description "Copy jars to local development environment"
+    from(jar)
+    from(configurations.runtimeClasspath.allArtifacts.files)
+    from(configurations.runtimeClasspath) {
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
     destinationDir = file("src/main/lib")
 }
-task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
+tasks.register('buildLocal', JavaExec) {
+    description "Build local development environment to run application locally"
+    dependsOn 'copyInstall', ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"
     description "Build archives and install all plugins with dependencies"
     mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
@@ -193,8 +203,8 @@ task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fo
 
 ext.distTempDir = file("${buildDir}/tmp/dist")
 /** When patch is "0", only use major and minor versions, e.g. 1.2 instead of 1.2.0 */
-def cleanVersion = project.version.split('\\.').toList()[2] == "0" ?
-        project.version.split('\\.').toList().subList(0, 2).join('.').toString() :
+def cleanVersion = project.version.toString().split('\\.').toList()[2] == "0" ?
+        project.version.toString().split('\\.').toList().subList(0, 2).join('.').toString() :
         project.version
 def distVersion = project.hasProperty("commit") && (!project.hasProperty("tag") || tag.empty) ?
                   "${project.version}@${commit.substring(0, 7)}" :
@@ -219,11 +229,14 @@ def bundled = [
 
 apply from: 'gradle/dist.gradle'
 
-task cleanDistTemp(type: Delete) {
+tasks.register('cleanDistTemp', Delete) {
+    description "Delete distribution temp dir"
     delete distTempDir
 }
 
-task initDist(dependsOn: [jar, cleanDistTemp]) {
+tasks.register('initDist') {
+    description "Create distribution temp dir"
+    dependsOn jar, 'cleanDistTemp'
     doLast {
         distTempDir.mkdirs()
         println "distVersion: ${distVersion}"
@@ -231,28 +244,30 @@ task initDist(dependsOn: [jar, cleanDistTemp]) {
     }
 }
 
-task copyDistTemp(type: Copy, dependsOn: initDist) {
-    from (jar) {
+tasks.register('copyDistTemp', Copy) {
+    description "Copy source files to distribution temp dir"
+    dependsOn 'initDist'
+    from(jar) {
         into "lib"
     }
-    from (configurations.runtimeClasspath.allArtifacts.files) {
+    from(configurations.runtimeClasspath.allArtifacts.files) {
         into "lib"
     }
-    from (configurations.runtimeClasspath) {
+    from(configurations.runtimeClasspath) {
         into "lib"
         rename "ant-launcher(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant-launcher.jar"
         rename "ant(-\\d+(\\.\\d+(\\.\\d+)?)?)\\.jar", "ant.jar"
     }
-    from (".") {
+    from(".") {
         include "LICENSE"
     }
-    from ("src/main") {
+    from("src/main") {
         include "plugins/*/plugin.xml"
         expand(
                 version: project.version
         )
     }
-    from ("src/main") {
+    from("src/main") {
         exclude ".gradle"
         exclude "plugins/**/build.gradle"
         exclude "plugins/**/settings.gradle"
@@ -298,7 +313,8 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
 }
 copyDistTemp.outputs.dir distTempDir
 
-task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTemp", ":fop:copyDistTemp", ":htmlhelp:copyDistTemp"]) {
+tasks.register('integrateDistTemp', JavaExec) {
+    dependsOn 'copyDistTemp', ":fo:copyDistTemp", ":fop:copyDistTemp", ":htmlhelp:copyDistTemp"
     mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
     workingDir distTempDir
@@ -306,23 +322,28 @@ task integrateDistTemp(type: JavaExec, dependsOn: [copyDistTemp, ":fo:copyDistTe
     args file("${distTempDir}/integrator.xml")
 }
 
-task integrateDistPlugins() {
-    dependsOn bundled.collect{ name, url ->
-        return tasks.create("integrateDist${name}", JavaExec) {
-            dependsOn(integrateDistTemp)
-            mainClass = "org.apache.tools.ant.launch.Launcher"
-            classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
-            workingDir distTempDir
-            args "-f"
-            args file("${distTempDir}/integrator.xml")
-            args "install"
-            args "-Dplugin.file=${url}"
-        }.name
+tasks.register('integrateDistPlugins') {
+    description "Run integrator in distribution temp to install external plug-ins"
+    mustRunAfter integrateDistTemp
+}
+bundled.forEach{ name, url ->
+    def taskName = tasks.register("integrateDist${name}", JavaExec) {
+        dependsOn(integrateDistTemp)
+        mainClass = "org.apache.tools.ant.launch.Launcher"
+        classpath = sourceSets.main.runtimeClasspath + files("${distTempDir}", "${projectDir}/src/main/config")
+        workingDir distTempDir
+        args "-f"
+        args file("${distTempDir}/integrator.xml")
+        args "install"
+        args "-Dplugin.file=${url}"
+    }.name
+    tasks.named('integrateDistPlugins') {
+        dependsOn taskName
     }
 }
-integrateDistPlugins.mustRunAfter integrateDistTemp
 
-task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
+tasks.register('generateDocs', Exec) {
+    dependsOn 'integrateDistTemp'
     workingDir = file("${distTempDir}/docsrc")
     commandLine = Os.isFamily(Os.FAMILY_WINDOWS) ? file("${distTempDir}/docsrc/gradlew.bat") : file("${distTempDir}/docsrc/gradlew")
     args = ["--no-daemon", "dist"]
@@ -330,7 +351,8 @@ task generateDocs(type: Exec, dependsOn: integrateDistTemp) {
 generateDocs.mustRunAfter integrateDistPlugins
 generateDocs.onlyIf { skipDocs() }
 
-task cleanGenerateDocs(type: Delete) {
+tasks.register('cleanGenerateDocs', Delete) {
+    description "Clean docs source in distribution temp dir"
     delete "${distTempDir}/temp"
     delete "${distTempDir}/docsrc/.gradle"
     delete "${distTempDir}/docsrc/build"
@@ -338,15 +360,16 @@ task cleanGenerateDocs(type: Delete) {
     delete "${distTempDir}/docsrc/out"
     delete "${distTempDir}/docsrc/platform.ditaval"
     delete "${distTempDir}/docsrc/temp"
+
+    mustRunAfter generateDocs
+    onlyIf { skipDocs() }
 }
-cleanGenerateDocs.mustRunAfter generateDocs
-cleanGenerateDocs.onlyIf { skipDocs() }
 
 def skipDocs() {
-    !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs')))
+    !(project.hasProperty('skipGenerateDocs') && Boolean.parseBoolean(project.property('skipGenerateDocs').toString()))
 }
 
-task generateJavadocs(type: Javadoc) {
+tasks.register('generateJavadocs', Javadoc) {
     include "**/org/dita/dost/*.*"
     include "**/org/dita/dost/exception/DITAOTException.*"
     include "**/org/dita/dost/util/Configuration.*"
@@ -364,23 +387,27 @@ def plugins = [
         "org.dita.xhtml",
 ]
 
-task distPlugins() {
-    dependsOn plugins.collect{ name ->
-        def taskName = "distPlugin${name.split("\\.").collect{token -> return token.capitalize()}.join("")}"
-        return tasks.create(taskName, Zip) {
-            dependsOn(integrateDistTemp)
-            from ("${distTempDir}/plugins/${name}") {
-                exclude "build"
-                exclude "src"
-                exclude "out"
-            }
-            archiveFileName = "${name}-${project.version}.zip"
-        }.name
+tasks.register('distPlugins') {
+    description "Build distribution packages for plug-ins"
+    mustRunAfter integrateDistPlugins
+}
+plugins.forEach{ name ->
+    def taskName = tasks.register("distPlugin${name.split("\\.").collect{ token -> return token.capitalize()}.join("")}", Zip) {
+        dependsOn integrateDistTemp
+        from ("${distTempDir}/plugins/${name}") {
+            exclude "build"
+            exclude "src"
+            exclude "out"
+        }
+        archiveFileName = "${name}-${project.version}.zip"
+    }.name
+    tasks.named('distPlugins') {
+        dependsOn taskName
     }
 }
-distPlugins.mustRunAfter integrateDistPlugins
 
-task distPluginChecksums() {
+tasks.register('distPluginChecksums') {
+    description "Create SHA-256 checksum files for plug-in distribution packages"
     doLast {
         ant.checksum(algorithm: "SHA-256", fileext: ".sha256") {
             fileset(dir: "${buildDir}/distributions") {
@@ -388,13 +415,15 @@ task distPluginChecksums() {
             }
         }
     }
+    mustRunAfter distPlugins
 }
-distPluginChecksums.mustRunAfter distPlugins
 generateNotices.mustRunAfter distPlugins
 
-task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs]) {
+tasks.register('dist', Zip) {
+    description "Build distribution package"
+    dependsOn jar, integrateDistTemp, integrateDistPlugins, distPlugins, distPluginChecksums, generateNotices, generateDocs, cleanGenerateDocs, generateJavadocs
     into("dita-ot-${distVersion}") {
-        from (distTempDir) {
+        from(distTempDir) {
             exclude "bin/dita"
             exclude "bin/dita.bat"
             // legacy build scripts
@@ -402,7 +431,7 @@ task dist(type: Zip, dependsOn: [jar, integrateDistTemp, integrateDistPlugins, d
             exclude "bin/ant"
             exclude "bin/ant.*"
         }
-        from (distTempDir) {
+        from(distTempDir) {
             fileMode = 0755
             include "bin/dita"
             include "bin/dita.bat"
@@ -435,16 +464,16 @@ test {
 def getRepositoryUsername() {
     return project.hasProperty('ossrhUsername') ?
             project.property('ossrhUsername') :
-            System.env.containsKey('OSSRH_USERNAME') ?
-                    System.env['OSSRH_USERNAME'] :
+            System.getenv().containsKey('OSSRH_USERNAME') ?
+                    System.getenv()['OSSRH_USERNAME'] :
                     ""
 }
 
 def getRepositoryPassword() {
     return project.hasProperty('ossrhPassword') ?
             project.property('ossrhPassword') :
-            System.env.containsKey('OSSRH_PASSWORD') ?
-                    System.env['OSSRH_PASSWORD'] :
+            System.getenv().containsKey('OSSRH_PASSWORD') ?
+                    System.getenv()['OSSRH_PASSWORD'] :
                     ""
 }
 
@@ -492,8 +521,8 @@ publishing {
             def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
-                username getRepositoryUsername()
-                password getRepositoryPassword()
+                username = getRepositoryUsername()
+                password = getRepositoryPassword()
             }
         }
     }
