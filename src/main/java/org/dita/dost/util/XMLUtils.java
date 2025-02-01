@@ -47,6 +47,8 @@ import net.sf.saxon.s9api.streams.Step;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -63,11 +65,13 @@ import org.xmlresolver.Resolver;
  */
 public final class XMLUtils {
 
+  private static final SecurityManager securityManager = new SecurityManager();
   private static final DocumentBuilderFactory factory;
 
   static {
     factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
+    factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
   }
 
   private static final SAXParserFactory saxParserFactory;
@@ -909,6 +913,11 @@ public final class XMLUtils {
   public static XMLReader getXMLReader() throws SAXException {
     try {
       final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
+      try {
+        reader.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
+      }
       return Configuration.DEBUG ? new DebugXMLReader(reader) : reader;
     } catch (ParserConfigurationException e) {
       throw new SAXException(e);
@@ -948,6 +957,11 @@ public final class XMLUtils {
           }
           try {
             r.setProperty(PROPERTY_PROCESSING_MODE, processingMode.name().toLowerCase());
+          } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
+            // Ignore
+          }
+          try {
+            r.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
           } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
             // Ignore
           }
