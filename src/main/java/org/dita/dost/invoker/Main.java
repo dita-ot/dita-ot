@@ -612,29 +612,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       pluginInstall.setForce(Boolean.parseBoolean(installArgs.definedProps.get("force").toString()));
     }
     if (installArgs.installFile != null) {
-      final File f = new File(installArgs.installFile.replace('/', File.separatorChar)).getAbsoluteFile();
-      final String pluginFile = f.exists() ? f.getAbsolutePath() : installArgs.installFile;
-      try {
-        pluginInstall.setPluginFile(Paths.get(pluginFile));
-      } catch (InvalidPathException e) {
-        // Ignore
-      }
-      try {
-        final URI uri = new URI(pluginFile);
-        if (uri.isAbsolute()) {
-          pluginInstall.setPluginUri(uri);
-        }
-      } catch (URISyntaxException e) {
-        // Ignore
-      }
-      if (pluginFile.contains("@")) {
-        final String[] tokens = pluginFile.split("@");
-        pluginInstall.setPluginName(tokens[0]);
-        pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
-      } else {
-        pluginInstall.setPluginName(pluginFile);
-        pluginInstall.setPluginVersion(null);
-      }
+      parseInstallFile(installArgs.installFile, pluginInstall);
     }
 
     try {
@@ -643,6 +621,37 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       throw e;
     } catch (Exception e) {
       throw new CliException(e.getMessage(), e);
+    }
+  }
+
+  private void parseInstallFile(String installFile, PluginInstall pluginInstall) {
+    final File pluginFile = new File(installFile.replace('/', File.separatorChar)).getAbsoluteFile();
+    if (pluginFile.exists()) {
+      try {
+        pluginInstall.setPluginFile(pluginFile.toPath());
+        return;
+      } catch (InvalidPathException e) {
+        // Ignore
+      }
+    }
+
+    try {
+      final URI uri = new URI(installFile);
+      if (uri.isAbsolute()) {
+        pluginInstall.setPluginUri(uri);
+        return;
+      }
+    } catch (URISyntaxException e) {
+      // Ignore
+    }
+
+    if (installFile.contains("@")) {
+      final String[] tokens = installFile.split("@");
+      pluginInstall.setPluginName(tokens[0]);
+      pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+    } else {
+      pluginInstall.setPluginName(installFile);
+      pluginInstall.setPluginVersion(null);
     }
   }
 
