@@ -38,6 +38,9 @@ public class LinkFilter extends AbstractXMLFilter {
       final AttributesImpl resAtts = new AttributesImpl(atts);
       int i = atts.getIndex(ATTRIBUTE_NAME_IMAGEREF);
       if (i == -1) {
+        i = atts.getIndex(ATTRIBUTE_NAME_COPY_TO);
+      }
+      if (i == -1) {
         i = atts.getIndex(ATTRIBUTE_NAME_HREF);
       }
       if (i == -1) {
