@@ -24,6 +24,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:import href="plugin:org.dita.html5:xsl/pr-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/ui-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/hi-d.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/emphasis-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/abbrev-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/markup-d.xsl"/>
   <xsl:import href="plugin:org.dita.html5:xsl/xml-d.xsl"/>
