@@ -204,7 +204,7 @@ def distFileName = (project.hasProperty("tag") && tag.empty) ?
                    "${cleanVersion}"
 def bundled = [
         "eclipsehelp": "https://github.com/dita-ot/org.dita.eclipsehelp/releases/download/3.4/org.dita.eclipsehelp-3.4.0.zip",
-        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/5.7.0/org.lwdita-5.7.0.zip",
+        "markdown": "https://github.com/jelovirt/org.lwdita/releases/download/5.9.1/org.lwdita-5.9.1.zip",
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/refs/tags/2.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
@@ -214,7 +214,7 @@ def bundled = [
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/2.0.0/org.dita.index-2.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",
         "xep": "https://github.com/dita-ot/org.dita.pdf2.xep/releases/download/3.6.3/org.dita.pdf2.xep-3.6.3.zip",
-        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.7.2/com.elovirta.pdf-0.7.2.zip",
+        "theme": "https://github.com/jelovirt/pdf-generator/releases/download/0.8.0/com.elovirta.pdf-0.8.0.zip",
 ]
 
 apply from: 'gradle/dist.gradle'
