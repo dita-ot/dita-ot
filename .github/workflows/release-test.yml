@@ -27,3 +27,10 @@ jobs:
           ./gradlew dist -Pcommit=${GITHUB_SHA} -Ptag=${TAG} --no-daemon
         env:
           TAG: ${{ env.tag }}
+      - name: Extract distribution package
+        run: |
+          unzip build/distributions/dita-ot-${TAG}.zip -d build/distributions/
+      - name: Test HTML5 and PDF2
+        run: |
+          ./bin/dita -i docsrc/userguide.ditamap -f html5 -f pdf2 -o out -v
+        working-directory: build/distributions/dita-ot-${TAG}
