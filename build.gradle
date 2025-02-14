@@ -281,6 +281,7 @@ task copyDistTemp(type: Copy, dependsOn: initDist) {
         exclude "plugins/org.dita.pdf2/build"
         exclude "plugins/org.dita.pdf2/bin/**"
         include "plugins/org.dita.specialization.dita11/**"
+        include "plugins/org.dita.validate/**"
         include "plugins/org.dita.xhtml/**"
         include "plugins/org.oasis-open.dita.v1_2/**"
         include "plugins/org.oasis-open.dita.v1_3/**"
