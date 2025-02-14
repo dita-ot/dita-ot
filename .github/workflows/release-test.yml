@@ -30,9 +30,9 @@ jobs:
           unzip build/distributions/dita-ot-${{ env.tag }}.zip -d build/distributions/
       - name: Test HTML5
         run: |
-          ./bin/dita -i docsrc/userguide.ditamap -f html5 -o out -v
+          ./bin/dita -i docsrc/userguide.ditamap -f html5 -o out
         working-directory: build/distributions/dita-ot-${{ env.tag }}
       - name: Test PDF2
         run: |
-          ./bin/dita -i docsrc/userguide.ditamap -f pdf2 -o out -v
+          ./bin/dita -i docsrc/userguide.ditamap -f pdf2 -o out
         working-directory: build/distributions/dita-ot-${{ env.tag }}
