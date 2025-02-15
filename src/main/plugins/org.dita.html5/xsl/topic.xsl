@@ -1573,11 +1573,33 @@ See the accompanying LICENSE file for applicable license.
     </audio>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' topic/video ')]/@height">
+    <xsl:variable name="height-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($height-in-pixel = '100%')">
+      <xsl:attribute name="height" select="number($height-in-pixel)"/>
+    </xsl:if>  
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/video ')]/@width">
+    <xsl:variable name="width-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($width-in-pixel = '100%')">
+      <xsl:attribute name="width" select="number($width-in-pixel)"/>
+    </xsl:if>  
+  </xsl:template>
+  
   <xsl:template match="*[contains(@class,' topic/video ')]">
     <video>
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="@autoplay | @controls | @loop | @muted" mode="boolean-media-attribute"/>
-      <xsl:apply-templates select="@tabindex | @href | @format"/>
+      <xsl:apply-templates select="@tabindex | @href | @format | @height | @width"/>
       <xsl:apply-templates select="@poster"/>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates select="*[contains(@class,' topic/media-source ')],
