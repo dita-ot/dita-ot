@@ -237,17 +237,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
         }
       } catch (final URISyntaxException e) {
         switch (processingMode) {
-          case STRICT:
-            throw new RuntimeException(
-              MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ": " + e.getMessage(),
-              e
-            );
-          case SKIP:
-            logger.error(
-              MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
-            );
-            break;
-          case LAX:
+          case STRICT -> throw new RuntimeException(
+            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ": " + e.getMessage(),
+            e
+          );
+          case SKIP -> logger.error(
+            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
+          );
+          case LAX -> {
             try {
               final URI uri = new URI(URLUtils.clean(href.trim()));
               if (res == null) {
@@ -265,7 +262,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
                 MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
               );
             }
-            break;
+          }
         }
       }
     }

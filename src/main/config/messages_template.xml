@@ -450,6 +450,11 @@ See the accompanying LICENSE file for applicable license.
     <response>Ignoring chunk operation.</response>
   </message>
 
+  <message id="DOTJ088E" type="ERROR">
+    <reason>XML parsing error: %1</reason>
+    <response></response>
+  </message>
+
   <!-- End of Java Messages -->
 
   <!-- Start of XSL Messages -->

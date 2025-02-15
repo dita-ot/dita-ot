@@ -12,7 +12,6 @@ import static java.util.Collections.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.google.common.collect.ImmutableList;
 import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
@@ -82,7 +81,7 @@ public class TestKeyrefReader {
     final KeyScope src = keyScope(
       null,
       List.of("rootKey"),
-      ImmutableList.of(keyScope("first", List.of("firstKey"), List.of(keyScope("second", List.of("secondKey")))))
+      List.of(keyScope("first", List.of("firstKey"), List.of(keyScope("second", List.of("secondKey")))))
     );
 
     final KeyScope act = keyrefreader.cascadeChildKeys(src);
@@ -181,9 +180,9 @@ public class TestKeyrefReader {
     }
   }
 
-  private static Document keyDefToDoc(final String key) throws Exception {
+  private Document keyDefToDoc(final String key) throws Exception {
     final InputSource inputSource = new InputSource(new StringReader(key));
-    final DocumentBuilder documentBuilder = XMLUtils.getDocumentBuilder();
+    final DocumentBuilder documentBuilder = xmlUtils.getDocumentBuilder();
     return documentBuilder.parse(inputSource);
   }
 

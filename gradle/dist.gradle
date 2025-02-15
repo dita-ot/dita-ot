@@ -52,8 +52,13 @@ def licenses = [
         [name: 'autolink', title: 'autolink-java', license: ['autolink-license.txt']],
 ]
 
-task generateNotices() {
-    def notices = file("${distTempDir}/NOTICES.txt")
+/**
+ * Generate the NOTICE file.
+ *
+ * See https://infra.apache.org/licensing-howto.html
+ */
+tasks.register('generateNotices') {
+    def notices = file("${distTempDir}/NOTICE")
     outputs.file(notices)
     doLast {
         file(distTempDir).traverse(type: FILES, nameFilter: ~/.*\.jar$/) {
@@ -87,11 +92,11 @@ Project and the Project does not represent or warrant that the information on
 any third party web site referenced in this Notices file is accurate. The
 Project disclaims any and all liability for errors and omissions or for any
 damages accruing from the use of this Notices file or its contents, including
-without limitation URLs or references to any third party websites.
-""")
+without limitation URLs or references to any third party websites.""")
             licenses.findAll { it.license != null }
                     .sort { it.title }
                     .each { license ->
+                out.writeLine('')
                 out.writeLine('=' * 80)
                 out.writeLine("""
 The Program includes the following software component, which was obtained under

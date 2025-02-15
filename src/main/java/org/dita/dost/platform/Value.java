@@ -8,4 +8,17 @@
 
 package org.dita.dost.platform;
 
-public record Value(String id, String value) {}
+import java.io.File;
+
+public sealed interface Value {
+  String pluginId();
+  String value();
+
+  record StringValue(String pluginId, String value) implements Value {}
+
+  record PathValue(String pluginId, File baseDir, String value) implements Value {
+    public String getPath() {
+      return baseDir + File.separator + value;
+    }
+  }
+}

@@ -11,9 +11,9 @@ package org.dita.dost.module.reader;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 
-import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FilenameUtils;
 
 public class HashTempFileScheme implements TempFileNameScheme {
@@ -23,7 +23,7 @@ public class HashTempFileScheme implements TempFileNameScheme {
     assert src.isAbsolute();
     final String ext = FilenameUtils.getExtension(src.getPath());
     final String path = stripFragment(src.normalize()).toString();
-    final String hash = Hashing.sha1().hashString(path, Charsets.UTF_8).toString();
+    final String hash = Hashing.sha1().hashString(path, StandardCharsets.UTF_8).toString();
     return toURI(ext.isEmpty() ? hash : (hash + "." + ext));
   }
 }

@@ -3,6 +3,12 @@ on:
   push:
     tags:
       - "*"
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
 jobs:
   # Build distribution package and upload the GitHub releases
   dist:

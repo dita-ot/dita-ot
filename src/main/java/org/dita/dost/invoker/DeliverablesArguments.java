@@ -57,7 +57,7 @@ public class DeliverablesArguments extends Arguments {
    */
   private void handleArgProject(final String arg, final Deque<String> args) {
     final Map.Entry<String, String> entry = parse(arg, args);
-    if (entry.getValue() == null) {
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
       throw new BuildException("Missing value for project " + entry.getKey());
     }
     projectFile = new File(entry.getValue()).getAbsoluteFile();

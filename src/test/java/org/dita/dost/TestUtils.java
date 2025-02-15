@@ -15,10 +15,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -758,5 +755,23 @@ public class TestUtils {
 
   public static XdmNode parse(File input) throws SaxonApiException {
     return processor.newDocumentBuilder().build(input);
+  }
+
+  public static <K, V> MapBuilder<K, V> mapBuilder() {
+    return new MapBuilder<>();
+  }
+
+  public static class MapBuilder<K, V> {
+
+    private final HashMap<K, V> res = new HashMap<>();
+
+    public MapBuilder<K, V> put(K key, V value) {
+      res.put(key, value);
+      return this;
+    }
+
+    public Map<K, V> build() {
+      return Map.copyOf(res);
+    }
   }
 }

@@ -53,7 +53,9 @@ public class TopicReaderModuleTest {
   public void setUp() throws SAXException, IOException, DITAOTException {
     reader = new TopicReaderModule();
     reader.setLogger(new TestUtils.TestLogger());
-    job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+    final XMLUtils xmlUtils = new XMLUtils();
+    reader.setXmlUtils(xmlUtils);
+    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     job.setInputFile(ditamap);
     job.setInputMap(root.relativize(ditamap));
     job.setInputDir(root);

@@ -78,13 +78,11 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     logger.debug("Loading subject schemes");
     var enumerationDefs = root.select(Steps.descendant(SUBJECTSCHEME_ENUMERATIONDEF::matches)).toList();
     if (!enumerationDefs.isEmpty()) {
-      enumerationDefs
-        .stream()
-        .forEach(enumerationDef -> {
-          final XdmNode schemeRoot = enumerationDef.select(Steps.ancestor(SUBMAP::matches)).findFirst().orElse(root);
-          var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
-          subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
-        });
+      enumerationDefs.forEach(enumerationDef -> {
+        final XdmNode schemeRoot = enumerationDef.select(Steps.ancestor(SUBMAP::matches)).findFirst().orElse(root);
+        var subjectDefinitions = subjectSchemeReader.getSubjectDefinition(schemeRoot);
+        subjectSchemeReader.processEnumerationDef(subjectDefinitions, enumerationDef);
+      });
       return subjectSchemeReader.getSubjectSchemeMap();
     } else {
       return new SubjectScheme(Map.of());

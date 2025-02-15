@@ -13,7 +13,6 @@ import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.toFile;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -222,11 +221,12 @@ public class JobSourceSet extends AbstractFileSet implements ResourceCollection 
     }
 
     public void setFormat(final String format) {
-      final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+      final Set<String> builder = new HashSet<>();
+      builder.add(format);
       if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
         supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
       }
-      this.formats = builder.build();
+      this.formats = Collections.unmodifiableSet(builder);
     }
 
     public void setConref(final boolean conref) {

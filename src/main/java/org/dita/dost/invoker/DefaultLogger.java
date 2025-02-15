@@ -58,14 +58,14 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
   /** PrintStream to write error messages to */
   private PrintStream err;
 
-  /** Lowest level of message to write out */
+  //** Lowest level of message to write out */
   //  private int msgOutputLevel = Project.MSG_ERR;
 
   /** Time of the start of the build */
   private long startTime = System.currentTimeMillis();
 
   // CheckStyle:ConstantNameCheck OFF - bc
-  /** Line separator */
+  //** Line separator */
   //  protected static final String lSep = StringUtils.LINE_SEP;
   // CheckStyle:ConstantNameCheck ON
 

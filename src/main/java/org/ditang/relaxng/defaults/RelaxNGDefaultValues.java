@@ -148,22 +148,12 @@ public abstract class RelaxNGDefaultValues {
 
   /**
    * Stores information about a default attribute.
+   *
+   * @param localName attribute local name
+   * @param namespace attribute namespace
+   * @param value attribute default value
    */
-  class Attribute {
-
-    /** The attribute local name */
-    final String localName;
-    /** The attribute namespace */
-    final String namespace;
-    /** The attribute default value */
-    final String value;
-
-    public Attribute(String localName, String namespace, String value) {
-      this.localName = localName;
-      this.namespace = namespace;
-      this.value = value;
-    }
-  }
+  record Attribute(String localName, String namespace, String value) {}
 
   /**
    * Updates the annotation model.

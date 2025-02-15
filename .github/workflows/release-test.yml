@@ -24,6 +24,15 @@ jobs:
       - name: Build distribution package
         run: |
           ./gradlew --no-daemon
-          ./gradlew dist -Pcommit=${GITHUB_SHA} -Ptag=${TAG} --no-daemon
-        env:
-          TAG: ${{ env.tag }}
+          ./gradlew dist -Pcommit=${GITHUB_SHA} -Ptag=${{ env.tag }} --no-daemon
+      - name: Extract distribution package
+        run: |
+          unzip build/distributions/dita-ot-${{ env.tag }}.zip -d build/distributions/
+      - name: Test HTML5
+        run: |
+          ./bin/dita -i docsrc/userguide.ditamap -f html5 -o out
+        working-directory: build/distributions/dita-ot-${{ env.tag }}
+      - name: Test PDF2
+        run: |
+          ./bin/dita -i docsrc/userguide.ditamap -f pdf2 -o out
+        working-directory: build/distributions/dita-ot-${{ env.tag }}

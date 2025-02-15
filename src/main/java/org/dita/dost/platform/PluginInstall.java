@@ -84,7 +84,7 @@ public final class PluginInstall {
     try {
       integrator.execute();
     } catch (final Exception e) {
-      throw new BuildException("Integration failed: " + e.getMessage(), e);
+      throw new BuildException("Integration failed: " + e.toString(), e);
     }
   }
 
@@ -103,9 +103,9 @@ public final class PluginInstall {
       } else {
         final Set<Registry> plugins = readRegistry(this.pluginName, pluginVersion);
         for (final Registry plugin : plugins) {
-          final File tempFile = get(plugin.url.toURI(), plugin.cksum);
+          final File tempFile = get(plugin.uri(), plugin.cksum());
           final Path tempPluginDir = unzip(tempFile);
-          final String name = plugin.name;
+          final String name = plugin.name();
           installs.put(name, tempPluginDir);
         }
       }
@@ -203,7 +203,7 @@ public final class PluginInstall {
         final Optional<Registry> reg = findPlugin(regs, version);
         if (reg.isPresent()) {
           final Registry plugin = reg.get();
-          logger.trace("Plugin found at {0}@{1}", registryUrl, plugin.vers);
+          logger.trace("Plugin found at {0}@{1}", registryUrl, plugin.vers());
           res = plugin;
           break;
         }
@@ -221,10 +221,11 @@ public final class PluginInstall {
 
     Set<Registry> results = new HashSet<>();
     results.add(res);
-    res.deps
+    res
+      .deps()
       .stream()
-      .filter(dep -> !installedPlugins.contains(dep.name))
-      .flatMap(dep -> readRegistry(dep.name, dep.req).stream())
+      .filter(dep -> !installedPlugins.contains(dep.name()))
+      .flatMap(dep -> readRegistry(dep.name(), dep.req()).stream())
       .forEach(results::add);
 
     return results;
@@ -300,22 +301,27 @@ public final class PluginInstall {
 
   private Optional<Registry> findPlugin(final Collection<Registry> regs, final SemVerMatch version) {
     if (version == null) {
-      return regs.stream().filter(this::matchingPlatformVersion).max(Comparator.comparing(o -> o.vers));
+      return regs.stream().filter(this::matchingPlatformVersion).max(Comparator.comparing(o -> o.vers()));
     } else {
-      return regs.stream().filter(this::matchingPlatformVersion).filter(reg -> version.contains(reg.vers)).findFirst();
+      return regs
+        .stream()
+        .filter(this::matchingPlatformVersion)
+        .filter(reg -> version.contains(reg.vers()))
+        .findFirst();
     }
   }
 
   @VisibleForTesting
   boolean matchingPlatformVersion(final Registry reg) {
-    final Optional<Dependency> platformDependency = reg.deps
+    final Optional<Dependency> platformDependency = reg
+      .deps()
       .stream()
-      .filter(dep -> dep.name.equals("org.dita.base"))
+      .filter(dep -> dep.name().equals("org.dita.base"))
       .findFirst();
     if (platformDependency.isPresent()) {
       final SemVer platform = new SemVer(Configuration.configuration.get("otversion"));
       final Dependency dep = platformDependency.get();
-      return dep.req.contains(platform);
+      return dep.req().contains(platform);
     } else {
       return true;
     }

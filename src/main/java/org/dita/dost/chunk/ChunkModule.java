@@ -298,7 +298,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
         final String id = nestedTopic.getAttribute(ATTRIBUTE_NAME_ID);
         final Element removedNestedTopic = (Element) topic.removeChild(nestedTopic);
-        final Document doc = xmlUtils.getDocumentBuilder().newDocument();
+        final Document doc = xmlUtils.newDocument();
         final Element adoptedNestedTopic = (Element) doc.adoptNode(removedNestedTopic);
         doc.appendChild(adoptedNestedTopic);
         cascadeNamespaces(adoptedNestedTopic, topic);
@@ -504,7 +504,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       .stream()
       .filter(chunk -> chunk.operation() == COMBINE)
       .map(chunk -> rewriteCombineChunk(mapFile, mapDoc, normalTopicRefs, rewriteMap, chunk).build())
-      .collect(Collectors.toUnmodifiableList());
+      .toList();
   }
 
   private ChunkBuilder rewriteCombineChunk(
@@ -666,7 +666,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     } else {
       final Element navtitle = getNavtitle(rootChunk.topicref());
       if (navtitle != null) {
-        doc = getDocumentBuilder().newDocument();
+        doc = xmlUtils.newDocument();
         final Element ditaWrapper = createDita(doc);
         doc.appendChild(ditaWrapper);
         final Element topic = createTopic(doc, rootChunk.id());
@@ -674,7 +674,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         ditaWrapper.appendChild(topic);
         mergeTopic(rootChunk, rootChunk, topic);
       } else {
-        doc = getDocumentBuilder().newDocument();
+        doc = xmlUtils.newDocument();
         final Element ditaWrapper = createDita(doc);
         doc.appendChild(ditaWrapper);
         mergeTopic(rootChunk, rootChunk, ditaWrapper);

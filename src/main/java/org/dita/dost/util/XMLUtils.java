@@ -47,6 +47,8 @@ import net.sf.saxon.s9api.streams.Step;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.module.saxon.DelegatingCollationUriResolver;
@@ -63,11 +65,13 @@ import org.xmlresolver.Resolver;
  */
 public final class XMLUtils {
 
+  private static final SecurityManager securityManager = new SecurityManager();
   private static final DocumentBuilderFactory factory;
 
   static {
     factory = DocumentBuilderFactory.newInstance();
     factory.setNamespaceAware(true);
+    factory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
   }
 
   private static final SAXParserFactory saxParserFactory;
@@ -166,6 +170,10 @@ public final class XMLUtils {
 
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+  }
+
+  public Resolver getCatalogResolver() {
+    return catalogResolver;
   }
 
   /**
@@ -905,6 +913,11 @@ public final class XMLUtils {
   public static XMLReader getXMLReader() throws SAXException {
     try {
       final XMLReader reader = saxParserFactory.newSAXParser().getXMLReader();
+      try {
+        reader.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+      } catch (SAXNotRecognizedException | SAXNotSupportedException e) {
+        // Ignore
+      }
       return Configuration.DEBUG ? new DebugXMLReader(reader) : reader;
     } catch (ParserConfigurationException e) {
       throw new SAXException(e);
@@ -915,8 +928,8 @@ public final class XMLUtils {
    * Get reader for input format
    *
    * @param format         input document format
-   * @param processingMode
-   * @return reader for given forma
+   * @param processingMode processing mode
+   * @return reader for given format
    * @throws SAXException if creating reader failed
    */
   public static Optional<XMLReader> getXmlReader(final String format, Configuration.Mode processingMode)
@@ -947,6 +960,11 @@ public final class XMLUtils {
           } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
             // Ignore
           }
+          try {
+            r.setProperty(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+          } catch (SAXNotRecognizedException | SAXNotSupportedException ex) {
+            // Ignore
+          }
           return Optional.of(r);
         } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
           throw new SAXException(ex);
@@ -962,7 +980,7 @@ public final class XMLUtils {
    * @return DOM document builder instance.
    * @throws RuntimeException if instantiating DocumentBuilder failed
    */
-  public static DocumentBuilder getDocumentBuilder() {
+  public DocumentBuilder getDocumentBuilder() {
     DocumentBuilder builder;
     try {
       builder = factory.newDocumentBuilder();
@@ -972,8 +990,22 @@ public final class XMLUtils {
     if (Configuration.DEBUG) {
       builder = new DebugDocumentBuilder(builder);
     }
-    builder.setEntityResolver(CatalogUtils.getCatalogResolver());
+    builder.setEntityResolver(catalogResolver);
     return builder;
+  }
+
+  /**
+   * Create new DOM document.
+   *
+   * @return empty DOM document
+   * @throws RuntimeException if instantiating DocumentBuilder failed
+   */
+  public Document newDocument() {
+    try {
+      return factory.newDocumentBuilder().newDocument();
+    } catch (final ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -1406,7 +1438,7 @@ public final class XMLUtils {
    */
   public Document cloneDocument(final XdmNode node) throws IOException {
     try {
-      final Document doc = XMLUtils.getDocumentBuilder().newDocument();
+      final Document doc = newDocument();
       final DOMDestination destination = new DOMDestination(doc);
       final Receiver receiver = destination.getReceiver(
         getProcessor().getUnderlyingConfiguration().makePipelineConfiguration(),

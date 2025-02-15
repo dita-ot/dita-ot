@@ -1422,6 +1422,7 @@ See the accompanying LICENSE file for applicable license.
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="setid"/>
+      <xsl:apply-templates select="." mode="set-image-loading"/>
       <xsl:choose>
         <xsl:when test="*[contains(@class, ' topic/longdescref ')]">
           <xsl:apply-templates select="*[contains(@class, ' topic/longdescref ')]"/>
@@ -1572,11 +1573,33 @@ See the accompanying LICENSE file for applicable license.
     </audio>
   </xsl:template>
   
+  <xsl:template match="*[contains(@class, ' topic/video ')]/@height">
+    <xsl:variable name="height-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($height-in-pixel = '100%')">
+      <xsl:attribute name="height" select="number($height-in-pixel)"/>
+    </xsl:if>  
+  </xsl:template>
+  
+  <xsl:template match="*[contains(@class, ' topic/video ')]/@width">
+    <xsl:variable name="width-in-pixel">
+      <xsl:call-template name="length-to-pixels">
+        <xsl:with-param name="dimen" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="not($width-in-pixel = '100%')">
+      <xsl:attribute name="width" select="number($width-in-pixel)"/>
+    </xsl:if>  
+  </xsl:template>
+  
   <xsl:template match="*[contains(@class,' topic/video ')]">
     <video>
       <xsl:call-template name="commonattributes"/>
       <xsl:apply-templates select="@autoplay | @controls | @loop | @muted" mode="boolean-media-attribute"/>
-      <xsl:apply-templates select="@tabindex | @href | @format"/>
+      <xsl:apply-templates select="@tabindex | @href | @format | @height | @width"/>
       <xsl:apply-templates select="@poster"/>
       <xsl:call-template name="setid"/>
       <xsl:apply-templates select="*[contains(@class,' topic/media-source ')],
@@ -1969,6 +1992,12 @@ See the accompanying LICENSE file for applicable license.
     <xsl:if test="@scale">
   <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
     </xsl:if>
+  </xsl:template>
+  
+  <!-- leave @loading unset for local/peer images - defaults to "eager" -->    
+  <xsl:template match="*" mode="set-image-loading"/>
+  <xsl:template match="*[@scope='external']" mode="set-image-loading">
+    <xsl:attribute name="loading" select="'lazy'"/>
   </xsl:template>
   
     <xsl:template name="style">

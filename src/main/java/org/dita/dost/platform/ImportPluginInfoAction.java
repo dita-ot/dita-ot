@@ -8,7 +8,7 @@
 package org.dita.dost.platform;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.UNIX_SEPARATOR;
 
 import java.io.File;
 import java.util.List;
@@ -33,26 +33,28 @@ final class ImportPluginInfoAction extends ImportAction {
   @Override
   public void getResult(final ContentHandler buf) throws SAXException {
     // plugin properties
-    for (final Entry<String, Features> e : featureTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : featureTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = "dita.plugin." + e.getKey() + ".dir";
       final StringBuilder location = new StringBuilder();
 
-      final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-      if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+      final List<Value> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+      if (
+        Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0).value())
+      ) {
         location.append("${dita.dir}");
-      } else if (f.getPluginDir().getAbsolutePath().startsWith(f.getDitaDir().getAbsolutePath())) {
+      } else if (f.pluginDir().getAbsolutePath().startsWith(f.ditaDir().getAbsolutePath())) {
         location
           .append("${dita.dir}")
           .append(UNIX_SEPARATOR)
           .append(
             FileUtils.getRelativeUnixPath(
-              new File(f.getDitaDir(), "plugin.xml").getAbsolutePath(),
-              f.getPluginDir().getAbsolutePath()
+              new File(f.ditaDir(), "plugin.xml").getAbsolutePath(),
+              f.pluginDir().getAbsolutePath()
             )
           );
       } else {
-        location.append(f.getPluginDir().getAbsolutePath());
+        location.append(f.pluginDir().getAbsolutePath());
       }
       buf.startElement(
         NULL_NS_URI,

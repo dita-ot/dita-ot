@@ -12,7 +12,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.FileUtils.supportedImageExtensions;
 import static org.dita.dost.util.URLUtils.toFile;
 
-import com.google.common.collect.ImmutableSet;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -308,10 +307,7 @@ public final class ExtensibleAntInvoker extends Task {
     if (filters.isEmpty()) {
       return f -> true;
     }
-    final List<Predicate<FileInfo>> res = filters
-      .stream()
-      .map(FileInfoFilterElem::toFilter)
-      .collect(Collectors.toList());
+    final List<Predicate<FileInfo>> res = filters.stream().map(FileInfoFilterElem::toFilter).toList();
     return f -> {
       for (final Predicate<FileInfo> filter : res) {
         if (filter.test(f)) {
@@ -671,11 +667,12 @@ public final class ExtensibleAntInvoker extends Task {
     private Boolean isResourceOnly;
 
     public void setFormat(final String format) {
-      final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder().add(format);
+      final Set<String> builder = new HashSet<>();
+      builder.add(format);
       if (format.equals(ATTR_FORMAT_VALUE_IMAGE)) {
         supportedImageExtensions.stream().map(ext -> ext.substring(1)).forEach(builder::add);
       }
-      this.formats = builder.build();
+      this.formats = Collections.unmodifiableSet(builder);
     }
 
     public void setConref(final boolean conref) {

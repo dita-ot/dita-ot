@@ -51,6 +51,10 @@ See the accompanying LICENSE file for applicable license.
   <!-- Deprecated since 2.1 -->
   <extension-point id="depend.preprocess.copy-subsidiary.pre" name="Copy subsidiary pre-target"/>
   <extension-point id="depend.preprocess.post" name="Preprocessing post-target"/>
+  <extension-point id="depend.preprocess2.maps.pre" name="Runs an Ant target before pre-processing maps"/>
+  <extension-point id="depend.preprocess2.maps.post" name="Runs an Ant target after pre-processing maps"/>
+  <extension-point id="depend.preprocess2.topics.pre" name="Runs an Ant target before pre-processing topics"/>
+  <extension-point id="depend.preprocess2.topics.post" name="Runs an Ant target after pre-processing topics"/>
   <extension-point id="dita.preprocess.debug-filter.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.map-reader.param" name="Debug filter module parameters"/>
   <extension-point id="dita.preprocess.topic-reader.param" name="Debug filter module parameters"/>
@@ -65,6 +69,7 @@ See the accompanying LICENSE file for applicable license.
   <extension-point id="dita.xsl.mappull" name="Map pull XSLT import"/>
   <extension-point id="dita.xsl.maplink" name="Map link XSLT import"/>
   <extension-point id="dita.parser" name="Custom DITA parser"/>
+  <extension-point id="init.template" name="Init subcommand template"/>
   <!-- extensions -->
   <transtype name="base" abstract="true" desc="Common">
     <param name="args.gen.task.lbl" desc="Specifies whether to generate headings for sections within task topics." type="enum">

@@ -9,7 +9,6 @@ package org.dita.dost.util;
 
 import static java.util.Collections.unmodifiableMap;
 
-import com.google.common.collect.ImmutableList;
 import java.util.*;
 
 /**
@@ -74,11 +73,14 @@ public record KeyScope(String id, String name, Map<String, KeyDef> keyDefinition
     final Map<String, KeyDef> keyDefinition = new HashMap<>();
     scope1.keyDefinition.forEach(keyDefinition::putIfAbsent);
     scope2.keyDefinition.forEach(keyDefinition::putIfAbsent);
+    final List<KeyScope> childScopes = new ArrayList<>();
+    childScopes.addAll(scope1.childScopes);
+    childScopes.addAll(scope2.childScopes);
     return new KeyScope(
       scope1.id,
       scope1.name,
       unmodifiableMap(keyDefinition),
-      ImmutableList.<KeyScope>builder().addAll(scope1.childScopes).addAll(scope2.childScopes).build()
+      Collections.unmodifiableList(childScopes)
     );
   }
 }

@@ -7,18 +7,15 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
-import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.EnumeratedAttribute;
-import org.apache.tools.ant.util.*;
+import org.apache.tools.ant.util.FileNameMapper;
 import org.dita.dost.ant.ExtensibleAntInvoker;
 import org.dita.dost.util.Job;
 
@@ -70,23 +67,19 @@ public class JobMapper implements FileNameMapper {
     if (fi == null) {
       fi = job.getFileInfo(job.getInputDir().resolve(uri));
     }
-    final String res;
-    switch (type) {
-      case TEMP:
-        res = fi.file.getPath();
-        break;
-      case RESULT:
-        if (fi.result == null) {
-          res = sourceFileName;
-        } else {
-          final URI base = job.getInputDir();
-          final URI rel = base.relativize(fi.result);
-          res = toFile(rel).getPath();
+    final String res =
+      switch (type) {
+        case TEMP -> fi.file.getPath();
+        case RESULT -> {
+          if (fi.result == null) {
+            yield sourceFileName;
+          } else {
+            final URI base = job.getInputDir();
+            final URI rel = base.relativize(fi.result);
+            yield toFile(rel).getPath();
+          }
         }
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
+      };
     return new String[] { extension != null ? (FilenameUtils.removeExtension(res) + extension) : res };
   }
 
@@ -97,7 +90,7 @@ public class JobMapper implements FileNameMapper {
       return Arrays
         .stream(Type.values())
         .map(t -> t.toString().toLowerCase())
-        .collect(Collectors.toList())
+        .toList()
         .toArray(new String[Type.values().length]);
     }
   }

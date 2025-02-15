@@ -207,7 +207,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * Init xml reader used for pipeline parsing.
    *
    * @param validate whether validate input file
-   * @throws SAXException parsing exception
+   * @throws DITAOTException parsing exception
    */
   void initXMLReader(final boolean validate) throws DITAOTException {
     try {
@@ -221,8 +221,6 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } catch (final SAXNotRecognizedException e) {
           // Not Xerces, ignore exception
         }
-      } else {
-        logger.warn(MessageUtils.getMessage("DOTJ037W").toString());
       }
       if (gramcache) {
         final XMLGrammarPool grammarPool = GrammarPoolManager.getGrammarPool();
@@ -235,7 +233,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
         }
       }
-      reader.setEntityResolver(CatalogUtils.getCatalogResolver());
+      reader.setEntityResolver(xmlUtils.getCatalogResolver());
     } catch (SAXException e) {
       throw new DITAOTException(e);
     }
@@ -388,7 +386,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       XMLReader xmlSource = parser;
       for (final XMLFilter f : getProcessingPipe(currentFile)) {
         f.setParent(xmlSource);
-        f.setEntityResolver(CatalogUtils.getCatalogResolver());
+        f.setEntityResolver(xmlUtils.getCatalogResolver());
         f.setErrorHandler(errorHandler);
         xmlSource = f;
       }
@@ -698,8 +696,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
     job.setProperty("tempdirToinputmapdir.relative.value", StringUtils.escapeRegExp(getPrefix(relativeRootFile)));
 
-    final Set<URI> res = new HashSet<>();
-    res.addAll(listFilter.getResourceOnlySet());
+    final Set<URI> res = new HashSet<>(listFilter.getResourceOnlySet());
     res.removeAll(listFilter.getNormalProcessingRoleSet());
     resourceOnlySet.addAll(res);
 

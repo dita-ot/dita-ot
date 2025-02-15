@@ -21,8 +21,6 @@ import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
@@ -35,9 +33,12 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
@@ -67,13 +68,21 @@ public final class Integrator {
   private static final String CONF_PLUGIN_ORDER = "plugin.order";
   private static final String CONF_PLUGIN_IGNORES = "plugin.ignores";
   private static final String CONF_PLUGIN_DIRS = "plugindirs";
-  /** Feature name for supported image extensions. */
+  /**
+   * Feature name for supported image extensions.
+   */
   private static final String FEAT_IMAGE_EXTENSIONS = "dita.image.extensions";
-  /** Feature name for supported image extensions. */
+  /**
+   * Feature name for supported image extensions.
+   */
   private static final String FEAT_HTML_EXTENSIONS = "dita.html.extensions";
-  /** Feature name for supported resource file extensions. */
+  /**
+   * Feature name for supported resource file extensions.
+   */
   private static final String FEAT_RESOURCE_EXTENSIONS = "dita.resource.extensions";
-  /** Feature name for print transformation types. */
+  /**
+   * Feature name for print transformation types.
+   */
   private static final String FEAT_PRINT_TRANSTYPES = "dita.transtype.print";
   private static final String FEAT_TRANSTYPES = "dita.conductor.transtype.check";
   private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
@@ -85,35 +94,32 @@ public final class Integrator {
   public static final String FEAT_VALUE_SEPARATOR = ",";
   private static final String PARAM_VALUE_SEPARATOR = ";";
 
-  private static final Set<PosixFilePermission> PERMISSIONS = ImmutableSet
-    .<PosixFilePermission>builder()
-    .add(
-      PosixFilePermission.OWNER_READ,
-      PosixFilePermission.OWNER_WRITE,
-      PosixFilePermission.OWNER_EXECUTE,
-      PosixFilePermission.GROUP_READ,
-      PosixFilePermission.GROUP_EXECUTE,
-      PosixFilePermission.OTHERS_READ,
-      PosixFilePermission.OTHERS_EXECUTE
-    )
-    .build();
+  private static final Set<PosixFilePermission> PERMISSIONS = Set.of(
+    PosixFilePermission.OWNER_READ,
+    PosixFilePermission.OWNER_WRITE,
+    PosixFilePermission.OWNER_EXECUTE,
+    PosixFilePermission.GROUP_READ,
+    PosixFilePermission.GROUP_EXECUTE,
+    PosixFilePermission.OTHERS_READ,
+    PosixFilePermission.OTHERS_EXECUTE
+  );
 
-  public static final Pattern ID_PATTERN = Pattern.compile("[0-9a-zA-Z_\\-]+(?:\\.[0-9a-zA-Z_\\-]+)*");
-  public static final Pattern VERSION_PATTERN = Pattern.compile("\\d+(?:\\.\\d+(?:\\.\\d+(?:\\.[0-9a-zA-Z_\\-]+)?)?)?");
   public static final String CONF_PARSER_FORMAT = "parser.";
 
   /** Plugin table which contains detected plugins. */
-  private final Map<String, Features> pluginTable;
+  private final Map<String, Plugin> pluginTable;
   private final Map<String, Value> templateSet;
   private final File ditaDir;
-  /** Plugin configuration file. */
+  /**
+   * Plugin configuration file.
+   */
   private final Set<File> descSet;
   private final XMLReader reader;
   private final Document pluginsDoc;
   private final PluginParser parser;
   private DITAOTLogger logger;
   private final Set<String> loadedPlugin;
-  private final Hashtable<String, List<Value>> featureTable;
+  private final Map<String, List<Value>> featureTable;
 
   @Deprecated
   private File propertiesFile;
@@ -132,7 +138,7 @@ public final class Integrator {
     templateSet = new HashMap<>(16);
     descSet = new HashSet<>(16);
     loadedPlugin = new HashSet<>(16);
-    featureTable = new Hashtable<>(16);
+    featureTable = new HashMap<>(16);
     extensionPoints = new HashSet<>();
     try {
       final SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -160,7 +166,13 @@ public final class Integrator {
       }
     );
     parser = new PluginParser(ditaDir);
-    pluginsDoc = XMLUtils.getDocumentBuilder().newDocument();
+    try {
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+      pluginsDoc = factory.newDocumentBuilder().newDocument();
+    } catch (ParserConfigurationException e) {
+      throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
+    }
 
     pluginList = getPluginIds(readPlugins());
   }
@@ -320,20 +332,19 @@ public final class Integrator {
     }
     configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.join(printTranstypes, CONF_LIST_SEPARATOR));
 
-    for (final Entry<String, Features> e : pluginTable.entrySet()) {
-      final Features f = e.getValue();
+    for (final Entry<String, Plugin> e : pluginTable.entrySet()) {
+      final Plugin f = e.getValue();
       final String name = "plugin." + e.getKey() + ".dir";
-      final List<String> baseDirValues = f.getFeature("dita.basedir-resource-directory");
-      if (Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0))) {
+      final List<Value> baseDirValues = f.getFeature("dita.basedir-resource-directory");
+      if (
+        Boolean.parseBoolean(baseDirValues == null || baseDirValues.isEmpty() ? null : baseDirValues.get(0).value())
+      ) {
         //configuration.put(name, ditaDir.getAbsolutePath());
         configuration.put(name, ".");
       } else {
         configuration.put(
           name,
-          FileUtils.getRelativeUnixPath(
-            new File(ditaDir, "dummy").getAbsolutePath(),
-            f.getPluginDir().getAbsolutePath()
-          )
+          FileUtils.getRelativeUnixPath(new File(ditaDir, "dummy").getAbsolutePath(), f.pluginDir().getAbsolutePath())
         );
       }
     }
@@ -349,7 +360,9 @@ public final class Integrator {
     writeEnvShell(jars);
     writeEnvBatch(jars);
 
-    final Collection<File> libJars = ImmutableList.<File>builder().addAll(getLibJars()).addAll(jars).build();
+    final Collection<File> libJars = new ArrayList<>();
+    libJars.addAll(getLibJars());
+    libJars.addAll(jars);
     writeStartcmdShell(libJars);
     writeStartcmdBatch(libJars);
     writeConfigurationJar();
@@ -410,16 +423,12 @@ public final class Integrator {
         switch (type) {
           case XMLEvent.START_ELEMENT:
             switch (src.getLocalName()) {
-              case "message":
+              case "message" -> {
                 id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
                 severity = src.getAttributeValue(XMLConstants.NULL_NS_URI, "type");
-                break;
-              case "reason":
-                reason = src.getElementText();
-                break;
-              case "response":
-                response = src.getElementText();
-                break;
+              }
+              case "reason" -> reason = src.getElementText();
+              case "response" -> response = src.getElementText();
             }
             break;
           case XMLEvent.END_ELEMENT:
@@ -537,20 +546,20 @@ public final class Integrator {
         while (src.hasNext()) {
           final int type = src.next();
           switch (type) {
-            case XMLEvent.START_ELEMENT:
+            case XMLEvent.START_ELEMENT -> {
               if (src.getLocalName().equals("message")) {
                 id = src.getAttributeValue(XMLConstants.NULL_NS_URI, "id");
               } else if (id != null) {
                 buf.append(src.getElementText()).append(' ');
               }
-              break;
-            case XMLEvent.END_ELEMENT:
+            }
+            case XMLEvent.END_ELEMENT -> {
               if (src.getLocalName().equals("message")) {
                 messages.put(id, convertMessage(buf.toString()));
                 id = null;
                 buf.delete(0, buf.length());
               }
-              break;
+            }
           }
         }
         src.close();
@@ -627,12 +636,9 @@ public final class Integrator {
           final List<String> fsv = fs
             .stream()
             .map(f -> f.getAttribute("name") + "=" + f.getAttribute("value"))
-            .collect(Collectors.toList());
+            .toList();
           if (!fsv.isEmpty()) {
-            res.put(
-              CONF_PARSER_FORMAT + format + ".features",
-              fsv.stream().collect(Collectors.joining(PARAM_VALUE_SEPARATOR))
-            );
+            res.put(CONF_PARSER_FORMAT + format + ".features", String.join(PARAM_VALUE_SEPARATOR, fsv));
           }
         }
       }
@@ -644,7 +650,14 @@ public final class Integrator {
     final File base = new File(ditaDir, "dummy");
     return src
       .stream()
-      .map(lib -> toFile(lib.value()))
+      .flatMap(lib -> {
+        if (lib instanceof Value.PathValue path) {
+          return Stream.of(toFile(path.getPath()));
+        } else {
+          logger.error("Library import must be a file feature: " + lib.value());
+          return Stream.empty();
+        }
+      })
       .map(libFile -> {
         if (!libFile.exists()) {
           throw new IllegalArgumentException("Library file not found: " + libFile.getAbsolutePath());
@@ -717,34 +730,34 @@ public final class Integrator {
 
       out.write(
         """
-                    #!/bin/sh
-                    # Generated file, do not edit manually"
-                    echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
+        #!/bin/sh
+        # Generated file, do not edit manually"
+        echo "NOTE: The startcmd.sh has been deprecated, use the 'dita' command instead."
 
-                    realpath() {
-                      case $1 in
-                        /*) echo "$1" ;;
-                        *) echo "$PWD/${1#./}" ;;
-                      esac
-                    }
+        realpath() {
+          case $1 in
+            /*) echo "$1" ;;
+            *) echo "$PWD/${1#./}" ;;
+          esac
+        }
 
-                    if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
-                      export DITA_DIR="$(realpath "$DITA_HOME")"
-                    else #elif [ "${DITA_HOME:+1}" != "1" ]; then
-                      export DITA_DIR="$(dirname "$(realpath "$0")")"
-                    fi
+        if [ "${DITA_HOME:+1}" = "1" ] && [ -e "$DITA_HOME" ]; then
+          export DITA_DIR="$(realpath "$DITA_HOME")"
+        else #elif [ "${DITA_HOME:+1}" != "1" ]; then
+          export DITA_DIR="$(dirname "$(realpath "$0")")"
+        fi
 
-                    if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
-                      chmod +x "$DITA_DIR"/bin/ant
-                    fi
+        if [ -f "$DITA_DIR"/bin/ant ] && [ ! -x "$DITA_DIR"/bin/ant ]; then
+          chmod +x "$DITA_DIR"/bin/ant
+        fi
 
-                    export ANT_OPTS="-Xmx512m $ANT_OPTS"
-                    export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
-                    export ANT_HOME="$DITA_DIR"
-                    export PATH="$DITA_DIR"/bin:"$PATH"
+        export ANT_OPTS="-Xmx512m $ANT_OPTS"
+        export ANT_OPTS="$ANT_OPTS -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl"
+        export ANT_HOME="$DITA_DIR"
+        export PATH="$DITA_DIR"/bin:"$PATH"
 
-                    NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
-                    """
+        NEW_CLASSPATH="$DITA_DIR/lib:$NEW_CLASSPATH"
+        """
       );
       for (final File relativeLib : jars) {
         out.write("NEW_CLASSPATH=\"");
@@ -756,15 +769,15 @@ public final class Integrator {
       }
       out.write(
         """
-                    if test -n "$CLASSPATH"; then
-                      export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
-                    else
-                      export CLASSPATH="$NEW_CLASSPATH"
-                    fi
+        if test -n "$CLASSPATH"; then
+          export CLASSPATH="$NEW_CLASSPATH":"$CLASSPATH"
+        else
+          export CLASSPATH="$NEW_CLASSPATH"
+        fi
 
-                    cd "$DITA_DIR"
-                    "$SHELL"
-                    """
+        cd "$DITA_DIR"
+        "$SHELL"
+        """
       );
       try {
         Files.setPosixFilePermissions(outFile.toPath(), PERMISSIONS);
@@ -790,21 +803,21 @@ public final class Integrator {
 
       out.write(
         """
-                    @echo off\r
-                    REM Generated file, do not edit manually\r
-                    echo "NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead."\r
-                    pause\r
-                    \r
-                    REM Get the absolute path of DITAOT's home directory\r
-                    set DITA_DIR=%~dp0\r
-                    \r
-                    REM Set environment variables\r
-                    set ANT_OPTS=-Xmx512m %ANT_OPTS%\r
-                    set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r
-                    set ANT_HOME=%DITA_DIR%\r
-                    set PATH=%DITA_DIR%\\bin;%PATH%\r
-                    set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r
-                    """
+        @echo off\r
+        REM Generated file, do not edit manually\r
+        echo "NOTE: The startcmd.bat has been deprecated, use the dita.bat command instead."\r
+        pause\r
+        \r
+        REM Get the absolute path of DITAOT's home directory\r
+        set DITA_DIR=%~dp0\r
+        \r
+        REM Set environment variables\r
+        set ANT_OPTS=-Xmx512m %ANT_OPTS%\r
+        set ANT_OPTS=%ANT_OPTS% -Djavax.xml.transform.TransformerFactory=net.sf.saxon.TransformerFactoryImpl\r
+        set ANT_HOME=%DITA_DIR%\r
+        set PATH=%DITA_DIR%\\bin;%PATH%\r
+        set CLASSPATH=%DITA_DIR%lib;%CLASSPATH%\r
+        """
       );
       for (final File relativeLib : jars) {
         out.write("set CLASSPATH=");
@@ -851,15 +864,11 @@ public final class Integrator {
    */
   private boolean loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
-      final Features pluginFeatures = pluginTable.get(plugin);
-      final Map<String, List<String>> featureSet = pluginFeatures.getAllFeatures();
-      for (final Map.Entry<String, List<String>> currentFeature : featureSet.entrySet()) {
+      final Plugin pluginFeatures = pluginTable.get(plugin);
+      final Map<String, List<Value>> featureSet = pluginFeatures.features();
+      for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
         final String key = currentFeature.getKey();
-        final List<Value> values = currentFeature
-          .getValue()
-          .stream()
-          .map(val -> new Value(plugin, val))
-          .collect(Collectors.toList());
+        final List<Value> values = currentFeature.getValue();
         if (!extensionPoints.contains(key)) {
           throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
         }
@@ -874,11 +883,10 @@ public final class Integrator {
         }
       }
 
-      for (final Value templateName : pluginFeatures.getAllTemplates()) {
-        final String template = new File(pluginFeatures.getPluginDir().toURI().resolve(templateName.value()))
-          .getAbsolutePath();
+      for (final String templateName : pluginFeatures.templates()) {
+        final String template = new File(pluginFeatures.pluginDir().toURI().resolve(templateName)).getAbsolutePath();
         final String templatePath = FileUtils.getRelativeUnixPath(ditaDir + File.separator + "dummy", template);
-        templateSet.put(templatePath, templateName);
+        templateSet.put(templatePath, new Value.StringValue(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
       return true;
@@ -894,16 +902,12 @@ public final class Integrator {
    * @return {@code true} if plugin can be loaded, otherwise {@code false}
    */
   private boolean checkPlugin(final String currentPlugin) {
-    final Features pluginFeatures = pluginTable.get(currentPlugin);
-    final Iterator<PluginRequirement> iter = pluginFeatures.getRequireListIter();
+    final Plugin pluginFeatures = pluginTable.get(currentPlugin);
     // check whether dependcy is satisfied
-    while (iter.hasNext()) {
+    for (PluginRequirement requirement : pluginFeatures.requiredPlugins()) {
       boolean anyPluginFound = false;
-      final PluginRequirement requirement = iter.next();
-      final Iterator<String> requiredPluginIter = requirement.getPlugins();
-      while (requiredPluginIter.hasNext()) {
-        // Iterate over all alternatives in plugin requirement.
-        final String requiredPlugin = requiredPluginIter.next();
+      // Iterate over all alternatives in plugin requirement.
+      for (String requiredPlugin : requirement.plugins()) {
         if (pluginTable.containsKey(requiredPlugin)) {
           if (!loadedPlugin.contains(requiredPlugin)) {
             // required plug-in is not loaded
@@ -913,7 +917,7 @@ public final class Integrator {
           anyPluginFound = true;
         }
       }
-      if (!anyPluginFound && requirement.getRequired()) {
+      if (!anyPluginFound && requirement.required()) {
         // not contain any plugin required by current plugin
         final String msg = MessageUtils.getMessage("DOTJ020W", requirement.toString(), currentPlugin).toString();
         throw new RuntimeException(msg);
@@ -928,8 +932,10 @@ public final class Integrator {
       return null;
     }
     try {
-      return XMLUtils.getDocumentBuilder().parse(plugins);
-    } catch (SAXException | IOException e) {
+      final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware(true);
+      return factory.newDocumentBuilder().parse(plugins);
+    } catch (ParserConfigurationException | SAXException | IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -985,11 +991,9 @@ public final class Integrator {
     try {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
-      final Features f = parser.getFeatures();
-      final String id = f.getPluginId();
-      validatePlugin(f);
-      extensionPoints.addAll(f.getExtensionPoints().keySet());
-      pluginTable.put(id, f);
+      final Plugin f = parser.getPlugin();
+      extensionPoints.addAll(f.extensionPoints().keySet());
+      pluginTable.put(f.pluginId(), f);
       return root;
     } catch (final RuntimeException e) {
       throw e;
@@ -1001,42 +1005,6 @@ public final class Integrator {
       throw ex;
     } catch (final Exception e) {
       throw new RuntimeException(e);
-    }
-  }
-
-  /**
-   * Validate plug-in configuration.
-   * <p>
-   * Follow OSGi symbolic name syntax rules:
-   *
-   * <pre>
-   * digit         ::= [0..9]
-   * alpha         ::= [a..zA..Z]
-   * alphanum      ::= alpha | digit
-   * token         ::= ( alphanum | '_' | '-' )+
-   * symbolic-name ::= token('.'token)*
-   * </pre>
-   *
-   * Follow OSGi bundle version syntax rules:
-   *
-   * <pre>
-   * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
-   * major     ::= number
-   * minor     ::=number
-   * micro     ::=number
-   * qualifier ::= ( alphanum | '_' | '-' )+
-   * </pre>
-   *
-   * @param f Features to validate
-   */
-  private void validatePlugin(final Features f) {
-    final String id = f.getPluginId();
-    if (!ID_PATTERN.matcher(id).matches()) {
-      throw new IllegalArgumentException("Plug-in ID '%s' doesn't follow syntax rules.".formatted(id));
-    }
-    final List<String> version = f.getFeature("package.version");
-    if (version != null && !version.isEmpty() && !VERSION_PATTERN.matcher(version.get(0)).matches()) {
-      throw new IllegalArgumentException("Plug-in version '%s' doesn't follow syntax rules.".formatted(version.get(0)));
     }
   }
 
@@ -1057,19 +1025,20 @@ public final class Integrator {
    */
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+    this.parser.setLogger(logger);
   }
 
   /**
    * Get all and combine extension values
    *
    * @param featureTable plugin features
-   * @param extension extension ID
+   * @param extension    extension ID
    * @return combined extension value, {@code null} if no value available
    */
-  static String getValue(final Map<String, Features> featureTable, final String extension) {
-    final List<String> buf = new ArrayList<>();
-    for (final Features f : featureTable.values()) {
-      final List<String> v = f.getFeature(extension);
+  static String getValue(final Map<String, Plugin> featureTable, final String extension) {
+    final List<Value> buf = new ArrayList<>();
+    for (final Plugin f : featureTable.values()) {
+      final List<Value> v = f.getFeature(extension);
       if (v != null) {
         buf.addAll(v);
       }
@@ -1077,7 +1046,7 @@ public final class Integrator {
     if (buf.isEmpty()) {
       return null;
     } else {
-      return StringUtils.join(buf, ",");
+      return buf.stream().map(Value::value).collect(Collectors.joining(","));
     }
   }
 

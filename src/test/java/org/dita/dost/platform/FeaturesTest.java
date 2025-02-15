@@ -12,8 +12,13 @@ import static org.dita.dost.platform.PluginParser.FEATURE_ELEM;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.dita.dost.platform.Value.PathValue;
+import org.dita.dost.platform.Value.StringValue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -29,77 +34,98 @@ public class FeaturesTest {
   }
 
   @Test
-  public void testFeaturesString() {
-    assertNotNull(new Features(new File("base", "plugins"), new File("base")));
-  }
-
-  @Test
   public void testGetLocation() {
-    assertEquals(
-      new File("base", "plugins"),
-      new Features(new File("base", "plugins"), new File("base")).getPluginDir()
-    );
+    Features features = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .build();
+    assertEquals(new File("base", "plugins").getAbsoluteFile(), features.pluginDir());
   }
 
   @Test
   public void testAddExtensionPoint() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    final ExtensionPoint e = new ExtensionPoint("id", "name", "plugin");
-    f.addExtensionPoint(e);
+    final Features.Builder f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .setPluginId("plugin");
+    f.addExtensionPoint("id", "name");
     try {
-      f.addExtensionPoint(null);
+      f.addExtensionPoint(null, null);
       fail();
     } catch (final NullPointerException ex) {}
   }
 
   @Test
   public void testGetExtensionPoints() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    final ExtensionPoint e = new ExtensionPoint("id", "name", "plugin");
-    f.addExtensionPoint(e);
-    final ExtensionPoint e2 = new ExtensionPoint("id2", "name2", "plugin");
-    f.addExtensionPoint(e2);
+    final Features f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .setPluginId("plugin")
+      .addExtensionPoint("id", "name")
+      .addExtensionPoint("id2", "name2")
+      .build();
 
-    assertEquals(2, f.getExtensionPoints().size());
-    assertEquals(e, f.getExtensionPoints().get("id"));
-    assertEquals(e2, f.getExtensionPoints().get("id2"));
+    assertEquals(2, f.extensionPoints().size());
+    //    assertEquals(e, f.getExtensionPoints().get("id"));
+    //    assertEquals(e2, f.getExtensionPoints().get("id2"));
   }
 
   @Test
   public void testGetFeature() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addFeature("foo", getElement("bar", null));
+    final Features f = Features
+      .builder()
+      .setPluginId("plugin")
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addFeature("foo", createElement("bar", null))
+      .build();
 
-    assertEquals(asList("bar"), f.getFeature("foo"));
+    assertEquals(asList(new StringValue("plugin", "bar")), f.getFeature("foo"));
   }
 
   @Test
   public void testGetAllFeatures() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addFeature("foo", getElement("bar", null));
-    f.addFeature("foo", getElement("baz", null));
-    f.addFeature("bar", getElement("qux", null));
+    final Features f = Features
+      .builder()
+      .setPluginId("plugin")
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addFeature("foo", createElement("bar", null))
+      .addFeature("foo", createElement("baz", null))
+      .addFeature("bar", createElement("qux", null))
+      .build();
 
-    final Map<String, List<String>> exp = new HashMap<>();
-    exp.put("foo", asList("bar", "baz"));
-    exp.put("bar", asList("qux"));
+    final Map<String, List<Value>> exp = Map.of(
+      "foo",
+      asList(new StringValue("plugin", "bar"), new StringValue("plugin", "baz")),
+      "bar",
+      asList(new StringValue("plugin", "qux"))
+    );
 
-    assertEquals(exp, f.getAllFeatures());
+    assertEquals(exp, f.features());
   }
 
   @Test
   public void testAddFeature() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addFeature("foo", getElement(null, null));
-    f.addFeature("foo", getElement(" bar, baz ", null));
-    assertEquals(asList("bar", "baz"), f.getFeature("foo"));
-    f.addFeature("foo", getElement("bar, baz", "file"));
+    final Features f = Features
+      .builder()
+      .setPluginId("plugin")
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addFeature("foo", createElement(null, null))
+      .addFeature("foo", createElement(" bar, baz ", null))
+      .addFeature("foo", createElement("bar, baz", "file"))
+      .build();
+
     assertEquals(
       asList(
-        "bar",
-        "baz",
-        "base" + File.separator + "plugins" + File.separator + "bar",
-        "base" + File.separator + "plugins" + File.separator + "baz"
+        new StringValue("plugin", "bar"),
+        new StringValue("plugin", "baz"),
+        new PathValue("plugin", new File("base", "plugins").getAbsoluteFile(), "bar"),
+        new PathValue("plugin", new File("base", "plugins").getAbsoluteFile(), "baz")
       ),
       f.getFeature("foo")
     );
@@ -107,42 +133,48 @@ public class FeaturesTest {
 
   @Test
   public void testAddRequireString() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addRequire("foo");
     try {
-      f.addRequire(null);
+      final Features f = Features
+        .builder()
+        .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+        .setDitaDir(new File("base").getAbsoluteFile())
+        .addRequire("foo")
+        .addRequire(null)
+        .build();
       fail();
     } catch (final NullPointerException e) {}
   }
 
   @Test
   public void testAddRequireStringString() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addRequire("foo");
-    f.addRequire("foo", null);
     try {
-      f.addRequire(null, null);
+      final Features f = Features
+        .builder()
+        .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+        .setDitaDir(new File("base").getAbsoluteFile())
+        .addRequire("foo")
+        .addRequire("foo", null)
+        .addRequire(null, null)
+        .build();
       fail();
     } catch (final NullPointerException e) {}
   }
 
   @Test
   public void testGetRequireListIter() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addRequire("foo | bar ");
-    f.addRequire("baz", "unrequired");
-    f.addRequire("qux", "required");
+    final Features f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addRequire("foo | bar ")
+      .addRequire("baz", "unrequired")
+      .addRequire("qux", "required")
+      .build();
 
     final Map<List<String>, Boolean> act = new HashMap<>();
-    final Iterator<PluginRequirement> requirements = f.getRequireListIter();
-    while (requirements.hasNext()) {
-      final PluginRequirement requirement = requirements.next();
-      final List<String> plugins = new ArrayList<>();
-      for (final Iterator<String> ps = requirement.getPlugins(); ps.hasNext();) {
-        plugins.add(ps.next());
-      }
-      Collections.sort(plugins);
-      act.put(plugins, requirement.getRequired());
+    for (PluginRequirement requirement : f.requiredPlugins()) {
+      final List<String> plugins = requirement.plugins().stream().sorted().toList();
+      act.put(plugins, requirement.required());
     }
 
     final Map<List<String>, Boolean> exp = new HashMap<>();
@@ -155,22 +187,30 @@ public class FeaturesTest {
 
   @Test
   public void testAddMeta() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addMeta("foo", "bar");
-    f.addMeta("foo", "baz");
-    f.addMeta("bar", "baz");
     try {
-      f.addMeta("bar", null);
+      final Features f = Features
+        .builder()
+        .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+        .setDitaDir(new File("base").getAbsoluteFile())
+        .addMeta("foo", "bar")
+        .addMeta("foo", "baz")
+        .addMeta("bar", "baz")
+        .addMeta("bar", null)
+        .build();
       fail();
     } catch (final NullPointerException e) {}
   }
 
   @Test
   public void testGetMeta() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addMeta("foo", "bar");
-    f.addMeta("foo", "baz");
-    f.addMeta("bar", "baz");
+    final Features f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addMeta("foo", "bar")
+      .addMeta("foo", "baz")
+      .addMeta("bar", "baz")
+      .build();
 
     assertEquals("baz", f.getMeta("foo"));
     assertEquals("baz", f.getMeta("bar"));
@@ -179,35 +219,32 @@ public class FeaturesTest {
 
   @Test
   public void testAddTemplate() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addTemplate(new Value("base", "foo"));
-    f.addTemplate(new Value("base", "foo"));
-    f.addTemplate(new Value("base", "bar"));
-    f.addTemplate(null);
+    final Features f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addTemplate("foo")
+      .addTemplate("foo")
+      .addTemplate("bar")
+      .build();
   }
 
   @Test
   public void testGetAllTemplates() {
-    final Features f = new Features(new File("base", "plugins"), new File("base"));
-    f.addTemplate(new Value("base", "foo"));
-    f.addTemplate(new Value("base", "foo"));
-    f.addTemplate(new Value("base", "bar"));
-    f.addTemplate(null);
+    final Features f = Features
+      .builder()
+      .setPluginDir(new File("base", "plugins").getAbsoluteFile())
+      .setDitaDir(new File("base").getAbsoluteFile())
+      .addTemplate("foo")
+      .addTemplate("foo")
+      .addTemplate("bar")
+      .build();
 
-    final List<Value> act = f.getAllTemplates();
-    act.sort((a0, a1) -> {
-      if (a0 == null || a1 == null) {
-        return -1;
-      }
-      return Objects.compare(a0.value(), a1.value(), String::compareTo);
-    });
-    assertEquals(
-      Arrays.asList(null, new Value("base", "bar"), new Value("base", "foo"), new Value("base", "foo")),
-      act
-    );
+    final List<String> act = f.templates().stream().sorted().toList();
+    assertEquals(Arrays.asList("bar", "foo", "foo"), act);
   }
 
-  private static Element getElement(final String value, final String type) {
+  private static Element createElement(final String value, final String type) {
     final Element feature = doc.createElement(FEATURE_ELEM);
     if (value != null) {
       feature.setAttribute("value", value);

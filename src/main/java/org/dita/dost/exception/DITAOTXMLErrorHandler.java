@@ -9,6 +9,7 @@
 package org.dita.dost.exception;
 
 import org.dita.dost.log.DITAOTLogger;
+import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -49,7 +50,10 @@ public final class DITAOTXMLErrorHandler implements ErrorHandler {
     if (mode == Configuration.Mode.STRICT) {
       throw ex;
     } else {
-      logger.error(ex.getMessage(), ex);
+      logger.error(
+        MessageUtils.getMessage("DOTJ088E", saxException.getMessage()).setLocation(saxException).toString(),
+        saxException
+      );
     }
   }
 
