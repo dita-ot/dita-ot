@@ -131,7 +131,7 @@ public class IndexPreprocessorTask extends Task {
       transformer.transform(new DOMSource(resultDoc), streamResult);
       out.close();
     } catch (final Exception e) {
-      e.printStackTrace();
+      //      e.printStackTrace();
       throw new BuildException(e);
     }
   }

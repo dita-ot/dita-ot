@@ -1162,8 +1162,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("legacy")) {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
-      logger = new DefaultLogger();
-      ((DefaultLogger) logger).useColor(args.useColor);
+      logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);
