@@ -77,6 +77,7 @@ abstract class Arguments {
   boolean justPrintUsage;
   boolean justPrintVersion;
   boolean justPrintDiagnostics;
+  boolean printStacktrace = false;
   final Map<String, Object> definedProps = new HashMap<>();
   int repeat = 1;
 
@@ -114,6 +115,8 @@ abstract class Arguments {
       msgOutputLevel = Project.MSG_VERBOSE;
     } else if (isLongForm(arg, "-debug") || arg.equals("-d")) {
       msgOutputLevel = Project.MSG_DEBUG;
+    } else if (isLongForm(arg, "-stacktrace")) {
+      printStacktrace = true;
     } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
       emacsMode = true;
     } else if (isLongForm(arg, "-logfile") || arg.equals("-l")) {

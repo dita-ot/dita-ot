@@ -72,6 +72,8 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
   /** Whether or not to use emacs-style output */
   private boolean emacsMode = false;
 
+  private boolean printStacktrace = false;
+
   //  private boolean useColor = false;
 
   // CheckStyle:VisibilityModifier ON
@@ -136,8 +138,14 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     this.emacsMode = emacsMode;
   }
 
-  public void useColor(final boolean useColor) {
+  public DefaultLogger useColor(final boolean useColor) {
     this.useColor = useColor;
+    return this;
+  }
+
+  public DefaultLogger setPrintStacktrace(final boolean printStacktrace) {
+    this.printStacktrace = printStacktrace;
+    return this;
   }
 
   /**
@@ -199,7 +207,7 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
       }
       if (error instanceof DITAOTException && msgOutputLevel < Project.MSG_INFO) {
         message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
-      } else {
+      } else if (printStacktrace) {
         try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
           error.printStackTrace(printWriter);
           printWriter.flush();
@@ -207,6 +215,8 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
         } catch (IOException e) {
           // Failed to print stack trace
         }
+      } else {
+        message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
       }
 
       if (msgOutputLevel >= Project.MSG_INFO) {
