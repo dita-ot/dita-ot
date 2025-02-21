@@ -12,7 +12,7 @@
             dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
             dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget" product="osx">
       <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+        <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
           Map
         </submap-title>
       </submap-topicmeta>
@@ -28,7 +28,7 @@
             dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
             dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget">
       <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+        <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
           Map
         </submap-title>
       </submap-topicmeta>
@@ -45,7 +45,7 @@
             dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
             dita-ot:submap-otherprops="other" dita-ot:submap-specializations="@props/deliveryTarget">
       <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+        <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
           Map
         </submap-title>
       </submap-topicmeta>
@@ -59,7 +59,7 @@
             dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
             dita-ot:submap-specializations="@props/deliveryTarget" keyref="B">
       <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-        <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
+        <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">DITA Topic
           Map
         </submap-title>
       </submap-topicmeta>
