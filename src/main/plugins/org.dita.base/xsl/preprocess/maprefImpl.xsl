@@ -528,7 +528,8 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' topic/title ')]" mode="preserve-submap-title-and-topicmeta">
     <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-      <submap-title class="+ topic/navtitle ditaot-d/submap-title ">
+      <!-- Using both DITA 1.x and DITA 2.0 navtitle classes for this internal pseudo element --> 
+      <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title ">
         <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
         <xsl:apply-templates/>
       </submap-title>
