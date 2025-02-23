@@ -42,6 +42,8 @@ import com.google.common.base.Strings;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -448,7 +450,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (args.logFile != null) {
       PrintStream logTo;
       try {
-        logTo = new PrintStream(new FileOutputStream(args.logFile));
+        logTo =
+          new PrintStream(
+            Files.newOutputStream(args.logFile.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE),
+            false,
+            StandardCharsets.UTF_8
+          );
       } catch (final IOException ioe) {
         throw new CliException(
           "Cannot write to the specified log file. Make sure the path exists and you have write permissions."
@@ -1174,6 +1181,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
       logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
+    }
+
+    if (logger instanceof JsonLogger && args.logFile != null) {
+      ((JsonLogger) logger).setArray(true);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);
