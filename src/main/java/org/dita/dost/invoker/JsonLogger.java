@@ -5,23 +5,6 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- */
 
 package org.dita.dost.invoker;
 
@@ -42,20 +25,23 @@ import org.dita.dost.log.AbstractLogger;
 /**
  * Writes build events to a output stream as JSON objects.
  */
-class JsonLogger extends AbstractLogger implements BuildLogger {
+public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   // CheckStyle:VisibilityModifier OFF - bc
   /** PrintStream to write non-error messages to */
   private PrintStream out;
+  private JsonGenerator generator;
 
-  /** PrintStream to write error messages to */
-  private PrintStream err;
+  //  /** PrintStream to write error messages to */
+  //  private PrintStream err;
 
   //** Lowest level of message to write out */
   //  private int msgOutputLevel = Project.MSG_ERR;
 
   /** Time of the start of the build */
   private long startTime = System.currentTimeMillis();
+
+  private boolean isArray = false;
 
   /**
    * Sole constructor.
@@ -82,7 +68,8 @@ class JsonLogger extends AbstractLogger implements BuildLogger {
    */
   @Override
   public void setOutputPrintStream(final PrintStream output) {
-    out = new PrintStream(output, true);
+    //    out = new PrintStream(output, true);
+    this.out = output;
   }
 
   @Override
@@ -98,10 +85,8 @@ class JsonLogger extends AbstractLogger implements BuildLogger {
    */
   @Override
   public void setErrorPrintStream(final PrintStream err) {
-    this.err = new PrintStream(err, true);
+    // NOOP
   }
-
-  private JsonGenerator generator;
 
   /**
    * Responds to a build being started by just remembering the current time.
@@ -116,17 +101,17 @@ class JsonLogger extends AbstractLogger implements BuildLogger {
     } catch (IOException e) {
       throw new RuntimeException("Failed to open JSON generator: " + e.getMessage(), e);
     }
+    if (isArray) {
+      try {
+        generator.writeStartArray();
+        generator.flush();
+        out.append(System.lineSeparator());
+        out.flush();
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+      }
+    }
   }
-
-  //  private static void throwableMessage(final StringBuilder m, final Throwable error, final boolean verbose) {
-  //    String msg = error.getMessage();
-  //    final int i = msg.indexOf(": ");
-  //    if (i != -1) {
-  //      msg = msg.substring(i + 1).trim();
-  //    }
-  //    m.append(msg);
-  //    //        m.append(lSep);
-  //  }
 
   /**
    * Prints whether the build succeeded or failed, any errors the occurred
@@ -197,6 +182,13 @@ class JsonLogger extends AbstractLogger implements BuildLogger {
           //          err.println(removeLevelPrefix(message));
         }
         generator.writeEndObject();
+        generator.flush();
+        out.append(System.lineSeparator());
+        out.flush();
+      }
+
+      if (isArray) {
+        generator.writeEndArray();
         generator.flush();
         out.append(System.lineSeparator());
         out.flush();
@@ -370,5 +362,9 @@ class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void log(String msg, Throwable t, int level) {
     throw new UnsupportedOperationException();
+  }
+
+  public void setArray(boolean isArray) {
+    this.isArray = isArray;
   }
 }
