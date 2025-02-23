@@ -23,7 +23,6 @@ class ValidateArguments extends Arguments {
   private static final Map<String, Argument> ARGUMENTS = new HashMap<>();
 
   static {
-    //    ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable", null));
     ARGUMENTS.put("-i", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("--input", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("-r", new FileOrUriArgument("args.resources", null));

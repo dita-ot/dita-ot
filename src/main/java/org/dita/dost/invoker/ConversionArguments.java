@@ -9,6 +9,7 @@
 package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
+import static org.dita.dost.invoker.Main.ANT_PROJECT_DELIVERABLE;
 import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
@@ -41,7 +42,7 @@ public class ConversionArguments extends Arguments {
     ARGUMENTS.put("-f", new StringArgument("transtype", null));
     ARGUMENTS.put("--format", new StringArgument("transtype", null));
     ARGUMENTS.put("--transtype", new StringArgument("transtype", null));
-    ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable", null));
+    ARGUMENTS.put("--deliverable", new StringArgument(ANT_PROJECT_DELIVERABLE, null));
     ARGUMENTS.put("-i", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("--input", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("-r", new FileOrUriArgument("args.resources", null));
@@ -80,6 +81,7 @@ public class ConversionArguments extends Arguments {
 
   public final List<String> inputs = new ArrayList<>();
   public final List<String> formats = new ArrayList<>();
+  public final List<String> deliverables = new ArrayList<>();
   private final List<String> resources = new ArrayList<>();
 
   /**
@@ -140,6 +142,8 @@ public class ConversionArguments extends Arguments {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-format") || arg.equals("-f")) {
         handleArgFormat(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+      } else if (isLongForm(arg, "-deliverable")) {
+        handleArgDeliverable(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-filter")) {
         handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
@@ -191,7 +195,7 @@ public class ConversionArguments extends Arguments {
   }
 
   private void validate() {
-    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+    if (!deliverables.isEmpty() && projectFile == null) {
       throw new CliException(locale.getString("conversion.error.project_not_defined"));
     }
   }
@@ -257,6 +261,14 @@ public class ConversionArguments extends Arguments {
       throw new BuildException(MessageUtils.getMessage("DOTA001F", entry.getValue()).toString());
     }
     formats.add(argument.getValue(entry.getValue()));
+  }
+
+  private void handleArgDeliverable(final String arg, final Deque<String> args, final Argument argument) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
+      throw new BuildException("Missing value for deliverable " + entry.getKey());
+    }
+    deliverables.add(argument.getValue(entry.getValue()));
   }
 
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
