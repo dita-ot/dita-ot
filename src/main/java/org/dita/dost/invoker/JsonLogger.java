@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
@@ -42,6 +45,8 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   private long startTime = System.currentTimeMillis();
 
   private boolean isArray = false;
+
+  private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
   /**
    * Sole constructor.
@@ -163,16 +168,13 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       // message.append("Total time: ");
       // message.append(formatTime(System.currentTimeMillis() - startTime));
 
-      generator.writeStartObject();
+      writeStart();
       generator.writeStringField("level", "info");
       generator.writeNumberField("duration", System.currentTimeMillis() - startTime);
-      generator.writeEndObject();
-      generator.flush();
-      out.append(System.lineSeparator());
-      out.flush();
+      writeEnd();
 
       if (!message.isEmpty()) {
-        generator.writeStartObject();
+        writeStart();
         generator.writeStringField("level", "info");
         if (error == null) {
           generator.writeStringField("msg", message.toString());
@@ -181,17 +183,14 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
           generator.writeStringField("msg", removeLevelPrefix(message).toString());
           //          err.println(removeLevelPrefix(message));
         }
-        generator.writeEndObject();
-        generator.flush();
-        out.append(System.lineSeparator());
-        out.flush();
+        writeEnd();
       }
 
       if (isArray) {
         generator.writeEndArray();
         generator.flush();
-        out.append(System.lineSeparator());
-        out.flush();
+        //        out.append(System.lineSeparator());
+        //        out.flush();
       }
       //      log(message.toString());
     } catch (IOException e) {
@@ -203,6 +202,18 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
         throw new RuntimeException("Failed to close JSON generator: " + e.getMessage(), e);
       }
     }
+  }
+
+  private void writeStart() throws IOException {
+    generator.writeStartObject();
+    generator.writeStringField("timestamp", formatter.format(Instant.now()));
+  }
+
+  private void writeEnd() throws IOException {
+    generator.writeEndObject();
+    generator.flush();
+    out.append(System.lineSeparator());
+    out.flush();
   }
 
   private boolean evaluate(final Project project, final String condition) {
@@ -231,7 +242,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
       try {
-        generator.writeStartObject();
+        writeStart();
         generator.writeStringField(
           "level",
           switch (event.getPriority()) {
@@ -245,10 +256,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
         );
         generator.writeStringField("target", event.getTarget().getName());
         generator.writeStringField("msg", event.getTarget().getDescription());
-        generator.writeEndObject();
-        generator.flush();
-        out.append(System.lineSeparator());
-        out.flush();
+        writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
       }
@@ -292,7 +300,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     // Filter out messages based on priority
     if (priority <= msgOutputLevel) {
       try {
-        generator.writeStartObject();
+        writeStart();
         generator.writeStringField("level", "info");
         final StringBuilder message = new StringBuilder(event.getMessage());
         if (event.getTask() != null) {
@@ -303,10 +311,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
           generator.writeStringField("stacktrace", StringUtils.getStackTrace(ex));
         }
         generator.writeStringField("msg", removeLevelPrefix(message).toString());
-        generator.writeEndObject();
-        generator.flush();
-        out.append(System.lineSeparator());
-        out.flush();
+        writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
       }
