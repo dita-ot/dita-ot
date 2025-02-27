@@ -39,10 +39,12 @@ import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -1183,8 +1185,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
     }
 
-    if (logger instanceof JsonLogger && args.logFile != null) {
-      ((JsonLogger) logger).setArray(true);
+    if (logger instanceof JsonLogger jsonLogger && args.logFile != null) {
+      jsonLogger.setArray(true);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);
