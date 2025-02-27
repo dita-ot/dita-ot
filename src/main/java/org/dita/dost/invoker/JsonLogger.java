@@ -14,13 +14,13 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.util.DateUtils;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.AbstractLogger;
@@ -45,6 +45,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   private long startTime = System.currentTimeMillis();
 
   private boolean isArray = false;
+  private Clock clock = Clock.systemUTC();
 
   private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
@@ -65,16 +66,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     return BuildLogger.super.getMessageOutputLevel();
   }
 
-  /**
-   * Sets the output stream to which this logger is to send its output.
-   *
-   * @param output The output stream for the logger. Must not be
-   *            <code>null</code>.
-   */
   @Override
   public void setOutputPrintStream(final PrintStream output) {
-    //    out = new PrintStream(output, true);
-    this.out = output;
+    out = new PrintStream(output, true);
   }
 
   @Override
@@ -82,25 +76,14 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     // Ignore
   }
 
-  /**
-   * Sets the output stream to which this logger is to send error messages.
-   *
-   * @param err The error stream for the logger. Must not be <code>null</code>
-   *            .
-   */
   @Override
   public void setErrorPrintStream(final PrintStream err) {
-    // NOOP
+    // Ignore
   }
 
-  /**
-   * Responds to a build being started by just remembering the current time.
-   *
-   * @param event Ignored.
-   */
   @Override
   public void buildStarted(final BuildEvent event) {
-    startTime = System.currentTimeMillis();
+    startTime = clock.instant().getEpochSecond();
     try {
       generator = new ObjectMapper().createGenerator(out);
     } catch (IOException e) {
@@ -110,21 +93,12 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       try {
         generator.writeStartArray();
         generator.flush();
-        out.append(System.lineSeparator());
-        out.flush();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
       }
     }
   }
 
-  /**
-   * Prints whether the build succeeded or failed, any errors the occurred
-   * during the build, and how long the build took.
-   *
-   * @param event An event with any relevant extra information. Must not be
-   *            <code>null</code>.
-   */
   @Override
   public void buildFinished(final BuildEvent event) {
     Throwable error = event.getException();
@@ -135,17 +109,21 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       }
     }
     try {
+      writeStart();
+
       final StringBuilder message = new StringBuilder();
       if (error == null) {
+        generator.writeStringField("level", "info");
         if (msgOutputLevel >= Project.MSG_INFO) {
-          //          generator.writeStartObject();
-          //          generator.writeNumberField("duration", System.currentTimeMillis() - startTime);
-          //          generator.writeEndObject();
-          //          out.append(System.lineSeparator());
-          //          return;
+          //                    generator.writeStartObject();
+          //                    generator.writeNumberField("duration", clock.instant().getEpochSecond() - startTime);
+          //                    generator.writeEndObject();
+          //                    out.append(System.lineSeparator());
+          //                    return;
         }
       } else {
-        message.append(Main.locale.getString("error_msg").formatted(""));
+        generator.writeStringField("level", "fatal");
+        //        message.append(Main.locale.getString("error_msg").formatted(""));
         if (error instanceof DITAOTException && msgOutputLevel < Project.MSG_INFO) {
           message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
         } else {
@@ -157,20 +135,17 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
             // Failed to print stack trace
           }
         }
-
-        if (msgOutputLevel >= Project.MSG_INFO) { //
-          //          message.append(StringUtils.LINE_SEP);
-          //          message.append("BUILD FAILED");
-          //          message.append(" in ").append(formatTime(System.currentTimeMillis() - startTime));
-        }
+        //        if (msgOutputLevel >= Project.MSG_INFO) { //
+        //          message.append(StringUtils.LINE_SEP);
+        //          message.append("BUILD FAILED");
+        //          message.append(" in ").append(DateUtils.formatElapsedTime(clock.instant().getEpochSecond() - startTime));
+        //        }
       }
       // message.append(StringUtils.LINE_SEP);
       // message.append("Total time: ");
-      // message.append(formatTime(System.currentTimeMillis() - startTime));
+      // message.append(DateUtils.formatElapsedTime(clock.instant().getEpochSecond() - startTime));
 
-      writeStart();
-      generator.writeStringField("level", "info");
-      generator.writeNumberField("duration", System.currentTimeMillis() - startTime);
+      generator.writeStringField("msg", "BUILD SUCCESSFUL");
       writeEnd();
 
       if (!message.isEmpty()) {
@@ -206,14 +181,16 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   private void writeStart() throws IOException {
     generator.writeStartObject();
-    generator.writeStringField("timestamp", formatter.format(Instant.now()));
+    generator.writeStringField("timestamp", formatter.format(Instant.now(clock)));
   }
 
   private void writeEnd() throws IOException {
     generator.writeEndObject();
     generator.flush();
-    out.append(System.lineSeparator());
-    out.flush();
+    if (!isArray) {
+      out.append(System.lineSeparator());
+      out.flush();
+    }
   }
 
   private boolean evaluate(final Project project, final String condition) {
@@ -225,13 +202,6 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     };
   }
 
-  /**
-   * Logs a message to say that the target has started if this logger allows
-   * information-level messages.
-   *
-   * @param event An event with any relevant extra information. Must not be
-   *            <code>null</code>.
-   */
   @Override
   public void targetStarted(final BuildEvent event) {
     if (event.getTarget().getIf() != null && !evaluate(event.getProject(), event.getTarget().getIf())) {
@@ -263,41 +233,18 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
-  /**
-   * No-op implementation.
-   *
-   * @param event Ignored.
-   */
   @Override
   public void targetFinished(final BuildEvent event) {}
 
-  /**
-   * No-op implementation.
-   *
-   * @param event Ignored.
-   */
   @Override
   public void taskStarted(final BuildEvent event) {}
 
-  /**
-   * No-op implementation.
-   *
-   * @param event Ignored.
-   */
   @Override
   public void taskFinished(final BuildEvent event) {}
 
-  /**
-   * Logs a message, if the priority is suitable. In non-emacs mode, task
-   * level messages are prefixed by the task name which is right-justified.
-   *
-   * @param event A BuildEvent containing message information. Must not be
-   *            <code>null</code>.
-   */
   @Override
   public void messageLogged(final BuildEvent event) {
     final int priority = event.getPriority();
-    // Filter out messages based on priority
     if (priority <= msgOutputLevel) {
       try {
         writeStart();
@@ -315,54 +262,8 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
       }
-      //      log(msg);
     }
   }
-
-  /**
-   * Convenience method to format a specified length of time.
-   *
-   * @param millis Length of time to format, in milliseconds.
-   *
-   * @return the time as a formatted string.
-   *
-   * @see DateUtils#formatElapsedTime(long)
-   */
-  protected static String formatTime(final long millis) {
-    return DateUtils.formatElapsedTime(millis);
-  }
-
-  /**
-   * Empty implementation which allows subclasses to receive the same output
-   * that is generated here.
-   *
-   * @param message Message being logged. Should not be <code>null</code>.
-   */
-  private void log(final String message) {}
-
-  //  /**
-  //   * Get the current time.
-  //   *
-  //   * @return the current time as a formatted string.
-  //   * @since Ant1.7.1
-  //   */
-  //  protected String getTimestamp() {
-  //    final Date date = new Date(System.currentTimeMillis());
-  //    final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-  //    return formatter.format(date);
-  //  }
-
-  //  /**
-  //   * Get the project name or null
-  //   *
-  //   * @param event the event
-  //   * @return the project that raised this event
-  //   * @since Ant1.7.1
-  //   */
-  //  protected String extractProjectName(final BuildEvent event) {
-  //    final Project project = event.getProject();
-  //    return (project != null) ? project.getName() : null;
-  //  }
 
   @Override
   public void log(String msg, Throwable t, int level) {
@@ -371,5 +272,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   public void setArray(boolean isArray) {
     this.isArray = isArray;
+  }
+
+  public void setClock(Clock clock) {
+    this.clock = clock;
   }
 }
