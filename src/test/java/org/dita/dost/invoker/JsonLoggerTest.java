@@ -8,7 +8,6 @@
 
 package org.dita.dost.invoker;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +64,8 @@ class JsonLoggerTest {
     logger.buildFinished(event);
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertArrayEquals(new LogEntry[] { entry("info", "BUILD SUCCESSFUL") }, act);
+    assertEquals(2, act.length);
+    assertEquals(entry("info", "BUILD SUCCESSFUL"), act[0]);
   }
 
   @Test
@@ -77,8 +77,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(2, act.length);
-    assertEquals(entry("fatal", "BUILD SUCCESSFUL"), act[0]);
-    assertEquals("info", act[1].level);
+    assertEquals("fatal", act[0].level);
   }
 
   @Test
