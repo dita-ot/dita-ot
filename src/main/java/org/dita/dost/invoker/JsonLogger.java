@@ -8,6 +8,8 @@
 
 package org.dita.dost.invoker;
 
+import static org.apache.tools.ant.util.DateUtils.formatElapsedTime;
+
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -31,7 +33,9 @@ import org.dita.dost.log.AbstractLogger;
 public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   // CheckStyle:VisibilityModifier OFF - bc
-  /** PrintStream to write non-error messages to */
+  /**
+   * PrintStream to write non-error messages to
+   */
   private PrintStream out;
   private JsonGenerator generator;
 
@@ -41,7 +45,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   //** Lowest level of message to write out */
   //  private int msgOutputLevel = Project.MSG_ERR;
 
-  /** Time of the start of the build */
+  /**
+   * Time of the start of the build
+   */
   private long startTime = System.currentTimeMillis();
 
   private boolean isArray = false;
@@ -109,65 +115,35 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       }
     }
     try {
-      writeStart();
-
-      final StringBuilder message = new StringBuilder();
       if (error == null) {
-        generator.writeStringField("level", "info");
-        if (msgOutputLevel >= Project.MSG_INFO) {
-          //                    generator.writeStartObject();
-          //                    generator.writeNumberField("duration", clock.instant().getEpochSecond() - startTime);
-          //                    generator.writeEndObject();
-          //                    out.append(System.lineSeparator());
-          //                    return;
-        }
+        writeStart("info");
+        generator.writeStringField("msg", "BUILD SUCCESSFUL");
       } else {
-        generator.writeStringField("level", "fatal");
-        //        message.append(Main.locale.getString("error_msg").formatted(""));
-        if (error instanceof DITAOTException && msgOutputLevel < Project.MSG_INFO) {
-          message.append(Main.locale.getString("exception_msg").formatted(error.getMessage()));
+        writeStart("fatal");
+        if (error instanceof DITAOTException) { //  && msgOutputLevel < Project.MSG_INFO
+          generator.writeStringField("msg", removeLevelPrefix(error.getMessage()).toString());
         } else {
-          try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf)) {
+          try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf, true)) {
             error.printStackTrace(printWriter);
-            printWriter.flush();
-            message.append(Main.locale.getString("exception_msg").formatted(buf));
+            generator.writeStringField("msg", buf.toString());
           } catch (IOException e) {
             // Failed to print stack trace
           }
         }
-        //        if (msgOutputLevel >= Project.MSG_INFO) { //
-        //          message.append(StringUtils.LINE_SEP);
-        //          message.append("BUILD FAILED");
-        //          message.append(" in ").append(DateUtils.formatElapsedTime(clock.instant().getEpochSecond() - startTime));
-        //        }
       }
-      // message.append(StringUtils.LINE_SEP);
-      // message.append("Total time: ");
-      // message.append(DateUtils.formatElapsedTime(clock.instant().getEpochSecond() - startTime));
-
-      generator.writeStringField("msg", "BUILD SUCCESSFUL");
       writeEnd();
 
-      if (!message.isEmpty()) {
-        writeStart();
-        generator.writeStringField("level", "info");
-        if (error == null) {
-          generator.writeStringField("msg", message.toString());
-          //          out.println(msg);
-        } else {
-          generator.writeStringField("msg", removeLevelPrefix(message).toString());
-          //          err.println(removeLevelPrefix(message));
-        }
-        writeEnd();
-      }
+      writeStart("info");
+      generator.writeStringField(
+        "msg",
+        "Total time: " + formatElapsedTime(clock.instant().getEpochSecond() - startTime)
+      );
+      writeEnd();
 
       if (isArray) {
         generator.writeEndArray();
         generator.flush();
-        //        out.append(System.lineSeparator());
-        //        out.flush();
       }
-      //      log(message.toString());
     } catch (IOException e) {
       throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
     } finally {
@@ -179,9 +155,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
-  private void writeStart() throws IOException {
+  private void writeStart(String level) throws IOException {
     generator.writeStartObject();
     generator.writeStringField("timestamp", formatter.format(Instant.now(clock)));
+    generator.writeStringField("level", level);
   }
 
   private void writeEnd() throws IOException {
@@ -212,9 +189,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
       try {
-        writeStart();
-        generator.writeStringField(
-          "level",
+        writeStart(
           switch (event.getPriority()) {
             case Project.MSG_ERR -> "error";
             case Project.MSG_WARN -> "warn";
@@ -247,8 +222,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     final int priority = event.getPriority();
     if (priority <= msgOutputLevel) {
       try {
-        writeStart();
-        generator.writeStringField("level", "info");
+        writeStart("info");
         final StringBuilder message = new StringBuilder(event.getMessage());
         if (event.getTask() != null) {
           generator.writeStringField("task", event.getTask().getTaskName());
