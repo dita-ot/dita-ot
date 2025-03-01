@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.Target;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.AbstractLogger;
@@ -116,7 +117,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     try {
       if (error == null) {
-        writeStart("info");
+        writeStart(toLevel(event));
         generator.writeStringField("msg", "BUILD SUCCESSFUL");
       } else {
         writeStart("fatal");
@@ -181,26 +182,17 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public void targetStarted(final BuildEvent event) {
-    if (event.getTarget().getIf() != null && !evaluate(event.getProject(), event.getTarget().getIf())) {
+    final Target target = event.getTarget();
+    if (target.getIf() != null && !evaluate(event.getProject(), target.getIf())) {
       return;
     }
-    if (event.getTarget().getUnless() != null && evaluate(event.getProject(), event.getTarget().getUnless())) {
+    if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
       try {
-        writeStart(
-          switch (event.getPriority()) {
-            case Project.MSG_ERR -> "error";
-            case Project.MSG_WARN -> "warn";
-            case Project.MSG_INFO -> "info";
-            case Project.MSG_VERBOSE -> "debug";
-            case Project.MSG_DEBUG -> "trace";
-            default -> throw new IllegalArgumentException("Unexpected value: " + event.getPriority());
-          }
-        );
-        generator.writeStringField("target", event.getTarget().getName());
-        generator.writeStringField("msg", event.getTarget().getDescription());
+        writeStart(toLevel(event));
+        generator.writeStringField("msg", "Started target %s: %s".formatted(target.getName(), target.getDescription()));
         writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
@@ -208,8 +200,39 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
+  private static String toLevel(BuildEvent event) {
+    return switch (event.getPriority()) {
+      case Project.MSG_ERR -> "error";
+      case Project.MSG_WARN -> "warn";
+      case Project.MSG_INFO -> "info";
+      case Project.MSG_VERBOSE -> "debug";
+      case Project.MSG_DEBUG -> "trace";
+      default -> throw new IllegalArgumentException("Unexpected value: " + event.getPriority());
+    };
+  }
+
   @Override
-  public void targetFinished(final BuildEvent event) {}
+  public void targetFinished(final BuildEvent event) {
+    final Target target = event.getTarget();
+    if (target.getIf() != null && !evaluate(event.getProject(), target.getIf())) {
+      return;
+    }
+    if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
+      return;
+    }
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+      try {
+        writeStart(toLevel(event));
+        generator.writeStringField(
+          "msg",
+          "Finished target %s: %s".formatted(target.getName(), target.getDescription())
+        );
+        writeEnd();
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+      }
+    }
+  }
 
   @Override
   public void taskStarted(final BuildEvent event) {}
@@ -220,22 +243,23 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void messageLogged(final BuildEvent event) {
     final int priority = event.getPriority();
-    if (priority <= msgOutputLevel) {
-      try {
-        writeStart("info");
-        final StringBuilder message = new StringBuilder(event.getMessage());
-        if (event.getTask() != null) {
-          generator.writeStringField("task", event.getTask().getTaskName());
-        }
-        final Throwable ex = event.getException();
-        if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
-          generator.writeStringField("stacktrace", StringUtils.getStackTrace(ex));
-        }
-        generator.writeStringField("msg", removeLevelPrefix(message).toString());
-        writeEnd();
-      } catch (IOException e) {
-        throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+    if (priority > msgOutputLevel) {
+      return;
+    }
+    try {
+      writeStart(toLevel(event));
+      final StringBuilder message = new StringBuilder(event.getMessage());
+      if (event.getTask() != null) {
+        generator.writeStringField("task", event.getTask().getTaskName());
       }
+      final Throwable ex = event.getException();
+      if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
+        generator.writeStringField("stacktrace", StringUtils.getStackTrace(ex));
+      }
+      generator.writeStringField("msg", removeLevelPrefix(message).toString());
+      writeEnd();
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
     }
   }
 
