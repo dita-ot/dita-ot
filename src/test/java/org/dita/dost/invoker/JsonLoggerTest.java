@@ -63,7 +63,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(
-      new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ofSeconds(0), null, null),
+      new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       act[0]
     );
   }
@@ -81,7 +81,7 @@ class JsonLoggerTest {
   }
 
   @Test
-  void targetStarted() throws IOException {
+  void target() throws IOException {
     final Target target = new Target();
     target.setName("target");
     target.setDescription("description");
@@ -89,12 +89,47 @@ class JsonLoggerTest {
     event.setMessage("message", Project.MSG_INFO);
 
     logger.targetStarted(event);
+    logger.targetFinished(event);
     logger.buildFinished(new BuildEvent(new Project()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
       new LogEntry[] {
         new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null, null),
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          "info",
+          "Finished target target: description",
+          Duration.ZERO,
+          null,
+          null
+        ),
+        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+      },
+      act
+    );
+  }
+
+  @Test
+  void task() throws IOException {
+    var target = new Target();
+    target.setName("target");
+    final Task task = new Task() {};
+    task.setTaskName("task");
+    task.setDescription("description");
+    task.setOwningTarget(target);
+    var event = new BuildEvent(task);
+    event.setMessage("message", Project.MSG_INFO);
+
+    logger.taskStarted(event);
+    logger.taskFinished(event);
+    logger.buildFinished(new BuildEvent(new Project()));
+
+    final LogEntry[] act = objectReader.readValue(buf.toByteArray());
+    assertArrayEquals(
+      new LogEntry[] {
+        new LogEntry(ZonedDateTime.now(clock), "info", "Started task task: description", null, null, null),
+        new LogEntry(ZonedDateTime.now(clock), "info", "Finished task task: description", Duration.ZERO, null, null),
         new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       },
       act
