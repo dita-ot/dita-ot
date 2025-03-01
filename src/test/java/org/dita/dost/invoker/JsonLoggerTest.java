@@ -48,7 +48,7 @@ class JsonLoggerTest {
     logger.setArray(true);
     logger.setClock(clock);
 
-    logger.buildStarted(new BuildEvent(new Project()));
+    logger.buildStarted(new BuildEvent(createProject()));
   }
 
   @AfterEach
@@ -58,7 +58,7 @@ class JsonLoggerTest {
 
   @Test
   void buildFinished() throws IOException {
-    var event = new BuildEvent(new Project());
+    var event = new BuildEvent(createProject());
 
     logger.buildFinished(event);
 
@@ -71,7 +71,7 @@ class JsonLoggerTest {
 
   @Test
   void buildFinished_error() throws IOException {
-    var event = new BuildEvent(new Project());
+    var event = new BuildEvent(createProject());
     event.setException(new DITAOTException("test"));
 
     logger.buildFinished(event);
@@ -83,15 +83,12 @@ class JsonLoggerTest {
 
   @Test
   void target() throws IOException {
-    final Target target = new Target();
-    target.setName("target");
-    target.setDescription("description");
-    var event = new BuildEvent(target);
+    var event = new BuildEvent(createTarget());
     event.setMessage("message", Project.MSG_INFO);
 
     logger.targetStarted(event);
     logger.targetFinished(event);
-    logger.buildFinished(new BuildEvent(new Project()));
+    logger.buildFinished(new BuildEvent(createProject()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
@@ -120,18 +117,12 @@ class JsonLoggerTest {
 
   @Test
   void task() throws IOException {
-    var target = new Target();
-    target.setName("target");
-    final Task task = new Task() {};
-    task.setTaskName("task");
-    task.setDescription("description");
-    task.setOwningTarget(target);
-    var event = new BuildEvent(task);
+    var event = new BuildEvent(createTask());
     event.setMessage("message", Project.MSG_INFO);
 
     logger.taskStarted(event);
     logger.taskFinished(event);
-    logger.buildFinished(new BuildEvent(new Project()));
+    logger.buildFinished(new BuildEvent(createProject()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
@@ -160,21 +151,37 @@ class JsonLoggerTest {
 
   @Test
   void messageLogged() throws IOException {
-    var target = new Target();
-    target.setName("target");
-    final Task task = new Task() {};
-    task.setTaskName("task");
-    task.setOwningTarget(target);
-    var event = new BuildEvent(task);
+    var event = new BuildEvent(createTask());
     event.setMessage("message", Project.MSG_INFO);
 
     logger.messageLogged(event);
-    logger.buildFinished(new BuildEvent(new Project()));
+    logger.buildFinished(new BuildEvent(createProject()));
 
     System.out.println(new String(buf.toByteArray()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "message", null, null, "task"), act[0]);
+  }
+
+  private static Project createProject() {
+    return new Project();
+  }
+
+  private static Task createTask() {
+    final Task task = new Task() {};
+    task.setTaskName("task");
+    task.setDescription("description");
+    task.setOwningTarget(createTarget());
+    task.setProject(task.getOwningTarget().getProject());
+    return task;
+  }
+
+  private static Target createTarget() {
+    var target = new Target();
+    target.setName("target");
+    target.setDescription("description");
+    target.setProject(createProject());
+    return target;
   }
 
   private record LogEntry(
