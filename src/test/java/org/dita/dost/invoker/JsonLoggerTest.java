@@ -8,6 +8,7 @@
 
 package org.dita.dost.invoker;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +66,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(2, act.length);
-    assertEquals(entry("info", "BUILD SUCCESSFUL"), act[0]);
+    assertEquals(entry("debug", "BUILD SUCCESSFUL"), act[0]);
   }
 
   @Test
@@ -91,10 +92,22 @@ class JsonLoggerTest {
     logger.targetStarted(event);
     logger.buildFinished(new BuildEvent(new Project()));
 
-    System.out.println(new String(buf.toByteArray()));
+    //    System.out.println(new String(buf.toByteArray()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "description", "target", null), act[0]);
+    assertArrayEquals(
+      new LogEntry[] {
+        new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null),
+        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", null, null),
+        new LogEntry(ZonedDateTime.now(clock), "info", "Total time: 0 seconds", null, null),
+      },
+      act
+    );
+    //    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "description", "target", null), act[0]);
+    //    assertEquals(
+    //      new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null),
+    //      act[1]
+    //    );
   }
 
   @Test
