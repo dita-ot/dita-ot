@@ -8,8 +8,6 @@
 
 package org.dita.dost.invoker;
 
-import static org.apache.tools.ant.util.DateUtils.formatElapsedTime;
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -131,13 +129,6 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
           }
         }
       }
-      writeEnd();
-
-      writeStart("info");
-      generator.writeStringField(
-        "msg",
-        "Total time: " + formatElapsedTime(clock.instant().getEpochSecond() - timestampStack.peek())
-      );
       generator.writeStringField(
         "duration",
         Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
@@ -196,7 +187,12 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
-        generator.writeStringField("msg", "Started target %s: %s".formatted(target.getName(), target.getDescription()));
+        generator.writeStringField(
+          "msg",
+          target.getDescription() != null
+            ? "Started target %s: %s".formatted(target.getName(), target.getDescription())
+            : "Started target %s".formatted(target.getName())
+        );
         writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
@@ -229,7 +225,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
         writeStart(toLevel(event));
         generator.writeStringField(
           "msg",
-          "Finished target %s: %s".formatted(target.getName(), target.getDescription())
+          target.getDescription() != null
+            ? "Finished target %s: %s".formatted(target.getName(), target.getDescription())
+            : "Finished target %s".formatted(target.getName())
         );
         generator.writeStringField(
           "duration",
