@@ -17,10 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
@@ -97,13 +94,13 @@ class JsonLoggerTest {
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
       new LogEntry[] {
-        new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null),
-        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", null, null),
-        new LogEntry(ZonedDateTime.now(clock), "info", "Total time: 0 seconds", null, null),
+        new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null, null),
+        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", null, null, null),
+        new LogEntry(ZonedDateTime.now(clock), "info", "Total time: 0 seconds", Duration.ofSeconds(0), null, null),
       },
       act
     );
-    //    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "description", "target", null), act[0]);
+    //    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "description", "target", null), act[0]);é
     //    assertEquals(
     //      new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null),
     //      act[1]
@@ -126,12 +123,19 @@ class JsonLoggerTest {
     System.out.println(new String(buf.toByteArray()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "message", null, "task"), act[0]);
+    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "message", null, null, "task"), act[0]);
   }
 
   private LogEntry entry(String level, String msg) {
-    return new LogEntry(ZonedDateTime.now(clock), level, msg, null, null);
+    return new LogEntry(ZonedDateTime.now(clock), level, msg, null, null, null);
   }
 
-  private record LogEntry(ZonedDateTime timestamp, String level, String msg, String target, String task) {}
+  private record LogEntry(
+    ZonedDateTime timestamp,
+    String level,
+    String msg,
+    Duration duration,
+    String target,
+    String task
+  ) {}
 }
