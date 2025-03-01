@@ -23,6 +23,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
 import org.apache.tools.ant.Task;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.log.MessageBean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(
-      new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+      new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       act[0]
     );
   }
@@ -76,7 +77,7 @@ class JsonLoggerTest {
     logger.buildFinished(event);
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals("fatal", act[0].level);
+    assertEquals(MessageBean.Type.FATAL, act[0].level);
     assertEquals(Duration.ZERO, act[0].duration);
   }
 
@@ -95,16 +96,23 @@ class JsonLoggerTest {
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
       new LogEntry[] {
-        new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null, null),
         new LogEntry(
           ZonedDateTime.now(clock),
-          "info",
+          MessageBean.Type.INFO,
+          "Started target target: description",
+          null,
+          null,
+          null
+        ),
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
           "Finished target target: description",
           Duration.ZERO,
           null,
           null
         ),
-        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       },
       act
     );
@@ -128,9 +136,23 @@ class JsonLoggerTest {
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
       new LogEntry[] {
-        new LogEntry(ZonedDateTime.now(clock), "info", "Started task task: description", null, null, null),
-        new LogEntry(ZonedDateTime.now(clock), "info", "Finished task task: description", Duration.ZERO, null, null),
-        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Started task task: description",
+          null,
+          null,
+          null
+        ),
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Finished task task: description",
+          Duration.ZERO,
+          null,
+          null
+        ),
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       },
       act
     );
@@ -152,12 +174,12 @@ class JsonLoggerTest {
     System.out.println(new String(buf.toByteArray()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "message", null, null, "task"), act[0]);
+    assertEquals(new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "message", null, null, "task"), act[0]);
   }
 
   private record LogEntry(
     ZonedDateTime timestamp,
-    String level,
+    MessageBean.Type level,
     String msg,
     Duration duration,
     String target,
