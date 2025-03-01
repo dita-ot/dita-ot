@@ -62,8 +62,10 @@ class JsonLoggerTest {
     logger.buildFinished(event);
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(2, act.length);
-    assertEquals(entry("debug", "BUILD SUCCESSFUL"), act[0]);
+    assertEquals(
+      new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ofSeconds(0), null, null),
+      act[0]
+    );
   }
 
   @Test
@@ -74,8 +76,8 @@ class JsonLoggerTest {
     logger.buildFinished(event);
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(2, act.length);
     assertEquals("fatal", act[0].level);
+    assertEquals(Duration.ZERO, act[0].duration);
   }
 
   @Test
@@ -89,22 +91,14 @@ class JsonLoggerTest {
     logger.targetStarted(event);
     logger.buildFinished(new BuildEvent(new Project()));
 
-    //    System.out.println(new String(buf.toByteArray()));
-
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertArrayEquals(
       new LogEntry[] {
         new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null, null),
-        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", null, null, null),
-        new LogEntry(ZonedDateTime.now(clock), "info", "Total time: 0 seconds", Duration.ofSeconds(0), null, null),
+        new LogEntry(ZonedDateTime.now(clock), "debug", "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       },
       act
     );
-    //    assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "description", "target", null), act[0]);é
-    //    assertEquals(
-    //      new LogEntry(ZonedDateTime.now(clock), "info", "Started target target: description", null, null),
-    //      act[1]
-    //    );
   }
 
   @Test
@@ -124,10 +118,6 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(new LogEntry(ZonedDateTime.now(clock), "info", "message", null, null, "task"), act[0]);
-  }
-
-  private LogEntry entry(String level, String msg) {
-    return new LogEntry(ZonedDateTime.now(clock), level, msg, null, null, null);
   }
 
   private record LogEntry(
