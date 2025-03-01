@@ -17,9 +17,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.BuildLogger;
 import org.apache.tools.ant.Project;
@@ -46,13 +49,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   //** Lowest level of message to write out */
   //  private int msgOutputLevel = Project.MSG_ERR;
 
-  /**
-   * Time of the start of the build
-   */
-  private long startTime = System.currentTimeMillis();
-
   private boolean isArray = false;
   private Clock clock = Clock.systemUTC();
+  private Deque<Long> timestampStack = new ArrayDeque<>();
 
   private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
@@ -90,7 +89,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public void buildStarted(final BuildEvent event) {
-    startTime = clock.instant().getEpochSecond();
+    timestampStack.push(clock.instant().getEpochSecond());
     try {
       generator = new ObjectMapper().createGenerator(out);
     } catch (IOException e) {
@@ -137,7 +136,11 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       writeStart("info");
       generator.writeStringField(
         "msg",
-        "Total time: " + formatElapsedTime(clock.instant().getEpochSecond() - startTime)
+        "Total time: " + formatElapsedTime(clock.instant().getEpochSecond() - timestampStack.peek())
+      );
+      generator.writeStringField(
+        "duration",
+        Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
       );
       writeEnd();
 
@@ -190,6 +193,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       return;
     }
     if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+      timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
         generator.writeStringField("msg", "Started target %s: %s".formatted(target.getName(), target.getDescription()));
@@ -226,6 +230,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
         generator.writeStringField(
           "msg",
           "Finished target %s: %s".formatted(target.getName(), target.getDescription())
+        );
+        generator.writeStringField(
+          "duration",
+          Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
         );
         writeEnd();
       } catch (IOException e) {
