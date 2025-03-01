@@ -25,6 +25,7 @@ import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.AbstractLogger;
+import org.dita.dost.log.MessageBean;
 
 /**
  * Writes build events to a output stream as JSON objects.
@@ -111,10 +112,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     try {
       if (error == null) {
-        writeStart(toLevel(event));
+        writeStart(MessageBean.Type.INFO);
         generator.writeStringField("msg", "BUILD SUCCESSFUL");
       } else {
-        writeStart("fatal");
+        writeStart(MessageBean.Type.FATAL);
         if (error instanceof DITAOTException) { //  && msgOutputLevel < Project.MSG_INFO
           generator.writeStringField("msg", removeLevelPrefix(error.getMessage()).toString());
         } else {
@@ -147,10 +148,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
-  private void writeStart(String level) throws IOException {
+  private void writeStart(MessageBean.Type level) throws IOException {
     generator.writeStartObject();
     generator.writeStringField("timestamp", formatter.format(Instant.now(clock)));
-    generator.writeStringField("level", level);
+    generator.writeStringField("level", level.name());
   }
 
   private void writeEnd() throws IOException {
@@ -180,7 +181,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+    if (event.getPriority() <= msgOutputLevel && !target.getName().equals("")) {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
@@ -197,13 +198,13 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
-  private static String toLevel(BuildEvent event) {
+  private static MessageBean.Type toLevel(BuildEvent event) {
     return switch (event.getPriority()) {
-      case Project.MSG_ERR -> "error";
-      case Project.MSG_WARN -> "warn";
-      case Project.MSG_INFO -> "info";
-      case Project.MSG_VERBOSE -> "debug";
-      case Project.MSG_DEBUG -> "trace";
+      case Project.MSG_ERR -> MessageBean.Type.ERROR;
+      case Project.MSG_WARN -> MessageBean.Type.WARN;
+      case Project.MSG_INFO -> MessageBean.Type.INFO;
+      case Project.MSG_VERBOSE -> MessageBean.Type.DEBUG;
+      case Project.MSG_DEBUG -> MessageBean.Type.TRACE;
       default -> throw new IllegalArgumentException("Unexpected value: " + event.getPriority());
     };
   }
@@ -217,7 +218,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+    if (event.getPriority() <= msgOutputLevel && !target.getName().equals("")) {
       try {
         writeStart(toLevel(event));
         generator.writeStringField(
@@ -240,7 +241,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void taskStarted(final BuildEvent event) {
     final Task target = event.getTask();
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getTaskName().equals("")) {
+    if (event.getPriority() <= msgOutputLevel && !target.getTaskName().equals("")) {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
@@ -260,7 +261,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void taskFinished(final BuildEvent event) {
     final Task target = event.getTask();
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getTaskName().equals("")) {
+    if (event.getPriority() <= msgOutputLevel && !target.getTaskName().equals("")) {
       try {
         writeStart(toLevel(event));
         generator.writeStringField(
