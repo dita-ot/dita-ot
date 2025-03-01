@@ -21,10 +21,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildLogger;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Target;
+import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.AbstractLogger;
@@ -241,10 +238,47 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   }
 
   @Override
-  public void taskStarted(final BuildEvent event) {}
+  public void taskStarted(final BuildEvent event) {
+    final Task target = event.getTask();
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getTaskName().equals("")) {
+      timestampStack.push(clock.instant().getEpochSecond());
+      try {
+        writeStart(toLevel(event));
+        generator.writeStringField(
+          "msg",
+          target.getDescription() != null
+            ? "Started task %s: %s".formatted(target.getTaskName(), target.getDescription())
+            : "Started task %s".formatted(target.getTaskName())
+        );
+        writeEnd();
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+      }
+    }
+  }
 
   @Override
-  public void taskFinished(final BuildEvent event) {}
+  public void taskFinished(final BuildEvent event) {
+    final Task target = event.getTask();
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getTaskName().equals("")) {
+      try {
+        writeStart(toLevel(event));
+        generator.writeStringField(
+          "msg",
+          target.getDescription() != null
+            ? "Finished task %s: %s".formatted(target.getTaskName(), target.getDescription())
+            : "Finished task %s".formatted(target.getTaskName())
+        );
+        generator.writeStringField(
+          "duration",
+          Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
+        );
+        writeEnd();
+      } catch (IOException e) {
+        throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+      }
+    }
+  }
 
   @Override
   public void messageLogged(final BuildEvent event) {
