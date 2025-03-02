@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
+import java.util.List;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Target;
@@ -27,13 +28,16 @@ import org.dita.dost.log.MessageBean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class JsonLoggerTest {
 
-  private final ObjectReader objectReader = new ObjectMapper()
+  private static final ObjectReader objectReader = new ObjectMapper()
     .findAndRegisterModules()
     .readerForArrayOf(LogEntry.class);
-  private final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("Z"));
+  private static final Clock clock = Clock.fixed(Instant.now(), ZoneId.of("Z"));
   private JsonLogger logger;
   private ByteArrayOutputStream buf;
   private PrintStream out;
@@ -157,10 +161,147 @@ class JsonLoggerTest {
     logger.messageLogged(event);
     logger.buildFinished(new BuildEvent(createProject()));
 
-    System.out.println(new String(buf.toByteArray()));
-
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "message", null, null, "task"), act[0]);
+  }
+
+  static List<Arguments> removeLevelPrefix() {
+    return List.of(
+      Arguments.of(
+        "[DOTJ037W][INFO] Message",
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W] Message", null, null, "task")
+      ),
+      Arguments.of(
+        "[DOTJ037W][INFO]: Message",
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W]: Message", null, null, "task")
+      ),
+      Arguments.of(
+        "[DOTJ037W] Message",
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W] Message", null, null, "task")
+      ),
+      Arguments.of(
+        "[DOTJ037W][Warning]: Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "[DOTJ037W][Warning]: Message",
+          null,
+          null,
+          "task"
+        )
+      ),
+      Arguments.of(
+        "[WARN][DOTJ037W]: Message",
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[WARN][DOTJ037W]: Message", null, null, "task")
+      ),
+      Arguments.of(
+        "[WARN] Message",
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[WARN] Message", null, null, "task")
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [DOTJ037W][INFO] Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [DOTJ037W][INFO]: Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [DOTJ037W] Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [DOTJ037W][Warning]: Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [WARN][DOTJ037W]: Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      ),
+      Arguments.of(
+        "file:/src/path.dita:2:3: [WARN] Message",
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          null,
+          "file:/src/path.dita",
+          2,
+          3
+        )
+      )
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("removeLevelPrefix")
+  void messageLogged_prefix(String src, LogEntry exp) throws IOException {
+    var event = new BuildEvent(createTask());
+    event.setMessage(src, Project.MSG_INFO);
+
+    logger.messageLogged(event);
+    logger.buildFinished(new BuildEvent(createProject()));
+
+    final LogEntry[] act = objectReader.readValue(buf.toByteArray());
+    assertEquals(exp, act[0]);
   }
 
   private static Project createProject() {
@@ -190,6 +331,21 @@ class JsonLoggerTest {
     String msg,
     Duration duration,
     String target,
-    String task
-  ) {}
+    String task,
+    String code,
+    String location,
+    Integer line,
+    Integer row
+  ) {
+    LogEntry(
+      ZonedDateTime timestamp,
+      MessageBean.Type level,
+      String msg,
+      Duration duration,
+      String target,
+      String task
+    ) {
+      this(timestamp, level, msg, duration, target, task, null, null, null, null);
+    }
+  }
 }

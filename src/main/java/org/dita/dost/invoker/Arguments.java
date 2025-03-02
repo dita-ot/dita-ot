@@ -188,7 +188,6 @@ abstract class Arguments {
     }
     if (entry.getValue().equals("json")) {
       loggerClassname = JsonLogger.class.getCanonicalName();
-      useColor = false;
     } else {
       loggerClassname = entry.getValue();
     }
