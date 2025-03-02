@@ -126,7 +126,7 @@ abstract class Arguments {
     } else if (isLongForm(arg, "-listener")) {
       handleArgListener(args);
     } else if (isLongForm(arg, "-logger")) {
-      handleArgLogger(args);
+      handleArgLogger(arg, args);
     } else if (isLongForm(arg, "-no-color")) {
       useColor = false;
     } else {
@@ -181,13 +181,15 @@ abstract class Arguments {
   /**
    * Handle the --logger argument.
    */
-  private void handleArgLogger(final Deque<String> args) {
-    if (loggerClassname != null) {
-      throw new BuildException("Only one logger class may be specified.");
+  private void handleArgLogger(String arg, final Deque<String> args) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
+      throw new BuildException("Missing value for logger  " + entry.getKey());
     }
-    loggerClassname = args.pop();
-    if (loggerClassname == null) {
-      throw new BuildException("You must specify a classname when using the -logger argument");
+    if (entry.getValue().equals("json")) {
+      loggerClassname = JsonLogger.class.getCanonicalName();
+    } else {
+      loggerClassname = entry.getValue();
     }
   }
 

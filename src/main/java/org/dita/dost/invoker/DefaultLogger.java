@@ -355,6 +355,27 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     // Filter out messages based on priority
     if (priority <= msgOutputLevel) {
       final StringBuilder message = new StringBuilder();
+
+      if (!legacyFormat) {
+        if (priority == Project.MSG_ERR) {
+          if (useColor) {
+            message.append(ANSI_RED);
+          }
+          message.append(Main.locale.getString("error_msg").formatted(""));
+          if (useColor) {
+            message.append(ANSI_RESET);
+          }
+        } else if (priority == Project.MSG_WARN) {
+          if (useColor) {
+            message.append(ANSI_YELLOW);
+          }
+          message.append(Main.locale.getString("warn_msg").formatted(""));
+          if (useColor) {
+            message.append(ANSI_RESET);
+          }
+        }
+      }
+
       if (event.getTask() != null && !emacsMode) {
         // Print out the name of the task if we're in one
         final String name = event.getTask().getTaskName();
