@@ -169,34 +169,93 @@ class JsonLoggerTest {
     return List.of(
       Arguments.of(
         "[DOTJ037W][INFO] Message",
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W] Message", null, null, "task")
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          null,
+          null,
+          null
+        )
       ),
       Arguments.of(
         "[DOTJ037W][INFO]: Message",
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W]: Message", null, null, "task")
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          null,
+          null,
+          null
+        )
       ),
       Arguments.of(
         "[DOTJ037W] Message",
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[DOTJ037W] Message", null, null, "task")
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          null,
+          null,
+          null
+        )
       ),
       Arguments.of(
         "[DOTJ037W][Warning]: Message",
         new LogEntry(
           ZonedDateTime.now(clock),
           MessageBean.Type.INFO,
-          "[DOTJ037W][Warning]: Message",
+          "Message",
           null,
           null,
-          "task"
+          "task",
+          "DOTJ037W",
+          null,
+          null,
+          null
         )
       ),
       Arguments.of(
         "[WARN][DOTJ037W]: Message",
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[WARN][DOTJ037W]: Message", null, null, "task")
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          "DOTJ037W",
+          null,
+          null,
+          null
+        )
       ),
       Arguments.of(
         "[WARN] Message",
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "[WARN] Message", null, null, "task")
+        new LogEntry(
+          ZonedDateTime.now(clock),
+          MessageBean.Type.INFO,
+          "Message",
+          null,
+          null,
+          "task",
+          null,
+          null,
+          null,
+          null
+        )
       ),
       Arguments.of(
         "file:/src/path.dita:2:3: [DOTJ037W][INFO] Message",

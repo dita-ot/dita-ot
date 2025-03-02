@@ -308,15 +308,21 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   }
 
   private static final Pattern LOCATION_PREFIX = Pattern.compile(
-    "^(.+):(\\d+):(\\d+):\\s+(?:\\[(\\w+)])?(?:\\[(\\w+)])?:?\\s+"
+    "^(?:(.+):(\\d+):(\\d+):\\s+)?(?:\\[(\\w+)])?(?:\\[(\\w+)])?:?\\s+"
   );
 
   private void extractLocation(StringBuilder message) throws IOException {
     final Matcher matcher = LOCATION_PREFIX.matcher(message);
     if (matcher.find()) {
-      generator.writeStringField("location", matcher.group(1));
-      generator.writeNumberField("line", Integer.parseInt(matcher.group(2)));
-      generator.writeNumberField("row", Integer.parseInt(matcher.group(3)));
+      if (matcher.group(1) != null) {
+        generator.writeStringField("location", matcher.group(1));
+      }
+      if (matcher.group(2) != null) {
+        generator.writeNumberField("line", Integer.parseInt(matcher.group(2)));
+      }
+      if (matcher.group(3) != null) {
+        generator.writeNumberField("row", Integer.parseInt(matcher.group(3)));
+      }
       for (int i = 4; i <= matcher.groupCount(); i++) {
         if (matcher.group(i) != null) {
           switch (matcher.group(i).toUpperCase()) {
