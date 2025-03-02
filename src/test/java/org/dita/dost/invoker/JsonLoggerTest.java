@@ -88,7 +88,7 @@ class JsonLoggerTest {
   @Test
   void target() throws IOException {
     var event = new BuildEvent(createTarget());
-    event.setMessage("message", Project.MSG_INFO);
+    event.setMessage("message", Project.MSG_DEBUG);
 
     logger.targetStarted(event);
     logger.targetFinished(event);
@@ -102,7 +102,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Started target target: description",
           null,
-          null,
+          "target",
           null
         ),
         new LogEntry(
@@ -110,7 +110,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Finished target target: description",
           Duration.ZERO,
-          null,
+          "target",
           null
         ),
         new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
@@ -122,7 +122,8 @@ class JsonLoggerTest {
   @Test
   void task() throws IOException {
     var event = new BuildEvent(createTask());
-    event.setMessage("message", Project.MSG_INFO);
+    event.setMessage("message", Project.MSG_DEBUG);
+    logger.setOutputLevel(Project.MSG_DEBUG);
 
     logger.taskStarted(event);
     logger.taskFinished(event);
@@ -133,19 +134,19 @@ class JsonLoggerTest {
       new LogEntry[] {
         new LogEntry(
           ZonedDateTime.now(clock),
-          MessageBean.Type.INFO,
+          MessageBean.Type.TRACE,
           "Started task task: description",
           null,
-          null,
-          null
+          "target",
+          "task"
         ),
         new LogEntry(
           ZonedDateTime.now(clock),
-          MessageBean.Type.INFO,
+          MessageBean.Type.TRACE,
           "Finished task task: description",
           Duration.ZERO,
-          null,
-          null
+          "target",
+          "task"
         ),
         new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
       },
@@ -162,7 +163,10 @@ class JsonLoggerTest {
     logger.buildFinished(new BuildEvent(createProject()));
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
-    assertEquals(new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "message", null, null, "task"), act[0]);
+    assertEquals(
+      new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "message", null, "target", "task"),
+      act[0]
+    );
   }
 
   static List<Arguments> removeLevelPrefix() {
@@ -174,7 +178,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           null,
@@ -189,7 +193,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           null,
@@ -204,7 +208,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           null,
@@ -219,7 +223,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           null,
@@ -234,7 +238,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           null,
@@ -249,7 +253,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           null,
           null,
@@ -264,7 +268,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           "file:/src/path.dita",
@@ -279,7 +283,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           "file:/src/path.dita",
@@ -294,7 +298,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           "file:/src/path.dita",
@@ -309,7 +313,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           "file:/src/path.dita",
@@ -324,7 +328,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           "DOTJ037W",
           "file:/src/path.dita",
@@ -339,7 +343,7 @@ class JsonLoggerTest {
           MessageBean.Type.INFO,
           "Message",
           null,
-          null,
+          "target",
           "task",
           null,
           "file:/src/path.dita",
