@@ -183,10 +183,11 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (event.getPriority() <= msgOutputLevel && !target.getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
-        writeStart(toLevel(event));
+        writeStart(MessageBean.Type.INFO);
+        generator.writeStringField("target", target.getName());
         generator.writeStringField(
           "msg",
           target.getDescription() != null
@@ -200,17 +201,6 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
-  private static MessageBean.Type toLevel(BuildEvent event) {
-    return switch (event.getPriority()) {
-      case Project.MSG_ERR -> MessageBean.Type.ERROR;
-      case Project.MSG_WARN -> MessageBean.Type.WARN;
-      case Project.MSG_INFO -> MessageBean.Type.INFO;
-      case Project.MSG_VERBOSE -> MessageBean.Type.DEBUG;
-      case Project.MSG_DEBUG -> MessageBean.Type.TRACE;
-      default -> throw new IllegalArgumentException("Unexpected value: " + event.getPriority());
-    };
-  }
-
   @Override
   public void targetFinished(final BuildEvent event) {
     final Target target = event.getTarget();
@@ -220,9 +210,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (event.getPriority() <= msgOutputLevel && !target.getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
       try {
-        writeStart(toLevel(event));
+        writeStart(MessageBean.Type.INFO);
+        generator.writeStringField("target", target.getName());
         generator.writeStringField(
           "msg",
           target.getDescription() != null
@@ -242,16 +233,18 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public void taskStarted(final BuildEvent event) {
-    final Task target = event.getTask();
-    if (event.getPriority() <= msgOutputLevel && !target.getTaskName().equals("")) {
+    final Task task = event.getTask();
+    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
+        generator.writeStringField("target", task.getOwningTarget().getName());
+        generator.writeStringField("task", task.getTaskName());
         generator.writeStringField(
           "msg",
-          target.getDescription() != null
-            ? "Started task %s: %s".formatted(target.getTaskName(), target.getDescription())
-            : "Started task %s".formatted(target.getTaskName())
+          task.getDescription() != null
+            ? "Started task %s: %s".formatted(task.getTaskName(), task.getDescription())
+            : "Started task %s".formatted(task.getTaskName())
         );
         writeEnd();
       } catch (IOException e) {
@@ -262,15 +255,17 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public void taskFinished(final BuildEvent event) {
-    final Task target = event.getTask();
-    if (event.getPriority() <= msgOutputLevel && !target.getTaskName().equals("")) {
+    final Task task = event.getTask();
+    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
       try {
         writeStart(toLevel(event));
+        generator.writeStringField("target", task.getOwningTarget().getName());
+        generator.writeStringField("task", task.getTaskName());
         generator.writeStringField(
           "msg",
-          target.getDescription() != null
-            ? "Finished task %s: %s".formatted(target.getTaskName(), target.getDescription())
-            : "Finished task %s".formatted(target.getTaskName())
+          task.getDescription() != null
+            ? "Finished task %s: %s".formatted(task.getTaskName(), task.getDescription())
+            : "Finished task %s".formatted(task.getTaskName())
         );
         generator.writeStringField(
           "duration",
@@ -291,6 +286,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     try {
       writeStart(toLevel(event));
+      if (event.getTarget() != null) {
+        generator.writeStringField("target", event.getTarget().getName());
+      }
       if (event.getTask() != null) {
         generator.writeStringField("task", event.getTask().getTaskName());
       }
@@ -305,6 +303,30 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     } catch (IOException e) {
       throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
     }
+  }
+
+  @Override
+  public void log(String msg, Throwable t, int level) {
+    throw new UnsupportedOperationException();
+  }
+
+  public void setArray(boolean isArray) {
+    this.isArray = isArray;
+  }
+
+  public void setClock(Clock clock) {
+    this.clock = clock;
+  }
+
+  private static MessageBean.Type toLevel(BuildEvent event) {
+    return switch (event.getPriority()) {
+      case Project.MSG_ERR -> MessageBean.Type.ERROR;
+      case Project.MSG_WARN -> MessageBean.Type.WARN;
+      case Project.MSG_INFO -> MessageBean.Type.INFO;
+      case Project.MSG_VERBOSE -> MessageBean.Type.DEBUG;
+      case Project.MSG_DEBUG -> MessageBean.Type.TRACE;
+      default -> throw new IllegalArgumentException("Unexpected value: " + event.getPriority());
+    };
   }
 
   private static final Pattern LOCATION_PREFIX = Pattern.compile(
@@ -345,18 +367,5 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       //      }
       message.delete(0, matcher.end());
     }
-  }
-
-  @Override
-  public void log(String msg, Throwable t, int level) {
-    throw new UnsupportedOperationException();
-  }
-
-  public void setArray(boolean isArray) {
-    this.isArray = isArray;
-  }
-
-  public void setClock(Clock clock) {
-    this.clock = clock;
   }
 }
