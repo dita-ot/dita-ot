@@ -21,6 +21,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.tools.ant.*;
 import org.apache.tools.ant.util.StringUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -289,7 +291,6 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     try {
       writeStart(toLevel(event));
-      final StringBuilder message = new StringBuilder(event.getMessage());
       if (event.getTask() != null) {
         generator.writeStringField("task", event.getTask().getTaskName());
       }
@@ -297,10 +298,46 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
         generator.writeStringField("stacktrace", StringUtils.getStackTrace(ex));
       }
+      final StringBuilder message = new StringBuilder(event.getMessage());
+      extractLocation(message);
       generator.writeStringField("msg", removeLevelPrefix(message).toString());
       writeEnd();
     } catch (IOException e) {
       throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
+    }
+  }
+
+  private static final Pattern LOCATION_PREFIX = Pattern.compile(
+    "^(.+):(\\d+):(\\d+):\\s+(?:\\[(\\w+)])?(?:\\[(\\w+)])?:?\\s+"
+  );
+
+  private void extractLocation(StringBuilder message) throws IOException {
+    final Matcher matcher = LOCATION_PREFIX.matcher(message);
+    if (matcher.find()) {
+      generator.writeStringField("location", matcher.group(1));
+      generator.writeNumberField("line", Integer.parseInt(matcher.group(2)));
+      generator.writeNumberField("row", Integer.parseInt(matcher.group(3)));
+      for (int i = 4; i <= matcher.groupCount(); i++) {
+        if (matcher.group(i) != null) {
+          switch (matcher.group(i).toUpperCase()) {
+            case "ERROR":
+            case "WARN":
+            case "WARNING":
+            case "INFO":
+            case "DEBUG":
+            case "TRACE":
+              break;
+            default:
+              generator.writeStringField("code", matcher.group(i));
+              break;
+          }
+          //          generator.writeStringField("code", matcher.group(i));
+        }
+      }
+      //      if (matcher.group(4) != null) {
+      //        generator.writeStringField("code", matcher.group(4));
+      //      }
+      message.delete(0, matcher.end());
     }
   }
 
