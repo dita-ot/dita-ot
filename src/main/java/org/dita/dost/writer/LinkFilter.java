@@ -38,13 +38,6 @@ public class LinkFilter extends AbstractXMLFilter {
       final AttributesImpl resAtts = new AttributesImpl(atts);
       int i = atts.getIndex(ATTRIBUTE_NAME_IMAGEREF);
       if (i == -1) {
-        int j = atts.getIndex(ATTRIBUTE_NAME_COPY_TO);
-        if (j != -1) {
-          final URI resCopyTo = getHref(toURI(atts.getValue(j)));
-          addOrSetAttribute(resAtts, ATTRIBUTE_NAME_COPY_TO, resCopyTo.toString());
-        }
-      }
-      if (i == -1) {
         i = atts.getIndex(ATTRIBUTE_NAME_HREF);
       }
       if (i == -1) {
@@ -54,6 +47,12 @@ public class LinkFilter extends AbstractXMLFilter {
         final URI resHref = getHref(toURI(atts.getValue(i)));
         addOrSetAttribute(resAtts, atts.getQName(i), resHref.toString());
         res = resAtts;
+      }
+
+      int copyToIndex = atts.getIndex(ATTRIBUTE_NAME_COPY_TO);
+      if (copyToIndex != -1) {
+        final URI resCopyTo = getHref(toURI(atts.getValue(copyToIndex)));
+        addOrSetAttribute(resAtts, ATTRIBUTE_NAME_COPY_TO, resCopyTo.toString());
       }
     }
 
