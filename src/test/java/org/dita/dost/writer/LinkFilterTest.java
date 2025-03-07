@@ -80,10 +80,7 @@ public class LinkFilterTest {
         @Override
         public void startElement(String uri, String localName, String qName, Attributes atts) {
           assertEquals(URI.create("../topics/topic.dita"), URI.create(atts.getValue(ATTRIBUTE_NAME_HREF)));
-          assertEquals(
-            URI.create("9905ee35-8276-4a95-bf97-33d5a05b1f60.dita"),
-            URI.create(atts.getValue(ATTRIBUTE_NAME_COPY_TO))
-          );
+          assertEquals(URI.create("../topics/topic_copy.dita"), URI.create(atts.getValue(ATTRIBUTE_NAME_COPY_TO)));
         }
       }
     );
