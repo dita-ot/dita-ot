@@ -20,7 +20,7 @@ jobs:
           cache: 'gradle'
       - name: Set tag name
         run: |
-          echo "tag=${GITHUB_REF#refs/heads/release/}" >> $GITHUB_ENV
+          echo "tag=${GITHUB_REF#refs/heads/*/}" >> $GITHUB_ENV
       - name: Build distribution package
         run: |
           ./gradlew --no-daemon
