@@ -13,7 +13,11 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
+import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
+import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_BY_TOPIC;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
@@ -27,6 +31,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.XMLConstants;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Step;
@@ -41,6 +46,7 @@ import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 /**
@@ -65,7 +71,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
-        return null;
+        if (isCompatible(mapDoc)) {
+          rewriteToCompatibilityMode(mapDoc);
+          logger.debug("Process DITA 1.x chunks in compatibility mode");
+        } else {
+          return null;
+        }
       }
       logger.info("Processing {0}", mapFile);
       final List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
@@ -80,6 +91,27 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       throw new DITAOTException(e);
     }
     return null;
+  }
+
+  private void rewriteToCompatibilityMode(Document mapDoc) {
+    List<Element> elements = XMLUtils.toList(mapDoc.getElementsByTagName("*"));
+    for (Element elem : elements) {
+      var chunkAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
+      if (chunkAttr != null) {
+        var rewrittenChunk = Stream
+          .of(WHITESPACE.split(chunkAttr.getValue()))
+          .filter(token -> !token.isBlank())
+          .map(token ->
+            switch (token) {
+              case CHUNK_TO_CONTENT -> COMBINE.name;
+              case CHUNK_BY_TOPIC -> SPLIT.name;
+              default -> token;
+            }
+          )
+          .collect(Collectors.joining(" "));
+        chunkAttr.setValue(rewrittenChunk);
+      }
+    }
   }
 
   private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {
