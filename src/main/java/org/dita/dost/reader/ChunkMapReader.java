@@ -24,7 +24,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import org.dita.dost.exception.DITAOTException;
@@ -54,7 +56,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
   public static final String CHUNK_SELECT_TOPIC = "select-topic";
   public static final String CHUNK_SELECT_DOCUMENT = "select-document";
   private static final String CHUNK_BY_DOCUMENT = "by-document";
-  private static final String CHUNK_BY_TOPIC = "by-topic";
+  public static final String CHUNK_BY_TOPIC = "by-topic";
   public static final String CHUNK_TO_CONTENT = "to-content";
   public static final String CHUNK_TO_NAVIGATION = "to-navigation";
   public static final String CHUNK_PREFIX = "Chunk";
@@ -122,6 +124,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
     if (ditaVersion == null || ditaVersion >= 2.0f) {
       return doc;
     }
+    var chunkTokens = getChunkTokens(doc);
+    if (chunkTokens.isEmpty()) {
+      return doc;
+    }
+    if (isSimple(chunkTokens)) {
+      return doc;
+    }
+
     final Element root = doc.getDocumentElement();
     if (rootChunkOverride != null) {
       final String c = join(rootChunkOverride, " ");
@@ -147,6 +157,27 @@ public final class ChunkMapReader extends AbstractDomFilter {
     }
 
     return buildOutputDocument(root);
+  }
+
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+  private Set<String> getChunkTokens(Document doc) {
+    List<Element> elements = XMLUtils.toList(doc.getElementsByTagName("*"));
+    return elements
+      .stream()
+      .map(elem -> elem.getAttribute(ATTRIBUTE_NAME_CHUNK))
+      .filter(chunk -> !chunk.isBlank())
+      .flatMap(chunk -> Stream.of(WHITESPACE.split(chunk)).filter(token -> !token.isBlank()))
+      .collect(Collectors.toSet());
+  }
+
+  /**
+   * Check if all chunk tokens can be processed with DITA 2.0 chunk compatibility mode.
+   */
+  private boolean isSimple(Set<String> chunkTokens) {
+    return chunkTokens
+      .stream()
+      .allMatch(chunkToken -> chunkToken.equals(CHUNK_TO_CONTENT) || chunkToken.equals(CHUNK_BY_TOPIC));
   }
 
   private final Set<URI> chunkTopicSet = new HashSet<>();

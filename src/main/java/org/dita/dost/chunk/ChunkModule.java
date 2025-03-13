@@ -14,6 +14,8 @@ import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_BY_TOPIC;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
@@ -26,7 +28,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.XMLConstants;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Step;
@@ -41,6 +45,7 @@ import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 public class ChunkModule extends AbstractPipelineModuleImpl {
@@ -60,10 +65,21 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
-        return null;
+        var chunkTokens = getChunkTokens(mapDoc);
+        if (chunkTokens.isEmpty()) {
+          return null;
+        }
+        if (isSimple(chunkTokens)) {
+          rewriteToCompatibilityMode(mapDoc);
+        } else {
+          return null;
+        }
       }
       logger.info("Processing {0}", mapFile);
       final List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
+      if (chunks.isEmpty()) {
+        return null;
+      }
       final Map<URI, URI> combineRewriteMap = processCombine(mapFile, mapDoc, chunks);
       final Map<URI, URI> splitRewriteMap = processSplit(mapFile, mapDoc, chunks);
       rewriteLinks(combineRewriteMap, splitRewriteMap);
@@ -72,6 +88,48 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       throw new DITAOTException(e);
     }
     return null;
+  }
+
+  private void rewriteToCompatibilityMode(Document mapDoc) {
+    List<Element> elements = XMLUtils.toList(mapDoc.getElementsByTagName("*"));
+    for (Element elem : elements) {
+      var chunkAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
+      if (chunkAttr != null) {
+        var rewrittenChunk = Stream
+          .of(WHITESPACE.split(chunkAttr.getValue()))
+          .filter(token -> !token.isBlank())
+          .map(token ->
+            switch (token) {
+              case CHUNK_TO_CONTENT -> COMBINE.name;
+              case CHUNK_BY_TOPIC -> SPLIT.name;
+              default -> token;
+            }
+          )
+          .collect(Collectors.joining(" "));
+        chunkAttr.setValue(rewrittenChunk);
+      }
+    }
+  }
+
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
+
+  private Set<String> getChunkTokens(Document doc) {
+    List<Element> elements = XMLUtils.toList(doc.getElementsByTagName("*"));
+    return elements
+      .stream()
+      .map(elem -> elem.getAttribute(ATTRIBUTE_NAME_CHUNK))
+      .filter(chunk -> !chunk.isBlank())
+      .flatMap(chunk -> Stream.of(WHITESPACE.split(chunk)).filter(token -> !token.isBlank()))
+      .collect(Collectors.toSet());
+  }
+
+  /**
+   * Check if all chunk tokens can be processed with DITA 2.0 chunk compatibility mode.
+   */
+  private boolean isSimple(Set<String> chunkTokens) {
+    return chunkTokens
+      .stream()
+      .allMatch(chunkToken -> chunkToken.equals(CHUNK_TO_CONTENT) || chunkToken.equals(CHUNK_BY_TOPIC));
   }
 
   private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {
