@@ -155,7 +155,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     return doc;
   }
 
-  private void collectTopicrefs(final Element topicref, final Attr chunkAttr) {
+  private void collectTopicrefs(final Element topicref, Attr chunkAttr) {
     final URI hrefAttr = Optional
       .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
       .map(Node::getNodeValue)
@@ -166,13 +166,16 @@ public final class MapMetaReader extends AbstractDomFilter {
     Map<String, Element> current = Collections.emptyMap();
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
+    final Attr copyToAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+    if (chunkAttr == null || !chunkAttr.getNodeValue().equals("to-content")) {
+      chunkAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
+    }
+    final boolean isCopiedInChunk = copyToAttr != null &&
+        (chunkAttr != null && chunkAttr.getNodeValue().equals("to-content"));
+
     for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
       collectTopicrefs(elem, chunkAttr);
     }
-
-    final Attr copyToAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
-    final boolean isCopiedInChunk = copyToAttr != null &&
-        (chunkAttr != null && chunkAttr.getNodeValue().equals("to-content"));
 
     if (hasDitaTopicTarget && !isCopiedInChunk) {
       for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
