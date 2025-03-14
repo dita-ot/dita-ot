@@ -150,14 +150,6 @@ public class ArgumentParserTest {
   }
 
   @Test
-  public void deliverablesSubcommand__optionForm() {
-    final DeliverablesArguments act = (DeliverablesArguments) parser.processArgs(
-      new String[] { "--deliverables", "-p", "project.json" }
-    );
-    assertEquals(new File("project.json").getAbsoluteFile(), act.projectFile);
-  }
-
-  @Test
   public void initSubcommand() {
     final InitArguments act = (InitArguments) parser.processArgs(new String[] { "init", "template" });
     assertEquals("template", act.template);

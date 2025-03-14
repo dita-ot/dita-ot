@@ -88,7 +88,7 @@ final class ArgumentParser {
    */
   public Arguments processArgs(final String[] arguments) {
     for (final String subcommand : arguments) {
-      switch (getName(subcommand)) {
+      switch (subcommand) {
         case "help":
           return new HelpArguments().parse(arguments);
         case "plugins":
@@ -107,6 +107,20 @@ final class ArgumentParser {
           return new UninstallArguments().parse(arguments);
         case "init":
           return new InitArguments().parse(arguments);
+      }
+      // Deprecated since 4.3
+      // Backwards compatibility for pre 3.5
+      switch (getName(subcommand)) {
+        case "plugins":
+          return new PluginsArguments().parse(arguments);
+        case "version":
+          return new VersionArguments().parse(arguments);
+        case "transtypes":
+          return new TranstypesArguments().parse(arguments);
+        case "install":
+          return new InstallArguments().parse(arguments);
+        case "uninstall":
+          return new UninstallArguments().parse(arguments);
       }
     }
     return new ConversionArguments().parse(arguments);
