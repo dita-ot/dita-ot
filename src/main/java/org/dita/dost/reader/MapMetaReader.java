@@ -147,13 +147,13 @@ public final class MapMetaReader extends AbstractDomFilter {
       removeIndexTermRecursive(keyword);
     }
     for (var elem : XMLUtils.getChildElements(doc.getDocumentElement(), MAP_TOPICREF)) {
-      collectTopicrefs(elem);
+      collectTopicrefs(elem, elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK));
     }
 
     return doc;
   }
 
-  private void collectTopicrefs(final Element topicref) {
+  private void collectTopicrefs(final Element topicref, final Attr chunkAttr) {
     final URI hrefAttr = Optional
       .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_HREF))
       .map(Node::getNodeValue)
@@ -165,16 +165,20 @@ public final class MapMetaReader extends AbstractDomFilter {
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
 
     for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
-      collectTopicrefs(elem);
+      collectTopicrefs(elem, chunkAttr);
     }
 
-    if (hasDitaTopicTarget) {
+    final Attr copyToAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO);
+    final boolean isCopiedInChunk = copyToAttr != null &&
+        (chunkAttr != null && chunkAttr.getNodeValue().equals("to-content"));
+
+    if (hasDitaTopicTarget && !isCopiedInChunk) {
       for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICMETA)) {
         current = handleMeta(elem, Collections.emptyMap());
       }
     }
 
-    if (!current.isEmpty() && hasDitaTopicTarget) {
+    if (!current.isEmpty() && hasDitaTopicTarget && !isCopiedInChunk) {
       final URI copytoAttr = Optional
         .ofNullable(topicref.getAttributeNode(ATTRIBUTE_NAME_COPY_TO))
         .map(Attr::getNodeValue)
