@@ -83,8 +83,7 @@ final class ArgumentParser {
    * Process command line arguments. When ant is started from Launcher,
    * launcher-only arguments do not get passed through to this routine.
    *
-   * @param arguments the command line arguments.
-   * @since Ant 1.6
+   * @param arguments the command line arguments
    */
   public Arguments processArgs(final String[] arguments) {
     for (final String subcommand : arguments) {
