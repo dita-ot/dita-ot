@@ -1,7 +1,7 @@
 {
   "scripts": {
     "fmt": "prettier --write '**/*.java'",
-    "check-fmt": "prettier --check '**/*.java'"
+    "check-fmt": "prettier --check '**/*.java' --debug-check"
   },
   "devDependencies": {
     "prettier-plugin-java": "^2.1.0"
