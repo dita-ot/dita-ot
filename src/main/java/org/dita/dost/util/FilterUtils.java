@@ -182,9 +182,11 @@ public final class FilterUtils {
     for (final QName attr : flagAttributes) {
       final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
       if (value != null) {
-        final Map<QName, List<String>> groups = getGroups(value);
+        final Map<QName, List<String>> groups = getGroups(attr, value);
         for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
-          final QName[] propList = group.getKey() != null ? new QName[] { attr, group.getKey() } : new QName[] { attr };
+          final QName[] propList = group.getKey().equals(attr)
+            ? new QName[] { attr }
+            : new QName[] { attr, group.getKey() };
           res.addAll(extCheckFlag(propList, group.getValue()));
         }
       }
@@ -310,9 +312,11 @@ public final class FilterUtils {
     for (final QName attr : filterAttributes) {
       final String value = atts.getValue(attr.getNamespaceURI(), attr.getLocalPart());
       if (value != null) {
-        final Map<QName, List<String>> groups = getGroups(value);
+        final Map<QName, List<String>> groups = getGroups(attr, value);
         for (Map.Entry<QName, List<String>> group : groups.entrySet()) {
-          final QName[] propList = group.getKey() != null ? new QName[] { attr, group.getKey() } : new QName[] { attr };
+          final QName[] propList = group.getKey().equals(attr)
+            ? new QName[] { attr }
+            : new QName[] { attr, group.getKey() };
           if (extCheckExclude(propList, group.getValue())) {
             return true;
           }
@@ -344,11 +348,12 @@ public final class FilterUtils {
   /**
    * Parse groups
    *
+   * @param attr profiling attribute name
    * @param value profiling attribute value
-   * @return map of groups names to group values, ungrouped values have {@code null} name
+   * @return map of groups names to group values, ungrouped values have attribute name
    */
   @VisibleForTesting
-  Map<QName, List<String>> getGroups(final String value) {
+  Map<QName, List<String>> getGroups(final QName attr, final String value) {
     final Map<QName, List<String>> res = new HashMap<>();
 
     final StringBuilder buf = new StringBuilder();
@@ -356,23 +361,27 @@ public final class FilterUtils {
     final Matcher m = groupPattern.matcher(value);
     while (m.find()) {
       buf.append(value.subSequence(previousEnd, m.start()));
-      final String v = m.group(2);
-      if (!v.trim().isEmpty()) {
-        final QName k = QName.valueOf(m.group(1));
-        if (res.containsKey(k)) {
-          final List<String> l = new ArrayList<>(res.get(k));
-          l.addAll(Arrays.asList(v.trim().split("\\s+")));
-          res.put(k, l);
-        } else {
-          res.put(k, Arrays.asList(v.trim().split("\\s+")));
-        }
+      final QName k = QName.valueOf(m.group(1));
+      final String v = m.group(2).trim();
+      if (!v.isEmpty()) {
+        res.computeIfAbsent(k, key -> new ArrayList<>()).addAll(Arrays.asList(v.split("\\s+")));
       }
+      //      res.computeIfAbsent(null, key -> new ArrayList<>()).add(k.getLocalPart());
       previousEnd = m.end();
     }
     buf.append(value.substring(previousEnd));
+
+    final List<String> values = new ArrayList<>();
+    //    for (QName group : res.keySet()) {
+    //      values.add(group.getLocalPart());
+    //    }
     if (!buf.toString().trim().isEmpty()) {
-      res.put(null, Arrays.asList(buf.toString().trim().split("\\s+")));
+      values.addAll(Arrays.asList(buf.toString().trim().split("\\s+")));
     }
+    if (!values.isEmpty()) {
+      res.put(attr, values);
+    }
+
     return res;
   }
 
