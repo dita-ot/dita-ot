@@ -170,8 +170,8 @@ public final class MapMetaReader extends AbstractDomFilter {
     if (chunkAttr == null || !chunkAttr.getNodeValue().equals("to-content")) {
       chunkAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
     }
-    final boolean isCopiedInChunk = copyToAttr != null &&
-        (chunkAttr != null && chunkAttr.getNodeValue().equals("to-content"));
+    final boolean isCopiedInChunk =
+      copyToAttr != null && (chunkAttr != null && chunkAttr.getNodeValue().equals("to-content"));
 
     for (Element elem : XMLUtils.getChildElements(topicref, MAP_TOPICREF)) {
       collectTopicrefs(elem, chunkAttr);
