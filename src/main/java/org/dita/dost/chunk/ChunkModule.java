@@ -13,6 +13,8 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
+import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
+import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
 import static org.dita.dost.reader.ChunkMapReader.CHUNK_BY_TOPIC;
 import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
@@ -28,7 +30,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.XMLConstants;
@@ -48,6 +49,11 @@ import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
+/**
+ * DITA 2.x chunk processing.
+ *
+ * @since 3.7
+ */
 public class ChunkModule extends AbstractPipelineModuleImpl {
 
   static final String GEN_CHUNK_PREFIX = "Chunk";
@@ -65,11 +71,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
-        var chunkTokens = getChunkTokens(mapDoc);
-        if (chunkTokens.isEmpty()) {
-          return null;
-        }
-        if (isSimple(chunkTokens)) {
+        if (isCompatible(mapDoc)) {
           rewriteToCompatibilityMode(mapDoc);
         } else {
           return null;
@@ -109,27 +111,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         chunkAttr.setValue(rewrittenChunk);
       }
     }
-  }
-
-  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-
-  private Set<String> getChunkTokens(Document doc) {
-    List<Element> elements = XMLUtils.toList(doc.getElementsByTagName("*"));
-    return elements
-      .stream()
-      .map(elem -> elem.getAttribute(ATTRIBUTE_NAME_CHUNK))
-      .filter(chunk -> !chunk.isBlank())
-      .flatMap(chunk -> Stream.of(WHITESPACE.split(chunk)).filter(token -> !token.isBlank()))
-      .collect(Collectors.toSet());
-  }
-
-  /**
-   * Check if all chunk tokens can be processed with DITA 2.0 chunk compatibility mode.
-   */
-  private boolean isSimple(Set<String> chunkTokens) {
-    return chunkTokens
-      .stream()
-      .allMatch(chunkToken -> chunkToken.equals(CHUNK_TO_CONTENT) || chunkToken.equals(CHUNK_BY_TOPIC));
   }
 
   private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {

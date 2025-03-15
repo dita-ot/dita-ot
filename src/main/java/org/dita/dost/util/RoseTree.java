@@ -11,6 +11,7 @@ package org.dita.dost.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Mutable Rose Tree data structure.
@@ -46,5 +47,9 @@ public class RoseTree<T> {
       return Collections.emptyList();
     }
     return children;
+  }
+
+  public Stream<T> flatten() {
+    return Stream.concat(Stream.of(value), children.stream().flatMap(RoseTree::flatten));
   }
 }
