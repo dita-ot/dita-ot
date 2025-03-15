@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.commons.io.FilenameUtils.getBaseName;
+import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.getDitaVersion;
 import static org.dita.dost.util.FileUtils.getFragment;
@@ -122,14 +123,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
   public Document process(final Document doc) {
     final Float ditaVersion = getDitaVersion(doc.getDocumentElement());
     if (ditaVersion == null || ditaVersion >= 2.0f) {
-      return doc;
+      return null;
     }
     var chunkTokens = getChunkTokens(doc);
-    if (chunkTokens.isEmpty()) {
-      return doc;
+    if (chunkTokens.isEmpty() && rootChunkOverride == null) {
+      return null;
     }
-    if (isSimple(chunkTokens)) {
-      return doc;
+    if (isCompatible(doc)) {
+      return null;
     }
 
     final Element root = doc.getDocumentElement();
