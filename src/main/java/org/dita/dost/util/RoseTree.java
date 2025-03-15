@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 
 /**
  * Mutable Rose Tree data structure.
+ *
  * @param <T> value type
  */
 public class RoseTree<T> {
@@ -22,11 +23,22 @@ public class RoseTree<T> {
   private final T value;
   private List<RoseTree<T>> children;
 
+  /**
+   * Create new tree.
+   *
+   * @param value    node value
+   * @param children child nodes
+   */
   public RoseTree(T value, List<RoseTree<T>> children) {
     this.value = value;
     this.children = children;
   }
 
+  /**
+   * Create new tree with no children.
+   *
+   * @param value node value
+   */
   public RoseTree(T value) {
     this(value, null);
   }
