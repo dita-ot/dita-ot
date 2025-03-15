@@ -73,6 +73,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       if (ditaVersion == null || ditaVersion < 2.0f) {
         if (isCompatible(mapDoc)) {
           rewriteToCompatibilityMode(mapDoc);
+          logger.debug("Process DITA 1.x chunks in compatibility mode");
         } else {
           return null;
         }

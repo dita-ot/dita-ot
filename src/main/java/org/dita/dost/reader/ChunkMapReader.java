@@ -130,13 +130,14 @@ public final class ChunkMapReader extends AbstractDomFilter {
       return null;
     }
     if (isCompatible(doc)) {
+      logger.debug("Skip to process DITA 1.x chunks in compatibility mode");
       return null;
     }
 
     final Element root = doc.getDocumentElement();
     if (rootChunkOverride != null) {
       final String c = join(rootChunkOverride, " ");
-      logger.debug("Use override root chunk \"" + c + "\"");
+      logger.debug("Use override root chunk {}", c);
       root.setAttribute(ATTRIBUTE_NAME_CHUNK, c);
     }
     readLinks(doc);
