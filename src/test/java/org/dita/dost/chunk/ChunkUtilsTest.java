@@ -23,7 +23,14 @@ class ChunkUtilsTest {
   private final DocumentBuilder documentBuilder = new XMLUtils().getDocumentBuilder();
 
   @ParameterizedTest
-  @ValueSource(strings = { "top-level-to-content.ditamap", "top-level-by-topic.ditamap", "only-by-topic.ditamap" })
+  @ValueSource(
+    strings = {
+      "multiple-to-content.ditamap",
+      "top-level-to-content.ditamap",
+      "top-level-by-topic.ditamap",
+      "only-by-topic.ditamap",
+    }
+  )
   void isCompatible(String file) throws IOException, SAXException {
     try (var in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/chunk/ChunkUtilsTest/" + file)) {
       var doc = documentBuilder.parse(in);
