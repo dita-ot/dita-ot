@@ -148,7 +148,7 @@ public class CleanPreprocessModuleTest {
         .build()
     );
 
-    assertEquals(create("file:/"), module.getBaseDir());
+    assertEquals(create("file:/main/"), module.getBaseDir());
   }
 
   @Test
