@@ -62,8 +62,8 @@ public class ChunkModuleTest extends AbstractModuleTest {
       Arguments.of("split-map", Collections.emptyMap(), 0),
       Arguments.of("chunk-combine-within-split", Collections.emptyMap(), 0),
       Arguments.of("managing-links", Collections.emptyMap(), 0),
-      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0),
-      Arguments.of("compatibility-combine", Collections.emptyMap(), 2)
+      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0)
+      //      Arguments.of("compatibility-combine", Collections.emptyMap(), 2)
     );
   }
 

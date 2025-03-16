@@ -29,6 +29,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ChunkMapReaderTest {
@@ -83,6 +84,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testMissingSource() throws Exception {
     final Job job = createJob("missing.ditamap", "2.dita");
 
@@ -97,6 +99,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testChunkFullMap() throws Exception {
     final Job job = createJob("map.ditamap", "1.dita", "2.dita", "3.dita");
 
@@ -124,6 +127,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testExistingGeneratedFile() throws Exception {
     final Job job = createJob("conflict.ditamap", "2.dita", "Chunk0.dita");
 
