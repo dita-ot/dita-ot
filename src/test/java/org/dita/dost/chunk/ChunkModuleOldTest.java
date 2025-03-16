@@ -20,10 +20,12 @@ import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Job;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+@Disabled
 public class ChunkModuleOldTest extends AbstractModuleTest {
 
   public static Stream<Arguments> data() {

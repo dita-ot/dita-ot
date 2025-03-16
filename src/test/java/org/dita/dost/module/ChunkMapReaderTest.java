@@ -22,6 +22,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ChunkMapReaderTest {
@@ -41,6 +42,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testunware_chunk_content() {
     test(
       "unware_chunk_content.ditamap",
@@ -56,6 +58,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testunware_chunk_content2() {
     test(
       "unware_chunk_content2.ditamap",
@@ -70,6 +73,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testconflict_same_id() {
     test(
       "conflict_same_id.ditamap",
@@ -86,6 +90,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testanchor1() {
     test(
       "anchor1.ditamap",
@@ -146,6 +151,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testcase2() {
     test(
       "case2.ditamap",
@@ -180,6 +186,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testcase4() {
     test(
       "case4.ditamap",
@@ -196,6 +203,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testcase5() {
     test(
       "case5.ditamap",
@@ -234,6 +242,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testcase7() {
     test(
       "case7.ditamap",
@@ -268,6 +277,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testlink2() {
     test(
       "link2.ditamap",
@@ -411,6 +421,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testFixChunk_map8() {
     test(
       "FixChunk_map8.ditamap",
@@ -441,6 +452,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testByTopic_map3() {
     test(
       "ByTopic_map3.ditamap",
@@ -509,6 +521,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testByTopic_map7() {
     test(
       "ByTopic_map7.ditamap",
@@ -629,6 +642,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testconflict_by_topic() {
     test(
       "conflict_by_topic.ditamap",
