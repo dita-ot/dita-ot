@@ -41,6 +41,7 @@ public interface ITPreprocessBase {
       .transtype(PREPROCESS)
       .input(Paths.get("main/chunkup.ditamap"))
       .put("outer.control", "quiet")
+      .warnCount(4)
       .test();
   }
 
