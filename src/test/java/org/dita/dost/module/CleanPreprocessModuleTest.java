@@ -130,6 +130,28 @@ public class CleanPreprocessModuleTest {
   }
 
   @Test
+  public void getBaseDirResourceOnly() throws Exception {
+    job.setInputDir(URI.create("file:/main/maps/"));
+    job.add(
+      new Builder()
+        .uri(create("main/maps/map.ditamap"))
+        .isInput(true)
+        .result(create("file:/main/maps/map.ditamap"))
+        .build()
+    );
+    job.add(new Builder().uri(create("main/topics/topic.dita")).result(create("file:/main/topics/topic.dita")).build());
+    job.add(
+      new Builder()
+        .uri(create("reuse/reuse.dita"))
+        .result(create("file:/reuse/reuse.dita"))
+        .isResourceOnly(true)
+        .build()
+    );
+
+    assertEquals(create("file:/"), module.getBaseDir());
+  }
+
+  @Test
   public void RewriteRule_WhenStylesheetNotFound_ShouldThrowException() throws Exception {
     assertThrows(
       RuntimeException.class,
