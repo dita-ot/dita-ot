@@ -38,7 +38,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   public static Stream<Arguments> data() {
     return Stream.of(
-      Arguments.of("combine", Collections.emptyMap(), 2),
+      Arguments.of("combine", Collections.emptyMap(), 1),
       Arguments.of("duplicate", Collections.emptyMap(), 0),
       Arguments.of("override", Map.of("root-chunk-override", "combine"), 0),
       Arguments.of("dita", Collections.emptyMap(), 0),
