@@ -26,6 +26,7 @@ class ChunkUtilsTest {
   @ValueSource(
     strings = {
       "multiple-to-content.ditamap",
+      "nested-to-content.ditamap",
       "top-level-to-content.ditamap",
       "top-level-by-topic.ditamap",
       "only-by-topic.ditamap",
@@ -39,7 +40,7 @@ class ChunkUtilsTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "nested-to-content.ditamap", "select.ditamap", "to-navigation.ditamap" })
+  @ValueSource(strings = { "select.ditamap", "to-navigation.ditamap", "nested-by-topic-inside-to-content.ditamap" })
   void isNotCompatible(String file) throws IOException, SAXException {
     try (var in = getClass().getClassLoader().getResourceAsStream("org/dita/dost/chunk/ChunkUtilsTest/" + file)) {
       var doc = documentBuilder.parse(in);
