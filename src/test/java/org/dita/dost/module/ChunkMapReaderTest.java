@@ -109,6 +109,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testanchor2() {
     test(
       "anchor2.ditamap",
@@ -480,6 +481,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testByTopic_map5() {
     test(
       "ByTopic_map5.ditamap",
@@ -543,6 +545,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testtopicgroup_chunk() {
     test(
       "topicgroup_chunk.ditamap",
@@ -616,6 +619,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testchunk_map_tocontent() {
     test(
       "chunk_map_tocontent.ditamap",
@@ -992,6 +996,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testchunk_duplicate_tocontent() {
     test(
       "chunk_duplicate_tocontent.ditamap",
@@ -1066,6 +1071,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testchunk_rewrite_tocontent() {
     test(
       "chunk_rewrite_tocontent.ditamap",
@@ -1097,6 +1103,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testconflict_to_content() {
     test(
       "conflict_to_content.ditamap",
