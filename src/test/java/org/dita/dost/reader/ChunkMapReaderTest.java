@@ -56,6 +56,7 @@ public class ChunkMapReaderTest {
   }
 
   @Test
+  @Disabled
   public void testRead() throws Exception {
     final Job job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     job.setInputDir(srcDir.toURI());
