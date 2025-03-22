@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
-  <topic class="- topic/topic "
-         ditaarch:DITAArchVersion="1.3" domains="(topic markup-d xml-d)" id="unique_2">
-    <title class="- topic/title ">Child of topicref with shortdesc</title>
+  <topic class="- topic/topic " ditaarch:DITAArchVersion="1.3"
+         domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+         id="topicID">
+
+    <title class="- topic/title ">Hi,DITA7
+    </title>
+
     <body class="- topic/body ">
-      <p class="- topic/p ">shortdesc with no title</p>
+      <p class="- topic/p ">DITA7
+      </p>
     </body>
+
+
   </topic>
 </dita>
