@@ -586,8 +586,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       // init dst
       URI dstBase;
       if (rootChunk.src() == null) {
-        dstBase = mapFile.resolve(GEN_CHUNK_PREFIX + FILE_EXTENSION_DITA);
-        dst = addSuffix(dstBase, Integer.toString(1));
+        for (int i = 1;; i++) {
+          final URI res = mapFile.resolve(GEN_CHUNK_PREFIX + i + FILE_EXTENSION_DITA);
+          if (rewriteMap.values().stream().anyMatch(d -> removeFragment(d).equals(res))) {
+            continue;
+          } else {
+            dstBase = res;
+            dst = dstBase;
+            break;
+          }
+        }
       } else {
         dstBase = rootChunk.src();
         dst = dstBase;
