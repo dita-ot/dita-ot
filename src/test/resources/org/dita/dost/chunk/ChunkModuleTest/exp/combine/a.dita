@@ -11,13 +11,6 @@
       <body class="- topic/body ">
         <p class="- topic/p ">b</p>
       </body>
-      <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-        ditaarch:DITAArchVersion="2.0" id="topic_c">
-        <title class="- topic/title ">c</title>
-        <body class="- topic/body ">
-          <p class="- topic/p ">c</p>
-        </body>
-      </topic>
     </topic>
   </topic>
 </dita>

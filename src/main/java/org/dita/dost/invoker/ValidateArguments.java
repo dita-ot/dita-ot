@@ -55,14 +55,14 @@ class ValidateArguments extends Arguments {
       final String arg = args.pop();
       if (arg.equals("validate")) {
         definedProps.put("transtype", "validate");
-        break;
-      } else if (arg.startsWith("-")) {
-        parseCommonOptions(arg, args);
-      }
-    }
-    while (!args.isEmpty()) {
-      final String arg = args.pop();
-      if (isLongForm(arg, "-project") || arg.equals("-p")) {
+      } else if (isLongForm(arg, "-format") || arg.equals("-f")) {
+        final Map.Entry<String, String> entry = parse(arg, args);
+        if (entry.getValue().equals("validate")) {
+          definedProps.put("transtype", "validate");
+        } else {
+          // Ignore, this only happens when both validate subcommand and --format option are used and the --format option is not validate.
+        }
+      } else if (isLongForm(arg, "-project") || arg.equals("-p")) {
         handleArgProject(arg, args);
       } else if (isLongForm(arg, "-input") || arg.equals("-i")) {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
