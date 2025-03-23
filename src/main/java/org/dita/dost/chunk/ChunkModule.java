@@ -480,18 +480,31 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     //                        .build();
     //                job.add(dstFi);
     //            }
-    (parallel ? chunks.stream().parallel() : chunks.stream()).forEach(chunk -> {
-        logger.info("Generate chunk {0}", removeFragment(chunk.dst()));
+    (parallel ? chunks.stream().parallel() : chunks.stream()).map(chunk -> {
+        var dst = removeFragment(chunk.dst());
+        var tmp = addSuffixToPath(dst, "tmp");
+        logger.info("Generate chunk {0} to {1}", dst, tmp);
         try {
           //   recursively merge chunk topics
           final Document chunkDoc = merge(chunk);
           rewriteLinks(chunkDoc, chunk.src(), rewriteMap);
           chunkDoc.normalizeDocument();
-          final URI dst = removeFragment(chunk.dst());
-          logger.info("Writing {0}", dst);
-          job.getStore().writeDocument(chunkDoc, dst);
+          logger.info("Writing {0}", tmp);
+          job.getStore().writeDocument(chunkDoc, tmp);
+          return Map.entry(tmp, dst);
         } catch (IOException e) {
-          logger.error("Failed to generate chunk {0}", removeFragment(chunk.dst()), e);
+          logger.error("Failed to generate chunk {0}", dst, e);
+          return null;
+        }
+      })
+      .filter(Objects::nonNull)
+      .toList()
+      .forEach(tmpFile -> {
+        try {
+          logger.info("Moving {0} to {1}", tmpFile.getKey(), tmpFile.getValue());
+          job.getStore().move(tmpFile.getKey(), tmpFile.getValue());
+        } catch (IOException e) {
+          logger.error("Failed to move chunk {0} to {1}", tmpFile.getKey(), tmpFile.getValue(), e);
         }
       });
   }
