@@ -383,7 +383,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       } catch (IOException e) {
         logger.error("Failed to delete " + tmp, e);
       }
-      job.remove(job.getFileInfo(tmp));
+      var tmpFileInfo = job.getFileInfo(tmp);
+      if (tmpFileInfo != null) {
+        job.remove(tmpFileInfo);
+      }
     });
     final Set<URI> added = destinations.stream().filter(dst -> !sources.contains(dst)).collect(Collectors.toSet());
     added.forEach(tmp -> {
@@ -840,6 +843,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           .flatMap(child -> collectCombineChunks(mapFile, child).stream())
           .forEachOrdered(builder::addChild);
         chunks.add(builder.build());
+        for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+          collectChunkOperations(mapFile, child, chunks, null);
+        }
       }
     } else if (chunk.equals(SPLIT.name)) {
       if (MAP_MAP.matches(elem)) {
@@ -875,11 +881,14 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
    * Collect combine chunk contents.
    */
   private List<ChunkBuilder> collectCombineChunks(final URI mapFile, final Element elem) {
-    if (!elem.getAttribute(ATTRIBUTE_NAME_CHUNK).isEmpty()) {
-      logger.warn(
-        MessageUtils.getMessage("DOTJ087W", elem.getAttribute(ATTRIBUTE_NAME_CHUNK)).setLocation(elem).toString()
-      );
-      elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+    final String chunkAttr = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+    if (!chunkAttr.isEmpty()) {
+      if (chunkAttr.equals(COMBINE.name)) {
+        return Collections.emptyList();
+      } else if (chunkAttr.equals(SPLIT.name)) {
+        logger.warn(MessageUtils.getMessage("DOTJ087W", chunkAttr).setLocation(elem).toString());
+        elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+      }
     }
     final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
     final Element navtitle = getNavtitle(elem);
