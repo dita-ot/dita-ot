@@ -462,6 +462,9 @@ See the accompanying LICENSE file for applicable license.
       <xsl:when test="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]">
         <xsl:apply-templates select="parent::*[contains(@class, ' map/relcolspec ')]/*[contains(@class, ' topic/title ')]" mode="text-only"/>
       </xsl:when>
+      <xsl:when test="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' alternativeTitles-d/navtitle ')]">
+        <xsl:apply-templates select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' alternativeTitles-d/navtitle ')]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="descendant::*[contains(@class,' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
       </xsl:when>
