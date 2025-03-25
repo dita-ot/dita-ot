@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><job>
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
@@ -12,7 +13,9 @@
     <string>false</string>
   </property>
   <property name="InputMapDir.uri">
-    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap</string>
+    <string>
+      file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap
+    </string>
   </property>
   <property name="tempdirToinputmapdir.relative.value">
     <string/>
@@ -30,7 +33,9 @@
     <string>relflagimage.list</string>
   </property>
   <property name="InputMapDir">
-    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap</string>
+    <string>
+      /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap
+    </string>
   </property>
   <property name="user.input.file.uri">
     <string>chunk_duplicate.ditamap</string>
@@ -45,10 +50,20 @@
     <string/>
   </property>
   <files>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/dita2.dita" uri="dita2.dita" path="dita2.dita" format="dita" target="true"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap" uri="chunk_duplicate.ditamap" path="chunk_duplicate.ditamap" format="ditamap" input="true"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/dita1.dita" uri="dita1.dita" path="dita1.dita" format="dita" target="true"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/sub_dita2.dita" uri="sub_dita2.dita" path="sub_dita2.dita" format="dita" target="true"/>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/sub_dita1.dita" uri="sub_dita1.dita" path="sub_dita1.dita" format="dita" target="true"/>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/dita2.dita"
+        uri="dita2.dita" path="dita2.dita" format="dita" target="true"/>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/chunk_duplicate.ditamap"
+        uri="chunk_duplicate.ditamap" path="chunk_duplicate.ditamap" format="ditamap" input="true"/>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/dita1.dita"
+        uri="dita1.dita" path="dita1.dita" format="dita" target="true"/>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/sub_dita2.dita"
+        uri="sub_dita2.dita" path="sub_dita2.dita" format="dita" target="true"/>
+    <file
+        src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/src/chunk_duplicate_tocontent/sub_dita1.dita"
+        uri="sub_dita1.dita" path="sub_dita1.dita" format="dita" target="true"/>
   </files>
 </job>

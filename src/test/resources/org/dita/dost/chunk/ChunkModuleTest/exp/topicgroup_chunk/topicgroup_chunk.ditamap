@@ -65,8 +65,8 @@
     </topichead>
     <topicref class="- map/topicref " href="Chunk4.dita#Chunk1">
       <topicmeta class="- map/topicmeta ">
-        <shortdesc class="- map/shortdesc ">This is an edge case but should not crash:
-          short description on a chunked group but without a title.
+        <shortdesc class="- map/shortdesc ">This is an edge case but should not crash: short description on a chunked
+          group but without a title.
         </shortdesc>
       </topicmeta>
       <topicref class="- map/topicref " href="Chunk4.dita#topicID"/>
