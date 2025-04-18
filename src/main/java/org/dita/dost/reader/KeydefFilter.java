@@ -38,6 +38,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
 
   /** Basedir of the current parsing file */
   private URI currentDir = null;
+  /** Specifies whether key duplicates should be shown in the log */
+  private boolean showKeyDuplicates = true;
   /** Map of key definitions */
   private final Map<String, KeyDef> keysDefMap;
   /** Map to store multi-level keyrefs */
@@ -67,6 +69,15 @@ public final class KeydefFilter extends AbstractXMLFilter {
    */
   public void setCurrentDir(final URI dir) {
     currentDir = dir;
+  }
+
+  /**
+   * Set the showKeyDuplicates property.
+   *
+   * @param showKeyDuplicates true if key duplicates should be shown in the log
+   */
+  public void setShowKeyDuplicates(final boolean showKeyDuplicates) {
+    this.showKeyDuplicates = showKeyDuplicates;
   }
 
   /**
@@ -148,7 +159,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
             keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
           }
         } else {
-          logger.info(MessageUtils.getMessage("DOTJ045I", key).setLocation(atts).toString());
+          if (showKeyDuplicates)
+            logger.info(MessageUtils.getMessage("DOTJ045I", key).setLocation(atts).toString());
         }
       }
     }
