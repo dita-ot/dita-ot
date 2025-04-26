@@ -1,7 +1,7 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2013 Jarno Elovirta
+ * Copyright 2025 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
@@ -34,28 +34,31 @@ import org.dita.dost.log.MessageBean;
  */
 public class JsonLogger extends AbstractLogger implements BuildLogger {
 
-  // CheckStyle:VisibilityModifier OFF - bc
+  static final String FIELD_CODE = "code";
+  static final String FIELD_DURATION = "duration";
+  static final String FIELD_LEVEL = "level";
+  static final String FIELD_LINE = "line";
+  static final String FIELD_LOCATION = "location";
+  static final String FIELD_MSG = "msg";
+  static final String FIELD_ROW = "row";
+  static final String FIELD_STACKTRACE = "stacktrace";
+  static final String FIELD_TARGET = "target";
+  static final String FIELD_TASK = "task";
+  static final String FIELD_TIMESTAMP = "timestamp";
+
   /**
    * PrintStream to write non-error messages to
    */
   private PrintStream out;
   private JsonGenerator generator;
 
-  //  /** PrintStream to write error messages to */
-  //  private PrintStream err;
-
-  //** Lowest level of message to write out */
-  //  private int msgOutputLevel = Project.MSG_ERR;
-
   private boolean isArray = false;
-  private Clock clock = Clock.systemUTC();
-  private Deque<Long> timestampStack = new ArrayDeque<>();
+  private Clock clock = Clock.systemDefaultZone();
+  /** Timestamp stack to track build/target/task duration. */
+  private final Deque<Long> timestampStack = new ArrayDeque<>();
 
   private final DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault());
 
-  /**
-   * Sole constructor.
-   */
   public JsonLogger() {
     msgOutputLevel = Project.MSG_ERR;
   }
@@ -115,24 +118,21 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     try {
       if (error == null) {
         writeStart(MessageBean.Type.INFO);
-        generator.writeStringField("msg", "BUILD SUCCESSFUL");
+        generator.writeStringField(FIELD_MSG, "BUILD SUCCESSFUL");
       } else {
         writeStart(MessageBean.Type.FATAL);
         if (error instanceof DITAOTException) { //  && msgOutputLevel < Project.MSG_INFO
-          generator.writeStringField("msg", removeLevelPrefix(error.getMessage()).toString());
+          generator.writeStringField(FIELD_MSG, removeLevelPrefix(error.getMessage()).toString());
         } else {
           try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf, true)) {
             error.printStackTrace(printWriter);
-            generator.writeStringField("msg", buf.toString());
+            generator.writeStringField(FIELD_MSG, buf.toString());
           } catch (IOException e) {
             // Failed to print stack trace
           }
         }
       }
-      generator.writeStringField(
-        "duration",
-        Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
-      );
+      writeDuration();
       writeEnd();
 
       if (isArray) {
@@ -150,10 +150,17 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
   }
 
+  private void writeDuration() throws IOException {
+    generator.writeStringField(
+      FIELD_DURATION,
+      Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
+    );
+  }
+
   private void writeStart(MessageBean.Type level) throws IOException {
     generator.writeStartObject();
-    generator.writeStringField("timestamp", formatter.format(Instant.now(clock)));
-    generator.writeStringField("level", level.name());
+    generator.writeStringField(FIELD_TIMESTAMP, formatter.format(Instant.now(clock)));
+    generator.writeStringField(FIELD_LEVEL, level.name());
   }
 
   private void writeEnd() throws IOException {
@@ -187,9 +194,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(MessageBean.Type.INFO);
-        generator.writeStringField("target", target.getName());
+        generator.writeStringField(FIELD_TARGET, target.getName());
         generator.writeStringField(
-          "msg",
+          FIELD_MSG,
           target.getDescription() != null
             ? "Started target %s: %s".formatted(target.getName(), target.getDescription())
             : "Started target %s".formatted(target.getName())
@@ -213,17 +220,14 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
       try {
         writeStart(MessageBean.Type.INFO);
-        generator.writeStringField("target", target.getName());
+        generator.writeStringField(FIELD_TARGET, target.getName());
         generator.writeStringField(
-          "msg",
+          FIELD_MSG,
           target.getDescription() != null
             ? "Finished target %s: %s".formatted(target.getName(), target.getDescription())
             : "Finished target %s".formatted(target.getName())
         );
-        generator.writeStringField(
-          "duration",
-          Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
-        );
+        writeDuration();
         writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
@@ -238,10 +242,10 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       timestampStack.push(clock.instant().getEpochSecond());
       try {
         writeStart(toLevel(event));
-        generator.writeStringField("target", task.getOwningTarget().getName());
-        generator.writeStringField("task", task.getTaskName());
+        generator.writeStringField(FIELD_TARGET, task.getOwningTarget().getName());
+        generator.writeStringField(FIELD_TASK, task.getTaskName());
         generator.writeStringField(
-          "msg",
+          FIELD_MSG,
           task.getDescription() != null
             ? "Started task %s: %s".formatted(task.getTaskName(), task.getDescription())
             : "Started task %s".formatted(task.getTaskName())
@@ -259,18 +263,15 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
       try {
         writeStart(toLevel(event));
-        generator.writeStringField("target", task.getOwningTarget().getName());
-        generator.writeStringField("task", task.getTaskName());
+        generator.writeStringField(FIELD_TARGET, task.getOwningTarget().getName());
+        generator.writeStringField(FIELD_TASK, task.getTaskName());
         generator.writeStringField(
-          "msg",
+          FIELD_MSG,
           task.getDescription() != null
             ? "Finished task %s: %s".formatted(task.getTaskName(), task.getDescription())
             : "Finished task %s".formatted(task.getTaskName())
         );
-        generator.writeStringField(
-          "duration",
-          Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
-        );
+        writeDuration();
         writeEnd();
       } catch (IOException e) {
         throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
@@ -287,18 +288,18 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     try {
       writeStart(toLevel(event));
       if (event.getTarget() != null) {
-        generator.writeStringField("target", event.getTarget().getName());
+        generator.writeStringField(FIELD_TARGET, event.getTarget().getName());
       }
       if (event.getTask() != null) {
-        generator.writeStringField("task", event.getTask().getTaskName());
+        generator.writeStringField(FIELD_TASK, event.getTask().getTaskName());
       }
       final Throwable ex = event.getException();
       if (Project.MSG_VERBOSE <= msgOutputLevel && ex != null) {
-        generator.writeStringField("stacktrace", StringUtils.getStackTrace(ex));
+        generator.writeStringField(FIELD_STACKTRACE, StringUtils.getStackTrace(ex));
       }
       final StringBuilder message = new StringBuilder(event.getMessage());
       extractLocation(message);
-      generator.writeStringField("msg", removeLevelPrefix(message).toString());
+      generator.writeStringField(FIELD_MSG, removeLevelPrefix(message).toString());
       writeEnd();
     } catch (IOException e) {
       throw new RuntimeException("Failed to write JSON: " + e.getMessage(), e);
@@ -337,13 +338,13 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     final Matcher matcher = LOCATION_PREFIX.matcher(message);
     if (matcher.find()) {
       if (matcher.group(1) != null) {
-        generator.writeStringField("location", matcher.group(1));
+        generator.writeStringField(FIELD_LOCATION, matcher.group(1));
       }
       if (matcher.group(2) != null) {
-        generator.writeNumberField("line", Integer.parseInt(matcher.group(2)));
+        generator.writeNumberField(FIELD_LINE, Integer.parseInt(matcher.group(2)));
       }
       if (matcher.group(3) != null) {
-        generator.writeNumberField("row", Integer.parseInt(matcher.group(3)));
+        generator.writeNumberField(FIELD_ROW, Integer.parseInt(matcher.group(3)));
       }
       for (int i = 4; i <= matcher.groupCount(); i++) {
         if (matcher.group(i) != null) {
@@ -356,14 +357,14 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
             case "TRACE":
               break;
             default:
-              generator.writeStringField("code", matcher.group(i));
+              generator.writeStringField(FIELD_CODE, matcher.group(i));
               break;
           }
-          //          generator.writeStringField("code", matcher.group(i));
+          //          generator.writeStringField(FIELD_CODE, matcher.group(i));
         }
       }
       //      if (matcher.group(4) != null) {
-      //        generator.writeStringField("code", matcher.group(4));
+      //        generator.writeStringField(FIELD_CODE, matcher.group(4));
       //      }
       message.delete(0, matcher.end());
     }
