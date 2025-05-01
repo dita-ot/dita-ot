@@ -9,6 +9,7 @@
 package org.dita.dost.invoker;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -91,7 +92,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   public void buildStarted(final BuildEvent event) {
     timestampStack.push(clock.instant().toEpochMilli());
     try {
-      generator = new ObjectMapper().createGenerator(out);
+      var prettyPrinter = new MinimalPrettyPrinter();
+      prettyPrinter.setRootValueSeparator(System.lineSeparator());
+      generator = new ObjectMapper().createGenerator(out).setPrettyPrinter(prettyPrinter);
     } catch (IOException e) {
       throw new RuntimeException("Failed to open JSON generator: " + e.getMessage(), e);
     }
@@ -166,10 +169,6 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   private void writeEnd() throws IOException {
     generator.writeEndObject();
     generator.flush();
-    if (!isArray) {
-      out.append(System.lineSeparator());
-      out.flush();
-    }
   }
 
   private boolean evaluate(final Project project, final String condition) {
