@@ -15,7 +15,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.Clock;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -90,7 +89,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public void buildStarted(final BuildEvent event) {
-    timestampStack.push(clock.instant().getEpochSecond());
+    timestampStack.push(clock.instant().toEpochMilli());
     try {
       generator = new ObjectMapper().createGenerator(out);
     } catch (IOException e) {
@@ -117,8 +116,12 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     }
     try {
       if (error == null) {
-        writeStart(MessageBean.Type.INFO);
-        generator.writeStringField(FIELD_MSG, "BUILD SUCCESSFUL");
+        if (Project.MSG_INFO <= msgOutputLevel) {
+          writeStart(MessageBean.Type.INFO);
+          generator.writeStringField(FIELD_MSG, "Build successful");
+          writeDuration();
+          writeEnd();
+        }
       } else {
         writeStart(MessageBean.Type.FATAL);
         if (error instanceof DITAOTException) { //  && msgOutputLevel < Project.MSG_INFO
@@ -131,9 +134,9 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
             // Failed to print stack trace
           }
         }
+        writeDuration();
+        writeEnd();
       }
-      writeDuration();
-      writeEnd();
 
       if (isArray) {
         generator.writeEndArray();
@@ -151,10 +154,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   }
 
   private void writeDuration() throws IOException {
-    generator.writeStringField(
-      FIELD_DURATION,
-      Duration.ofSeconds(clock.instant().getEpochSecond() - timestampStack.pop()).toString()
-    );
+    generator.writeNumberField(FIELD_DURATION, clock.instant().toEpochMilli() - timestampStack.pop());
   }
 
   private void writeStart(MessageBean.Type level) throws IOException {
@@ -191,7 +191,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       return;
     }
     if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
-      timestampStack.push(clock.instant().getEpochSecond());
+      timestampStack.push(clock.instant().toEpochMilli());
       try {
         writeStart(MessageBean.Type.INFO);
         generator.writeStringField(FIELD_TARGET, target.getName());
@@ -239,7 +239,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   public void taskStarted(final BuildEvent event) {
     final Task task = event.getTask();
     if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
-      timestampStack.push(clock.instant().getEpochSecond());
+      timestampStack.push(clock.instant().toEpochMilli());
       try {
         writeStart(toLevel(event));
         generator.writeStringField(FIELD_TARGET, task.getOwningTarget().getName());

@@ -17,7 +17,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.time.*;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.apache.tools.ant.BuildEvent;
 import org.apache.tools.ant.Project;
@@ -68,7 +71,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(
-      new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+      new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "Build successful", 0L, null, null),
       act[0]
     );
   }
@@ -82,7 +85,7 @@ class JsonLoggerTest {
 
     final LogEntry[] act = objectReader.readValue(buf.toByteArray());
     assertEquals(MessageBean.Type.FATAL, act[0].level);
-    assertEquals(Duration.ZERO, act[0].duration);
+    assertEquals(0L, act[0].duration);
   }
 
   @Test
@@ -109,11 +112,11 @@ class JsonLoggerTest {
           ZonedDateTime.now(clock),
           MessageBean.Type.INFO,
           "Finished target target: description",
-          Duration.ZERO,
+          0L,
           "target",
           null
         ),
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "Build successful", 0L, null, null),
       },
       act
     );
@@ -144,11 +147,11 @@ class JsonLoggerTest {
           ZonedDateTime.now(clock),
           MessageBean.Type.TRACE,
           "Finished task task: description",
-          Duration.ZERO,
+          0L,
           "target",
           "task"
         ),
-        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "BUILD SUCCESSFUL", Duration.ZERO, null, null),
+        new LogEntry(ZonedDateTime.now(clock), MessageBean.Type.INFO, "Build successful", 0L, null, null),
       },
       act
     );
@@ -392,7 +395,7 @@ class JsonLoggerTest {
     ZonedDateTime timestamp,
     MessageBean.Type level,
     String msg,
-    Duration duration,
+    Long duration,
     String target,
     String task,
     String code,
@@ -400,14 +403,7 @@ class JsonLoggerTest {
     Integer line,
     Integer row
   ) {
-    LogEntry(
-      ZonedDateTime timestamp,
-      MessageBean.Type level,
-      String msg,
-      Duration duration,
-      String target,
-      String task
-    ) {
+    LogEntry(ZonedDateTime timestamp, MessageBean.Type level, String msg, Long duration, String target, String task) {
       this(timestamp, level, msg, duration, target, task, null, null, null, null);
     }
   }
