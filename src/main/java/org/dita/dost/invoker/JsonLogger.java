@@ -69,7 +69,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
 
   @Override
   public int getMessageOutputLevel() {
-    return BuildLogger.super.getMessageOutputLevel();
+    return msgOutputLevel;
   }
 
   @Override
@@ -125,7 +125,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
       } else {
         writeStart(MessageBean.Type.FATAL);
         if (error instanceof DITAOTException) { //  && msgOutputLevel < Project.MSG_INFO
-          generator.writeStringField(FIELD_MSG, removeLevelPrefix(error.getMessage()).toString());
+          generator.writeStringField(FIELD_MSG, removeLevelPrefix(error.getMessage()));
         } else {
           try (var buf = new StringWriter(); var printWriter = new PrintWriter(buf, true)) {
             error.printStackTrace(printWriter);
