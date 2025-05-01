@@ -126,8 +126,6 @@ public class ConversionArguments extends Arguments {
         handleArgListener(args);
       } else if (arg.startsWith("-D")) {
         definedProps.putAll(handleArgDefine(arg, args));
-      } else if (isLongForm(arg, "-logger")) {
-        handleArgLogger(args);
       } else if (isLongForm(arg, "-inputhandler")) {
         handleArgInputHandler(args);
       } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
@@ -303,19 +301,6 @@ public class ConversionArguments extends Arguments {
   }
 
   /**
-   * Handle the --logger argument.
-   */
-  private void handleArgLogger(final Deque<String> args) {
-    if (loggerClassname != null) {
-      throw new BuildException("Only one logger class may be specified.");
-    }
-    loggerClassname = args.pop();
-    if (loggerClassname == null) {
-      throw new BuildException("You must specify a classname when using the -logger argument");
-    }
-  }
-
-  /**
    * Handle the --inputhandler argument.
    */
   private void handleArgInputHandler(final Deque<String> args) {
@@ -427,6 +412,7 @@ public class ConversionArguments extends Arguments {
       buf
         .options(null, "deliverable", "name", locale.getString("conversion.option.deliverable"))
         .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
+        .options(null, "logger", "json|className", locale.getString("conversion.option.logger"))
         .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
         .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
         .options("t", "temp", "dir", locale.getString("conversion.option.temp"));
