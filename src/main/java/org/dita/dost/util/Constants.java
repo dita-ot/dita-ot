@@ -791,6 +791,7 @@ public final class Constants {
     "- topic/body learningBase/learningBasebody learningSummary/learningSummarybody "
   );
   public static final DitaClass MAP_ANCHOR = DitaClass.getInstance("- map/anchor ");
+  public static final DitaClass MAP_KEYTEXT = DitaClass.getInstance("- map/keytext ");
   public static final DitaClass MAP_LINKTEXT = DitaClass.getInstance("- map/linktext ");
   public static final DitaClass MAP_MAP = DitaClass.getInstance("- map/map ");
   public static final DitaClass MAP_NAVREF = DitaClass.getInstance("- map/navref ");
