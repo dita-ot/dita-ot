@@ -48,6 +48,12 @@ public class LinkFilter extends AbstractXMLFilter {
         addOrSetAttribute(resAtts, atts.getQName(i), resHref.toString());
         res = resAtts;
       }
+
+      int copyToIndex = atts.getIndex(ATTRIBUTE_NAME_COPY_TO);
+      if (copyToIndex != -1) {
+        final URI resCopyTo = getHref(toURI(atts.getValue(copyToIndex)));
+        addOrSetAttribute(resAtts, ATTRIBUTE_NAME_COPY_TO, resCopyTo.toString());
+      }
     }
 
     getContentHandler().startElement(uri, localName, qName, res);

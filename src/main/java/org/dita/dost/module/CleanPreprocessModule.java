@@ -35,7 +35,6 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
@@ -230,7 +229,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     final Collection<FileInfo> fis = job.getFileInfo();
     URI baseDir = job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
     for (final FileInfo fi : fis) {
-      if (fi.result != null) {
+      if (fi.result != null && !fi.isResourceOnly) {
         final URI res = fi.result.resolve(".");
         baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
       }

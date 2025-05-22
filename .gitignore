@@ -4,6 +4,9 @@ build/
 target/
 *.iml
 
+# Node dependenciess
+node_modules
+
 # JAR files retrieved during the build process
 src/main/lib/*.jar
 

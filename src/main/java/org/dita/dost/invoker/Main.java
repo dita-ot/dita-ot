@@ -39,9 +39,13 @@ import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -324,8 +328,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    */
   private void processArgs(final String[] arguments) {
     args = argumentParser.processArgs(arguments);
-    final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
-    projectProps = Collections.singletonList(definedProps);
     buildFile = args.buildFile;
     logger.setOutputLevel(args.msgOutputLevel);
     logger.setUseColor(args.useColor);
@@ -349,6 +351,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
       definedProps.putAll(getLocalProperties(ditaDir));
       definedProps.put(USE_COLOR, Boolean.toString(validateArgs.useColor));
       if (validateArgs.projectFile == null) {
@@ -388,6 +391,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
       definedProps.putAll(getLocalProperties(ditaDir));
       definedProps.put(USE_COLOR, Boolean.toString(conversionArgs.useColor));
       if (conversionArgs.projectFile == null) {
@@ -409,8 +413,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           throw new CliException(err, args.getUsage(true));
         }
         // default values
-        if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
-          definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
+        if (!projectProp.containsKey(ANT_OUTPUT_DIR)) {
+          projectProp.put(ANT_OUTPUT_DIR, Paths.get("out").toAbsolutePath().toString());
         }
         if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
           projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
@@ -448,7 +452,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (args.logFile != null) {
       PrintStream logTo;
       try {
-        logTo = new PrintStream(new FileOutputStream(args.logFile));
+        logTo =
+          new PrintStream(
+            Files.newOutputStream(args.logFile.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE),
+            false,
+            StandardCharsets.UTF_8
+          );
       } catch (final IOException ioe) {
         throw new CliException(
           "Cannot write to the specified log file. Make sure the path exists and you have write permissions."
@@ -1174,6 +1183,10 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
       logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
+    }
+
+    if (logger instanceof JsonLogger jsonLogger && args.logFile != null) {
+      jsonLogger.setArray(true);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);

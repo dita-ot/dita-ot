@@ -2271,6 +2271,7 @@ See the accompanying LICENSE file for applicable license.
                           contains($class, ' topic/p ') or
                           (contains($class, ' topic/image ') and $element/@placement = 'break') or
                           contains($class, ' topic/pre ') or
+                          contains($class, ' topic/lines ') or
                           contains($class, ' topic/note ') or
                           contains($class, ' topic/fig ') or
                           contains($class, ' topic/dl ') or
