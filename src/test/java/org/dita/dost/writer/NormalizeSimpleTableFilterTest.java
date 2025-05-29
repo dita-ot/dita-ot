@@ -18,14 +18,18 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class NormalizeSimpleTableFilterTest {
 
   private final DocumentBuilderFactory dbf;
   private final TransformerFactory tf;
+  private NormalizeSimpleTableFilter f;
 
   public NormalizeSimpleTableFilterTest() {
     dbf = DocumentBuilderFactory.newInstance();
@@ -33,29 +37,16 @@ public class NormalizeSimpleTableFilterTest {
     tf = TransformerFactory.newInstance();
   }
 
-  @Test
-  public void simple() throws Exception {
-    test("simple.dita");
+  @BeforeEach
+  public void setUp() throws SAXException {
+    f = new NormalizeSimpleTableFilter();
+    f.setParent(XMLUtils.getXMLReader());
   }
 
-  @Test
-  public void topic() throws Exception {
-    test("topic.dita");
-  }
-
-  @Test
-  public void nested() throws Exception {
-    test("nested.dita");
-  }
-
-  @Test
-  public void rowspan() throws Exception {
-    test("rowspan.dita");
-  }
-
-  @Test
-  public void parallel() throws Exception {
-    test("parallel.dita");
+  @ParameterizedTest
+  @ValueSource(strings = { "simple.dita", "topic.dita", "nested.dita", "rowspan.dita", "parallel.dita" })
+  public void filter(String file) throws Exception {
+    test(file);
   }
 
   private void test(final String file) throws Exception {
@@ -68,8 +59,6 @@ public class NormalizeSimpleTableFilterTest {
     final InputStream src = getClass()
       .getClassLoader()
       .getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
-    final NormalizeSimpleTableFilter f = new NormalizeSimpleTableFilter();
-    f.setParent(XMLUtils.getXMLReader());
     f.setLogger(new TestUtils.TestLogger());
     final SAXSource s = new SAXSource(f, new InputSource(src));
 

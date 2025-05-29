@@ -11,7 +11,6 @@ import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
@@ -260,13 +259,22 @@ public class NormalizeTableFilter extends AbstractXMLFilter {
     }
   }
 
-  private int getRowSpan(final Attributes atts) {
+  private int getRowSpan(final Attributes atts) throws SAXException {
     final String span = atts.getValue(ATTRIBUTE_NAME_MOREROWS);
     if (span != null) {
-      return Integer.parseInt(span) + 1;
-    } else {
-      return 1;
+      try {
+        return Integer.parseInt(span.trim()) + 1;
+      } catch (final NumberFormatException e) {
+        if (processingMode == Configuration.Mode.STRICT) {
+          throw new SAXException(
+            MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_MOREROWS, span).setLocation(atts).toString()
+          );
+        } else {
+          logger.error(MessageUtils.getMessage("DOTJ062E", ATTRIBUTE_NAME_MOREROWS, span).setLocation(atts).toString());
+        }
+      }
     }
+    return 1;
   }
 
   private int getColCount(final Attributes atts) throws SAXException {
