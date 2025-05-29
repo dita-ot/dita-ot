@@ -53,6 +53,7 @@ public class NormalizeTableFilterTest {
   @ValueSource(
     strings = {
       "topic.dita",
+      "broken.dita",
       "test.dita",
       "simple.dita",
       "withoutColSpec.dita",
@@ -66,13 +67,6 @@ public class NormalizeTableFilterTest {
   public void filter(String file) throws Exception {
     final CachingLogger logger = test(file);
     assertEquals(0, logger.getMessages().size());
-  }
-
-  @Test
-  public void broken() throws Exception {
-    f.setParam(ANT_INVOKER_EXT_PARAM_PROCESSING_MODE, Configuration.Mode.STRICT.name());
-
-    assertThrows(XPathException.class, () -> test("broken.dita"));
   }
 
   private CachingLogger test(final String file) throws Exception {

@@ -44,7 +44,9 @@ public class NormalizeSimpleTableFilterTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "simple.dita", "topic.dita", "nested.dita", "rowspan.dita", "parallel.dita" })
+  @ValueSource(
+    strings = { "simple.dita", "topic.dita", "nested.dita", "rowspan.dita", "parallel.dita", "missing.dita" }
+  )
   public void filter(String file) throws Exception {
     test(file);
   }
