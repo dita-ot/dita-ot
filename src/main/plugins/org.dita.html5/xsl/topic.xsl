@@ -107,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:variable>
     
-  <xsl:variable name="FILTERDOC"
+  <xsl:variable name="FILTERDOC" as="document-node()?"
                 select="if (string-length($FILTERFILEURL) > 0)
                         then document($FILTERFILEURL, /)
                         else ()"/>
@@ -1846,35 +1846,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="string-join($default-output-class, ' ')"/>
     </xsl:apply-templates>
-    <xsl:choose>
-      <xsl:when test="exists($passthrough-attrs[empty(@att) and empty(@value)])">
-        <xsl:variable name="specializations" as="xs:string*">
-          <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
-            <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
-              <xsl:matching-substring>
-                <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
-              </xsl:matching-substring>
-            </xsl:analyze-string>
-          </xsl:for-each>
-        </xsl:variable>
-        <xsl:for-each select="@props |
-                              @audience |
-                              @platform |
-                              @product |
-                              @otherprops |
-                              @deliveryTarget |
-                              @*[local-name() = $specializations]">
-          <xsl:attribute name="data-{name()}" select="."/>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:when test="exists($passthrough-attrs)">
-        <xsl:for-each select="@*">
-          <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
-            <xsl:attribute name="data-{name()}" select="."/>
-          </xsl:if>
-        </xsl:for-each>
-      </xsl:when>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="create-passthrough-attributes"/>
   </xsl:template>
   
   <!-- Set the class attribute on the resulting output element. The default for a class of elements
@@ -1988,6 +1960,41 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="dir" select="."/>
   </xsl:template>
   
+  <!-- Create HTML5 data-* passthrough attributes if specified by DITAVAL -->
+  <xsl:mode name="create-passthrough-attributes" on-no-match="deep-skip"/>
+
+  <xsl:template match="*" mode="create-passthrough-attributes">
+    <xsl:choose>
+      <xsl:when test="exists($passthrough-attrs[empty(@att) and empty(@value)])">
+        <xsl:variable name="specializations" as="xs:string*">
+          <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
+            <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
+              <xsl:matching-substring>
+                <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
+              </xsl:matching-substring>
+            </xsl:analyze-string>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:for-each select="@props |
+                              @audience |
+                              @platform |
+                              @product |
+                              @otherprops |
+                              @deliveryTarget |
+                              @*[local-name() = $specializations]">
+          <xsl:attribute name="data-{name()}" select="."/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:when test="exists($passthrough-attrs)">
+        <xsl:for-each select="@*">
+          <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
+            <xsl:attribute name="data-{name()}" select="."/>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="setscale">
     <xsl:if test="@scale">
   <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
