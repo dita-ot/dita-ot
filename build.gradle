@@ -45,6 +45,7 @@ dependencies {
         exclude group: 'com.google.guava', module: 'listenablefuture'
         exclude group: 'com.google.errorprone', module: 'error_prone_annotations'
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
+        exclude group: 'org.jspecify', module: 'jspecify'
     }
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.17'
     implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.18'
