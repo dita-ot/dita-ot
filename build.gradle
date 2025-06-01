@@ -38,7 +38,7 @@ dependencies {
     implementation group: 'com.ibm.icu', name: 'icu4j', version:'74.2'
     implementation group: 'org.apache.ant', name: 'ant', version:'1.10.15'
     implementation group: 'org.apache.ant', name: 'ant-launcher', version:'1.10.15'
-    implementation(group: 'com.google.guava', name: 'guava', version: '32.1.1-jre') {
+    implementation(group: 'com.google.guava', name: 'guava', version: '33.4.8-jre') {
         exclude group: 'org.checkerframework', module: 'checker-qual'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
         exclude group: 'com.google.guava', module: 'failureaccess'
