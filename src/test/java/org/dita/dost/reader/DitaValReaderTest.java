@@ -135,6 +135,8 @@ public class DitaValReaderTest {
     final Map<FilterKey, Action> act = reader.getFilterMap();
     final Map<FilterKey, Action> exp = Map.of(
       new FilterKey(PRODUCT, "p1"),
+      new FilterUtils.Flag("prop", "red", "pink", new String[] { "underline" }, null, null, null, "warning"),
+      new FilterKey(PRODUCT, "p2"),
       new FilterUtils.Flag("prop", "red", "pink", new String[] { "underline" }, null, null, null, "warning")
     );
     assertEquals(exp, act);
