@@ -218,7 +218,7 @@ public final class DitaValReader implements AbstractReader {
       getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
       readFlagImage(elem, "startflag"),
       readFlagImage(elem, "endflag"),
-      getValue(elem, ATTRIBUTE_NAME_OUTPUTCLASS)
+      getValue(elem, ATTRIBUTE_NAME_ADD_OUTPUTCLASS)
     );
   }
 
