@@ -123,4 +123,20 @@ public class DitaValReaderTest {
     );
     assertEquals(exp, act);
   }
+
+  @Test
+  public void testStyle() {
+    final File ditavalFile = new File(resourceDir, "src" + File.separator + "style.ditaval");
+    DitaValReader reader = new DitaValReader();
+    TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
+    reader.setLogger(logger);
+    reader.setJob(job);
+    reader.read(ditavalFile.toURI());
+    final Map<FilterKey, Action> act = reader.getFilterMap();
+    final Map<FilterKey, Action> exp = Map.of(
+      new FilterKey(PRODUCT, "p1"),
+      new FilterUtils.Flag("prop", "red", "pink", new String[] { "underline" }, null, null, null, "warning")
+    );
+    assertEquals(exp, act);
+  }
 }
