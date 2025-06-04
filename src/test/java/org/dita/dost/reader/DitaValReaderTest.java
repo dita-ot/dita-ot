@@ -31,7 +31,7 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestDitaValReader {
+public class DitaValReaderTest {
 
   private static final QName PLATFORM = QName.valueOf("platform");
   private static final QName PRODUCT = QName.valueOf("product");
@@ -42,7 +42,7 @@ public class TestDitaValReader {
   private static final QName LANG = new QName(XML_NS_URI, "lang", "xml");
   private static final QName CONFIDENTIALITY = new QName("http://www.cms.com/", "confidentiality");
 
-  private final File resourceDir = TestUtils.getResourceDir(TestDitaValReader.class);
+  private final File resourceDir = TestUtils.getResourceDir(DitaValReaderTest.class);
 
   private Job job;
   private DITAOTLogger logger;
