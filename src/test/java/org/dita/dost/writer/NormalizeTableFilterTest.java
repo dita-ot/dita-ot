@@ -7,30 +7,35 @@
  */
 package org.dita.dost.writer;
 
-import static org.dita.dost.TestUtils.CachingLogger.Message.Level.*;
 import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
+import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils.CachingLogger;
-import org.dita.dost.TestUtils.CachingLogger.Message;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class NormalizeTableFilterTest {
 
   private final DocumentBuilderFactory dbf;
   private final TransformerFactory tf;
+  private NormalizeTableFilter f;
 
   public NormalizeTableFilterTest() {
     dbf = DocumentBuilderFactory.newInstance();
@@ -38,70 +43,46 @@ public class NormalizeTableFilterTest {
     tf = TransformerFactory.newInstance();
   }
 
-  @Test
-  public void topic() throws Exception {
-    test("topic.dita");
+  @BeforeEach
+  public void setUp() throws SAXException {
+    f = new NormalizeTableFilter();
+    f.setParent(XMLUtils.getXMLReader());
   }
 
-  @Test
-  public void test() throws Exception {
-    test("test.dita");
-  }
-
-  @Test
-  public void simple() throws Exception {
-    test("simple.dita");
-  }
-
-  @Test
-  public void withoutColSpec() throws Exception {
-    test("withoutColSpec.dita");
-  }
-
-  @Test
-  public void rowspan() throws Exception {
-    test("rowspan.dita");
-  }
-
-  @Test
-  public void onlyrows() throws Exception {
-    test("onlyRows.dita");
-  }
-
-  @Test
-  public void nested() throws Exception {
-    test("nested.dita");
-  }
-
-  @Test
-  public void parallel() throws Exception {
-    test("parallel.dita");
-  }
-
-  @Test
-  public void multiGroup() throws Exception {
-    test("multiGroup.dita");
-  }
-
-  @Test
-  public void broken() throws Exception {
-    final CachingLogger logger = test("broken.dita");
-    final List<Message> errors = logger.getMessages().stream().filter(m -> m.level == ERROR).toList();
-    assertEquals(8, errors.size());
+  @ParameterizedTest
+  @ValueSource(
+    strings = {
+      "topic.dita",
+      "broken.dita",
+      "test.dita",
+      "simple.dita",
+      "withoutColSpec.dita",
+      "rowspan.dita",
+      "onlyRows.dita",
+      "nested.dita",
+      "parallel.dita",
+      "multiGroup.dita",
+    }
+  )
+  public void filter(String file) throws Exception {
+    final CachingLogger logger = test(file);
+    assertEquals(0, logger.getMessages().size());
   }
 
   private CachingLogger test(final String file) throws Exception {
+    return test(file, file);
+  }
+
+  private CachingLogger test(final String srcFile, final String expFile) throws Exception {
     final DocumentBuilder db = dbf.newDocumentBuilder();
     final InputStream expStream = getClass()
       .getClassLoader()
-      .getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + file);
+      .getResourceAsStream(this.getClass().getSimpleName() + "/exp/" + expFile);
 
     final Transformer t = tf.newTransformer();
     final InputStream src = getClass()
       .getClassLoader()
-      .getResourceAsStream(this.getClass().getSimpleName() + "/src/" + file);
-    final NormalizeTableFilter f = new NormalizeTableFilter();
-    f.setParent(XMLUtils.getXMLReader());
+      .getResourceAsStream(this.getClass().getSimpleName() + "/src/" + srcFile);
     final CachingLogger logger = new CachingLogger();
     f.setLogger(logger);
     final SAXSource s = new SAXSource(f, new InputSource(src));

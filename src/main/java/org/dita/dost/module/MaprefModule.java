@@ -15,7 +15,9 @@ import static org.dita.dost.util.XMLUtils.toMessageListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
@@ -40,6 +42,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
 
   private Processor processor;
   private XsltExecutable templates;
+  private Map<String, String> parameters;
 
   private void init(final AbstractPipelineInput input) {
     processor = xmlUtils.getProcessor();
@@ -54,6 +57,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         e
       );
     }
+    this.parameters = Collections.unmodifiableMap(input.getAttributes());
   }
 
   /**
@@ -112,6 +116,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
       transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));
+      parameters.forEach((key, value) -> transformer.setParameter(new QName(key), XdmItem.makeValue(value)));
 
       final Source source = job.getStore().getSource(inputFile.toURI());
       transformer.setSource(source);
