@@ -37,7 +37,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * Filter for processing key reference elements in DITA files.
  * Instances are reusable but not thread-safe.
  */
-public final class KeyrefPaser extends AbstractXMLFilter {
+public final class KeyrefParser extends AbstractXMLFilter {
 
   /**
    * Set of attributes which should not be copied from
@@ -176,7 +176,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   /**
    * Constructor.
    */
-  public KeyrefPaser() {
+  public KeyrefParser() {
     keyrefLevel = 0;
     definitionMaps = new ArrayDeque<>();
     keyrefLevalStack = new ArrayDeque<>();

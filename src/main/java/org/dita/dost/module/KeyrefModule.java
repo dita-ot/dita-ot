@@ -44,7 +44,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
-import org.dita.dost.writer.KeyrefPaser;
+import org.dita.dost.writer.KeyrefParser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
@@ -500,7 +500,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     );
     filters.add(topicFragmentFilter);
 
-    final KeyrefPaser parser = new KeyrefPaser();
+    final KeyrefParser parser = new KeyrefParser();
     parser.setLogger(logger);
     parser.setJob(job);
     parser.setKeyDefinition(r.scope);
