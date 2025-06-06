@@ -43,7 +43,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
    * Set of attributes which should not be copied from
    * key definition to key reference which is {@code <topicref>}.
    */
-  private static final Set<String> no_copy = Set.of(
+  private static final Set<String> NO_COPY_TOPICREF = Set.of(
     ATTRIBUTE_NAME_ID,
     ATTRIBUTE_NAME_CLASS,
     ATTRIBUTE_NAME_XTRC,
@@ -58,10 +58,10 @@ public final class KeyrefParser extends AbstractXMLFilter {
    * Set of attributes which should not be copied from
    * key definition to key reference which is not {@code <topicref>}.
    */
-  private static final Set<String> no_copy_topic;
+  private static final Set<String> NO_COPY_NON_TOPICREF;
 
   static {
-    final Set<String> nct = new HashSet<>(no_copy);
+    final Set<String> nct = new HashSet<>(NO_COPY_TOPICREF);
     nct.add("query");
     nct.add("search");
     nct.add(ATTRIBUTE_NAME_TOC);
@@ -69,7 +69,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
     nct.add(ATTRIBUTE_NAME_COPY_TO);
     nct.add(ATTRIBUTE_NAME_CHUNK);
     nct.add(ATTRIBUTE_NAME_NAVTITLE);
-    no_copy_topic = Collections.unmodifiableSet(nct);
+    NO_COPY_NON_TOPICREF = Collections.unmodifiableSet(nct);
   }
 
   /** List of key reference element definitions. */
@@ -151,7 +151,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
    * Flag indicating whether the key reference element is empty,
    * if it is empty, it should pull matching content from the key definition.
    */
-  private boolean empty;
+  private boolean isEmpty;
 
   /** Stack of element names of the element containing keyref attribute. */
   private final Deque<String> elemName;
@@ -181,7 +181,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
     definitionMaps = new ArrayDeque<>();
     keyrefLevalStack = new ArrayDeque<>();
     validKeyref = new ArrayDeque<>();
-    empty = true;
+    isEmpty = true;
     elemName = new ArrayDeque<>();
     hasSubElem = new ArrayDeque<>();
     mergeUtils = new MergeUtils();
@@ -256,18 +256,18 @@ public final class KeyrefParser extends AbstractXMLFilter {
   public void characters(final char[] ch, final int start, final int length) throws SAXException {
     if (keyrefLevel != 0 && isEmpty(ch, start, length)) {
       if (!hasChecked) {
-        empty = true;
+        isEmpty = true;
       }
     } else {
       hasChecked = true;
-      empty = false;
+      isEmpty = false;
     }
     getContentHandler().characters(ch, start, length);
   }
 
   @Override
   public void endElement(final String uri, final String localName, final String name) throws SAXException {
-    if (keyrefLevel != 0 && empty) {
+    if (keyrefLevel != 0 && isEmpty) {
       // If current element is in the scope of key reference element
       // and the element is empty
       if (!validKeyref.isEmpty() && validKeyref.peek()) {
@@ -283,7 +283,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
     }
     if (keyrefLevel != 0) {
       keyrefLevel--;
-      empty = false;
+      isEmpty = false;
     }
 
     if (keyrefLevel == 0 && !keyrefLevalStack.isEmpty()) {
@@ -521,7 +521,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
     }
     Attributes resAtts = atts;
     hasChecked = false;
-    empty = true;
+    isEmpty = true;
     if (!hasKeyref(atts) || currentElement == null) {
       // If the keyrefLevel doesn't equal 0, it means that current element is under the key reference element;
       if (keyrefLevel != 0) {
@@ -668,7 +668,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
             if (valid) {
               if (MAP_TOPICREF.matches(currentElement.type)) {
                 for (final XdmNode attr : attrs) {
-                  if (!no_copy.contains(attr.getNodeName().getLocalName())) {
+                  if (!NO_COPY_TOPICREF.contains(attr.getNodeName().getLocalName())) {
                     XMLUtils.removeAttribute(resAtts, getQName(attr.getNodeName()));
                     XMLUtils.addOrSetAttribute(resAtts, attr);
                   }
@@ -676,7 +676,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
               } else {
                 for (final XdmNode attr : attrs) {
                   if (
-                    !no_copy_topic.contains(attr.getNodeName().getLocalName()) &&
+                    !NO_COPY_NON_TOPICREF.contains(attr.getNodeName().getLocalName()) &&
                     (
                       attr.getNodeName().getLocalName().equals(refAttr) ||
                       resAtts.getIndex(getQName(attr.getNodeName())) == -1
