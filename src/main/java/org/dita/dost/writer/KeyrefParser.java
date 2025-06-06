@@ -169,7 +169,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
 
   /** Set of link targets which are not resource-only */
   private Set<URI> normalProcessingRoleTargets;
-  private MergeUtils mergeUtils;
+  private final MergeUtils mergeUtils;
 
   private boolean compatibilityMode;
 
@@ -588,7 +588,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
                   target.getFragment()
                 );
                 String topicId = null;
-                if (relativeTarget.getFragment() == null && !"".equals(elementId)) {
+                if (relativeTarget.getFragment() == null && !elementId.isEmpty()) {
                   topicId = getFirstTopicId(topicFile);
                   if (topicId == null) {
                     String directHref = keyDef.element.attribute(ATTRIBUTE_NAME_HREF);
@@ -761,7 +761,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
   }
 
   private String getQName(final QName qName) {
-    return qName.getPrefix().length() != 0 ? (qName.getPrefix() + ":" + qName.getLocalName()) : qName.getLocalName();
+    return !qName.getPrefix().isEmpty() ? (qName.getPrefix() + ":" + qName.getLocalName()) : qName.getLocalName();
   }
 
   /**
