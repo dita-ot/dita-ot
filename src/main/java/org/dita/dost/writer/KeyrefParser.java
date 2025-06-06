@@ -750,9 +750,9 @@ public final class KeyrefParser extends AbstractXMLFilter {
   }
 
   /**
-   * Serialize DOM node into a SAX stream, while modifying map classes to topic classes for common elements.
+   * Serialize XdmNode into a SAX stream, while modifying map classes to topic classes for common elements.
    *
-   * @param elem element to serialize
+   * @param elem XdmNode to serialize
    * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
    */
   @VisibleForTesting
@@ -765,9 +765,9 @@ public final class KeyrefParser extends AbstractXMLFilter {
   }
 
   /**
-   * Serialize DOM node into a SAX stream.
+   * Serialize XdmNode into a SAX stream.
    *
-   * @param elem element to serialize
+   * @param elem XdmNode to serialize
    * @param retainElements {@code true} to serialize elements, {@code false} to only serialize text nodes.
    * @param swapMapClass {@code true} to change map/ to topic/ in common class attributes, {@code false} to leave as is
    */
