@@ -22,6 +22,7 @@ import static org.dita.dost.util.XMLUtils.isDitaFormat;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -147,9 +148,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         .toList();
       final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
 
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null).forEach(this::processFile);
+      final Map<URI, String> topicIdCache = new ConcurrentHashMap<>();
 
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null).forEach(this::processFile);
+      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null)
+        .forEach(r -> processFile(r, topicIdCache));
+
+      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null)
+        .forEach(r -> processFile(r, topicIdCache));
 
       // Store job configuration updates
       for (final URI file : normalProcessingRole) {
@@ -484,7 +489,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
    * Process key references in a topic. Topic is stored with a new name if it's
    * been processed before.
    */
-  private void processFile(final ResolveTask r) {
+  private void processFile(final ResolveTask r, final Map<URI, String> topicIdCache) {
     final List<XMLFilter> filters = new ArrayList<>();
 
     final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
@@ -505,6 +510,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     parser.setJob(job);
     parser.setKeyDefinition(r.scope);
     parser.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
+    parser.setTopicIdCache(topicIdCache);
     filters.add(parser);
 
     try {
