@@ -107,7 +107,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:variable>
     
-  <xsl:variable name="FILTERDOC"
+  <xsl:variable name="FILTERDOC" as="document-node()?"
                 select="if (string-length($FILTERFILEURL) > 0)
                         then document($FILTERFILEURL, /)
                         else ()"/>
@@ -1846,35 +1846,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:apply-templates select="." mode="set-output-class">
       <xsl:with-param name="default" select="string-join($default-output-class, ' ')"/>
     </xsl:apply-templates>
-    <xsl:choose>
-      <xsl:when test="exists($passthrough-attrs[empty(@att) and empty(@value)])">
-        <xsl:variable name="specializations" as="xs:string*">
-          <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
-            <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
-              <xsl:matching-substring>
-                <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
-              </xsl:matching-substring>
-            </xsl:analyze-string>
-          </xsl:for-each>
-        </xsl:variable>
-        <xsl:for-each select="@props |
-                              @audience |
-                              @platform |
-                              @product |
-                              @otherprops |
-                              @deliveryTarget |
-                              @*[local-name() = $specializations]">
-          <xsl:attribute name="data-{name()}" select="."/>
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:when test="exists($passthrough-attrs)">
-        <xsl:for-each select="@*">
-          <xsl:if test="$passthrough-attrs[@att = name(current()) and (empty(@val) or (some $v in tokenize(current(), '\s+') satisfies $v = @val))]">
-            <xsl:attribute name="data-{name()}" select="."/>
-          </xsl:if>
-        </xsl:for-each>
-      </xsl:when>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="create-passthrough-attributes"/>
   </xsl:template>
   
   <!-- Set the class attribute on the resulting output element. The default for a class of elements
@@ -1988,6 +1960,85 @@ See the accompanying LICENSE file for applicable license.
     <xsl:attribute name="dir" select="."/>
   </xsl:template>
   
+  <!-- Create HTML5 data-* passthrough attributes if specified by DITAVAL -->
+  <xsl:mode name="create-passthrough-attributes" on-no-match="deep-skip"/>
+
+  <xsl:template match="*[exists($passthrough-attrs)]" mode="create-passthrough-attributes">
+    <!-- Get specialized profiling attribute names, if defined -->
+    <xsl:variable name="specialized-attr-names" as="xs:string*">
+      <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
+        <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
+          <xsl:matching-substring>
+            <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
+          </xsl:matching-substring>
+        </xsl:analyze-string>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <!-- Get all profiling attributes for this element -->
+    <xsl:variable name="profiling-attrs" as="attribute()*">
+      <xsl:sequence select="@props | @audience | @platform | @product | @otherprops | @deliveryTarget"/>
+      <xsl:sequence select="@*[local-name(.) = $specialized-attr-names]"/>
+    </xsl:variable>
+
+    <!-- Ungroup and organize all profiling attribute values for this element. For example, the values for:
+
+           <p product="v1 grpA(Av2) v3 grpB(Bv3 Bv4)"/>
+
+         would be stored in an <ATTVAL> element sequence as follows:
+
+           <ATTVAL att="product"  group="product"  values="v1"/>
+           <ATTVAL att="product"  group="product"  values="v3"/>
+           <ATTVAL att="product"  group="grpA"     values="Av2"/>
+           <ATTVAL att="product"  group="grpB"     values="Bv3"/>
+           <ATTVAL att="product"  group="grpB"     values="Bv4"/> -->
+    <xsl:variable name="all-attvals" as="element()*">
+      <xsl:for-each select="$profiling-attrs">
+        <xsl:variable name="attr-name" select="local-name(.)"/>
+        <!-- Regex pattern tries to match "group(val val)" first, "val" second -->
+        <xsl:analyze-string select="." regex="([^\s(]+)\(([^)]*)\)|(\S+)">
+          <xsl:matching-substring>
+            <xsl:choose>
+              <xsl:when test="regex-group(1) and regex-group(2)">
+                <!-- Explicit group value: @att="group(val val)" -->
+                <xsl:for-each select="tokenize(regex-group(2))">
+                  <ATTVAL att="{$attr-name}" group="{regex-group(1)}" val="{.}"/>
+                </xsl:for-each>
+              </xsl:when>
+              <xsl:when test="regex-group(3)">
+                <!-- Implicit group value: @att="val" (group name is attribute name)-->
+                <ATTVAL att="{$attr-name}" group="{$attr-name}" val="{regex-group(3)}"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:matching-substring>
+        </xsl:analyze-string>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <!-- Get all <ATTVAL> entries that match passthrough actions. An <ATTVAL> entry matches if:
+
+         * A passthrough action exists without an @att value (matches all attributes)
+         * A passthrough action exists with an @att value matching the <ATTVAL> @att or @group value, and
+           * The passthrough action has no @val value (matches all values), or
+           * The passthrough action has a @val value that matches the <ATTVAL> @val value -->
+    <xsl:variable name="matching-attvals" as="element()*">
+      <xsl:for-each select="$all-attvals">
+        <xsl:variable name="attval" select="."/>
+        <xsl:if test="$passthrough-attrs[empty(@att) or (@att = $attval/(@att, @group) and (empty(@val) or @val = $attval/@val))]">
+          <xsl:sequence select="$attval"/>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <!-- Create HTML5 data-* passthrough attributes.
+
+         Passthrough attributes are always named by group name (implicit or explicit) regardless of
+         how their values were matched by passthrough actions. -->
+    <xsl:for-each-group select="$matching-attvals" group-by="@group">
+      <xsl:attribute name="data-{current-grouping-key()}" select="sort(distinct-values(current-group()/@val))"/>
+    </xsl:for-each-group>
+  </xsl:template>
+
   <xsl:template name="setscale">
     <xsl:if test="@scale">
   <!--    <xsl:attribute name="style">font-size: <xsl:value-of select="@scale"/>%;</xsl:attribute> -->
