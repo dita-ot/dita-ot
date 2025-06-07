@@ -21,6 +21,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
@@ -170,7 +171,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
   /** Set of link targets which are not resource-only */
   private Set<URI> normalProcessingRoleTargets;
   private final MergeUtils mergeUtils;
-
+  private Map<URI, String> topicIdCache;
   private boolean compatibilityMode;
 
   /**
@@ -212,6 +213,10 @@ public final class KeyrefParser extends AbstractXMLFilter {
     this.definitionMaps.push(definitionMap);
   }
 
+  public void setTopicIdCache(final Map<URI, String> topicIdCache) {
+    this.topicIdCache = topicIdCache;
+  }
+
   /**
    * Get set of link targets which have normal processing role. Paths are relative to current file.
    */
@@ -239,6 +244,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
   @Override
   public void startDocument() throws SAXException {
     normalProcessingRoleTargets = new HashSet<>();
+    topicIdCache = new ConcurrentHashMap<>();
     getContentHandler().startDocument();
   }
 
@@ -841,7 +847,10 @@ public final class KeyrefParser extends AbstractXMLFilter {
    * Get first topic id
    */
   private String getFirstTopicId(final URI topicFile) {
-    return mergeUtils.getFirstTopicId(topicFile, false);
+    if (topicIdCache.containsKey(topicFile)) {
+      logger.debug("Cache hit for topic {}", topicFile.toString());
+    }
+    return topicIdCache.computeIfAbsent(topicFile, file -> mergeUtils.getFirstTopicId(topicFile, false));
   }
 
   /**
