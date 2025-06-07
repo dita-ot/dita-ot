@@ -41,9 +41,9 @@ import org.xml.sax.SAXException;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
 
-public class KeyrefPaserTest {
+public class KeyrefParserTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(KeyrefPaserTest.class);
+  private static final File resourceDir = TestUtils.getResourceDir(KeyrefParserTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static final File expDir = new File(resourceDir, "exp");
 
@@ -58,7 +58,7 @@ public class KeyrefPaserTest {
     TestUtils.copy(srcDir, tempDir);
 
     final KeyScope keyDefinition = readKeyMap(map);
-    final KeyrefPaser parser = new KeyrefPaser();
+    final KeyrefParser parser = new KeyrefParser();
     parser.setLogger(new TestUtils.TestLogger());
     parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
     parser.setKeyDefinition(keyDefinition);
@@ -93,7 +93,7 @@ public class KeyrefPaserTest {
     TestUtils.copy(srcDir, tempDir);
 
     final KeyScope keyDefinition = readKeyMap(map);
-    final KeyrefPaser parser = new KeyrefPaser();
+    final KeyrefParser parser = new KeyrefParser();
     parser.setLogger(new TestUtils.TestLogger());
     parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
     parser.setKeyDefinition(keyDefinition);
@@ -115,7 +115,7 @@ public class KeyrefPaserTest {
       .getProcessor()
       .newDocumentBuilder()
       .newBuildingContentHandler();
-    final KeyrefPaser parser = new KeyrefPaser();
+    final KeyrefParser parser = new KeyrefParser();
     parser.setContentHandler(buildingContentHandler);
     final XdmNode xdmNode = src.toXdmNode(xmlUtils.getProcessor());
 
