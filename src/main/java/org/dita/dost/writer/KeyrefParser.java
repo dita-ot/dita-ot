@@ -783,12 +783,12 @@ public final class KeyrefParser extends AbstractXMLFilter {
         .select(attribute())
         .forEach(a -> {
           if (Objects.equals(a.getNodeName(), new QName(ATTRIBUTE_NAME_CLASS)) && swapMapClass) {
-            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeclassValue(a.getStringValue()));
+            XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, changeClassValue(a.getStringValue()));
           } else {
             XMLUtils.addOrSetAttribute(atts, a);
           }
         });
-      getContentHandler().startElement(qName.getNamespaceURI(), qName.getLocalName(), qNameString, atts);
+      getContentHandler().startElement(qName.getNamespace(), qName.getLocalName(), qNameString, atts);
     }
     for (final XdmNode node : elem.children()) {
       switch (node.getNodeKind()) {
@@ -807,14 +807,14 @@ public final class KeyrefParser extends AbstractXMLFilter {
       }
     }
     if (retainElements) {
-      getContentHandler().endElement(qName.getNamespaceURI(), qName.getLocalName(), qNameString);
+      getContentHandler().endElement(qName.getNamespace(), qName.getLocalName(), qNameString);
     }
   }
 
   /**
    * Change map type to topic type.
    */
-  private String changeclassValue(final String classValue) {
+  private String changeClassValue(final String classValue) {
     final DitaClass cls = DitaClass.getInstance(classValue);
     if (cls.equals(MAP_LINKTEXT)) {
       return TOPIC_LINKTEXT.toString();
