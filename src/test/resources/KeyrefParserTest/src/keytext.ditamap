@@ -6,4 +6,9 @@
       <keytext class="- map/keytext ">keytext content</keytext>
     </topicmeta>
   </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keytext-href" href="http://example.com" scope="external" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keytext class="- map/keytext ">keytext content</keytext>
+    </topicmeta>
+  </keydef>
 </map>

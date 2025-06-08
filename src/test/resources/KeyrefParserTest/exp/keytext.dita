@@ -6,8 +6,18 @@
     <p class="- topic/p ">
       <keyword class="- topic/keyword " keyref="keytext">keytext content</keyword>
       <keyword class="- topic/keyword " keyref="keytext">non-empty</keyword>
-      <xref class="- topic/xref " keyref="keytext"></xref>
-      <xref class="- topic/xref " keyref="keytext">non-empty</xref>
+      <xref class="- topic/xref " keyref="keytext-href" href="http://example.com" scope="external"/>
+      <xref class="- topic/xref " keyref="keytext-href" href="http://example.com" scope="external">non-empty</xref>
+      <image class="- topic/image " keyref="keytext-href" href="http://example.com" scope="external"/>
+      <image class="- topic/image " keyref="keytext-href" href="http://example.com" scope="external">non-empty</image>
+      <data class="- topic/data " keyref="keytext"/>
+      <data class="- topic/data " keyref="keytext">non-empty</data>
+      <data class="- topic/data " keyref="keytext-href" href="http://example.com" scope="external"/>
+      <data class="- topic/data " keyref="keytext-href" href="http://example.com" scope="external">non-empty</data>
     </p>
   </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="keytext"/>
+    <link class="- topic/link " keyref="keytext-href" href="http://example.com" scope="external"/>
+  </related-links>
 </topic>
