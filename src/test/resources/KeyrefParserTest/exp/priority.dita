@@ -1,0 +1,13 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+       id="priority" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">title</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <keyword class="- topic/keyword " keyref="keytext" href="priority.dita">keytext</keyword>
+      <keyword class="- topic/keyword " keyref="titlealt-linking" href="priority.dita"/>
+      <keyword class="- topic/keyword " keyref="titlealt-navigation" href="priority.dita"/>
+      <keyword class="- topic/keyword " keyref="title" href="priority.dita"/>
+    </p>
+  </body>
+</topic>
