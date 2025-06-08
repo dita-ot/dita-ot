@@ -81,7 +81,8 @@ public class KeyrefParserTest {
       Arguments.of(Paths.get("b.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
-      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap"))
+      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap")),
+      Arguments.of(Paths.get("keytext.dita"), Paths.get("keytext.ditamap"))
     );
   }
 

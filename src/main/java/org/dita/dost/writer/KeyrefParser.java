@@ -319,11 +319,18 @@ public final class KeyrefParser extends AbstractXMLFilter {
       .stream()
       .filter(item -> TOPIC_KEYWORDS.matches(item.getParent()))
       .toList();
+    final Optional<XdmNode> keyText = elem.select(descendant().where(MAP_KEYTEXT::matches)).findFirst();
     // XXX: No need to look for term as content model for keywords doesn't allow it
     //                        if (nodeList.getLength() == 0) {
     //                            nodeList = elem.descendant(TOPIC_TERM.localName);
     //                        }
-    if (!keywordsInKeywords.isEmpty()) {
+    if (keyText.isPresent()) {
+      if (!currentElement.hasNestedElements) {
+        if (!currentElement.isEmpty) {
+          domToSax(keyText.get(), false);
+        }
+      }
+    } else if (!keywordsInKeywords.isEmpty()) {
       if (!currentElement.hasNestedElements) {
         // only one keyword or term is used.
         if (!currentElement.isEmpty) {
