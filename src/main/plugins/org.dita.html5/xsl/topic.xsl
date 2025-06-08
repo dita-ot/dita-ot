@@ -2619,6 +2619,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:if>
     </xsl:if>
     <xsl:call-template name="setid"/>
+    <xsl:apply-templates select="." mode="create-passthrough-attributes"/>
     <xsl:apply-templates select="." mode="addAttributesToBody"/>
   </xsl:template>
 
