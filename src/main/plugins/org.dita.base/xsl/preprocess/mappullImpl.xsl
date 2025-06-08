@@ -87,7 +87,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="parent-toc" as="xs:string">#none#</xsl:param>
     <!-- used for mapref target to see whether @toc should be override by the source of mapref -->
     <xsl:param name="parent-processing-role" as="xs:string">#none#</xsl:param>
-    
+
+    <xsl:param name="topicref" as="element()" select="."/>
+
     <!--need to create these variables regardless, for passing as a parameter to get-stuff template-->
         <xsl:variable name="type" as="xs:string">
           <xsl:call-template name="inherit"><xsl:with-param name="attrib">type</xsl:with-param></xsl:call-template>
@@ -153,24 +155,22 @@ Other modes can be found within the code, and may or may not prove useful for ov
           <xsl:if test="(:not(@scope) and :)$scope!='#none#'">
             <xsl:attribute name="scope" select="$scope"/>
           </xsl:if>
-          <!--xsl:if test="not(@audience)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">audience</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
-          <!--xsl:if test="not(@platform)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">platform</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
-          <!--xsl:if test="not(@product)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">product</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
-          <!--xsl:if test="not(@rev)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">rev</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
-          <!--xsl:if test="not(@otherprops)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">otherprops</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
-          <!--xsl:if test="not(@props)"-->
-            <xsl:apply-templates select="." mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib">props</xsl:with-param></xsl:apply-templates>
-          <!--/xsl:if-->
+
+          <!-- Cascade profiling attributes -->
+          <xsl:variable name="specializations" as="xs:string*">
+            <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
+              <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
+                <xsl:matching-substring>
+                  <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
+                </xsl:matching-substring>
+              </xsl:analyze-string>
+            </xsl:for-each>
+          </xsl:variable>
+
+          <xsl:for-each select="('rev', 'props', 'audience', 'platform', 'product', 'otherprops', $specializations)">
+            <xsl:apply-templates select="$topicref" mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib" select="."/></xsl:apply-templates>
+          </xsl:for-each>
+
           <!--grab type, text and metadata, as long there's an href to grab from, and it's not inaccessible-->
           <xsl:choose>
             <xsl:when test="@href=''">
