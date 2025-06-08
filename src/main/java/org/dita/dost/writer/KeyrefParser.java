@@ -102,14 +102,18 @@ public final class KeyrefParser extends AbstractXMLFilter {
     ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_LONGQUOTEREF, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, false, false));
-    final Map<String, String> objectAttrs = new HashMap<>();
-    objectAttrs.put(ATTRIBUTE_NAME_ARCHIVEKEYREFS, ATTRIBUTE_NAME_ARCHIVE);
-    objectAttrs.put(ATTRIBUTE_NAME_CLASSIDKEYREF, ATTRIBUTE_NAME_CLASSID);
-    objectAttrs.put(ATTRIBUTE_NAME_CODEBASEKEYREF, ATTRIBUTE_NAME_CODEBASE);
-    objectAttrs.put(ATTRIBUTE_NAME_DATAKEYREF, ATTRIBUTE_NAME_DATA);
+    final Map<String, String> objectAttrs = Map.of(
+      ATTRIBUTE_NAME_ARCHIVEKEYREFS,
+      ATTRIBUTE_NAME_ARCHIVE,
+      ATTRIBUTE_NAME_CLASSIDKEYREF,
+      ATTRIBUTE_NAME_CLASSID,
+      ATTRIBUTE_NAME_CODEBASEKEYREF,
+      ATTRIBUTE_NAME_CODEBASE,
+      ATTRIBUTE_NAME_DATAKEYREF,
+      ATTRIBUTE_NAME_DATA
+    );
     ki.add(new KeyrefInfo(TOPIC_OBJECT, objectAttrs, true, false));
-    final Map<String, String> paramAttrs = new HashMap<>();
-    paramAttrs.put(ATTRIBUTE_NAME_KEYREF, ATTRIBUTE_NAME_VALUE);
+    final Map<String, String> paramAttrs = Map.of(ATTRIBUTE_NAME_KEYREF, ATTRIBUTE_NAME_VALUE);
     ki.add(new KeyrefInfo(TOPIC_PARAM, paramAttrs, true, false));
     keyrefInfos = Collections.unmodifiableList(ki);
   }
@@ -914,12 +918,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
      * @param hasNestedElements element is a reference type
      */
     KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean hasNestedElements) {
-      final Map<String, String> attrs = new HashMap<>();
-      attrs.put(ATTRIBUTE_NAME_KEYREF, refAttr);
-      this.type = type;
-      this.attrs = attrs;
-      this.isEmpty = isEmpty;
-      this.hasNestedElements = hasNestedElements;
+      this(type, Map.of(ATTRIBUTE_NAME_KEYREF, refAttr), isEmpty, hasNestedElements);
     }
   }
 }
