@@ -333,6 +333,26 @@ public final class KeyrefParser extends AbstractXMLFilter {
         if (!currentElement.isEmpty) {
           domToSax(keyText.get(), false);
         }
+      } else {
+        // If the key reference element carries href attribute
+        // all keyword or term are used.
+        if (TOPIC_LINK.matches(currentElement.type)) {
+          final AttributesImpl atts = new AttributesImpl();
+          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
+          getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
+        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
+          final AttributesImpl atts = new AttributesImpl();
+          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_ALT.toString());
+          getContentHandler().startElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName, atts);
+        }
+        if (!currentElement.isEmpty) {
+          domToSax(keyText.get(), false);
+        }
+        if (TOPIC_LINK.matches(currentElement.type)) {
+          getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
+        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
+          getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
+        }
       }
     } else if (!keywordsInKeywords.isEmpty()) {
       if (!currentElement.hasNestedElements) {
