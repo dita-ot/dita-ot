@@ -100,7 +100,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
     ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_LONGQUOTEREF, ATTRIBUTE_NAME_HREF, false, false));
-    ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, false, false));
+    ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, true, false));
     final Map<String, String> objectAttrs = Map.of(
       ATTRIBUTE_NAME_ARCHIVEKEYREFS,
       ATTRIBUTE_NAME_ARCHIVE,
@@ -462,6 +462,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
           )
           .findFirst()
       );
+    final Optional<XdmNode> shortdesc = elem.select(descendant().where(TOPIC_SHORTDESC::matches)).findFirst();
     // XXX: No need to look for term as content model for keywords doesn't allow it
     //                        if (nodeList.getLength() == 0) {
     //                            nodeList = elem.descendant(TOPIC_TERM.localName);
@@ -490,6 +491,17 @@ public final class KeyrefParser extends AbstractXMLFilter {
           getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
         } else if (TOPIC_IMAGE.matches(currentElement.type)) {
           getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
+        }
+
+        if (shortdesc.isPresent()) {
+          for (var cls : new DitaClass[] { TOPIC_LINK, TOPIC_XREF }) {
+            if (cls.matches(currentElement.type)) {
+              var atts = new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString()).build();
+              getContentHandler().startElement(NULL_NS_URI, TOPIC_SHORTDESC.localName, TOPIC_SHORTDESC.localName, atts);
+              domToSax(shortdesc.get(), false);
+              getContentHandler().endElement(NULL_NS_URI, TOPIC_SHORTDESC.localName, TOPIC_SHORTDESC.localName);
+            }
+          }
         }
       }
     } else {

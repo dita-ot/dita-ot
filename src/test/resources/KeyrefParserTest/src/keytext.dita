@@ -8,6 +8,8 @@
       <keyword class="- topic/keyword " keyref="keytext">non-empty</keyword>
       <xref class="- topic/xref " keyref="keytext-href"/>
       <xref class="- topic/xref " keyref="keytext-href">non-empty</xref>
+      <xref class="- topic/xref " keyref="keytext-href-desc"/>
+      <xref class="- topic/xref " keyref="keytext-href-desc">non-empty</xref>
       <image class="- topic/image " keyref="keytext-href"/>
       <image class="- topic/image " keyref="keytext-href">non-empty</image>
       <data class="- topic/data " keyref="keytext"/>
@@ -18,6 +20,16 @@
   </body>
   <related-links class="- topic/related-links ">
     <link class="- topic/link " keyref="keytext"/>
+    <link class="- topic/link " keyref="keytext">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
     <link class="- topic/link " keyref="keytext-href"/>
+    <link class="- topic/link " keyref="keytext-href">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
+    <link class="- topic/link " keyref="keytext-href-desc"/>
+    <link class="- topic/link " keyref="keytext-href-desc">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
   </related-links>
 </topic>

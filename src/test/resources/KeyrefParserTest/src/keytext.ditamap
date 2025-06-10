@@ -11,4 +11,10 @@
       <keytext class="- map/keytext ">keytext content</keytext>
     </topicmeta>
   </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keytext-href-desc" href="http://example.com" scope="external" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keytext class="- map/keytext ">keytext content</keytext>
+      <shortdesc class="- topic/shortdesc ">shortdesc content</shortdesc>
+    </topicmeta>
+  </keydef>
 </map>
