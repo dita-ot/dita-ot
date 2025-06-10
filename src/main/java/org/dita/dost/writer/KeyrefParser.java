@@ -9,8 +9,7 @@
 package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
-import static net.sf.saxon.s9api.streams.Predicates.isText;
+import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
@@ -442,17 +441,27 @@ public final class KeyrefParser extends AbstractXMLFilter {
    * Current element name equals the key reference element
    * grab keyword or term from key definition
    */
-  private void matchingEndElementV2(XdmNode elem) throws SAXException {
+  private void matchingEndElementV2(final XdmNode elem) throws SAXException {
     if (hasSubElem.peek() || currentElement == null) {
       return;
     }
 
-    final List<XdmNode> keywords = elem.select(descendant().where(hasLocalName(TOPIC_KEYWORD.localName))).asList();
-    final List<XdmNode> keywordsInKeywords = keywords
-            .stream()
-            .filter(item -> TOPIC_KEYWORDS.matches(item.getParent()))
-            .toList();
-    final Optional<XdmNode> keyText = elem.select(descendant().where(MAP_KEYTEXT::matches)).findFirst();
+    final Optional<XdmNode> keyText = elem
+      .select(descendant().where(MAP_KEYTEXT::matches))
+      .findFirst()
+      .or(() ->
+        elem
+          .select(descendant().where(TOPIC_TITLEALT::matches).where(attributeEq(ATTRIBUTE_NAME_TITLE_ROLE, "linking")))
+          .findFirst()
+      )
+      .or(() ->
+        elem
+          .select(
+            descendant().where(TOPIC_TITLEALT::matches)
+            //                    .where(attributeEq(ATTRIBUTE_NAME_TITLE_ROLE, "navigation"))
+          )
+          .findFirst()
+      );
     // XXX: No need to look for term as content model for keywords doesn't allow it
     //                        if (nodeList.getLength() == 0) {
     //                            nodeList = elem.descendant(TOPIC_TERM.localName);
@@ -483,48 +492,19 @@ public final class KeyrefParser extends AbstractXMLFilter {
           getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
         }
       }
-    } else if (!keywordsInKeywords.isEmpty()) {
-      if (!currentElement.hasNestedElements) {
-        // only one keyword or term is used.
-        if (!currentElement.isEmpty) {
-          domToSax(keywordsInKeywords.get(0), false);
-        }
-      } else {
-        // If the key reference element carries href attribute
-        // all keyword or term are used.
-        if (TOPIC_LINK.matches(currentElement.type)) {
-          final AttributesImpl atts = new AttributesImpl();
-          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
-          getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
-        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
-          final AttributesImpl atts = new AttributesImpl();
-          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_ALT.toString());
-          getContentHandler().startElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName, atts);
-        }
-        if (!currentElement.isEmpty) {
-          for (final XdmNode onekeyword : keywordsInKeywords) {
-            domToSax(onekeyword, true);
-          }
-        }
-        if (TOPIC_LINK.matches(currentElement.type)) {
-          getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
-        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
-          getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
-        }
-      }
     } else {
       if (TOPIC_LINK.matches(currentElement.type)) {
         // If the key reference element is link or its specialization,
         // should pull in the linktext
         final List<XdmNode> linktext = elem
-                .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
-                .asList();
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
         if (!linktext.isEmpty()) {
           domToSax(linktext.get(0), true);
         } else if (fallbackToNavtitleOrHref(elem)) {
           final List<XdmNode> navtitleElement = elem
-                  .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
-                  .asList();
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
           if (!navtitleElement.isEmpty()) {
             writeLinktext(navtitleElement.get(0));
           } else {
@@ -543,14 +523,14 @@ public final class KeyrefParser extends AbstractXMLFilter {
         // If the key reference element is an image or its specialization,
         // should pull in the linktext
         final List<XdmNode> linktext = elem
-                .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
-                .asList();
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
         if (!linktext.isEmpty()) {
           writeAlt(linktext.get(0));
         } else if (fallbackToNavtitleOrHref(elem)) {
           final List<XdmNode> navtitleElement = elem
-                  .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
-                  .asList();
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
           if (!navtitleElement.isEmpty()) {
             writeAlt(navtitleElement.get(0));
           } else {
@@ -562,14 +542,14 @@ public final class KeyrefParser extends AbstractXMLFilter {
         }
       } else if (!currentElement.isEmpty && fallbackToNavtitleOrHref(elem)) {
         final List<XdmNode> linktext = elem
-                .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
-                .asList();
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
         if (!linktext.isEmpty()) {
           domToSax(linktext.get(0), false);
         } else {
           final List<XdmNode> navtitleElement = elem
-                  .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
-                  .asList();
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
           if (!navtitleElement.isEmpty()) {
             domToSax(navtitleElement.get(0), false);
           } else {

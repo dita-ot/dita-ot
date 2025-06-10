@@ -6,23 +6,23 @@
           processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
       <keytext class="- map/keytext ">keytext</keytext>
-      <titlealt class="- topic/titlealt" title-role="linking">titlealt linking</titlealt>
-      <titlealt class="- topic/titlealt" title-role="navigation">titlealt navigation</titlealt>
+      <titlealt class="- topic/titlealt " title-role="linking">titlealt linking</titlealt>
+      <titlealt class="- topic/titlealt " title-role="navigation">titlealt navigation</titlealt>
     </topicmeta>
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="titlealt-linking"
           href="priority.dita"
           processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
-      <titlealt class="- topic/titlealt" title-role="linking">titlealt linking</titlealt>
-      <titlealt class="- topic/titlealt" title-role="navigation">titlealt navigation</titlealt>
+      <titlealt class="- topic/titlealt " title-role="linking">titlealt linking</titlealt>
+      <titlealt class="- topic/titlealt " title-role="navigation">titlealt navigation</titlealt>
     </topicmeta>
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="titlealt-navigation"
           href="priority.dita"
           processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
-      <titlealt class="- topic/titlealt" title-role="navigation">titlealt navigation</titlealt>
+      <titlealt class="- topic/titlealt " title-role="navigation">titlealt navigation</titlealt>
     </topicmeta>
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="title"

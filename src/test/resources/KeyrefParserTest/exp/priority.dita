@@ -5,8 +5,8 @@
   <body class="- topic/body ">
     <p class="- topic/p ">
       <keyword class="- topic/keyword " keyref="keytext" href="priority.dita">keytext</keyword>
-      <keyword class="- topic/keyword " keyref="titlealt-linking" href="priority.dita"/>
-      <keyword class="- topic/keyword " keyref="titlealt-navigation" href="priority.dita"/>
+      <keyword class="- topic/keyword " keyref="titlealt-linking" href="priority.dita">titlealt linking</keyword>
+      <keyword class="- topic/keyword " keyref="titlealt-navigation" href="priority.dita">titlealt navigation</keyword>
       <keyword class="- topic/keyword " keyref="title" href="priority.dita"/>
     </p>
   </body>
