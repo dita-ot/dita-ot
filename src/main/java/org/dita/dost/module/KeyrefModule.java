@@ -269,7 +269,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       if (href != null && rewrites.containsKey(stripFragment(href))) {
         href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
       }
-      final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+      final KeyDef newKey = new KeyDef(
+        oldKey.keys,
+        href,
+        oldKey.scope,
+        oldKey.format,
+        oldKey.source,
+        oldKey.element,
+        oldKey.version
+      );
       newKeys.put(key.getKey(), newKey);
     }
     return new KeyScope(

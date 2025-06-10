@@ -24,6 +24,7 @@ public class KeyDef {
   public final URI source;
   public final XdmNode element;
   public final String format;
+  public final int version;
 
   /**
    * Construct new key definition.
@@ -32,6 +33,7 @@ public class KeyDef {
    * @param href href URI, may be {@code null}
    * @param scope link scope, may be {@code null}
    * @param source key definition source, may be {@code null}
+   * @param version DITA major version of the defining key
    */
   public KeyDef(
     final String keys,
@@ -39,7 +41,8 @@ public class KeyDef {
     final String scope,
     final String format,
     final URI source,
-    final XdmNode element
+    final XdmNode element,
+    final int version
   ) {
     //assert href.isAbsolute();
     this.keys = keys;
@@ -48,6 +51,7 @@ public class KeyDef {
     this.format = format == null ? ATTR_FORMAT_VALUE_DITA : format;
     this.source = source;
     this.element = element;
+    this.version = version;
   }
 
   @Override
@@ -74,6 +78,7 @@ public class KeyDef {
     result = prime * result + ((scope == null) ? 0 : scope.hashCode());
     result = prime * result + ((format == null) ? 0 : format.hashCode());
     result = prime * result + ((source == null) ? 0 : source.hashCode());
+    result = prime * result + version;
     return result;
   }
 
@@ -121,6 +126,9 @@ public class KeyDef {
         return false;
       }
     } else if (!source.equals(other.source)) {
+      return false;
+    }
+    if (version != other.version) {
       return false;
     }
     return true;

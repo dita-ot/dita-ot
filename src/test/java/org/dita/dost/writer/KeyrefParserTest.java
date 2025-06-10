@@ -69,8 +69,8 @@ public class KeyrefParserTest {
 
     try {
       assertXMLEqual(
-              new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
-              new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
+        new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
+        new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
       );
     } catch (AssertionError e) {
       System.err.write(Files.readAllBytes(Paths.get(tempDir.getAbsolutePath(), file.toString())));
@@ -80,16 +80,16 @@ public class KeyrefParserTest {
 
   private static Stream<Arguments> testWriteArguments() {
     return Stream.of(
-//      Arguments.of(Paths.get("whitespace.xml"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("a.xml"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("subdir", "subdirtopic.xml"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("id.xml"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("fallback.xml"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("b.ditamap"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
-//      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap")),
-//      Arguments.of(Paths.get("keytext.dita"), Paths.get("keytext.ditamap")),
+      Arguments.of(Paths.get("whitespace.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("a.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("subdir", "subdirtopic.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("id.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("fallback.xml"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("b.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
+      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap")),
+      Arguments.of(Paths.get("keytext.dita"), Paths.get("keytext.ditamap")),
       Arguments.of(Paths.get("priority.dita"), Paths.get("priority.ditamap"))
     );
   }
