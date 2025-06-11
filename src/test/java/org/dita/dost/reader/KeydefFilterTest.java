@@ -65,7 +65,8 @@ public class KeydefFilterTest {
         ATTR_SCOPE_VALUE_LOCAL,
         null,
         null,
-        null
+        null,
+        1
       )
     );
     expKeyDefMap.put(
@@ -76,7 +77,8 @@ public class KeydefFilterTest {
         ATTR_SCOPE_VALUE_LOCAL,
         null,
         null,
-        null
+        null,
+        1
       )
     );
     expKeyDefMap.put(
@@ -87,7 +89,8 @@ public class KeydefFilterTest {
         ATTR_SCOPE_VALUE_LOCAL,
         null,
         null,
-        null
+        null,
+        1
       )
     );
     expKeyDefMap.put(
@@ -98,13 +101,25 @@ public class KeydefFilterTest {
         ATTR_SCOPE_VALUE_LOCAL,
         null,
         null,
-        null
+        null,
+        1
       )
     );
-    expKeyDefMap.put("peer", new KeyDef("peer", toURI("../topics/peer.xml"), ATTR_SCOPE_VALUE_PEER, null, null, null));
+    expKeyDefMap.put(
+      "peer",
+      new KeyDef("peer", toURI("../topics/peer.xml"), ATTR_SCOPE_VALUE_PEER, null, null, null, 1)
+    );
     expKeyDefMap.put(
       "external",
-      new KeyDef("external", toURI("http://www.example.com/external.xml"), ATTR_SCOPE_VALUE_EXTERNAL, null, null, null)
+      new KeyDef(
+        "external",
+        toURI("http://www.example.com/external.xml"),
+        ATTR_SCOPE_VALUE_EXTERNAL,
+        null,
+        null,
+        null,
+        1
+      )
     );
 
     assertEquals(expKeyDefMap, reader.getKeysDMap());

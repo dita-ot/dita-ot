@@ -791,6 +791,7 @@ public final class Constants {
     "- topic/body learningBase/learningBasebody learningSummary/learningSummarybody "
   );
   public static final DitaClass MAP_ANCHOR = DitaClass.getInstance("- map/anchor ");
+  public static final DitaClass MAP_KEYTEXT = DitaClass.getInstance("- map/keytext ");
   public static final DitaClass MAP_LINKTEXT = DitaClass.getInstance("- map/linktext ");
   public static final DitaClass MAP_MAP = DitaClass.getInstance("- map/map ");
   public static final DitaClass MAP_NAVREF = DitaClass.getInstance("- map/navref ");
@@ -1140,6 +1141,7 @@ public final class Constants {
   public static final DitaClass TOPIC_THEAD = DitaClass.getInstance("- topic/thead ");
   public static final DitaClass TOPIC_TITLE = DitaClass.getInstance("- topic/title ");
   public static final DitaClass TOPIC_TITLEALTS = DitaClass.getInstance("- topic/titlealts ");
+  public static final DitaClass TOPIC_TITLEALT = DitaClass.getInstance("- topic/titlealt ");
   public static final DitaClass TOPIC_TM = DitaClass.getInstance("- topic/tm ");
   public static final DitaClass TOPIC_TOPIC = DitaClass.getInstance("- topic/topic ");
   public static final DitaClass TOPIC_UL = DitaClass.getInstance("- topic/ul ");
@@ -1364,6 +1366,7 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
   public static final String ATTRIBUTE_NAME_STYLE = "style";
   public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
+  public static final String ATTRIBUTE_NAME_TITLE_ROLE = "title-role";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 

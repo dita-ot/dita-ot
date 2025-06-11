@@ -12,6 +12,7 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import net.sf.saxon.sapling.SaplingElement;
 import net.sf.saxon.sapling.SaplingNode;
 import net.sf.saxon.sapling.SaplingText;
 import net.sf.saxon.sapling.Saplings;
+import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.store.StreamStore;
@@ -65,10 +67,15 @@ public class KeyrefParserTest {
     parser.setCurrentFile(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri());
     parser.write(Paths.get(tempDir.getAbsolutePath(), file.toString()).toFile());
 
-    assertXMLEqual(
-      new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
-      new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
-    );
+    try {
+      assertXMLEqual(
+        new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
+        new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
+      );
+    } catch (AssertionError e) {
+      System.err.write(Files.readAllBytes(Paths.get(tempDir.getAbsolutePath(), file.toString())));
+      throw e;
+    }
   }
 
   private static Stream<Arguments> testWriteArguments() {
@@ -81,7 +88,9 @@ public class KeyrefParserTest {
       Arguments.of(Paths.get("b.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("d.ditamap"), Paths.get("keys.ditamap")),
       Arguments.of(Paths.get("copy-to-keys.ditamap"), Paths.get("keys.ditamap")),
-      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap"))
+      Arguments.of(Paths.get("subdir", "c.ditamap"), Paths.get("subdir", "c.ditamap")),
+      Arguments.of(Paths.get("keytext.dita"), Paths.get("keytext.ditamap")),
+      Arguments.of(Paths.get("priority.dita"), Paths.get("priority.ditamap"))
     );
   }
 

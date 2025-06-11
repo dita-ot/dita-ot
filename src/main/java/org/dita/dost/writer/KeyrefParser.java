@@ -9,8 +9,7 @@
 package org.dita.dost.writer;
 
 import static javax.xml.XMLConstants.NULL_NS_URI;
-import static net.sf.saxon.s9api.streams.Predicates.hasLocalName;
-import static net.sf.saxon.s9api.streams.Predicates.isText;
+import static net.sf.saxon.s9api.streams.Predicates.*;
 import static net.sf.saxon.s9api.streams.Steps.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
@@ -101,15 +100,19 @@ public final class KeyrefParser extends AbstractXMLFilter {
     ki.add(new KeyrefInfo(TOPIC_INDEX_BASE, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_INDEXTERMREF, ATTRIBUTE_NAME_HREF, false, false));
     ki.add(new KeyrefInfo(TOPIC_LONGQUOTEREF, ATTRIBUTE_NAME_HREF, false, false));
-    ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, false, false));
-    final Map<String, String> objectAttrs = new HashMap<>();
-    objectAttrs.put(ATTRIBUTE_NAME_ARCHIVEKEYREFS, ATTRIBUTE_NAME_ARCHIVE);
-    objectAttrs.put(ATTRIBUTE_NAME_CLASSIDKEYREF, ATTRIBUTE_NAME_CLASSID);
-    objectAttrs.put(ATTRIBUTE_NAME_CODEBASEKEYREF, ATTRIBUTE_NAME_CODEBASE);
-    objectAttrs.put(ATTRIBUTE_NAME_DATAKEYREF, ATTRIBUTE_NAME_DATA);
+    ki.add(new KeyrefInfo(TOPIC_LONGDESCREF, ATTRIBUTE_NAME_HREF, true, false));
+    final Map<String, String> objectAttrs = Map.of(
+      ATTRIBUTE_NAME_ARCHIVEKEYREFS,
+      ATTRIBUTE_NAME_ARCHIVE,
+      ATTRIBUTE_NAME_CLASSIDKEYREF,
+      ATTRIBUTE_NAME_CLASSID,
+      ATTRIBUTE_NAME_CODEBASEKEYREF,
+      ATTRIBUTE_NAME_CODEBASE,
+      ATTRIBUTE_NAME_DATAKEYREF,
+      ATTRIBUTE_NAME_DATA
+    );
     ki.add(new KeyrefInfo(TOPIC_OBJECT, objectAttrs, true, false));
-    final Map<String, String> paramAttrs = new HashMap<>();
-    paramAttrs.put(ATTRIBUTE_NAME_KEYREF, ATTRIBUTE_NAME_VALUE);
+    final Map<String, String> paramAttrs = Map.of(ATTRIBUTE_NAME_KEYREF, ATTRIBUTE_NAME_VALUE);
     ki.add(new KeyrefInfo(TOPIC_PARAM, paramAttrs, true, false));
     keyrefInfos = Collections.unmodifiableList(ki);
   }
@@ -283,7 +286,11 @@ public final class KeyrefParser extends AbstractXMLFilter {
         } else if (!name.equals(elemName.peek())) {
           nonMatchingEndElement(name, elem);
         } else {
-          matchingEndElement(elem);
+          if (keyDef.version == 2) {
+            matchingEndElementV2(elem);
+          } else {
+            matchingEndElement(elem);
+          }
         }
       }
     }
@@ -350,6 +357,151 @@ public final class KeyrefParser extends AbstractXMLFilter {
           getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
         } else if (TOPIC_IMAGE.matches(currentElement.type)) {
           getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
+        }
+      }
+    } else {
+      if (TOPIC_LINK.matches(currentElement.type)) {
+        // If the key reference element is link or its specialization,
+        // should pull in the linktext
+        final List<XdmNode> linktext = elem
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
+        if (!linktext.isEmpty()) {
+          domToSax(linktext.get(0), true);
+        } else if (fallbackToNavtitleOrHref(elem)) {
+          final List<XdmNode> navtitleElement = elem
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
+          if (!navtitleElement.isEmpty()) {
+            writeLinktext(navtitleElement.get(0));
+          } else {
+            final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
+            if (navtitle != null && !navtitle.trim().isEmpty()) {
+              writeLinktext(navtitle);
+            } else {
+              final String hrefAtt = elem.attribute(ATTRIBUTE_NAME_HREF);
+              if (hrefAtt != null && !hrefAtt.trim().isEmpty()) {
+                writeLinktext(hrefAtt);
+              }
+            }
+          }
+        }
+      } else if (TOPIC_IMAGE.matches(currentElement.type)) {
+        // If the key reference element is an image or its specialization,
+        // should pull in the linktext
+        final List<XdmNode> linktext = elem
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
+        if (!linktext.isEmpty()) {
+          writeAlt(linktext.get(0));
+        } else if (fallbackToNavtitleOrHref(elem)) {
+          final List<XdmNode> navtitleElement = elem
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
+          if (!navtitleElement.isEmpty()) {
+            writeAlt(navtitleElement.get(0));
+          } else {
+            final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
+            if (navtitle != null && !navtitle.trim().isEmpty()) {
+              writeAlt(navtitle);
+            }
+          }
+        }
+      } else if (!currentElement.isEmpty && fallbackToNavtitleOrHref(elem)) {
+        final List<XdmNode> linktext = elem
+          .select(descendant().where(hasLocalName(TOPIC_LINKTEXT.localName)).first())
+          .asList();
+        if (!linktext.isEmpty()) {
+          domToSax(linktext.get(0), false);
+        } else {
+          final List<XdmNode> navtitleElement = elem
+            .select(descendant().where(hasLocalName(TOPIC_NAVTITLE.localName)).first())
+            .asList();
+          if (!navtitleElement.isEmpty()) {
+            domToSax(navtitleElement.get(0), false);
+          } else {
+            final String navtitle = elem.attribute(ATTRIBUTE_NAME_NAVTITLE);
+            if (navtitle != null && !navtitle.trim().isEmpty()) {
+              final char[] ch = navtitle.toCharArray();
+              getContentHandler().characters(ch, 0, ch.length);
+            } else {
+              final String hrefAtt = elem.attribute(ATTRIBUTE_NAME_HREF);
+              if (hrefAtt != null && !hrefAtt.trim().isEmpty()) {
+                final char[] ch = hrefAtt.toCharArray();
+                getContentHandler().characters(ch, 0, ch.length);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Current element name equals the key reference element
+   * grab keyword or term from key definition
+   */
+  private void matchingEndElementV2(final XdmNode elem) throws SAXException {
+    if (hasSubElem.peek() || currentElement == null) {
+      return;
+    }
+
+    final Optional<XdmNode> keyText = elem
+      .select(descendant().where(MAP_KEYTEXT::matches))
+      .findFirst()
+      .or(() ->
+        elem
+          .select(descendant().where(TOPIC_TITLEALT::matches).where(attributeEq(ATTRIBUTE_NAME_TITLE_ROLE, "linking")))
+          .findFirst()
+      )
+      .or(() ->
+        elem
+          .select(
+            descendant().where(TOPIC_TITLEALT::matches)
+            //                    .where(attributeEq(ATTRIBUTE_NAME_TITLE_ROLE, "navigation"))
+          )
+          .findFirst()
+      );
+    final Optional<XdmNode> shortdesc = elem.select(descendant().where(TOPIC_SHORTDESC::matches)).findFirst();
+    // XXX: No need to look for term as content model for keywords doesn't allow it
+    //                        if (nodeList.getLength() == 0) {
+    //                            nodeList = elem.descendant(TOPIC_TERM.localName);
+    //                        }
+    if (keyText.isPresent()) {
+      if (!currentElement.hasNestedElements) {
+        if (!currentElement.isEmpty) {
+          domToSax(keyText.get(), false);
+        }
+      } else {
+        // If the key reference element carries href attribute
+        // all keyword or term are used.
+        if (TOPIC_LINK.matches(currentElement.type)) {
+          final AttributesImpl atts = new AttributesImpl();
+          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_LINKTEXT.toString());
+          getContentHandler().startElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName, atts);
+        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
+          final AttributesImpl atts = new AttributesImpl();
+          XMLUtils.addOrSetAttribute(atts, ATTRIBUTE_NAME_CLASS, TOPIC_ALT.toString());
+          getContentHandler().startElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName, atts);
+        }
+        if (!currentElement.isEmpty) {
+          domToSax(keyText.get(), false);
+        }
+        if (TOPIC_LINK.matches(currentElement.type)) {
+          getContentHandler().endElement(NULL_NS_URI, TOPIC_LINKTEXT.localName, TOPIC_LINKTEXT.localName);
+        } else if (TOPIC_IMAGE.matches(currentElement.type)) {
+          getContentHandler().endElement(NULL_NS_URI, TOPIC_ALT.localName, TOPIC_ALT.localName);
+        }
+
+        if (shortdesc.isPresent()) {
+          for (var cls : new DitaClass[] { TOPIC_LINK, TOPIC_XREF }) {
+            if (cls.matches(currentElement.type)) {
+              var atts = new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_SHORTDESC.toString()).build();
+              getContentHandler().startElement(NULL_NS_URI, TOPIC_SHORTDESC.localName, TOPIC_SHORTDESC.localName, atts);
+              domToSax(shortdesc.get(), false);
+              getContentHandler().endElement(NULL_NS_URI, TOPIC_SHORTDESC.localName, TOPIC_SHORTDESC.localName);
+            }
+          }
         }
       }
     } else {
@@ -907,12 +1059,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
      * @param hasNestedElements element is a reference type
      */
     KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean hasNestedElements) {
-      final Map<String, String> attrs = new HashMap<>();
-      attrs.put(ATTRIBUTE_NAME_KEYREF, refAttr);
-      this.type = type;
-      this.attrs = attrs;
-      this.isEmpty = isEmpty;
-      this.hasNestedElements = hasNestedElements;
+      this(type, Map.of(ATTRIBUTE_NAME_KEYREF, refAttr), isEmpty, hasNestedElements);
     }
   }
 }

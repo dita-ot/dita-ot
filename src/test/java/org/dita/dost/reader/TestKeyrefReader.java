@@ -647,7 +647,7 @@ public class TestKeyrefReader {
   }
 
   private KeyDef keyDef(String key) {
-    return new KeyDef(key, URI.create("key.dita"), "local", "dita", null, null);
+    return new KeyDef(key, URI.create("key.dita"), "local", "dita", null, null, 1);
   }
 
   private KeyScope keyScope(String name, List<String> keydefs, List<KeyScope> keyscopes) {
