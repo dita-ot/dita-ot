@@ -22,6 +22,8 @@
   }
 
   .note__body {
+    /* Note body is a <div> to keep HTML5 valid for block element children;
+       "display: inline" allows one-line rendering if children are inline (#3955) */
     display: inline;
   }
 }
