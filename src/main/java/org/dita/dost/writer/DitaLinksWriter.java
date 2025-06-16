@@ -11,8 +11,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.AttributesBuilder;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -176,7 +175,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     for (final Element desc : getChildElements(dst, TOPIC_DESC, true)) {
       for (final Element elem : getChildElements(desc, true)) {
         final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
-        final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+        final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
         if (href != null && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
           final URI abs = baseURI.resolve(href.getValue());
           final URI rel = getRelativePath(currentFile, abs);

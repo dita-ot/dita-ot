@@ -241,6 +241,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
       Attributes resAtts = atts;
       if (
         (TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts)) &&
+        // FIXME: read from current or scope stack
         !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
       ) {
         final String value = atts.getValue(ATTRIBUTE_NAME_HREF);

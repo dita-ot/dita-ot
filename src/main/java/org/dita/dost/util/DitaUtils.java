@@ -11,10 +11,9 @@ package org.dita.dost.util;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.XMLUtils.getCascadeValue;
 
+import java.util.Objects;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import java.util.Objects;
 
 public class DitaUtils {
 
