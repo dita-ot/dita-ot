@@ -60,6 +60,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
       final URI href = toURI(res.getValue(ATTRIBUTE_NAME_HREF));
       final URI copyTo = toURI(res.getValue(ATTRIBUTE_NAME_COPY_TO));
       final URI source = copyTo != null ? copyTo : href;
+      // FIXME: cascade
       String currentScope = res.getValue(ATTRIBUTE_NAME_SCOPE);
       String scope = getCascadingScope(currentScope);
       final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);

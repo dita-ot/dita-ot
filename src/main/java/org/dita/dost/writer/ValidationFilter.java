@@ -276,6 +276,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
    */
   private AttributesImpl validateScope(final Attributes atts, final AttributesImpl modified) {
     AttributesImpl res = modified;
+    // FIXME: cascade
     final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (scope == null && href != null && href.isAbsolute()) {
@@ -442,6 +443,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     if (MAP_TOPICREF.matches(cls)) {
       final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+      // FIXME: cascade
       final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
       final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
       if (format == null && isLocalScope(scope) && href != null) {

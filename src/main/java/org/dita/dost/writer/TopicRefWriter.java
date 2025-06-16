@@ -119,6 +119,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
       return false;
     }
 
+    // FIXME: cascade
     String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
     if (formatValue == null) {

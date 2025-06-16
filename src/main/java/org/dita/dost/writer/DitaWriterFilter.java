@@ -156,6 +156,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         }
         attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
       } else if (ATTRIBUTE_NAME_HREF.equals(attName) || ATTRIBUTE_NAME_COPY_TO.equals(attName)) {
+        // FIXME: cascade
         if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
           if (res == null) {
             res = new AttributesImpl(atts);

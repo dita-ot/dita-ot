@@ -219,6 +219,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static final class CopyToFilter extends XMLFilterImpl {
 
+    private final Deque<String> scopeStack = new ArrayDeque<>();
+
     private final File workdir;
     private final File path2project;
     private final File path2rootmap;
@@ -238,11 +240,17 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
       throws SAXException {
+      var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      if (scope == null) {
+        scope = scopeStack.peek();
+      }
+      scopeStack.push(scope);
+
       Attributes resAtts = atts;
       if (
         (TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts)) &&
         // FIXME: read from current or scope stack
-        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
+        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, scope)
       ) {
         final String value = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (value != null && !value.startsWith("#")) {
@@ -250,6 +258,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         }
       }
       getContentHandler().startElement(uri, localName, qName, resAtts);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+      getContentHandler().endElement(uri, localName, qName);
+
+      scopeStack.pop();
     }
 
     private String updateHref(final String value) {

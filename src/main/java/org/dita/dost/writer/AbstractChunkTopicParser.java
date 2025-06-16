@@ -296,6 +296,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
       }
     }
     final String href = resAtts.getValue(ATTRIBUTE_NAME_HREF);
+    // FIXME: cascade
     final String scope = resAtts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
       // if current @href value needs to be updated

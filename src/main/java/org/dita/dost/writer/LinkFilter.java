@@ -61,6 +61,7 @@ public class LinkFilter extends AbstractXMLFilter {
 
   private boolean hasLocalDitaLink(final Attributes atts) {
     final boolean hasHref = atts.getIndex(ATTRIBUTE_NAME_HREF) != -1;
+    // FIXME: cascade
     final boolean notExternal = !ATTR_SCOPE_VALUE_EXTERNAL.equals(atts.getValue(ATTRIBUTE_NAME_SCOPE));
     if (hasHref && notExternal) {
       return true;

@@ -115,6 +115,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    * Stack for @processing-role value
    */
   private final Stack<String> processRoleStack = new Stack<>();
+  private final Stack<String> scopeStack = new Stack<>();
   /**
    * Topics with processing role of "resource-only"
    */
@@ -382,6 +383,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     schemeSet.clear();
     schemeRefSet.clear();
     processRoleStack.clear();
+    scopeStack.clear();
     isRootElement = true;
     rootClass = null;
     // Don't clean resourceOnlySet, normalProcessingRoleSet, or nonTopicrefReferenceSet
@@ -409,6 +411,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       processingRole = processRoleStack.peek();
     }
     processRoleStack.push(processingRole);
+    String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    if (scope == null) {
+      scope = scopeStack.peek();
+    }
+    scopeStack.push(scope);
 
     final DitaClass cls = DitaClass.getInstance(atts);
     if (
@@ -419,7 +426,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-    String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (scope == null && href != null && href.isAbsolute()) {
       switch (href.getScheme()) {
         case "http", "https", "ftp", "ftps", "sftp", "mailto" -> scope = ATTR_SCOPE_VALUE_EXTERNAL;
@@ -469,14 +475,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
       parseConrefAttr(atts);
       if (PR_D_CODEREF.matches(cls)) {
-        parseCoderef(atts);
+        parseCoderef(atts, scope);
       } else if (TOPIC_OBJECT.matches(cls)) {
         parseObject(atts);
       } else if (MAP_TOPICREF.matches(cls)) {
-        parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-        parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+        parseAttribute(atts, ATTRIBUTE_NAME_HREF, scope);
+        parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO, scope);
       } else {
-        parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+        parseAttribute(atts, ATTRIBUTE_NAME_HREF, scope);
       }
       parseConactionAttr(atts);
       parseConkeyrefAttr(atts);
@@ -486,12 +492,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     getContentHandler().startElement(uri, localName, qName, atts);
   }
 
-  private void parseCoderef(final Attributes atts) {
+  private void parseCoderef(final Attributes atts, final String attrScope) {
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (href == null) {
       return;
     }
-    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (
       ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
       ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
@@ -563,6 +568,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     // @processing-role
     processRoleStack.pop();
+    scopeStack.pop();
     classes.pop();
 
     getContentHandler().endElement(uri, localName, qName);
@@ -584,7 +590,8 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    * @param atts     all attributes
    * @param attrName attributes to process
    */
-  private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
+  private void parseAttribute(final Attributes atts, final String attrName, final String attrScope)
+    throws SAXException {
     URI attrValue = toURI(atts.getValue(attrName));
     if (attrValue == null) {
       return;
@@ -597,7 +604,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
-    String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (attrScope == null && ATTRIBUTE_NAME_HREF.equals(attrName) && attrValue.isAbsolute()) {
       switch (attrValue.getScheme()) {
         case "http", "https", "ftp", "ftps", "sftp", "mailto" -> attrScope = ATTR_SCOPE_VALUE_EXTERNAL;

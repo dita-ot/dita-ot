@@ -12,10 +12,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.KeyDef;
@@ -42,6 +39,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
   private final Map<String, KeyDef> keysDefMap;
   /** Map to store multi-level keyrefs */
   private final Map<String, String> keysRefMap;
+  private final Deque<String> scopeStack = new ArrayDeque<>();
 
   /**
    * Constructor.
@@ -77,14 +75,28 @@ public final class KeydefFilter extends AbstractXMLFilter {
     currentDir = null;
     keysDefMap.clear();
     keysRefMap.clear();
+    scopeStack.clear();
   }
 
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
-    handleKeysAttr(atts);
+    var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    if (scope == null) {
+      scope = scopeStack.peek();
+    }
+    scopeStack.push(scope);
+
+    handleKeysAttr(atts, scope);
 
     getContentHandler().startElement(uri, localName, qName, atts);
+  }
+
+  @Override
+  public void endElement(String uri, String localName, String qName) throws SAXException {
+    getContentHandler().endElement(uri, localName, qName);
+
+    scopeStack.pop();
   }
 
   /**
@@ -102,7 +114,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
    *
    * @param atts all attributes
    */
-  private void handleKeysAttr(final Attributes atts) {
+  private void handleKeysAttr(final Attributes atts, final String attrScope) {
     final String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
     if (attrValue != null) {
       URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -118,7 +130,6 @@ public final class KeydefFilter extends AbstractXMLFilter {
       for (final String key : attrValue.trim().split("\\s+")) {
         if (!keysDefMap.containsKey(key)) {
           if (target != null && !target.toString().isEmpty()) {
-            final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
             final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
             if (
               attrScope != null &&

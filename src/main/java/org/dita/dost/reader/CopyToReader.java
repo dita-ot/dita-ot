@@ -44,6 +44,7 @@ public final class CopyToReader extends AbstractXMLFilter {
    * Stack for @processing-role value
    */
   private final Stack<String> processRoleStack = new Stack<>();
+  private final Stack<String> scopeStack = new Stack<>();
 
   /**
    * Get the copy-to map.
@@ -71,6 +72,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     chunkLevel = 0;
     copyToMap.clear();
     processRoleStack.clear();
+    scopeStack.clear();
   }
 
   @Override
@@ -88,6 +90,11 @@ public final class CopyToReader extends AbstractXMLFilter {
       processingRole = processRoleStack.peek();
     }
     processRoleStack.push(processingRole);
+    String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    if (scope == null) {
+      scope = scopeStack.peek();
+    }
+    scopeStack.push(scope);
 
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
@@ -98,7 +105,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     }
 
     if (MAP_TOPICREF.matches(classValue)) {
-      parseAttribute(atts);
+      parseAttribute(atts, scopeStack.peek());
     }
 
     getContentHandler().startElement(uri, localName, qName, atts);
@@ -107,6 +114,7 @@ public final class CopyToReader extends AbstractXMLFilter {
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     processRoleStack.pop();
+    scopeStack.pop();
 
     if (chunkLevel > 0) {
       chunkLevel--;
@@ -130,12 +138,11 @@ public final class CopyToReader extends AbstractXMLFilter {
    *
    * @param atts all attributes
    */
-  private void parseAttribute(final Attributes atts) {
+  private void parseAttribute(final Attributes atts, String attrScope) {
     URI target = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
     if (target == null) {
       return;
     }
-    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 
     // external resource is filtered here.
     if (

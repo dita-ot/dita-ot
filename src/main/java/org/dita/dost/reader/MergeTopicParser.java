@@ -226,6 +226,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
   private void handleHref(final String classValue, final AttributesImpl atts) {
     final URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (attValue != null) {
+      // FIXME: cascade
       final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
       if (isLocalScope(scopeValue) && attValue.getScheme() == null) {
         final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
