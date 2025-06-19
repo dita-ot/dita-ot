@@ -167,7 +167,7 @@ class AttributeStackTest {
     assertThrows(IllegalArgumentException.class, () -> stack.peek("unknown"));
 
     AttributeStack emptyStack = new AttributeStack("test");
-    assertThrows(NullPointerException.class, () -> emptyStack.peek("test"));
+    assertThrows(IllegalStateException.class, () -> emptyStack.peek("test"));
   }
 
   @Test
