@@ -219,7 +219,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static final class CopyToFilter extends XMLFilterImpl {
 
-    private final Deque<String> scopeStack = new ArrayDeque<>();
+    private final Deque<String> scopeStack = new LinkedList<>();
 
     private final File workdir;
     private final File path2project;

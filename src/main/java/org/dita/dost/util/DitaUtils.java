@@ -38,8 +38,12 @@ public class DitaUtils {
     return scope == null || scope.isEmpty() || scope.equals(ATTR_SCOPE_VALUE_LOCAL);
   }
 
+  public static boolean isExternalScope(final String scope) {
+    return Objects.equals(scope, ATTR_SCOPE_VALUE_EXTERNAL);
+  }
+
   public static boolean isExternalScope(final Element elem) {
-    return Objects.equals(getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE), ATTR_SCOPE_VALUE_EXTERNAL);
+    return isExternalScope(getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE));
   }
 
   public static boolean isNormalProcessRole(final Element elem) {

@@ -14,9 +14,7 @@ import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
@@ -43,8 +41,9 @@ public final class CopyToReader extends AbstractXMLFilter {
   /**
    * Stack for @processing-role value
    */
-  private final Stack<String> processRoleStack = new Stack<>();
-  private final Stack<String> scopeStack = new Stack<>();
+  private final Deque<String> processRoleStack = new LinkedList<>();
+  private final Deque<String> scopeStack = new LinkedList<>();
+  private final Deque<String> formatStack = new LinkedList<>();
 
   /**
    * Get the copy-to map.
@@ -90,11 +89,16 @@ public final class CopyToReader extends AbstractXMLFilter {
       processingRole = processRoleStack.peek();
     }
     processRoleStack.push(processingRole);
-    String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (scope == null) {
       scope = scopeStack.peek();
     }
     scopeStack.push(scope);
+    var format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+    if (format == null) {
+      format = formatStack.peek();
+    }
+    formatStack.push(format);
 
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
@@ -115,6 +119,7 @@ public final class CopyToReader extends AbstractXMLFilter {
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     processRoleStack.pop();
     scopeStack.pop();
+    formatStack.pop();
 
     if (chunkLevel > 0) {
       chunkLevel--;
@@ -199,7 +204,7 @@ public final class CopyToReader extends AbstractXMLFilter {
       throw new IllegalArgumentException();
       //return ATTR_FORMAT_VALUE_HTML;
     } else {
-      return atts.getValue(ATTRIBUTE_NAME_FORMAT);
+      return formatStack.peek();
     }
   }
 

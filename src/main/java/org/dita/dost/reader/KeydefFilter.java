@@ -39,7 +39,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
   private final Map<String, KeyDef> keysDefMap;
   /** Map to store multi-level keyrefs */
   private final Map<String, String> keysRefMap;
-  private final Deque<String> scopeStack = new ArrayDeque<>();
+  private final Deque<String> scopeStack = new LinkedList<>();
+  private final Deque<String> formatStack = new LinkedList<>();
 
   /**
    * Constructor.
@@ -76,6 +77,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
     keysDefMap.clear();
     keysRefMap.clear();
     scopeStack.clear();
+    formatStack.clear();
   }
 
   @Override
@@ -86,8 +88,13 @@ public final class KeydefFilter extends AbstractXMLFilter {
       scope = scopeStack.peek();
     }
     scopeStack.push(scope);
+    var format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+    if (format == null) {
+      format = formatStack.peek();
+    }
+    formatStack.push(format);
 
-    handleKeysAttr(atts, scope);
+    handleKeysAttr(atts);
 
     getContentHandler().startElement(uri, localName, qName, atts);
   }
@@ -114,7 +121,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
    *
    * @param atts all attributes
    */
-  private void handleKeysAttr(final Attributes atts, final String attrScope) {
+  private void handleKeysAttr(final Attributes atts) {
     final String attrValue = atts.getValue(ATTRIBUTE_NAME_KEYS);
     if (attrValue != null) {
       URI target = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -122,7 +129,6 @@ public final class KeydefFilter extends AbstractXMLFilter {
       if (copyTo != null) {
         target = copyTo;
       }
-
       final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
 
       // Many keys can be defined in a single definition, like
@@ -130,7 +136,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
       for (final String key : attrValue.trim().split("\\s+")) {
         if (!keysDefMap.containsKey(key)) {
           if (target != null && !target.toString().isEmpty()) {
-            final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+            final String attrScope = scopeStack.peek();
+            final String attrFormat = formatStack.peek();
             if (
               attrScope != null &&
               (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))
