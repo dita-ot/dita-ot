@@ -52,8 +52,7 @@ public final class MergeMapParser extends XMLFilterImpl {
   private File tempdir = null;
 
   private final Stack<String> processStack;
-  private final Deque<String> scopeStack;
-  private final Deque<String> formatStack;
+  private final AttributeStack attributeStack;
   private int processLevel;
   private final ByteArrayOutputStream topicBuffer;
   private final SAXTransformerFactory stf;
@@ -66,8 +65,7 @@ public final class MergeMapParser extends XMLFilterImpl {
    */
   public MergeMapParser() {
     processStack = new Stack<>();
-    scopeStack = new LinkedList<>();
-    formatStack = new LinkedList<>();
+    attributeStack = new AttributeStack(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
     processLevel = 0;
     util = new MergeUtils();
     topicParser = new MergeTopicParser(util);
@@ -160,8 +158,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       }
     }
     getContentHandler().endElement(uri, localName, qName);
-    scopeStack.pop();
-    formatStack.pop();
+    attributeStack.pop();
   }
 
   @Override
@@ -174,16 +171,7 @@ public final class MergeMapParser extends XMLFilterImpl {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
     throws SAXException {
-    var scope = attributes.getValue(ATTRIBUTE_NAME_SCOPE);
-    if (scope == null) {
-      scope = scopeStack.peek();
-    }
-    scopeStack.push(scope);
-    var format = attributes.getValue(ATTRIBUTE_NAME_FORMAT);
-    if (format == null) {
-      format = formatStack.peek();
-    }
-    formatStack.push(format);
+    attributeStack.push(attributes);
 
     final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
     if (attrValue != null) {
@@ -205,6 +193,8 @@ public final class MergeMapParser extends XMLFilterImpl {
       URI attValue = toURI(attributes.getValue(ATTRIBUTE_NAME_HREF));
       if (attValue != null) {
         atts = new AttributesImpl(attributes);
+        var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+        var format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
         if (isLocalScope(scope) && isDitaFormat(format)) {
           final URI ohref = attValue;
           final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));

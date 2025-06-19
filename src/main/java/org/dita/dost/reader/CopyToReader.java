@@ -16,6 +16,7 @@ import static org.dita.dost.util.URLUtils.toURI;
 import java.net.URI;
 import java.util.*;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -42,8 +43,7 @@ public final class CopyToReader extends AbstractXMLFilter {
    * Stack for @processing-role value
    */
   private final Deque<String> processRoleStack = new LinkedList<>();
-  private final Deque<String> scopeStack = new LinkedList<>();
-  private final Deque<String> formatStack = new LinkedList<>();
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   /**
    * Get the copy-to map.
@@ -71,7 +71,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     chunkLevel = 0;
     copyToMap.clear();
     processRoleStack.clear();
-    scopeStack.clear();
+    attributeStack.clear();
   }
 
   @Override
@@ -89,16 +89,7 @@ public final class CopyToReader extends AbstractXMLFilter {
       processingRole = processRoleStack.peek();
     }
     processRoleStack.push(processingRole);
-    var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-    if (scope == null) {
-      scope = scopeStack.peek();
-    }
-    scopeStack.push(scope);
-    var format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-    if (format == null) {
-      format = formatStack.peek();
-    }
-    formatStack.push(format);
+    attributeStack.push(atts);
 
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
@@ -109,7 +100,7 @@ public final class CopyToReader extends AbstractXMLFilter {
     }
 
     if (MAP_TOPICREF.matches(classValue)) {
-      parseAttribute(atts, scopeStack.peek());
+      parseAttribute(atts);
     }
 
     getContentHandler().startElement(uri, localName, qName, atts);
@@ -118,8 +109,7 @@ public final class CopyToReader extends AbstractXMLFilter {
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     processRoleStack.pop();
-    scopeStack.pop();
-    formatStack.pop();
+    attributeStack.pop();
 
     if (chunkLevel > 0) {
       chunkLevel--;
@@ -143,13 +133,14 @@ public final class CopyToReader extends AbstractXMLFilter {
    *
    * @param atts all attributes
    */
-  private void parseAttribute(final Attributes atts, String attrScope) {
+  private void parseAttribute(final Attributes atts) {
     URI target = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
     if (target == null) {
       return;
     }
 
     // external resource is filtered here.
+    var attrScope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
     if (
       ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
       ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
@@ -204,7 +195,7 @@ public final class CopyToReader extends AbstractXMLFilter {
       throw new IllegalArgumentException();
       //return ATTR_FORMAT_VALUE_HTML;
     } else {
-      return formatStack.peek();
+      return attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
     }
   }
 

@@ -15,6 +15,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.Map.Entry;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
@@ -39,8 +40,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
   private final Map<String, KeyDef> keysDefMap;
   /** Map to store multi-level keyrefs */
   private final Map<String, String> keysRefMap;
-  private final Deque<String> scopeStack = new LinkedList<>();
-  private final Deque<String> formatStack = new LinkedList<>();
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   /**
    * Constructor.
@@ -76,23 +76,13 @@ public final class KeydefFilter extends AbstractXMLFilter {
     currentDir = null;
     keysDefMap.clear();
     keysRefMap.clear();
-    scopeStack.clear();
-    formatStack.clear();
+    attributeStack.clear();
   }
 
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
-    var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-    if (scope == null) {
-      scope = scopeStack.peek();
-    }
-    scopeStack.push(scope);
-    var format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-    if (format == null) {
-      format = formatStack.peek();
-    }
-    formatStack.push(format);
+    attributeStack.push(atts);
 
     handleKeysAttr(atts);
 
@@ -103,7 +93,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
   public void endElement(String uri, String localName, String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
 
-    scopeStack.pop();
+    attributeStack.pop();
   }
 
   /**
@@ -136,8 +126,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
       for (final String key : attrValue.trim().split("\\s+")) {
         if (!keysDefMap.containsKey(key)) {
           if (target != null && !target.toString().isEmpty()) {
-            final String attrScope = scopeStack.peek();
-            final String attrFormat = formatStack.peek();
+            final String attrScope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+            final String attrFormat = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
             if (
               attrScope != null &&
               (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))

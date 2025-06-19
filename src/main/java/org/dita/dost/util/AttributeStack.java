@@ -60,4 +60,8 @@ public class AttributeStack {
     Arrays.fill(stack, baseIndex, baseIndex + attributeCount, null);
     top--;
   }
+
+  public void clear() {
+    top = -1;
+  }
 }

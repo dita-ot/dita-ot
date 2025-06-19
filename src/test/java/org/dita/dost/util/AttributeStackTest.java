@@ -207,4 +207,12 @@ class AttributeStackTest {
       }
     }
   }
+
+  @Test
+  void clear() {
+    stack.push(new AttributesBuilder().add("foo", "value").build());
+
+    stack.clear();
+    assertThrows(IllegalStateException.class, () -> stack.peek("foo"));
+  }
 }
