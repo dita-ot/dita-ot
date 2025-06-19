@@ -14,11 +14,18 @@ public class AttributeStack {
   }
 
   public void push(Attributes attrs) {
-    var values = new String[names.length];
-    for (int i = 0; i < values.length; i++) {
-      values[i] = attrs.getValue(names[i]);
+    var res = new String[names.length];
+    for (int i = 0; i < res.length; i++) {
+      var value = attrs.getValue(names[i]);
+      if (value == null) {
+        var previous = stack.peek();
+        if (previous != null) {
+          value = previous[i];
+        }
+      }
+      res[i] = value;
     }
-    stack.push(values);
+    stack.push(res);
   }
 
   public String peek(String name) {

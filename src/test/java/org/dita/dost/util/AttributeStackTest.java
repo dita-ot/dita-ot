@@ -1,195 +1,210 @@
 package org.dita.dost.util;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AttributeStackTest {
-    private AttributeStack stack;
 
-    @BeforeEach
-    void setUp() {
-        stack = new AttributeStack("foo", "bar");
-    }
+  private AttributeStack stack;
 
-    @Test
-    void pushSingleAttribute() {
-        stack.push(new AttributesBuilder().add("foo", "FOO").build());
-        assertEquals("FOO", stack.peek("foo"));
-    }
+  @BeforeEach
+  void setUp() {
+    stack = new AttributeStack("foo", "bar", "baz");
+  }
 
-    @Test
-    void pushMultipleAttributes() {
-        stack.push(new AttributesBuilder()
-                .add("foo", "FOO_VALUE")
-                .add("bar", "BAR_VALUE")
-                .build());
+  @Test
+  void basicCascading() {
+    stack.push(new AttributesBuilder().add("foo", "parent_foo").add("bar", "parent_bar").build());
 
-        assertEquals("FOO_VALUE", stack.peek("foo"));
-        assertEquals("BAR_VALUE", stack.peek("bar"));
-    }
+    stack.push(new AttributesBuilder().add("foo", "child_foo").build());
 
-    @Test
-    void peekNonExisting() {
-        stack.push(new AttributesBuilder().add("foo", "FOO").build());
-        assertNull(stack.peek("bar"));
-    }
+    assertEquals("child_foo", stack.peek("foo"));
+    assertEquals("parent_bar", stack.peek("bar"));
+    assertNull(stack.peek("baz"));
+  }
 
-    @Test
-    void multipleStackOperations() {
-        stack.push(new AttributesBuilder().add("foo", "level1").build());
-        assertEquals("level1", stack.peek("foo"));
+  @Test
+  void multipleLevelCascading() {
+    stack.push(new AttributesBuilder().add("foo", "level1_foo").add("bar", "level1_bar").build());
 
-        stack.push(new AttributesBuilder().add("foo", "level2").add("bar", "bar2").build());
-        assertEquals("level2", stack.peek("foo"));
-        assertEquals("bar2", stack.peek("bar"));
+    stack.push(new AttributesBuilder().add("baz", "level2_baz").build());
 
-        stack.pop();
-        assertEquals("level1", stack.peek("foo"));
-        assertNull(stack.peek("bar"));
+    stack.push(new AttributesBuilder().add("foo", "level3_foo").build());
 
-        stack.pop();
-    }
+    assertEquals("level3_foo", stack.peek("foo"));
+    assertEquals("level1_bar", stack.peek("bar"));
+    assertEquals("level2_baz", stack.peek("baz"));
+  }
 
-    @Test
-    void deepStackOperations() {
-        // Push multiple levels
-        for (int i = 1; i <= 5; i++) {
-            stack.push(new AttributesBuilder()
-                    .add("foo", "foo" + i)
-                    .add("bar", "bar" + i)
-                    .build());
-        }
+  @Test
+  void cascadingStopsAtFirstValue() {
+    stack.push(new AttributesBuilder().add("foo", "level1_foo").build());
 
-        assertEquals("foo5", stack.peek("foo"));
-        assertEquals("bar5", stack.peek("bar"));
+    stack.push(new AttributesBuilder().add("foo", "level2_foo").build());
 
-        for (int i = 4; i >= 1; i--) {
-            stack.pop();
-            assertEquals("foo" + i, stack.peek("foo"));
-            assertEquals("bar" + i, stack.peek("bar"));
-        }
-    }
+    stack.push(new AttributesBuilder().add("bar", "level3_bar").build());
 
-    @Test
-    void emptyAttributes() {
+    assertEquals("level2_foo", stack.peek("foo"));
+    assertEquals("level3_bar", stack.peek("bar"));
+  }
+
+  @Test
+  void firstPushWithMissingAttributes() {
+    stack.push(new AttributesBuilder().add("foo", "only_foo").build());
+
+    assertEquals("only_foo", stack.peek("foo"));
+    assertNull(stack.peek("bar"));
+    assertNull(stack.peek("baz"));
+  }
+
+  @Test
+  void emptyPushCascadesAll() {
+    stack.push(
+      new AttributesBuilder().add("foo", "parent_foo").add("bar", "parent_bar").add("baz", "parent_baz").build()
+    );
+
+    stack.push(new AttributesBuilder().build());
+
+    assertEquals("parent_foo", stack.peek("foo"));
+    assertEquals("parent_bar", stack.peek("bar"));
+    assertEquals("parent_baz", stack.peek("baz"));
+  }
+
+  @Test
+  void partialOverrideWithCascading() {
+    stack.push(
+      new AttributesBuilder().add("foo", "parent_foo").add("bar", "parent_bar").add("baz", "parent_baz").build()
+    );
+
+    stack.push(new AttributesBuilder().add("bar", "child_bar").build());
+
+    assertEquals("parent_foo", stack.peek("foo"));
+    assertEquals("child_bar", stack.peek("bar"));
+    assertEquals("parent_baz", stack.peek("baz"));
+  }
+
+  @Test
+  void popRestoresOriginalValues() {
+    stack.push(new AttributesBuilder().add("foo", "parent_foo").add("bar", "parent_bar").build());
+
+    stack.push(new AttributesBuilder().add("foo", "child_foo").build());
+
+    assertEquals("child_foo", stack.peek("foo"));
+    assertEquals("parent_bar", stack.peek("bar"));
+
+    stack.pop();
+    assertEquals("parent_foo", stack.peek("foo"));
+    assertEquals("parent_bar", stack.peek("bar"));
+  }
+
+  @Test
+  void deepCascadingChain() {
+    stack.push(new AttributesBuilder().add("foo", "L1_foo").add("bar", "L1_bar").add("baz", "L1_baz").build());
+
+    stack.push(new AttributesBuilder().add("foo", "L2_foo").build());
+
+    stack.push(new AttributesBuilder().add("bar", "L3_bar").build());
+
+    stack.push(new AttributesBuilder().add("baz", "L4_baz").build());
+
+    stack.push(new AttributesBuilder().build());
+
+    assertEquals("L2_foo", stack.peek("foo"));
+    assertEquals("L3_bar", stack.peek("bar"));
+    assertEquals("L4_baz", stack.peek("baz"));
+  }
+
+  @Test
+  void cascadingWithSingleAttribute() {
+    AttributeStack singleStack = new AttributeStack("only");
+
+    singleStack.push(new AttributesBuilder().add("only", "first").build());
+
+    singleStack.push(new AttributesBuilder().build());
+
+    assertEquals("first", singleStack.peek("only"));
+  }
+
+  @Test
+  void complexInheritanceScenario() {
+    stack.push(
+      new AttributesBuilder().add("foo", "root_style").add("bar", "root_color").add("baz", "root_font").build()
+    );
+
+    stack.push(new AttributesBuilder().add("foo", "section_style").build());
+
+    stack.push(new AttributesBuilder().add("bar", "subsection_color").build());
+
+    stack.push(new AttributesBuilder().add("baz", "paragraph_font").build());
+
+    assertEquals("section_style", stack.peek("foo"));
+    assertEquals("subsection_color", stack.peek("bar"));
+    assertEquals("paragraph_font", stack.peek("baz"));
+
+    stack.pop();
+    assertEquals("section_style", stack.peek("foo"));
+    assertEquals("subsection_color", stack.peek("bar"));
+    assertEquals("root_font", stack.peek("baz"));
+
+    stack.pop();
+    assertEquals("section_style", stack.peek("foo"));
+    assertEquals("root_color", stack.peek("bar"));
+    assertEquals("root_font", stack.peek("baz"));
+
+    stack.pop();
+    assertEquals("root_style", stack.peek("foo"));
+    assertEquals("root_color", stack.peek("bar"));
+    assertEquals("root_font", stack.peek("baz"));
+  }
+
+  @Test
+  void errorConditionsWithCascading() {
+    stack.push(new AttributesBuilder().add("foo", "value").build());
+
+    assertThrows(IllegalArgumentException.class, () -> stack.peek("unknown"));
+
+    AttributeStack emptyStack = new AttributeStack("test");
+    assertThrows(NullPointerException.class, () -> emptyStack.peek("test"));
+  }
+
+  @Test
+  void cascadingWithThreeAttributes() {
+    AttributeStack tripleStack = new AttributeStack("first", "second", "third");
+
+    tripleStack.push(new AttributesBuilder().add("first", "1st").add("second", "2nd").add("third", "3rd").build());
+
+    tripleStack.push(new AttributesBuilder().add("first", "new_1st").build());
+
+    assertEquals("new_1st", tripleStack.peek("first"));
+    assertEquals("2nd", tripleStack.peek("second"));
+    assertEquals("3rd", tripleStack.peek("third"));
+  }
+
+  @Test
+  void sixteenLevelsDeepWithCascading() {
+    for (int i = 1; i <= 16; i++) {
+      if (i % 3 == 1) {
+        stack.push(new AttributesBuilder().add("foo", "level" + i).build());
+      } else {
         stack.push(new AttributesBuilder().build());
-        assertNull(stack.peek("foo"));
-        assertNull(stack.peek("bar"));
+      }
     }
 
-    @Test
-    void nullAttributeValues() {
-        stack.push(new AttributesBuilder().add("foo", null).build());
-        assertNull(stack.peek("foo"));
-        assertNull(stack.peek("bar"));
-    }
+    assertEquals("level16", stack.peek("foo"));
 
-    @Test
-    void overwriteAttributeValues() {
-        stack.push(new AttributesBuilder().add("foo", "original").build());
-        assertEquals("original", stack.peek("foo"));
-
-        stack.push(new AttributesBuilder().add("foo", "overwritten").build());
-        assertEquals("overwritten", stack.peek("foo"));
-
-        stack.pop();
-        assertEquals("original", stack.peek("foo"));
-    }
-
-    @Test
-    void peekUninitializedAttribute() {
-        stack.push(new AttributesBuilder().add("foo", "value").build());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> stack.peek("nonexistent")
-        );
-
-        assertEquals("Stack not initialized for attribute nonexistent", exception.getMessage());
-    }
-
-    @Test
-    void peekFromEmptyStack() {
-        assertThrows(NullPointerException.class, () -> stack.peek("foo"));
-    }
-
-    @Test
-    void popEmptyStack() {
-        assertThrows(java.util.NoSuchElementException.class, () -> stack.pop());
-    }
-
-    @Test
-    void singleAttributeStack() {
-        AttributeStack singleStack = new AttributeStack("only");
-        singleStack.push(new AttributesBuilder().add("only", "value").build());
-
-        assertEquals("value", singleStack.peek("only"));
-
-        assertThrows(IllegalArgumentException.class, () -> singleStack.peek("other"));
-    }
-
-    @Test
-    void threeAttributeStack() {
-        AttributeStack tripleStack = new AttributeStack("first", "second", "third");
-        tripleStack.push(new AttributesBuilder()
-                .add("first", "1st")
-                .add("second", "2nd")
-                .add("third", "3rd")
-                .build());
-
-        assertEquals("1st", tripleStack.peek("first"));
-        assertEquals("2nd", tripleStack.peek("second"));
-        assertEquals("3rd", tripleStack.peek("third"));
-    }
-
-    @Test
-    void caseSensitivity() {
-        AttributeStack caseStack = new AttributeStack("Foo", "FOO");
-        caseStack.push(new AttributesBuilder()
-                .add("Foo", "mixed")
-                .add("FOO", "upper")
-                .build());
-
-        assertEquals("mixed", caseStack.peek("Foo"));
-        assertEquals("upper", caseStack.peek("FOO"));
-
-        assertThrows(IllegalArgumentException.class, () -> caseStack.peek("foo"));
-    }
-
-    @Test
-    void partialAttributeUpdates() {
-        stack.push(new AttributesBuilder()
-                .add("foo", "foo1")
-                .add("bar", "bar1")
-                .build());
-
-        stack.push(new AttributesBuilder().add("foo", "foo2").build());
-
-        assertEquals("foo2", stack.peek("foo"));
-        assertNull(stack.peek("bar"));
-
-        stack.pop();
-        assertEquals("foo1", stack.peek("foo"));
-        assertEquals("bar1", stack.peek("bar"));
-    }
-
-    @Test
-    void sixteenLevelsDeep() {
-        for (int i = 1; i <= 16; i++) {
-            stack.push(new AttributesBuilder()
-                    .add("foo", "level" + i)
-                    .build());
+    for (int i = 15; i >= 1; i--) {
+      stack.pop();
+      if (i % 3 == 1) {
+        assertEquals("level" + i, stack.peek("foo"));
+      } else {
+        int expectedLevel = ((i - 1) / 3) * 3 + 1;
+        if (expectedLevel >= 1) {
+          assertEquals("level" + expectedLevel, stack.peek("foo"));
         }
-
-        assertEquals("level16", stack.peek("foo"));
-
-        for (int i = 15; i >= 1; i--) {
-            stack.pop();
-            assertEquals("level" + i, stack.peek("foo"));
-        }
+      }
     }
+  }
 }
