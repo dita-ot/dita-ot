@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -39,6 +40,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   private Locator locator;
   /** Deque of domains attibute values */
   private final Deque<QName[][]> domains = new LinkedList<>();
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
   private Mode processingMode;
 
   /**
@@ -76,6 +78,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
     final String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
     if (d != null) {
       domains.addFirst(StringUtils.getExtProps(d));
@@ -106,6 +109,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     domains.removeFirst();
     super.endElement(uri, localName, qName);
+    attributeStack.pop();
   }
 
   // Validation methods
@@ -276,8 +280,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
    */
   private AttributesImpl validateScope(final Attributes atts, final AttributesImpl modified) {
     AttributesImpl res = modified;
-    // FIXME: cascade
-    final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (scope == null && href != null && href.isAbsolute()) {
       final boolean sameScheme = Objects.equals(currentFile.getScheme(), href.getScheme());
@@ -442,9 +445,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
     AttributesImpl res = modified;
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     if (MAP_TOPICREF.matches(cls)) {
-      final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-      // FIXME: cascade
-      final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      final String format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+      final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
       if (format == null && isLocalScope(scope) && href != null) {
         final URI target = currentFile.resolve(href);

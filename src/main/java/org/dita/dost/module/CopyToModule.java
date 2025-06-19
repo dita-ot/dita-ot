@@ -240,7 +240,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
       attributeStack.push(atts);
 
       Attributes resAtts = atts;
-      var scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       if (
         (TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts)) &&
         !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, scope)

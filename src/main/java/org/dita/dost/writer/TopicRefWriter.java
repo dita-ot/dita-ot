@@ -18,6 +18,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.util.AttributeStack;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -32,6 +33,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
   private Map<URI, URI> conflictTable = null;
   /** Using for rectify relative path of xml */
   private String fixpath = null;
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   @Override
   public void write(final File outputFilename) throws DITAOTException {
@@ -86,6 +88,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
     Attributes as = atts;
 
     if (TOPIC_OBJECT.matches(atts)) {
@@ -107,6 +110,13 @@ public final class TopicRefWriter extends AbstractXMLFilter {
     getContentHandler().startElement(uri, localName, qName, as);
   }
 
+  @Override
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+    getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
+  }
+
   /**
    * Check whether the attributes contains references
    *
@@ -119,9 +129,8 @@ public final class TopicRefWriter extends AbstractXMLFilter {
       return false;
     }
 
-    // FIXME: cascade
-    String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-    String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+    String scopeValue = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+    String formatValue = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
     if (formatValue == null) {
       formatValue = ATTR_FORMAT_VALUE_DITA;
     }

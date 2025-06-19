@@ -19,10 +19,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.io.File;
 import java.net.URI;
 import org.dita.dost.log.DITAOTLogger;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.MergeUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -47,6 +44,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
   private DITAOTLogger logger;
   private File output;
   private final String GENERATED_DITA_ELEMENT_ID = "GENERATED-DITA-ID";
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   /**
    * Default Constructor.
@@ -85,12 +83,14 @@ public final class MergeTopicParser extends XMLFilterImpl {
 
   @Override
   public void endDocument() throws SAXException {
-    // NOOP
+    attributeStack.clear();
   }
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
   }
 
   /**
@@ -197,6 +197,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
     throws SAXException {
+    attributeStack.push(attributes);
     final AttributesImpl atts = new AttributesImpl(attributes);
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
@@ -226,10 +227,9 @@ public final class MergeTopicParser extends XMLFilterImpl {
   private void handleHref(final String classValue, final AttributesImpl atts) {
     final URI attValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (attValue != null) {
-      // FIXME: cascade
-      final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      final String scopeValue = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       if (isLocalScope(scopeValue) && attValue.getScheme() == null) {
-        final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+        final String formatValue = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
         // The scope for @href is local
         if (
           (
