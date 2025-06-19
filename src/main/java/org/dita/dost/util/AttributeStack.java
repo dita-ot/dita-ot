@@ -3,6 +3,9 @@ package org.dita.dost.util;
 import java.util.Arrays;
 import org.xml.sax.Attributes;
 
+/**
+ * Stack to track cascading attributes in SAX.
+ */
 public class AttributeStack {
 
   private String[] stack;
@@ -11,6 +14,10 @@ public class AttributeStack {
   private final int[] nameHashes;
   private int top = -1;
 
+  /**
+   * Create new attribute stack.
+   * @param names names of attributes to collect
+   */
   public AttributeStack(String... names) {
     this.names = names.clone();
     this.attributeCount = names.length;
@@ -21,6 +28,9 @@ public class AttributeStack {
     this.stack = new String[16 * attributeCount];
   }
 
+  /**
+   * Push tracked attributes to stack.
+   */
   public void push(Attributes attrs) {
     top++;
     if ((top + 1) * attributeCount > stack.length) {
@@ -37,6 +47,11 @@ public class AttributeStack {
     }
   }
 
+  /**
+   * Peek the top most attribute on the stack.
+   * @param name name of the attribute
+   * @return cascaded value for the attribute, may be {@code null}
+   */
   public String peek(String name) {
     if (top < 0) {
       throw new IllegalStateException("Stack is empty");
@@ -51,6 +66,9 @@ public class AttributeStack {
     throw new IllegalArgumentException("Stack not initialized for attribute " + name);
   }
 
+  /**
+   * Pop attribute from the top of the stack.
+   */
   public void pop() {
     if (top < 0) {
       throw new IllegalStateException("Stack is empty");
@@ -61,6 +79,9 @@ public class AttributeStack {
     top--;
   }
 
+  /**
+   * Clear stack.
+   */
   public void clear() {
     top = -1;
   }
