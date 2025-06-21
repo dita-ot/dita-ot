@@ -20,11 +20,8 @@ import java.util.Objects;
 import javax.xml.namespace.QName;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.Constants;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -63,6 +60,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   /** File infos by src. */
   private Map<URI, FileInfo> fileInfoMap;
   private TempFileNameScheme tempFileNameScheme;
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   public DitaWriterFilter() {}
 
@@ -87,6 +85,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
   }
 
   @Override
@@ -130,6 +130,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     final Attributes res = processAttributes(qName, atts);
 
     getContentHandler().startElement(uri, localName, qName, res);
@@ -156,16 +158,16 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         }
         attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
       } else if (ATTRIBUTE_NAME_HREF.equals(attName) || ATTRIBUTE_NAME_COPY_TO.equals(attName)) {
-        // FIXME: cascade
-        if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
+        var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+        if (isLocalScope(scope)) {
           if (res == null) {
             res = new AttributesImpl(atts);
           }
           attValue = replaceHREF(attName, atts).toString();
         }
       } else if (ATTRIBUTE_NAME_FORMAT.equals(attName)) {
-        final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        final String format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+        final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
         // verify format is correct
         if (isFormatDita(format) && isLocalScope(scope)) {
           if (res == null) {
