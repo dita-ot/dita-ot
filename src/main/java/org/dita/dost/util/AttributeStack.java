@@ -1,5 +1,7 @@
 package org.dita.dost.util;
 
+import static org.dita.dost.util.Constants.*;
+
 import java.util.Arrays;
 import org.xml.sax.Attributes;
 
@@ -26,6 +28,33 @@ public class AttributeStack {
       this.nameHashes[i] = this.names[i].hashCode();
     }
     this.stack = new String[16 * attributeCount];
+  }
+
+  /**
+   * Create new attribute stack for all cascading attributes.
+   *
+   * @see <a href="https://docs.oasis-open.org/dita/dita/v1.3/errata02/os/complete/part3-all-inclusive/archSpec/base/cascading-in-a-ditamap.html">Cascading of metadata attributes in a DITA map</a>
+   */
+  public AttributeStack() {
+    this(
+      ATTRIBUTE_NAME_AUDIENCE,
+      ATTRIBUTE_NAME_PLATFORM,
+      ATTRIBUTE_NAME_PRODUCT,
+      ATTRIBUTE_NAME_OTHERPROPS,
+      ATTRIBUTE_NAME_REV,
+      ATTRIBUTE_NAME_PROPS,
+      ATTRIBUTE_NAME_LINKING,
+      ATTRIBUTE_NAME_TOC,
+      ATTRIBUTE_NAME_PRINT,
+      ATTRIBUTE_NAME_SEARCH,
+      ATTRIBUTE_NAME_FORMAT,
+      ATTRIBUTE_NAME_SCOPE,
+      ATTRIBUTE_NAME_TYPE,
+      ATTRIBUTE_NAME_DIR,
+      ATTRIBUTE_NAME_TRANSLATE,
+      ATTRIBUTE_NAME_PROCESSING_ROLE,
+      ATTRIBUTE_NAME_CASCADE
+    );
   }
 
   /**
