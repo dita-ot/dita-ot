@@ -9,11 +9,13 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.addOrSetAttribute;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.net.URI;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -22,6 +24,8 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 public class LinkFilter extends AbstractXMLFilter {
+
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE);
 
   /**
    * Destination temporary file
@@ -32,6 +36,8 @@ public class LinkFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     Attributes res = atts;
 
     if (hasLocalDitaLink(atts)) {
@@ -59,10 +65,17 @@ public class LinkFilter extends AbstractXMLFilter {
     getContentHandler().startElement(uri, localName, qName, res);
   }
 
+  @Override
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+    getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
+  }
+
   private boolean hasLocalDitaLink(final Attributes atts) {
     final boolean hasHref = atts.getIndex(ATTRIBUTE_NAME_HREF) != -1;
-    final boolean notExternal = !ATTR_SCOPE_VALUE_EXTERNAL.equals(atts.getValue(ATTRIBUTE_NAME_SCOPE));
-    if (hasHref && notExternal) {
+    var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+    if (hasHref && !isExternalScope(scope)) {
       return true;
     }
     final URI data = toURI(atts.getValue(ATTRIBUTE_NAME_DATA));

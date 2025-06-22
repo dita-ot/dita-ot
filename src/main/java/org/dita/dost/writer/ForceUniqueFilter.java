@@ -8,6 +8,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.FileUtils.replaceExtension;
@@ -16,6 +17,7 @@ import static org.dita.dost.util.URLUtils.*;
 import java.net.URI;
 import java.util.*;
 import org.dita.dost.module.reader.TempFileNameScheme;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
@@ -44,12 +46,19 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
    * Stack used to hold the current topicref parent.
    */
   private final Deque<ParentTopicref> topicrefParentsStack = new ArrayDeque<>();
+  private final AttributeStack attributeStack = new AttributeStack(
+    ATTRIBUTE_NAME_SCOPE,
+    ATTRIBUTE_NAME_FORMAT,
+    ATTRIBUTE_NAME_PROCESSING_ROLE
+  );
 
   // ContentHandler methods
 
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     ignoreStack.push(MAP_RELTABLE.matches(atts) ? false : ignoreStack.isEmpty() || ignoreStack.peek());
 
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
@@ -62,14 +71,14 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
       final URI source = copyTo != null ? copyTo : href;
       String currentScope = res.getValue(ATTRIBUTE_NAME_SCOPE);
       String scope = getCascadingScope(currentScope);
-      final String format = res.getValue(ATTRIBUTE_NAME_FORMAT);
+      final String format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
       String currentProcesingResource = res.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
       final String processingRole = getCascadingProcessingRole(currentProcesingResource);
       FileInfo dstFi = null;
       if (
         source != null &&
         isLocalScope(scope) &&
-        (format == null || format.equals(ATTR_FORMAT_VALUE_DITA)) &&
+        isDitaFormat(format) &&
         (processingRole == null || processingRole.equals(ATTR_PROCESSING_ROLE_VALUE_NORMAL))
       ) {
         final URI file = stripFragment(source);
@@ -99,9 +108,7 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
             final URI targetRel = getRelativePath(currentFile, dstTempAbs);
             final URI target = setFragment(targetRel, href.getFragment());
 
-            final AttributesImpl buf = new AttributesImpl(atts);
-            XMLUtils.addOrSetAttribute(buf, ATTRIBUTE_NAME_COPY_TO, target.toString());
-            res = buf;
+            res = new XMLUtils.AttributesBuilder(atts).add(ATTRIBUTE_NAME_COPY_TO, target.toString()).build();
           }
         }
       }

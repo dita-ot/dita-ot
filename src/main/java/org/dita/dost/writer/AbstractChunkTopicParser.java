@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -22,11 +23,8 @@ import java.util.*;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.TopicIdParser;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -86,6 +84,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
   final NamespaceSupport namespaces = new NamespaceSupport();
   final HashMap<String, Integer> namespaceMap = new HashMap<>();
+  final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE);
 
   @Override
   public void setJob(final Job job) {
@@ -296,8 +295,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
       }
     }
     final String href = resAtts.getValue(ATTRIBUTE_NAME_HREF);
-    final String scope = resAtts.getValue(ATTRIBUTE_NAME_SCOPE);
-    if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+    final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+    if (href != null && !isExternalScope(scope)) {
       // if current @href value needs to be updated
       URI relative = getRelativePath(outputFile, currentParsingFile);
       if (conflictTable.containsKey(outputFile)) {

@@ -15,6 +15,7 @@ import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isResourceOnly;
 import static org.dita.dost.util.Job.FileInfo;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.isDitaFormat;
@@ -446,16 +447,6 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         }
       }
     }
-  }
-
-  private boolean isResourceOnly(final XdmNode elem) {
-    return elem
-      .select(
-        ancestorOrSelf(Predicates.hasAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE))
-          .first()
-          .where(attributeEq(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY))
-      )
-      .exists();
   }
 
   /**
