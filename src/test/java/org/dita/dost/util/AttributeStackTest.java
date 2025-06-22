@@ -58,6 +58,8 @@ class AttributeStackTest {
         .add("processing-role", "processing-role value")
         .add("cascade", "cascade value")
         .add(XML_NS_URI, "lang", "xml:lang value")
+        .add("deliveryTarget", "deliveryTarget value")
+        .add("subjectrefs", "subjectrefs value")
         .build()
     );
 
@@ -79,6 +81,8 @@ class AttributeStackTest {
     assertEquals("processing-role value", stack.peek("processing-role"));
     assertEquals("cascade value", stack.peek("cascade"));
     assertEquals("xml:lang value", stack.peek(XML_NS_URI, "lang"));
+    assertEquals("deliveryTarget value", stack.peek("deliveryTarget"));
+    assertEquals("subjectrefs value", stack.peek("subjectrefs"));
   }
 
   @Test

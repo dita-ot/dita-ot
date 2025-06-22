@@ -1368,6 +1368,8 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
   public static final String ATTRIBUTE_NAME_STYLE = "style";
   public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
+  public static final String ATTRIBUTE_NAME_DELIVERY_TARGET = "deliveryTarget";
+  public static final String ATTRIBUTE_NAME_SUBJECTREFS = "subjectrefs";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 

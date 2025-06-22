@@ -5,9 +5,7 @@ import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import org.xml.sax.Attributes;
 
@@ -17,6 +15,7 @@ import org.xml.sax.Attributes;
 public class AttributeStack {
 
   private static final String[] LOCAL_NAMES = {
+    // DITA 1.3
     ATTRIBUTE_NAME_AUDIENCE,
     ATTRIBUTE_NAME_PLATFORM,
     ATTRIBUTE_NAME_PRODUCT,
@@ -35,9 +34,13 @@ public class AttributeStack {
     ATTRIBUTE_NAME_PROCESSING_ROLE,
     ATTRIBUTE_NAME_CASCADE,
     ATTRIBUTE_NAME_LANG,
+    ATTRIBUTE_NAME_DELIVERY_TARGET,
+    // DITA 2.0
+    ATTRIBUTE_NAME_SUBJECTREFS,
   };
 
   private static final String[] NAMESPACES = {
+    // DITA 1.3
     NULL_NS_URI,
     NULL_NS_URI,
     NULL_NS_URI,
@@ -56,6 +59,9 @@ public class AttributeStack {
     NULL_NS_URI,
     NULL_NS_URI,
     XML_NS_URI,
+    NULL_NS_URI,
+    // DITA 2.0
+    NULL_NS_URI,
   };
 
   private String[] stack;
