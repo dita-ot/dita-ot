@@ -10,7 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.FileUtils.isSupportedImageFile;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
@@ -24,6 +24,7 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -116,8 +117,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   /**
    * Stack for @processing-role value
    */
-  private final Deque<String> processRoleStack = new ArrayDeque<>();
-  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
+  private final AttributeStack attributeStack = new AttributeStack();
   /**
    * Topics with processing role of "resource-only"
    */
@@ -384,7 +384,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     outDitaFilesSet.clear();
     schemeSet.clear();
     schemeRefSet.clear();
-    processRoleStack.clear();
     attributeStack.clear();
     isRootElement = true;
     rootClass = null;
@@ -397,7 +396,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       throw new IllegalStateException();
     }
 
-    processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_NORMAL);
+    attributeStack.push(
+      new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_NORMAL).build()
+    );
 
     getContentHandler().startDocument();
   }
@@ -405,15 +406,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     handleRootElement(atts);
     handleSubjectScheme(atts);
-
-    String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
-    if (processingRole == null) {
-      processingRole = processRoleStack.peek();
-    }
-    processRoleStack.push(processingRole);
-    attributeStack.push(atts);
 
     final DitaClass cls = DitaClass.getInstance(atts);
     if (
@@ -442,7 +438,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         // Topic link within a topic, ignore if only crawling map
       } else if (!(MAP_TOPICREF.matches(cls))) {
         nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
-      } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+      } else if (isResourceOnly(attributeStack.peek(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
         resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
       } else {
         normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
@@ -566,8 +562,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-    // @processing-role
-    processRoleStack.pop();
     attributeStack.pop();
     classes.pop();
 
@@ -579,8 +573,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    */
   @Override
   public void endDocument() throws SAXException {
-    processRoleStack.pop();
-
     getContentHandler().endDocument();
   }
 
@@ -618,7 +610,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     final URI filename = stripFragment(attrValue.isAbsolute() ? attrValue : currentDir.resolve(attrValue));
     assert filename.isAbsolute();
 
-    final String attrType = atts.getValue(ATTRIBUTE_NAME_TYPE);
+    final String attrType = attributeStack.peek(ATTRIBUTE_NAME_TYPE);
     if (MAP_TOPICREF.matches(attrClass) && ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
       schemeSet.add(filename);
     }

@@ -426,7 +426,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       !filtered.contains(srcAbsUri) &&
       !href.isEmpty() &&
       !isExternalScope(topicref) &&
-      !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE)) &&
+      !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE)) &&
       isDitaFormat(topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
     ) {
       final ProfilingFilter writer = new ProfilingFilter();
