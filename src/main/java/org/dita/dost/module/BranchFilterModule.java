@@ -9,6 +9,7 @@ package org.dita.dost.module;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.*;
@@ -254,7 +255,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       if (
         MAP_TOPICREF.matches(elem) &&
         isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT)) &&
-        !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)
+        !isExternalScope(elem)
       ) {
         res.add(elem);
       }
@@ -424,8 +425,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       skipFilter == null &&
       !filtered.contains(srcAbsUri) &&
       !href.isEmpty() &&
-      !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE)) &&
-      !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(topicref.getAttribute(ATTRIBUTE_NAME_PROCESSING_ROLE)) &&
+      !isExternalScope(topicref) &&
+      !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(getCascadeValue(topicref, ATTRIBUTE_NAME_PROCESSING_ROLE)) &&
       isDitaFormat(topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT))
     ) {
       final ProfilingFilter writer = new ProfilingFilter();
@@ -618,8 +619,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
       final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-      final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-      if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+      final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
+      if ((!href.isEmpty() || !copyTo.isEmpty()) && !isExternalScope(scope)) {
         final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
         if (isDitaFormat(hrefFileInfo.format)) {
           final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;

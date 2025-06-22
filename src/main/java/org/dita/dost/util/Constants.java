@@ -1359,6 +1359,10 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_DELIVERYTARGET = "deliveryTarget";
   /**cascade attribute.*/
   public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
+  public static final String ATTRIBUTE_NAME_LINKING = "linking";
+  public static final String ATTRIBUTE_NAME_SEARCH = "search";
+  public static final String ATTRIBUTE_NAME_DIR = "dir";
+  public static final String ATTRIBUTE_NAME_TRANSLATE = "translate";
   public static final String ATTRIBUTE_NAME_COLS = "cols";
   public static final String ATTRIBUTE_NAME_VALUE = "value";
   public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
@@ -1367,6 +1371,8 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_STYLE = "style";
   public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
   public static final String ATTRIBUTE_NAME_TITLE_ROLE = "title-role";
+  public static final String ATTRIBUTE_NAME_DELIVERY_TARGET = "deliveryTarget";
+  public static final String ATTRIBUTE_NAME_SUBJECTREFS = "subjectrefs";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 

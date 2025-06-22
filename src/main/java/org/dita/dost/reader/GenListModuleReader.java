@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.util.Configuration.ditaFormat;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.FileUtils.isSupportedImageFile;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.nonDitaContext;
@@ -20,8 +21,10 @@ import java.util.function.Predicate;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.log.MessageBean;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -114,7 +117,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   /**
    * Stack for @processing-role value
    */
-  private final Stack<String> processRoleStack = new Stack<>();
+  private final AttributeStack attributeStack = new AttributeStack();
   /**
    * Topics with processing role of "resource-only"
    */
@@ -381,7 +384,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     outDitaFilesSet.clear();
     schemeSet.clear();
     schemeRefSet.clear();
-    processRoleStack.clear();
+    attributeStack.clear();
     isRootElement = true;
     rootClass = null;
     // Don't clean resourceOnlySet, normalProcessingRoleSet, or nonTopicrefReferenceSet
@@ -393,7 +396,9 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       throw new IllegalStateException();
     }
 
-    processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_NORMAL);
+    attributeStack.push(
+      new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_NORMAL).build()
+    );
 
     getContentHandler().startDocument();
   }
@@ -401,14 +406,10 @@ public final class GenListModuleReader extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     handleRootElement(atts);
     handleSubjectScheme(atts);
-
-    String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
-    if (processingRole == null) {
-      processingRole = processRoleStack.peek();
-    }
-    processRoleStack.push(processingRole);
 
     final DitaClass cls = DitaClass.getInstance(atts);
     if (
@@ -419,7 +420,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-    String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
     if (scope == null && href != null && href.isAbsolute()) {
       switch (href.getScheme()) {
         case "http", "https", "ftp", "ftps", "sftp", "mailto" -> scope = ATTR_SCOPE_VALUE_EXTERNAL;
@@ -432,11 +433,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope) &&
       !ATTR_SCOPE_VALUE_PEER.equals(scope)
     ) {
-      if (isFormatDita(atts.getValue(ATTRIBUTE_NAME_FORMAT)) && !isDitaMap() && !job.crawlTopics()) {
+      var format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+      if (isFormatDita(format) && !isDitaMap() && !job.crawlTopics()) {
         // Topic link within a topic, ignore if only crawling map
       } else if (!(MAP_TOPICREF.matches(cls))) {
         nonTopicrefReferenceSet.add(stripFragment(currentDir.resolve(href)));
-      } else if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processingRole)) {
+      } else if (isResourceOnly(attributeStack.peek(ATTRIBUTE_NAME_PROCESSING_ROLE))) {
         resourceOnlySet.add(stripFragment(currentDir.resolve(href)));
       } else {
         normalProcessingRoleSet.add(stripFragment(currentDir.resolve(href)));
@@ -469,14 +471,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
       parseConrefAttr(atts);
       if (PR_D_CODEREF.matches(cls)) {
-        parseCoderef(atts);
+        parseCoderef(atts, scope);
       } else if (TOPIC_OBJECT.matches(cls)) {
         parseObject(atts);
       } else if (MAP_TOPICREF.matches(cls)) {
-        parseAttribute(atts, ATTRIBUTE_NAME_HREF);
-        parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO);
+        parseAttribute(atts, ATTRIBUTE_NAME_HREF, scope);
+        parseAttribute(atts, ATTRIBUTE_NAME_COPY_TO, scope);
       } else {
-        parseAttribute(atts, ATTRIBUTE_NAME_HREF);
+        parseAttribute(atts, ATTRIBUTE_NAME_HREF, scope);
       }
       parseConactionAttr(atts);
       parseConkeyrefAttr(atts);
@@ -486,12 +488,11 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     getContentHandler().startElement(uri, localName, qName, atts);
   }
 
-  private void parseCoderef(final Attributes atts) {
+  private void parseCoderef(final Attributes atts, final String attrScope) {
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (href == null) {
       return;
     }
-    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
     if (
       ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
       ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
@@ -561,8 +562,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-    // @processing-role
-    processRoleStack.pop();
+    attributeStack.pop();
     classes.pop();
 
     getContentHandler().endElement(uri, localName, qName);
@@ -573,8 +573,6 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    */
   @Override
   public void endDocument() throws SAXException {
-    processRoleStack.pop();
-
     getContentHandler().endDocument();
   }
 
@@ -584,7 +582,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
    * @param atts     all attributes
    * @param attrName attributes to process
    */
-  private void parseAttribute(final Attributes atts, final String attrName) throws SAXException {
+  private void parseAttribute(final Attributes atts, final String attrName, final String scope) throws SAXException {
     URI attrValue = toURI(atts.getValue(attrName));
     if (attrValue == null) {
       return;
@@ -597,7 +595,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
-    String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    var attrScope = scope;
     if (attrScope == null && ATTRIBUTE_NAME_HREF.equals(attrName) && attrValue.isAbsolute()) {
       switch (attrValue.getScheme()) {
         case "http", "https", "ftp", "ftps", "sftp", "mailto" -> attrScope = ATTR_SCOPE_VALUE_EXTERNAL;
@@ -605,18 +603,14 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
 
     // external resource is filtered here.
-    if (
-      ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
-      ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
-      attrValue.toString().startsWith(SHARP)
-    ) {
+    if (!isLocalScope(attrScope) || attrValue.toString().startsWith(SHARP)) {
       return;
     }
 
     final URI filename = stripFragment(attrValue.isAbsolute() ? attrValue : currentDir.resolve(attrValue));
     assert filename.isAbsolute();
 
-    final String attrType = atts.getValue(ATTRIBUTE_NAME_TYPE);
+    final String attrType = attributeStack.peek(ATTRIBUTE_NAME_TYPE);
     if (MAP_TOPICREF.matches(attrClass) && ATTR_TYPE_VALUE_SUBJECT_SCHEME.equalsIgnoreCase(attrType)) {
       schemeSet.add(filename);
     }

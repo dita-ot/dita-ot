@@ -1374,6 +1374,21 @@ public final class XMLUtils {
   }
 
   /**
+   * Get cascaded attribute value.
+   *
+   * @param node     attribute parent element
+   * @param attrName attribute name
+   * @return attribute value, {@code null} if not set
+   */
+  public static String getCascadeValue(final XdmNode node, final String attrName) {
+    return node
+      .select(ancestorOrSelf(hasAttribute(attrName)).first().then(attribute(attrName)))
+      .findFirst()
+      .map(XdmItem::getStringValue)
+      .orElse(null);
+  }
+
+  /**
    * Stream of element ancestor elements.
    *
    * @param element start element

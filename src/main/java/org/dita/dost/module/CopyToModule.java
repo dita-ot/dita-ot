@@ -22,10 +22,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.CopyToReader;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.writer.ForceUniqueFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -219,6 +216,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static final class CopyToFilter extends XMLFilterImpl {
 
+    private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE);
+
     private final File workdir;
     private final File path2project;
     private final File path2rootmap;
@@ -238,10 +237,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
       throws SAXException {
+      attributeStack.push(atts);
+
       Attributes resAtts = atts;
+      var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       if (
         (TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts)) &&
-        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
+        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, scope)
       ) {
         final String value = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (value != null && !value.startsWith("#")) {
@@ -249,6 +251,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         }
       }
       getContentHandler().startElement(uri, localName, qName, resAtts);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+      getContentHandler().endElement(uri, localName, qName);
+
+      attributeStack.pop();
     }
 
     private String updateHref(final String value) {
