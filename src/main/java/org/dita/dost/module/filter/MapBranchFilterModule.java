@@ -10,10 +10,12 @@ package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
@@ -213,7 +215,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       if (
         MAP_TOPICREF.matches(elem) &&
         isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT)) &&
-        !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)
+        !isExternalScope(elem)
       ) {
         res.add(elem);
       }
@@ -344,8 +346,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
       final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-      final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-      if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+      final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
+      if ((!href.isEmpty() || !copyTo.isEmpty()) && !isExternalScope(scope)) {
         final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
 
         final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;

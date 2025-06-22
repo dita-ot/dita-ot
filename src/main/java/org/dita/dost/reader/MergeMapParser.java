@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -17,6 +18,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.Stack;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -48,6 +52,7 @@ public final class MergeMapParser extends XMLFilterImpl {
   private File tempdir = null;
 
   private final Stack<String> processStack;
+  private final AttributeStack attributeStack;
   private int processLevel;
   private final ByteArrayOutputStream topicBuffer;
   private final SAXTransformerFactory stf;
@@ -60,6 +65,7 @@ public final class MergeMapParser extends XMLFilterImpl {
    */
   public MergeMapParser() {
     processStack = new Stack<>();
+    attributeStack = new AttributeStack(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
     processLevel = 0;
     util = new MergeUtils();
     topicParser = new MergeTopicParser(util);
@@ -152,6 +158,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       }
     }
     getContentHandler().endElement(uri, localName, qName);
+    attributeStack.pop();
   }
 
   @Override
@@ -164,6 +171,8 @@ public final class MergeMapParser extends XMLFilterImpl {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
     throws SAXException {
+    attributeStack.push(attributes);
+
     final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
     if (attrValue != null) {
       processStack.push(attrValue);
@@ -184,9 +193,9 @@ public final class MergeMapParser extends XMLFilterImpl {
       URI attValue = toURI(attributes.getValue(ATTRIBUTE_NAME_HREF));
       if (attValue != null) {
         atts = new AttributesImpl(attributes);
-        final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-        if (isLocalScope(scopeValue) && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
+        var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+        var format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+        if (isLocalScope(scope) && isDitaFormat(format)) {
           final URI ohref = attValue;
           final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
           if (copyToValue != null && !copyToValue.toString().isEmpty()) {

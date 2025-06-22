@@ -16,6 +16,7 @@ import static net.sf.saxon.s9api.streams.Steps.*;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
@@ -718,7 +719,7 @@ public final class KeyrefPaser extends AbstractXMLFilter {
   // Private methods ---------------------------------------------------------
 
   private boolean isLocalDita(final XdmNode elem) {
-    final String scopeValue = elem.attribute(ATTRIBUTE_NAME_SCOPE);
+    final String scopeValue = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
     final String formatValue = elem.attribute(ATTRIBUTE_NAME_FORMAT);
     return (
       isLocalScope(scopeValue) &&

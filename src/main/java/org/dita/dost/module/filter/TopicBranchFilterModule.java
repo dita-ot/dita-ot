@@ -10,6 +10,7 @@ package org.dita.dost.module.filter;
 import static java.util.Collections.singletonList;
 import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
@@ -182,7 +183,7 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
       skipFilter == null &&
       !filtered.contains(srcAbsUri) &&
       !href.isEmpty() &&
-      !ATTR_SCOPE_VALUE_EXTERNAL.equals(topicref.getAttribute(ATTRIBUTE_NAME_SCOPE))
+      !isExternalScope(topicref)
     ) {
       final ProfilingFilter writer = new ProfilingFilter();
       writer.setLogger(logger);

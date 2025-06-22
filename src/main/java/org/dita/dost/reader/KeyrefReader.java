@@ -16,6 +16,7 @@ import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.KeyScope.ROOT_ID;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 import static org.dita.dost.util.XMLUtils.rootElement;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -245,7 +246,7 @@ public final class KeyrefReader implements AbstractReader {
                 ? copy.attribute(ATTRIBUTE_NAME_COPY_TO)
                 : copy.attribute(ATTRIBUTE_NAME_HREF)
           );
-          final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
+          final String scope = getCascadeValue(copy, ATTRIBUTE_NAME_SCOPE);
           final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
           final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
           keyDefs.put(key, keyDef);

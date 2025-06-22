@@ -273,6 +273,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     final String id = atts.getValue(ATTRIBUTE_NAME_ID);
     final AttributesImpl attsMod = new AttributesImpl(atts);
@@ -407,5 +409,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     lang.pop();
+    attributeStack.pop();
   }
 }

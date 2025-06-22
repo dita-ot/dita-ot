@@ -14,10 +14,10 @@ import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
+import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -41,9 +41,9 @@ public final class CopyToReader extends AbstractXMLFilter {
    */
   private int chunkLevel = 0;
   /**
-   * Stack for @processing-role value
+   * Stack for cascading attributes.
    */
-  private final Stack<String> processRoleStack = new Stack<>();
+  private final AttributeStack attributeStack = new AttributeStack();
 
   /**
    * Get the copy-to map.
@@ -70,12 +70,14 @@ public final class CopyToReader extends AbstractXMLFilter {
   public void reset() {
     chunkLevel = 0;
     copyToMap.clear();
-    processRoleStack.clear();
+    attributeStack.clear();
   }
 
   @Override
   public void startDocument() throws SAXException {
-    processRoleStack.push(ATTR_PROCESSING_ROLE_VALUE_NORMAL);
+    attributeStack.push(
+      new XMLUtils.AttributesBuilder().add(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTR_PROCESSING_ROLE_VALUE_NORMAL).build()
+    );
 
     getContentHandler().startDocument();
   }
@@ -83,11 +85,7 @@ public final class CopyToReader extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
-    String processingRole = atts.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
-    if (processingRole == null) {
-      processingRole = processRoleStack.peek();
-    }
-    processRoleStack.push(processingRole);
+    attributeStack.push(atts);
 
     final String classValue = atts.getValue(ATTRIBUTE_NAME_CLASS);
 
@@ -106,7 +104,7 @@ public final class CopyToReader extends AbstractXMLFilter {
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-    processRoleStack.pop();
+    attributeStack.pop();
 
     if (chunkLevel > 0) {
       chunkLevel--;
@@ -120,7 +118,7 @@ public final class CopyToReader extends AbstractXMLFilter {
    */
   @Override
   public void endDocument() throws SAXException {
-    processRoleStack.pop();
+    attributeStack.clear();
 
     getContentHandler().endDocument();
   }
@@ -135,9 +133,9 @@ public final class CopyToReader extends AbstractXMLFilter {
     if (target == null) {
       return;
     }
-    final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
 
     // external resource is filtered here.
+    var attrScope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
     if (
       ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
       ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
@@ -192,7 +190,7 @@ public final class CopyToReader extends AbstractXMLFilter {
       throw new IllegalArgumentException();
       //return ATTR_FORMAT_VALUE_HTML;
     } else {
-      return atts.getValue(ATTRIBUTE_NAME_FORMAT);
+      return attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
     }
   }
 
