@@ -1,7 +1,26 @@
 package org.dita.dost.util;
 
+import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CASCADE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DIR;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_FORMAT;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_LANG;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_LINKING;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OTHERPROPS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PRINT;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PROCESSING_ROLE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PROPS;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SCOPE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SEARCH;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TOC;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TRANSLATE;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +35,53 @@ class AttributeStackTest {
   }
 
   @Test
+  void defaultAttributes() {
+    stack = new AttributeStack();
+
+    stack.push(
+      new AttributesBuilder()
+        .add("audience", "audience value")
+        .add("platform", "platform value")
+        .add("product", "product value")
+        .add("otherprops", "otherprops value")
+        .add("rev", "rev value")
+        .add("props", "props value")
+        .add("linking", "linking value")
+        .add("toc", "toc value")
+        .add("print", "print value")
+        .add("search", "search value")
+        .add("format", "format value")
+        .add("scope", "scope value")
+        .add("type", "type value")
+        .add("dir", "dir value")
+        .add("translate", "translate value")
+        .add("processing-role", "processing-role value")
+        .add("cascade", "cascade value")
+        .add(XML_NS_URI, "lang", "xml:lang value")
+        .build()
+    );
+
+    assertEquals("audience value", stack.peek("audience"));
+    assertEquals("platform value", stack.peek("platform"));
+    assertEquals("product value", stack.peek("product"));
+    assertEquals("otherprops value", stack.peek("otherprops"));
+    assertEquals("rev value", stack.peek("rev"));
+    assertEquals("props value", stack.peek("props"));
+    assertEquals("linking value", stack.peek("linking"));
+    assertEquals("toc value", stack.peek("toc"));
+    assertEquals("print value", stack.peek("print"));
+    assertEquals("search value", stack.peek("search"));
+    assertEquals("format value", stack.peek("format"));
+    assertEquals("scope value", stack.peek("scope"));
+    assertEquals("type value", stack.peek("type"));
+    assertEquals("dir value", stack.peek("dir"));
+    assertEquals("translate value", stack.peek("translate"));
+    assertEquals("processing-role value", stack.peek("processing-role"));
+    assertEquals("cascade value", stack.peek("cascade"));
+    assertEquals("xml:lang value", stack.peek(XML_NS_URI, "lang"));
+  }
+
+  @Test
   void basicCascading() {
     stack.push(new AttributesBuilder().add("foo", "parent_foo").add("bar", "parent_bar").build());
 
@@ -24,6 +90,39 @@ class AttributeStackTest {
     assertEquals("child_foo", stack.peek("foo"));
     assertEquals("parent_bar", stack.peek("bar"));
     assertNull(stack.peek("baz"));
+  }
+
+  @Test
+  void basicCascading_QName() {
+    stack =
+      new AttributeStack(
+        QName.valueOf("foo"),
+        QName.valueOf("{https://example.com}foo"),
+        QName.valueOf("bar"),
+        QName.valueOf("{https://example.com}bar"),
+        QName.valueOf("baz"),
+        QName.valueOf("{https://example.com}baz")
+      );
+
+    stack.push(
+      new AttributesBuilder()
+        .add("foo", "parent_foo")
+        .add("https://example.com", "foo", "parent_example_foo")
+        .add("bar", "parent_bar")
+        .add("https://example.com", "bar", "parent_example_bar")
+        .build()
+    );
+
+    stack.push(
+      new AttributesBuilder().add("foo", "child_foo").add("https://example.com", "foo", "child_example_foo").build()
+    );
+
+    assertEquals("child_foo", stack.peek("foo"));
+    assertEquals("child_example_foo", stack.peek("https://example.com", "foo"));
+    assertEquals("parent_bar", stack.peek("bar"));
+    assertEquals("parent_example_bar", stack.peek("https://example.com", "bar"));
+    assertNull(stack.peek("baz"));
+    assertNull(stack.peek("https://example.com", "baz"));
   }
 
   @Test
