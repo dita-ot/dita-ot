@@ -5,6 +5,12 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
+
+plugins {
+    id "com.diffplug.spotless" version "7.0.4"
+}
+
+
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -59,6 +65,12 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.10.2'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.10.2'
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
 }
 
 jar {
