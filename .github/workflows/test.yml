@@ -20,9 +20,7 @@ jobs:
         with:
           node-version: 18
       - name: Check formatting
-        run: |
-          npm ci
-          npm run check-fmt
+        run: ./gradlew spotlessCheck --info --stacktrace --no-daemon
       - name: Build with Gradle
         run: ./gradlew --info --stacktrace --no-daemon
       - name: Run unit tests
