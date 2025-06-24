@@ -15,10 +15,6 @@ jobs:
           cache: 'gradle'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
       - name: Check formatting
         run: ./gradlew spotlessCheck --info --stacktrace --no-daemon
       - name: Build with Gradle
