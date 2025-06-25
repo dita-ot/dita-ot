@@ -31,7 +31,7 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestDitaValReader {
+public class DitaValReaderTest {
 
   private static final QName PLATFORM = QName.valueOf("platform");
   private static final QName PRODUCT = QName.valueOf("product");
@@ -42,7 +42,7 @@ public class TestDitaValReader {
   private static final QName LANG = new QName(XML_NS_URI, "lang", "xml");
   private static final QName CONFIDENTIALITY = new QName("http://www.cms.com/", "confidentiality");
 
-  private final File resourceDir = TestUtils.getResourceDir(TestDitaValReader.class);
+  private final File resourceDir = TestUtils.getResourceDir(DitaValReaderTest.class);
 
   private Job job;
   private DITAOTLogger logger;
@@ -120,6 +120,24 @@ public class TestDitaValReader {
       Action.EXCLUDE,
       new FilterKey(QName.valueOf("default"), null),
       Action.INCLUDE
+    );
+    assertEquals(exp, act);
+  }
+
+  @Test
+  public void testStyle() {
+    final File ditavalFile = new File(resourceDir, "src" + File.separator + "style.ditaval");
+    DitaValReader reader = new DitaValReader();
+    TestUtils.CachingLogger logger = new TestUtils.CachingLogger();
+    reader.setLogger(logger);
+    reader.setJob(job);
+    reader.read(ditavalFile.toURI());
+    final Map<FilterKey, Action> act = reader.getFilterMap();
+    final Map<FilterKey, Action> exp = Map.of(
+      new FilterKey(PRODUCT, "p1"),
+      new FilterUtils.Flag("prop", "red", "pink", new String[] { "underline" }, null, null, null, "warning"),
+      new FilterKey(PRODUCT, "p2"),
+      new FilterUtils.Flag("prop", "red", "pink", new String[] { "underline" }, null, null, null, "warning")
     );
     assertEquals(exp, act);
   }

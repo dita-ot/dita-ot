@@ -1373,6 +1373,7 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_TITLE_ROLE = "title-role";
   public static final String ATTRIBUTE_NAME_DELIVERY_TARGET = "deliveryTarget";
   public static final String ATTRIBUTE_NAME_SUBJECTREFS = "subjectrefs";
+  public static final String ATTRIBUTE_NAME_ADD_OUTPUTCLASS = "add-outputclass";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
