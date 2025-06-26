@@ -15,6 +15,14 @@ jobs:
           cache: 'gradle'
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Cache NPM
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/nodejs
+            build/spotless-*
+            build/tmp/spotless-register-dependencies
+          key: ${{ runner.os }}-${{ hashFiles('.prettierrc') }}-${{ hashFiles('.nvmrc') }}
       - name: Check formatting
         run: ./gradlew spotlessCheck --info --stacktrace --no-daemon
       - name: Build with Gradle

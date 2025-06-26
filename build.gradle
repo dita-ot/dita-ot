@@ -70,7 +70,7 @@ dependencies {
 
 node {
     download = true
-    version = "22.17.0"
+    version = file('.nvmrc').readLines().first().trim()
     // when setting both these directories, npm and node will be in separate directories
     workDir = file("${buildDir}/nodejs")
 }
