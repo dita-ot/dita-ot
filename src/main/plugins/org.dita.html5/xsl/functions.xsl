@@ -302,25 +302,22 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="inputBaseDir" as="xs:string" />
     <xsl:param name="fileBaseDir" as="xs:string" />
 
-    <xsl:variable name="inputBaseDirTokens"  as="xs:string+" select="tokenize($inputBaseDir, '/')" />
-    <xsl:variable name="fileBaseDirTokens"  as="xs:string+" select="tokenize($fileBaseDir, '/')" />
+    <xsl:variable name="inputBaseDirTokens" as="xs:string+" select="tokenize($inputBaseDir, '/')" />
+    <xsl:variable name="fileBaseDirTokens" as="xs:string+" select="tokenize($fileBaseDir, '/')" />
 
     <xsl:variable name="pathFromFileToCommon" as="xs:string*"
-                  select="
-                    for $i in 1 to count($fileBaseDirTokens)
-                      return
-                        if ($i > count($inputBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i]) then '..' else ()
-                    " />
+                  select="for $i in 1 to count($fileBaseDirTokens)
+                          return if ($i > count($inputBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i])
+                                 then '..'
+                                 else ()"/>
 
     <xsl:variable name="pathFromCommonToInput" as="xs:string*"
-                  select="
-                    for $i in 1 to count($inputBaseDirTokens)
-                      return
-                        if ($i > count($fileBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i]) then $inputBaseDirTokens[$i] else ()
-                    " />
+                  select="for $i in 1 to count($inputBaseDirTokens)
+                          return if ($i > count($fileBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i])
+                                 then $inputBaseDirTokens[$i]
+                                 else ()"/>
 
     <xsl:sequence select="string-join(($pathFromFileToCommon, $pathFromCommonToInput, ''), '/')" />
-
   </xsl:function>
 
   <xsl:function name="dita-ot:get-path2file" as="xs:string?">
@@ -328,25 +325,22 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="fileBaseDir" as="xs:string" />
     <xsl:param name="fileName" as="xs:string" />
 
-    <xsl:variable name="inputBaseDirTokens"  as="xs:string+" select="tokenize($inputBaseDir, '/')" />
-    <xsl:variable name="fileBaseDirTokens"  as="xs:string+" select="tokenize($fileBaseDir, '/')" />
+    <xsl:variable name="inputBaseDirTokens" as="xs:string+" select="tokenize($inputBaseDir, '/')" />
+    <xsl:variable name="fileBaseDirTokens" as="xs:string+" select="tokenize($fileBaseDir, '/')" />
 
     <xsl:variable name="pathFromCommonToFile" as="xs:string*"
-                  select="
-                    for $i in 1 to count($fileBaseDirTokens)
-                      return
-                        if ($i > count($inputBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i]) then $fileBaseDirTokens[$i] else ()
-                    " />
+                  select="for $i in 1 to count($fileBaseDirTokens)
+                          return if ($i > count($inputBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i])
+                                 then $fileBaseDirTokens[$i]
+                                 else ()"/>
 
     <xsl:variable name="pathFromInputToCommon" as="xs:string*"
-                  select="
-                    for $i in 1 to count($inputBaseDirTokens)
-                      return
-                        if ($i > count($fileBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i]) then '..' else ()
-                    " />
+                  select="for $i in 1 to count($inputBaseDirTokens)
+                          return if ($i > count($fileBaseDirTokens) or $fileBaseDirTokens[$i] != $inputBaseDirTokens[$i])
+                                 then '..'
+                                 else ()"/>
 
     <xsl:sequence select="string-join(($pathFromInputToCommon, $pathFromCommonToFile, $fileName), '/')" />
-
   </xsl:function>
 
 </xsl:stylesheet>
