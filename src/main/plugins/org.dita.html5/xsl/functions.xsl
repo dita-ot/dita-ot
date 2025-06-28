@@ -301,23 +301,23 @@ See the accompanying LICENSE file for applicable license.
   <!--
   - Calculates the relative path between the file directory and the input map directory.
   -
-  - @param inputBaseDir   the input map directory
-  - @param fileBaseDir    the file directory
+  - @param inputBaseDir   the input map file
+  - @param fileBaseDir    the file file
   - @return               the relative path
   -->
   <xsl:function name="dita-ot:get-path2map-dir" as="xs:string?">
-    <xsl:param name="inputBaseDir" as="xs:string" />
-    <xsl:param name="fileBaseDir" as="xs:string" />
+    <xsl:param name="inputBaseFile" as="xs:string" />
+    <xsl:param name="fileBaseFile" as="xs:string" />
 
-    <xsl:sequence select="dita-ot:get-relative-path($fileBaseDir, $inputBaseDir, '')" />
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $fileBaseFile), resolve-uri('.', $inputBaseFile), '')" />
 
   </xsl:function>
 
   <!--
   - Calculates the relative path between the input map directory and the file.
   -
-  - @param inputBaseDir   the input map directory
-  - @param fileBaseDir    the file directory
+  - @param inputBaseDir   the input map file
+  - @param fileBaseDir    the file file
   - @param fileName       the file name
   - @return               the relative path
   -->
@@ -326,7 +326,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="fileBaseDir" as="xs:string" />
     <xsl:param name="fileName" as="xs:string" />
 
-    <xsl:sequence select="dita-ot:get-relative-path($inputBaseDir, $fileBaseDir, $fileName)" />
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $inputBaseDir), resolve-uri('.', $fileBaseDir), $fileName)" />
   </xsl:function>
 
   <!--

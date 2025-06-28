@@ -54,11 +54,9 @@ See the accompanying LICENSE file for applicable license.
       </nav>
     </xsl:if>
   </xsl:template>
-
-  <xsl:variable name="fileBaseDir" select="replace(base-uri(), '(/[^/]+$)', '')"/>
-  <xsl:variable name="inputBaseDir" select="replace($input.map.url, '(/[^/]+$)', '')"/>
-  <xsl:variable name="pathToMapDir" select="dita-ot:get-path2map-dir($inputBaseDir, $fileBaseDir)" />
-  <xsl:variable name="pathToFile" select="dita-ot:get-path2file($inputBaseDir, $fileBaseDir, $FILENAME)" />
+      
+  <xsl:variable name="pathToMapDir" select="dita-ot:get-path2map-dir($input.map.url, base-uri())" />
+  <xsl:variable name="pathToFile" select="dita-ot:get-path2file($input.map.url, base-uri(), $FILENAME)" />
   <xsl:variable name="current-file" select="dita-ot:normalize-href($pathToFile)" as="xs:string?"/>
   <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]" as="element()*"/>
   <xsl:variable name="current-topicref" select="$current-topicrefs[1]" as="element()?"/>
