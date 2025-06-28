@@ -343,8 +343,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="tagetDir" as="xs:string" />
     <xsl:param name="targetFile" as="xs:string"/>
 
-    <xsl:variable name="baseDirTokens" as="xs:string+" select="tokenize($baseDir, '/')" />
-    <xsl:variable name="tagetDirTokens" as="xs:string+" select="tokenize($tagetDir, '/')" />
+    <xsl:variable name="baseDirTokens" as="xs:string+" select="tokenize(replace($baseDir, '/$', ''), '/')" />
+    <xsl:variable name="tagetDirTokens" as="xs:string+" select="tokenize(replace($tagetDir, '/$', ''), '/')" />
 
     <xsl:variable name="pathFromCommonToTarget" as="xs:string*"
                   select="for $i in 1 to count($tagetDirTokens)

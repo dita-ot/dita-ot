@@ -448,68 +448,104 @@
       <x:call function="dita-ot:get-path2file">
         <x:param name="inputBaseDir" select="'/foo/bar'" />
         <x:param name="fileBaseDir" select="'/foo/bar'" />
-        <x:param name="fileName" select="'qux'" />
+        <x:param name="fileName" select="'qux.ext'" />
       </x:call>
-      <x:expect label="return empty path" select="'qux'"/>
+      <x:expect label="return empty path" select="'qux.ext'"/>
     </x:scenario>
     <x:scenario label="below">
       <x:call function="dita-ot:get-path2file">
         <x:param name="inputBaseDir" select="'/foo'" />
         <x:param name="fileBaseDir" select="'/foo/bar/baz'" />
-        <x:param name="fileName" select="'qux'" />
+        <x:param name="fileName" select="'qux.ext'" />
       </x:call>
-      <x:expect label="return relative path" select="'bar/baz/qux'"/>
+      <x:expect label="return relative path" select="'bar/baz/qux.ext'"/>
     </x:scenario>
     <x:scenario label="above">
       <x:call function="dita-ot:get-path2file">
         <x:param name="inputBaseDir" select="'/foo/bar/baz'" />
         <x:param name="fileBaseDir" select="'/foo'" />
-        <x:param name="fileName" select="'qux'" />
+        <x:param name="fileName" select="'qux.ext'" />
       </x:call>
-      <x:expect label="return relative path" select="'../../qux'"/>
+      <x:expect label="return relative path" select="'../../qux.ext'"/>
     </x:scenario>
     <x:scenario label="parallel">
       <x:call function="dita-ot:get-path2file">
-        <x:param name="inputBaseDir" select="'/foo/baz/qux'" />
+        <x:param name="inputBaseDir" select="'/foo/baz/qux.ext'" />
         <x:param name="fileBaseDir" select="'/foo/bar/quxx'" />
-        <x:param name="fileName" select="'qux'" />
+        <x:param name="fileName" select="'qux.ext'" />
       </x:call>
-      <x:expect label="return relative path" select="'../../bar/quxx/qux'"/>
+      <x:expect label="return relative path" select="'../../bar/quxx/qux.ext'"/>
     </x:scenario>
   </x:scenario>
 
   <x:scenario label="dita-ot:get-relative-path">
-    <x:scenario label="same">
-      <x:call function="dita-ot:get-relative-path">
-        <x:param name="baseDir" select="'/foo/bar'" />
-        <x:param name="tagetDir" select="'/foo/bar'" />
-        <x:param name="targetFile" select="'qux'" />
-      </x:call>
-      <x:expect label="return empty path" select="'qux'"/>
+    <x:scenario label="without trailing slash">
+      <x:scenario label="same">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/bar'" />
+          <x:param name="tagetDir" select="'/foo/bar'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return empty path" select="'qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="below">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo'" />
+          <x:param name="tagetDir" select="'/foo/bar/baz'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'bar/baz/qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="above">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/bar/baz'" />
+          <x:param name="tagetDir" select="'/foo'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'../../qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="parallel">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/baz/qux.ext'" />
+          <x:param name="tagetDir" select="'/foo/bar/quxx'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'../../bar/quxx/qux.ext'"/>
+      </x:scenario>
     </x:scenario>
-    <x:scenario label="below">
-      <x:call function="dita-ot:get-relative-path">
-        <x:param name="baseDir" select="'/foo'" />
-        <x:param name="tagetDir" select="'/foo/bar/baz'" />
-        <x:param name="targetFile" select="'qux'" />
-      </x:call>
-      <x:expect label="return relative path" select="'bar/baz/qux'"/>
-    </x:scenario>
-    <x:scenario label="above">
-      <x:call function="dita-ot:get-relative-path">
-        <x:param name="baseDir" select="'/foo/bar/baz'" />
-        <x:param name="tagetDir" select="'/foo'" />
-        <x:param name="targetFile" select="'qux'" />
-      </x:call>
-      <x:expect label="return relative path" select="'../../qux'"/>
-    </x:scenario>
-    <x:scenario label="parallel">
-      <x:call function="dita-ot:get-relative-path">
-        <x:param name="baseDir" select="'/foo/baz/qux'" />
-        <x:param name="tagetDir" select="'/foo/bar/quxx'" />
-        <x:param name="targetFile" select="'qux'" />
-      </x:call>
-      <x:expect label="return relative path" select="'../../bar/quxx/qux'"/>
+    <x:scenario label="with trailing slash">
+      <x:scenario label="same">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/bar/'" />
+          <x:param name="tagetDir" select="'/foo/bar/'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return empty path" select="'qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="below">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/'" />
+          <x:param name="tagetDir" select="'/foo/bar/baz/'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'bar/baz/qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="above">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/bar/baz/'" />
+          <x:param name="tagetDir" select="'/foo/'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'../../qux.ext'"/>
+      </x:scenario>
+      <x:scenario label="parallel">
+        <x:call function="dita-ot:get-relative-path">
+          <x:param name="baseDir" select="'/foo/baz/qux/'" />
+          <x:param name="tagetDir" select="'/foo/bar/quxx/'" />
+          <x:param name="targetFile" select="'qux.ext'" />
+        </x:call>
+        <x:expect label="return relative path" select="'../../bar/quxx/qux.ext'"/>
+      </x:scenario>
     </x:scenario>
   </x:scenario>
 
