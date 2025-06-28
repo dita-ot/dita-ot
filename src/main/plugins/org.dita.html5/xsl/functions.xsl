@@ -298,6 +298,15 @@ See the accompanying LICENSE file for applicable license.
     <xsl:value-of select="replace(translate($href, '\', '/'), ' ', '%20')"/>
   </xsl:function>
 
+  <!--
+  - Calculates the relative path between two directories.
+  - Use it for example to calculate the path from the current file
+  - directory to the input map directory.
+  -
+  - @param inputBaseDir   the target directory
+  - @param fileBaseDir    the base directory
+  - @return               the relative path
+  -->
   <xsl:function name="dita-ot:get-path2map-dir" as="xs:string?">
     <xsl:param name="inputBaseDir" as="xs:string" />
     <xsl:param name="fileBaseDir" as="xs:string" />
@@ -320,6 +329,16 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="string-join(($pathFromFileToCommon, $pathFromCommonToInput, ''), '/')" />
   </xsl:function>
 
+  <!--
+  - Calculates the relative path between a directory and a file.
+  - Use it for example to calculate the path from the input map
+  - directory to the current file.
+  -
+  - @param inputBaseDir   the base directory
+  - @param fileBaseDir    the target directory
+  - @param fileName       the target file
+  - @return               the relative path
+  -->
   <xsl:function name="dita-ot:get-path2file" as="xs:string?">
     <xsl:param name="inputBaseDir" as="xs:string" />
     <xsl:param name="fileBaseDir" as="xs:string" />
