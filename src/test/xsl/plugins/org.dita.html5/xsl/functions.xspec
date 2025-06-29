@@ -415,29 +415,29 @@
   <x:scenario label="dita-ot:get-path2map-dir">
     <x:scenario label="same">
       <x:call function="dita-ot:get-path2map-dir">
-        <x:param name="inputBaseFile" select="'file:///foo/bar/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/bar/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/qux.ext'" />
       </x:call>
       <x:expect label="return empty path" select="''"/>
     </x:scenario>
     <x:scenario label="below">
       <x:call function="dita-ot:get-path2map-dir">
-        <x:param name="inputBaseFile" select="'file:///foo/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/baz/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/baz/qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'../../'"/>
     </x:scenario>
     <x:scenario label="above">
       <x:call function="dita-ot:get-path2map-dir">
-        <x:param name="inputBaseFile" select="'file:///foo/bar/baz/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/bar/baz/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'bar/baz/'"/>
     </x:scenario>
     <x:scenario label="parallel">
       <x:call function="dita-ot:get-path2map-dir">
-        <x:param name="inputBaseFile" select="'file:///foo/baz/qux/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/quxx/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/baz/qux/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/quxx/qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'../../baz/qux/'"/>
     </x:scenario>
@@ -446,32 +446,32 @@
   <x:scenario label="dita-ot:get-path2file">
     <x:scenario label="same">
       <x:call function="dita-ot:get-path2file">
-        <x:param name="inputBaseFile" select="'file:///foo/bar/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/bar/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/qux.ext'" />
         <x:param name="fileName" select="'qux.ext'" />
       </x:call>
       <x:expect label="return empty path" select="'qux.ext'"/>
     </x:scenario>
     <x:scenario label="below">
       <x:call function="dita-ot:get-path2file">
-        <x:param name="inputBaseFile" select="'file:///foo/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/baz/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/baz/qux.ext'" />
         <x:param name="fileName" select="'qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'bar/baz/qux.ext'"/>
     </x:scenario>
     <x:scenario label="above">
       <x:call function="dita-ot:get-path2file">
-        <x:param name="inputBaseFile" select="'file:///foo/bar/baz/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/qux.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/bar/baz/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/qux.ext'" />
         <x:param name="fileName" select="'qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'../../qux.ext'"/>
     </x:scenario>
     <x:scenario label="parallel">
       <x:call function="dita-ot:get-path2file">
-        <x:param name="inputBaseFile" select="'file:///foo/baz/qux.ext'" />
-        <x:param name="fileBaseFile" select="'file:///foo/bar/quxx/quxxx.ext'" />
+        <x:param name="inputMapUri" select="'file:///foo/baz/qux.ext'" />
+        <x:param name="fileUri" select="'file:///foo/bar/quxx/quxxx.ext'" />
         <x:param name="fileName" select="'qux.ext'" />
       </x:call>
       <x:expect label="return relative path" select="'../bar/quxx/qux.ext'"/>

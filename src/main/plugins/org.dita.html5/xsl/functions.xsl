@@ -301,32 +301,32 @@ See the accompanying LICENSE file for applicable license.
   <!--
   - Calculates the relative path between the file directory and the input map directory.
   -
-  - @param inputBaseDir   the input map file
-  - @param fileBaseDir    the file file
-  - @return               the relative path
+  - @param inputMapUri    the input map URI
+  - @param fileUri        the file URI
+  - @return               the relative path from the file dir to the map dir
   -->
   <xsl:function name="dita-ot:get-path2map-dir" as="xs:string?">
-    <xsl:param name="inputBaseFile" as="xs:string" />
-    <xsl:param name="fileBaseFile" as="xs:string" />
+    <xsl:param name="inputMapUri" as="xs:string" />
+    <xsl:param name="fileUri" as="xs:string" />
 
-    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $fileBaseFile), resolve-uri('.', $inputBaseFile), '')" />
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $fileUri), resolve-uri('.', $inputMapUri), '')" />
 
   </xsl:function>
 
   <!--
   - Calculates the relative path between the input map directory and the file.
   -
-  - @param inputBaseDir   the input map file
-  - @param fileBaseDir    the file file
+  - @param inputMapUri    the input map URI
+  - @param fileUri        the file URI
   - @param fileName       the file name
-  - @return               the relative path
+  - @return               the relative path from the map dir to the file
   -->
   <xsl:function name="dita-ot:get-path2file" as="xs:string?">
-    <xsl:param name="inputBaseDir" as="xs:string" />
-    <xsl:param name="fileBaseDir" as="xs:string" />
+    <xsl:param name="inputMapUri" as="xs:string" />
+    <xsl:param name="fileUri" as="xs:string" />
     <xsl:param name="fileName" as="xs:string" />
 
-    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $inputBaseDir), resolve-uri('.', $fileBaseDir), $fileName)" />
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $inputMapUri), resolve-uri('.', $fileUri), $fileName)" />
   </xsl:function>
 
   <!--
