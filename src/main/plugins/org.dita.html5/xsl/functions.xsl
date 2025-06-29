@@ -303,7 +303,7 @@ See the accompanying LICENSE file for applicable license.
   -
   - @param inputMapUri    the input map URI
   - @param fileUri        the file URI
-  - @return               the relative path from the file dir to the map dir
+  - @return               the relative path
   -->
   <xsl:function name="dita-ot:get-path2map-dir" as="xs:string?">
     <xsl:param name="inputMapUri" as="xs:string" />
@@ -319,7 +319,7 @@ See the accompanying LICENSE file for applicable license.
   - @param inputMapUri    the input map URI
   - @param fileUri        the file URI
   - @param fileName       the file name
-  - @return               the relative path from the map dir to the file
+  - @return               the relative path
   -->
   <xsl:function name="dita-ot:get-path2file" as="xs:string?">
     <xsl:param name="inputMapUri" as="xs:string" />
