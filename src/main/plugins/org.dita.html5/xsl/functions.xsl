@@ -298,4 +298,66 @@ See the accompanying LICENSE file for applicable license.
     <xsl:value-of select="replace(translate($href, '\', '/'), ' ', '%20')"/>
   </xsl:function>
 
+  <!--
+  - Calculates the relative path between the file directory and the input map directory.
+  -
+  - @param inputMapUri    the input map URI
+  - @param fileUri        the file URI
+  - @return               the relative path
+  -->
+  <xsl:function name="dita-ot:get-path2map-dir" as="xs:string?">
+    <xsl:param name="inputMapUri" as="xs:string" />
+    <xsl:param name="fileUri" as="xs:string" />
+
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $fileUri), resolve-uri('.', $inputMapUri), '')" />
+  </xsl:function>
+
+  <!--
+  - Calculates the relative path between the input map directory and the file.
+  -
+  - @param inputMapUri    the input map URI
+  - @param fileUri        the file URI
+  - @param fileName       the file name
+  - @return               the relative path
+  -->
+  <xsl:function name="dita-ot:get-path2file" as="xs:string?">
+    <xsl:param name="inputMapUri" as="xs:string" />
+    <xsl:param name="fileUri" as="xs:string" />
+    <xsl:param name="fileName" as="xs:string" />
+
+    <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $inputMapUri), resolve-uri('.', $fileUri), $fileName)" />
+  </xsl:function>
+
+  <!--
+  - Calculates the relative path between a directory and a file in another directory.
+  - If the file name is an empty string, then it returns the relative path between the directories.
+  -
+  - @param baseDir      the base directory
+  - @param targetDir     the target directory
+  - @param targetFile   the target file
+  - @return             the relative path
+  -->
+  <xsl:function name="dita-ot:get-relative-path" as="xs:string?">
+    <xsl:param name="baseDir" as="xs:string" />
+    <xsl:param name="targetDir" as="xs:string" />
+    <xsl:param name="targetFile" as="xs:string"/>
+
+    <xsl:variable name="baseDirTokens" as="xs:string+" select="tokenize(replace($baseDir, '/$', ''), '/')" />
+    <xsl:variable name="targetDirTokens" as="xs:string+" select="tokenize(replace($targetDir, '/$', ''), '/')" />
+
+    <xsl:variable name="pathFromCommonToTarget" as="xs:string*"
+                  select="for $i in 1 to count($targetDirTokens)
+                          return if ($i > count($baseDirTokens) or $targetDirTokens[$i] != $baseDirTokens[$i])
+                                 then $targetDirTokens[$i]
+                                 else ()"/>
+
+    <xsl:variable name="pathFromBaseToCommon" as="xs:string*"
+                  select="for $i in 1 to count($baseDirTokens)
+                          return if ($i > count($targetDirTokens) or $targetDirTokens[$i] != $baseDirTokens[$i])
+                                 then '..'
+                                 else ()"/>
+
+    <xsl:sequence select="string-join(($pathFromBaseToCommon, $pathFromCommonToTarget, $targetFile), '/')" />
+  </xsl:function>
+
 </xsl:stylesheet>

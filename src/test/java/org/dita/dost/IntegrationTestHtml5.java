@@ -116,4 +116,48 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
       .warnCount(1)
       .test();
   }
+
+  @Test
+  public void html5_uplevels3_nav_toc_full() throws Throwable {
+    builder()
+      .name("html5_uplevels3_nav_toc_full")
+      .transtype(HTML5)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("nav-toc", "full")
+      .test();
+  }
+
+  @Test
+  public void html5_nav_toc_full() throws Throwable {
+    builder()
+      .name("html5_nav_toc_full")
+      .transtype(HTML5)
+      .input(Paths.get("base.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("nav-toc", "full")
+      .test();
+  }
+
+  @Test
+  public void html5_uplevels3_nav_toc_partial() throws Throwable {
+    builder()
+      .name("html5_uplevels3_nav_toc_partial")
+      .transtype(HTML5)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("nav-toc", "partial")
+      .test();
+  }
+
+  @Test
+  public void html5_nav_toc_partial() throws Throwable {
+    builder()
+      .name("html5_nav_toc_partial")
+      .transtype(HTML5)
+      .input(Paths.get("base.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("nav-toc", "partial")
+      .test();
+  }
 }
