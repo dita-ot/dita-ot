@@ -310,7 +310,6 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="fileUri" as="xs:string" />
 
     <xsl:sequence select="dita-ot:get-relative-path(resolve-uri('.', $fileUri), resolve-uri('.', $inputMapUri), '')" />
-
   </xsl:function>
 
   <!--
@@ -334,27 +333,27 @@ See the accompanying LICENSE file for applicable license.
   - If the file name is an empty string, then it returns the relative path between the directories.
   -
   - @param baseDir      the base directory
-  - @param tagetDir     the target directory
+  - @param targetDir     the target directory
   - @param targetFile   the target file
   - @return             the relative path
   -->
   <xsl:function name="dita-ot:get-relative-path" as="xs:string?">
     <xsl:param name="baseDir" as="xs:string" />
-    <xsl:param name="tagetDir" as="xs:string" />
+    <xsl:param name="targetDir" as="xs:string" />
     <xsl:param name="targetFile" as="xs:string"/>
 
     <xsl:variable name="baseDirTokens" as="xs:string+" select="tokenize(replace($baseDir, '/$', ''), '/')" />
-    <xsl:variable name="tagetDirTokens" as="xs:string+" select="tokenize(replace($tagetDir, '/$', ''), '/')" />
+    <xsl:variable name="targetDirTokens" as="xs:string+" select="tokenize(replace($targetDir, '/$', ''), '/')" />
 
     <xsl:variable name="pathFromCommonToTarget" as="xs:string*"
-                  select="for $i in 1 to count($tagetDirTokens)
-                          return if ($i > count($baseDirTokens) or $tagetDirTokens[$i] != $baseDirTokens[$i])
-                                 then $tagetDirTokens[$i]
+                  select="for $i in 1 to count($targetDirTokens)
+                          return if ($i > count($baseDirTokens) or $targetDirTokens[$i] != $baseDirTokens[$i])
+                                 then $targetDirTokens[$i]
                                  else ()"/>
 
     <xsl:variable name="pathFromBaseToCommon" as="xs:string*"
                   select="for $i in 1 to count($baseDirTokens)
-                          return if ($i > count($tagetDirTokens) or $tagetDirTokens[$i] != $baseDirTokens[$i])
+                          return if ($i > count($targetDirTokens) or $targetDirTokens[$i] != $baseDirTokens[$i])
                                  then '..'
                                  else ()"/>
 
