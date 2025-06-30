@@ -145,6 +145,8 @@ if (System.getProperty("log_level") != null) {
 }
 
 tasks.register('integrationTest', Test) {
+    group = "verification"
+    description = "Run integration tests."
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -178,6 +180,8 @@ if (System.getProperty("log_level") != null) {
 }
 
 tasks.register('e2eTest', Test) {
+    group = "verification"
+    description = "Run end-to-end tests."
     dependsOn 'buildLocal'
     minHeapSize = "128m"
     maxHeapSize = "1024m"
@@ -214,7 +218,8 @@ task copyInstall(type: Copy) {
     destinationDir = file("src/main/lib")
 }
 task buildLocal(type: JavaExec, dependsOn: [copyInstall, ":fo:copyInstall", ":fop:copyInstall", ":htmlhelp:copyInstall", ":html5:compileSass"]) {
-    description "Build archives and install all plugins with dependencies"
+    group = "build"
+    description "Build archives and install all plugins with dependencies."
     mainClass = "org.apache.tools.ant.launch.Launcher"
     classpath = sourceSets.main.runtimeClasspath + files("${projectDir}/src/main", "${projectDir}/src/main/config")
     workingDir file("${projectDir}/src/main")
