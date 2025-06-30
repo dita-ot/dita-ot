@@ -119,7 +119,6 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
   @Test
   public void html5_uplevels3_nav_toc_full() throws Throwable {
-    final File srcDir = new File(resourceDir, "html5_uplevels3_nav_toc_full" + File.separator + "src");
     builder()
       .name("html5_uplevels3_nav_toc_full")
       .transtype(HTML5)
@@ -131,7 +130,6 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
   @Test
   public void html5_nav_toc_full() throws Throwable {
-    final File srcDir = new File(resourceDir, "html5_nav_toc_full" + File.separator + "src");
     builder()
       .name("html5_nav_toc_full")
       .transtype(HTML5)
@@ -143,7 +141,6 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
   @Test
   public void html5_uplevels3_nav_toc_partial() throws Throwable {
-    final File srcDir = new File(resourceDir, "html5_uplevels3_nav_toc_partial" + File.separator + "src");
     builder()
       .name("html5_uplevels3_nav_toc_partial")
       .transtype(HTML5)
@@ -155,7 +152,6 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
   @Test
   public void html5_nav_toc_partial() throws Throwable {
-    final File srcDir = new File(resourceDir, "html5_nav_toc_partial" + File.separator + "src");
     builder()
       .name("html5_nav_toc_partial")
       .transtype(HTML5)
