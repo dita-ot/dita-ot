@@ -20,15 +20,15 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class TestDITAOTCopy {
+public class DITAOTCopyTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestDITAOTCopy.class);
+  private static final File resourceDir = TestUtils.getResourceDir(DITAOTCopyTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static File tempDir;
 
   @BeforeAll
   public static void setUp() throws IOException {
-    tempDir = TestUtils.createTempDir(TestDITAOTCopy.class);
+    tempDir = TestUtils.createTempDir(DITAOTCopyTest.class);
   }
 
   @Test

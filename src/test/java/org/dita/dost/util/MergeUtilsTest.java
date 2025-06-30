@@ -18,15 +18,14 @@ import java.io.File;
 import java.io.IOException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.MergeUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class TestMergeUtils {
+public class MergeUtilsTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestMergeUtils.class);
+  private static final File resourceDir = TestUtils.getResourceDir(MergeUtilsTest.class);
   private static final File srcDir = new File(resourceDir, "src");
 
   public static MergeUtils mergeUtils;

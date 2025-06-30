@@ -41,9 +41,9 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-public class TestKeyrefReader {
+public class KeyrefReaderTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestKeyrefReader.class);
+  private static final File resourceDir = TestUtils.getResourceDir(KeyrefReaderTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private final XMLUtils xmlUtils = new XMLUtils();
 

@@ -16,7 +16,7 @@ import java.util.Locale;
 import javax.xml.namespace.QName;
 import org.junit.jupiter.api.Test;
 
-public class TestStringUtils {
+public class StringUtilsTest {
 
   @Test
   public void testAssembleString() {
