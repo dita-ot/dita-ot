@@ -23,13 +23,18 @@ jobs:
             build/spotless-*
             build/tmp/spotless-register-dependencies
           key: ${{ runner.os }}-${{ hashFiles('.prettierrc') }}-${{ hashFiles('.nvmrc') }}
+      - name: Start Gradle Daemon
+        run: ./gradlew --dry-run
       - name: Check formatting
-        run: ./gradlew spotlessCheck --info --stacktrace --no-daemon
+        run: ./gradlew spotlessCheck --info --stacktrace
       - name: Build with Gradle
-        run: ./gradlew --info --stacktrace --no-daemon
+        run: ./gradlew --info --stacktrace
       - name: Run unit tests
-        run: ./gradlew test --info --stacktrace --no-daemon
+        run: ./gradlew test --info --stacktrace
       - name: Run end to end tests
-        run: ./gradlew e2eTest --info --stacktrace --no-daemon
+        run: ./gradlew e2eTest --info --stacktrace
       - name: Run integration tests
-        run: ./gradlew integrationTest --info --stacktrace --no-daemon
+        run: ./gradlew integrationTest --info --stacktrace
+      - name: Stop Gradle Daemon
+        if: always()
+        run: ./gradlew --stop
