@@ -121,6 +121,8 @@ artifacts {
 test {
     useJUnitPlatform {
         filter {
+            includeTestsMatching "Test*"
+            excludeTestsMatching "TestUtils"
             includeTestsMatching "*Test"
             excludeTestsMatching "IntegrationTest*"
             excludeTestsMatching "EndToEndTest*"
