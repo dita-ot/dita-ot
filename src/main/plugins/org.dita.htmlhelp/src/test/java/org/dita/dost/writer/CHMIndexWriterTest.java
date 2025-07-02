@@ -22,15 +22,15 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class TestCHMIndexWriter {
+public class CHMIndexWriterTest {
 
   private static File tempDir;
-  private static final File resourceDir = TestUtils.getResourceDir(TestCHMIndexWriter.class);
+  private static final File resourceDir = TestUtils.getResourceDir(CHMIndexWriterTest.class);
   private static final File expDir = new File(resourceDir, "exp");
 
   @BeforeAll
   public static void setUp() throws IOException {
-    tempDir = TestUtils.createTempDir(TestCHMIndexWriter.class);
+    tempDir = TestUtils.createTempDir(CHMIndexWriterTest.class);
   }
 
   @Test

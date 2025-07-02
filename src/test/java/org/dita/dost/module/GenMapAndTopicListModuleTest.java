@@ -30,9 +30,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class TestGenMapAndTopicListModule {
+public class GenMapAndTopicListModuleTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestGenMapAndTopicListModule.class);
+  private static final File resourceDir = TestUtils.getResourceDir(GenMapAndTopicListModuleTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static final File expDir = new File(resourceDir, "exp");
 

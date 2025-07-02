@@ -10,16 +10,13 @@ package org.dita.dost.module;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
-import static org.dita.dost.util.Constants.INPUT_DITAMAP_URI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
-import org.dita.dost.module.TopicMergeModule;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
@@ -30,9 +27,9 @@ import org.junit.jupiter.api.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class TestTopicMergeModule {
+public class TopicMergeModuleTest {
 
-  private final File resourceDir = TestUtils.getResourceDir(TestTopicMergeModule.class);
+  private final File resourceDir = TestUtils.getResourceDir(TopicMergeModuleTest.class);
   private File tempDir;
 
   public TopicMergeModule module;

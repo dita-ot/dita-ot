@@ -14,7 +14,7 @@ import java.io.File;
 import org.dita.dost.TestUtils;
 import org.junit.jupiter.api.Test;
 
-public class TestIDitaTranstypeIndexWriter {
+public class IDitaTranstypeIndexWriterTest {
 
   public static final IDitaTranstypeIndexWriter idita1 = new CHMIndexWriter();
 

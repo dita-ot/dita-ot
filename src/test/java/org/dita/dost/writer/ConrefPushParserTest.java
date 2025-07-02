@@ -27,9 +27,9 @@ import org.w3c.dom.DocumentFragment;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class TestConrefPushParser {
+public class ConrefPushParserTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestConrefPushParser.class);
+  private static final File resourceDir = TestUtils.getResourceDir(ConrefPushParserTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static final File expDir = new File(resourceDir, "exp");
   private File tempDir;
@@ -37,7 +37,7 @@ public class TestConrefPushParser {
 
   @BeforeEach
   public void setUp() throws IOException {
-    tempDir = TestUtils.createTempDir(TestConrefPushParser.class);
+    tempDir = TestUtils.createTempDir(ConrefPushParserTest.class);
     targetFile = new File(tempDir, "conrefpush_stub2.xml");
     copyFile(new File(srcDir, "conrefpush_stub2.xml"), targetFile);
   }

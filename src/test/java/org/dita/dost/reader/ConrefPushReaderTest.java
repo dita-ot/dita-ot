@@ -30,20 +30,20 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 
-public class TestConrefPushReader {
+public class ConrefPushReaderTest {
 
-  private static final File resourceDir = TestUtils.getResourceDir(TestConrefPushReader.class);
+  private static final File resourceDir = TestUtils.getResourceDir(ConrefPushReaderTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private final DocumentBuilder builder;
   private File tempDir;
 
-  public TestConrefPushReader() throws ParserConfigurationException {
+  public ConrefPushReaderTest() throws ParserConfigurationException {
     builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
   }
 
   @BeforeEach
   public void setUp() throws IOException {
-    tempDir = TestUtils.createTempDir(TestConrefPushReader.class);
+    tempDir = TestUtils.createTempDir(ConrefPushReaderTest.class);
     copyFile(new File(srcDir, "conrefpush_stub.xml"), new File(tempDir, "conrefpush_stub.xml"));
   }
 
