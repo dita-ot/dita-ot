@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class IntegrationTestHtml5 extends AbstractIntegrationTest {
 
@@ -117,47 +119,22 @@ public class IntegrationTestHtml5 extends AbstractIntegrationTest {
       .test();
   }
 
-  @Test
-  public void html5_uplevels3_nav_toc_full() throws Throwable {
+  @ParameterizedTest(name = "{0}")
+  @CsvSource(
+    {
+      "html5_uplevels3_nav_toc_full, maps/above.ditamap, full",
+      "html5_nav_toc_full, base.ditamap, full",
+      "html5_uplevels3_nav_toc_partial, maps/above.ditamap, partial",
+      "html5_nav_toc_partial, base.ditamap, partial",
+    }
+  )
+  public void html5_nav_toc(String name, String input, String navToc) throws Throwable {
     builder()
-      .name("html5_uplevels3_nav_toc_full")
+      .name(name)
       .transtype(HTML5)
-      .input(Paths.get("maps/above.ditamap"))
+      .input(Paths.get(input))
       .put("generate.copy.outer", "3")
-      .put("nav-toc", "full")
-      .test();
-  }
-
-  @Test
-  public void html5_nav_toc_full() throws Throwable {
-    builder()
-      .name("html5_nav_toc_full")
-      .transtype(HTML5)
-      .input(Paths.get("base.ditamap"))
-      .put("generate.copy.outer", "3")
-      .put("nav-toc", "full")
-      .test();
-  }
-
-  @Test
-  public void html5_uplevels3_nav_toc_partial() throws Throwable {
-    builder()
-      .name("html5_uplevels3_nav_toc_partial")
-      .transtype(HTML5)
-      .input(Paths.get("maps/above.ditamap"))
-      .put("generate.copy.outer", "3")
-      .put("nav-toc", "partial")
-      .test();
-  }
-
-  @Test
-  public void html5_nav_toc_partial() throws Throwable {
-    builder()
-      .name("html5_nav_toc_partial")
-      .transtype(HTML5)
-      .input(Paths.get("base.ditamap"))
-      .put("generate.copy.outer", "3")
-      .put("nav-toc", "partial")
+      .put("nav-toc", navToc)
       .test();
   }
 }
