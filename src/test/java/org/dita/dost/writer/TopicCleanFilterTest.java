@@ -15,20 +15,22 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
+import java.util.stream.Stream;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 class TopicCleanFilterTest {
 
-  private TopicCleanFilter filter;
-  private Job job;
+  private final TopicCleanFilter filter;
+  private final Job job;
 
   TopicCleanFilterTest() throws IOException {
     filter = new TopicCleanFilter();
@@ -41,23 +43,26 @@ class TopicCleanFilterTest {
     job.getFileInfo().forEach(job::remove);
   }
 
-  @ParameterizedTest
-  @CsvSource(
-    {
-      "path2project,topic.dita,root.ditamap,",
-      "path2project,dir/topic.dita,root.ditamap,../",
-      "path2project,dir/sub/topic.dita,root.ditamap,../../",
-      "path2project-uri,topic.dita,root.ditamap,./",
-      "path2project-uri,dir/topic.dita,root.ditamap,../",
-      "path2project-uri,dir/sub/topic.dita,root.ditamap,../../",
-      "path2rootmap-uri,topic.dita,root.ditamap,",
-      "path2rootmap-uri,dir/topic.dita,root.ditamap,../",
-      "path2rootmap-uri,dir/sub/topic.dita,root.ditamap,../../",
-      "path2rootmap-uri,topic.dita,maps/root.ditamap,maps/",
-      "path2rootmap-uri,dir/topic.dita,maps/root.ditamap,../maps/",
-      "path2rootmap-uri,dir/sub/topic.dita,maps/root.ditamap,../../maps/",
-    }
-  )
+  public static Stream<Arguments> processingInstructionInputs() {
+    final String ps = File.separator;
+    return Stream.of(
+      Arguments.of("path2project", "topic.dita", "root.ditamap", ""),
+      Arguments.of("path2project", "dir/topic.dita", "root.ditamap", ".." + ps),
+      Arguments.of("path2project", "dir/sub/topic.dita", "root.ditamap", ".." + ps + ".." + ps),
+      Arguments.of("path2project-uri", "topic.dita", "root.ditamap", "./"),
+      Arguments.of("path2project-uri", "dir/topic.dita", "root.ditamap", "../"),
+      Arguments.of("path2project-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
+      Arguments.of("path2rootmap-uri", "topic.dita", "root.ditamap", ""),
+      Arguments.of("path2rootmap-uri", "dir/topic.dita", "root.ditamap", "../"),
+      Arguments.of("path2rootmap-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
+      Arguments.of("path2rootmap-uri", "topic.dita", "maps/root.ditamap", "maps/"),
+      Arguments.of("path2rootmap-uri", "dir/topic.dita", "maps/root.ditamap", "../maps/"),
+      Arguments.of("path2rootmap-uri", "dir/sub/topic.dita", "maps/root.ditamap", "../../maps/")
+    );
+  }
+
+  @ParameterizedTest(name = "name={0}, src={1}, input={2}, exp={3}")
+  @MethodSource("processingInstructionInputs")
   void processingInstruction(String name, String src, String input, String exp) throws SAXException {
     job.add(
       Job.FileInfo
