@@ -44,11 +44,10 @@ class TopicCleanFilterTest {
   }
 
   public static Stream<Arguments> processingInstructionInputs() {
-    final String ps = File.separator;
     return Stream.of(
       Arguments.of("path2project", "topic.dita", "root.ditamap", ""),
-      Arguments.of("path2project", "dir/topic.dita", "root.ditamap", ".." + ps),
-      Arguments.of("path2project", "dir/sub/topic.dita", "root.ditamap", ".." + ps + ".." + ps),
+      Arguments.of("path2project", "dir/topic.dita", "root.ditamap", ".." + File.separator),
+      Arguments.of("path2project", "dir/sub/topic.dita", "root.ditamap", ".." + File.separator + ".." + File.separator),
       Arguments.of("path2project-uri", "topic.dita", "root.ditamap", "./"),
       Arguments.of("path2project-uri", "dir/topic.dita", "root.ditamap", "../"),
       Arguments.of("path2project-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),

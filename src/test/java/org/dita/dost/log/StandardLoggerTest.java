@@ -29,11 +29,6 @@ class StandardLoggerTest {
   private ByteArrayOutputStream err;
   private static String EOL;
 
-  @BeforeAll
-  static void setUpClass() {
-    EOL = System.lineSeparator();
-  }
-
   @BeforeEach
   void setUp() {
     out = new ByteArrayOutputStream();
@@ -102,7 +97,7 @@ class StandardLoggerTest {
   }
 
   private void assertOut(final String exp) {
-    assertEquals(exp + EOL, out.toString(StandardCharsets.UTF_8));
+    assertEquals(exp + System.lineSeparator(), out.toString(StandardCharsets.UTF_8));
   }
 
   private void assertErr() {
@@ -110,6 +105,6 @@ class StandardLoggerTest {
   }
 
   private void assertErr(final String exp) {
-    assertEquals(exp + EOL, err.toString(StandardCharsets.UTF_8));
+    assertEquals(exp + System.lineSeparator(), err.toString(StandardCharsets.UTF_8));
   }
 }
