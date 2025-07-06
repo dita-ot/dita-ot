@@ -24,6 +24,7 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
@@ -726,7 +727,7 @@ public final class Integrator {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
       logger.trace("Generate start command shell {}", outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
+      out = Files.newBufferedWriter(outFile.toPath());
 
       out.write(
         """
@@ -799,7 +800,7 @@ public final class Integrator {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
       logger.trace("Generate start command batch {}", outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
+      out = Files.newBufferedWriter(outFile.toPath());
 
       out.write(
         """
