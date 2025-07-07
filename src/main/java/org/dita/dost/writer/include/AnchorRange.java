@@ -13,12 +13,24 @@ import java.io.IOException;
 import org.dita.dost.writer.CoderefResolver;
 import org.xml.sax.SAXException;
 
+/**
+ * Range based on anchors that define the start and end of a range.
+ * Lines between the start and end achors are included.
+ * If the start anchor is {@code null}, lines are included from the first line until the line before the end anchor.
+ * If the end anchor is {@code null}, lines are included from line after the start anchor until the last line.
+ * If both start and end anchor are {@code null}, all lines are included.
+ */
 public class AnchorRange extends AllRange implements Range {
 
   private final String start;
   private final String end;
   private int include;
 
+  /**
+   * Create a new anchor range based on case-sensitive matching for lines that contain the anchor.
+   * @param start start anchor, exclusive, may be {@code null}
+   * @param end end line, exclusive, may be {@code null}
+   */
   public AnchorRange(final String start, final String end) {
     this.start = start;
     this.end = end;

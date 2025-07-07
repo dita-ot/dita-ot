@@ -14,6 +14,9 @@ import org.dita.dost.writer.CoderefResolver;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
+/**
+ * Range that includes all lines.
+ */
 public class AllRange implements Range {
 
   ContentHandler handler;
