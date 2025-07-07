@@ -53,8 +53,10 @@ public class AnchorRange extends AllRange implements Range {
         } else {
           handler.characters(CoderefResolver.XML_NEWLINE, 0, CoderefResolver.XML_NEWLINE.length);
         }
-        final char[] ch = line.toCharArray();
-        handler.characters(ch, 0, ch.length);
+        if (!line.isEmpty()) {
+          final char[] ch = line.toCharArray();
+          handler.characters(ch, 0, ch.length);
+        }
       }
       if (include >= 0) {
         include++;

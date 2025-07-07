@@ -53,7 +53,7 @@ class AllRangeTest {
     var reader = new BufferedReader(new StringReader("\n"));
     range.copyLines(reader);
 
-    assertEquals(List.of(""), handler.lines);
+    assertEquals(List.of(), handler.lines);
   }
 
   @Test
