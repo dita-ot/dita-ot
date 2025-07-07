@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -123,23 +124,9 @@ public class TestUtils {
    * @throws IOException if reading file failed
    */
   public static String readFileToString(final File file, final boolean ignoreHead) throws IOException {
-    final StringBuilder std = new StringBuilder();
     try (BufferedReader in = Files.newBufferedReader(file.toPath())) {
-      boolean firstLine = true;
-      if (ignoreHead) {
-        in.readLine();
-      }
-      String str;
-      while ((str = in.readLine()) != null) {
-        if (!firstLine) {
-          std.append("\n");
-        } else {
-          firstLine = false;
-        }
-        std.append(str);
-      }
+      return in.lines().skip(ignoreHead ? 1 : 0).collect(Collectors.joining("\n"));
     }
-    return std.toString();
   }
 
   /**
