@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
@@ -123,7 +124,7 @@ public class TestUtils {
    */
   public static String readFileToString(final File file, final boolean ignoreHead) throws IOException {
     final StringBuilder std = new StringBuilder();
-    try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+    try (BufferedReader in = Files.newBufferedReader(file.toPath())) {
       boolean firstLine = true;
       if (ignoreHead) {
         in.readLine();
@@ -151,7 +152,7 @@ public class TestUtils {
    */
   public static String readXmlToString(final File file, final boolean normalize, final boolean clean) throws Exception {
     final Writer std = new CharArrayWriter();
-    try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+    try (InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()))) {
       final Transformer serializer = TransformerFactory.newInstance().newTransformer();
       XMLReader p = XMLReaderFactory.createXMLReader();
       p.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -262,8 +263,8 @@ public class TestUtils {
     final XMLReader parser = XMLReaderFactory.createXMLReader();
     parser.setEntityResolver(CatalogUtils.getCatalogResolver());
     try (
-      InputStream in = new BufferedInputStream(new FileInputStream(src));
-      OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))
+      InputStream in = new BufferedInputStream(Files.newInputStream(src.toPath()));
+      OutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()))
     ) {
       serializer.transform(new SAXSource(parser, new InputSource(in)), new StreamResult(out));
     }

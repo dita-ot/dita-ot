@@ -482,9 +482,7 @@ public abstract class AbstractIntegrationTest {
    */
   private String[] readTextFile(final File f) throws IOException {
     final List<String> buf = new ArrayList<>();
-    try (
-      final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))
-    ) {
+    try (final BufferedReader r = Files.newBufferedReader(f.toPath(), StandardCharsets.UTF_8)) {
       String l;
       while ((l = r.readLine()) != null) {
         buf.add(l);
