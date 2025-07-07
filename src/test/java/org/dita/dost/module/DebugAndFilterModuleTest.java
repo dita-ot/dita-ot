@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -111,7 +112,7 @@ public class DebugAndFilterModuleTest {
     parser.setEntityResolver(CatalogUtils.getCatalogResolver());
     parser.setContentHandler(handler);
     for (final File f : files) {
-      try (InputStream in = new FileInputStream(new File(tmpDir, f.getPath()))) {
+      try (InputStream in = Files.newInputStream(new File(tmpDir, f.getPath()).toPath())) {
         handler.setSource(new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
         parser.parse(new InputSource(in));
       }

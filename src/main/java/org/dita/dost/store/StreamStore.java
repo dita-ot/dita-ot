@@ -374,10 +374,10 @@ public class StreamStore extends AbstractStore implements Store {
     final URI f = getUri(path);
     if (isTempFile(f)) {
       if (LOG) System.err.println("  getInputStream:" + f);
-      return new FileInputStream(toFile(f));
+      return Files.newInputStream(toFile(f).toPath());
     } else if ("file".equals(path.getScheme())) {
       if (LOG) System.err.println("  getInputStream:" + path);
-      return new FileInputStream(toFile(path));
+      return Files.newInputStream(toFile(path).toPath());
     } else {
       if (LOG) System.err.println("  getInputStream:" + f);
       return f.toURL().openStream();

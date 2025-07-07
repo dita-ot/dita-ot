@@ -14,8 +14,10 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -122,23 +124,9 @@ public class TestUtils {
    * @throws IOException if reading file failed
    */
   public static String readFileToString(final File file, final boolean ignoreHead) throws IOException {
-    final StringBuilder std = new StringBuilder();
-    try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-      boolean firstLine = true;
-      if (ignoreHead) {
-        in.readLine();
-      }
-      String str;
-      while ((str = in.readLine()) != null) {
-        if (!firstLine) {
-          std.append("\n");
-        } else {
-          firstLine = false;
-        }
-        std.append(str);
-      }
+    try (BufferedReader in = Files.newBufferedReader(file.toPath())) {
+      return in.lines().skip(ignoreHead ? 1 : 0).collect(Collectors.joining("\n"));
     }
-    return std.toString();
   }
 
   /**
@@ -151,7 +139,7 @@ public class TestUtils {
    */
   public static String readXmlToString(final File file, final boolean normalize, final boolean clean) throws Exception {
     final Writer std = new CharArrayWriter();
-    try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+    try (InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()))) {
       final Transformer serializer = TransformerFactory.newInstance().newTransformer();
       XMLReader p = XMLReaderFactory.createXMLReader();
       p.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -262,8 +250,8 @@ public class TestUtils {
     final XMLReader parser = XMLReaderFactory.createXMLReader();
     parser.setEntityResolver(CatalogUtils.getCatalogResolver());
     try (
-      InputStream in = new BufferedInputStream(new FileInputStream(src));
-      OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))
+      InputStream in = new BufferedInputStream(Files.newInputStream(src.toPath()));
+      OutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()))
     ) {
       serializer.transform(new SAXSource(parser, new InputSource(in)), new StreamResult(out));
     }

@@ -9,6 +9,7 @@
 package org.dita.dost.platform;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,8 +82,8 @@ final class FileGenerator extends XMLFilterImpl {
     templateFile = fileName;
 
     try (
-      final InputStream in = new BufferedInputStream(new FileInputStream(fileName));
-      final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))
+      final InputStream in = new BufferedInputStream(Files.newInputStream(fileName.toPath()));
+      final OutputStream out = new BufferedOutputStream(Files.newOutputStream(outputFile.toPath()))
     ) {
       final Transformer serializer = TransformerFactory.newInstance().newTransformer();
       final SAXParserFactory parserFactory = SAXParserFactory.newInstance();

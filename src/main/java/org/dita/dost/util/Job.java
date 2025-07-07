@@ -181,7 +181,7 @@ public final class Job {
   private void read() throws IOException {
     lastModified = getStore().getLastModified(jobFile.toURI());
     if (getStore().exists(jobFile.toURI())) {
-      try (final InputStream in = new FileInputStream(jobFile)) {
+      try {
         getStore().transform(jobFile.toURI(), new JobHandler(prop, files));
       } catch (final DITAOTException e) {
         throw new IOException("Failed to read job file: " + e.getMessage());

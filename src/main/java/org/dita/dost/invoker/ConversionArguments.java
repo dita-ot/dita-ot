@@ -18,6 +18,9 @@ import static org.dita.dost.util.XMLUtils.toList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
@@ -359,14 +362,10 @@ public class ConversionArguments extends Arguments {
     for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
       final String filename = propertyFiles.elementAt(propertyFileIndex);
       final Properties props = new Properties();
-      FileInputStream fis = null;
-      try {
-        fis = new FileInputStream(filename);
+      try (var fis = Files.newInputStream(Path.of(filename));) {
         props.load(fis);
       } catch (final IOException e) {
         System.out.println("Could not load property file " + filename + ": " + e.getMessage());
-      } finally {
-        FileUtils.close(fis);
       }
 
       // ensure that -D properties take precedence

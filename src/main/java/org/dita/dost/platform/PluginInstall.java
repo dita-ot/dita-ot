@@ -146,7 +146,7 @@ public final class PluginInstall {
   private String getFileHash(final File file) {
     try (
       DigestInputStream digestInputStream = new DigestInputStream(
-        new BufferedInputStream(new FileInputStream(file)),
+        new BufferedInputStream(Files.newInputStream(file.toPath())),
         MessageDigest.getInstance("SHA-256")
       )
     ) {

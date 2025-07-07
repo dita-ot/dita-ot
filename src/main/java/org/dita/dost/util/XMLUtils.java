@@ -730,8 +730,8 @@ public final class XMLUtils {
     }
 
     try (
-      final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-      final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))
+      final InputStream in = new BufferedInputStream(Files.newInputStream(inputFile.toPath()));
+      final OutputStream out = new BufferedOutputStream(Files.newOutputStream(outputFile.toPath()))
     ) {
       XMLReader reader = getXMLReader();
       for (final XMLFilter filter : filters) {

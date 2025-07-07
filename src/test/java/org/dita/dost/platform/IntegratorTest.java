@@ -175,7 +175,7 @@ public class IntegratorTest {
 
   private Properties getProperties(final File f) throws IOException {
     final Properties p = new Properties();
-    try (InputStream in = new FileInputStream(f)) {
+    try (InputStream in = Files.newInputStream(f.toPath())) {
       p.load(in);
     }
     return p;
