@@ -69,7 +69,7 @@ public class XSpecTest {
 
   @TestFactory
   Stream<DynamicNode> xspecTests() {
-    List<File> files = getFiles(); // or any other filter
+    List<File> files = getFiles();
 
     return files.stream().map(file -> dynamicContainer(file.getName(), testXSpec(file)));
   }
@@ -92,88 +92,89 @@ public class XSpecTest {
 
   private Stream<DynamicTest> parseXSpecResults(XdmNode results) throws SaxonApiException {
     List<DynamicTest> dynamicTests = new ArrayList<>();
-    Processor processor = runner.getProcessor();
-    XPathCompiler xpath = processor.newXPathCompiler();
-    xpath.declareNamespace("x", XSPEC_NS);
+    XPathCompiler xpath = getXPathCompiler();
+    XPathSelector allScenarios = getAllScenarios(results, xpath);
 
-    String xpathFailingScenario = "//x:scenario[x:test[@successful='false' and not(@pending)]]";
-    XPathSelector failingScenarios = xpath.compile(xpathFailingScenario).load();
-    failingScenarios.setContextItem(results);
-    processFailingScenarios(failingScenarios, xpath, dynamicTests);
+    for (XdmItem scenario : allScenarios) {
+      String label = getLabel(xpath, scenario);
 
-    String xpathSuccessfulScenarios = "//x:scenario[x:test[@successful='true' and not(@pending)]]";
-    XPathSelector successfulScenarios = xpath.compile(xpathSuccessfulScenarios).load();
-    successfulScenarios.setContextItem(results);
-    processSuccessfulScenarios(successfulScenarios, xpath, dynamicTests);
-
-    String xpathSkippedScenarios = "//x:scenario[x:test[@pending]]";
-    XPathSelector skippedScenarios = xpath.compile(xpathSkippedScenarios).load();
-    skippedScenarios.setContextItem(results);
-    processSkippedScenarios(skippedScenarios, xpath, dynamicTests);
+      if (isPendingTest(xpath, scenario)) {
+        addPending(dynamicTests, label);
+      } else if (isSuccessfulTest(xpath, scenario)) {
+        addSuccess(dynamicTests, label);
+      } else {
+        addFailure(xpath, scenario, dynamicTests, label);
+      }
+    }
 
     return dynamicTests.stream();
   }
 
-  private void processSuccessfulScenarios(
-    XPathSelector successfulScenarios,
-    XPathCompiler xpath,
-    List<DynamicTest> dynamicTests
-  ) throws SaxonApiException {
-    for (XdmItem scenarioItem : successfulScenarios) {
-      XdmNode scenario = (XdmNode) scenarioItem;
-      String label = getLabel(xpath, scenario);
-
-      dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertTrue(true)));
-    }
+  private static XPathCompiler getXPathCompiler() {
+    Processor processor = runner.getProcessor();
+    XPathCompiler xpath = processor.newXPathCompiler();
+    xpath.declareNamespace("x", XSPEC_NS);
+    return xpath;
   }
 
-  private void processSkippedScenarios(
-    XPathSelector skippedScenarios,
-    XPathCompiler xpath,
-    List<DynamicTest> dynamicTests
-  ) throws SaxonApiException {
-    for (XdmItem scenarioItem : skippedScenarios) {
-      XdmNode scenario = (XdmNode) scenarioItem;
-      String label = getLabel(xpath, scenario);
-
-      dynamicTests.add(DynamicTest.dynamicTest(label, this::pending));
-    }
+  private static XPathSelector getAllScenarios(XdmNode results, XPathCompiler xpath) throws SaxonApiException {
+    String xpathAllScenarios = "//x:scenario";
+    XPathSelector allScenarios = xpath.compile(xpathAllScenarios).load();
+    allScenarios.setContextItem(results);
+    return allScenarios;
   }
 
-  private void pending() {
+  private void addPending(List<DynamicTest> dynamicTests, String label) {
+    dynamicTests.add(DynamicTest.dynamicTest(label, this::skipTest));
+  }
+
+  private static void addSuccess(List<DynamicTest> dynamicTests, String label) {
+    dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertTrue(true)));
+  }
+
+  private static void addFailure(XPathCompiler xpath, XdmItem scenario, List<DynamicTest> dynamicTests, String label)
+    throws SaxonApiException {
+    String actual = getNodeText(xpath, scenario, "x:result/*");
+    String expected = getExpected(xpath, scenario);
+    dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertEquals(expected, actual, label)));
+  }
+
+  private static String getExpected(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
+    String expected = getNodeText(xpath, scenario, "x:test/x:expect/*");
+    if (expected.isEmpty()) {
+      expected = getNodeText(xpath, scenario, "string(x:test/x:expect/@select)");
+    }
+    String finalExpected = expected;
+    return finalExpected;
+  }
+
+  private static boolean isSuccessfulTest(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
+    return Boolean.parseBoolean(getNodeText(xpath, scenario, "string(x:test/@successful)"));
+  }
+
+  private static boolean isPendingTest(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
+    XPathSelector selector = xpath.compile("x:test/@pending").load();
+    selector.setContextItem(scenario);
+    XdmItem pending = selector.evaluateSingle();
+    return (pending != null);
+  }
+
+  private void skipTest() {
     throw new TestAbortedException("Pending");
   }
 
-  private void processFailingScenarios(
-    XPathSelector failingScenarios,
-    XPathCompiler xpath,
-    List<DynamicTest> dynamicTests
-  ) throws SaxonApiException {
-    for (XdmItem scenarioItem : failingScenarios) {
-      XdmNode scenario = (XdmNode) scenarioItem;
-
-      String actual = getNodeText(xpath, scenario, "x:result/*");
-      String expected = getNodeText(xpath, scenario, "x:test/x:expect/*");
-      if (expected.isEmpty()) {
-        expected = getNodeText(xpath, scenario, "string(x:test/x:expect/@select)");
-      }
-      String finalExpected = expected;
-
-      String label = getLabel(xpath, scenario);
-
-      dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertEquals(finalExpected, actual, label)));
-    }
+  private static String getLabel(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
+    XPathSelector selector = xpath.compile("ancestor-or-self::x:scenario/x:label/text()").load();
+    selector.setContextItem(scenario);
+    XdmValue labels = selector.evaluate();
+    StringBuilder final_label = new StringBuilder();
+    for (XdmItem label : labels) final_label.append(" ").append(label.toString());
+    return final_label.toString().trim();
   }
 
-  private static String getLabel(XPathCompiler xpath, XdmNode scenario) throws SaxonApiException {
-    String mainLabel = getNodeText(xpath, scenario, "ancestor::x:scenario/x:label/text()");
-    String subLabel = getNodeText(xpath, scenario, "x:label/text()");
-    return mainLabel + (mainLabel.isEmpty() ? "" : " : ") + subLabel;
-  }
-
-  private static String getNodeText(XPathCompiler xpath, XdmNode context, String expr) throws SaxonApiException {
+  private static String getNodeText(XPathCompiler xpath, XdmItem scenario, String expr) throws SaxonApiException {
     XPathSelector selector = xpath.compile(expr).load();
-    selector.setContextItem(context);
+    selector.setContextItem(scenario);
     XdmItem item = selector.evaluateSingle();
     return item != null ? item.toString() : "";
   }
