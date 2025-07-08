@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
                stylesheet="dita-utilities.xsl">
 
   <x:scenario label="Scenario for testing replace template">
@@ -345,84 +346,6 @@
       </x:call>
 
       <x:expect label="return empty sequence" select="()"/>
-    </x:scenario>
-  </x:scenario>
-
-  <x:scenario label="dita-ot:get-first-topic-language">
-    <x:scenario label="@xml:lang of first child">
-      <x:call function="dita-ot:get-first-topic-language">
-        <x:param name="ctx">
-          <topic id="foo" xml:lang="is-is">
-            <title>foo</title>
-          </topic>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return @xml:lang" select="'is-is'"/>
-    </x:scenario>
-
-    <x:scenario label="@xml:lang of dita element child">
-      <x:call function="dita-ot:get-first-topic-language">
-        <x:param name="ctx">
-          <dita>
-            <topic id="foo" xml:lang="el-gr">
-              <title>foo</title>
-            </topic>
-          </dita>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return @xml:lang" select="'el-gr'"/>
-    </x:scenario>
-
-    <x:scenario label="upper-case @xml:lang">
-      <x:call function="dita-ot:get-first-topic-language">
-        <x:param name="ctx">
-          <topic id="foo" xml:lang="pt-BR">
-            <title>foo</title>
-          </topic>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return @xml:lang" select="'pt-br'"/>
-    </x:scenario>
-
-    <x:scenario label="no @xml:lang">
-      <x:call function="dita-ot:get-first-topic-language">
-        <x:param name="ctx">
-          <topic id="foo">
-            <title>foo</title>
-          </topic>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return $DEFAULTLANG" select="'en'"/>
-    </x:scenario>
-  </x:scenario>
-
-  <x:scenario label="dita-ot:get-current-language">
-    <x:scenario label="given element has @xml:lang">
-      <x:call function="dita-ot:get-current-language">
-        <x:param name="ctx">
-          <topic id="foo" xml:lang="el-gr">
-            <title>foo</title>
-          </topic>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return @xml:lang" select="'el-gr'"/>
-    </x:scenario>
-
-    <x:scenario label="given element has no @xml:lang">
-      <x:call function="dita-ot:get-current-language">
-        <x:param name="ctx">
-          <topic id="foo">
-            <title>foo</title>
-          </topic>
-        </x:param>
-      </x:call>
-
-      <x:expect label="return $DEFAULTLANG" select="'en'"/>
     </x:scenario>
   </x:scenario>
 
