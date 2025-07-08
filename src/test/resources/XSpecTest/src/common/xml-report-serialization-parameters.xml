@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<output:serialization-parameters xmlns:output="http://www.w3.org/2010/xslt-xquery-serialization">
+	<output:indent value="yes" />
+</output:serialization-parameters>

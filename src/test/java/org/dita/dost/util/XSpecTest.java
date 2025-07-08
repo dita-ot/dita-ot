@@ -7,35 +7,32 @@
  */
 package org.dita.dost.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.s9api.*;
+import org.dita.dost.TestUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xmlresolver.Resolver;
 
 public class XSpecTest {
 
   public static final String XSPEC_NS = "http://www.jenitennison.com/xslt/xspec";
   private static TransformerFactory transformerFactory;
-  private static Transformer compiler;
+  private static Transformer transformer;
   private static URIResolver resolver;
+  private static XSpecRunner runner;
 
   public static Stream<Arguments> getFiles() {
     final List<File> cases = new ArrayList<>();
@@ -55,14 +52,10 @@ public class XSpecTest {
     }
   }
 
-  //  private final File xspec;
-
-  //  public XSpecTest(final File xspec) {
-  //    this.xspec = xspec;
-  //  }
-
   @BeforeAll
   public static void setUpClass() throws TransformerException {
+    final File resourceDir = TestUtils.getResourceDir(XSpecTest.class);
+    final String resourceDirUri = resourceDir.toURI() + "/";
     transformerFactory = TransformerFactory.newInstance();
     final File ditaDir = new File(
       Optional.ofNullable(System.getProperty("dita.dir")).orElse("src" + File.separator + "main")
@@ -72,37 +65,81 @@ public class XSpecTest {
     final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
     resolver = new ClassPathResolver(catalogResolver);
     transformerFactory.setURIResolver(resolver);
-    final Source stylesheet = resolver.resolve("classpath:///XSpec/generate-xspec-tests.xsl", "");
-    compiler = transformerFactory.newTransformer(stylesheet);
-    compiler.setURIResolver(resolver);
+    final Source stylesheet = resolver.resolve("src/compiler/compile-xslt-tests.xsl", resourceDirUri);
+    transformer = transformerFactory.newTransformer(stylesheet);
+    transformer.setURIResolver(resolver);
+    runner = new XSpecRunner(resolver);
   }
 
-  @ParameterizedTest
+  @ParameterizedTest(name = "{0}")
   @MethodSource("getFiles")
-  public void testXSpec(File xspec) throws TransformerException, ParserConfigurationException {
+  public void testXSpec(File xspec) throws TransformerException, SaxonApiException {
+    final DOMSource compiledXSpec = getCompiledXSpec(xspec);
+    final XdmNode results = runner.runXSpec(compiledXSpec);
+    parseXSpecResults(results);
+  }
+
+  private static DOMSource getCompiledXSpec(File xspec) throws TransformerException {
     final DOMResult stylesheet = new DOMResult();
-    compiler.transform(new StreamSource(xspec), stylesheet);
+    transformer.transform(new StreamSource(xspec), stylesheet);
+    return new DOMSource(stylesheet.getNode());
+  }
 
-    final Transformer compiledXspec = transformerFactory.newTransformer(new DOMSource(stylesheet.getNode()));
-    final DOMResult results = new DOMResult();
-    compiledXspec.transform(
-      new DOMSource(DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()),
-      results
-    );
+  private void parseXSpecResults(XdmNode results) throws SaxonApiException {
+    List<Executable> testResults = new ArrayList<>();
+    Processor processor = runner.getProcessor(); // If not already shared
+    XPathCompiler xpath = processor.newXPathCompiler();
+    xpath.declareNamespace("x", XSPEC_NS);
 
-    final NodeList tests = ((Document) results.getNode()).getElementsByTagNameNS(XSPEC_NS, "test");
-    for (int i = 0; i < tests.getLength(); i++) {
-      final Element test = (Element) tests.item(i);
-      final boolean res =
-        Boolean.parseBoolean(test.getAttribute("successful")) || test.getAttributeNode("pending") != null;
-      if (!res) {
-        final Element scenario = (Element) test.getParentNode();
-        final Node label = scenario.getElementsByTagNameNS(XSPEC_NS, "label").item(0).getFirstChild();
-        final String act =
-          ((Element) scenario.getElementsByTagNameNS(XSPEC_NS, "result").item(0)).getAttribute("select");
-        final String exp = ((Element) test.getElementsByTagNameNS(XSPEC_NS, "expect").item(0)).getAttribute("select");
-        assertEquals(exp, act, label != null ? label.getTextContent() : null);
-      }
+    XPathSelector failingScenarios = xpath
+      .compile("//x:scenario[x:test[@successful='false' and not(@pending)]]")
+      .load();
+    failingScenarios.setContextItem(results);
+
+    for (XdmItem scenarioItem : failingScenarios) {
+      XdmNode scenario = (XdmNode) scenarioItem;
+      XPathSelector resultQuery = xpath.compile("x:result/*").load();
+      resultQuery.setContextItem(scenario);
+      XdmItem actual = resultQuery.evaluateSingle();
+      String act = actual != null ? actual.toString() : "";
+      XPathSelector expectQuery = xpath.compile("x:test/x:expect/*").load();
+      expectQuery.setContextItem(scenario);
+      XdmItem expected = expectQuery.evaluateSingle();
+      String exp = expected != null ? expected.toString() : "";
+      testResults.add(() -> Assertions.assertEquals(exp, act));
+    }
+
+    Assertions.assertAll(testResults);
+  }
+
+  public static class XSpecRunner {
+
+    private static final QName XSPEC_MAIN_TEMPLATE = new QName("x", "http://www.jenitennison.com/xslt/xspec", "main");
+
+    private final Processor processor;
+    private final URIResolver uriResolver;
+    private final XsltCompiler compiler;
+
+    public XSpecRunner(URIResolver uriResolver) {
+      this.processor = new Processor(false);
+      this.uriResolver = uriResolver;
+      this.compiler = processor.newXsltCompiler();
+      compiler.setURIResolver(uriResolver);
+    }
+
+    public Processor getProcessor() {
+      return this.processor;
+    }
+
+    public XdmNode runXSpec(DOMSource compiledXSpecSource) throws SaxonApiException {
+      XsltExecutable executable = compiler.compile(compiledXSpecSource);
+      Xslt30Transformer transformer = executable.load30();
+      transformer.setURIResolver(uriResolver);
+
+      XdmDestination destination = new XdmDestination();
+      transformer.callTemplate(XSPEC_MAIN_TEMPLATE, destination);
+      return destination.getXdmNode();
     }
   }
+
 }
