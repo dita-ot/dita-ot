@@ -7,7 +7,7 @@
                 version="3.0"
                 exclude-result-prefixes="xs dita-ot table simpletable">
   
-  <xsl:import href="../../../../../../main/plugins/org.dita.base/xsl/preprocess/maplinkImpl.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/preprocess/maplinkImpl.xsl"/>
 
   <!-- Mocks -->
   

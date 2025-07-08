@@ -3,8 +3,8 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-result-prefixes="xs"
                 version="3.0">
-  
-  <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/dita-utilities.xsl"/>
-  <xsl:import href="../../../main/plugins/org.dita.base/xsl/common/output-message.xsl"/>
+
+  <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
+  <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   
 </xsl:stylesheet>
