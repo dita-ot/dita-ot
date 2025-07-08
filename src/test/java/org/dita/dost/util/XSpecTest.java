@@ -98,13 +98,18 @@ public class XSpecTest {
 
     for (XdmItem scenarioItem : failingScenarios) {
       XdmNode scenario = (XdmNode) scenarioItem;
-      XPathSelector resultQuery = xpath.compile("x:result/*").load();
-      resultQuery.setContextItem(scenario);
-      XdmItem actual = resultQuery.evaluateSingle();
+      XPathSelector query = xpath.compile("x:result/*").load();
+      query.setContextItem(scenario);
+      XdmItem actual = query.evaluateSingle();
       String act = actual != null ? actual.toString() : "";
-      XPathSelector expectQuery = xpath.compile("x:test/x:expect/*").load();
-      expectQuery.setContextItem(scenario);
-      XdmItem expected = expectQuery.evaluateSingle();
+      query = xpath.compile("x:test/x:expect/*").load();
+      query.setContextItem(scenario);
+      XdmItem expected = query.evaluateSingle();
+      if (null == expected) {
+        query = xpath.compile("string(x:test/x:expect/@select)").load();
+        query.setContextItem(scenario);
+        expected = query.evaluateSingle();
+      }
       String exp = expected != null ? expected.toString() : "";
       testResults.add(() -> Assertions.assertEquals(exp, act));
     }
