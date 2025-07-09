@@ -164,7 +164,7 @@ public class XSpecTest {
   }
 
   private static String getLabel(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
-    XPathSelector selector = xpath.compile("ancestor-or-self::x:scenario/x:label/text()").load();
+    XPathSelector selector = xpath.compile("ancestor-or-self::x:scenario/x:label/text() | x:test/x:label/text()").load();
     selector.setContextItem(scenario);
     XdmValue labels = selector.evaluate();
     StringBuilder final_label = new StringBuilder();
