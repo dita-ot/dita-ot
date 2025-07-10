@@ -33,7 +33,10 @@ class ClassPathResolver implements URIResolver {
     try {
       final URI abs = new URI(base).resolve(href);
       if (SCHEME.equals(abs.getScheme())) {
-        final String path = abs.getPath().substring(1);
+        String path = abs.getSchemeSpecificPart();
+        if (path.startsWith("/")) {
+          path = path.substring(1); // remove leading slash
+        }
         final InputStream in = this.getClass().getClassLoader().getResourceAsStream(path);
         return new StreamSource(in, abs.toString());
       } else {

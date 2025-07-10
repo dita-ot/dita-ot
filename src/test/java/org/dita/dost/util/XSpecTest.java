@@ -19,7 +19,6 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
-import org.dita.dost.TestUtils;
 import org.junit.jupiter.api.*;
 import org.opentest4j.TestAbortedException;
 import org.xmlresolver.Resolver;
@@ -50,18 +49,21 @@ public class XSpecTest {
 
   @BeforeAll
   public static void setUpClass() throws TransformerException {
-    final File resourceDir = TestUtils.getResourceDir(XSpecTest.class);
-    final String resourceDirUri = resourceDir.toURI() + "/";
     TransformerFactory transformerFactory = TransformerFactory.newInstance();
     final File ditaDir = new File(
       Optional.ofNullable(System.getProperty("dita.dir")).orElse("src" + File.separator + "main")
     )
       .getAbsoluteFile();
+
     CatalogUtils.setDitaDir(ditaDir);
     final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
     URIResolver resolver = new ClassPathResolver(catalogResolver);
     transformerFactory.setURIResolver(resolver);
-    final Source stylesheet = resolver.resolve("src/compiler/compile-xslt-tests.xsl", resourceDirUri);
+    System.err.println(System.getProperty("java.class.path"));
+    final Source stylesheet = resolver.resolve(
+      "classpath:/io/xspec/xspec/impl/src/compiler/compile-xslt-tests.xsl",
+      ""
+    );
     transformer = transformerFactory.newTransformer(stylesheet);
     transformer.setURIResolver(resolver);
     runner = new XSpecRunner(resolver);
