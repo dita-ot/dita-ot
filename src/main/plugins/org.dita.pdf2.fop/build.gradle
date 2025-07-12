@@ -10,7 +10,7 @@ description = """DITA Open Toolkit PDF plug-in for FOP."""
 repositories {
     mavenCentral()
     maven {
-        url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+        url = "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
     }
 }
 dependencies {
