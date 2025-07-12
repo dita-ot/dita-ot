@@ -1,5 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+}
 
 group = 'org.dita-ot.pdf'
 
@@ -22,7 +24,7 @@ dependencies {
     runtimeOnly group: 'org.apache.pdfbox', name: 'pdfbox', version: '3.0.5'
 }
 
-test {
+tasks.named("test", Test)  {
     useJUnitPlatform()
 }
 

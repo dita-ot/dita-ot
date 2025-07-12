@@ -5,8 +5,10 @@
  *
  *  See the accompanying LICENSE file for applicable license.
  */
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+}
 
 group = 'org.dita-ot.htmlhelp'
 
@@ -29,7 +31,7 @@ dependencies {
     testImplementation rootProject.sourceSets.test.output
 }
 
-test {
+tasks.named("test", Test)  {
     useJUnitPlatform()
 }
 
