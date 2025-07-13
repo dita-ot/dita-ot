@@ -92,7 +92,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void startDocument() throws SAXException {
     // XXX May be require fixup
-    final File path2Project = DebugAndFilterModule.getPathtoProject(toFile(currentFile), toFile(job.getInputDir()));
+    final File path2Project = DebugAndFilterModule.getPathtoProject(toFile(currentFile), job);
     final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
     getContentHandler().startDocument();
     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
