@@ -509,11 +509,8 @@ public final class DebugAndFilterModule extends SourceReaderModule {
    * @param inputDir absolute path to the baseInputDir of the job
    * @return path to base directory, {@code null} if not available
    */
-  public static File getPathtoProject(
-    final File currentFile,
-    final File inputDir
-  ) {
-    return getRelativePath(currentFile,inputDir);
+  public static File getPathtoProject(final File currentFile, final File inputDir) {
+    return getRelativePath(currentFile, inputDir);
   }
 
   /**
