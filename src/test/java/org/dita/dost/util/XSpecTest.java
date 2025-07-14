@@ -1,7 +1,7 @@
 /*
  * This file is part of the DITA Open Toolkit project.
  *
- * Copyright 2016 Jarno Elovirta, 2025 David Bertalan
+ * Copyright 2016 Jarno Elovirta
  *
  * See the accompanying LICENSE file for applicable license.
  */
@@ -49,7 +49,7 @@ public class XSpecTest {
 
   @BeforeAll
   public static void setUpClass() throws TransformerException {
-    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    var transformerFactory = TransformerFactory.newInstance();
     final File ditaDir = new File(
       Optional.ofNullable(System.getProperty("dita.dir")).orElse("src" + File.separator + "main")
     )
@@ -57,13 +57,9 @@ public class XSpecTest {
 
     CatalogUtils.setDitaDir(ditaDir);
     final Resolver catalogResolver = CatalogUtils.getCatalogResolver();
-    URIResolver resolver = new ClassPathResolver(catalogResolver);
+    var resolver = new ClassPathResolver(catalogResolver);
     transformerFactory.setURIResolver(resolver);
-    System.err.println(System.getProperty("java.class.path"));
-    final Source stylesheet = resolver.resolve(
-      "classpath:/io/xspec/xspec/impl/src/compiler/compile-xslt-tests.xsl",
-      ""
-    );
+    var stylesheet = resolver.resolve("classpath:/io/xspec/xspec/impl/src/compiler/compile-xslt-tests.xsl", "");
     transformer = transformerFactory.newTransformer(stylesheet);
     transformer.setURIResolver(resolver);
     runner = new XSpecRunner(resolver);
@@ -71,15 +67,13 @@ public class XSpecTest {
 
   @TestFactory
   Stream<DynamicNode> xspecTests() {
-    List<File> files = getFiles();
-
-    return files.stream().map(file -> dynamicContainer(file.getName(), testXSpec(file)));
+    return getFiles().stream().map(file -> dynamicContainer(file.getName(), testXSpec(file)));
   }
 
   public Stream<DynamicTest> testXSpec(File xspec) {
     try {
-      final DOMSource compiledXSpec = getCompiledXSpec(xspec);
-      final XdmNode results = runner.runXSpec(compiledXSpec);
+      var compiledXSpec = getCompiledXSpec(xspec);
+      var results = runner.runXSpec(compiledXSpec);
       return parseXSpecResults(results);
     } catch (SaxonApiException | TransformerException e) {
       throw new RuntimeException(e);
@@ -93,12 +87,12 @@ public class XSpecTest {
   }
 
   private Stream<DynamicTest> parseXSpecResults(XdmNode results) throws SaxonApiException {
-    List<DynamicTest> dynamicTests = new ArrayList<>();
-    XPathCompiler xpath = getXPathCompiler();
-    XPathSelector allScenarios = getAllScenarios(results, xpath);
+    var dynamicTests = new ArrayList<DynamicTest>();
+    var xpath = getXPathCompiler();
+    var allScenarios = getAllScenarios(results, xpath);
 
     for (XdmItem scenario : allScenarios) {
-      String label = getLabel(xpath, scenario);
+      var label = getLabel(xpath, scenario);
 
       if (isPendingTest(xpath, scenario)) {
         addPending(dynamicTests, label);
@@ -113,15 +107,15 @@ public class XSpecTest {
   }
 
   private static XPathCompiler getXPathCompiler() {
-    Processor processor = runner.getProcessor();
-    XPathCompiler xpath = processor.newXPathCompiler();
+    var processor = runner.getProcessor();
+    var xpath = processor.newXPathCompiler();
     xpath.declareNamespace("x", XSPEC_NS);
     return xpath;
   }
 
   private static XPathSelector getAllScenarios(XdmNode results, XPathCompiler xpath) throws SaxonApiException {
-    String xpathAllScenarios = "//x:scenario";
-    XPathSelector allScenarios = xpath.compile(xpathAllScenarios).load();
+    var xpathAllScenarios = "//x:scenario";
+    var allScenarios = xpath.compile(xpathAllScenarios).load();
     allScenarios.setContextItem(results);
     return allScenarios;
   }
@@ -136,17 +130,17 @@ public class XSpecTest {
 
   private static void addFailure(XPathCompiler xpath, XdmItem scenario, List<DynamicTest> dynamicTests, String label)
     throws SaxonApiException {
-    String actual = getNodeText(xpath, scenario, "x:result/*");
-    String expected = getExpected(xpath, scenario);
-    dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertEquals(expected, actual, label)));
+    var act = getNodeText(xpath, scenario, "x:result/*");
+    var exp = getExpected(xpath, scenario);
+    dynamicTests.add(DynamicTest.dynamicTest(label, () -> Assertions.assertEquals(exp, act, label)));
   }
 
   private static String getExpected(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
-    String expected = getNodeText(xpath, scenario, "x:test/x:expect/*");
-    if (expected.isEmpty()) {
-      expected = getNodeText(xpath, scenario, "string(x:test/x:expect/@select)");
+    var exp = getNodeText(xpath, scenario, "x:test/x:expect/*");
+    if (exp.isEmpty()) {
+      exp = getNodeText(xpath, scenario, "string(x:test/x:expect/@select)");
     }
-    return expected;
+    return exp;
   }
 
   private static boolean isSuccessfulTest(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
@@ -154,9 +148,9 @@ public class XSpecTest {
   }
 
   private static boolean isPendingTest(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
-    XPathSelector selector = xpath.compile("x:test/@pending").load();
+    var selector = xpath.compile("x:test/@pending").load();
     selector.setContextItem(scenario);
-    XdmItem pending = selector.evaluateSingle();
+    var pending = selector.evaluateSingle();
     return (pending != null);
   }
 
@@ -165,20 +159,20 @@ public class XSpecTest {
   }
 
   private static String getLabel(XPathCompiler xpath, XdmItem scenario) throws SaxonApiException {
-    XPathSelector selector = xpath
-      .compile("ancestor-or-self::x:scenario/x:label/text() | x:test/x:label/text()")
-      .load();
+    var selector = xpath.compile("ancestor-or-self::x:scenario/x:label/text() | x:test/x:label/text()").load();
     selector.setContextItem(scenario);
-    XdmValue labels = selector.evaluate();
-    StringBuilder final_label = new StringBuilder();
-    for (XdmItem label : labels) final_label.append(" ").append(label.toString());
+    var labels = selector.evaluate();
+    var final_label = new StringBuilder();
+    for (XdmItem label : labels) {
+      final_label.append(" ").append(label.toString());
+    }
     return final_label.toString().trim();
   }
 
   private static String getNodeText(XPathCompiler xpath, XdmItem scenario, String expr) throws SaxonApiException {
-    XPathSelector selector = xpath.compile(expr).load();
+    var selector = xpath.compile(expr).load();
     selector.setContextItem(scenario);
-    XdmItem item = selector.evaluateSingle();
+    var item = selector.evaluateSingle();
     return item != null ? item.toString() : "";
   }
 
@@ -202,11 +196,11 @@ public class XSpecTest {
     }
 
     public XdmNode runXSpec(DOMSource compiledXSpecSource) throws SaxonApiException {
-      XsltExecutable executable = compiler.compile(compiledXSpecSource);
-      Xslt30Transformer transformer = executable.load30();
+      var executable = compiler.compile(compiledXSpecSource);
+      var transformer = executable.load30();
       transformer.setURIResolver(uriResolver);
 
-      XdmDestination destination = new XdmDestination();
+      var destination = new XdmDestination();
       transformer.callTemplate(XSPEC_MAIN_TEMPLATE, destination);
       return destination.getXdmNode();
     }
