@@ -65,7 +65,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
   private XMLUtils xmlUtils;
 
   private TempFileNameScheme tempFileNameScheme;
-  private Collection<String> rootChunkOverride;
+  private Set<String> rootChunkOverride;
   private String defaultChunkByToken;
 
   // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
@@ -99,7 +99,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
   }
 
   public void setRootChunkOverride(final String chunkValue) {
-    rootChunkOverride = split(chunkValue);
+    rootChunkOverride = Set.copyOf(split(chunkValue));
   }
 
   /**
@@ -129,7 +129,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     if (chunkTokens.isEmpty() && rootChunkOverride == null) {
       return null;
     }
-    if (isCompatible(doc)) {
+    if (isCompatible(doc, rootChunkOverride)) {
       logger.debug("Skip to process DITA 1.x chunks in compatibility mode");
       return null;
     }

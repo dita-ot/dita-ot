@@ -33,12 +33,28 @@ public class ChunkUtils {
    * @return {@code true} if map can be rewritten to DITA 2.x
    */
   public static boolean isCompatible(Document doc) {
+    return isCompatible(doc, null);
+  }
+
+  /**
+   * Check if DITA 1.x map chunk operations can be rewritten to DITA 2.x.
+   *
+   * @param doc DITA 1.x map
+   * @param override root chunk override, may be {@code null}
+   * @return {@code true} if map can be rewritten to DITA 2.x
+   */
+  public static boolean isCompatible(Document doc, Set<String> override) {
     var chunkTree = getChunkTree(doc);
     // Has chunks
-    if (chunkTree.isEmpty()) {
+    if (chunkTree.isEmpty() && (override == null || override.isEmpty())) {
       return false;
     }
-    var tokens = chunkTree.stream().flatMap(RoseTree::flatten).flatMap(Set::stream).collect(Collectors.toSet());
+    var tokens = Stream
+      .concat(
+        chunkTree.stream().flatMap(RoseTree::flatten).flatMap(Set::stream),
+        override != null ? override.stream() : Stream.empty()
+      )
+      .collect(Collectors.toSet());
     // Only combine
     if (tokens.size() == 1 && tokens.contains(CHUNK_TO_CONTENT)) {
       return true;
@@ -59,7 +75,7 @@ public class ChunkUtils {
     return false;
   }
 
-  public static boolean findCombineWithSplitDescendant(RoseTree<Set<String>> root) {
+  private static boolean findCombineWithSplitDescendant(RoseTree<Set<String>> root) {
     final Deque<RoseTree<Set<String>>> stack = new ArrayDeque<>();
     stack.push(root);
     while (!stack.isEmpty()) {
@@ -83,30 +99,6 @@ public class ChunkUtils {
     }
     return false;
   }
-
-  //  public static boolean hasSplitDescendant(RoseTreeNode node) {
-  //    if (node.value == NodeType.SPLIT) {
-  //      return true;
-  //    }
-  //    for (RoseTreeNode child : node.children) {
-  //      if (hasSplitDescendant(child)) {
-  //        return true;
-  //      }
-  //    }
-  //    return false;
-  //  }
-  //
-  //  public static boolean findCombineWithSplitDescendant(RoseTree<Set<String>> node) {
-  //    if (node.getValue().equals(CHUNK_TO_CONTENT) && hasSplitDescendant(node)) {
-  //      return true;
-  //    }
-  //    for (RoseTree<Set<String>> child : node.getChildren()) {
-  //      if (findCombineWithSplitDescendant(child)) {
-  //        return true;
-  //      }
-  //    }
-  //    return false;
-  //  }
 
   private static List<RoseTree<Set<String>>> getChunkTree(Document doc) {
     List<RoseTree<Set<String>>> res = new ArrayList<>();
