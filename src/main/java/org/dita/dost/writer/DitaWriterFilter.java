@@ -92,13 +92,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void startDocument() throws SAXException {
     // XXX May be require fixup
-    final URI relativeToMap = URLUtils.getRelativePath(job.getInputFile(), currentFile);
-    final File path2Project = DebugAndFilterModule.getPathtoProject(
-      toFile(relativeToMap),
-      toFile(currentFile),
-      toFile(job.getInputFile()),
-      job
-    );
+    final File path2Project = DebugAndFilterModule.getPathtoProject(toFile(currentFile), job);
     final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
     getContentHandler().startDocument();
     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
@@ -110,7 +104,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
     getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.toURI().resolve(".").toString());
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-    if (path2Project != null) {
+    if (!path2Project.getPath().isEmpty()) {
       getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
       getContentHandler()
         .processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString() + URI_SEPARATOR);
