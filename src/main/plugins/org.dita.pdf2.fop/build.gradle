@@ -1,5 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+}
 
 group = 'org.dita-ot.pdf'
 
@@ -8,7 +10,7 @@ description = """DITA Open Toolkit PDF plug-in for FOP."""
 repositories {
     mavenCentral()
     maven {
-        url "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
+        url = "https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/"
     }
 }
 dependencies {
@@ -22,11 +24,11 @@ dependencies {
     runtimeOnly group: 'org.apache.pdfbox', name: 'pdfbox', version: '3.0.5'
 }
 
-test {
+tasks.named("test", Test)  {
     useJUnitPlatform()
 }
 
-task copyInstall(type: Copy) {
+tasks.register('copyInstall', Copy) {
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-core-*.jar'
@@ -45,7 +47,7 @@ task copyInstall(type: Copy) {
     destinationDir = file("lib")
 }
 
-task copyDistTemp(type: Copy) {
+tasks.register('copyDistTemp', Copy) {
     from(sourceSets.main.runtimeClasspath) {
         include 'batik-all-*.jar'
         include 'fop-core-*.jar'

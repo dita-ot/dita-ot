@@ -5,8 +5,10 @@
  *
  *  See the accompanying LICENSE file for applicable license.
  */
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+}
 
 group = 'org.dita-ot.htmlhelp'
 
@@ -29,19 +31,19 @@ dependencies {
     testImplementation rootProject.sourceSets.test.output
 }
 
-test {
+tasks.named("test", Test)  {
     useJUnitPlatform()
 }
 
 jar.archiveFileName = "${project.name}.jar"
 
-task copyInstall(type: Copy) {
-    from (jar)
+tasks.register('copyInstall', Copy) {
+    from(jar)
     destinationDir = file("lib")
 }
 
-task copyDistTemp(type: Copy) {
-    from (jar) {
+tasks.register('copyDistTemp', Copy) {
+    from(jar) {
         into "plugins/org.dita.htmlhelp/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")

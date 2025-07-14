@@ -5,8 +5,10 @@
  *
  * See the accompanying LICENSE file for applicable license.
  */
-apply plugin: 'java'
-apply plugin: 'maven-publish'
+plugins {
+    id "java"
+    id "maven-publish"
+}
 
 group = 'org.dita-ot.pdf'
 
@@ -32,7 +34,7 @@ sourceSets {
     }
 }
 
-test {
+tasks.named("test", Test) {
     useJUnitPlatform()
 }
 
@@ -41,13 +43,13 @@ jar.include "com/idiominc/**"
 jar.include "com/suite/**"
 jar.include "org/dita/dost/pdf2/**"
 
-task copyInstall(type: Copy) {
-    from (jar)
+tasks.register('copyInstall', Copy) {
+    from(jar)
     destinationDir = file("lib")
 }
 
-task copyDistTemp(type: Copy) {
-    from (jar) {
+tasks.register('copyDistTemp', Copy) {
+    from(jar) {
         into "plugins/org.dita.pdf2/lib"
     }
     destinationDir = file("${rootProject.buildDir}/tmp/dist")
