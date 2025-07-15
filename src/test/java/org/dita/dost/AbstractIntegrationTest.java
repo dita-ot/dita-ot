@@ -8,12 +8,20 @@
 
 package org.dita.dost;
 
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+import org.apache.tools.ant.*;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.Store;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -25,18 +33,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.*;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractIntegrationTest {
 
@@ -44,6 +45,7 @@ public abstract class AbstractIntegrationTest {
    * Message codes where duplicates are ignored in message count.
    */
   private static final String[] ignoreDuplicates = new String[] { "DOTJ037W" };
+  private final List<Executable> testResults = new ArrayList<>();
 
   enum Transtype {
     PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
@@ -61,7 +63,8 @@ public abstract class AbstractIntegrationTest {
       "build-init",
       "preprocess2",
       "xhtml.topics",
-      "dita.map.xhtml"
+      "dita.map.xhtml",
+      "copy-css"
     );
 
     final String name;
@@ -275,6 +278,7 @@ public abstract class AbstractIntegrationTest {
     final File act = actDir.toPath().resolve(transtype.toString()).toFile();
 
     compare(exp, act);
+    assertAll(testResults);
     return this;
   }
 
@@ -433,23 +437,15 @@ public abstract class AbstractIntegrationTest {
         compare(exp, act);
       } else {
         final String ext = FileUtils.getExtension(name);
-        try {
-          if (ext == null) {} else if (
-            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-          ) {
-            assertXMLEqual(parseHtml(exp), parseHtml(act));
-          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-            assertXMLEqual(parseXml(exp), parseXml(act));
-          } else if (ext.equals("txt")) {
-            assertArrayEquals(readTextFile(exp), readTextFile(act));
-          }
-        } catch (final RuntimeException ex) {
-          throw ex;
-        } catch (final Throwable ex) {
-          throw new Throwable(
-            "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": " + ex.getMessage(),
-            ex
-          );
+        var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+        if (ext == null) {} else if (
+          ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
+        ) {
+          testResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+        } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
+          testResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+        } else if (ext.equals("txt")) {
+          testResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
         }
       }
     }

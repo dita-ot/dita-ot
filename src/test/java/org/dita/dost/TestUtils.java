@@ -270,24 +270,31 @@ public class TestUtils {
   }
 
   public static void assertXMLEqual(Document exp, Document act) {
-    final Diff d = DiffBuilder
+    assertXMLEqual(exp, act, "");
+  }
+
+  public static void assertXMLEqual(Document exp, Document act, String message) {
+    final Diff diff = DiffBuilder
       .compare(ignoreComments(exp))
       .withTest(ignoreComments(act))
       .ignoreWhitespace()
       .normalizeWhitespace()
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
-    if (d.hasDifferences()) {
+    if (diff.hasDifferences()) {
+      System.out.print("-" + System.lineSeparator() + message + System.lineSeparator() + diff + System.lineSeparator());
+      StringWriter writer = new StringWriter();
+      writer.write(System.lineSeparator());
       try {
         var transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
-        System.out.println();
-        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-        System.out.println();
+        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(writer));
+        writer.write(System.lineSeparator());
+        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(writer));
+        writer.write(System.lineSeparator());
       } catch (TransformerException ex) {
         //
       }
-      throw new AssertionError(d.toString());
+      throw new AssertionError(message + System.lineSeparator() + diff + writer);
     }
   }
 
