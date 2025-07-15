@@ -8,7 +8,6 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 
 import java.io.File;
@@ -175,11 +174,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
   @Test
   public void testimage_scale() throws Throwable {
     builder().name("image-scale").transtype(XHTML).input(Paths.get("test.dita")).test();
-  }
-
-  @Test
-  public void testkeyref() throws Throwable {
-    builder().name(Paths.get("keyref", "basic")).transtype(PREPROCESS).input(Paths.get("test.ditamap")).test();
   }
 
   @Test
@@ -355,28 +349,6 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
       .put("args.filter", filters)
       .put("clean.temp", "no")
       .errorCount(1)
-      .test();
-  }
-
-  @Test
-  public void testuplevels1() throws Throwable {
-    builder()
-      .name("uplevels1")
-      .transtype(XHTML)
-      .input(Paths.get("maps/above.ditamap"))
-      .put("generate.copy.outer", "1")
-      .put("outer.control", "quiet")
-      .test();
-  }
-
-  @Test
-  public void testuplevels3() throws Throwable {
-    builder()
-      .name("uplevels3")
-      .transtype(XHTML)
-      .input(Paths.get("maps/above.ditamap"))
-      .put("generate.copy.outer", "3")
-      .put("outer.control", "quiet")
       .test();
   }
 }

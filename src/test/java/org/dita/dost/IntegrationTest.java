@@ -9,6 +9,7 @@
 package org.dita.dost;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Paths;
@@ -398,6 +399,28 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
       .transtype(PREPROCESS)
       .input(Paths.get("simplemap.ditamap"))
       .put("args.filter", Paths.get("filter.ditaval"))
+      .test();
+  }
+
+  @Test
+  public void testuplevels1() throws Throwable {
+    builder()
+      .name("uplevels1")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "1")
+      .put("outer.control", "quiet")
+      .test();
+  }
+
+  @Test
+  public void testuplevels3() throws Throwable {
+    builder()
+      .name("uplevels3")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("outer.control", "quiet")
       .test();
   }
 }
