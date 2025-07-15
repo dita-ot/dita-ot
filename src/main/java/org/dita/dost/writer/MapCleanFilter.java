@@ -15,7 +15,7 @@ import java.util.Deque;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-public class MapCleanFilter extends AbstractXMLFilter {
+public class MapCleanFilter extends TopicCleanFilter {
 
   private enum Keep {
     RETAIN,
@@ -29,6 +29,8 @@ public class MapCleanFilter extends AbstractXMLFilter {
   public void startDocument() throws SAXException {
     stack.clear();
     getContentHandler().startDocument();
+
+    calculatePathToProjectDirs();
   }
 
   @Override
@@ -79,8 +81,9 @@ public class MapCleanFilter extends AbstractXMLFilter {
 
   @Override
   public void processingInstruction(String target, String data) throws SAXException {
+    final String res = getProcessingInstruction(target, data);
     if (stack.isEmpty() || stack.peekFirst() != Keep.DISCARD_BRANCH) {
-      getContentHandler().processingInstruction(target, data);
+      getContentHandler().processingInstruction(target, res);
     }
   }
 
@@ -95,5 +98,4 @@ public class MapCleanFilter extends AbstractXMLFilter {
   //        <xsl:with-param name="id" select="'DOTX072I'"/>
   //      </xsl:call-template>
   //    </xsl:template>
-
 }

@@ -52,7 +52,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private static final String PARAM_USE_RESULT_FILENAME = "use-result-filename";
 
-  private final LinkFilter filter = new LinkFilter();
+  private final LinkFilter linkFilter = new LinkFilter();
   private final MapCleanFilter mapFilter = new MapCleanFilter();
   private final TopicCleanFilter topicFilter = new TopicCleanFilter();
 
@@ -101,7 +101,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         })
         .orElse(null);
 
-    filter.setLogger(logger);
+    linkFilter.setLogger(logger);
 
     mapFilter.setLogger(logger);
     topicFilter.setLogger(logger);
@@ -124,7 +124,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       final Collection<FileInfo> rewritten = rewrite(original);
       // move temp files and update links
       final Job tempJob = new Job(job, emptyMap(), rewritten);
-      filter.setJob(tempJob);
+      linkFilter.setJob(tempJob);
       mapFilter.setJob(tempJob);
       topicFilter.setJob(tempJob);
       for (final FileInfo fi : rewritten) {
@@ -280,8 +280,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   }
 
   private void init() {
-    filter.setJob(job);
-    filter.setLogger(logger);
+    linkFilter.setJob(job);
+    linkFilter.setLogger(logger);
 
     mapFilter.setJob(job);
     mapFilter.setLogger(logger);
@@ -290,30 +290,35 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     topicFilter.setLogger(logger);
   }
 
-  private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
+  private List<XMLFilter> getProcessingPipe(final FileInfo fileInfo, final File srcFile, final File destFile) {
     final List<XMLFilter> res = new ArrayList<>();
 
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
-      filter.setCurrentFile(srcFile.toURI());
-      filter.setDestFile(destFile.toURI());
-      res.add(filter);
+    if (
+      fileInfo.format == null ||
+      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA) ||
+      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP)
+    ) {
+      linkFilter.setCurrentFile(srcFile.toURI());
+      linkFilter.setDestFile(destFile.toURI());
+      res.add(linkFilter);
     }
 
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
-      topicFilter.setFileInfo(fi);
+    if (fileInfo.format == null || fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+      topicFilter.setFileInfo(fileInfo);
       res.add(topicFilter);
-    } else if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    } else if (fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+      mapFilter.setFileInfo(fileInfo);
       res.add(mapFilter);
     }
 
-    for (final XmlFilterModule.FilterPair p : filters) {
-      if (p.predicate.test(fi)) {
-        final AbstractXMLFilter f = p.newInstance();
-        logger.debug("Configure filter " + f.getClass().getCanonicalName());
-        f.setCurrentFile(srcFile.toURI());
-        f.setJob(job);
-        f.setLogger(logger);
-        res.add(f);
+    for (final XmlFilterModule.FilterPair filterPair : filters) {
+      if (filterPair.predicate.test(fileInfo)) {
+        final AbstractXMLFilter xmlFilter = filterPair.newInstance();
+        logger.debug("Configure filter " + xmlFilter.getClass().getCanonicalName());
+        xmlFilter.setCurrentFile(srcFile.toURI());
+        xmlFilter.setJob(job);
+        xmlFilter.setLogger(logger);
+        res.add(xmlFilter);
       }
     }
 

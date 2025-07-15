@@ -8,20 +8,11 @@
 
 package org.dita.dost;
 
-import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.apache.tools.ant.*;
-import org.dita.dost.store.CacheStore;
-import org.dita.dost.store.Store;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.Job;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.function.Executable;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -33,11 +24,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+import org.apache.tools.ant.*;
+import org.dita.dost.store.CacheStore;
+import org.dita.dost.store.Store;
+import org.dita.dost.util.FileUtils;
+import org.dita.dost.util.Job;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 public abstract class AbstractIntegrationTest {
 
