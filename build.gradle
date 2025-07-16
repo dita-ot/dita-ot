@@ -76,8 +76,7 @@ dependencies {
 node {
     download = true
     version = file('.nvmrc').readLines().first().trim()
-    workDir = file("${buildDir}/nodejs")
-    distBaseUrl = 'https://nodejs.org/dist'
+    workDir = file("${gradle.gradleUserHomeDir}/nodejs")
 }
 
 def nodeExec = System.getProperty('os.name').toLowerCase().contains('windows') ? '/node.exe' : '/bin/node'
