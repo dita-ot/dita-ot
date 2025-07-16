@@ -76,8 +76,8 @@ dependencies {
 node {
     download = true
     version = file('.nvmrc').readLines().first().trim()
-    // when setting both these directories, npm and node will be in separate directories
     workDir = file("${buildDir}/nodejs")
+    distBaseUrl = 'https://nodejs.org/dist'
 }
 
 def nodeExec = System.getProperty('os.name').toLowerCase().contains('windows') ? '/node.exe' : '/bin/node'
