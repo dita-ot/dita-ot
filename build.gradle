@@ -76,15 +76,11 @@ dependencies {
 node {
     download = true
     version = file('.nvmrc').readLines().first().trim()
-    workDir = file("${gradle.gradleUserHomeDir}/nodejs")
 }
-
-def nodeExec = System.getProperty('os.name').toLowerCase().contains('windows') ? '/node.exe' : '/bin/node'
 
 spotless {
     java {
         prettier(['prettier': '2.8.4', 'prettier-plugin-java': '2.1.0']).configFile('.prettierrc')
-                .nodeExecutable("${tasks.named('nodeSetup').get().nodeDir.get()}${nodeExec}")
     }
 }
 
