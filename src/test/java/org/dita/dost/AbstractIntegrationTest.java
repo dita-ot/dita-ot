@@ -247,9 +247,12 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      assertEquals(warnCount, countMessages(log, Project.MSG_WARN), "warnCount");
-      assertEquals(errorCount, countMessages(log, Project.MSG_ERR), "errorCount");
-
+      List<Executable> testResults = new ArrayList<>();
+      List<TestListener.Message> warnings = getMessages(log, Project.MSG_WARN);
+      List<TestListener.Message> errors = getMessages(log, Project.MSG_ERR);
+      testResults.add(()->assertEquals(warnCount, warnings.size(), "warnCount mismatch: " + warnings + "\n"));
+      testResults.add(()->assertEquals(errorCount, errors.size(), "errorCount mismatch: " + errors + "\n"));
+      assertAll(testResults);
       this.actDir = transtype.compareTemp ? tempDir : outDir;
     } catch (final RuntimeException e) {
       throw e;
@@ -310,8 +313,8 @@ public abstract class AbstractIntegrationTest {
     System.err.println("Log end");
   }
 
-  private int countMessages(final List<TestListener.Message> messages, final int level) {
-    int count = 0;
+  private List<TestListener.Message> getMessages(final List<TestListener.Message> messages, final int level) {
+    List<TestListener.Message> filteredMessages = new ArrayList<>();
     final Set<String> duplicates = new HashSet<>();
     messages:for (final TestListener.Message m : messages) {
       if (m.level == level) {
@@ -324,10 +327,10 @@ public abstract class AbstractIntegrationTest {
             }
           }
         }
-        count++;
+        filteredMessages.add(m);
       }
     }
-    return count;
+    return filteredMessages;
   }
 
   /**
@@ -610,7 +613,7 @@ public abstract class AbstractIntegrationTest {
     private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]");
     private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]");
 
-    public final List<TestListener.Message> messages = new ArrayList<>();
+    public final List<Message> messages = new ArrayList<>();
     final PrintStream out;
     final PrintStream err;
 
@@ -621,32 +624,32 @@ public abstract class AbstractIntegrationTest {
 
     @Override
     public void buildStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
+      messages.add(new Message(-1, "build started: " + event.getMessage()));
     }
 
     @Override
     public void buildFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
+      messages.add(new Message(-1, "build finished: " + event.getMessage()));
     }
 
     @Override
     public void targetStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
+      messages.add(new Message(-1, event.getTarget().getName() + ":"));
     }
 
     @Override
     public void targetFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
+      messages.add(new Message(-1, "target finished: " + event.getTarget().getName()));
     }
 
     @Override
     public void taskStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
+      messages.add(new Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
     }
 
     @Override
     public void taskFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
+      messages.add(new Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
     }
 
     @Override
@@ -678,7 +681,7 @@ public abstract class AbstractIntegrationTest {
         //                    err.println(message);
       }
 
-      messages.add(new TestListener.Message(level, message));
+      messages.add(new Message(level, message));
     }
 
     record Message(int level, String message) {}
