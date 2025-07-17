@@ -10,12 +10,17 @@ package org.dita.dost;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dita.dost.reader.GrammarPoolManager;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 public abstract class IntegrationTest extends AbstractIntegrationTest {
 
@@ -404,8 +409,32 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
   @Test
   public void testuplevels1() throws Throwable {
-    builder()
+    var actDir = builder()
       .name("uplevels1")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "1")
+      .put("outer.control", "quiet")
+      .test();
+    var outerFiles = List.of(
+      "images/carwash.gif",
+      "a.html",
+      "b.html",
+      "topics/c.html",
+      "topics/d.html"
+    );
+    var outerFilesShouldNotExist = new ArrayList<Executable>();
+    for (String outerFile : outerFiles) {
+      var outerFilePath = Paths.get(actDir.getParent(),outerFile);
+      outerFilesShouldNotExist.add(()->assertFalse(Files.exists(outerFilePath),"outerFile exists: " + outerFilePath ));
+    }
+    assertAll(outerFilesShouldNotExist);
+  }
+
+  @Test
+  public void testuplevels1_resource_only() throws Throwable {
+    builder()
+      .name("uplevels1_resource_only")
       .transtype(XHTML)
       .input(Paths.get("maps/above.ditamap"))
       .put("generate.copy.outer", "1")
@@ -417,6 +446,17 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
   public void testuplevels3() throws Throwable {
     builder()
       .name("uplevels3")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("outer.control", "quiet")
+      .test();
+  }
+
+  @Test
+  public void testuplevels3_resource_only() throws Throwable {
+    builder()
+      .name("uplevels3_resource_only")
       .transtype(XHTML)
       .input(Paths.get("maps/above.ditamap"))
       .put("generate.copy.outer", "3")
