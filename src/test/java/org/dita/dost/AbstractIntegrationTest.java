@@ -244,8 +244,8 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      List<TestListener.Message> warnings = getMessages(log, Project.MSG_WARN);
-      List<TestListener.Message> errors = getMessages(log, Project.MSG_ERR);
+      final List<TestListener.Message> warnings = getMessages(log, Project.MSG_WARN);
+      final List<TestListener.Message> errors = getMessages(log, Project.MSG_ERR);
       assertAll(
         () -> assertEquals(warnCount, warnings.size(), "warnCount mismatch: " + warnings + "\n"),
         () -> assertEquals(errorCount, errors.size(), "errorCount mismatch: " + errors + "\n")
