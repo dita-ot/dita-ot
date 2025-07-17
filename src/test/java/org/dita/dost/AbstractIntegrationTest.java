@@ -247,12 +247,12 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      List<Executable> testResults = new ArrayList<>();
       List<TestListener.Message> warnings = getMessages(log, Project.MSG_WARN);
       List<TestListener.Message> errors = getMessages(log, Project.MSG_ERR);
-      testResults.add(() -> assertEquals(warnCount, warnings.size(), "warnCount mismatch: " + warnings + "\n"));
-      testResults.add(() -> assertEquals(errorCount, errors.size(), "errorCount mismatch: " + errors + "\n"));
-      assertAll(testResults);
+      assertAll(
+        () -> assertEquals(warnCount, warnings.size(), "warnCount mismatch: " + warnings + "\n"),
+        () -> assertEquals(errorCount, errors.size(), "errorCount mismatch: " + errors + "\n")
+      );
       this.actDir = transtype.compareTemp ? tempDir : outDir;
     } catch (final RuntimeException e) {
       throw e;
