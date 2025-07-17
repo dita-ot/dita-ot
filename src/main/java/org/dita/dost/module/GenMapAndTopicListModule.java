@@ -20,6 +20,7 @@ import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -427,7 +428,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       throw e;
     } catch (final SAXParseException sax) {
       final Exception inner = sax.getException();
-      if (inner != null && inner instanceof DITAOTException) {
+      if (inner instanceof DITAOTException) {
         throw (DITAOTException) inner;
       }
       if (currentFile.equals(rootFile)) {
@@ -496,25 +497,25 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     // Category non-copyto result and update uplevels accordingly
     final Set<Reference> nonCopytoResult = new LinkedHashSet<>(128);
     nonCopytoResult.addAll(listFilter.getNonConrefCopytoTargets());
-    for (final URI f : listFilter.getConrefTargets()) {
-      nonCopytoResult.add(new Reference(stripFragment(f), getFormatFromPath(stripFragment(f))));
+    for (final URI conrefTarget : listFilter.getConrefTargets()) {
+      nonCopytoResult.add(new Reference(stripFragment(conrefTarget), getFormatFromPath(stripFragment(conrefTarget))));
     }
-    for (final URI f : listFilter.getCopytoMap().values()) {
-      nonCopytoResult.add(new Reference(stripFragment(f)));
+    for (final URI copytoItem : listFilter.getCopytoMap().values()) {
+      nonCopytoResult.add(new Reference(stripFragment(copytoItem)));
     }
-    for (final URI f : listFilter.getIgnoredCopytoSourceSet()) {
-      nonCopytoResult.add(new Reference(stripFragment(f)));
+    for (final URI ignoredCopytoItem : listFilter.getIgnoredCopytoSourceSet()) {
+      nonCopytoResult.add(new Reference(stripFragment(ignoredCopytoItem)));
     }
-    for (final URI filename1 : listFilter.getCoderefTargetSet()) {
-      nonCopytoResult.add(new Reference(stripFragment(filename1)));
+    for (final URI coderefTarget : listFilter.getCoderefTargetSet()) {
+      nonCopytoResult.add(new Reference(stripFragment(coderefTarget)));
     }
-    for (final Reference file : nonCopytoResult) {
-      categorizeReferenceFile(file);
-      updateUplevels(file.filename);
+    for (final Reference nonCopytoFile : nonCopytoResult) {
+      categorizeReferenceFile(nonCopytoFile);
+      updateUplevels(nonCopytoFile.filename);
     }
-    for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
-      final URI source = e.getValue();
-      final URI target = e.getKey();
+    for (final Map.Entry<URI, URI> copytoEntry : listFilter.getCopytoMap().entrySet()) {
+      final URI source = copytoEntry.getValue();
+      final URI target = copytoEntry.getKey();
       copyTo.put(target, source);
       updateUplevels(target);
     }
@@ -525,8 +526,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     nonTopicrefReferenceSet.addAll(listFilter.getNonTopicrefReferenceSet());
     nonTopicrefReferenceSet.removeAll(listFilter.getNormalProcessingRoleSet());
     nonTopicrefReferenceSet.removeAll(listFilter.getResourceOnlySet());
-    for (final URI file : nonTopicrefReferenceSet) {
-      updateUplevels(file);
+    for (final URI nonTopicReference : nonTopicrefReferenceSet) {
+      updateUplevels(nonTopicReference);
     }
     schemeSet.addAll(listFilter.getSchemeRefSet());
 
@@ -553,7 +554,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     // Generate topic-scheme dictionary
     final Set<URI> schemeSet = listFilter.getSchemeSet();
-    if (schemeSet != null && !schemeSet.isEmpty()) {
+    if (!schemeSet.isEmpty()) {
       Set<URI> children = schemeDictionary.get(currentFile);
       if (children == null) {
         children = new HashSet<>();
@@ -873,6 +874,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
     for (final URI resource : resources) {
       getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
+    }
+
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
+      for (final FileInfo fs : fileinfos.values()) {
+        if (!Paths.get(fs.src).startsWith(Paths.get(rootFile).getParent())) {
+          fs.isResourceOnly = true;
+        }
+      }
     }
 
     addFlagImagesSetToProperties(job, relFlagImagesSet);

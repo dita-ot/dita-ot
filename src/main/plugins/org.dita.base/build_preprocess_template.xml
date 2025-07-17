@@ -482,10 +482,10 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction" 
     description="Copy image files">
     <condition property="copy-image.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
-      <equals arg1="${generate.copy.outer}" arg2="1"/>      
+      <istrue value="${inner.transform}"/>
     </condition>
     <copy todir="${copy-image.todir}" failonerror="false" overwrite="true">
-      <ditafileset format="image" />
+      <ditafileset format="image" processingRole="normal" />
       <jobmapper/>
     </copy>
   </target>
@@ -496,10 +496,10 @@ See the accompanying LICENSE file for applicable license.
     unless="preprocess.copy-html.skip"
     description="Copy html files">
     <condition property="copy-html.todir" value="${_dita.map.output.dir}/${uplevels}" else="${dita.output.dir}">
-      <equals arg1="${generate.copy.outer}" arg2="1"/>      
+      <istrue value="${inner.transform}"/>
     </condition>
     <copy todir="${copy-html.todir}" failonerror="false" overwrite="true">
-      <ditafileset>
+      <ditafileset processingRole="normal">
         <excludes format="dita"/>
         <excludes format="ditamap"/>
         <excludes format="ditaval"/>

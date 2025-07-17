@@ -205,7 +205,7 @@ See the accompanying LICENSE file for applicable license.
     </condition>
 
     <condition property="old.transform">
-      <equals arg1="${generate.copy.outer}" arg2="3"></equals>
+      <equals arg1="${generate.copy.outer}" arg2="3"/>
     </condition>
 
     <property name="conserve-memory" value="false"/>
