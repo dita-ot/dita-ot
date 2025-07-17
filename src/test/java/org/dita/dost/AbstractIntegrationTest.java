@@ -245,8 +245,8 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      assertEquals(warnCount, countMessages(log, Project.MSG_WARN));
-      assertEquals(errorCount, countMessages(log, Project.MSG_ERR));
+      assertEquals(warnCount, countMessages(log, Project.MSG_WARN), "warnCount");
+      assertEquals(errorCount, countMessages(log, Project.MSG_ERR), "errorCount");
 
       this.actDir = transtype.compareTemp ? tempDir : outDir;
     } catch (final RuntimeException e) {
