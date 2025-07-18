@@ -159,7 +159,8 @@ See the accompanying LICENSE file for applicable license.
     </sequential>
   </macrodef>
   
-  <target name="dita.topics.html.common" unless="noTopic" if="old.transform">
+  <target name="dita.topics.html.common" unless="noTopic" if="old.transform"
+          description="Build HTML">
     <topics.html>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
@@ -170,12 +171,13 @@ See the accompanying LICENSE file for applicable license.
   <!--To generate&copy inner files-->
   <!--requirement 1,2-->
   
-  <target name="dita.inner.topics.html.common" unless="noTopic" if="inner.transform">
+  <target name="dita.inner.topics.html.common" unless="noTopic" if="inner.transform"
+          description="Build HTML">
     <topics.html>
       <dita:extension id="dita.conductor.xhtml.param" behavior="org.dita.dost.platform.InsertAction"/>
       <dita:extension id="dita.conductor.html.param" behavior="org.dita.dost.platform.InsertAction"/>
       <mapper classname="org.dita.dost.ant.types.JobMapper" to="${out.ext}"/>
     </topics.html>
   </target>
-  
+
 </project>
