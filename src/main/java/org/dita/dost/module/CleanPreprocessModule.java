@@ -183,13 +183,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return null;
   }
 
-  private Collection<FileInfo> rewrite(final Collection<FileInfo> fis) throws DITAOTException {
+  private Collection<FileInfo> rewrite(final Collection<FileInfo> fileInfoCollection) throws DITAOTException {
     if (rewriteClass != null) {
-      return rewriteClass.rewrite(fis);
+      return rewriteClass.rewrite(fileInfoCollection);
     }
     if (rewriteTransformer != null) {
       try {
-        final DOMSource source = new DOMSource(serialize(fis));
+        final DOMSource source = new DOMSource(serialize(fileInfoCollection));
         final Map<URI, FileInfo> files = new HashMap<>();
         final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
         rewriteTransformer.setSource(source);
@@ -200,7 +200,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         throw new DITAOTException(e);
       }
     }
-    return fis;
+    return fileInfoCollection;
   }
 
   private Document serialize(final Collection<FileInfo> fis) throws IOException {

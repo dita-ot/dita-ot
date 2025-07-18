@@ -8,6 +8,7 @@
 package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 import java.io.*;
@@ -282,19 +283,21 @@ public class TestUtils {
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
     if (diff.hasDifferences()) {
-      System.out.print("-" + System.lineSeparator() + message + System.lineSeparator() + diff + System.lineSeparator());
-      StringWriter writer = new StringWriter();
-      writer.write(System.lineSeparator());
+      var errorMessage = message + System.lineSeparator() + diff + System.lineSeparator();
+      System.out.print("-" + System.lineSeparator() + errorMessage);
+      var expWriter = new StringWriter();
+      var actWriter = new StringWriter();
       try {
         var transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(writer));
-        writer.write(System.lineSeparator());
-        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(writer));
-        writer.write(System.lineSeparator());
+        var transformer= transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.METHOD,"xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(new DOMSource(exp), new StreamResult(expWriter));
+        transformer.transform(new DOMSource(act), new StreamResult(actWriter));
       } catch (TransformerException ex) {
-        //
+        throw new AssertionError(errorMessage);
       }
-      throw new AssertionError(message + System.lineSeparator() + diff + writer);
+      assertEquals(expWriter,actWriter, errorMessage);
     }
   }
 
