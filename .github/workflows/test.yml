@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            build/nodejs
+            .gradle/nodejs
             build/spotless-*
             build/tmp/spotless-register-dependencies
           key: ${{ runner.os }}-${{ hashFiles('.prettierrc') }}-${{ hashFiles('.nvmrc') }}
