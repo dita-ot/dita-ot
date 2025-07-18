@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -117,7 +119,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         .getFileInfo()
         .stream()
         .filter(fi -> fi.result != null)
-        .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
+        .map(fi -> FileInfo.builder(fi).result(URI.create(Paths.get(base).relativize(Path.of(fi.result)).toString().replace("\\", "/"))).build())
         .collect(Collectors.toList());
       original.forEach(fi -> job.remove(fi));
       // rewrite results
@@ -128,7 +130,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       mapFilter.setJob(tempJob);
       topicFilter.setJob(tempJob);
       for (final FileInfo fi : rewritten) {
-        if (fi.isResourceOnly) continue;
         try {
           assert !fi.result.isAbsolute();
           if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
