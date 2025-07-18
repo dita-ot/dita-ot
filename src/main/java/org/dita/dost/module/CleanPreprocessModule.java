@@ -128,6 +128,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       mapFilter.setJob(tempJob);
       topicFilter.setJob(tempJob);
       for (final FileInfo fi : rewritten) {
+        if (fi.isResourceOnly) continue;
         try {
           assert !fi.result.isAbsolute();
           if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
@@ -152,7 +153,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
           }
           final FileInfo res = FileInfo.builder(fi).uri(fi.result).result(base.resolve(fi.result)).build();
           job.add(res);
-        } catch (final IOException e) {
+        } catch (final IOException | AssertionError e) {
           logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
         }
       }
