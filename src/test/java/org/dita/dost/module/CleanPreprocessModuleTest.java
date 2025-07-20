@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.TestLogger;
 import org.dita.dost.store.StreamStore;
@@ -28,6 +28,9 @@ import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class CleanPreprocessModuleTest {
 
@@ -144,5 +147,26 @@ public class CleanPreprocessModuleTest {
         module.execute(input);
       }
     );
+  }
+
+  static Stream<Arguments> tempUplevelsProvider() {
+    return Stream.of(
+      Arguments.of(List.of("1.dit"), "file:/foo/bar/", "file:/foo/bar/", ""),
+      Arguments.of(List.of("1.dita"), "file:/foo/", "file:/foo/bar/", "../"),
+      Arguments.of(List.of("1.dita", "bar/2.dita"), "file:/foo/", "file:/foo/bar/", "../"),
+      Arguments.of(List.of("1.dita", "bar/2.dita", "bar/baz/3.dita"), "file:/foo/", "file:/foo/bar/baz/", "../../"),
+      Arguments.of(List.of("bar/baz/1.dita", "bar/2.dita", "bar/baz/3.dita"), "file:/foo/", "file:/foo/bar/baz/", "../")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("tempUplevelsProvider")
+  void testCorrectTestUplevels(List<String> uriResults, String inputDir, URI baseDir, String exp) {
+    job.setInputDir(create(inputDir));
+    for (String result : uriResults) {
+      job.add(new Builder().uri(create(inputDir + result)).result(create(inputDir + result)).build());
+    }
+    String act = module.getTempUplevels(baseDir);
+    assertEquals(exp, act);
   }
 }

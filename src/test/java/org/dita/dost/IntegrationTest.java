@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.dita.dost.reader.GrammarPoolManager;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
 import org.junit.jupiter.api.Test;
@@ -411,19 +410,21 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
   @Test
   public void testuplevels1() throws Throwable {
-    var outerFiles = List.of(
-      "images/carwash.gif",
-      "a.html",
-      "b.html",
-      "topics/c.html",
-      "topics/d.html"
-    );
-    var outDir = new File("build" + File.separator + "out" + File.separator + "integrationTest" + File.separator +"uplevels1" + File.separator + "temp"
+    var outerFiles = List.of("images/carwash.gif", "a.html", "b.html", "topics/c.html", "topics/d.html");
+    var outDir = new File(
+      "build" +
+      File.separator +
+      "out" +
+      File.separator +
+      "integrationTest" +
+      File.separator +
+      "uplevels1" +
+      File.separator +
+      "temp"
     );
     for (String outerFile : outerFiles) {
       Path outerFilePath = Paths.get(outDir + File.separator + outerFile);
-      if (Files.exists(outerFilePath))
-        Files.delete(outerFilePath);
+      if (Files.exists(outerFilePath)) Files.delete(outerFilePath);
     }
     var actDir = builder()
       .name("uplevels1")
@@ -434,8 +435,9 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
       .test();
     var outerFilesShouldNotExist = new ArrayList<Executable>();
     for (String outerFile : outerFiles) {
-      var outerFilePath = Paths.get(actDir.getParent(),outerFile);
-      outerFilesShouldNotExist.add(()->assertFalse(Files.exists(outerFilePath),"outerFile exists: " + outerFilePath ));
+      var outerFilePath = Paths.get(actDir.getParent(), outerFile);
+      outerFilesShouldNotExist.add(() -> assertFalse(Files.exists(outerFilePath), "outerFile exists: " + outerFilePath)
+      );
     }
     assertAll(outerFilesShouldNotExist);
   }

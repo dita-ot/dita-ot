@@ -115,57 +115,18 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     init(input);
     final URI base = getBaseDir();
     if (useResultFilename) {
-      // collect and relativize result
-      final Collection<FileInfo> original = job
-        .getFileInfo()
-        .stream()
-        .filter(fi -> fi.result != null)
-        .map(fi -> FileInfo.builder(fi).result(URI.create(Paths.get(base).relativize(Path.of(fi.result)).toString().replace("\\", "/"))).build())
-        .collect(Collectors.toList());
-      original.forEach(fi -> job.remove(fi));
-      // rewrite results
-      final Collection<FileInfo> rewritten = rewrite(original);
-      // move temp files and update links
-      final Job tempJob = new Job(job, emptyMap(), rewritten);
-      linkFilter.setJob(tempJob);
-      mapFilter.setJob(tempJob);
-      topicFilter.setJob(tempJob);
-      for (final FileInfo fi : rewritten) {
-        try {
-          assert !fi.result.isAbsolute();
-          if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-            logger.debug("Skip format " + fi.format);
-          } else {
-            final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-            if (job.getStore().exists(srcFile.toURI())) {
-              final File destFile = new File(job.tempDirURI.resolve(fi.result));
-              final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-              if (!processingPipe.isEmpty()) {
-                logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                job.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-                if (!srcFile.equals(destFile)) {
-                  logger.debug("Deleting " + srcFile.toURI());
-                  FileUtils.deleteQuietly(srcFile);
-                }
-              } else if (!srcFile.equals(destFile)) {
-                logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-                FileUtils.moveFile(srcFile, destFile);
-              }
-            }
-          }
-          final FileInfo res = FileInfo.builder(fi).uri(fi.result).result(base.resolve(fi.result)).build();
-          job.add(res);
-        } catch (final IOException | AssertionError e) {
-          logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
-        }
-      }
+      final Collection<FileInfo> original = getRelativeFileInfos(base);
+
+      final Collection<FileInfo> rewritten = getRewrittenFileInfos(original);
+
+      cleanFiles(rewritten, base);
     }
 
     job.setProperty("uplevels", getUplevels(base));
     job.setInputDir(base);
-
     // start map
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
+
     if (start != null) {
       job.setInputMap(start.uri);
 
@@ -176,7 +137,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         throw new RuntimeException(e);
       }
     }
-
     try {
       job.write();
     } catch (IOException e) {
@@ -184,6 +144,85 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
 
     return null;
+  }
+
+  private Collection<FileInfo> getRewrittenFileInfos(Collection<FileInfo> original) throws DITAOTException {
+    // rewrite results
+    final Collection<FileInfo> rewritten = rewrite(original);
+    return rewritten;
+  }
+
+  private Collection<FileInfo> getRelativeFileInfos(URI base) {
+    // collect and relativize result
+    final Collection<FileInfo> original = job
+      .getFileInfo()
+      .stream()
+      .filter(fi -> fi.result != null)
+      .map(fi -> FileInfo.builder(fi).result(getRelativeResult(base, fi)).build())
+      .collect(Collectors.toList());
+    original.forEach(fi -> job.remove(fi));
+    return original;
+  }
+
+  /**
+   * @param base
+   * @return
+   */
+  @VisibleForTesting
+  String getTempUplevels(URI base) {
+    return job
+      .getFileInfo()
+      .stream()
+      .filter(fi -> fi.result != null && !fi.isInput)
+      .map(fi -> FileInfo.builder(fi).result(getRelativeResult(base, fi)).build())
+      .map(fi -> fi.result.toString())
+      .filter(result -> result.startsWith("../"))
+      .map(result -> result.replaceAll("^((\\.\\./)+).*?$", "$1"))
+      .max(Comparator.comparingInt(String::length))
+      .orElse("");
+  }
+
+  private static URI getRelativeResult(URI base, FileInfo fi) {
+    if (Objects.equals(base.getScheme(), "file") && Objects.equals(fi.result.getScheme(), "file")) return URI.create(
+      Paths.get(base).relativize(Path.of(fi.result)).toString().replace("\\", "/")
+    );
+    return base.resolve(fi.result);
+  }
+
+  private void cleanFiles(Collection<FileInfo> rewritten, URI base) throws DITAOTException {
+    final Job tempJob = new Job(job, emptyMap(), rewritten);
+    linkFilter.setJob(tempJob);
+    mapFilter.setJob(tempJob);
+    topicFilter.setJob(tempJob);
+    for (final FileInfo rwfi : rewritten) {
+      try {
+        assert !rwfi.result.isAbsolute();
+        if (rwfi.format != null && (rwfi.format.equals("coderef") || rwfi.format.equals("image"))) {
+          logger.debug("Skip format " + rwfi.format);
+        } else {
+          final File srcFile = new File(tempJob.tempDirURI.resolve(rwfi.uri));
+          if (tempJob.getStore().exists(srcFile.toURI())) {
+            final File destFile = new File(tempJob.tempDirURI.resolve(rwfi.result));
+            final List<XMLFilter> processingPipe = getProcessingPipe(rwfi, srcFile, destFile);
+            if (!processingPipe.isEmpty()) {
+              logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+              tempJob.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+              if (!srcFile.equals(destFile)) {
+                logger.debug("Deleting " + srcFile.toURI());
+                FileUtils.deleteQuietly(srcFile);
+              }
+            } else if (!srcFile.equals(destFile)) {
+              logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+              FileUtils.moveFile(srcFile, destFile);
+            }
+          }
+        }
+        final FileInfo res = FileInfo.builder(rwfi).uri(rwfi.result).result(base.resolve(rwfi.result)).build();
+        job.add(res);
+      } catch (final IOException | AssertionError e) {
+        logger.error("Failed to clean " + job.tempDirURI.resolve(rwfi.uri) + ": " + e.getMessage(), e);
+      }
+    }
   }
 
   private Collection<FileInfo> rewrite(final Collection<FileInfo> fileInfoCollection) throws DITAOTException {
@@ -238,6 +277,16 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       }
     }
 
+    return baseDir;
+  }
+
+  private URI getInputBaseDir() {
+    return job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
+  }
+
+  private URI correctBasedirWithUplevels(URI baseDir) {
+    String tempUplevels = getTempUplevels(baseDir);
+    if (!tempUplevels.isEmpty()) baseDir = baseDir.resolve(tempUplevels);
     return baseDir;
   }
 

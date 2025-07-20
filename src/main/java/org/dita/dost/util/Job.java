@@ -117,7 +117,7 @@ public final class Job {
   }
 
   private final Map<String, Object> prop;
-  public final File tempDir;
+  public File tempDir;
   public final URI tempDirURI;
   private final File jobFile;
   private final Map<URI, FileInfo> files = new ConcurrentHashMap<>();

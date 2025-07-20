@@ -11,6 +11,8 @@ import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
@@ -71,13 +73,18 @@ public class JobMapper implements FileNameMapper {
       switch (type) {
         case TEMP -> fi.file.getPath();
         case RESULT -> {
-          if (fi.result == null) {
-            yield sourceFileName;
+          if (fi.result == null) yield sourceFileName;
+
+          Path base;
+          Path file = Paths.get(fi.result);
+          if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
+            base = Paths.get(job.getInputDir().resolve(job.getInputMap())).getParent();
           } else {
-            final URI base = job.getInputDir();
-            final URI rel = base.relativize(fi.result);
-            yield toFile(rel).getPath();
+            base = Paths.get(job.getInputDir());
           }
+
+          final Path rel = base.relativize(file);
+          yield rel.toString();
         }
       };
     return new String[] { extension != null ? (FilenameUtils.removeExtension(res) + extension) : res };

@@ -289,15 +289,15 @@ public class TestUtils {
       var actWriter = new StringWriter();
       try {
         var transformerFactory = TransformerFactory.newInstance();
-        var transformer= transformerFactory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.METHOD,"xml");
+        var transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.transform(new DOMSource(exp), new StreamResult(expWriter));
         transformer.transform(new DOMSource(act), new StreamResult(actWriter));
       } catch (TransformerException ex) {
         throw new AssertionError(errorMessage);
       }
-      assertEquals(expWriter,actWriter, errorMessage);
+      assertEquals(expWriter, actWriter, errorMessage);
     }
   }
 

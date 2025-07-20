@@ -12,7 +12,10 @@ import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Objects;
+
+import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.util.Job;
 import org.xml.sax.SAXException;
 
@@ -42,8 +45,10 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     getContentHandler().processingInstruction(target, res);
   }
 
+  @VisibleForTesting
   void calculatePathToProjectDirs() {
     final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
+
     pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
     pathToMapDir =
       job
