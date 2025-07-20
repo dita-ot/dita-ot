@@ -159,10 +159,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return original;
   }
 
-  /**
-   * @param base
-   * @return
-   */
   @VisibleForTesting
   String getTempUplevels(URI base) {
     return job

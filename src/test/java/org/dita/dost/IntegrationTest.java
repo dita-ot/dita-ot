@@ -15,20 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.dita.dost.ant.types.JobSourceSetTest;
+
 import org.dita.dost.reader.GrammarPoolManager;
-import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.XMLUtils;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 

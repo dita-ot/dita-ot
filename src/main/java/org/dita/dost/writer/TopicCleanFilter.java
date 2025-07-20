@@ -13,7 +13,6 @@ import static org.dita.dost.util.URLUtils.getRelativePath;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
-import java.net.URI;
 import java.util.Objects;
 import org.dita.dost.util.Job;
 import org.xml.sax.SAXException;
