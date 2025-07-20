@@ -115,7 +115,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     init(input);
     final URI base = getBaseDir();
     if (useResultFilename) {
-      final Collection<FileInfo> original = getRelativeFileInfos(base);
+      final Collection<FileInfo> original = extractFileInfosFromJob(base);
 
       final Collection<FileInfo> rewritten = rewriteViaExtensions(original);
 
@@ -146,7 +146,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return null;
   }
 
-  private Collection<FileInfo> getRelativeFileInfos(URI base) {
+  private Collection<FileInfo> extractFileInfosFromJob(URI base) {
     // collect and relativize result
     final Collection<FileInfo> original = job
       .getFileInfo()
@@ -155,6 +155,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       .map(fi -> FileInfo.builder(fi).result(getRelativeResult(base, fi)).build())
       .collect(Collectors.toList());
     original.forEach(fi -> job.remove(fi));
+
     return original;
   }
 
@@ -213,12 +214,13 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             }
           }
         }
-        final FileInfo res = FileInfo
-          .builder(fileInfo)
-          .uri(fileInfo.result)
-          .result(base.resolve(fileInfo.result))
-          .build();
-        job.add(res);
+
+        URI resultUri = base.resolve(fileInfo.result);
+        final FileInfo res = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri).build();
+        boolean skipOuterfile =
+          job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER &&
+          !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
+        if (!skipOuterfile) job.add(res);
       } catch (final IOException | AssertionError e) {
         logger.error("Failed to clean " + job.tempDirURI.resolve(fileInfo.uri) + ": " + e.getMessage(), e);
       }

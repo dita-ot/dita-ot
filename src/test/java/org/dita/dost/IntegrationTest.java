@@ -13,13 +13,22 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.dita.dost.ant.types.JobSourceSetTest;
 import org.dita.dost.reader.GrammarPoolManager;
+import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.Job;
+import org.dita.dost.util.XMLUtils;
 import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammarPoolImpl;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
@@ -410,36 +419,35 @@ public abstract class IntegrationTest extends AbstractIntegrationTest {
 
   @Test
   public void testuplevels1() throws Throwable {
-    var outerFiles = List.of("images/carwash.gif", "a.html", "b.html", "topics/c.html", "topics/d.html");
-    var outDir = new File(
-      "build" +
-      File.separator +
-      "out" +
-      File.separator +
-      "integrationTest" +
-      File.separator +
-      "uplevels1" +
-      File.separator +
-      "temp"
-    );
-    for (String outerFile : outerFiles) {
-      Path outerFilePath = Paths.get(outDir + File.separator + outerFile);
-      if (Files.exists(outerFilePath)) Files.delete(outerFilePath);
-    }
-    var actDir = builder()
+    List<String> outerFiles = List.of("images/carwash.gif", "a.html", "b.html", "topics/c.html", "topics/d.html");
+    Path outDir = Paths.get("build", "tmp", "integrationTest", "uplevels1", "out");
+    outerFiles
+      .stream()
+      .map(outDir::resolve)
+      .forEach(remnantFromThePreviousRun -> {
+        try {
+          Files.deleteIfExists(remnantFromThePreviousRun);
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+
+    File actDir = builder()
       .name("uplevels1")
       .transtype(XHTML)
       .input(Paths.get("maps/above.ditamap"))
       .put("generate.copy.outer", "1")
       .put("outer.control", "quiet")
       .test();
-    var outerFilesShouldNotExist = new ArrayList<Executable>();
-    for (String outerFile : outerFiles) {
-      var outerFilePath = Paths.get(actDir.getParent(), outerFile);
-      outerFilesShouldNotExist.add(() -> assertFalse(Files.exists(outerFilePath), "outerFile exists: " + outerFilePath)
-      );
-    }
-    assertAll(outerFilesShouldNotExist);
+
+    assertAll(
+      "Files should not exist outside the output folder",
+      outerFiles
+        .stream()
+        .map(outerFile -> actDir.getParentFile().toPath().resolve(outerFile))
+        .map(outerFile -> (Executable) () -> assertFalse(Files.exists(outerFile), "outerFile exists: " + outerFile))
+        .toList()
+    );
   }
 
   @Test

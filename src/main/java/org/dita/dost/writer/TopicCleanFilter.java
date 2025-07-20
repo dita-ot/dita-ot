@@ -52,7 +52,7 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         .stream()
         .findAny()
         .map(startFile -> getRelativePath(fi.uri, startFile.uri).resolve(".").getPath())
-        .orElse("null");
+        .orElse("");
     if (job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
       final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
       pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
