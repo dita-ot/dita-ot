@@ -9,6 +9,9 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
@@ -34,13 +37,69 @@ class TopicCleanFilterTest {
 
   TopicCleanFilterTest() throws IOException {
     filter = new TopicCleanFilter();
-    final File temp = new File("").getAbsoluteFile();
-    job = new Job(temp, new CacheStore(temp, new XMLUtils()));
+    final File tempDir = new File("").getAbsoluteFile();
+    job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
   }
 
   @AfterEach
   void cleanUp() {
     job.getFileInfo().forEach(job::remove);
+  }
+
+  public static Stream<Arguments> projectDirInputs() {
+    return Stream.of(
+      Arguments.of(NOT_GENERATEOUTTER, "topic.dita", "root.ditamap", "./", ""),
+      Arguments.of(NOT_GENERATEOUTTER, "dir/topic.dita", "root.ditamap", "../", "../"),
+      Arguments.of(NOT_GENERATEOUTTER, "dir/sub/topic.dita", "root.ditamap", "../../", "../../"),
+      Arguments.of(NOT_GENERATEOUTTER, "dir/sub/topic.dita", "maps/root.ditamap", "../../maps/", "../../maps/"),
+      Arguments.of(NOT_GENERATEOUTTER, "root/dir/sub/topic.dita", "root/root.ditamap", "../../", "../../"),
+      Arguments.of(NOT_GENERATEOUTTER, "root/dir/topic.dita", "root/root.ditamap", "../", "../"),
+      Arguments.of(OLDSOLUTION, "topic.dita", "root.ditamap", "./", ""),
+      Arguments.of(OLDSOLUTION, "dir/topic.dita", "root.ditamap", "../", "../"),
+      Arguments.of(OLDSOLUTION, "dir/sub/topic.dita", "root.ditamap", "../../", "../../"),
+      Arguments.of(OLDSOLUTION, "dir/sub/topic.dita", "maps/root.ditamap", "../../", "../../maps/"),
+      Arguments.of(OLDSOLUTION, "root/topic.dita", "root/root.ditamap", "../", ""),
+      Arguments.of(OLDSOLUTION, "root/dir/sub/topic.dita", "root/root.ditamap", "../../../", "../../"),
+      Arguments.of(OLDSOLUTION, "root/dir/topic.dita", "root/root.ditamap", "../../", "../")
+    );
+  }
+
+  @ParameterizedTest(name = "{0} input={1} src={2}")
+  @MethodSource("projectDirInputs")
+  void testpathToProjectDir(
+    Job.Generate generate,
+    String src,
+    String input,
+    String expPathToRootDir,
+    String expPathToMapDir
+  ) throws SAXException {
+    job.setGeneratecopyouter(generate);
+    job.add(
+      Job.FileInfo
+        .builder()
+        .src(URI.create("src:///Volume/src/").resolve(input))
+        .format(ATTR_FORMAT_VALUE_DITAMAP)
+        .isInput(true)
+        .uri(URI.create(input))
+        .result(URI.create(input))
+        .build()
+    );
+    filter.setJob(job);
+    filter.setFileInfo(
+      Job.FileInfo
+        .builder()
+        .src(URI.create("src:///Volume/src/").resolve(src))
+        .uri(URI.create(src))
+        .result(URI.create(src))
+        .build()
+    );
+
+    filter.startDocument();
+
+    assertAll(
+      () -> assertEquals(expPathToRootDir, filter.pathToRootDir, "pathToRootDir"),
+      () -> assertEquals(expPathToMapDir, filter.pathToMapDir, "pathToMapDir")
+    );
   }
 
   public static Stream<Arguments> processingInstructionInputs() {
@@ -60,9 +119,9 @@ class TopicCleanFilterTest {
     );
   }
 
-  @ParameterizedTest(name = "name={0}, src={1}, input={2}, exp={3}")
+  @ParameterizedTest(name = "{0}, src={1}, input={2}")
   @MethodSource("processingInstructionInputs")
-  void processingInstruction(String name, String src, String input, String exp) throws SAXException {
+  void testprocessingInstruction(String name, String src, String input, String exp) throws SAXException {
     job.add(
       Job.FileInfo
         .builder()
@@ -87,7 +146,7 @@ class TopicCleanFilterTest {
         @Override
         public void processingInstruction(String target, String data) {
           assertEquals(name, target);
-          assertEquals(Objects.requireNonNullElse(exp, ""), data);
+          assertEquals(Objects.requireNonNullElse(exp, ""), data, name + " \"" + src + "\" \"" + input + "\"");
         }
       }
     );
@@ -97,7 +156,7 @@ class TopicCleanFilterTest {
   }
 
   @Test
-  void processingInstruction_other() throws SAXException {
+  void testprocessingInstruction_other() throws SAXException {
     filter.setJob(job);
     filter.setFileInfo(
       Job.FileInfo

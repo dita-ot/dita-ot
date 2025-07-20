@@ -34,10 +34,10 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
@@ -117,9 +117,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     if (useResultFilename) {
       final Collection<FileInfo> original = getRelativeFileInfos(base);
 
-      final Collection<FileInfo> rewritten = getRewrittenFileInfos(original);
+      final Collection<FileInfo> rewritten = rewriteViaExtensions(original);
 
-      cleanFiles(rewritten, base);
+      rewriteViaInternal(rewritten, base);
     }
 
     job.setProperty("uplevels", getUplevels(base));
@@ -144,12 +144,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
 
     return null;
-  }
-
-  private Collection<FileInfo> getRewrittenFileInfos(Collection<FileInfo> original) throws DITAOTException {
-    // rewrite results
-    final Collection<FileInfo> rewritten = rewrite(original);
-    return rewritten;
   }
 
   private Collection<FileInfo> getRelativeFileInfos(URI base) {
@@ -189,21 +183,23 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return base.resolve(fi.result);
   }
 
-  private void cleanFiles(Collection<FileInfo> rewritten, URI base) throws DITAOTException {
-    final Job tempJob = new Job(job, emptyMap(), rewritten);
+  private void rewriteViaInternal(Collection<FileInfo> fileInfoCollection, URI base) throws DITAOTException {
+    HashMap<String, Object> tempProp = new HashMap<>();
+    tempProp.put(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, job.getGeneratecopyouter());
+    final Job tempJob = new Job(job, tempProp, fileInfoCollection);
     linkFilter.setJob(tempJob);
     mapFilter.setJob(tempJob);
     topicFilter.setJob(tempJob);
-    for (final FileInfo rwfi : rewritten) {
+    for (final FileInfo fileInfo : fileInfoCollection) {
       try {
-        assert !rwfi.result.isAbsolute();
-        if (rwfi.format != null && (rwfi.format.equals("coderef") || rwfi.format.equals("image"))) {
-          logger.debug("Skip format " + rwfi.format);
+        assert !fileInfo.result.isAbsolute();
+        if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
+          logger.debug("Skip format " + fileInfo.format);
         } else {
-          final File srcFile = new File(tempJob.tempDirURI.resolve(rwfi.uri));
+          final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
           if (tempJob.getStore().exists(srcFile.toURI())) {
-            final File destFile = new File(tempJob.tempDirURI.resolve(rwfi.result));
-            final List<XMLFilter> processingPipe = getProcessingPipe(rwfi, srcFile, destFile);
+            final File destFile = new File(tempJob.tempDirURI.resolve(fileInfo.result));
+            final List<XMLFilter> processingPipe = getProcessingPipe(fileInfo, srcFile, destFile);
             if (!processingPipe.isEmpty()) {
               logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
               tempJob.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
@@ -217,15 +213,20 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
             }
           }
         }
-        final FileInfo res = FileInfo.builder(rwfi).uri(rwfi.result).result(base.resolve(rwfi.result)).build();
+        final FileInfo res = FileInfo
+          .builder(fileInfo)
+          .uri(fileInfo.result)
+          .result(base.resolve(fileInfo.result))
+          .build();
         job.add(res);
       } catch (final IOException | AssertionError e) {
-        logger.error("Failed to clean " + job.tempDirURI.resolve(rwfi.uri) + ": " + e.getMessage(), e);
+        logger.error("Failed to clean " + job.tempDirURI.resolve(fileInfo.uri) + ": " + e.getMessage(), e);
       }
     }
   }
 
-  private Collection<FileInfo> rewrite(final Collection<FileInfo> fileInfoCollection) throws DITAOTException {
+  private Collection<FileInfo> rewriteViaExtensions(final Collection<FileInfo> fileInfoCollection)
+    throws DITAOTException {
     if (rewriteClass != null) {
       return rewriteClass.rewrite(fileInfoCollection);
     }
@@ -277,16 +278,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       }
     }
 
-    return baseDir;
-  }
-
-  private URI getInputBaseDir() {
-    return job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
-  }
-
-  private URI correctBasedirWithUplevels(URI baseDir) {
-    String tempUplevels = getTempUplevels(baseDir);
-    if (!tempUplevels.isEmpty()) baseDir = baseDir.resolve(tempUplevels);
     return baseDir;
   }
 

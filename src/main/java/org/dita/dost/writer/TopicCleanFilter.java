@@ -11,11 +11,10 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.URLUtils.getRelativePath;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.net.URI;
 import java.util.Objects;
-
-import com.google.common.annotations.VisibleForTesting;
 import org.dita.dost.util.Job;
 import org.xml.sax.SAXException;
 
@@ -27,8 +26,8 @@ public class TopicCleanFilter extends AbstractXMLFilter {
   private static final String SINGLE_FILE_STEP = "";
 
   private Job.FileInfo fi;
-  private String pathToRootDir;
-  private String pathToMapDir;
+  String pathToRootDir;
+  String pathToMapDir;
 
   public void setFileInfo(Job.FileInfo fi) {
     this.fi = fi;
@@ -47,16 +46,19 @@ public class TopicCleanFilter extends AbstractXMLFilter {
 
   @VisibleForTesting
   void calculatePathToProjectDirs() {
-    final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
-
-    pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
     pathToMapDir =
       job
         .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
         .stream()
         .findAny()
         .map(startFile -> getRelativePath(fi.uri, startFile.uri).resolve(".").getPath())
-        .orElse(null);
+        .orElse("null");
+    if (job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
+      final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
+      pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
+    } else {
+      pathToRootDir = (pathToMapDir == null || pathToMapDir.isEmpty()) ? SINGLE_URI_STEP : pathToMapDir;
+    }
   }
 
   String getProcessingInstruction(String target, String data) {
