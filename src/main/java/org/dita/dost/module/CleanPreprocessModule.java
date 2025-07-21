@@ -237,11 +237,18 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private void addFileToJob(URI base, FileInfo fileInfo) {
     URI resultUri = base.resolve(fileInfo.result);
-    final FileInfo res = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri).build();
-    boolean skipOuterfile =
-      job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER &&
-      !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
-    if (!skipOuterfile) job.add(res);
+
+    FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri);
+
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOutFile(resultUri)) {
+      builder.isResourceOnly(true);
+    }
+
+    job.add(builder.build());
+  }
+
+  private boolean isOutFile(URI resultUri) {
+    return !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
   }
 
   private Collection<FileInfo> rewriteViaExtensions(final Collection<FileInfo> fileInfoCollection)

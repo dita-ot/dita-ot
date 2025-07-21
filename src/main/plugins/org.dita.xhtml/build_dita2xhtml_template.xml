@@ -47,7 +47,7 @@ See the accompanying LICENSE file for applicable license.
     <sequential>
       <local name="xhtml.toc.output.dir"/>
       <condition property="xhtml.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-       <isset property="inner.transform"/>
+       <istrue value="${inner.transform}"/>
       </condition>
       <pipeline>
       <xslt destdir="${xhtml.toc.output.dir}"

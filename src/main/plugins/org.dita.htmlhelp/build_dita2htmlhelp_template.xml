@@ -79,7 +79,7 @@ See the accompanying LICENSE file for applicable license.
           description="Build HTMLHelp HHP file">
     <local name="htmlhelp.hhp.output.dir"/>
     <condition property="htmlhelp.hhp.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-      <isset property="inner.transform"/>
+      <istrue value="${inner.transform}"/>
     </condition>
     <pipeline>
     <xslt destdir="${htmlhelp.hhp.output.dir}"
@@ -99,7 +99,7 @@ See the accompanying LICENSE file for applicable license.
           description="Build HTMLHelp HHC file">
     <local name="htmlhelp.hhc.output.dir"/>
     <condition property="htmlhelp.hhc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-      <isset property="inner.transform"/>
+      <istrue value="${inner.transform}"/>
     </condition>
     <pipeline>
     <xslt destdir="${htmlhelp.hhc.output.dir}"
@@ -117,7 +117,7 @@ See the accompanying LICENSE file for applicable license.
           description="Build HTMLHelp HHK file">
     <local name="htmlhelp.hhk.output.dir"/>
     <condition property="htmlhelp.hhk.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-      <isset property="inner.transform"/>
+      <istrue value="${inner.transform}"/>
     </condition>
     <pipeline message="Extract index term." inputmap="${user.input.file}">
       <module class="org.dita.dost.module.IndexTermExtractModule">

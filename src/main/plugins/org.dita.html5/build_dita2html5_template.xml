@@ -209,7 +209,7 @@ See the accompanying LICENSE file for applicable license.
     <sequential>
       <local name="html5.toc.output.dir"/>
       <condition property="html5.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-        <isset property="inner.transform"/>
+        <istrue value="${inner.transform}"/>
       </condition>
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
       <xslt destdir="${html5.toc.output.dir}"
