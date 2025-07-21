@@ -428,23 +428,26 @@ public abstract class AbstractIntegrationTest {
       if (exp.isDirectory() || (!exp.exists() && act.isDirectory())) {
         compare(exp, act);
       } else {
-        if (!exp.exists() || !act.exists()) {
-          compareResults.add(() -> assertTrue(exp.exists(), () -> "File exists: " + exp.getAbsolutePath()));
-          compareResults.add(() -> assertTrue(act.exists(), () -> "File exists: " + act.getAbsolutePath()));
+        if (exp.exists() && act.exists()) {
+          compareFileContents(exp, act);
         } else {
-          var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
-          final String ext = FileUtils.getExtension(name);
-          if (ext == null) {} else if (
-            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-          ) {
-            compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
-          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-            compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
-          } else if (ext.equals("txt")) {
-            compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
-          }
+          compareResults.add(() ->
+            fail("Missing file: " + (!exp.exists() ? exp.getAbsolutePath() : act.getAbsolutePath()))
+          );
         }
       }
+    }
+  }
+
+  private void compareFileContents(File exp, File act) {
+    var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+    final String ext = FileUtils.getExtension(exp.getName());
+    if (ext == null) {} else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")) {
+      compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
+      compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+    } else if (ext.equals("txt")) {
+      compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
     }
   }
 
@@ -453,7 +456,7 @@ public abstract class AbstractIntegrationTest {
   private Collection<String> getFiles(File expDir, File actDir) {
     final FileFilter filter = f ->
       f.isDirectory() ||
-        (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
+      (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
     final Set<String> buf = new HashSet<>();
     final File[] exp = expDir.listFiles(filter);
     if (exp != null) {
@@ -533,7 +536,7 @@ public abstract class AbstractIntegrationTest {
       final Node next = n.getNextSibling();
       if (
         n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE &&
-          (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))
+        (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))
       ) {
         e.removeChild(n);
       }
@@ -676,7 +679,7 @@ public abstract class AbstractIntegrationTest {
           // out.println(event.getMessage());
           break;
         default:
-          //                    err.println(message);
+        //                    err.println(message);
       }
 
       messages.add(new Message(level, message));
