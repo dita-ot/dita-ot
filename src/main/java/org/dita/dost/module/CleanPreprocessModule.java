@@ -113,17 +113,25 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   @Override
   public AbstractPipelineOutput execute(final Map<String, String> input) throws DITAOTException {
     init(input);
+    cleanFiles();
+    fixInputMap();
+    writeJob();
+    return null;
+  }
+
+  private void cleanFiles() throws DITAOTException {
     final URI base = getBaseDir();
     if (useResultFilename) {
-      final Collection<FileInfo> original = extractFileInfosFromJob(base);
-
-      final Collection<FileInfo> rewritten = rewriteViaExtensions(original);
-
-      rewriteViaInternal(rewritten, base);
+      var fileSet = extractFileInfosFromJob(base);
+      fileSet = rewriteViaExtensions(fileSet);
+      rewriteViaInternal(fileSet, base);
     }
 
     job.setProperty("uplevels", getUplevels(base));
     job.setInputDir(base);
+  }
+
+  private void fixInputMap() throws DITAOTException {
     // start map
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
 
@@ -137,13 +145,14 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         throw new RuntimeException(e);
       }
     }
+  }
+
+  private void writeJob() throws DITAOTException {
     try {
       job.write();
     } catch (IOException e) {
       throw new DITAOTException();
     }
-
-    return null;
   }
 
   private Collection<FileInfo> extractFileInfosFromJob(URI base) {
@@ -188,39 +197,51 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     mapFilter.setJob(tempJob);
     topicFilter.setJob(tempJob);
     for (final FileInfo fileInfo : fileInfoCollection) {
-      try {
-        assert !fileInfo.result.isAbsolute();
-        if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
-          logger.debug("Skip format " + fileInfo.format);
-        } else {
-          final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
-          if (tempJob.getStore().exists(srcFile.toURI())) {
-            final File destFile = new File(tempJob.tempDirURI.resolve(fileInfo.result));
-            final List<XMLFilter> processingPipe = getProcessingPipe(fileInfo, srcFile, destFile);
-            if (!processingPipe.isEmpty()) {
-              logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-              tempJob.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-              if (!srcFile.equals(destFile)) {
-                logger.debug("Deleting " + srcFile.toURI());
-                FileUtils.deleteQuietly(srcFile);
-              }
-            } else if (!srcFile.equals(destFile)) {
-              logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-              FileUtils.moveFile(srcFile, destFile);
-            }
-          }
-        }
+      rewriteFileAndAddToJob(base, fileInfo, tempJob);
+    }
+  }
 
-        URI resultUri = base.resolve(fileInfo.result);
-        final FileInfo res = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri).build();
-        boolean skipOuterfile =
-          job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER &&
-          !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
-        if (!skipOuterfile) job.add(res);
-      } catch (final IOException | AssertionError e) {
-        logger.error("Failed to clean " + job.tempDirURI.resolve(fileInfo.uri) + ": " + e.getMessage(), e);
+  private void rewriteFileAndAddToJob(URI base, FileInfo fileInfo, Job tempJob) throws DITAOTException {
+    try {
+      assert !fileInfo.result.isAbsolute();
+      if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
+        logger.debug("Skip format " + fileInfo.format);
+      } else {
+        rewriteFile(fileInfo, tempJob);
+      }
+
+      addFileToJob(base, fileInfo);
+    } catch (final IOException | AssertionError e) {
+      logger.error("Failed to clean " + job.tempDirURI.resolve(fileInfo.uri) + ": " + e.getMessage(), e);
+    }
+  }
+
+  private void rewriteFile(FileInfo fileInfo, Job tempJob) throws DITAOTException, IOException {
+    final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
+    if (tempJob.getStore().exists(srcFile.toURI())) {
+      final File destFile = new File(tempJob.tempDirURI.resolve(fileInfo.result));
+      final List<XMLFilter> processingPipe = getProcessingPipe(fileInfo, srcFile, destFile);
+      if (!processingPipe.isEmpty()) {
+        logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+        tempJob.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+        if (!srcFile.equals(destFile)) {
+          logger.debug("Deleting " + srcFile.toURI());
+          FileUtils.deleteQuietly(srcFile);
+        }
+      } else if (!srcFile.equals(destFile)) {
+        logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+        FileUtils.moveFile(srcFile, destFile);
       }
     }
+  }
+
+  private void addFileToJob(URI base, FileInfo fileInfo) {
+    URI resultUri = base.resolve(fileInfo.result);
+    final FileInfo res = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri).build();
+    boolean skipOuterfile =
+      job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER &&
+      !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
+    if (!skipOuterfile) job.add(res);
   }
 
   private Collection<FileInfo> rewriteViaExtensions(final Collection<FileInfo> fileInfoCollection)
