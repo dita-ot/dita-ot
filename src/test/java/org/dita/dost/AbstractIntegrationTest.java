@@ -34,6 +34,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -428,6 +429,7 @@ public abstract class AbstractIntegrationTest {
 
   private void compare(final File expDir, final File actDir) throws Throwable {
     final Collection<String> files = getFiles(expDir, actDir);
+    final List<Executable> testResults = new ArrayList<>();
     for (final String name : files) {
       final File exp = new File(expDir, name);
       final File act = new File(actDir, name);
@@ -435,26 +437,19 @@ public abstract class AbstractIntegrationTest {
         compare(exp, act);
       } else {
         final String ext = FileUtils.getExtension(name);
-        try {
-          if (ext == null) {} else if (
-            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-          ) {
-            assertXMLEqual(parseHtml(exp), parseHtml(act));
-          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-            assertXMLEqual(parseXml(exp), parseXml(act));
-          } else if (ext.equals("txt")) {
-            assertArrayEquals(readTextFile(exp), readTextFile(act));
-          }
-        } catch (final RuntimeException ex) {
-          throw ex;
-        } catch (final Throwable ex) {
-          throw new Throwable(
-            "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": " + ex.getMessage(),
-            ex
-          );
+        var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+        if (ext == null) {} else if (
+          ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
+        ) {
+          testResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+        } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
+          testResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+        } else if (ext.equals("txt")) {
+          testResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
         }
       }
     }
+    assertAll(testResults);
   }
 
   final Set<String> ignorable = Set.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");

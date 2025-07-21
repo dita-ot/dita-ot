@@ -8,6 +8,7 @@
 package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 import java.io.*;
@@ -258,24 +259,33 @@ public class TestUtils {
   }
 
   public static void assertXMLEqual(Document exp, Document act) {
-    final Diff d = DiffBuilder
+    assertXMLEqual(exp, act, "");
+  }
+
+  public static void assertXMLEqual(Document exp, Document act, String message) {
+    final Diff diff = DiffBuilder
       .compare(ignoreComments(exp))
       .withTest(ignoreComments(act))
       .ignoreWhitespace()
       .normalizeWhitespace()
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
-    if (d.hasDifferences()) {
+    if (diff.hasDifferences()) {
+      var errorMessage = message + System.lineSeparator() + diff + System.lineSeparator();
+      System.out.print("-" + System.lineSeparator() + errorMessage);
+      var expWriter = new StringWriter();
+      var actWriter = new StringWriter();
       try {
         var transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
-        System.out.println();
-        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-        System.out.println();
+        var transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(new DOMSource(exp), new StreamResult(expWriter));
+        transformer.transform(new DOMSource(act), new StreamResult(actWriter));
       } catch (TransformerException ex) {
-        //
+        throw new AssertionError(errorMessage);
       }
-      throw new AssertionError(d.toString());
+      assertEquals(expWriter, actWriter, errorMessage);
     }
   }
 
