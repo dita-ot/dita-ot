@@ -440,14 +440,18 @@ public abstract class AbstractIntegrationTest {
   }
 
   private void compareFileContents(File exp, File act) {
-    var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+    String message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
     final String ext = FileUtils.getExtension(exp.getName());
-    if (ext == null) {} else if (ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")) {
-      compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
-    } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-      compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
-    } else if (ext.equals("txt")) {
-      compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+    if (ext != null) {
+      // prettier-ignore
+      switch (ext) {
+        case "html", "htm", "xhtml", "hhk" ->
+          compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+        case "xml", "dita", "ditamap", "fo" ->
+          compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+        case "txt" ->
+          compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+      }
     }
   }
 
