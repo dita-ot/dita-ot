@@ -428,7 +428,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       throw e;
     } catch (final SAXParseException sax) {
       final Exception inner = sax.getException();
-      if (inner instanceof DITAOTException) {
+      if (inner != null && inner instanceof DITAOTException) {
         throw (DITAOTException) inner;
       }
       if (currentFile.equals(rootFile)) {
@@ -554,7 +554,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
     // Generate topic-scheme dictionary
     final Set<URI> schemeSet = listFilter.getSchemeSet();
-    if (!schemeSet.isEmpty()) {
+    if (schemeSet != null && !schemeSet.isEmpty()) {
       Set<URI> children = schemeDictionary.get(currentFile);
       if (children == null) {
         children = new HashSet<>();
