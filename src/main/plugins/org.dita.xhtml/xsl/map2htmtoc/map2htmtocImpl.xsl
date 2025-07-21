@@ -26,8 +26,7 @@ See the accompanying LICENSE file for applicable license.
 <xsl:param name="YEAR" select="format-date(current-date(), '[Y]')"/>
 <!-- Define a newline character -->
 <xsl:variable name="newline"><xsl:text>
-</xsl:text>
-</xsl:variable>
+</xsl:text></xsl:variable>
 
 <!-- *********************************************************************************
      Setup the HTML wrapper for the table of contents
