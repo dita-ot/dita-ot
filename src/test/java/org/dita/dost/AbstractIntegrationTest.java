@@ -44,6 +44,7 @@ public abstract class AbstractIntegrationTest {
    * Message codes where duplicates are ignored in message count.
    */
   private static final String[] ignoreDuplicates = new String[] { "DOTJ037W" };
+  private final Collection<Executable> compareResults = new ArrayList<>();
 
   enum Transtype {
     PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
@@ -61,7 +62,8 @@ public abstract class AbstractIntegrationTest {
       "build-init",
       "preprocess2",
       "xhtml.topics",
-      "dita.map.xhtml"
+      "dita.map.xhtml",
+      "copy-css"
     );
 
     final String name;
@@ -221,6 +223,7 @@ public abstract class AbstractIntegrationTest {
   protected File test() throws Throwable {
     final File actDir = run();
     compare();
+    assertAll(compareResults);
     return actDir;
   }
 
@@ -429,27 +432,30 @@ public abstract class AbstractIntegrationTest {
 
   private void compare(final File expDir, final File actDir) throws Throwable {
     final Collection<String> files = getFiles(expDir, actDir);
-    final List<Executable> testResults = new ArrayList<>();
     for (final String name : files) {
       final File exp = new File(expDir, name);
       final File act = new File(actDir, name);
-      if (exp.isDirectory()) {
+      if (exp.isDirectory() || (!exp.exists() && act.isDirectory())) {
         compare(exp, act);
       } else {
-        final String ext = FileUtils.getExtension(name);
-        var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
-        if (ext == null) {} else if (
-          ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-        ) {
-          testResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
-        } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-          testResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
-        } else if (ext.equals("txt")) {
-          testResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+        if (!exp.exists() || !act.exists()) {
+          compareResults.add(() -> assertTrue(exp.exists(), () -> "File exists: " + exp.getAbsolutePath()));
+          compareResults.add(() -> assertTrue(act.exists(), () -> "File exists: " + act.getAbsolutePath()));
+        } else {
+          var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+          final String ext = FileUtils.getExtension(name);
+          if (ext == null) {} else if (
+            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
+          ) {
+            compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
+            compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+          } else if (ext.equals("txt")) {
+            compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+          }
         }
       }
     }
-    assertAll(testResults);
   }
 
   final Set<String> ignorable = Set.of("keydef.xml", "subrelation.xml", ".job.xml", "stage2.fo");
@@ -457,7 +463,7 @@ public abstract class AbstractIntegrationTest {
   private Collection<String> getFiles(File expDir, File actDir) {
     final FileFilter filter = f ->
       f.isDirectory() ||
-      (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
+        (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
     final Set<String> buf = new HashSet<>();
     final File[] exp = expDir.listFiles(filter);
     if (exp != null) {
@@ -479,7 +485,9 @@ public abstract class AbstractIntegrationTest {
    */
   private String[] readTextFile(final File f) throws IOException {
     final List<String> buf = new ArrayList<>();
-    try (final BufferedReader r = Files.newBufferedReader(f.toPath(), StandardCharsets.UTF_8)) {
+    try (
+      final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))
+    ) {
       String l;
       while ((l = r.readLine()) != null) {
         buf.add(l);
@@ -491,6 +499,9 @@ public abstract class AbstractIntegrationTest {
   }
 
   private Document parseHtml(final File f) throws SAXException, IOException {
+    if (!f.exists()) {
+      throw new AssertionError(new FileNotFoundException(f.toString()));
+    }
     Document d = htmlb.parse(f);
     d = removeCopyright(d);
     return rewriteIds(d, htmlIdPattern);
@@ -532,7 +543,7 @@ public abstract class AbstractIntegrationTest {
       final Node next = n.getNextSibling();
       if (
         n.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE &&
-        (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))
+          (n.getNodeName().equals(PI_WORKDIR_TARGET) || n.getNodeName().equals(PI_WORKDIR_TARGET_URI))
       ) {
         e.removeChild(n);
       }
@@ -675,7 +686,7 @@ public abstract class AbstractIntegrationTest {
           // out.println(event.getMessage());
           break;
         default:
-        //                    err.println(message);
+          //                    err.println(message);
       }
 
       messages.add(new Message(level, message));
