@@ -420,16 +420,6 @@ public abstract class AbstractIntegrationTest {
     }
   }
 
-  private int getMessageCount(final Project project, final String type) {
-    int errorCount = 0;
-    if (isWindows() && project.getProperty("exp.message-count." + type + ".windows") != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type + ".windows"));
-    } else if (project.getProperty("exp.message-count." + type) != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type));
-    }
-    return errorCount;
-  }
-
   private void compare(final File expDir, final File actDir) throws Throwable {
     final Collection<String> files = getFiles(expDir, actDir);
     for (final String name : files) {
