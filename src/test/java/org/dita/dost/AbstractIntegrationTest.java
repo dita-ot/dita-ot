@@ -44,7 +44,7 @@ public abstract class AbstractIntegrationTest {
    * Message codes where duplicates are ignored in message count.
    */
   private static final String[] ignoreDuplicates = new String[] { "DOTJ037W" };
-  private final List<Executable> testResults = new ArrayList<>();
+  private final Collection<Executable> compareResults = new ArrayList<>();
 
   enum Transtype {
     PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
@@ -223,6 +223,7 @@ public abstract class AbstractIntegrationTest {
   protected File test() throws Throwable {
     final File actDir = run();
     compare();
+    assertAll(compareResults);
     return actDir;
   }
 
@@ -280,7 +281,6 @@ public abstract class AbstractIntegrationTest {
     final File act = actDir.toPath().resolve(transtype.toString()).toFile();
 
     compare(exp, act);
-    assertAll(testResults);
     return this;
   }
 
@@ -420,34 +420,29 @@ public abstract class AbstractIntegrationTest {
     }
   }
 
-  private int getMessageCount(final Project project, final String type) {
-    int errorCount = 0;
-    if (isWindows() && project.getProperty("exp.message-count." + type + ".windows") != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type + ".windows"));
-    } else if (project.getProperty("exp.message-count." + type) != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type));
-    }
-    return errorCount;
-  }
-
   private void compare(final File expDir, final File actDir) throws Throwable {
     final Collection<String> files = getFiles(expDir, actDir);
     for (final String name : files) {
       final File exp = new File(expDir, name);
       final File act = new File(actDir, name);
-      if (exp.isDirectory()) {
+      if (exp.isDirectory() || (!exp.exists() && act.isDirectory())) {
         compare(exp, act);
       } else {
-        final String ext = FileUtils.getExtension(name);
-        var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
-        if (ext == null) {} else if (
-          ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-        ) {
-          testResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
-        } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-          testResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
-        } else if (ext.equals("txt")) {
-          testResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+        if (!exp.exists() || !act.exists()) {
+          compareResults.add(() -> assertTrue(exp.exists(), () -> "File exists: " + exp.getAbsolutePath()));
+          compareResults.add(() -> assertTrue(act.exists(), () -> "File exists: " + act.getAbsolutePath()));
+        } else {
+          var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+          final String ext = FileUtils.getExtension(name);
+          if (ext == null) {} else if (
+            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
+          ) {
+            compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
+            compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+          } else if (ext.equals("txt")) {
+            compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
+          }
         }
       }
     }
@@ -494,6 +489,9 @@ public abstract class AbstractIntegrationTest {
   }
 
   private Document parseHtml(final File f) throws SAXException, IOException {
+    if (!f.exists()) {
+      throw new AssertionError(new FileNotFoundException(f.toString()));
+    }
     Document d = htmlb.parse(f);
     d = removeCopyright(d);
     return rewriteIds(d, htmlIdPattern);
