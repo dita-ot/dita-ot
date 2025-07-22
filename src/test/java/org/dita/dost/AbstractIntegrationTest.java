@@ -500,18 +500,12 @@ public abstract class AbstractIntegrationTest {
   }
 
   private Document parseHtml(final File f) throws SAXException, IOException {
-    if (!f.exists()) {
-      throw new AssertionError(new FileNotFoundException(f.toString()));
-    }
     Document d = htmlb.parse(f);
     d = removeCopyright(d);
     return rewriteIds(d, htmlIdPattern);
   }
 
   private Document parseXml(final File f) throws SAXException, IOException {
-    if (!f.exists()) {
-      throw new AssertionError(new FileNotFoundException(f.toString()));
-    }
     final Document d = db.parse(f);
     final NodeList elems = d.getElementsByTagName("*");
     for (int i = 0; i < elems.getLength(); i++) {
