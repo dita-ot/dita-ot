@@ -161,7 +161,7 @@ public class CleanPreprocessModuleTest {
 
   @ParameterizedTest
   @MethodSource("tempUplevelsProvider")
-  void testCorrectTestUplevels(List<String> uriResults, String inputDir, URI baseDir, String exp) {
+  void correctTestUplevels(List<String> uriResults, String inputDir, URI baseDir, String exp) {
     job.setInputDir(create(inputDir));
     for (String result : uriResults) {
       job.add(new Builder().uri(create(inputDir + result)).result(create(inputDir + result)).build());

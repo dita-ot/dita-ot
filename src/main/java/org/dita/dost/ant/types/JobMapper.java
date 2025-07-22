@@ -7,7 +7,6 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
@@ -72,22 +71,19 @@ public class JobMapper implements FileNameMapper {
     final String res =
       switch (type) {
         case TEMP -> fi.file.getPath();
-        case RESULT -> {
-          if (fi.result == null) yield sourceFileName;
-
-          Path base;
-          Path file = Paths.get(fi.result);
-          if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
-            base = Paths.get(job.getInputDir().resolve(job.getInputMap())).getParent();
-          } else {
-            base = Paths.get(job.getInputDir());
-          }
-
-          final Path rel = base.relativize(file);
-          yield rel.toString();
-        }
+        case RESULT -> (fi.result == null) ? sourceFileName : getResult(fi);
       };
     return new String[] { extension != null ? (FilenameUtils.removeExtension(res) + extension) : res };
+  }
+
+  private String getResult(Job.FileInfo fi) {
+    return getBase().relativize(Paths.get(fi.result)).toString();
+  }
+
+  private Path getBase() {
+    return (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER)
+      ? Paths.get(job.getInputDir().resolve(job.getInputMap())).getParent()
+      : Paths.get(job.getInputDir());
   }
 
   public static class TypeAttribute extends EnumeratedAttribute {

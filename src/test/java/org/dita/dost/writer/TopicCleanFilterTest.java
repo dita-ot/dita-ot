@@ -66,7 +66,7 @@ class TopicCleanFilterTest {
 
   @ParameterizedTest(name = "{0} input={1} src={2}")
   @MethodSource("projectDirInputs")
-  void testpathToProjectDir(
+  void pathToProjectDir(
     Job.Generate generate,
     String src,
     String input,
@@ -121,7 +121,7 @@ class TopicCleanFilterTest {
 
   @ParameterizedTest(name = "{0}, src={1}, input={2}")
   @MethodSource("processingInstructionInputs")
-  void testprocessingInstruction(String name, String src, String input, String exp) throws SAXException {
+  void processingInstruction(String name, String src, String input, String exp) throws SAXException {
     job.add(
       Job.FileInfo
         .builder()
@@ -156,7 +156,7 @@ class TopicCleanFilterTest {
   }
 
   @Test
-  void testprocessingInstruction_other() throws SAXException {
+  void processingInstruction_other() throws SAXException {
     filter.setJob(job);
     filter.setFileInfo(
       Job.FileInfo

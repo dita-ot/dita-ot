@@ -12,19 +12,15 @@ import static java.net.URI.create;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.Comparator;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Mapper;
-import org.apache.tools.ant.types.Resource;
 import org.apache.tools.ant.util.FileNameMapper;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
@@ -79,7 +75,7 @@ public class JobMapperTest {
   }
 
   @Test
-  public void testNormal() throws IOException {
+  public void normal() throws IOException {
     project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
     job.setInputDir(tempDir.toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
@@ -102,7 +98,7 @@ public class JobMapperTest {
   }
 
   @Test
-  public void testUplevels1() throws IOException {
+  public void uplevels1() throws IOException {
     job.setInputDir(tempDir.toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
     String ditamap = "common/map.ditamap";
@@ -124,7 +120,7 @@ public class JobMapperTest {
   }
 
   @Test
-  public void testUplevels3() throws IOException {
+  public void uplevels3() throws IOException {
     job.setInputDir(tempDir.toURI());
     job.setGeneratecopyouter(OLDSOLUTION);
     String ditamap = "common/map.ditamap";
