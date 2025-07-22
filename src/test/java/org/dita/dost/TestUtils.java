@@ -264,8 +264,9 @@ public class TestUtils {
 
   public static void assertXMLEqual(Document exp, Document act, String message) {
     final Diff diff = DiffBuilder
-      .compare(ignoreComments(exp))
-      .withTest(ignoreComments(act))
+      .compare(exp)
+      .withTest(act)
+      .ignoreComments()
       .ignoreWhitespace()
       .normalizeWhitespace()
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
