@@ -428,22 +428,33 @@ public abstract class AbstractIntegrationTest {
       if (exp.isDirectory() || (!exp.exists() && act.isDirectory())) {
         compare(exp, act);
       } else {
-        if (!exp.exists() || !act.exists()) {
-          compareResults.add(() -> assertTrue(exp.exists(), () -> "File exists: " + exp.getAbsolutePath()));
-          compareResults.add(() -> assertTrue(act.exists(), () -> "File exists: " + act.getAbsolutePath()));
+        if (exp.exists() && act.exists()) {
+          compareFileContents(exp, act);
         } else {
-          var message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
-          final String ext = FileUtils.getExtension(name);
-          if (ext == null) {} else if (
-            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-          ) {
-            compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
-          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-            compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
-          } else if (ext.equals("txt")) {
-            compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
-          }
+          reportMissingFile(exp, act);
         }
+      }
+    }
+  }
+
+  private void reportMissingFile(File exp, File act) {
+    String errorMessage = "Missing file: " + (!exp.exists() ? exp.getAbsolutePath() : act.getAbsolutePath()) + "\n";
+    System.out.print(errorMessage);
+    compareResults.add(() -> fail(errorMessage));
+  }
+
+  private void compareFileContents(File exp, File act) {
+    String message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+    final String ext = FileUtils.getExtension(exp.getName());
+    if (ext != null) {
+      // prettier-ignore
+      switch (ext) {
+        case "html", "htm", "xhtml", "hhk" ->
+          compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+        case "xml", "dita", "ditamap", "fo" ->
+          compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+        case "txt" ->
+          compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
       }
     }
   }
@@ -475,9 +486,7 @@ public abstract class AbstractIntegrationTest {
    */
   private String[] readTextFile(final File f) throws IOException {
     final List<String> buf = new ArrayList<>();
-    try (
-      final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))
-    ) {
+    try (final BufferedReader r = Files.newBufferedReader(f.toPath(), StandardCharsets.UTF_8)) {
       String l;
       while ((l = r.readLine()) != null) {
         buf.add(l);
@@ -489,18 +498,12 @@ public abstract class AbstractIntegrationTest {
   }
 
   private Document parseHtml(final File f) throws SAXException, IOException {
-    if (!f.exists()) {
-      throw new AssertionError(new FileNotFoundException(f.toString()));
-    }
     Document d = htmlb.parse(f);
     d = removeCopyright(d);
     return rewriteIds(d, htmlIdPattern);
   }
 
   private Document parseXml(final File f) throws SAXException, IOException {
-    if (!f.exists()) {
-      throw new AssertionError(new FileNotFoundException(f.toString()));
-    }
     final Document d = db.parse(f);
     final NodeList elems = d.getElementsByTagName("*");
     for (int i = 0; i < elems.getLength(); i++) {
