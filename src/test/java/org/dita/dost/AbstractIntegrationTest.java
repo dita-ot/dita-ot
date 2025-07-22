@@ -431,12 +431,16 @@ public abstract class AbstractIntegrationTest {
         if (exp.exists() && act.exists()) {
           compareFileContents(exp, act);
         } else {
-          compareResults.add(() ->
-            fail("Missing file: " + (!exp.exists() ? exp.getAbsolutePath() : act.getAbsolutePath()))
-          );
+          reportMissingFile(exp, act);
         }
       }
     }
+  }
+
+  private void reportMissingFile(File exp, File act) {
+    String errorMessage = "Missing file: " + (!exp.exists() ? exp.getAbsolutePath() : act.getAbsolutePath()) + "\n";
+    System.out.print(errorMessage);
+    compareResults.add(() -> fail(errorMessage));
   }
 
   private void compareFileContents(File exp, File act) {

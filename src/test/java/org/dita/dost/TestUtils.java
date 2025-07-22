@@ -9,6 +9,7 @@ package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 import java.io.*;
@@ -272,8 +273,8 @@ public class TestUtils {
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
     if (diff.hasDifferences()) {
-      var errorMessage = message + System.lineSeparator() + diff + System.lineSeparator();
-      System.out.print("-" + System.lineSeparator() + errorMessage);
+      var errorMessage = message + System.lineSeparator() + diff.fullDescription() + System.lineSeparator();
+      System.out.print(errorMessage);
       var expWriter = new StringWriter();
       var actWriter = new StringWriter();
       try {
@@ -284,7 +285,7 @@ public class TestUtils {
         transformer.transform(new DOMSource(exp), new StreamResult(expWriter));
         transformer.transform(new DOMSource(act), new StreamResult(actWriter));
       } catch (TransformerException ex) {
-        throw new AssertionError(errorMessage);
+        fail(errorMessage);
       }
       assertEquals(expWriter, actWriter, errorMessage);
     }
