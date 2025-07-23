@@ -11,6 +11,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -1146,5 +1147,79 @@ public final class Job {
     }
     tempFileNameScheme.setBaseDir(getInputDir());
     return tempFileNameScheme;
+  }
+
+  /**
+   * Get common base directory for all files
+   */
+  @VisibleForTesting
+  public URI getBaseDir() {
+    final Collection<FileInfo> fis = this.getFileInfo();
+    URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
+    for (final FileInfo fi : fis) {
+      if (fi.result != null) {
+        final URI res = fi.result.resolve(".");
+        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+      }
+    }
+
+    return baseDir;
+  }/**
+   * Get common base directory for processing-role="normal" files
+   */
+
+  @VisibleForTesting
+  public URI getBaseDirNormal() {
+    final Collection<FileInfo> fis = this.getFileInfo();
+    URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
+    for (final FileInfo fi : fis) {
+      if (fi.result != null && !fi.isResourceOnly) {
+        final URI res = fi.result.resolve(".");
+        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+      }
+    }
+
+    return baseDir;
+  }
+
+  @VisibleForTesting
+  URI getCommonBase(final URI left, final URI right) {
+    assert left.isAbsolute();
+    assert right.isAbsolute();
+    if (!left.getScheme().equals(right.getScheme())) {
+      return null;
+    }
+    final URI l = left.resolve(".");
+    final URI r = right.resolve(".");
+    final String lp = l.getPath();
+    final String rp = r.getPath();
+    if (lp.equals(rp)) {
+      return l;
+    }
+    if (lp.startsWith(rp)) {
+      return r;
+    }
+    if (rp.startsWith(lp)) {
+      return l;
+    }
+    final String[] la = left.getPath().split("/");
+    final String[] ra = right.getPath().split("/");
+    int i = 0;
+    final int len = Math.min(la.length, ra.length);
+    for (; i < len; i++) {
+      if (la[i].equals(ra[i])) {
+        //
+      } else {
+        final int common = Math.max(0, i);
+        final List<String> commons = Arrays.asList(la).subList(0, common);
+        if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
+          return null;
+        } else {
+          final String path = String.join("/", commons) + "/";
+          return URLUtils.setPath(left, path);
+        }
+      }
+    }
+    return null;
   }
 }

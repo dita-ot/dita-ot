@@ -102,6 +102,52 @@ class TopicCleanFilterTest {
     );
   }
 
+  public static Stream<Arguments> commonBase() {
+    return Stream.of(
+      Arguments.of("topic.dita", "root.ditamap", "resource.dita", ""),
+      Arguments.of("topic.dita", "root/root.ditamap", "resource.dita", ""),
+      Arguments.of("root/topic.dita", "root.ditamap", "resource.dita", ""),
+      Arguments.of("topics/topic.dita", "maps/root.ditamap", "resource.dita", ""),
+      Arguments.of("root/topic.dita", "root/root.ditamap", "root/resource.dita", "root/"),
+      Arguments.of("root/topic.dita", "root/root.ditamap", "resource.dita", "root/")
+    );
+  }
+
+  @ParameterizedTest(name = "{0} input={1} normal={2} resource={3}")
+  @MethodSource("commonBase")
+  void commonBase(String input, String normal, String resourceOnly, String exp) {
+    job.add(
+      Job.FileInfo
+        .builder()
+        .src(URI.create("src:///Volume/src/").resolve(input))
+        .format(ATTR_FORMAT_VALUE_DITAMAP)
+        .isInput(true)
+        .uri(URI.create(input))
+        .result(URI.create(input))
+        .build()
+    );
+    job.add(
+      Job.FileInfo
+        .builder()
+        .src(URI.create("src:///Volume/src/").resolve(resourceOnly))
+        .isResourceOnly(true)
+        .uri(URI.create(resourceOnly))
+        .result(URI.create(resourceOnly))
+        .build()
+    );
+    job.add(
+      Job.FileInfo
+        .builder()
+        .src(URI.create("src:///Volume/src/").resolve(normal))
+        .uri(URI.create(normal))
+        .result(URI.create(normal))
+        .build()
+    );
+    filter.setJob(job);
+
+    assertEquals(exp, filter.getCommonBase().toString(), "commonBase");
+  }
+
   public static Stream<Arguments> processingInstructionInputs() {
     return Stream.of(
       Arguments.of("path2project", "topic.dita", "root.ditamap", ""),

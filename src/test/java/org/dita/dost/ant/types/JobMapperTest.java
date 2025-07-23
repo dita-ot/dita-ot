@@ -9,16 +9,16 @@
 package org.dita.dost.ant.types;
 
 import static java.net.URI.create;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Mapper;
 import org.apache.tools.ant.util.FileNameMapper;
@@ -83,18 +83,16 @@ public class JobMapperTest {
     addMap(ditamap);
     addFiles();
 
-    final String[] act = applyJobMapper();
-    String[] exp = new String[] {
+    final List<String> act = applyJobMapper();
+    List<String> exp = Arrays.asList(
       "map.ditamap",
       "common" + File.separator + "topic.dita",
       "topics" + File.separator + "task.dita",
       "topics" + File.separator + "topic.dita",
       "topics/null.dita",
-      "images" + File.separator + "image.gif",
-    };
-    Arrays.sort(act);
-    Arrays.sort(exp);
-    assertArrayEquals(exp, act, "Mismatch");
+      "images" + File.separator + "image.gif"
+    );
+    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
   }
 
   @Test
@@ -105,18 +103,16 @@ public class JobMapperTest {
     addMap(ditamap);
     addFiles();
 
-    String[] act = applyJobMapper();
-    String[] exp = new String[] {
+    List<String> act = applyJobMapper();
+    List<String> exp = Arrays.asList(
       "map.ditamap",
       "topic.dita",
       "topics/null.dita",
       ".." + File.separator + "topics" + File.separator + "task.dita",
       ".." + File.separator + "topics" + File.separator + "topic.dita",
-      ".." + File.separator + "images" + File.separator + "image.gif",
-    };
-    Arrays.sort(act, Comparator.nullsLast(Comparator.naturalOrder()));
-    Arrays.sort(exp, Comparator.nullsLast(Comparator.naturalOrder()));
-    assertArrayEquals(exp, act, "Mismatch");
+      ".." + File.separator + "images" + File.separator + "image.gif"
+    );
+    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
   }
 
   @Test
@@ -127,18 +123,51 @@ public class JobMapperTest {
     addMap(ditamap);
     addFiles();
 
-    final String[] act = applyJobMapper();
-    String[] exp = new String[] {
+    final List<String> act = applyJobMapper();
+    List<String> exp = Arrays.asList(
       "common" + File.separator + "map.ditamap",
       "common" + File.separator + "topic.dita",
       "topics" + File.separator + "task.dita",
       "topics" + File.separator + "topic.dita",
       "images" + File.separator + "image.gif",
-      "topics/null.dita",
-    };
-    Arrays.sort(act);
-    Arrays.sort(exp);
-    assertArrayEquals(exp, act, "Mismatch");
+      "topics/null.dita"
+    );
+    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+  }
+
+  @Test
+  public void uplevels3_resource_only() throws IOException {
+    job.setInputDir(tempDir.toURI());
+    job.setGeneratecopyouter(OLDSOLUTION);
+    String ditamap = "common/map.ditamap";
+    addMap(ditamap);
+    addFiles();
+    job
+      .getFileInfo()
+      .stream()
+      .filter(fileInfo -> !fileInfo.uri.toString().startsWith("common"))
+      .forEach(fileInfo -> {
+        job.remove(fileInfo);
+        job.add(
+          new Job.FileInfo.Builder()
+            .uri(fileInfo.uri)
+            .result(fileInfo.result)
+            .isResourceOnly(true)
+            .format("dita")
+            .build()
+        );
+      });
+
+    final List<String> act = applyJobMapper();
+    List<String> exp = Arrays.asList(
+      "map.ditamap",
+      "topic.dita",
+      ".." + File.separator + "topics" + File.separator + "topic.dita",
+      ".." + File.separator + "topics" + File.separator + "task.dita",
+      ".." + File.separator + "images" + File.separator + "image.gif",
+      "topics/null.dita"
+    );
+    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
   }
 
   private static void addMap(String ditamap) throws IOException {
@@ -189,11 +218,11 @@ public class JobMapperTest {
     );
   }
 
-  private String[] applyJobMapper() {
+  private List<String> applyJobMapper() {
     return jobSourceSet
       .stream()
       .map(elem -> fileNameMapper.mapFileName(elem.getName()))
       .flatMap(Arrays::stream)
-      .toArray(String[]::new);
+      .toList();
   }
 }

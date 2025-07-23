@@ -120,7 +120,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   }
 
   private void cleanFiles() throws DITAOTException {
-    final URI base = getBaseDir();
+    final URI base = job.getBaseDir();
     if (useResultFilename) {
       var fileSet = extractFileInfosFromJob(base);
       fileSet = rewriteViaExtensions(fileSet);
@@ -288,64 +288,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     final URI rel = base.relativize(job.getInputFile());
     final int count = rel.toString().split("/").length - 1;
     return IntStream.range(0, count).boxed().map(i -> "../").collect(Collectors.joining(""));
-  }
-
-  /**
-   * Get common base directory for all files
-   */
-  @VisibleForTesting
-  URI getBaseDir() {
-    final Collection<FileInfo> fis = job.getFileInfo();
-    URI baseDir = job.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
-    for (final FileInfo fi : fis) {
-      if (fi.result != null) {
-        final URI res = fi.result.resolve(".");
-        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
-      }
-    }
-
-    return baseDir;
-  }
-
-  @VisibleForTesting
-  URI getCommonBase(final URI left, final URI right) {
-    assert left.isAbsolute();
-    assert right.isAbsolute();
-    if (!left.getScheme().equals(right.getScheme())) {
-      return null;
-    }
-    final URI l = left.resolve(".");
-    final URI r = right.resolve(".");
-    final String lp = l.getPath();
-    final String rp = r.getPath();
-    if (lp.equals(rp)) {
-      return l;
-    }
-    if (lp.startsWith(rp)) {
-      return r;
-    }
-    if (rp.startsWith(lp)) {
-      return l;
-    }
-    final String[] la = left.getPath().split("/");
-    final String[] ra = right.getPath().split("/");
-    int i = 0;
-    final int len = Math.min(la.length, ra.length);
-    for (; i < len; i++) {
-      if (la[i].equals(ra[i])) {
-        //
-      } else {
-        final int common = Math.max(0, i);
-        final List<String> commons = Arrays.asList(la).subList(0, common);
-        if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
-          return null;
-        } else {
-          final String path = String.join("/", commons) + "/";
-          return URLUtils.setPath(left, path);
-        }
-      }
-    }
-    return null;
   }
 
   private void init() {

@@ -13,6 +13,10 @@ import static org.dita.dost.util.URLUtils.getRelativePath;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import org.dita.dost.util.Job;
 import org.xml.sax.SAXException;
@@ -53,8 +57,8 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         .map(startFile -> getRelativePath(fi.result, startFile.result).resolve(".").getPath())
         .orElse("");
     if (job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
-      final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
-      pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
+      pathToRootDir = getRelativePath(fi.result, getCommonBase().resolve("dummy")).resolve(".").getPath();
+      pathToRootDir = pathToRootDir.isEmpty() ? SINGLE_URI_STEP : pathToRootDir;
     } else {
       pathToRootDir = (pathToMapDir == null || pathToMapDir.isEmpty()) ? SINGLE_URI_STEP : pathToMapDir;
     }
@@ -71,5 +75,23 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         : data;
       default -> data;
     };
+  }
+
+  URI getCommonBase() {
+    final Collection<Job.FileInfo> fileInfoCollection = job.getFileInfo();
+    List<List<String>> results = fileInfoCollection
+      .stream()
+      .filter(fileInfo -> !fileInfo.isResourceOnly)
+      .map(fileInfo -> Arrays.asList(fileInfo.result.getPath().split("/")))
+      .toList();
+    int maxCommonLength = Math.max(0, results.stream().mapToInt(List::size).min().orElse(0) - 1);
+    StringBuilder commonBase = new StringBuilder();
+    for (int col = 0; col < maxCommonLength; col++) {
+      int colIndex = col;
+      List<String> columnItems = results.stream().map(list -> list.get(colIndex)).distinct().toList();
+      if (columnItems.size() != 1) break;
+      commonBase.append(columnItems.get(0)).append("/");
+    }
+    return URI.create(commonBase.toString());
   }
 }
