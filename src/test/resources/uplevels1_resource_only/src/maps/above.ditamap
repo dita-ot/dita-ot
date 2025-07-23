@@ -8,4 +8,5 @@
   <topicref href="../topics/d.dita" processing-role="resource-only"/>
   <topicref href="e.dita"/>
   <topicref href="f.dita"/>
+  <topicref href="../images/carwash.gif" processing-role="resource-only" format="image"/>
 </map>

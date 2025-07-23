@@ -8,17 +8,6 @@
 
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
-import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
-import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Objects;
-import java.util.stream.Stream;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -29,6 +18,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TopicCleanFilterTest {
 
@@ -110,7 +111,7 @@ class TopicCleanFilterTest {
       Arguments.of("path2project-uri", "topic.dita", "root.ditamap", "./"),
       Arguments.of("path2project-uri", "dir/topic.dita", "root.ditamap", "../"),
       Arguments.of("path2project-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
-      Arguments.of("path2rootmap-uri", "topic.dita", "root.ditamap", ""),
+      Arguments.of("path2rootmap-uri", "topic.dita", "root.ditamap", "./"),
       Arguments.of("path2rootmap-uri", "dir/topic.dita", "root.ditamap", "../"),
       Arguments.of("path2rootmap-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
       Arguments.of("path2rootmap-uri", "topic.dita", "maps/root.ditamap", "maps/"),

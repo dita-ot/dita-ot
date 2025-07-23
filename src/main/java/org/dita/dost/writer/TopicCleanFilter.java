@@ -8,14 +8,15 @@
 
 package org.dita.dost.writer;
 
-import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
-import static org.dita.dost.util.URLUtils.getRelativePath;
-
 import com.google.common.annotations.VisibleForTesting;
-import java.io.File;
-import java.util.Objects;
 import org.dita.dost.util.Job;
 import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.util.Objects;
+
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.URLUtils.getRelativePath;
 
 public class TopicCleanFilter extends AbstractXMLFilter {
 
@@ -66,7 +67,7 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         ? ""
         : pathToRootDir.replace('/', File.separatorChar);
       case "path2project-uri" -> pathToRootDir;
-      case "path2rootmap-uri" -> pathToMapDir != null ? pathToMapDir : data;
+      case "path2rootmap-uri" -> pathToMapDir != null ? ( pathToMapDir.isEmpty() ? SINGLE_URI_STEP : pathToMapDir) : data;
       default -> data;
     };
   }
