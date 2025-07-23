@@ -50,7 +50,7 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
         .stream()
         .findAny()
-        .map(startFile -> getRelativePath(fi.uri, startFile.uri).resolve(".").getPath())
+        .map(startFile -> getRelativePath(fi.result, startFile.result).resolve(".").getPath())
         .orElse("");
     if (job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
       final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
