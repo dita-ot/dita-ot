@@ -8,7 +8,8 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -126,18 +127,18 @@ public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentU
   @ParameterizedTest(name = "{0}")
   @CsvSource(
     {
-      "html5_uplevels3_nav_toc_full, maps/above.ditamap, full",
-      "html5_nav_toc_full, base.ditamap, full",
-      "html5_uplevels3_nav_toc_partial, maps/above.ditamap, partial",
-      "html5_nav_toc_partial, base.ditamap, partial",
+      "html5_uplevels3_nav_toc_full, maps/above.ditamap, full, 3",
+      "html5_nav_toc_full, base.ditamap, full, 1",
+      "html5_uplevels3_nav_toc_partial, maps/above.ditamap, partial, 3",
+      "html5_nav_toc_partial, base.ditamap, partial, 1",
     }
   )
-  public void html5_nav_toc(String name, String input, String navToc) throws Throwable {
+  public void html5_nav_toc(String name, String input, String navToc, String generate) throws Throwable {
     builder()
       .name(name)
       .transtype(HTML5)
       .input(Paths.get(input))
-      .put("generate.copy.outer", "3")
+      .put("generate.copy.outer", generate)
       .put("nav-toc", navToc)
       .test();
   }
