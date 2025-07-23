@@ -8,11 +8,12 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
-
-import java.nio.file.Paths;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
+import java.nio.file.Paths;
+
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreprocessBase, ITContentUplevels {
 
@@ -29,15 +30,17 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
     };
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto() throws Throwable {
+  public void copyto() throws Throwable {
     builder().name(Paths.get("copyto", "basic")).transtype(PREPROCESS).input(Paths.get("TC2.ditamap")).test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_linktarget() throws Throwable {
+  public void copyto_linktarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_linktarget"))
       .transtype(PREPROCESS)
@@ -47,9 +50,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_extensions_metadata() throws Throwable {
+  public void copyto_extensions_metadata() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_extensions_metadata"))
       .transtype(PREPROCESS)
@@ -57,9 +61,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_circulartarget() throws Throwable {
+  public void copyto_circulartarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_circulartarget"))
       .transtype(PREPROCESS)
@@ -67,9 +72,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_sametarget2() throws Throwable {
+  public void copyto_sametarget2() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_sametarget2"))
       .transtype(PREPROCESS)
@@ -78,9 +84,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_sametarget() throws Throwable {
+  public void copyto_sametarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_sametarget"))
       .transtype(PREPROCESS)
@@ -89,9 +96,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testuplevelslinkOnlytopic() throws Throwable {
+  public void uplevelslinkOnlytopic() throws Throwable {
     builder()
       .name("uplevelslink")
       .transtype(PREPROCESS)
@@ -102,9 +110,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testCrawlMapPreprocess() throws Throwable {
+  public void CrawlMapPreprocess() throws Throwable {
     builder()
       .name("crawl_map")
       .transtype(PREPROCESS)
@@ -115,9 +124,10 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testchunk_uplevel() throws Throwable {
+  public void chunk_uplevel() throws Throwable {
     builder()
       .name("chunk_uplevel")
       .transtype(PREPROCESS)
