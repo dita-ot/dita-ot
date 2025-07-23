@@ -8,24 +8,6 @@
 
 package org.dita.dost;
 
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.*;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
 import org.apache.tools.ant.*;
 import org.dita.dost.store.CacheStore;
@@ -37,6 +19,25 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.function.Executable;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.dita.dost.TestUtils.assertXMLEqual;
+import static org.dita.dost.util.Constants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractIntegrationTest {
 
@@ -76,7 +77,7 @@ public abstract class AbstractIntegrationTest {
       this(
         name,
         compareTemp,
-        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
+        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt", "gif"),
         exp,
         targets
       );
