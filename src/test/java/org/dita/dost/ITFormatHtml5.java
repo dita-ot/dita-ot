@@ -8,7 +8,7 @@
 
 package org.dita.dost;
 
-import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,15 +18,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class IntegrationTestHtml5 extends AbstractIntegrationTest {
+public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentUplevels {
 
   public AbstractIntegrationTest builder() {
-    return new IntegrationTestHtml5();
+    return new ITFormatHtml5();
   }
 
   @Override
   Transtype getTranstype(Transtype transtype) {
-    return transtype;
+    return switch (transtype) {
+      case PREPROCESS -> PREPROCESS2;
+      case XHTML -> HTML5;
+      default -> transtype;
+    };
   }
 
   @Test

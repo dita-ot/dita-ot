@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTestXhtml extends AbstractIntegrationTest {
+public class ITFormatXhtml extends AbstractIntegrationTest implements ITContentUplevels {
 
-  public IntegrationTestXhtml builder() {
-    return new IntegrationTestXhtml();
+  public ITFormatXhtml builder() {
+    return new ITFormatXhtml();
   }
 
   @Override

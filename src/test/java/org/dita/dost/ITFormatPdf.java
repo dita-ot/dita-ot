@@ -13,10 +13,10 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.PDF;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTestPdf extends AbstractIntegrationTest {
+public class ITFormatPdf extends AbstractIntegrationTest {
 
   public AbstractIntegrationTest builder() {
-    return new IntegrationTestPdf();
+    return new ITFormatPdf();
   }
 
   @Override

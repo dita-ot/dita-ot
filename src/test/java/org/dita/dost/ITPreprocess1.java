@@ -13,10 +13,10 @@ import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTestPreprocess1 extends IntegrationTest {
+public class ITPreprocess1 extends AbstractIntegrationTest implements ITPreprocessBase {
 
-  public IntegrationTestPreprocess1 builder() {
-    return new IntegrationTestPreprocess1();
+  public ITPreprocess1 builder() {
+    return new ITPreprocess1();
   }
 
   @Override
