@@ -8,15 +8,14 @@
 
 package org.dita.dost;
 
-import org.junit.jupiter.api.Test;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
+import org.junit.jupiter.api.Test;
 
 public class ITFormatXhtml extends AbstractIntegrationTest implements ITContentUplevels {
 

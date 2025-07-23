@@ -8,12 +8,11 @@
 
 package org.dita.dost;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
 
 import java.nio.file.Paths;
-
-import static org.dita.dost.AbstractIntegrationTest.Transtype.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreprocessBase, ITContentUplevels {
 
