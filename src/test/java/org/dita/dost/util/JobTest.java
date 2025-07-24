@@ -7,22 +7,20 @@
  */
 package org.dita.dost.util;
 
-import static java.net.URI.create;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import org.dita.dost.TestUtils;
+import org.dita.dost.store.StreamStore;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.dita.dost.TestUtils;
-import org.dita.dost.store.StreamStore;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+
+import static java.net.URI.create;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.URLUtils.toURI;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public final class JobTest {
 
@@ -32,12 +30,15 @@ public final class JobTest {
   private static Job job;
 
   @BeforeAll
-  public static void setUp() throws IOException {
+  public static void setUpSuite() throws IOException {
     tempDir = TestUtils.createTempDir(JobTest.class);
     TestUtils.copy(srcDir, tempDir);
-    job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
   }
 
+  @BeforeEach
+  void setUp() throws IOException {
+    job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+  }
   @Test
   public void testGetProperty() {
     assertEquals("/foo/bar", job.getProperty(INPUT_DIR));
@@ -118,7 +119,7 @@ public final class JobTest {
   }
 
   @Test
-  public void getBaseDir() throws Exception {
+  public void getBaseDir() {
     job.setInputDir(URI.create("file:/foo/bar/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -151,7 +152,7 @@ public final class JobTest {
   }
 
   @Test
-  public void getBaseDirNormal() throws Exception {
+  public void getBaseDirNormal() {
     job.setInputDir(URI.create("file:/foo/bar/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -191,7 +192,7 @@ public final class JobTest {
   }
 
   @Test
-  public void getBaseDirExternal() throws Exception {
+  public void getBaseDirExternal() {
     job.setInputDir(URI.create("file:/foo/bar/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -211,7 +212,7 @@ public final class JobTest {
   }
 
   @Test
-  public void getBaseDirSubdir() throws Exception {
+  public void getBaseDirSubdir() {
     job.setInputDir(URI.create("file:/foo/bar/maps/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -231,7 +232,7 @@ public final class JobTest {
   }
 
   @Test
-  public void getBaseDirSupdir() throws Exception {
+  public void getBaseDirSupdir() {
     job.setInputDir(URI.create("file:/foo/bar/maps/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -248,7 +249,7 @@ public final class JobTest {
   }
 
   @AfterAll
-  public static void tearDown() throws IOException {
+  public static void tearDownSuite() throws IOException {
     TestUtils.forceDelete(tempDir);
   }
 }
