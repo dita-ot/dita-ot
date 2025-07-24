@@ -7,20 +7,19 @@
  */
 package org.dita.dost.util;
 
-import org.dita.dost.TestUtils;
-import org.dita.dost.store.StreamStore;
-import org.junit.jupiter.api.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import static java.net.URI.create;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.dita.dost.TestUtils;
+import org.dita.dost.store.StreamStore;
+import org.junit.jupiter.api.*;
 
 public final class JobTest {
 
@@ -39,6 +38,7 @@ public final class JobTest {
   void setUp() throws IOException {
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
   }
+
   @Test
   public void testGetProperty() {
     assertEquals("/foo/bar", job.getProperty(INPUT_DIR));

@@ -1152,7 +1152,6 @@ public final class Job {
   /**
    * Get common base directory for all files
    */
-  @VisibleForTesting
   public URI getBaseDir() {
     final Collection<FileInfo> fis = this.getFileInfo();
     URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
@@ -1164,11 +1163,11 @@ public final class Job {
     }
 
     return baseDir;
-  }/**
+  }
+
+  /**
    * Get common base directory for processing-role="normal" files
    */
-
-  @VisibleForTesting
   public URI getBaseDirNormal() {
     final Collection<FileInfo> fis = this.getFileInfo();
     URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");

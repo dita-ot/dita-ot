@@ -145,7 +145,7 @@ class TopicCleanFilterTest {
     );
     filter.setJob(job);
 
-    assertEquals(exp, filter.getCommonBase().toString(), "commonBase");
+    assertEquals(exp, job.getBaseDirNormal().toString(), "commonBase");
   }
 
   public static Stream<Arguments> processingInstructionInputs() {

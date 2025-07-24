@@ -9,16 +9,15 @@
 package org.dita.dost.module;
 
 import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITA;
+import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,6 +61,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private boolean useResultFilename;
   private XsltTransformer rewriteTransformer;
   private RewriteRule rewriteClass;
+  private URI base;
 
   private void init(final Map<String, String> input) {
     useResultFilename =
@@ -108,6 +108,8 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     mapFilter.setLogger(logger);
     topicFilter.setLogger(logger);
+
+    base = job.getBaseDir();
   }
 
   @Override
@@ -120,11 +122,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   }
 
   private void cleanFiles() throws DITAOTException {
-    final URI base = job.getBaseDir();
     if (useResultFilename) {
-      var fileSet = extractFileInfosFromJob(base);
+      var fileSet = extractFileInfosFromJob();
       fileSet = rewriteViaExtensions(fileSet);
-      rewriteViaInternal(fileSet, base);
+      rewriteViaInternal(fileSet);
     }
 
     job.setProperty("uplevels", getUplevels(base));
@@ -155,71 +156,66 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Collection<FileInfo> extractFileInfosFromJob(URI base) {
+  private Collection<FileInfo> extractFileInfosFromJob() {
     // collect and relativize result
     final Collection<FileInfo> original = job
       .getFileInfo()
       .stream()
-      .filter(fi -> fi.result != null)
-      .map(fi -> FileInfo.builder(fi).result(getRelativeResult(base, fi)).build())
+      .filter(fileInfo -> fileInfo.result != null)
       .collect(Collectors.toList());
     original.forEach(fi -> job.remove(fi));
 
     return original;
   }
 
-  @VisibleForTesting
-  String getTempUplevels(URI base) {
-    return job
-      .getFileInfo()
-      .stream()
-      .filter(fi -> fi.result != null && !fi.isInput)
-      .map(fi -> FileInfo.builder(fi).result(getRelativeResult(base, fi)).build())
-      .map(fi -> fi.result.toString())
-      .filter(result -> result.startsWith("../"))
-      .map(result -> result.replaceAll("^((\\.\\./)+).*?$", "$1"))
-      .max(Comparator.comparingInt(String::length))
-      .orElse("");
+  private void rewriteViaInternal(Collection<FileInfo> fileInfoCollection) throws DITAOTException {
+    final Job tempJob = createTempJob(fileInfoCollection);
+    for (final FileInfo fileInfo : fileInfoCollection) {
+      rewriteFileAndAddToJob(fileInfo, tempJob);
+    }
   }
 
-  private static URI getRelativeResult(URI base, FileInfo fi) {
-    if (Objects.equals(base.getScheme(), "file") && Objects.equals(fi.result.getScheme(), "file")) return URI.create(
-      Paths.get(base).relativize(Path.of(fi.result)).toString().replace("\\", "/")
-    );
-    return base.resolve(fi.result);
-  }
-
-  private void rewriteViaInternal(Collection<FileInfo> fileInfoCollection, URI base) throws DITAOTException {
+  private Job createTempJob(Collection<FileInfo> fileInfoCollection) {
     HashMap<String, Object> tempProp = new HashMap<>();
     tempProp.put(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, job.getGeneratecopyouter());
     final Job tempJob = new Job(job, tempProp, fileInfoCollection);
     linkFilter.setJob(tempJob);
     mapFilter.setJob(tempJob);
     topicFilter.setJob(tempJob);
-    for (final FileInfo fileInfo : fileInfoCollection) {
-      rewriteFileAndAddToJob(base, fileInfo, tempJob);
-    }
+    return tempJob;
   }
 
-  private void rewriteFileAndAddToJob(URI base, FileInfo fileInfo, Job tempJob) throws DITAOTException {
+  private void rewriteFileAndAddToJob(FileInfo fileInfo, Job tempJob) throws DITAOTException {
     try {
-      assert !fileInfo.result.isAbsolute();
       if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
         logger.debug("Skip format " + fileInfo.format);
       } else {
         rewriteFile(fileInfo, tempJob);
       }
 
-      addFileToJob(base, fileInfo);
-    } catch (final IOException | AssertionError e) {
+      job.add(finalizeFileInfo(fileInfo));
+    } catch (final IOException e) {
       logger.error("Failed to clean " + job.tempDirURI.resolve(fileInfo.uri) + ": " + e.getMessage(), e);
     }
+  }
+
+  private FileInfo finalizeFileInfo(FileInfo fileInfo) {
+    URI finalUri = base.relativize(fileInfo.result);
+    URI finalResult = fileInfo.result;
+
+    FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(finalUri).result(finalResult);
+
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOutFile(finalResult)) {
+      builder.isResourceOnly(true);
+    }
+
+    return builder.build();
   }
 
   private void rewriteFile(FileInfo fileInfo, Job tempJob) throws DITAOTException, IOException {
     final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
     if (tempJob.getStore().exists(srcFile.toURI())) {
-      final File destFile = new File(tempJob.tempDirURI.resolve(fileInfo.result));
+      final File destFile = new File(tempJob.tempDirURI.resolve(base.relativize(fileInfo.result)));
       final List<XMLFilter> processingPipe = getProcessingPipe(fileInfo, srcFile, destFile);
       if (!processingPipe.isEmpty()) {
         logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
@@ -233,18 +229,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         FileUtils.moveFile(srcFile, destFile);
       }
     }
-  }
-
-  private void addFileToJob(URI base, FileInfo fileInfo) {
-    URI resultUri = base.resolve(fileInfo.result);
-
-    FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(fileInfo.result).result(resultUri);
-
-    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOutFile(resultUri)) {
-      builder.isResourceOnly(true);
-    }
-
-    job.add(builder.build());
   }
 
   private boolean isOutFile(URI resultUri) {
