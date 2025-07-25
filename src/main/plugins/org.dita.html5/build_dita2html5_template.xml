@@ -163,6 +163,7 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="html5.map.toc" unless="_html5.toc.skip" description="Build HTML5 TOC file">
+    <echoproperties/>
     <html5.map>
       <dita:extension id="dita.conductor.html5.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
     </html5.map>
@@ -207,12 +208,8 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="html5.map">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
-      <local name="html5.toc.output.dir"/>
-      <condition property="html5.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-        <istrue value="${inner.transform}"/>
-      </condition>
       <pipeline message="Convert DITA map to HTML5" taskname="xslt">
-      <xslt destdir="${html5.toc.output.dir}"
+      <xslt destdir="${dita.output.dir}"
             style="${args.html5.toc.xsl}">
         <ditafileset input="true" format="ditamap"/>
         <param name="FILTERFILE" expression="${dita.input.valfile.url}" if:set="dita.input.valfile"/>
@@ -222,7 +219,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath"/>
         <param name="OUTPUTCLASS" expression="${args.html5.toc.class}" if:set="args.html5.toc.class"/>
         <params/>
-        <mapper type="merge" to="${args.html5.toc}${out.ext}"/>
+        <mapper classname="org.dita.dost.ant.types.JobMapper" from="${dita.input.filename}" to="${args.html5.toc}${out.ext}"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
       </pipeline>

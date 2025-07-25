@@ -36,7 +36,8 @@ public class JobMapper implements FileNameMapper {
 
   private Type type = Type.RESULT;
   private Job job;
-  private String extension;
+  private String to;
+  private String from;
 
   public void setProject(Project project) {
     job = ExtensibleAntInvoker.getJob(project);
@@ -44,17 +45,20 @@ public class JobMapper implements FileNameMapper {
 
   @Override
   public void setFrom(String from) {
-    // NOOP
+    this.from = from;
+  }
+
+  public String getFrom() {
+    return this.from;
   }
 
   @Override
-  public void setTo(String extension) {
-    // FIXME this should use an extra attribute `extension`, but Ant doesn't support it
-    this.extension = extension.charAt(0) == '.' ? extension : ("." + extension);
+  public void setTo(String to) {
+    this.to = to.contains(".") ? to : ("." + to);
   }
 
-  public void setExtension(String extension) {
-    this.extension = extension.charAt(0) == '.' ? extension : ("." + extension);
+  public String getTo() {
+    return this.to;
   }
 
   public void setType(TypeAttribute attr) {
@@ -63,21 +67,34 @@ public class JobMapper implements FileNameMapper {
 
   @Override
   public String[] mapFileName(String sourceFileName) {
-    final URI uri = toURI(sourceFileName);
-    Job.FileInfo fi = job.getFileInfo(uri);
-    if (fi == null) {
-      fi = job.getFileInfo(job.getInputDir().resolve(uri));
+    final String filePath = getFilePath(sourceFileName);
+
+    String result;
+    if (to == null) {
+      result = filePath;
+    } else if (from == null) {
+      result = FilenameUtils.removeExtension(filePath) + to;
+    } else {
+      result = filePath.replace(from, to);
     }
-    final String res =
-      switch (type) {
-        case TEMP -> fi.file.getPath();
-        case RESULT -> (fi.result == null) ? sourceFileName : getResult(fi);
-      };
-    return new String[] { extension != null ? (FilenameUtils.removeExtension(res) + extension) : res };
+    return new String[] { result };
   }
 
-  private String getResult(Job.FileInfo fi) {
-    return getBase().relativize(Paths.get(fi.result)).toString();
+  private String getFilePath(String sourceFileName) {
+    final URI uri = toURI(sourceFileName);
+    Job.FileInfo fileInfo = job.getFileInfo(uri);
+    if (fileInfo == null) {
+      fileInfo = job.getFileInfo(job.getInputDir().resolve(uri));
+    }
+
+    final String filePath =
+      switch (type) {
+        case TEMP -> fileInfo.file.getPath();
+        case RESULT -> fileInfo.result == null
+          ? sourceFileName
+          : getBase().relativize(Paths.get(fileInfo.result)).toString();
+      };
+    return filePath;
   }
 
   private Path getBase() {

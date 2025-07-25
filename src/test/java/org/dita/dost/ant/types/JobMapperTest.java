@@ -26,10 +26,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class JobMapperTest {
 
@@ -74,106 +71,209 @@ public class JobMapperTest {
     TestUtils.forceDelete(tempDir);
   }
 
-  @Test
-  public void normal() throws IOException {
-    project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
-    job.setInputDir(tempDir.toURI());
-    job.setGeneratecopyouter(NOT_GENERATEOUTTER);
-    String ditamap = "map.ditamap";
-    addMap(ditamap);
-    addFiles();
+  @Nested
+  class to {
 
-    final List<String> act = applyJobMapper();
-    List<String> exp = Arrays.asList(
-      "map.ditamap",
-      "common" + File.separator + "topic.dita",
-      "topics" + File.separator + "task.dita",
-      "topics" + File.separator + "topic.dita",
-      "topics/null.dita",
-      "images" + File.separator + "image.gif"
-    );
-    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    @Test
+    public void toEmptyThrowError() {
+      jobMapper.setTo("");
+      assertThat(jobMapper.getTo()).isEqualTo(".");
+    }
+
+    @Test
+    public void toExtensionWithoutDot() {
+      jobMapper.setTo("ext");
+      assertThat(jobMapper.getTo()).isEqualTo(".ext");
+    }
+
+    @Test
+    public void toExtensionWithDot() {
+      jobMapper.setTo(".ext");
+      assertThat(jobMapper.getTo()).isEqualTo(".ext");
+    }
+
+    @Test
+    public void toFileName() {
+      jobMapper.setTo("file.ext");
+      assertThat(jobMapper.getTo()).isEqualTo("file.ext");
+    }
   }
 
-  @Test
-  public void uplevels1() throws IOException {
-    job.setInputDir(tempDir.toURI());
-    job.setGeneratecopyouter(NOT_GENERATEOUTTER);
-    String ditamap = "common/map.ditamap";
-    addMap(ditamap);
-    addFiles();
+  @Nested
+  class baseDir {
 
-    List<String> act = applyJobMapper();
-    List<String> exp = Arrays.asList(
-      "map.ditamap",
-      "topic.dita",
-      "topics/null.dita",
-      ".." + File.separator + "topics" + File.separator + "task.dita",
-      ".." + File.separator + "topics" + File.separator + "topic.dita",
-      ".." + File.separator + "images" + File.separator + "image.gif"
-    );
-    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    @Test
+    public void baseDirNormal() throws IOException {
+      project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+      String ditamap = "map.ditamap";
+      addMap(ditamap);
+      addFiles();
+
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "map.ditamap",
+        "common" + File.separator + "topic.dita",
+        "topics" + File.separator + "task.dita",
+        "topics" + File.separator + "topic.dita",
+        "topics/null.dita",
+        "images" + File.separator + "image.gif"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
+
+    @Test
+    public void baseDirUplevels1() throws IOException {
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+      String ditamap = "common/map.ditamap";
+      addMap(ditamap);
+      addFiles();
+
+      List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "map.ditamap",
+        "topic.dita",
+        "topics/null.dita",
+        ".." + File.separator + "topics" + File.separator + "task.dita",
+        ".." + File.separator + "topics" + File.separator + "topic.dita",
+        ".." + File.separator + "images" + File.separator + "image.gif"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
+
+    @Test
+    public void baseDirUplevels3() throws IOException {
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(OLDSOLUTION);
+      String ditamap = "common/map.ditamap";
+      addMap(ditamap);
+      addFiles();
+
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "common" + File.separator + "map.ditamap",
+        "common" + File.separator + "topic.dita",
+        "topics" + File.separator + "task.dita",
+        "topics" + File.separator + "topic.dita",
+        "images" + File.separator + "image.gif",
+        "topics/null.dita"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
+
+    @Test
+    public void baseDirUplevels3ResourceOnly() throws IOException {
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(OLDSOLUTION);
+      String ditamap = "common/map.ditamap";
+      addMap(ditamap);
+      addFiles();
+      job
+        .getFileInfo()
+        .stream()
+        .filter(fileInfo -> !fileInfo.uri.toString().startsWith("common"))
+        .forEach(fileInfo -> {
+          job.remove(fileInfo);
+          job.add(
+            new Job.FileInfo.Builder()
+              .uri(fileInfo.uri)
+              .result(fileInfo.result)
+              .isResourceOnly(true)
+              .format("dita")
+              .build()
+          );
+        });
+
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "map.ditamap",
+        "topic.dita",
+        ".." + File.separator + "topics" + File.separator + "topic.dita",
+        ".." + File.separator + "topics" + File.separator + "task.dita",
+        ".." + File.separator + "images" + File.separator + "image.gif",
+        "topics/null.dita"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
   }
 
-  @Test
-  public void uplevels3() throws IOException {
-    job.setInputDir(tempDir.toURI());
-    job.setGeneratecopyouter(OLDSOLUTION);
-    String ditamap = "common/map.ditamap";
-    addMap(ditamap);
-    addFiles();
+  @Nested
+  class replace {
 
-    final List<String> act = applyJobMapper();
-    List<String> exp = Arrays.asList(
-      "common" + File.separator + "map.ditamap",
-      "common" + File.separator + "topic.dita",
-      "topics" + File.separator + "task.dita",
-      "topics" + File.separator + "topic.dita",
-      "images" + File.separator + "image.gif",
-      "topics/null.dita"
-    );
-    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
-  }
+    @Test
+    public void replaceExtension() throws IOException {
+      project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
+      jobMapper.setTo("png");
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+      String ditamap = "map.ditamap";
+      addMap(ditamap);
+      addFiles();
 
-  @Test
-  public void uplevels3_resource_only() throws IOException {
-    job.setInputDir(tempDir.toURI());
-    job.setGeneratecopyouter(OLDSOLUTION);
-    String ditamap = "common/map.ditamap";
-    addMap(ditamap);
-    addFiles();
-    job
-      .getFileInfo()
-      .stream()
-      .filter(fileInfo -> !fileInfo.uri.toString().startsWith("common"))
-      .forEach(fileInfo -> {
-        job.remove(fileInfo);
-        job.add(
-          new Job.FileInfo.Builder()
-            .uri(fileInfo.uri)
-            .result(fileInfo.result)
-            .isResourceOnly(true)
-            .format("dita")
-            .build()
-        );
-      });
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "map.png",
+        "common" + File.separator + "topic.png",
+        "topics" + File.separator + "task.png",
+        "topics" + File.separator + "topic.png",
+        "topics/null.png",
+        "images" + File.separator + "image.png"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
 
-    final List<String> act = applyJobMapper();
-    List<String> exp = Arrays.asList(
-      "map.ditamap",
-      "topic.dita",
-      ".." + File.separator + "topics" + File.separator + "topic.dita",
-      ".." + File.separator + "topics" + File.separator + "task.dita",
-      ".." + File.separator + "images" + File.separator + "image.gif",
-      "topics/null.dita"
-    );
-    assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    @Test
+    public void replaceExtensionAndDot() throws IOException {
+      project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
+      jobMapper.setTo(".png");
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+      String ditamap = "map.ditamap";
+      addMap(ditamap);
+      addFiles();
+
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "map.png",
+        "common" + File.separator + "topic.png",
+        "topics" + File.separator + "task.png",
+        "topics" + File.separator + "topic.png",
+        "topics/null.png",
+        "images" + File.separator + "image.png"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
+
+    @Test
+    public void replaceFilename() throws IOException {
+      project.setUserProperty(INPUT_DIR_URI, tempDir.getAbsolutePath());
+      jobMapper.setTo("index.html");
+      jobMapper.setFrom("map.ditamap");
+      job.setInputDir(tempDir.toURI());
+      job.setGeneratecopyouter(NOT_GENERATEOUTTER);
+      String ditamap = "map.ditamap";
+      addMap(ditamap);
+      addFiles();
+
+      final List<String> act = applyJobMapper();
+      List<String> exp = Arrays.asList(
+        "index.html",
+        "common" + File.separator + "topic.dita",
+        "topics" + File.separator + "task.dita",
+        "topics" + File.separator + "topic.dita",
+        "topics/null.dita",
+        "images" + File.separator + "image.gif"
+      );
+      assertThat(act).containsExactlyInAnyOrderElementsOf(exp);
+    }
   }
 
   private static void addMap(String ditamap) throws IOException {
     URI ditamapPath = tempDir.toURI().resolve(ditamap);
     File ditamapFile = new File(tempDir, ditamap);
-    ditamapFile.getParentFile().mkdirs();
+    ditamapFile.mkdirs();
     ditamapFile.createNewFile();
     job.add(
       new Job.FileInfo.Builder()

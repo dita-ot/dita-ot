@@ -208,7 +208,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOutFile(finalResult)) {
       builder.isResourceOnly(true);
     }
-
     return builder.build();
   }
 

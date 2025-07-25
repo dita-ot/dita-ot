@@ -77,10 +77,6 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="dita.map.htmlhelp.hhp" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHP file">
-    <local name="htmlhelp.hhp.output.dir"/>
-    <condition property="htmlhelp.hhp.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-      <istrue value="${inner.transform}"/>
-    </condition>
     <pipeline>
     <xslt destdir="${htmlhelp.hhp.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhp.xsl">
@@ -90,17 +86,13 @@ See the accompanying LICENSE file for applicable license.
       <param name="INCLUDEFILE" expression="${args.htmlhelp.includefile}" if:set="args.htmlhelp.includefile"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mapper type="merge" to="${args.output.base}.hhp"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" from="${dita.input.filename}" to="${args.output.base}.hhp"/>
     </xslt>
     </pipeline>
   </target>
 
   <target name="dita.map.htmlhelp.hhc" depends="dita.map.htmlhelp.init"
           description="Build HTMLHelp HHC file">
-    <local name="htmlhelp.hhc.output.dir"/>
-    <condition property="htmlhelp.hhc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-      <istrue value="${inner.transform}"/>
-    </condition>
     <pipeline>
     <xslt destdir="${htmlhelp.hhc.output.dir}"
           style="${dita.plugin.org.dita.htmlhelp.dir}/xsl/map2hhc.xsl">
@@ -108,7 +100,7 @@ See the accompanying LICENSE file for applicable license.
       <param name="OUTEXT" expression="${out.ext}" if:set="out.ext"/>
       <param name="defaultLanguage" expression="${default.language}"/>
       <xmlcatalog refid="dita.catalog"/>
-      <mapper type="merge" to="${args.output.base}.hhc"/>
+      <mapper classname="org.dita.dost.ant.types.JobMapper" from="${dita.input.filename}" to="${args.output.base}.hhc"/>
     </xslt>
     </pipeline>
   </target>

@@ -45,12 +45,8 @@ See the accompanying LICENSE file for applicable license.
   <macrodef name="map.html">
     <element name="params" optional="true" implicit="true"/>
     <sequential>
-      <local name="xhtml.toc.output.dir"/>
-      <condition property="xhtml.toc.output.dir" value="${dita.output.dir}" else="${_dita.map.output.dir}">
-       <istrue value="${inner.transform}"/>
-      </condition>
       <pipeline>
-      <xslt destdir="${xhtml.toc.output.dir}"
+      <xslt destdir="${dita.output.dir}"
             style="${args.xhtml.toc.xsl}">
         <ditafileset input="true" format="ditamap"/>
         <param name="OUTEXT" expression="${out.ext}" if:set="out.ext" />
@@ -59,7 +55,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="CSSPATH" expression="${user.csspath}" if:set="user.csspath" />
         <param name="OUTPUTCLASS" expression="${args.xhtml.toc.class}" if:set="args.xhtml.toc.class" />
         <params/>
-        <mapper type="merge" to="${args.xhtml.toc}${out.ext}"/>
+        <mapper classname="org.dita.dost.ant.types.JobMapper" from="${dita.input.filename}" to="${args.xhtml.toc}${out.ext}"/>
         <xmlcatalog refid="dita.catalog"/>
       </xslt>
       </pipeline>
