@@ -1153,11 +1153,34 @@ public final class Job {
    * Get common base directory for all files
    */
   public URI getBaseDir() {
-    final Collection<FileInfo> fis = this.getFileInfo();
-    URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
-    for (final FileInfo fi : fis) {
-      if (fi.result != null) {
-        final URI res = fi.result.resolve(".");
+    return getFilteredBaseDir();
+  }
+
+  /**
+   * Get common base directory for processing-role="normal" files
+   */
+  public URI getBaseDirNormal() {
+    return getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+  }
+
+  private URI getFilteredBaseDir() {
+    return getFilteredBaseDir(all -> true);
+  }
+
+  /**
+   * Get the common base directory based on a filter.
+   */
+  private URI getFilteredBaseDir(Predicate<FileInfo> filter) {
+    Collection<FileInfo> fileInfoCollection = this.getFileInfo();
+    URI baseDir = getFileInfo(fileInfo -> fileInfo.isInput)
+      .stream()
+      .findFirst()
+      .map(fileInfo -> fileInfo.result)
+      .orElse(getInputDir());
+
+    for (FileInfo fileInfo : fileInfoCollection) {
+      if (fileInfo.result != null && filter.test(fileInfo)) {
+        URI res = fileInfo.result.resolve(".");
         baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
       }
     }
@@ -1166,21 +1189,8 @@ public final class Job {
   }
 
   /**
-   * Get common base directory for processing-role="normal" files
+   * Get the common base directory of a pair of files.
    */
-  public URI getBaseDirNormal() {
-    final Collection<FileInfo> fis = this.getFileInfo();
-    URI baseDir = this.getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
-    for (final FileInfo fi : fis) {
-      if (fi.result != null && !fi.isResourceOnly) {
-        final URI res = fi.result.resolve(".");
-        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
-      }
-    }
-
-    return baseDir;
-  }
-
   @VisibleForTesting
   URI getCommonBase(final URI left, final URI right) {
     assert left.isAbsolute();

@@ -64,7 +64,7 @@ public class TopicCleanFilter extends AbstractXMLFilter {
   String getProcessingInstruction(String target, String data) {
     return switch (target) {
       case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)
-        ? ""
+        ? SINGLE_FILE_STEP
         : pathToRootDir.replace('/', File.separatorChar);
       case "path2project-uri" -> pathToRootDir;
       case "path2rootmap-uri" -> pathToMapDir != null

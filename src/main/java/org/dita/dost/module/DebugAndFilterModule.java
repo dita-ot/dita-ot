@@ -510,12 +510,12 @@ public final class DebugAndFilterModule extends SourceReaderModule {
    * @return path to base directory, {@code null} if not available
    */
   public static File getPathtoProject(final File currentFile, final Job job) {
-    File inputDir = toFile(job.getInputDir());
+    File baseDir = toFile(job.getBaseDirNormal());
     File inputMap = toFile(job.getInputFile());
     if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
       return getRelativePath(currentFile, inputMap.getParentFile());
     }
-    return getRelativePath(currentFile, inputDir);
+    return getRelativePath(currentFile, baseDir);
   }
 
   /**
