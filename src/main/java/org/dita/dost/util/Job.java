@@ -97,6 +97,10 @@ public final class Job {
   /** Map of serialization attributes to file info boolean fields. */
   private static final Map<String, Field> attrToFieldMap = new HashMap<>();
 
+  /** base directories for the file collection **/
+  static final String FILE_SET_BASE_DIR = "baseDir";
+  static final String FILE_SET_BASE_DIR_NORMAL = "baseDirNormal";
+
   static {
     try {
       attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
@@ -406,6 +410,7 @@ public final class Job {
    */
   public void add(final FileInfo fileInfo) {
     files.put(fileInfo.uri, fileInfo);
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
   }
 
   /**
@@ -414,6 +419,7 @@ public final class Job {
    * @return removed file info, {@code null} if not found
    */
   public FileInfo remove(final FileInfo fileInfo) {
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
     return files.remove(fileInfo.uri);
   }
 
@@ -451,6 +457,15 @@ public final class Job {
    */
   public Object setProperty(final String key, final String value) {
     return prop.put(key, value);
+  }
+
+  /**
+   * Remove property value.
+   *
+   * @param key property key
+   */
+  public void removeProperty(final String key) {
+    prop.remove(key);
   }
 
   /**
@@ -1160,7 +1175,11 @@ public final class Job {
    * Get common base directory for processing-role="normal" files
    */
   public URI getBaseDirNormal() {
-    return getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+    String baseDirNormal = getProperty(FILE_SET_BASE_DIR_NORMAL);
+    if (baseDirNormal != null) return URI.create(baseDirNormal);
+    URI baseDirNormalUri = getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+    setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
+    return baseDirNormalUri;
   }
 
   private URI getFilteredBaseDir() {
