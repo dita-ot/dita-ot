@@ -110,6 +110,10 @@ See the accompanying LICENSE file for applicable license.
       <val>TITLE</val>
       <val>NUMTITLE</val>
     </param>
+    <param name="check.key.duplicates.in.keyref" desc="Specifies whether key duplication is checked for in keyref processing instead of at the beginning." type="enum">
+      <val>yes</val>
+      <val default="true">no</val>
+    </param>
     <param name="link-crawl" desc="Specifies whether to crawl only those topic links found in maps, or all discovered topic links." type="enum">
       <val>map</val>
       <val default="true">topic</val>

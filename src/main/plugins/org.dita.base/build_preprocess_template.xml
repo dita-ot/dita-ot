@@ -124,6 +124,10 @@ See the accompanying LICENSE file for applicable license.
     dita:depends="{depend.preprocess.gen-list.pre}"
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     description="Generate file list">
+    <condition property="show.key.duplicates.in.gen-list" value="false" else="true">
+      <istrue value="${check.key.duplicates.in.keyref}"/>
+    </condition>
+    
     <pipeline message="Generate list." taskname="gen-list"
       inputmap="${args.input}">
       <module class="org.dita.dost.module.GenMapAndTopicListModule">
@@ -142,6 +146,7 @@ See the accompanying LICENSE file for applicable license.
         <param name="profiling.enable" value="${filter-on-parse}" unless:set="filter-on-parse"/>
         <param name="generate-debug-attributes" value="${generate-debug-attributes}" if:set="generate-debug-attributes"/>
         <param name="processing-mode" value="${processing-mode}" if:set="processing-mode"/>
+        <param name="show.key.duplicates" value="${show.key.duplicates.in.gen-list}"/>
       </module>
     </pipeline>
   </target>
@@ -315,6 +320,15 @@ See the accompanying LICENSE file for applicable license.
     dita:extension="depends org.dita.dost.platform.InsertDependsAction"
     unless="preprocess.keyref.skip"
     description="Resolve keyref">
+    <pipeline message="Check for key duplicates in generated map"
+  	  taskname="check-key-duplicates"
+      unless:true="${show.key.duplicates.in.gen-list}">
+      <xslt basedir="${dita.temp.dir}"
+            style="${dita.plugin.org.dita.base.dir}/xsl/preprocess/check-key-duplicates.xsl"
+            filenameparameter="file-being-processed">
+        <ditafileset format="ditamap" input="true"/>
+      </xslt>
+    </pipeline>
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
       </module>

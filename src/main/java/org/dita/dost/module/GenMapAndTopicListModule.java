@@ -123,6 +123,8 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
 
   /** Profiling is enabled. */
   private boolean profilingEnabled;
+  /** Show key duplicates */
+  private boolean showKeyDuplicates;
   /** Absolute path for filter file. */
   private File ditavalFile;
   /** Number of directory levels base directory is adjusted. */
@@ -262,6 +264,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     keydefFilter.setLogger(logger);
     keydefFilter.setCurrentFile(rootFile);
     keydefFilter.setJob(job);
+    keydefFilter.setShowKeyDuplicates(showKeyDuplicates);
 
     nullHandler = new DefaultHandler();
   }
@@ -337,6 +340,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     profilingEnabled = true;
     if (input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED) != null) {
       profilingEnabled = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_PROFILING_ENABLED));
+    }
+    
+    showKeyDuplicates = true;
+    if (input.getAttribute(ANT_INVOKER_PARAM_SHOW_KEY_DUPLICATES) != null) {
+      showKeyDuplicates = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_SHOW_KEY_DUPLICATES));
     }
 
     // create the keydef file for scheme files
