@@ -16,6 +16,7 @@ import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -65,52 +66,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private Collection<FileInfo> fileInfosFromJob;
   private Job tempJob;
 
-  private void init(final Map<String, String> input) {
-    useResultFilename =
-      Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME)).map(Boolean::parseBoolean).orElse(false);
-    final Resolver catalogResolver = xmlUtils.getCatalogResolver();
-    rewriteTransformer =
-      Optional
-        .ofNullable(input.get("result.rewrite-rule.xsl"))
-        .map(file -> {
-          try {
-            return catalogResolver.resolve(URLUtils.toURI(file).toString(), null);
-          } catch (TransformerException e) {
-            throw new RuntimeException(e.getMessage(), e);
-          }
-        })
-        .map(f -> {
-          try {
-            final Processor processor = xmlUtils.getProcessor();
-            final XsltCompiler xsltCompiler = processor.newXsltCompiler();
-            xsltCompiler.setErrorReporter(toErrorReporter(logger));
-            final XsltExecutable xsltExecutable = xsltCompiler.compile(f);
-            return xsltExecutable.load();
-          } catch (UncheckedXPathException e) {
-            throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
-          } catch (SaxonApiException e) {
-            throw new RuntimeException("Failed to compile XSLT: " + e.getMessage(), e);
-          }
-        })
-        .orElse(null);
-    rewriteClass =
-      Optional
-        .ofNullable(input.get("result.rewrite-rule.class"))
-        .map(c -> {
-          try {
-            final Class<RewriteRule> cls = (Class<RewriteRule>) Class.forName(c);
-            return cls.newInstance();
-          } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-          }
-        })
-        .orElse(null);
-
+  private void init() {
+    linkFilter.setJob(job);
     linkFilter.setLogger(logger);
-    mapFilter.setLogger(logger);
-    topicFilter.setLogger(logger);
 
-    tempBase = job.getBaseDir();
+    mapFilter.setJob(job);
+    mapFilter.setLogger(logger);
+
+    topicFilter.setJob(job);
+    topicFilter.setLogger(logger);
   }
 
   @Override
@@ -119,8 +83,71 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     cleanFiles();
     updateProperties();
     fixInputMap();
-    writeJob();
+    writeJobFile();
     return null;
+  }
+
+  private void init(final Map<String, String> input) {
+    useResultFilename = getUseResultFilename(input);
+    rewriteTransformer = getRewriteTransformerExtension(input);
+    rewriteClass = getRewriteClassExtension(input);
+
+    linkFilter.setLogger(logger);
+    mapFilter.setLogger(logger);
+    topicFilter.setLogger(logger);
+
+    tempBase = job.getBaseDir();
+  }
+
+  private static Boolean getUseResultFilename(Map<String, String> input) {
+    return Optional.ofNullable(input.get(PARAM_USE_RESULT_FILENAME)).map(Boolean::parseBoolean).orElse(false);
+  }
+
+  private XsltTransformer getRewriteTransformerExtension(Map<String, String> input) {
+    final Resolver catalogResolver = xmlUtils.getCatalogResolver();
+    return Optional
+      .ofNullable(input.get("result.rewrite-rule.xsl"))
+      .map(file -> {
+        try {
+          return catalogResolver.resolve(URLUtils.toURI(file).toString(), null);
+        } catch (TransformerException e) {
+          throw new RuntimeException(e.getMessage(), e);
+        }
+      })
+      .map(f -> {
+        try {
+          final Processor processor = xmlUtils.getProcessor();
+          final XsltCompiler xsltCompiler = processor.newXsltCompiler();
+          xsltCompiler.setErrorReporter(toErrorReporter(logger));
+          final XsltExecutable xsltExecutable = xsltCompiler.compile(f);
+          return xsltExecutable.load();
+        } catch (UncheckedXPathException e) {
+          throw new RuntimeException("Failed to compile XSLT: " + e.getXPathException().getMessageAndLocation(), e);
+        } catch (SaxonApiException e) {
+          throw new RuntimeException("Failed to compile XSLT: " + e.getMessage(), e);
+        }
+      })
+      .orElse(null);
+  }
+
+  private static RewriteRule getRewriteClassExtension(Map<String, String> input) {
+    return Optional
+      .ofNullable(input.get("result.rewrite-rule.class"))
+      .map(c -> {
+        try {
+          final Class<RewriteRule> cls = (Class<RewriteRule>) Class.forName(c);
+          return cls.getDeclaredConstructor().newInstance();
+        } catch (
+          ClassNotFoundException
+          | InstantiationException
+          | IllegalAccessException
+          | NoSuchMethodException
+          | InvocationTargetException e
+        ) {
+          throw new RuntimeException(e);
+        }
+      })
+      .orElse(null);
   }
 
   private void cleanFiles() throws DITAOTException {
@@ -136,7 +163,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     job.setInputDir(tempBase);
   }
 
-  private void fixInputMap() throws DITAOTException {
+  private void fixInputMap() {
     // start map
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
 
@@ -152,7 +179,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private void writeJob() throws DITAOTException {
+  private void writeJobFile() throws DITAOTException {
     try {
       job.write();
     } catch (IOException e) {
@@ -167,14 +194,22 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     fileInfosFromJob.forEach(fi -> job.remove(fi));
   }
 
+  /**
+   * Rewrites files using internal filters and adds them back to the main job.
+   * @throws DITAOTException       if an error occurs during the rewriting process
+   */
   private void rewriteFilesViaInternal() throws DITAOTException {
-    createTempJob(fileInfosFromJob);
+    configureTempJob(fileInfosFromJob);
     for (final FileInfo fileInfo : fileInfosFromJob) {
       rewriteFileAndAddToMainJob(fileInfo);
     }
   }
 
-  private void createTempJob(Collection<FileInfo> fileInfoCollection) {
+  /**
+   * Sets up a temporary {@link Job} for further processing.
+   * @param fileInfoCollection     a collection of {@link FileInfo} objects to be processed
+   */
+  private void configureTempJob(Collection<FileInfo> fileInfoCollection) {
     HashMap<String, Object> tempProp = new HashMap<>();
     tempProp.put(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, job.getGeneratecopyouter());
     tempJob = new Job(job, tempProp, fileInfoCollection);
@@ -183,9 +218,14 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     topicFilter.setJob(tempJob);
   }
 
+  /**
+   * Rewrites/cleans a file and adds it back to the main job if successful.
+   * @param fileInfo               the file to be cleaned
+   * @throws DITAOTException       if an error occurs during the rewriting process
+   */
   private void rewriteFileAndAddToMainJob(FileInfo fileInfo) throws DITAOTException {
     try {
-      if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
+      if ("coderef".equals(fileInfo.format) || "image".equals(fileInfo.format)) {
         logger.debug("Skip format " + fileInfo.format);
       } else {
         rewriteFile(fileInfo);
@@ -197,18 +237,30 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
+  /**
+   * Finalizes the relative URI and result URI.
+   * @param fileInfo               the file info to process
+   * @return                       a new {@link FileInfo} with updated URIs
+   */
   private FileInfo finalizeFileInfo(FileInfo fileInfo) {
     URI finalUri = tempBase.relativize(fileInfo.result);
     URI finalResult = fileInfo.result;
 
     FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(finalUri).result(finalResult);
 
-    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOutFile(finalResult)) {
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOuterFile(finalResult)) {
       builder.isResourceOnly(true);
     }
     return builder.build();
   }
 
+  /**
+   * Transforms a file through the processing pipeline
+   * or if there's no pipeline then simply moves it to its destination.
+   * @param fileInfo               the file to process
+   * @throws DITAOTException       if an error occurs during the transformation
+   * @throws IOException           if an I/O error occurs
+   */
   private void rewriteFile(FileInfo fileInfo) throws DITAOTException, IOException {
     final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
     if (tempJob.getStore().exists(srcFile.toURI())) {
@@ -228,10 +280,20 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private boolean isOutFile(URI resultUri) {
+  /**
+   * Checks if the result URI is an outer file, that is not located in the input directory.
+   * @param resultUri              the URI to check
+   * @return                       true if the file is an outer file, false otherwise
+   */
+  private boolean isOuterFile(URI resultUri) {
     return !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
   }
 
+  /**
+   * Rewrites files using plugins/extensions.
+   * Supports both XSLT and Java-based rewrite rules.
+   * @throws DITAOTException       if an error occurs during the rewriting process
+   */
   private void rewriteFilesViaExtensions() throws DITAOTException {
     if (rewriteClass != null) {
       fileInfosFromJob = rewriteClass.rewrite(fileInfosFromJob);
@@ -251,56 +313,60 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Document serialize(final Collection<FileInfo> fis) throws IOException {
+  /**
+   * Serializes a set of files into a single DOM for further processing.
+   * @param fileInfoCollection     the collection to serialize
+   * @return                       a DOM containing the serialized data
+   * @throws IOException           if an error occurs during serialization
+   */
+  private Document serialize(final Collection<FileInfo> fileInfoCollection) throws IOException {
     try {
       final Document doc = xmlUtils.newDocument();
       final DOMResult result = new DOMResult(doc);
       XMLStreamWriter out = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
-      job.serialize(out, emptyMap(), fis);
+      job.serialize(out, emptyMap(), fileInfoCollection);
       return (Document) result.getNode();
     } catch (final XMLStreamException e) {
       throw new IOException("Failed to serialize job file: " + e.getMessage());
     }
   }
 
+  /**
+   * If the input file is in a subdirectory of the base directory,
+   * returns a relative path to the base directory.
+   * This is not used by this class for cleaning the files.
+   */
   String getUplevels(final URI base) {
     final URI rel = base.relativize(job.getInputFile());
     final int count = rel.toString().split("/").length - 1;
     return IntStream.range(0, count).boxed().map(i -> "../").collect(Collectors.joining(""));
   }
 
-  private void init() {
-    linkFilter.setJob(job);
-    linkFilter.setLogger(logger);
-
-    mapFilter.setJob(job);
-    mapFilter.setLogger(logger);
-
-    topicFilter.setJob(job);
-    topicFilter.setLogger(logger);
-  }
-
   private List<XMLFilter> getProcessingPipe(final FileInfo fileInfo, final File srcFile, final File destFile) {
-    final List<XMLFilter> res = new ArrayList<>();
+    final List<XMLFilter> xmlFilterList = new ArrayList<>();
 
-    if (
-      fileInfo.format == null ||
-      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA) ||
-      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP)
-    ) {
+    final String format = fileInfo.format;
+    final boolean isDita = ATTR_FORMAT_VALUE_DITA.equals(format);
+    final boolean isMap = ATTR_FORMAT_VALUE_DITAMAP.equals(format);
+    final boolean isUnknown = format == null;
+
+    // add link filter for all DITA
+    if (isDita || isMap || isUnknown) {
       linkFilter.setCurrentFile(srcFile.toURI());
       linkFilter.setDestFile(destFile.toURI());
-      res.add(linkFilter);
+      xmlFilterList.add(linkFilter);
     }
 
-    if (fileInfo.format == null || fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+    // add topic filter for topics and map filter for maps
+    if (isDita || isUnknown) {
       topicFilter.setFileInfo(fileInfo);
-      res.add(topicFilter);
-    } else if (fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+      xmlFilterList.add(topicFilter);
+    } else if (isMap) {
       mapFilter.setFileInfo(fileInfo);
-      res.add(mapFilter);
+      xmlFilterList.add(mapFilter);
     }
 
+    // add remaining filters
     for (final XmlFilterModule.FilterPair filterPair : filters) {
       if (filterPair.predicate.test(fileInfo)) {
         final AbstractXMLFilter xmlFilter = filterPair.newInstance();
@@ -308,10 +374,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         xmlFilter.setCurrentFile(srcFile.toURI());
         xmlFilter.setJob(job);
         xmlFilter.setLogger(logger);
-        res.add(xmlFilter);
+        xmlFilterList.add(xmlFilter);
       }
     }
 
-    return res;
+    return xmlFilterList;
   }
 }
