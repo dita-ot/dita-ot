@@ -116,6 +116,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   public AbstractPipelineOutput execute(final Map<String, String> input) throws DITAOTException {
     init(input);
     cleanFiles();
+    updateProperties();
     fixInputMap();
     writeJob();
     return null;
@@ -127,7 +128,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       fileSet = rewriteViaExtensions(fileSet);
       rewriteViaInternal(fileSet);
     }
+  }
 
+  private void updateProperties() {
     job.setProperty("uplevels", getUplevels(base));
     job.setInputDir(base);
   }

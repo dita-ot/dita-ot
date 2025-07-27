@@ -877,11 +877,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
-      for (final FileInfo fs : fileinfos.values()) {
-        if (!Paths.get(fs.src).startsWith(Paths.get(rootFile).getParent())) {
-          fs.isResourceOnly = true;
-        }
-      }
+      hideOuterfilesFromOutput();
     }
 
     addFlagImagesSetToProperties(job, relFlagImagesSet);
@@ -933,6 +929,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       );
     } catch (final IOException e) {
       throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
+    }
+  }
+
+  private void hideOuterfilesFromOutput() {
+    for (final FileInfo fs : fileinfos.values()) {
+      if (!Paths.get(fs.src).startsWith(Paths.get(rootFile).getParent())) {
+        fs.isResourceOnly = true;
+      }
     }
   }
 

@@ -43,7 +43,6 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     getContentHandler().processingInstruction(target, res);
   }
 
-  @VisibleForTesting
   void calculatePathToProjectDirs() {
     pathToMapDir =
       job
@@ -60,7 +59,6 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     }
   }
 
-  @VisibleForTesting
   String getProcessingInstruction(String target, String data) {
     return switch (target) {
       case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)

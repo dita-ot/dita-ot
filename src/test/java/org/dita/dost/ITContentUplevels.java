@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 public interface ITContentUplevels {
-  public abstract AbstractIntegrationTest builder();
+  AbstractIntegrationTest builder();
 
   @Test
   default void testuplevels1() throws Throwable {

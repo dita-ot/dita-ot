@@ -1176,10 +1176,13 @@ public final class Job {
    */
   public URI getBaseDirNormal() {
     String baseDirNormal = getProperty(FILE_SET_BASE_DIR_NORMAL);
-    if (baseDirNormal != null) return URI.create(baseDirNormal);
-    URI baseDirNormalUri = getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
-    setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
-    return baseDirNormalUri;
+    if (baseDirNormal != null) {
+      return URI.create(baseDirNormal);
+    } else {
+      URI baseDirNormalUri = getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+      setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
+      return baseDirNormalUri;
+    }
   }
 
   private URI getFilteredBaseDir() {

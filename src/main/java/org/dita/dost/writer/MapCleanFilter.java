@@ -29,7 +29,6 @@ public class MapCleanFilter extends TopicCleanFilter {
   public void startDocument() throws SAXException {
     stack.clear();
     getContentHandler().startDocument();
-
     calculatePathToProjectDirs();
   }
 

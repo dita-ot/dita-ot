@@ -17,7 +17,7 @@ import org.ditang.relaxng.defaults.pool.RNGDefaultsEnabledSynchronizedXMLGrammar
 import org.junit.jupiter.api.Test;
 
 public interface ITPreprocessBase {
-  public abstract AbstractIntegrationTest builder();
+  AbstractIntegrationTest builder();
 
   @Test
   default void reltableHeaders() throws Throwable {

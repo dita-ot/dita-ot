@@ -163,7 +163,6 @@ See the accompanying LICENSE file for applicable license.
   </target>
 
   <target name="html5.map.toc" unless="_html5.toc.skip" description="Build HTML5 TOC file">
-    <echoproperties/>
     <html5.map>
       <dita:extension id="dita.conductor.html5.toc.param" behavior="org.dita.dost.platform.InsertAction"/>
     </html5.map>
