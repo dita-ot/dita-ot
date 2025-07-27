@@ -61,7 +61,9 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private boolean useResultFilename;
   private XsltTransformer rewriteTransformer;
   private RewriteRule rewriteClass;
-  private URI base;
+  private URI tempBase;
+  private Collection<FileInfo> fileInfosFromJob;
+  private Job tempJob;
 
   private void init(final Map<String, String> input) {
     useResultFilename =
@@ -105,11 +107,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         .orElse(null);
 
     linkFilter.setLogger(logger);
-
     mapFilter.setLogger(logger);
     topicFilter.setLogger(logger);
 
-    base = job.getBaseDir();
+    tempBase = job.getBaseDir();
   }
 
   @Override
@@ -124,15 +125,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private void cleanFiles() throws DITAOTException {
     if (useResultFilename) {
-      var fileSet = extractFileInfosFromJob();
-      fileSet = rewriteViaExtensions(fileSet);
-      rewriteViaInternal(fileSet);
+      extractFilesFromMainJob();
+      rewriteFilesViaExtensions();
+      rewriteFilesViaInternal();
     }
   }
 
   private void updateProperties() {
-    job.setProperty("uplevels", getUplevels(base));
-    job.setInputDir(base);
+    job.setProperty("uplevels", getUplevels(tempBase));
+    job.setInputDir(tempBase);
   }
 
   private void fixInputMap() throws DITAOTException {
@@ -159,41 +160,35 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Collection<FileInfo> extractFileInfosFromJob() {
+  private void extractFilesFromMainJob() {
     // collect and relativize result
-    final Collection<FileInfo> original = job
-      .getFileInfo()
-      .stream()
-      .filter(fileInfo -> fileInfo.result != null)
-      .collect(Collectors.toList());
-    original.forEach(fi -> job.remove(fi));
-
-    return original;
+    fileInfosFromJob =
+      job.getFileInfo().stream().filter(fileInfo -> fileInfo.result != null).collect(Collectors.toList());
+    fileInfosFromJob.forEach(fi -> job.remove(fi));
   }
 
-  private void rewriteViaInternal(Collection<FileInfo> fileInfoCollection) throws DITAOTException {
-    final Job tempJob = createTempJob(fileInfoCollection);
-    for (final FileInfo fileInfo : fileInfoCollection) {
-      rewriteFileAndAddToJob(fileInfo, tempJob);
+  private void rewriteFilesViaInternal() throws DITAOTException {
+    createTempJob(fileInfosFromJob);
+    for (final FileInfo fileInfo : fileInfosFromJob) {
+      rewriteFileAndAddToMainJob(fileInfo);
     }
   }
 
-  private Job createTempJob(Collection<FileInfo> fileInfoCollection) {
+  private void createTempJob(Collection<FileInfo> fileInfoCollection) {
     HashMap<String, Object> tempProp = new HashMap<>();
     tempProp.put(Constants.ANT_INVOKER_EXT_PARAM_GENERATECOPYOUTTER, job.getGeneratecopyouter());
-    final Job tempJob = new Job(job, tempProp, fileInfoCollection);
+    tempJob = new Job(job, tempProp, fileInfoCollection);
     linkFilter.setJob(tempJob);
     mapFilter.setJob(tempJob);
     topicFilter.setJob(tempJob);
-    return tempJob;
   }
 
-  private void rewriteFileAndAddToJob(FileInfo fileInfo, Job tempJob) throws DITAOTException {
+  private void rewriteFileAndAddToMainJob(FileInfo fileInfo) throws DITAOTException {
     try {
       if (fileInfo.format != null && (fileInfo.format.equals("coderef") || fileInfo.format.equals("image"))) {
         logger.debug("Skip format " + fileInfo.format);
       } else {
-        rewriteFile(fileInfo, tempJob);
+        rewriteFile(fileInfo);
       }
 
       job.add(finalizeFileInfo(fileInfo));
@@ -203,7 +198,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   }
 
   private FileInfo finalizeFileInfo(FileInfo fileInfo) {
-    URI finalUri = base.relativize(fileInfo.result);
+    URI finalUri = tempBase.relativize(fileInfo.result);
     URI finalResult = fileInfo.result;
 
     FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(finalUri).result(finalResult);
@@ -214,10 +209,10 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return builder.build();
   }
 
-  private void rewriteFile(FileInfo fileInfo, Job tempJob) throws DITAOTException, IOException {
+  private void rewriteFile(FileInfo fileInfo) throws DITAOTException, IOException {
     final File srcFile = new File(tempJob.tempDirURI.resolve(fileInfo.uri));
     if (tempJob.getStore().exists(srcFile.toURI())) {
-      final File destFile = new File(tempJob.tempDirURI.resolve(base.relativize(fileInfo.result)));
+      final File destFile = new File(tempJob.tempDirURI.resolve(tempBase.relativize(fileInfo.result)));
       final List<XMLFilter> processingPipe = getProcessingPipe(fileInfo, srcFile, destFile);
       if (!processingPipe.isEmpty()) {
         logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
@@ -237,25 +232,23 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return !Paths.get(resultUri).startsWith(Paths.get(job.getInputDir()));
   }
 
-  private Collection<FileInfo> rewriteViaExtensions(final Collection<FileInfo> fileInfoCollection)
-    throws DITAOTException {
+  private void rewriteFilesViaExtensions() throws DITAOTException {
     if (rewriteClass != null) {
-      return rewriteClass.rewrite(fileInfoCollection);
+      fileInfosFromJob = rewriteClass.rewrite(fileInfosFromJob);
     }
     if (rewriteTransformer != null) {
       try {
-        final DOMSource source = new DOMSource(serialize(fileInfoCollection));
+        final DOMSource source = new DOMSource(serialize(fileInfosFromJob));
         final Map<URI, FileInfo> files = new HashMap<>();
         final Destination result = new SAXDestination(new Job.JobHandler(new HashMap<>(), files));
         rewriteTransformer.setSource(source);
         rewriteTransformer.setDestination(result);
         rewriteTransformer.transform();
-        return files.values();
+        fileInfosFromJob = files.values();
       } catch (IOException | SaxonApiException e) {
         throw new DITAOTException(e);
       }
     }
-    return fileInfoCollection;
   }
 
   private Document serialize(final Collection<FileInfo> fis) throws IOException {
