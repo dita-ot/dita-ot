@@ -14,33 +14,32 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTestPreprocess2 extends IntegrationTest {
+public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreprocessBase {
 
-  public IntegrationTestPreprocess2 builder() {
-    return new IntegrationTestPreprocess2();
+  public ITPreprocess2 builder() {
+    return new ITPreprocess2();
   }
 
   @Override
   Transtype getTranstype(Transtype transtype) {
-    switch (transtype) {
-      case PREPROCESS:
-        return PREPROCESS2;
-      case XHTML:
-        return XHTML_WITH_PREPROCESS2;
-      default:
-        return transtype;
-    }
+    return switch (transtype) {
+      case PREPROCESS -> PREPROCESS2;
+      case XHTML -> XHTML_WITH_PREPROCESS2;
+      default -> transtype;
+    };
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto() throws Throwable {
+  public void copyto() throws Throwable {
     builder().name(Paths.get("copyto", "basic")).transtype(PREPROCESS).input(Paths.get("TC2.ditamap")).test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_linktarget() throws Throwable {
+  public void copyto_linktarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_linktarget"))
       .transtype(PREPROCESS)
@@ -50,9 +49,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_extensions_metadata() throws Throwable {
+  public void copyto_extensions_metadata() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_extensions_metadata"))
       .transtype(PREPROCESS)
@@ -60,9 +60,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_circulartarget() throws Throwable {
+  public void copyto_circulartarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_circulartarget"))
       .transtype(PREPROCESS)
@@ -70,9 +71,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_sametarget2() throws Throwable {
+  public void copyto_sametarget2() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_sametarget2"))
       .transtype(PREPROCESS)
@@ -81,9 +83,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testcopyto_sametarget() throws Throwable {
+  public void copyto_sametarget() throws Throwable {
     builder()
       .name(Paths.get("copyto", "copyto_sametarget"))
       .transtype(PREPROCESS)
@@ -92,9 +95,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testuplevelslinkOnlytopic() throws Throwable {
+  public void uplevelslinkOnlytopic() throws Throwable {
     builder()
       .name("uplevelslink")
       .transtype(PREPROCESS)
@@ -105,9 +109,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testCrawlMapPreprocess() throws Throwable {
+  public void crawlMapPreprocess() throws Throwable {
     builder()
       .name("crawl_map")
       .transtype(PREPROCESS)
@@ -118,9 +123,10 @@ public class IntegrationTestPreprocess2 extends IntegrationTest {
       .test();
   }
 
+  @Override
   @Disabled
   @Test
-  public void testchunk_uplevel() throws Throwable {
+  public void chunk_uplevel() throws Throwable {
     builder()
       .name("chunk_uplevel")
       .transtype(PREPROCESS)
