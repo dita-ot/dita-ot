@@ -303,6 +303,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       topicFilter.setFileInfo(fi);
       res.add(topicFilter);
     } else if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+      mapFilter.setFileInfo(fi);
       res.add(mapFilter);
     }
 
