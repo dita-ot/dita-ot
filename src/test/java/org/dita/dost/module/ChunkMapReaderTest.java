@@ -41,92 +41,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testunware_chunk_content() {
-    test(
-      "unware_chunk_content.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("dita1.dita", "dita1.dita")
-        .put("one.dita#topicID", "two.dita#unique_2")
-        .put("one.dita", "two.dita#unique_2")
-        .put("two.dita", "two.dita")
-        .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
-  public void testunware_chunk_content2() {
-    test(
-      "unware_chunk_content2.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("one.dita#topicID", "Chunk0.dita#unique_3")
-        .put("one.dita", "Chunk0.dita#unique_3")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "one.dita")
-    );
-  }
-
-  @Test
-  public void testconflict_same_id() {
-    test(
-      "conflict_same_id.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("t1.dita", "Chunk0.dita#topic1")
-        .put("t1.dita#topic1", "Chunk0.dita#topic1")
-        .put("t2.dita#topic1", "Chunk0.dita#unique_1")
-        .put("t2.dita", "Chunk0.dita#unique_1")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "t1.dita")
-    );
-  }
-
-  @Test
-  public void testanchor1() {
-    test(
-      "anchor1.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("reference1.dita#reference1", "Chunk0.dita#reference1")
-        .put("reference1.dita", "Chunk0.dita#reference1")
-        .put("task1.dita#task1", "Chunk0.dita#task1")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("task1.dita", "Chunk0.dita#task1")
-        .put("concept1.dita#concept1r", "Chunk0.dita#concept1r")
-        .put("concept1.dita", "Chunk0.dita#concept1r")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "concept1.dita")
-    );
-  }
-
-  @Test
-  public void testanchor2() {
-    test(
-      "anchor2.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("reference1.dita#reference1", "Chunk1.dita#reference1")
-        .put("reference1.dita", "Chunk1.dita#reference1")
-        .put("Chunk1.dita", "Chunk1.dita")
-        .put("task1.dita#task1", "Chunk1.dita#task1")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("task1.dita", "Chunk1.dita#task1")
-        .put("concept1.dita#concept1r", "Chunk0.dita#concept1r")
-        .put("concept1.dita", "Chunk0.dita#concept1r")
-        .build(),
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("Chunk1.dita", "task1.dita")
-        .put("Chunk0.dita", "concept1.dita")
-        .build()
-    );
-  }
-
-  @Test
   public void testcase1() {
     test(
       "case1.ditamap",
@@ -146,25 +60,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testcase2() {
-    test(
-      "case2.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("case2.dita", "case2.dita")
-        .put("ditabase.dita#two", "case2.dita#two")
-        .put("ditabase.dita#four", "case2.dita#four")
-        .put("nested.dita", "case2.dita#nested")
-        .put("ditabase.dita#one", "case2.dita#one")
-        .put("nested.dita#nested", "case2.dita#nested")
-        .put("ditabase.dita#five", "case2.dita#five")
-        .put("ditabase.dita#three", "case2.dita#three")
-        .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
   public void testcase3() {
     test(
       "case3.ditamap",
@@ -174,41 +69,6 @@ public class ChunkMapReaderTest {
         .put("child.dita", "child.dita")
         .put("ditabase.dita#three", "three.dita#three")
         .put("parent.dita", "parent.dita")
-        .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
-  public void testcase4() {
-    test(
-      "case4.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("child.dita", "Chunk0.dita#nested")
-        .put("case4.dita", "Chunk0.dita#parent")
-        .put("child.dita#nested", "Chunk0.dita#nested")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("case4.dita#parent", "Chunk0.dita#parent")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "case4.dita")
-    );
-  }
-
-  @Test
-  public void testcase5() {
-    test(
-      "case5.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("three.dita", "three.dita")
-        .put("four.dita", "four.dita")
-        .put("ditabase.dita#two", "two.dita#two")
-        .put("one.dita", "one.dita")
-        .put("ditabase.dita#four", "four.dita#four")
-        .put("two.dita", "two.dita")
-        .put("ditabase.dita#one", "one.dita#one")
-        .put("ditabase.dita#three", "three.dita#three")
         .build(),
       Collections.emptyMap()
     );
@@ -234,24 +94,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testcase7() {
-    test(
-      "case7.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("child.dita#child", "Chunk0.dita#child")
-        .put("child.dita", "Chunk0.dita#child")
-        .put("child2.dita#child2", "Chunk0.dita#child2")
-        .put("child2.dita", "Chunk0.dita#child2")
-        .put("parent.dita#parent", "Chunk0.dita#parent")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("parent.dita", "Chunk0.dita#parent")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "parent.dita")
-    );
-  }
-
-  @Test
   public void testlink1() {
     test(
       "link1.ditamap",
@@ -264,25 +106,6 @@ public class ChunkMapReaderTest {
         .put("topic.dita", "topic.dita")
         .build(),
       Collections.emptyMap()
-    );
-  }
-
-  @Test
-  public void testlink2() {
-    test(
-      "link2.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("t3.dita", "Chunk0.dita#topic3")
-        .put("ditabase.dita#topic", "Chunk0.dita#topic")
-        .put("ditabase.dita#task", "Chunk0.dita#task")
-        .put("ditabase.dita#concept", "Chunk0.dita#concept")
-        .put("ref.dita", "ref.dita")
-        .put("t3.dita#topic3", "Chunk0.dita#topic3")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("ditabase.dita", "Chunk0.dita#topic")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "t3.dita")
     );
   }
 
@@ -411,19 +234,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testFixChunk_map8() {
-    test(
-      "FixChunk_map8.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("nested2.dita", "nested2.dita")
-        .put("nested1.dita", "nested1.dita")
-        .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
   public void testByTopic_map2() {
     test(
       "ByTopic_map2.ditamap",
@@ -436,15 +246,6 @@ public class ChunkMapReaderTest {
         .put("nested2.dita", "nested2.dita")
         .put("nested1.dita", "N1.dita")
         .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
-  public void testByTopic_map3() {
-    test(
-      "ByTopic_map3.ditamap",
-      TestUtils.<String, String>mapBuilder().put("t1.dita", "t1.dita").put("nested1.dita", "nested1.dita").build(),
       Collections.emptyMap()
     );
   }
@@ -468,26 +269,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testByTopic_map5() {
-    test(
-      "ByTopic_map5.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("map5.dita", "map5.dita")
-        .put("nested1.dita#N1a", "map5.dita#N1a")
-        .put("t1.dita", "Chunk0.dita#topic1")
-        .put("t1.dita#topic1", "Chunk0.dita#topic1")
-        .put("nested1.dita#N1", "map5.dita#N1")
-        .put("nested1.dita", "map5.dita#N1")
-        .put("t2.dita#topic2", "Chunk0.dita#topic2")
-        .put("t2.dita", "Chunk0.dita#topic2")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      Collections.singletonMap("Chunk0.dita", "map5.dita")
-    );
-  }
-
-  @Test
   public void testByTopic_map6() {
     test(
       "ByTopic_map6.ditamap",
@@ -505,147 +286,6 @@ public class ChunkMapReaderTest {
         .put("Chunk0.dita", "Chunk0.dita")
         .build(),
       TestUtils.<String, String>mapBuilder().put("Chunk1.dita", "t1.dita").put("Chunk0.dita", "nested1.dita").build()
-    );
-  }
-
-  @Test
-  public void testByTopic_map7() {
-    test(
-      "ByTopic_map7.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("nested4.dita#N1a", "Chunk1.dita#N1a")
-        .put("nested1.dita#N1a", "N1a.dita#N1a")
-        .put("Chunk1.dita", "Chunk1.dita")
-        .put("nested4.dita#N1", "Chunk0.dita#N1")
-        .put("N1.dita", "N1.dita")
-        .put("N1a.dita", "N1a.dita")
-        .put("nested1.dita#N1", "N1.dita#N1")
-        .put("nested4.dita", "Chunk0.dita")
-        .put("nested1.dita", "N1.dita")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      TestUtils.<String, String>mapBuilder().put("Chunk1.dita", "N1a.dita").put("Chunk0.dita", "N1.dita").build()
-    );
-  }
-
-  @Test
-  public void testtopicgroup_chunk() {
-    test(
-      "topicgroup_chunk.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("Chunk19.dita", "Chunk23.dita#Chunk19")
-        .put("headkid.dita#topicID", "Chunk22.dita#topicID")
-        .put("groupkid.dita#topicID", "Chunk21.dita#topicID")
-        .put("Chunk18.dita#Chunk18", "Chunk22.dita#Chunk18")
-        .put("Chunk22.dita", "Chunk22.dita")
-        .put("Chunk8.dita", "Chunk8.dita")
-        .put("Chunk19.dita#Chunk19", "Chunk23.dita#Chunk19")
-        .put("Chunk7.dita", "Chunk7.dita")
-        .put("dita5.dita", "Chunk11.dita#topicID")
-        .put("Chunk1.dita", "Chunk1.dita")
-        .put("container.dita#topicID", "Chunk20.dita#topicID")
-        .put("dita8.dita", "Chunk15.dita#topicID")
-        .put("shortkid.dita", "Chunk23.dita#topicID")
-        .put("dita9.dita#topicID", "Chunk15.dita#unique_16")
-        .put("dita1.dita", "dita1.dita")
-        .put("Chunk10.dita", "Chunk10.dita")
-        .put("dita7.dita#topicID", "Chunk14.dita#topicID")
-        .put("Chunk21.dita", "Chunk21.dita")
-        .put("dita8.dita#topicID", "Chunk15.dita#topicID")
-        .put("Chunk13.dita", "Chunk14.dita")
-        .put("Chunk23.dita", "Chunk23.dita")
-        .put("Chunk20.dita", "Chunk20.dita")
-        .put("dita4.dita#topicID", "Chunk9.dita#topicID")
-        .put("dita3.dita#topicID", "Chunk8.dita#topicID")
-        .put("dita7.dita", "Chunk14.dita#topicID")
-        .put("dita6.dita#topicID", "Chunk11.dita#unique_12")
-        .put("dita1.dita#topicID", "Chunk6.dita#topicID")
-        .put("headkid.dita", "Chunk22.dita#topicID")
-        .put("dita5.dita#topicID", "Chunk11.dita#topicID")
-        .put("dita4.dita", "dita4.dita")
-        .put("Chunk6.dita", "Chunk6.dita")
-        .put("shortkid.dita#topicID", "Chunk23.dita#topicID")
-        .put("Chunk17.dita", "Chunk21.dita")
-        .put("dita2.dita#topicID", "Chunk7.dita#topicID")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("Chunk11.dita", "Chunk11.dita")
-        .put("dita2.dita", "dita2.dita")
-        .put("Chunk14.dita", "Chunk14.dita")
-        .put("Chunk18.dita", "Chunk22.dita#Chunk18")
-        .put("container.dita", "Chunk20.dita#topicID")
-        .put("Chunk15.dita", "Chunk15.dita")
-        .put("dita9.dita", "Chunk15.dita#unique_16")
-        .put("dita3.dita", "dita3.dita")
-        .put("Chunk9.dita", "Chunk9.dita")
-        .put("groupkid.dita", "Chunk21.dita#topicID")
-        .put("dita6.dita", "Chunk11.dita#unique_12")
-        .build(),
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("Chunk20.dita", "container.dita")
-        .put("Chunk23.dita", "Chunk19.dita")
-        .put("Chunk6.dita", "dita1.dita")
-        .put("Chunk22.dita", "Chunk18.dita")
-        .put("Chunk0.dita", "dita1.dita")
-        .put("Chunk8.dita", "dita3.dita")
-        .put("Chunk11.dita", "dita5.dita")
-        .put("Chunk14.dita", "Chunk13.dita")
-        .put("Chunk7.dita", "dita2.dita")
-        .put("Chunk1.dita", "dita2.dita")
-        .put("Chunk15.dita", "dita8.dita")
-        .put("Chunk10.dita", "dita5.dita")
-        .put("Chunk9.dita", "dita4.dita")
-        .put("Chunk21.dita", "Chunk17.dita")
-        .build()
-    );
-  }
-
-  @Test
-  public void testchunk_map_tocontent() {
-    test(
-      "chunk_map_tocontent.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("chunk_map_tocontent/dita1.dita#topicID1", "chunk_map_tocontent/Chunk0.dita#topicID1")
-        .put("chunk_map_tocontent/Chunk0.dita", "chunk_map_tocontent/Chunk0.dita")
-        .put("chunk_map_tocontent/dita.xml", "chunk_map_tocontent/dita.xml")
-        .put("chunk_map_tocontent/sub_dita1.dita", "chunk_map_tocontent/Chunk0.dita#topicIDSUB")
-        .put("chunk_map_tocontent/sub_dita2.dita#topicIDSUB", "chunk_map_tocontent/Chunk1.dita#topicIDSUB")
-        .put("chunk_map_tocontent/dita2.dita", "chunk_map_tocontent/Chunk1.dita#topicID1")
-        .put("chunk_map_tocontent/dita2.dita#topicID1", "chunk_map_tocontent/Chunk1.dita#topicID1")
-        .put("chunk_map_tocontent/sub_dita1.dita#topicIDSUB", "chunk_map_tocontent/Chunk0.dita#topicIDSUB")
-        .put("chunk_map_tocontent/Chunk1.dita", "chunk_map_tocontent/Chunk1.dita")
-        .put("chunk_map_tocontent/sub_dita2.dita", "chunk_map_tocontent/Chunk1.dita#topicIDSUB")
-        .put("chunk_map_tocontent/dita1.dita", "chunk_map_tocontent/Chunk0.dita#topicID1")
-        .build(),
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("chunk_map_tocontent/Chunk0.dita", "chunk_map_tocontent/dita1.dita")
-        .put("chunk_map_tocontent/Chunk1.dita", "chunk_map_tocontent/dita2.dita")
-        .build()
-    );
-  }
-
-  @Test
-  public void testconflict_by_topic() {
-    test(
-      "conflict_by_topic.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("nested4.dita#N1a", "Chunk1.dita#N1a")
-        .put("nested1.dita#N1a", "N1a.dita#N1a")
-        .put("Chunk1.dita", "Chunk1.dita")
-        .put("nested4.dita#N1", "Chunk0.dita#N1")
-        .put("N1.dita", "N1.dita")
-        .put("N1a.dita", "N1a.dita")
-        .put("nested1.dita#N1", "N1.dita#N1")
-        .put("nested4.dita", "Chunk0.dita")
-        .put("nested1.dita", "N1.dita")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      TestUtils.<String, String>mapBuilder().put("Chunk1.dita", "N1a.dita").put("Chunk0.dita", "N1.dita").build()
     );
   }
 
@@ -978,27 +618,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testchunk_duplicate_tocontent() {
-    test(
-      "chunk_duplicate_tocontent.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("dita2.dita", "Chunk1.dita#topicID1")
-        .put("Chunk1.dita", "Chunk1.dita")
-        .put("sub_dita2.dita#topicIDSUB", "Chunk1.dita#topicIDSUB")
-        .put("dita2.dita#topicID1", "Chunk1.dita#topicID1")
-        .put("dita1.dita", "Chunk0.dita#topicID1")
-        .put("sub_dita2.dita", "Chunk1.dita#topicIDSUB")
-        .put("sub_dita1.dita#topicIDSUB", "Chunk0.dita#topicIDSUB")
-        .put("sub_dita1.dita", "Chunk0.dita#topicIDSUB")
-        .put("dita1.dita#topicID1", "Chunk0.dita#topicID1")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .build(),
-      TestUtils.<String, String>mapBuilder().put("Chunk1.dita", "dita2.dita").put("Chunk0.dita", "dita1.dita").build()
-    );
-  }
-
-  @Test
   public void testAttribute_map10() {
     test(
       "Attribute_map10.ditamap",
@@ -1048,57 +667,6 @@ public class ChunkMapReaderTest {
         .put("Y.dita#Y1", "Chunk1.dita#Y1")
         .build(),
       TestUtils.<String, String>mapBuilder().put("Chunk1.dita", "Y.dita").put("Chunk0.dita", "X.dita").build()
-    );
-  }
-
-  @Test
-  public void testchunk_rewrite_tocontent() {
-    test(
-      "chunk_rewrite_tocontent.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("dita4.dita#topicID", "Chunk3.dita#topicID")
-        .put("dita3.dita#topicID", "Chunk0.dita#unique_2")
-        .put("dita6.dita#topicID", "Chunk4.dita#unique_5")
-        .put("dita1.dita#topicID", "Chunk0.dita#topicID")
-        .put("dita5.dita#topicID", "Chunk4.dita#topicID")
-        .put("dita4.dita", "Chunk3.dita#topicID")
-        .put("Chunk3.dita", "Chunk3.dita")
-        .put("dita2.dita#topicID", "Chunk0.dita#unique_1")
-        .put("Chunk0.dita", "Chunk0.dita")
-        .put("dita2.dita", "Chunk0.dita#unique_1")
-        .put("dita5.dita", "Chunk4.dita#topicID")
-        .put("dita1.dita", "Chunk0.dita#topicID")
-        .put("dita3.dita", "Chunk0.dita#unique_2")
-        .put("dita6.dita", "Chunk4.dita#unique_5")
-        .put("Chunk4.dita", "Chunk4.dita")
-        .build(),
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("Chunk3.dita", "dita4.dita")
-        .put("Chunk0.dita", "dita1.dita")
-        .put("Chunk4.dita", "dita5.dita")
-        .build()
-    );
-  }
-
-  @Test
-  public void testconflict_to_content() {
-    test(
-      "conflict_to_content.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("map5.dita", "map5.dita")
-        .put("nested1.dita#N1a", "map1.dita#N1a")
-        .put("t1.dita", "map5.dita#topic1")
-        .put("t1.dita#topic1", "map5.dita#topic1")
-        .put("nested1.dita#N1", "map1.dita#N1")
-        .put("map1.dita", "map1.dita")
-        .put("nested1.dita", "map1.dita#N1")
-        .put("t2.dita#topic2", "map5.dita#topic2")
-        .put("t2.dita", "map5.dita#topic2")
-        .build(),
-      Collections.emptyMap()
     );
   }
 

@@ -13,7 +13,11 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
+import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
+import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_BY_TOPIC;
+import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
@@ -27,6 +31,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.XMLConstants;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Step;
@@ -41,8 +46,14 @@ import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
 import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
+/**
+ * DITA 2.x chunk processing.
+ *
+ * @since 3.7
+ */
 public class ChunkModule extends AbstractPipelineModuleImpl {
 
   static final String GEN_CHUNK_PREFIX = "Chunk";
@@ -60,10 +71,18 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
-        return null;
+        if (isCompatible(mapDoc)) {
+          rewriteToCompatibilityMode(mapDoc);
+          logger.debug("Process DITA 1.x chunks in compatibility mode");
+        } else {
+          return null;
+        }
       }
       logger.info("Processing {0}", mapFile);
       final List<ChunkOperation> chunks = collectChunkOperations(mapFile, mapDoc);
+      if (chunks.isEmpty()) {
+        return null;
+      }
       final Map<URI, URI> combineRewriteMap = processCombine(mapFile, mapDoc, chunks);
       final Map<URI, URI> splitRewriteMap = processSplit(mapFile, mapDoc, chunks);
       rewriteLinks(combineRewriteMap, splitRewriteMap);
@@ -72,6 +91,27 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       throw new DITAOTException(e);
     }
     return null;
+  }
+
+  private void rewriteToCompatibilityMode(Document mapDoc) {
+    List<Element> elements = XMLUtils.toList(mapDoc.getElementsByTagName("*"));
+    for (Element elem : elements) {
+      var chunkAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
+      if (chunkAttr != null) {
+        var rewrittenChunk = Stream
+          .of(WHITESPACE.split(chunkAttr.getValue()))
+          .filter(token -> !token.isBlank())
+          .map(token ->
+            switch (token) {
+              case CHUNK_TO_CONTENT -> COMBINE.name;
+              case CHUNK_BY_TOPIC -> SPLIT.name;
+              default -> token;
+            }
+          )
+          .collect(Collectors.joining(" "));
+        chunkAttr.setValue(rewrittenChunk);
+      }
+    }
   }
 
   private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {
@@ -440,18 +480,31 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     //                        .build();
     //                job.add(dstFi);
     //            }
-    (parallel ? chunks.stream().parallel() : chunks.stream()).forEach(chunk -> {
-        logger.info("Generate chunk {0}", removeFragment(chunk.dst()));
+    (parallel ? chunks.stream().parallel() : chunks.stream()).map(chunk -> {
+        var dst = removeFragment(chunk.dst());
+        var tmp = addSuffixToPath(dst, "tmp");
+        logger.info("Generate chunk {0} to {1}", dst, tmp);
         try {
           //   recursively merge chunk topics
           final Document chunkDoc = merge(chunk);
           rewriteLinks(chunkDoc, chunk.src(), rewriteMap);
           chunkDoc.normalizeDocument();
-          final URI dst = removeFragment(chunk.dst());
-          logger.info("Writing {0}", dst);
-          job.getStore().writeDocument(chunkDoc, dst);
+          logger.info("Writing {0}", tmp);
+          job.getStore().writeDocument(chunkDoc, tmp);
+          return Map.entry(tmp, dst);
         } catch (IOException e) {
-          logger.error("Failed to generate chunk {0}", removeFragment(chunk.dst()), e);
+          logger.error("Failed to generate chunk {0}", dst, e);
+          return null;
+        }
+      })
+      .filter(Objects::nonNull)
+      .toList()
+      .forEach(tmpFile -> {
+        try {
+          logger.info("Moving {0} to {1}", tmpFile.getKey(), tmpFile.getValue());
+          job.getStore().move(tmpFile.getKey(), tmpFile.getValue());
+        } catch (IOException e) {
+          logger.error("Failed to move chunk {0} to {1}", tmpFile.getKey(), tmpFile.getValue(), e);
         }
       });
   }
@@ -546,8 +599,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       // init dst
       URI dstBase;
       if (rootChunk.src() == null) {
-        dstBase = mapFile.resolve(GEN_CHUNK_PREFIX + FILE_EXTENSION_DITA);
-        dst = addSuffix(dstBase, Integer.toString(1));
+        for (int i = 1;; i++) {
+          final URI res = mapFile.resolve(GEN_CHUNK_PREFIX + i + FILE_EXTENSION_DITA);
+          if (rewriteMap.values().stream().anyMatch(d -> removeFragment(d).equals(res))) {
+            continue;
+          } else {
+            dstBase = res;
+            dst = dstBase;
+            break;
+          }
+        }
       } else {
         dstBase = rootChunk.src();
         dst = dstBase;

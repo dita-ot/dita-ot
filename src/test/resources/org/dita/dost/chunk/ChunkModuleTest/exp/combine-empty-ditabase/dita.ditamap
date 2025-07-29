@@ -1,5 +1,4 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0"
-     class="- map/map ">
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0" class="- map/map ">
   <!-- FIXME: should be a.dita -->
   <topicref class="- map/topicref " href="a.dita#Chunk1">
     <topicref class="- map/topicref " href="a.dita#topic_b1"/>
