@@ -71,6 +71,7 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.10.2'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.10.2'
     testImplementation group: 'io.xspec', name: 'xspec', version: '3.2.2'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
 }
 
 node {
@@ -122,7 +123,7 @@ tasks.named("test") {
     useJUnitPlatform {
         filter {
             includeTestsMatching "*Test"
-            excludeTestsMatching "IntegrationTest*"
+            excludeTestsMatching "IT*"
             excludeTestsMatching "EndToEndTest*"
         }
     }
@@ -150,7 +151,7 @@ tasks.register('integrationTest', Test) {
     systemProperties = integrationTestSystemProperties
     useJUnitPlatform {
         filter {
-            includeTestsMatching 'IntegrationTest*'
+            includeTestsMatching 'IT*'
         }
     }
 }
