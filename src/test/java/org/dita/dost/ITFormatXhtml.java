@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
-public class ITFormatXhtml extends AbstractIntegrationTest implements ITContentUplevels {
+public class ITFormatXhtml extends AbstractIntegrationTest {
 
   public ITFormatXhtml builder() {
     return new ITFormatXhtml();
@@ -349,6 +349,28 @@ public class ITFormatXhtml extends AbstractIntegrationTest implements ITContentU
       .put("args.filter", filters)
       .put("clean.temp", "no")
       .errorCount(1)
+      .test();
+  }
+
+  @Test
+  public void uplevels1() throws Throwable {
+    builder()
+      .name("uplevels1")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "1")
+      .put("outer.control", "quiet")
+      .test();
+  }
+
+  @Test
+  public void uplevels3() throws Throwable {
+    builder()
+      .name("uplevels3")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("outer.control", "quiet")
       .test();
   }
 }
