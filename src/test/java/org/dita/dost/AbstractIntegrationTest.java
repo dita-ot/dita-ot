@@ -230,8 +230,8 @@ public abstract class AbstractIntegrationTest {
   protected File run() throws Throwable {
     final File testDir = Paths.get("src", "test", "resources").resolve(name).toFile();
     final File srcDir = new File(testDir, SRC_DIR);
-    final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
-    final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
+    final File outDir = new File(baseTempDir, name + File.separator + "out");
+    final File tempDir = new File(baseTempDir, name + File.separator + "temp");
 
     final Map<String, String> builder = new HashMap<>();
     args.forEach((k, v) -> {
