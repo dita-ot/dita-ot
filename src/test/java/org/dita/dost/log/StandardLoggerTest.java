@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import org.apache.tools.ant.Project;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +27,7 @@ class StandardLoggerTest {
   private StandardLogger logger;
   private ByteArrayOutputStream out;
   private ByteArrayOutputStream err;
+  private static String EOL;
 
   @BeforeEach
   void setUp() {
@@ -95,7 +97,7 @@ class StandardLoggerTest {
   }
 
   private void assertOut(final String exp) {
-    assertEquals(exp + "\n", new String(out.toByteArray(), StandardCharsets.UTF_8));
+    assertEquals(exp + System.lineSeparator(), out.toString(StandardCharsets.UTF_8));
   }
 
   private void assertErr() {
@@ -103,6 +105,6 @@ class StandardLoggerTest {
   }
 
   private void assertErr(final String exp) {
-    assertEquals(exp + "\n", new String(err.toByteArray(), StandardCharsets.UTF_8));
+    assertEquals(exp + System.lineSeparator(), err.toString(StandardCharsets.UTF_8));
   }
 }

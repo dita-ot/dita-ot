@@ -61,7 +61,7 @@ public class DebugAndFilterModuleTest {
     job.setInputFile(inputMap.getAbsoluteFile().toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
     job.setOutputDir(outDir);
-    job.setProperty(INPUT_DIR, inputDir.getAbsolutePath());
+    job.setProperty(INPUT_DIR_URI, inputDir.toURI().toString());
     job.setInputDir(inputDir.getAbsoluteFile().toURI());
     job.write();
 
@@ -133,8 +133,10 @@ public class DebugAndFilterModuleTest {
     tmpDir = new File(tempDir, "temp");
     TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
     final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
-    URI outside = new File("/etc/passwd").toURI();
-    job.add(new Job.FileInfo.Builder().src(outside).uri(outside).build());
+    File outsideFile = new File(System.getProperty("java.io.tmpdir"), "outerfile.dita");
+    outsideFile.createNewFile();
+    URI outsideFileURI = outsideFile.toURI();
+    job.add(new Job.FileInfo.Builder().src(outsideFileURI).uri(outsideFileURI).build());
     job.setInputFile(inputMap.getAbsoluteFile().toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
     job.setOutputDir(outDir);
@@ -157,12 +159,8 @@ public class DebugAndFilterModuleTest {
     module.setXmlUtils(new XMLUtils());
     module.setProcessingPipe(Collections.emptyList());
 
-    try {
-      module.execute(pipelineInput);
-      assertTrue(false);
-    } catch (Exception ex) {
-      assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage());
-    }
+    Exception ex = assertThrows(Exception.class, () -> module.execute(pipelineInput));
+    assertEquals("Cannot write outside of the temporary files folder: " + outsideFileURI, ex.getMessage());
   }
 
   private static class TestHandler implements ContentHandler {

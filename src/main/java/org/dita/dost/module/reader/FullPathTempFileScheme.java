@@ -17,7 +17,7 @@ public class FullPathTempFileScheme implements TempFileNameScheme {
   @Override
   public URI generateTempFileName(final URI src) {
     assert src.isAbsolute();
-    final URI rel = toURI(src.getPath().substring(1));
+    final URI rel = URI.create(src.toString().replaceFirst("file:/.+?/", ""));
     return rel;
   }
 }
