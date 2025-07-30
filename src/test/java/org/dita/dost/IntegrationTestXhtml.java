@@ -362,8 +362,8 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("Multiple Failures (2 failures)")
       .hasMessageContaining("Missing file")
-      .hasMessageContaining("filterlist/exp/xhtml/subdir/delta2.gif")
-      .hasMessageContaining("filterlist/out/xhtml/delta2.gif"); // FIXME is this a bug? (fix the code) or is this intended? (fix the test)
+      .hasMessageContaining(String.valueOf(Paths.get("filterlist", "exp", "xhtml", "subdir", "delta2.gif")))
+      .hasMessageContaining(String.valueOf(Paths.get("filterlist", "out", "xhtml", "delta2.gif"))); // FIXME is this a bug? (fix the code) or is this intended? (fix the test)
   }
 
   @Test
