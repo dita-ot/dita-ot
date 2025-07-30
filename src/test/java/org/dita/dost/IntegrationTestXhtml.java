@@ -8,6 +8,7 @@
 
 package org.dita.dost;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 
@@ -348,14 +349,21 @@ public class IntegrationTestXhtml extends AbstractIntegrationTest {
       .of(Paths.get("filter1.ditaval"), Paths.get("subdir", "filter2.ditaval"), Paths.get("missing.ditaval"))
       .map(path -> testDir.resolve(path).toAbsolutePath().toString())
       .collect(Collectors.joining(File.pathSeparator));
-    builder()
-      .name("filterlist")
-      .transtype(XHTML)
-      .input(Paths.get("simplemap.ditamap"))
-      .put("args.filter", filters)
-      .put("clean.temp", "no")
-      .errorCount(1)
-      .test();
+    assertThatThrownBy(() ->
+        builder()
+          .name("filterlist")
+          .transtype(XHTML)
+          .input(Paths.get("simplemap.ditamap"))
+          .put("args.filter", filters)
+          .put("clean.temp", "no")
+          .errorCount(1)
+          .test()
+      )
+      .isInstanceOf(AssertionError.class)
+      .hasMessageContaining("Multiple Failures (2 failures)")
+      .hasMessageContaining("Missing file")
+      .hasMessageContaining(String.valueOf(Paths.get("filterlist", "exp", "xhtml", "subdir", "delta2.gif")))
+      .hasMessageContaining(String.valueOf(Paths.get("filterlist", "out", "xhtml", "delta2.gif"))); // FIXME is this a bug? (fix the code) or is this intended? (fix the test)
   }
 
   @Test
