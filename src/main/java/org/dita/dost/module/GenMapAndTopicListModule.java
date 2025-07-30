@@ -20,6 +20,7 @@ import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -880,7 +881,11 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
-      hideOuterfilesFromOutput();
+      try {
+        hideOuterfilesFromOutput();
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     addFlagImagesSetToProperties(job, relFlagImagesSet);
@@ -935,9 +940,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
   }
 
-  private void hideOuterfilesFromOutput() {
+  private void hideOuterfilesFromOutput() throws URISyntaxException {
     for (final FileInfo fs : fileinfos.values()) {
-      if (!Paths.get(fs.src).startsWith(Paths.get(rootFile).getParent())) {
+      URI cleanSrc = new URI(fs.src.getScheme(), fs.src.getAuthority(), fs.src.getPath(), null, null);
+      if (!Paths.get(cleanSrc).startsWith(Paths.get(rootFile).getParent())) {
         fs.isResourceOnly = true;
       }
     }
