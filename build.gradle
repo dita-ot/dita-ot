@@ -123,6 +123,7 @@ tasks.named("test") {
     useJUnitPlatform {
         filter {
             includeTestsMatching "*Test"
+            includeTestsMatching "*Test\$*"
             excludeTestsMatching "IT*"
             excludeTestsMatching "EndToEndTest*"
         }

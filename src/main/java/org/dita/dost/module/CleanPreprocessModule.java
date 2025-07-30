@@ -190,12 +190,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private void extractFilesFromMainJob() {
     // collect and relativize result
     fileInfosFromJob =
-      job
-        .getFileInfo()
-        .stream()
-        .filter(fileInfo -> fileInfo.result != null)
-        .map(fi -> FileInfo.builder(fi).result(tempBase.relativize(fi.result)).build())
-        .collect(Collectors.toList());
+      job.getFileInfo().stream().filter(fileInfo -> fileInfo.result != null).collect(Collectors.toList());
     fileInfosFromJob.forEach(fi -> job.remove(fi));
   }
 
@@ -248,10 +243,15 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
    * @return                       a new {@link FileInfo} with updated URIs
    */
   private FileInfo finalizeFileInfo(FileInfo fileInfo) {
-    URI finalUri = fileInfo.result;
-    URI finalResult = tempBase.resolve(fileInfo.result);
+    URI finalUri = tempBase.relativize(fileInfo.result);
+    URI finalResult = fileInfo.result;
 
-    return FileInfo.builder(fileInfo).uri(finalUri).result(finalResult).build();
+    FileInfo.Builder builder = FileInfo.builder(fileInfo).uri(finalUri).result(finalResult);
+
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER && isOuterFile(finalResult)) {
+      builder.isResourceOnly(true);
+    }
+    return builder.build();
   }
 
   /**
@@ -362,6 +362,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       topicFilter.setFileInfo(fileInfo);
       xmlFilterList.add(topicFilter);
     } else if (isMap) {
+      mapFilter.setFileInfo(fileInfo);
       xmlFilterList.add(mapFilter);
     }
 

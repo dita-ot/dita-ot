@@ -52,6 +52,19 @@ public final class JobTest {
   }
 
   @Test
+  public void removePropertyExisting() {
+    job.setProperty("foo", "bar");
+    job.removeProperty("foo");
+    assertNull(job.getProperty("foo"));
+  }
+
+  @Test
+  public void removePropertyNonexistent() {
+    job.removeProperty("foo");
+    assertNull(job.getProperty("foo"));
+  }
+
+  @Test
   public void getFileInfo() throws URISyntaxException {
     final URI relative = new URI("foo/bar.dita");
     final URI absolute = tempDir.toURI().resolve(relative);
@@ -159,6 +172,87 @@ public final class JobTest {
     }
 
     @Test
+    public void getBaseDirUplevels() {
+      job.setInputDir(URI.create("file:/foo/bar/"));
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("map.ditamap"))
+          .isInput(true)
+          .result(create("file:/foo/bar/common/map.ditamap"))
+          .build()
+      );
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("topics/topic.dita"))
+          .result(create("file:/foo/bar/topics/topic.dita"))
+          .build()
+      );
+      job.add(new Job.FileInfo.Builder().uri(create("topics/null.dita")).build());
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("topics/task.dita"))
+          .result(create("file:/foo/bar/topics/task.dita"))
+          .build()
+      );
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("common/topic.dita"))
+          .result(create("file:/foo/bar/common/topic.dita"))
+          .build()
+      );
+
+      assertEquals(create("file:/foo/bar/"), job.getBaseDir());
+    }
+
+    @Test
+    public void getBaseDirNormalFirstTime() {
+      job.setInputDir(URI.create("file:/foo/bar/"));
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("map.ditamap"))
+          .isInput(true)
+          .result(create("file:/foo/bar/map.ditamap"))
+          .build()
+      );
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("topics/topic.dita"))
+          .result(create("file:/foo/bar/topics/topic.dita"))
+          .build()
+      );
+      job.add(new Job.FileInfo.Builder().uri(create("topics/null.dita")).build());
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("topics/task.dita"))
+          .result(create("file:/foo/bar/topics/task.dita"))
+          .build()
+      );
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("common/topic.dita"))
+          .result(create("file:/foo/bar/common/topic.dita"))
+          .build()
+      );
+      job.add(
+        new Job.FileInfo.Builder()
+          .uri(create("common/topic.dita"))
+          .result(create("file:/foo/common/topic.dita"))
+          .isResourceOnly(true)
+          .build()
+      );
+
+      URI exp = create("file:/foo/bar/");
+      assertEquals(exp, job.getBaseDirNormal());
+      assertEquals(exp, create(job.getProperty(Job.FILE_SET_BASE_DIR_NORMAL)));
+    }
+
+    @Test
+    public void getBaseDirNormalSecondTime() {
+      job.setProperty(Job.FILE_SET_BASE_DIR_NORMAL, "someBaseDir");
+      assertEquals(create("someBaseDir"), job.getBaseDirNormal());
+    }
+
+    @Test
     public void getBaseDirExternal() {
       job.setInputDir(URI.create("file:/foo/bar/"));
       job.add(
@@ -199,7 +293,7 @@ public final class JobTest {
     }
 
     @Test
-    public void getBaseDirSuperDir() {
+    public void getBaseDirSupDir() {
       job.setInputDir(URI.create("file:/foo/bar/maps/"));
       job.add(
         new Job.FileInfo.Builder()
@@ -237,7 +331,7 @@ public final class JobTest {
   }
 
   @AfterAll
-  public static void tearDown() throws IOException {
+  public static void tearDownSuite() throws IOException {
     TestUtils.forceDelete(tempDir);
   }
 }

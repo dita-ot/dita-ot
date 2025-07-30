@@ -20,6 +20,7 @@ import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import java.io.*;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -878,6 +879,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
     }
 
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
+      hideOuterfilesFromOutput();
+    }
+
     addFlagImagesSetToProperties(job, relFlagImagesSet);
 
     final Map<URI, URI> filteredCopyTo = filterConflictingCopyTo(copyTo, fileinfos.values());
@@ -927,6 +932,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       );
     } catch (final IOException e) {
       throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
+    }
+  }
+
+  private void hideOuterfilesFromOutput() {
+    for (final FileInfo fs : fileinfos.values()) {
+      if (!Paths.get(fs.src).startsWith(Paths.get(rootFile).getParent())) {
+        fs.isResourceOnly = true;
+      }
     }
   }
 
