@@ -356,7 +356,7 @@ public class ITFormatXhtml extends AbstractIntegrationTest implements ITContentU
       .isInstanceOf(AssertionError.class)
       .hasMessageContaining("Multiple Failures (2 failures)")
       .hasMessageContaining("Missing file")
-      .hasMessageContaining("filterlist/exp/xhtml/subdir/delta2.gif")
-      .hasMessageContaining("filterlist/out/xhtml/delta2.gif"); // FIXME is this a bug? (fix the code) or is this intended? (fix the test)
+      .hasMessageContaining(Paths.get("filterlist", "exp", "xhtml", "subdir", "delta2.gif").toString())
+      .hasMessageContaining(Paths.get("filterlist", "out", "xhtml", "delta2.gif").toString()); // FIXME is this a bug? (fix the code) or is this intended? (fix the test)
   }
 }
