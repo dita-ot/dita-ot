@@ -9,6 +9,7 @@
 package org.dita.dost;
 
 import static org.dita.dost.AbstractIntegrationTest.Transtype.HTML5;
+import static org.dita.dost.AbstractIntegrationTest.Transtype.PREPROCESS2;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,15 +17,19 @@ import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
-public class IntegrationTestHtml5 extends AbstractIntegrationTest {
+public class ITFormatHtml5 extends AbstractIntegrationTest {
 
   public AbstractIntegrationTest builder() {
-    return new IntegrationTestHtml5();
+    return new ITFormatHtml5();
   }
 
   @Override
   Transtype getTranstype(Transtype transtype) {
-    return transtype;
+    return switch (transtype) {
+      case PREPROCESS -> PREPROCESS2;
+      case XHTML -> HTML5;
+      default -> transtype;
+    };
   }
 
   @Test
