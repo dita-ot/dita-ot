@@ -20,6 +20,8 @@ import com.google.common.collect.MultimapBuilder.SetMultimapBuilder;
 import com.google.common.collect.SetMultimap;
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -878,6 +880,14 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       getOrCreateFileInfo(fileinfos, resource).isInputResource = true;
     }
 
+    if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
+      try {
+        hideOuterfilesFromOutput();
+      } catch (URISyntaxException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
     addFlagImagesSetToProperties(job, relFlagImagesSet);
 
     final Map<URI, URI> filteredCopyTo = filterConflictingCopyTo(copyTo, fileinfos.values());
@@ -927,6 +937,15 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       );
     } catch (final IOException e) {
       throw new DITAOTException("Failed to serialize subject scheme files: " + e.getMessage(), e);
+    }
+  }
+
+  private void hideOuterfilesFromOutput() throws URISyntaxException {
+    for (final FileInfo fs : fileinfos.values()) {
+      URI cleanSrc = new URI(fs.src.getScheme(), fs.src.getAuthority(), fs.src.getPath(), null, null);
+      if (!Paths.get(cleanSrc).startsWith(Paths.get(rootFile).getParent())) {
+        fs.isResourceOnly = true;
+      }
     }
   }
 

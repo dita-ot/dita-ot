@@ -505,17 +505,11 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   /**
    * Get path to base directory
    *
-   * @param filename relative input file path from base directory
    * @param traceFilename absolute input file
    * @param inputMap absolute path to start file
    * @return path to base directory, {@code null} if not available
    */
-  public static File getPathtoProject(
-    final File filename,
-    final File traceFilename,
-    final File inputMap,
-    final Job job
-  ) {
+  public static File getPathtoProject(final File traceFilename, final File inputMap, final Job job) {
     if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
       if (isOutFile(traceFilename, inputMap)) {
         return toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile(), job));
@@ -523,7 +517,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         return getRelativePath(traceFilename.getAbsoluteFile(), inputMap.getAbsoluteFile()).getParentFile();
       }
     } else {
-      return FileUtils.getRelativePath(filename);
+      return FileUtils.getRelativePath(traceFilename, toFile(job.getBaseDirNormal()));
     }
   }
 

@@ -11,6 +11,7 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URI;
@@ -95,6 +96,10 @@ public final class Job {
 
   /** Map of serialization attributes to file info boolean fields. */
   private static final Map<String, Field> attrToFieldMap = new HashMap<>();
+
+  /** base directories for the file collection **/
+  static final String FILE_SET_BASE_DIR = "baseDir";
+  static final String FILE_SET_BASE_DIR_NORMAL = "baseDirNormal";
 
   static {
     try {
@@ -405,6 +410,7 @@ public final class Job {
    */
   public void add(final FileInfo fileInfo) {
     files.put(fileInfo.uri, fileInfo);
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
   }
 
   /**
@@ -413,6 +419,7 @@ public final class Job {
    * @return removed file info, {@code null} if not found
    */
   public FileInfo remove(final FileInfo fileInfo) {
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
     return files.remove(fileInfo.uri);
   }
 
@@ -450,6 +457,15 @@ public final class Job {
    */
   public Object setProperty(final String key, final String value) {
     return prop.put(key, value);
+  }
+
+  /**
+   * Remove property value.
+   *
+   * @param key property key
+   */
+  public void removeProperty(final String key) {
+    prop.remove(key);
   }
 
   /**
@@ -1146,5 +1162,95 @@ public final class Job {
     }
     tempFileNameScheme.setBaseDir(getInputDir());
     return tempFileNameScheme;
+  }
+
+  /**
+   * Get common base directory for all files
+   */
+  public URI getBaseDir() {
+    return getFilteredBaseDir();
+  }
+
+  /**
+   * Get common base directory for processing-role="normal" files
+   */
+  public URI getBaseDirNormal() {
+    String baseDirNormal = getProperty(FILE_SET_BASE_DIR_NORMAL);
+    if (baseDirNormal != null) {
+      return URI.create(baseDirNormal);
+    } else {
+      URI baseDirNormalUri = getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+      setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
+      return baseDirNormalUri;
+    }
+  }
+
+  private URI getFilteredBaseDir() {
+    return getFilteredBaseDir(all -> true);
+  }
+
+  /**
+   * Get the common base directory based on a filter.
+   */
+  private URI getFilteredBaseDir(Predicate<FileInfo> filter) {
+    Collection<FileInfo> fileInfoCollection = this.getFileInfo();
+    URI baseDir = getFileInfo(fileInfo -> fileInfo.isInput)
+      .stream()
+      .findFirst()
+      .map(fileInfo -> fileInfo.result)
+      .orElse(getInputDir());
+
+    for (FileInfo fileInfo : fileInfoCollection) {
+      if (fileInfo.result != null && filter.test(fileInfo)) {
+        URI res = fileInfo.result.resolve(".");
+        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+      }
+    }
+
+    return baseDir;
+  }
+
+  /**
+   * Get the common base directory of a pair of files.
+   */
+  @VisibleForTesting
+  URI getCommonBase(final URI left, final URI right) {
+    assert left.isAbsolute();
+    assert right.isAbsolute();
+    if (!left.getScheme().equals(right.getScheme())) {
+      return null;
+    }
+    final URI l = left.resolve(".");
+    final URI r = right.resolve(".");
+    final String lp = l.getPath();
+    final String rp = r.getPath();
+    if (lp.equals(rp)) {
+      return l;
+    }
+    if (lp.startsWith(rp)) {
+      return r;
+    }
+    if (rp.startsWith(lp)) {
+      return l;
+    }
+    final String[] la = left.getPath().split("/");
+    final String[] ra = right.getPath().split("/");
+    int i = 0;
+    final int len = Math.min(la.length, ra.length);
+    for (; i < len; i++) {
+      if (la[i].equals(ra[i])) {
+        //
+      } else {
+        final int common = Math.max(0, i);
+        final List<String> commons = Arrays.asList(la).subList(0, common);
+        if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
+          return null;
+        } else {
+          final String path = String.join("/", commons) + "/";
+          return URLUtils.setPath(left, path);
+        }
+      }
+    }
+    return null;
   }
 }
