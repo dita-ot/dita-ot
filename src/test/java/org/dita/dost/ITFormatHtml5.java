@@ -17,7 +17,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
-public class ITFormatHtml5 extends AbstractIntegrationTest {
+public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentUplevels {
 
   public AbstractIntegrationTest builder() {
     return new ITFormatHtml5();
