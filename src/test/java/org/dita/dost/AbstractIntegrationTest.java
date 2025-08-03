@@ -76,7 +76,7 @@ public abstract class AbstractIntegrationTest {
       this(
         name,
         compareTemp,
-        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
+        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt", "gif", "jpg", "png"),
         exp,
         targets
       );
@@ -464,7 +464,10 @@ public abstract class AbstractIntegrationTest {
   private Collection<String> getFiles(File expDir, File actDir) {
     final FileFilter filter = f ->
       f.isDirectory() ||
-      (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
+      (
+        this.transtype.compareable.contains(FileUtils.getExtension(f.getName().toLowerCase())) &&
+        !ignorable.contains(f.getName())
+      );
     final Set<String> buf = new HashSet<>();
     final File[] exp = expDir.listFiles(filter);
     if (exp != null) {
