@@ -279,17 +279,6 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     return null;
   }
 
-  private void init() {
-    filter.setJob(job);
-    filter.setLogger(logger);
-
-    mapFilter.setJob(job);
-    mapFilter.setLogger(logger);
-
-    topicFilter.setJob(job);
-    topicFilter.setLogger(logger);
-  }
-
   private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
     final List<XMLFilter> res = new ArrayList<>();
 
