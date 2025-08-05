@@ -10,6 +10,8 @@ package org.dita.dost.module;
 
 import static java.util.Collections.emptyMap;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isDitaFormat;
+import static org.dita.dost.util.DitaUtils.isDitaMap;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
@@ -33,6 +35,7 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -256,17 +259,16 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
   private List<XMLFilter> getProcessingPipe(final FileInfo fi, final File srcFile, final File destFile) {
     final List<XMLFilter> res = new ArrayList<>();
-
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA) || fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    if (isDitaFormat(fi) || isDitaMap(fi)) {
       linkFilter.setCurrentFile(srcFile.toURI());
       linkFilter.setDestFile(destFile.toURI());
       res.add(linkFilter);
     }
 
-    if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+    if (isDitaFormat(fi)) {
       topicFilter.setFileInfo(fi);
       res.add(topicFilter);
-    } else if (fi.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+    } else if (isDitaMap(fi)) {
       res.add(mapFilter);
     }
 
