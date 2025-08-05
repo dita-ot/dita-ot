@@ -16,6 +16,7 @@ import static org.dita.dost.util.XMLUtils.toErrorReporter;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.util.*;
@@ -94,15 +95,20 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         .map(c -> {
           try {
             final Class<RewriteRule> cls = (Class<RewriteRule>) Class.forName(c);
-            return cls.newInstance();
-          } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            return cls.getDeclaredConstructor().newInstance();
+          } catch (
+            ClassNotFoundException
+            | InstantiationException
+            | IllegalAccessException
+            | InvocationTargetException
+            | NoSuchMethodException e
+          ) {
             throw new RuntimeException(e);
           }
         })
         .orElse(null);
 
     linkFilter.setLogger(logger);
-
     mapFilter.setLogger(logger);
     topicFilter.setLogger(logger);
   }
@@ -112,56 +118,32 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     init(input);
     final URI base = getBaseDir();
     if (useResultFilename) {
-      // collect and relativize result
-      final Collection<FileInfo> original = job
-        .getFileInfo()
-        .stream()
-        .filter(fi -> fi.result != null)
-        .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
-        .collect(Collectors.toList());
-      original.forEach(fi -> job.remove(fi));
-      // rewrite results
-      final Collection<FileInfo> rewritten = rewrite(original);
-      // move temp files and update links
-      final Job tempJob = new Job(job, emptyMap(), rewritten);
-      linkFilter.setJob(tempJob);
-      mapFilter.setJob(tempJob);
-      topicFilter.setJob(tempJob);
-      for (final FileInfo fi : rewritten) {
-        try {
-          assert !fi.result.isAbsolute();
-          if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
-            logger.debug("Skip format " + fi.format);
-          } else {
-            final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
-            if (job.getStore().exists(srcFile.toURI())) {
-              final File destFile = new File(job.tempDirURI.resolve(fi.result));
-              final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
-              if (!processingPipe.isEmpty()) {
-                logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
-                job.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
-                if (!srcFile.equals(destFile)) {
-                  logger.debug("Deleting " + srcFile.toURI());
-                  FileUtils.deleteQuietly(srcFile);
-                }
-              } else if (!srcFile.equals(destFile)) {
-                logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
-                FileUtils.moveFile(srcFile, destFile);
-              }
-            }
-          }
-          final FileInfo res = FileInfo.builder(fi).uri(fi.result).result(base.resolve(fi.result)).build();
-          job.add(res);
-        } catch (final IOException e) {
-          logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
-        }
-      }
+      final Collection<FileInfo> original = extractFileInfos(base);
+      final Collection<FileInfo> rewritten = rewriteFileInfos(original);
+      moveFiles(rewritten, base);
     }
 
     job.setProperty("uplevels", getUplevels(base));
     job.setInputDir(base);
 
-    // start map
+    writeInputMapList();
+
+    try {
+      job.write();
+    } catch (IOException e) {
+      throw new DITAOTException();
+    }
+
+    return null;
+  }
+
+  /**
+   * Write legacy path file for input map.
+   *
+   * @deprecated path files are a legacy feature retained for backwards compatibility.
+   */
+  @Deprecated
+  private void writeInputMapList() {
     final FileInfo start = job.getFileInfo(f -> f.isInput).iterator().next();
     if (start != null) {
       job.setInputMap(start.uri);
@@ -173,17 +155,68 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         throw new RuntimeException(e);
       }
     }
-
-    try {
-      job.write();
-    } catch (IOException e) {
-      throw new DITAOTException();
-    }
-
-    return null;
   }
 
-  private Collection<FileInfo> rewrite(final Collection<FileInfo> fis) throws DITAOTException {
+  /**
+   * Move temp files and update links.
+   */
+  private void moveFiles(Collection<FileInfo> rewritten, URI base) throws DITAOTException {
+    final Job tempJob = new Job(job, emptyMap(), rewritten);
+    linkFilter.setJob(tempJob);
+    mapFilter.setJob(tempJob);
+    topicFilter.setJob(tempJob);
+
+    for (final FileInfo fi : rewritten) {
+      try {
+        assert !fi.result.isAbsolute();
+        if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
+          logger.debug("Skip format " + fi.format);
+        } else {
+          final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
+          if (job.getStore().exists(srcFile.toURI())) {
+            final File destFile = new File(job.tempDirURI.resolve(fi.result));
+            final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
+            if (!processingPipe.isEmpty()) {
+              logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
+              job.getStore().transform(srcFile.toURI(), destFile.toURI(), processingPipe);
+              if (!srcFile.equals(destFile)) {
+                logger.debug("Deleting " + srcFile.toURI());
+                FileUtils.deleteQuietly(srcFile);
+              }
+            } else if (!srcFile.equals(destFile)) {
+              logger.info("Moving " + srcFile.toURI() + " to " + destFile.toURI());
+              FileUtils.moveFile(srcFile, destFile);
+            }
+          }
+        }
+        final FileInfo res = FileInfo.builder(fi).uri(fi.result).result(base.resolve(fi.result)).build();
+        job.add(res);
+      } catch (final IOException e) {
+        logger.error("Failed to clean " + job.tempDirURI.resolve(fi.uri) + ": " + e.getMessage(), e);
+      }
+    }
+  }
+
+  /**
+   * Collect FileInfos and remove from job.
+   * @param base comman base directory
+   */
+  private Collection<FileInfo> extractFileInfos(URI base) {
+    final Collection<FileInfo> original = job
+      .getFileInfo()
+      .stream()
+      .filter(fi -> fi.result != null)
+      .map(fi -> FileInfo.builder(fi).result(base.relativize(fi.result)).build())
+      .collect(Collectors.toList());
+    original.forEach(fi -> job.remove(fi));
+    return original;
+  }
+
+  /**
+   * Rewrites file path metadata. Supports both XSLT and Java-based rewrite rules.
+   * @throws DITAOTException  if an error occurs during the rewriting process
+   */
+  private Collection<FileInfo> rewriteFileInfos(final Collection<FileInfo> fis) throws DITAOTException {
     if (rewriteClass != null) {
       return rewriteClass.rewrite(fis);
     }
