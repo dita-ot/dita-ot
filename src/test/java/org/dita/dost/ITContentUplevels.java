@@ -1,6 +1,5 @@
 package org.dita.dost;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dita.dost.AbstractIntegrationTest.Transtype.XHTML;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,21 +18,17 @@ public interface ITContentUplevels {
   AbstractIntegrationTest builder();
 
   @Test
-  default void uplevels1() {
+  default void uplevels1() throws Throwable {
     var outerFiles = getListOfPotentialOuterFilesInTmpAndOut();
     cleanUpAnyLeftovers(outerFiles);
 
-    assertThatThrownBy(() ->
-        builder()
-          .name("uplevels1")
-          .transtype(XHTML)
-          .input(Paths.get("maps/above.ditamap"))
-          .put("generate.copy.outer", "1")
-          .put("outer.control", "quiet")
-          .test()
-      )
-      .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("Missing file"); // caused by bug, FIXME
+    builder()
+      .name("uplevels1")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "1")
+      .put("outer.control", "quiet")
+      .test();
 
     assertNoOuterFilesAreOutsideTmpOrOut(outerFiles);
   }
@@ -67,18 +62,14 @@ public interface ITContentUplevels {
   }
 
   @Test
-  default void uplevels1_resource_only() {
-    assertThatThrownBy(() ->
-        builder()
-          .name("uplevels1_resource_only")
-          .transtype(XHTML)
-          .input(Paths.get("maps/above.ditamap"))
-          .put("generate.copy.outer", "1")
-          .put("outer.control", "quiet")
-          .test()
-      )
-      .extracting(Throwable::getCause)
-      .isInstanceOf(AssertionError.class); // caused by bug, FIXME
+  default void uplevels1_resource_only() throws Throwable {
+    builder()
+      .name("uplevels1_resource_only")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "1")
+      .put("outer.control", "quiet")
+      .test();
   }
 
   @Test
@@ -93,17 +84,13 @@ public interface ITContentUplevels {
   }
 
   @Test
-  default void uplevels3_resource_only() {
-    assertThatThrownBy(() ->
-        builder()
-          .name("uplevels3_resource_only")
-          .transtype(XHTML)
-          .input(Paths.get("maps/above.ditamap"))
-          .put("generate.copy.outer", "3")
-          .put("outer.control", "quiet")
-          .test()
-      )
-      .extracting(Throwable::getCause)
-      .isInstanceOf(AssertionError.class); // caused by bug, FIXME
+  default void uplevels3_resource_only() throws Throwable {
+    builder()
+      .name("uplevels3_resource_only")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("outer.control", "quiet")
+      .test();
   }
 }

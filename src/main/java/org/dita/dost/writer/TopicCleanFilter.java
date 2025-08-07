@@ -24,8 +24,8 @@ public class TopicCleanFilter extends AbstractXMLFilter {
   private static final String SINGLE_FILE_STEP = "";
 
   private Job.FileInfo fi;
-  private String pathToRootDir;
-  private String pathToMapDir;
+  String pathToRootDir;
+  String pathToMapDir;
 
   public void setFileInfo(Job.FileInfo fi) {
     this.fi = fi;
@@ -36,38 +36,38 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     calculatePathToProjectDirs();
   }
 
-  void calculatePathToProjectDirs() {
-    final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
-    pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
-    pathToMapDir =
-      job
-        .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
-        .stream()
-        .findAny()
-        .map(startFile -> {
-          final String relativePath = getRelativePath(fi.uri, startFile.uri).resolve(".").getPath();
-          //          return relativePath.getPath().split("/").length;
-          return relativePath;
-        })
-        .orElse(null);
-  }
-
   @Override
   public void processingInstruction(String target, String data) throws SAXException {
     final String res = getProcessingInstruction(target, data);
     getContentHandler().processingInstruction(target, res);
   }
 
+  void calculatePathToProjectDirs() {
+    pathToMapDir =
+      job
+        .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
+        .stream()
+        .findAny()
+        .map(startFile -> getRelativePath(fi.result, startFile.result).resolve(".").getPath())
+        .orElse("");
+    if (job.getGeneratecopyouter() == Job.Generate.OLDSOLUTION) {
+      pathToRootDir = getRelativePath(fi.result, job.getResultBaseDirNormal().resolve("dummy")).resolve(".").getPath();
+      pathToRootDir = pathToRootDir.isEmpty() ? SINGLE_URI_STEP : pathToRootDir;
+    } else {
+      pathToRootDir = (pathToMapDir == null || pathToMapDir.isEmpty()) ? SINGLE_URI_STEP : pathToMapDir;
+    }
+  }
+
   String getProcessingInstruction(String target, String data) {
-    final String res =
-      switch (target) {
-        case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)
-          ? ""
-          : pathToRootDir.replace('/', File.separatorChar);
-        case "path2project-uri" -> pathToRootDir;
-        case "path2rootmap-uri" -> pathToMapDir != null ? pathToMapDir : data;
-        default -> data;
-      };
-    return res;
+    return switch (target) {
+      case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)
+        ? SINGLE_FILE_STEP
+        : pathToRootDir.replace('/', File.separatorChar);
+      case "path2project-uri" -> pathToRootDir;
+      case "path2rootmap-uri" -> pathToMapDir != null
+        ? (pathToMapDir.isEmpty() ? SINGLE_URI_STEP : pathToMapDir)
+        : data;
+      default -> data;
+    };
   }
 }

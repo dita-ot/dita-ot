@@ -7,10 +7,11 @@
  */
 package org.dita.dost.ant.types;
 
-import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.URLUtils.toURI;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.Project;
@@ -35,7 +36,8 @@ public class JobMapper implements FileNameMapper {
 
   private Type type = Type.RESULT;
   private Job job;
-  private String extension;
+  private String to;
+  private String from;
 
   public void setProject(Project project) {
     job = ExtensibleAntInvoker.getJob(project);
@@ -43,17 +45,20 @@ public class JobMapper implements FileNameMapper {
 
   @Override
   public void setFrom(String from) {
-    // NOOP
+    this.from = from;
+  }
+
+  public String getFrom() {
+    return this.from;
   }
 
   @Override
-  public void setTo(String extension) {
-    // FIXME this should use an extra attribute `extension`, but Ant doesn't support it
-    this.extension = extension.charAt(0) == '.' ? extension : ("." + extension);
+  public void setTo(String to) {
+    this.to = to.contains(".") ? to : ("." + to);
   }
 
-  public void setExtension(String extension) {
-    this.extension = extension.charAt(0) == '.' ? extension : ("." + extension);
+  public String getTo() {
+    return this.to;
   }
 
   public void setType(TypeAttribute attr) {
@@ -62,25 +67,40 @@ public class JobMapper implements FileNameMapper {
 
   @Override
   public String[] mapFileName(String sourceFileName) {
-    final URI uri = toURI(sourceFileName);
-    Job.FileInfo fi = job.getFileInfo(uri);
-    if (fi == null) {
-      fi = job.getFileInfo(job.getInputDir().resolve(uri));
+    final String filePath = getFilePath(sourceFileName);
+
+    String result;
+    if (to == null) {
+      result = filePath;
+    } else if (from == null) {
+      result = FilenameUtils.removeExtension(filePath) + to;
+    } else {
+      result = filePath.replace(from, to);
     }
-    final String res =
+    return new String[] { result };
+  }
+
+  private String getFilePath(String sourceFileName) {
+    final URI uri = toURI(sourceFileName);
+    Job.FileInfo fileInfo = job.getFileInfo(uri);
+    if (fileInfo == null) {
+      fileInfo = job.getFileInfo(job.getInputDir().resolve(uri));
+    }
+
+    final String filePath =
       switch (type) {
-        case TEMP -> fi.file.getPath();
-        case RESULT -> {
-          if (fi.result == null) {
-            yield sourceFileName;
-          } else {
-            final URI base = job.getInputDir();
-            final URI rel = base.relativize(fi.result);
-            yield toFile(rel).getPath();
-          }
-        }
+        case TEMP -> fileInfo.file.getPath();
+        case RESULT -> fileInfo.result == null
+          ? sourceFileName
+          : getBase().relativize(Paths.get(fileInfo.result)).toString();
       };
-    return new String[] { extension != null ? (FilenameUtils.removeExtension(res) + extension) : res };
+    return filePath;
+  }
+
+  private Path getBase() {
+    return (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER)
+      ? Paths.get(job.getInputDir().resolve(job.getInputMap())).getParent()
+      : Paths.get(job.getResultBaseDirNormal());
   }
 
   public static class TypeAttribute extends EnumeratedAttribute {

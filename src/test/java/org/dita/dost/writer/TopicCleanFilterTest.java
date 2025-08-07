@@ -9,18 +9,27 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
+import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
+import static org.dita.dost.util.Job.Generate.OLDSOLUTION;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.dita.dost.TestUtils;
 import org.dita.dost.store.CacheStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -29,95 +38,151 @@ import org.xml.sax.helpers.DefaultHandler;
 
 class TopicCleanFilterTest {
 
-  private final TopicCleanFilter filter;
-  private final Job job;
+  private static TopicCleanFilter filter;
 
-  TopicCleanFilterTest() throws IOException {
+  @BeforeAll
+  public static void setUpSuite() {
     filter = new TopicCleanFilter();
-    final File temp = new File("").getAbsoluteFile();
-    job = new Job(temp, new CacheStore(temp, new XMLUtils()));
-  }
-
-  @AfterEach
-  void cleanUp() {
-    job.getFileInfo().forEach(job::remove);
   }
 
   public static Stream<Arguments> processingInstructionInputs() {
     return Stream.of(
-      Arguments.of("path2project", "topic.dita", "root.ditamap", ""),
-      Arguments.of("path2project", "dir/topic.dita", "root.ditamap", ".." + File.separator),
-      Arguments.of("path2project", "dir/sub/topic.dita", "root.ditamap", ".." + File.separator + ".." + File.separator),
-      Arguments.of("path2project-uri", "topic.dita", "root.ditamap", "./"),
-      Arguments.of("path2project-uri", "dir/topic.dita", "root.ditamap", "../"),
-      Arguments.of("path2project-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
-      Arguments.of("path2rootmap-uri", "topic.dita", "root.ditamap", ""),
-      Arguments.of("path2rootmap-uri", "dir/topic.dita", "root.ditamap", "../"),
-      Arguments.of("path2rootmap-uri", "dir/sub/topic.dita", "root.ditamap", "../../"),
-      Arguments.of("path2rootmap-uri", "topic.dita", "maps/root.ditamap", "maps/"),
-      Arguments.of("path2rootmap-uri", "dir/topic.dita", "maps/root.ditamap", "../maps/"),
-      Arguments.of("path2rootmap-uri", "dir/sub/topic.dita", "maps/root.ditamap", "../../maps/")
+      Arguments.of("path2project", "./", "", ""),
+      Arguments.of("path2project", "../", "", ".." + File.separator),
+      Arguments.of("path2project", "./", "../", ""),
+      Arguments.of("path2project", "../", "../", ".." + File.separator),
+      Arguments.of("path2project", "../", null, ".." + File.separator),
+      Arguments.of("path2project-uri", "./", "", "./"),
+      Arguments.of("path2project-uri", "../", "", "../"),
+      Arguments.of("path2project-uri", "./", "../", "./"),
+      Arguments.of("path2project-uri", "../", "../", "../"),
+      Arguments.of("path2project-uri", "../", null, "../"),
+      Arguments.of("path2rootmap-uri", "./", "", "./"),
+      Arguments.of("path2rootmap-uri", "../", "", "./"),
+      Arguments.of("path2rootmap-uri", "./", "../", "../"),
+      Arguments.of("path2rootmap-uri", "../", "../", "../"),
+      Arguments.of("path2rootmap-uri", "../", null, "data"),
+      Arguments.of("other target", "passes", "through", "data")
     );
   }
 
-  @ParameterizedTest(name = "name={0}, src={1}, input={2}, exp={3}")
+  @ParameterizedTest(name = "{0}, src={1}, input={2}")
   @MethodSource("processingInstructionInputs")
-  void processingInstruction(String name, String src, String input, String exp) throws SAXException {
-    job.add(
-      Job.FileInfo
+  void processingInstruction(String target, String pathToRootDir, String pathToMapDir, String exp) throws SAXException {
+    filter.setContentHandler(
+      new DefaultHandler() {
+        @Override
+        public void processingInstruction(String expTarget, String data) {
+          assertEquals(target, expTarget);
+          assertEquals(
+            Objects.requireNonNullElse(exp, ""),
+            data,
+            target + " \"" + pathToMapDir + "\" \"" + pathToRootDir + "\""
+          );
+        }
+      }
+    );
+
+    filter.pathToMapDir = pathToMapDir;
+    filter.pathToRootDir = pathToRootDir;
+    filter.processingInstruction(target, "data");
+  }
+
+  @Nested
+  class pathToProjectDir {
+
+    private static File tempDir;
+    private static Job job;
+
+    @BeforeAll
+    public static void setUpPathToProjectDir() throws IOException {
+      tempDir = TestUtils.createTempDir(TopicCleanFilterTest.class);
+      setUpTestFiles();
+      job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
+      filter.setJob(job);
+    }
+
+    private static void setUpTestFiles() throws IOException {
+      String[] testedFilePaths = {
+        "topic.dita",
+        "dir/topic.dita",
+        "dir/sub/topic.dita",
+        "root/dir/sub/topic.dita",
+        "root/dir/topic.dita",
+        "root/topic.dita",
+        "root.ditamap",
+        "maps/root.ditamap",
+        "root/root.ditamap",
+      };
+      for (String filePath : testedFilePaths) {
+        Path path = Paths.get(tempDir.getPath(), filePath);
+        Files.createDirectories(path.getParent());
+        Files.createFile(path);
+      }
+    }
+
+    @AfterEach
+    void cleanUp() {
+      job.getFileInfo().forEach(job::remove);
+    }
+
+    @AfterAll
+    static void cleanUpSuite() throws IOException {
+      TestUtils.forceDelete(tempDir);
+    }
+
+    public static Stream<Arguments> projectDirInputs() {
+      return Stream.of(
+        Arguments.of(NOT_GENERATEOUTTER, "topic.dita", "root.ditamap", "./", ""),
+        Arguments.of(NOT_GENERATEOUTTER, "dir/topic.dita", "root.ditamap", "../", "../"),
+        Arguments.of(NOT_GENERATEOUTTER, "dir/sub/topic.dita", "root.ditamap", "../../", "../../"),
+        Arguments.of(NOT_GENERATEOUTTER, "dir/sub/topic.dita", "maps/root.ditamap", "../../maps/", "../../maps/"),
+        Arguments.of(NOT_GENERATEOUTTER, "root/dir/sub/topic.dita", "root/ditamap", "../../", "../../"),
+        Arguments.of(NOT_GENERATEOUTTER, "root/dir/topic.dita", "root/ditamap", "../", "../"),
+        Arguments.of(OLDSOLUTION, "topic.dita", "root.ditamap", "./", ""),
+        Arguments.of(OLDSOLUTION, "dir/topic.dita", "root.ditamap", "../", "../"),
+        Arguments.of(OLDSOLUTION, "dir/sub/topic.dita", "root.ditamap", "../../", "../../"),
+        Arguments.of(OLDSOLUTION, "dir/sub/topic.dita", "maps/root.ditamap", "../../", "../../maps/"),
+        Arguments.of(OLDSOLUTION, "root/topic.dita", "root/ditamap", "./", ""),
+        Arguments.of(OLDSOLUTION, "root/dir/sub/topic.dita", "root/ditamap", "../../", "../../"),
+        Arguments.of(OLDSOLUTION, "root/dir/topic.dita", "root/ditamap", "../", "../")
+      );
+    }
+
+    @ParameterizedTest(name = "{0} input={1} src={2}")
+    @MethodSource("projectDirInputs")
+    void calculatePathToProjectDirs(
+      Job.Generate generate,
+      String src,
+      String input,
+      String expPathToRootDir,
+      String expPathToMapDir
+    ) throws SAXException {
+      job.setGeneratecopyouter(generate);
+      Job.FileInfo mapFileInfo = Job.FileInfo
         .builder()
-        .src(URI.create("file:///Volume/src/").resolve(input))
+        .src(URI.create("src:///Volume/src/").resolve(input))
         .format(ATTR_FORMAT_VALUE_DITAMAP)
         .isInput(true)
         .uri(URI.create(input))
-        .result(URI.create(input))
-        .build()
-    );
-    filter.setJob(job);
-    filter.setFileInfo(
-      Job.FileInfo
+        .result(tempDir.toURI().resolve(input))
+        .build();
+      Job.FileInfo srcFileInfo = Job.FileInfo
         .builder()
-        .src(URI.create("file:///Volume/src/").resolve(src))
+        .src(URI.create("src:///Volume/src/").resolve(src))
         .uri(URI.create(src))
-        .result(URI.create(src))
-        .build()
-    );
-    filter.setContentHandler(
-      new DefaultHandler() {
-        @Override
-        public void processingInstruction(String target, String data) {
-          assertEquals(name, target);
-          assertEquals(Objects.requireNonNullElse(exp, ""), data);
-        }
-      }
-    );
+        .result(tempDir.toURI().resolve(src))
+        .build();
+      job.add(mapFileInfo);
+      job.add(srcFileInfo);
+      filter.setFileInfo(srcFileInfo);
 
-    filter.startDocument();
-    filter.processingInstruction(name, "target");
-  }
+      filter.startDocument();
 
-  @Test
-  void processingInstruction_other() throws SAXException {
-    filter.setJob(job);
-    filter.setFileInfo(
-      Job.FileInfo
-        .builder()
-        .src(URI.create("file:///Volume/src/topic.dita"))
-        .uri(URI.create("topic.dita"))
-        .result(URI.create("topic.dita"))
-        .build()
-    );
-    filter.setContentHandler(
-      new DefaultHandler() {
-        @Override
-        public void processingInstruction(String target, String data) {
-          assertEquals("target", target);
-          assertEquals("data", data);
-        }
-      }
-    );
-
-    filter.startDocument();
-    filter.processingInstruction("target", "data");
+      assertAll(
+        () -> assertEquals(expPathToRootDir, filter.pathToRootDir, "pathToRootDir"),
+        () -> assertEquals(expPathToMapDir, filter.pathToMapDir, "pathToMapDir")
+      );
+    }
   }
 }
