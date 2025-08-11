@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreprocessBase, ITContentUplevels {
+public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreprocessBase {
 
   public ITPreprocess2 builder() {
     return new ITPreprocess2();
