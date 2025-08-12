@@ -44,7 +44,7 @@ public class MergeTopicParserTest {
   private MergeTopicParser parser;
 
   @BeforeAll
-  public static void setupClass() {
+  public static void setUpAll() {
     final TransformerFactory tf = TransformerFactory.newInstance();
     if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
       throw new RuntimeException("SAX transformation factory not supported");

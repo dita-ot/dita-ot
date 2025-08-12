@@ -26,7 +26,7 @@ public class FileUtilsTest {
   private static File tempDir;
 
   @BeforeAll
-  public static void setUp() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(FileUtilsTest.class);
   }
 

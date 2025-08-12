@@ -36,7 +36,7 @@ public class JobSourceSetTest {
   private JobSourceSet jobSourceSet;
 
   @BeforeAll
-  public static void setUpClass() throws Exception {
+  public static void setUpAll() throws Exception {
     tempDir = TestUtils.createTempDir(JobSourceSetTest.class);
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     for (String ext : Arrays.asList("dita", "ditamap", "jpg", "html")) {

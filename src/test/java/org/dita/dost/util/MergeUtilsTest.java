@@ -31,7 +31,7 @@ public class MergeUtilsTest {
   public static MergeUtils mergeUtils;
 
   @BeforeAll
-  public static void setUp() throws IOException {
+  public static void setUpAll() throws IOException {
     mergeUtils = new MergeUtils();
     mergeUtils.setJob(new Job(srcDir, new StreamStore(srcDir, new XMLUtils())));
   }

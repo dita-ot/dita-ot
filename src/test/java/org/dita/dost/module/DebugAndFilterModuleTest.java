@@ -42,7 +42,7 @@ public class DebugAndFilterModuleTest {
   private File inputDir;
 
   @BeforeAll
-  public static void setUpClass() {
+  public static void setUpAll() {
     CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
   }
 
