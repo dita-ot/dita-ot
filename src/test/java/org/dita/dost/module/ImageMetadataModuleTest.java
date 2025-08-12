@@ -40,7 +40,7 @@ public class ImageMetadataModuleTest {
   private static File tempDir;
 
   @BeforeAll
-  public static void setup() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(ImageMetadataModuleTest.class);
   }
 

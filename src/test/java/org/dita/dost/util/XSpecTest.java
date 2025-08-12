@@ -48,7 +48,7 @@ public class XSpecTest {
   }
 
   @BeforeAll
-  public static void setUpClass() throws TransformerException {
+  public static void setUpAll() throws TransformerException {
     var transformerFactory = TransformerFactory.newInstance();
     final File ditaDir = new File(
       Optional.ofNullable(System.getProperty("dita.dir")).orElse("src" + File.separator + "main")

@@ -201,7 +201,7 @@ public abstract class AbstractIntegrationTest {
   }
 
   @BeforeAll
-  public static void setUpBeforeClass() throws Exception {
+  public static void setUpAll() throws Exception {
     final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     db = dbf.newDocumentBuilder();
