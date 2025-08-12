@@ -41,7 +41,7 @@ class TopicCleanFilterTest {
   private static TopicCleanFilter filter;
 
   @BeforeAll
-  public static void setUpSuite() {
+  public static void setUpAll() {
     filter = new TopicCleanFilter();
   }
 

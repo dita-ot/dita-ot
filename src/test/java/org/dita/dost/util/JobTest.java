@@ -29,7 +29,7 @@ public final class JobTest {
   private static Job job;
 
   @BeforeAll
-  public static void setUpSuite() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(JobTest.class);
     TestUtils.copy(srcDir, tempDir);
   }

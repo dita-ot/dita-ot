@@ -40,7 +40,7 @@ public class JobMapperTest {
   private FileNameMapper fileNameMapper;
 
   @BeforeAll
-  public static void setUpClass() throws Exception {
+  public static void setUpAll() throws Exception {
     tempDir = TestUtils.createTempDir(JobMapperTest.class);
     project = new Project();
     project.setBasedir(tempDir.getAbsolutePath());
