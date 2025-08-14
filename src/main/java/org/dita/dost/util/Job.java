@@ -1170,14 +1170,14 @@ public final class Job {
   }
 
   /**
-   * Get common base directory for all files
+   * Get common result base directory for all files.
    */
   public URI getResultBaseDir() {
     return getFilteredBaseDir(all -> true);
   }
 
   /**
-   * Get common base directory for processing-role="normal" files
+   * Get common result base directory for processing-role="normal" files.
    */
   public URI getResultBaseDirNormal() {
     String baseDirNormal = getProperty(FILE_SET_BASE_DIR_NORMAL);
@@ -1191,7 +1191,7 @@ public final class Job {
   }
 
   /**
-   * Get the common base directory based on a filter.
+   * Get common result base directory based on a filter.
    */
   private URI getFilteredBaseDir(Predicate<FileInfo> filter) {
     final Collection<FileInfo> fis = getFileInfo();
