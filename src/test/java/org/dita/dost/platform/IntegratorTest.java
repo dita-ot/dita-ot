@@ -97,7 +97,7 @@ public class IntegratorTest {
         Constants.GEN_CONF_PROPERTIES
       )
     );
-    expProperties.setProperty("plugin.org.dita.base.dir", new File("plugins/org.dita.base").getPath());
+    expProperties.setProperty("plugin.org.dita.base.dir", "plugins/org.dita.base");
     expProperties.setProperty("plugin.base.dir", "plugins/base");
     expProperties.setProperty("plugin.dummy.dir", "plugins/dummy");
     final Properties actProperties = getProperties(

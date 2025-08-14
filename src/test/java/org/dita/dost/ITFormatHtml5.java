@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentUplevels {
 
@@ -132,6 +134,25 @@ public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentU
       .put("validate", "no")
       .put("dita.input.valfile", new File(srcDir, "all.ditaval").getAbsolutePath())
       .warnCount(1)
+      .test();
+  }
+
+  @ParameterizedTest(name = "{0}")
+  @CsvSource(
+    {
+      "html5_uplevels3_nav_toc_full, maps/above.ditamap, full",
+      "html5_nav_toc_full, base.ditamap, full",
+      "html5_uplevels3_nav_toc_partial, maps/above.ditamap, partial",
+      "html5_nav_toc_partial, base.ditamap, partial",
+    }
+  )
+  public void html5_nav_toc(String name, String input, String navToc) throws Throwable {
+    builder()
+      .name(name)
+      .transtype(HTML5)
+      .input(Paths.get(input))
+      .put("generate.copy.outer", "3")
+      .put("nav-toc", navToc)
       .test();
   }
 }
