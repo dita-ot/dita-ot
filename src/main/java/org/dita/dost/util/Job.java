@@ -1173,7 +1173,7 @@ public final class Job {
    * Get common base directory for all files
    */
   public URI getResultBaseDir() {
-    return getFilteredBaseDir();
+    return getFilteredBaseDir(all -> true);
   }
 
   /**
@@ -1184,30 +1184,21 @@ public final class Job {
     if (baseDirNormal != null) {
       return URI.create(baseDirNormal);
     } else {
-      URI baseDirNormalUri = getFilteredBaseDir(fileInfo -> !fileInfo.isResourceOnly);
+      URI baseDirNormalUri = getFilteredBaseDir(fi -> !fi.isResourceOnly);
       setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
       return baseDirNormalUri;
     }
-  }
-
-  private URI getFilteredBaseDir() {
-    return getFilteredBaseDir(all -> true);
   }
 
   /**
    * Get the common base directory based on a filter.
    */
   private URI getFilteredBaseDir(Predicate<FileInfo> filter) {
-    Collection<FileInfo> fileInfoCollection = this.getFileInfo();
-    URI baseDir = getFileInfo(fileInfo -> fileInfo.isInput)
-      .stream()
-      .findFirst()
-      .map(fileInfo -> fileInfo.result)
-      .orElse(getInputDir());
-
-    for (FileInfo fileInfo : fileInfoCollection) {
-      if (fileInfo.result != null && filter.test(fileInfo)) {
-        URI res = fileInfo.result.resolve(".");
+    final Collection<FileInfo> fis = getFileInfo();
+    URI baseDir = getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
+    for (final FileInfo fi : fis) {
+      if (fi.result != null && filter.test(fi)) {
+        final URI res = fi.result.resolve(".");
         baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
       }
     }
