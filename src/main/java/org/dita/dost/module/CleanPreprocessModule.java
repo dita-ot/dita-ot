@@ -172,7 +172,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
 
     for (final FileInfo fi : rewritten) {
       try {
-        if ("coderef".equals(fi.format) || "image".equals(fi.format)) {
+        if (fi.format != null && (fi.format.equals("coderef") || fi.format.equals("image"))) {
           logger.debug("Skip format " + fi.format);
         } else {
           final File srcFile = new File(job.tempDirURI.resolve(fi.uri));

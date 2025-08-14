@@ -95,14 +95,14 @@ class TopicCleanFilterTest {
     private static Job job;
 
     @BeforeAll
-    public static void setUpPathToProjectDir() throws IOException {
+    public static void setUpPathToProjectDirAll() throws IOException {
       tempDir = TestUtils.createTempDir(TopicCleanFilterTest.class);
-      setUpTestFiles();
+      createTestFiles();
       job = new Job(tempDir, new CacheStore(tempDir, new XMLUtils()));
       filter.setJob(job);
     }
 
-    private static void setUpTestFiles() throws IOException {
+    private static void createTestFiles() throws IOException {
       String[] testedFilePaths = {
         "topic.dita",
         "dir/topic.dita",
@@ -122,12 +122,12 @@ class TopicCleanFilterTest {
     }
 
     @AfterEach
-    void cleanUp() {
+    void tearDownPathToProjectDir() {
       job.getFileInfo().forEach(job::remove);
     }
 
     @AfterAll
-    static void cleanUpSuite() throws IOException {
+    static void tearDownPathToProjectDirAll() throws IOException {
       TestUtils.forceDelete(tempDir);
     }
 
