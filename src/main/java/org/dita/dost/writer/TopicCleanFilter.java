@@ -24,8 +24,8 @@ public class TopicCleanFilter extends AbstractXMLFilter {
   private static final String SINGLE_FILE_STEP = "";
 
   private Job.FileInfo fi;
-  String pathToRootDir;
-  String pathToMapDir;
+  private String pathToRootDir;
+  private String pathToMapDir;
 
   public void setFileInfo(Job.FileInfo fi) {
     this.fi = fi;
