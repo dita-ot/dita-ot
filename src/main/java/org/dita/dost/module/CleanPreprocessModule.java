@@ -177,7 +177,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
         } else {
           final File srcFile = new File(job.tempDirURI.resolve(fi.uri));
           if (job.getStore().exists(srcFile.toURI())) {
-            final File destFile = new File(tempJob.tempDirURI.resolve(base.relativize(fi.result)));
+            final File destFile = new File(job.tempDirURI.resolve(base.relativize(fi.result)));
             final List<XMLFilter> processingPipe = getProcessingPipe(fi, srcFile, destFile);
             if (!processingPipe.isEmpty()) {
               logger.info("Processing " + srcFile.toURI() + " to " + destFile.toURI());
