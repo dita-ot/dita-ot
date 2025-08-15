@@ -36,12 +36,6 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     calculatePathToProjectDirs();
   }
 
-  @Override
-  public void processingInstruction(String target, String data) throws SAXException {
-    final String res = getProcessingInstruction(target, data);
-    getContentHandler().processingInstruction(target, res);
-  }
-
   void calculatePathToProjectDirs() {
     pathToMapDir =
       job
@@ -56,6 +50,12 @@ public class TopicCleanFilter extends AbstractXMLFilter {
     } else {
       pathToRootDir = (pathToMapDir == null || pathToMapDir.isEmpty()) ? SINGLE_URI_STEP : pathToMapDir;
     }
+  }
+
+  @Override
+  public void processingInstruction(String target, String data) throws SAXException {
+    final String res = getProcessingInstruction(target, data);
+    getContentHandler().processingInstruction(target, res);
   }
 
   String getProcessingInstruction(String target, String data) {
