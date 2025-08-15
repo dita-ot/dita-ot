@@ -54,7 +54,7 @@ public class MainTest {
   @ParameterizedTest
   @MethodSource("data")
   public void absoluteArgument(String suffix) {
-    assertEquals(Paths.get("/baz/qux"), getOutputDir(null, "/baz/qux", suffix));
+    assertEquals(Paths.get("/baz/qux").toAbsolutePath(), getOutputDir(null, "/baz/qux", suffix));
   }
 
   @ParameterizedTest
@@ -78,7 +78,7 @@ public class MainTest {
   @ParameterizedTest
   @MethodSource("data")
   public void absoluteArgument_relativeProject(String suffix) {
-    assertEquals(Paths.get("/baz/qux/foo/bar"), getOutputDir("foo/bar", "/baz/qux", suffix));
+    assertEquals(Paths.get("/baz/qux/foo/bar").toAbsolutePath(), getOutputDir("foo/bar", "/baz/qux", suffix));
   }
 
   @ParameterizedTest

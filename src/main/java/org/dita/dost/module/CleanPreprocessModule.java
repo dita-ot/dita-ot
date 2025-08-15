@@ -269,6 +269,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       topicFilter.setFileInfo(fi);
       res.add(topicFilter);
     } else if (isDitaMap(fi)) {
+      mapFilter.setFileInfo(fi);
       res.add(mapFilter);
     }
 

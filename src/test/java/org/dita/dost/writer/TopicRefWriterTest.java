@@ -116,22 +116,24 @@ public class TopicRefWriterTest {
 
   @BeforeEach
   public void setUp() throws Exception {
-    final File tempDir = new File(URI.create("file:/tmp"));
+    final File tempDir = TestUtils.createTempDir(getClass());
 
     reader = new TopicRefWriter();
     reader.setLogger(new TestUtils.TestLogger());
     reader.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
-    reader.setCurrentFile(create("file:/tmp/dir/bar.dita"));
+    reader.setCurrentFile(tempDir.toURI().resolve("dir/bar.dita"));
 
-    reader.setup(map("file:/tmp/dir/same.dita", "file:/tmp/dir/same.dita"));
+    reader.setup(
+      map(tempDir.toURI().resolve("dir/same.dita").toString(), tempDir.toURI().resolve("dir/same.dita").toString())
+    );
     reader.setChangeTable(
       map(
-        "file:/tmp/dir/same.dita",
-        "file:/tmp/dir/same.dita",
-        "file:/tmp/dir/source.dita",
-        "file:/tmp/dir/change.dita",
-        "file:/tmp/dir/source.dita#from",
-        "file:/tmp/dir/change.dita#to"
+        tempDir.toURI().resolve("dir/same.dita").toString(),
+        tempDir.toURI().resolve("dir/same.dita").toString(),
+        tempDir.toURI().resolve("dir/source.dita").toString(),
+        tempDir.toURI().resolve("dir/change.dita").toString(),
+        tempDir.toURI().resolve("dir/source.dita#from").toString(),
+        tempDir.toURI().resolve("dir/change.dita#to").toString()
       )
     );
     reader.setFixpath(null);

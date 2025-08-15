@@ -82,19 +82,14 @@ public interface ITContentUplevels {
   }
 
   @Test
-  default void uplevels3() {
-    assertThatThrownBy(() ->
-        builder()
-          .name("uplevels3")
-          .transtype(XHTML)
-          .input(Paths.get("maps/above.ditamap"))
-          .put("generate.copy.outer", "3")
-          .put("outer.control", "quiet")
-          .test()
-      )
-      .isInstanceOf(AssertionError.class)
-      .hasMessageContaining("Failed comparing")
-      .hasMessageContaining("Expected attribute value"); // caused by bug, FIXME
+  default void uplevels3() throws Throwable {
+    builder()
+      .name("uplevels3")
+      .transtype(XHTML)
+      .input(Paths.get("maps/above.ditamap"))
+      .put("generate.copy.outer", "3")
+      .put("outer.control", "quiet")
+      .test();
   }
 
   @Test
