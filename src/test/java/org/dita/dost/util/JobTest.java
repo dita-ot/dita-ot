@@ -10,8 +10,7 @@ package org.dita.dost.util;
 import static java.net.URI.create;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -334,25 +333,28 @@ public final class JobTest {
     job.setInputDir(URI.create("file:/main/maps/"));
     job.add(
       new Job.FileInfo.Builder()
-        .uri(create("main/maps/map.ditamap"))
+        .uri(create("content/maps/map.ditamap"))
         .isInput(true)
-        .result(create("file:/main/maps/map.ditamap"))
+        .result(create("file:/main/content/maps/map.ditamap"))
         .build()
     );
     job.add(
       new Job.FileInfo.Builder()
-        .uri(create("main/topics/topic.dita"))
-        .result(create("file:/main/topics/topic.dita"))
+        .uri(create("content/topics/topic.dita"))
+        .result(create("file:/main/content/topics/topic.dita"))
         .build()
     );
     job.add(
       new Job.FileInfo.Builder()
         .uri(create("reuse/reuse.dita"))
-        .result(create("file:/reuse/reuse.dita"))
+        .result(create("file:/main/reuse/reuse.dita"))
         .isResourceOnly(true)
         .build()
     );
-
-    assertEquals(create("file:/main/"), job.getResultBaseDir());
+    assertAll(
+      () -> assertEquals(create("file:/main/"), job.getResultBaseDir(), "basedir with all files"),
+      () ->
+        assertEquals(create("file:/main/content/"), job.getResultBaseDirNormal(), "basedir without resource-only files")
+    );
   }
 }
