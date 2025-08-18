@@ -280,6 +280,7 @@ public final class Integrator {
     // Collect information for each feature id and generate a feature table.
     final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
     fileGen.setLogger(logger);
+    fileGen.setDitaDir(ditaDir);
     for (final String currentPlugin : orderPlugins(pluginTable.keySet())) {
       loadPlugin(currentPlugin);
     }
