@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 public class ChunkMapReaderTest {
 
-  private final File resourceDir = TestUtils.getResourceDir(ChunkModuleTest.class);
+  private final File resourceDir = TestUtils.getResourceDir(ChunkMapReaderTest.class);
   private File tempBaseDir;
 
   @BeforeEach

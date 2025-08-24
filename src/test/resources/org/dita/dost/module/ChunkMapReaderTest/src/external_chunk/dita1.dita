@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_external_chunk/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_external_chunk/preprocess/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Composite//EN?><?doctype-system ditabase.dtd?><?Pub Inc?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+  ditaarch:DITAArchVersion="1.3">
+  <concept id="ditaconcept1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic concept/concept ">
+    <title class="- topic/title ">ditaConcept1</title>
+    <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+      and abstract.</shortdesc>
+    <prolog class="- topic/prolog ">
+      <metadata class="- topic/metadata ">
+        <keywords class="- topic/keywords "> </keywords>
+      </metadata>
+    </prolog>
+    <conbody class="- topic/body  concept/conbody ">
+      <p class="- topic/p ">Type <b class="+ topic/ph hi-d/b ">your</b> text here.</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li ">an interesting point</li>
+        <li class="- topic/li ">another interesting point</li>
+      </ul>
+      <section class="- topic/section ">
+        <title class="- topic/title ">Subheading</title>
+        <p class="- topic/p ">Here's a little section in a concept.</p>
+      </section>
+      <example class="- topic/example ">
+        <title class="- topic/title ">Example</title>
+        <p class="- topic/p ">Here's a little example section in a concept.</p>
+      </example>
+    </conbody>
+    <concept id="ditaconcept11" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic concept/concept ">
+      <title class="- topic/title ">ditaconcept11</title>
+      <conbody class="- topic/body  concept/conbody ">
+        <p class="- topic/p ">ditaconcept11 body</p>
+      </conbody>
+      <concept id="ditaconcept111" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+        class="- topic/topic concept/concept ">
+        <title class="- topic/title ">ditaconcept111</title>
+        <conbody class="- topic/body  concept/conbody ">
+          <p class="- topic/p ">ditaconcept111 body</p>
+        </conbody>
+      </concept>
+    </concept>
+    <concept id="ditaconcept12" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic concept/concept ">
+      <title class="- topic/title ">ditaconcept12</title>
+      <conbody class="- topic/body  concept/conbody ">
+        <p class="- topic/p ">ditaconcept12 body</p>
+      </conbody>
+    </concept>
+    <reference id="ditaconcept1reference1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic       reference/reference ">
+      <title class="- topic/title ">ditaconcept1reference1</title>
+    </reference>
+    <task id="ditaconcept1task1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic task/task ">
+      <title class="- topic/title ">ditaconcept1task1</title>
+    </task>
+    <topic id="ditaconcept1topic1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic ">
+      <title class="- topic/title ">ditaconcept1topic1</title>
+    </topic>
+  </concept>
+  <task id="ditatask1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic task/task ">
+    <title class="- topic/title ">ditatask1</title>
+    <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+      and abstract.</shortdesc>
+    <prolog class="- topic/prolog ">
+      <metadata class="- topic/metadata ">
+        <keywords class="- topic/keywords "> </keywords>
+      </metadata>
+    </prolog>
+    <taskbody class="- topic/body task/taskbody ">
+      <example class="- topic/example ">Main topic</example>
+    </taskbody>
+    <task id="ditatask11" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic task/task ">
+      <title class="- topic/title ">ditatask11</title>
+      <taskbody class="- topic/body task/taskbody ">
+        <context class="- topic/section task/context ">
+          <p class="- topic/p ">ditatask11 body</p>
+        </context>
+      </taskbody>
+      <task id="ditatask111" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+        class="- topic/topic task/task ">
+        <title class="- topic/title ">ditatask111</title>
+        <taskbody class="- topic/body task/taskbody ">
+          <context class="- topic/section task/context ">
+            <p class="- topic/p ">ditatask111 body</p>
+          </context>
+        </taskbody>
+      </task>
+    </task>
+    <task id="ditatask12" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic task/task ">
+      <title class="- topic/title ">ditatask12</title>
+      <taskbody class="- topic/body task/taskbody ">
+        <context class="- topic/section task/context ">
+          <p class="- topic/p ">ditatask12 body</p>
+        </context>
+      </taskbody>
+    </task>
+  </task>
+  <reference id="ditareference1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic       reference/reference ">
+    <title class="- topic/title ">ditareference1</title>
+    <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+      and abstract.</shortdesc>
+    <prolog class="- topic/prolog ">
+      <metadata class="- topic/metadata ">
+        <keywords class="- topic/keywords "> </keywords>
+      </metadata>
+    </prolog>
+    <refbody class="- topic/body        reference/refbody ">
+      <section class="- topic/section "><title class="- topic/title ">Purpose</title>This little
+        command copies things.</section>
+      <refsyn class="- topic/section     reference/refsyn ">
+        <synph class="+ topic/ph pr-d/synph ">
+          <kwd class="+ topic/keyword pr-d/kwd ">DITA</kwd>
+        </synph>
+      </refsyn>
+      <example class="- topic/example "><title class="- topic/title ">Sample</title>This little
+        sample copies <q class="- topic/q ">here</q> to <q class="- topic/q "
+        >there</q>:<pre xml:space="preserve" class="- topic/pre ">copy from here to there</pre></example>
+    </refbody>
+    <reference id="ditareference11" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic       reference/reference ">
+      <title class="- topic/title ">ditareference11</title>
+      <refbody class="- topic/body        reference/refbody ">
+        <data class="- topic/data ">
+          <ph class="- topic/ph ">ditareference11 body</ph>
+        </data>
+      </refbody>
+      <reference id="ditareference111" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+        class="- topic/topic       reference/reference ">
+        <title class="- topic/title ">ditareference111</title>
+        <refbody class="- topic/body        reference/refbody ">
+          <data class="- topic/data ">
+            <ph class="- topic/ph ">ditareferece111 body</ph>
+          </data>
+        </refbody>
+      </reference>
+    </reference>
+    <reference id="ditareference12" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic       reference/reference ">
+      <title class="- topic/title ">ditareference12</title>
+      <refbody class="- topic/body        reference/refbody ">
+        <data class="- topic/data ">
+          <ph class="- topic/ph ">ditareference12 body</ph>
+        </data>
+      </refbody>
+    </reference>
+  </reference>
+  <topic id="ditatopic1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic ">
+    <title class="- topic/title ">ditatopic1</title>
+    <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+      and abstract.</shortdesc>
+    <body class="- topic/body ">
+      <p class="- topic/p ">Here's a <b class="+ topic/ph hi-d/b ">cute</b>, <i
+          class="+ topic/ph hi-d/i ">little</i> topic.</p>
+    </body>
+    <topic id="ditatopic11" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic ">
+      <title class="- topic/title ">ditatopic11</title>
+      <body class="- topic/body ">
+        <p class="- topic/p ">ditatopic11 body</p>
+      </body>
+      <topic id="ditatopic111" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+        class="- topic/topic ">
+        <title class="- topic/title ">ditatopic111</title>
+        <body class="- topic/body ">
+          <p class="- topic/p ">ditatopic111 body</p>
+        </body>
+      </topic>
+    </topic>
+    <topic id="ditatopic12" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic ">
+      <title class="- topic/title ">ditatopic12</title>
+      <body class="- topic/body ">
+        <p class="- topic/p ">ditatopic12 body</p>
+      </body>
+    </topic>
+  </topic>
+</dita>
