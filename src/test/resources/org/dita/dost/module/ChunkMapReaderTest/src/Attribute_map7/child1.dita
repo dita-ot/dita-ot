@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map7?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map7/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="child1" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic ">
+  <title class="- topic/title ">child1</title>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <p class="- topic/p ">Use the task topic to describe the steps of a particular task, or to
+        provide an overview of a higher-level task. The task topic includes sections for describing
+        the context, prerequisites, actual steps, expected results, example, and expected next steps
+        for a task.<indexterm class="- topic/indexterm ">Task elements</indexterm>
+      </p>
+    </section>
+  </body>
+</topic>

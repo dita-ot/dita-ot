@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/batseparate0?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/batseparate0/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?><?Pub Sty _display FontColor="red"?><?Pub Inc?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge"
+  chunk="by-topic" class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  xml:lang="en-us">
+  <title class="- topic/title ">Separate combined batty tasks into separate output topics</title>
+
+  <topicref href="battytasks.dita#battytasks" class="- map/topicref "
+    chunk="to-content select-topic">
+
+    <topicref href="battytasks.dita#batcaring" class="- map/topicref "
+      chunk="to-content select-topic"/>
+
+    <topicref href="battytasks.dita#batfeeding" class="- map/topicref "
+      chunk="to-content select-topic"/>
+
+    <topicref href="battytasks.dita#batcleaning" class="- map/topicref "
+      chunk="to-content select-topic"/>
+  </topicref>
+</map>

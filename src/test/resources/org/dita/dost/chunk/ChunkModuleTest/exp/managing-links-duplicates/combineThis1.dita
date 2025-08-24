@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
-  <topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic "
+  <topic class="- topic/topic "
          ditaarch:DITAArchVersion="2.0"
          domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)"
          id="combineThisRoot"

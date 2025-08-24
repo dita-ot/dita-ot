@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-     xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="merge" class="- map/map "
-     ditaarch:DITAArchVersion="2.0"
-     domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)"
-     specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product">
+<map
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="merge" class="- map/map "
+    ditaarch:DITAArchVersion="2.0"
+    domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)"
+    specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product">
   <title class="- topic/title ">Map with chunks and key definitions</title>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="splitThis.dita" keys="splitThisKey"
           processing-role="resource-only"/>

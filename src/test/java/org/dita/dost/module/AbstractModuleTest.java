@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
@@ -151,18 +152,15 @@ public abstract class AbstractModuleTest {
   protected void initStore(Store cache) {
     if (cache instanceof CacheStore) {
       final File srcDir = new File(resourceDir, "src" + File.separator + testCase);
-      try {
-        Files
-          .walk(srcDir.toPath())
-          .filter(Files::isRegularFile)
-          .forEach(src -> {
-            final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
-            try (OutputStream out = cache.getOutputStream(dst)) {
-              Files.copy(src, out);
-            } catch (IOException e) {
-              throw new UncheckedIOException(e);
-            }
-          });
+      try (Stream<Path> files = Files.walk(srcDir.toPath()).filter(Files::isRegularFile)) {
+        files.forEach(src -> {
+          final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
+          try (OutputStream out = cache.getOutputStream(dst)) {
+            Files.copy(src, out);
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        });
       } catch (IOException e) {
         throw new UncheckedIOException(e);
       }

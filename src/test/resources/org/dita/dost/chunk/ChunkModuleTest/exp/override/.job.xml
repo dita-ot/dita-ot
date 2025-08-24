@@ -3,7 +3,7 @@
     <string>file:/</string>
   </property>
   <files>
-    <file path="override.dita" format="dita"/>
-    <file src="file:/override.ditamap" uri="override.ditamap" path="override.ditamap" format="ditamap" input="true"/>
+    <file src="file:/override.ditamap" uri="override.dita" path="override.dita" result="file:/override.dita" format="dita"/>
+    <file src="file:/override.ditamap" uri="override.ditamap" path="override.ditamap" result="file:/override.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

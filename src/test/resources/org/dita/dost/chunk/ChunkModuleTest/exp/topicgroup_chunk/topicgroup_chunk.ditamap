@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/topicgroup_chunk?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/topicgroup_chunk/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="merge" class="- map/map "
+     ditaarch:DITAArchVersion="2.0"
+     domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+     id="mapID">
+  <title class="- topic/title ">chunk_group</title>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <topicref class="- map/topicref " href="dita11.dita#topicID">
+      <topicref class="- map/topicref " href="dita21.dita#topicID">
+        <topicref class="- map/topicref " href="dita21.dita#unique_1">
+          <topicref class="- map/topicref " href="dita21.dita#unique_2">
+            <topicref class="- map/topicref " href="dita21.dita#unique_3">
+              <topicref class="- map/topicref " href="dita21.dita#unique_4"/>
+            </topicref>
+          </topicref>
+        </topicref>
+      </topicref>
+    </topicref>
+  </topicgroup>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " id="topicgroupID">
+    <topicref class="- map/topicref " href="dita12.dita#topicID">
+      <topicref class="- map/topicref " href="dita22.dita#topicID">
+        <topicref class="- map/topicref " href="dita31.dita#topicID">
+          <topicref class="- map/topicref " href="dita41.dita#topicID">
+            <topicref class="- map/topicref " href="dita5.dita#topicID"/>
+          </topicref>
+        </topicref>
+      </topicref>
+    </topicref>
+  </topicgroup>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup " id="topicgroupID2">
+    <topicref class="- map/topicref " href="dita1.dita">
+      <topicref class="- map/topicref " href="dita2.dita">
+        <topicref class="- map/topicref " href="dita3.dita">
+          <topicref class="- map/topicref " href="dita4.dita">
+            <topicref class="- map/topicref " href="dita51.dita#topicID">
+              <topicref class="- map/topicref " href="dita51.dita#unique_1"/>
+            </topicref>
+          </topicref>
+        </topicref>
+      </topicref>
+    </topicref>
+  </topicgroup>
+  <topicgroup class="- map/topicref " href="Chunk1.dita#Chunk1">
+    <topicref class="- map/topicref " href="Chunk1.dita#topicID"/>
+  </topicgroup>
+  <topicref class="- map/topicref " href="dita8.dita#topicID">
+    <topichead class="+ map/topicref mapgroup-d/topichead " href="dita8.dita#unique_1">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Topic Head</navtitle>
+      </topicmeta>
+      <topicref class="- map/topicref " href="dita8.dita#unique_2"/>
+    </topichead>
+  </topicref>
+  <!-- Test chunking of groups when already chunking -->
+  <topicref class="- map/topicref " href="container.dita#topicID">
+    <topicgroup class="- map/topicref " href="Chunk2.dita#Chunk1">
+      <topicref class="- map/topicref " href="Chunk2.dita#topicID"/>
+    </topicgroup>
+    <topichead class="+ map/topicref mapgroup-d/topichead " href="Chunk3.dita#Chunk1">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Navigation title in a topichead</navtitle>
+      </topicmeta>
+      <topicref class="- map/topicref " href="Chunk3.dita#topicID"/>
+    </topichead>
+    <topicref class="- map/topicref " href="Chunk4.dita#Chunk1">
+      <topicmeta class="- map/topicmeta ">
+        <shortdesc class="- map/shortdesc ">This is an edge case but should not crash: short description on a chunked
+          group but without a title.
+        </shortdesc>
+      </topicmeta>
+      <topicref class="- map/topicref " href="Chunk4.dita#topicID"/>
+    </topicref>
+  </topicref>
+</map>
