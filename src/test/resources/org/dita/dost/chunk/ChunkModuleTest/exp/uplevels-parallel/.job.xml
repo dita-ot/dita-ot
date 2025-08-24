@@ -103,9 +103,9 @@
     <file src="file:/a.png" uri="a.png" path="a.png" result="file:/a.png" format="image" target="true"/>
     <file src="file:/a.dita" uri="a.dita" path="a.dita" result="file:/a.dita" format="dita" target="true"/>
     <file src="file:/maps/map.ditamap" uri="maps/map.ditamap" path="maps/map.ditamap" result="file:/maps/map.ditamap"
-      format="ditamap" input="true"/>
+          format="ditamap" input="true"/>
     <file src="file:/dir/b.png" uri="dir/b.png" path="dir/b.png" result="file:/dir/b.png" format="image" target="true"/>
     <file src="file:/dir/subdir/c.png" uri="dir/subdir/c.png" path="dir/subdir/c.png" result="file:/dir/subdir/c.png"
-      format="image" target="true"/>
+          format="image" target="true"/>
   </files>
 </job>
