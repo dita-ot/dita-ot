@@ -835,6 +835,7 @@ public class ChunkMapReaderTest {
 
     mapReader.setRootChunkOverride("to-content");
     mapReader.setJob(job);
+    mapReader.setCompatibilityMode(false);
 
     TestUtils.copy(new File(srcDir, "mapNoChunk.ditamap"), new File(tempDir, "mapNoChunk.ditamap"));
     job.add(

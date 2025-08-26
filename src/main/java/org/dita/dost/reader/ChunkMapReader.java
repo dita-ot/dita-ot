@@ -67,6 +67,9 @@ public final class ChunkMapReader extends AbstractDomFilter {
   private TempFileNameScheme tempFileNameScheme;
   private Set<String> rootChunkOverride;
   private String defaultChunkByToken;
+  private boolean compatibilityMode = Boolean.parseBoolean(
+    Configuration.configuration.get("compatibility.chunk.v2-for-v1")
+  );
 
   // ChunkTopicParser assumes keys and values are chimera paths, i.e. systems paths with fragments.
   private final LinkedHashMap<URI, URI> changeTable = new LinkedHashMap<>(128);
@@ -102,6 +105,10 @@ public final class ChunkMapReader extends AbstractDomFilter {
     rootChunkOverride = Set.copyOf(split(chunkValue));
   }
 
+  public void setCompatibilityMode(boolean compatibilityMode) {
+    this.compatibilityMode = compatibilityMode;
+  }
+
   /**
    * Absolute URI to file being processed
    */
@@ -129,7 +136,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     if (chunkTokens.isEmpty() && rootChunkOverride == null) {
       return null;
     }
-    if (isCompatible(doc, rootChunkOverride)) {
+    if (compatibilityMode && isCompatible(doc, rootChunkOverride)) {
       logger.debug("Skip to process DITA 1.x chunks in compatibility mode");
       return null;
     }

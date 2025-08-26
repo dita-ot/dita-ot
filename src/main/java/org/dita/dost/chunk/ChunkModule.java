@@ -42,6 +42,7 @@ import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
@@ -61,6 +62,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   static final String SPLIT_CHUNK_DUPLICATE_SUFFIX = "1";
   private TempFileNameScheme tempFileNameScheme;
   private String rootChunkOverride;
+  private boolean compatibilityMode;
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
@@ -71,7 +73,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Document mapDoc = getInputMap(mapFile);
       final Float ditaVersion = getDitaVersion(mapDoc.getDocumentElement());
       if (ditaVersion == null || ditaVersion < 2.0f) {
-        if (isCompatible(mapDoc, rootChunkOverride != null ? Set.of(rootChunkOverride) : emptySet())) {
+        if (
+          compatibilityMode && isCompatible(mapDoc, rootChunkOverride != null ? Set.of(rootChunkOverride) : emptySet())
+        ) {
           rewriteToCompatibilityMode(mapDoc);
           logger.debug("Process DITA 1.x chunks in compatibility mode");
         } else {
@@ -401,6 +405,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
       rootChunkOverride = input.getAttribute(ROOT_CHUNK_OVERRIDE);
     }
+    compatibilityMode = Boolean.parseBoolean(Configuration.configuration.get("compatibility.chunk.v2-for-v1"));
   }
 
   private Document getInputMap(URI mapFile) throws IOException {
