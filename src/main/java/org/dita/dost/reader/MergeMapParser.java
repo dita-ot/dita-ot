@@ -18,9 +18,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Stack;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -147,18 +144,21 @@ public final class MergeMapParser extends XMLFilterImpl {
 
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
-    if (processLevel > 0) {
-      String value = processStack.peek();
-      if (processLevel == processStack.size()) {
-        value = processStack.pop();
+    try {
+      if (processLevel > 0) {
+        String value = processStack.peek();
+        if (processLevel == processStack.size()) {
+          value = processStack.pop();
+        }
+        processLevel--;
+        if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
+          return;
+        }
       }
-      processLevel--;
-      if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
-        return;
-      }
+      getContentHandler().endElement(uri, localName, qName);
+    } finally {
+      attributeStack.pop();
     }
-    getContentHandler().endElement(uri, localName, qName);
-    attributeStack.pop();
   }
 
   @Override
