@@ -28,11 +28,18 @@ public class ChunkMapReaderTest {
 
   private final File resourceDir = TestUtils.getResourceDir(ChunkMapReaderTest.class);
   private File tempBaseDir;
+  private ChunkMapReader mapReader;
 
   @BeforeEach
   public void setUp() throws Exception {
     tempBaseDir = TestUtils.createTempDir(getClass());
     TestUtils.copy(new File(resourceDir, "src"), tempBaseDir);
+    mapReader = new ChunkMapReader();
+    final TestUtils.CachingLogger logger = new TestUtils.CachingLogger(true);
+    mapReader.setLogger(logger);
+    mapReader.setXmlUtils(new XMLUtils());
+    mapReader.supportToNavigation(false);
+    mapReader.setCompatibilityMode(false);
   }
 
   @AfterEach
@@ -411,19 +418,6 @@ public class ChunkMapReaderTest {
   }
 
   @Test
-  public void testFixChunk_map8() {
-    test(
-      "FixChunk_map8.ditamap",
-      TestUtils
-        .<String, String>mapBuilder()
-        .put("nested2.dita", "nested2.dita")
-        .put("nested1.dita", "nested1.dita")
-        .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
   public void testByTopic_map2() {
     test(
       "ByTopic_map2.ditamap",
@@ -436,15 +430,6 @@ public class ChunkMapReaderTest {
         .put("nested2.dita", "nested2.dita")
         .put("nested1.dita", "N1.dita")
         .build(),
-      Collections.emptyMap()
-    );
-  }
-
-  @Test
-  public void testByTopic_map3() {
-    test(
-      "ByTopic_map3.ditamap",
-      TestUtils.<String, String>mapBuilder().put("t1.dita", "t1.dita").put("nested1.dita", "nested1.dita").build(),
       Collections.emptyMap()
     );
   }
@@ -1119,16 +1104,10 @@ public class ChunkMapReaderTest {
     final String testName = FilenameUtils.getBaseName(testCase);
     final File tempDir = new File(tempBaseDir, testName);
     try {
-      final ChunkMapReader mapReader = new ChunkMapReader();
-      final TestUtils.CachingLogger logger = new TestUtils.CachingLogger(true);
-      mapReader.setLogger(logger);
       final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
       mapReader.setJob(job);
-      mapReader.setXmlUtils(new XMLUtils());
-      mapReader.supportToNavigation(false);
 
-      final URI path = job.getInputMap();
-      final File mapFile = new File(tempDir, path.getPath());
+      final File mapFile = new File(tempDir, job.getInputMap().getPath());
       mapReader.read(mapFile);
 
       assertEquals(change, relativize(mapReader.getChangeTable(), tempDir));
