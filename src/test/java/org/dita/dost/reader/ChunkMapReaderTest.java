@@ -52,6 +52,7 @@ public class ChunkMapReaderTest {
     mapReader = new ChunkMapReader();
     mapReader.setLogger(logger);
     mapReader.setXmlUtils(xmlUtils);
+    mapReader.setCompatibilityMode(false);
   }
 
   @Test
