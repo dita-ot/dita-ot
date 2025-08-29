@@ -66,6 +66,9 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     if (input.getAttribute(ROOT_CHUNK_OVERRIDE) != null) {
       mapReader.setRootChunkOverride(input.getAttribute(ROOT_CHUNK_OVERRIDE));
     }
+    if (input.getAttribute("compatibility.chunk.v2-for-v1") != null) {
+      mapReader.setCompatibilityMode(Boolean.parseBoolean(input.getAttribute("compatibility.chunk.v2-for-v1")));
+    }
 
     try {
       final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();

@@ -4,37 +4,24 @@
      domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
      xml:lang="en-us">
   <title class="- topic/title ">Input map</title>
-  <topicref chunk="by-topic" class="- map/topicref " href="chunkmefirst.dita#chunkmefirst" type="topic">
+  <topicref class="- map/topicref " href="composite_chunkmefirst.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
       <navtitle class="- topic/navtitle ">First topic in main dir!</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">First topic in main dir!</linktext>
     </topicmeta>
-    <topicref class="- map/topicref " xtrf="generated_by_chunk" href="chunkmetoo.dita" type="concept">
+    <topicref class="- map/topicref " href="composite_chunkmetoo.dita" type="concept">
       <topicmeta class="- map/topicmeta ">
         <navtitle class="- topic/navtitle ">Second topic in main dir!</navtitle>
-        <?ditaot usertext?>
+        <?ditaot gentext?>
         <linktext class="- map/linktext ">Second topic in main dir!</linktext>
-        <?ditaot usershortdesc?>
-        <shortdesc class="- map/shortdesc "/>
       </topicmeta>
     </topicref>
   </topicref>
-  <topicref chunk="by-topic" class="- map/topicref " href="mixup/chunkmefirstSUBDIR.dita#chunkmefirstSUBDIR"
-            type="topic">
-    <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">First topic (subdir composite)!</navtitle>
-      <?ditaot gentext?>
-      <linktext class="- map/linktext ">First topic (subdir composite)!</linktext>
-    </topicmeta>
-    <topicref class="- map/topicref " xtrf="generated_by_chunk" href="mixup/chunkmetooSUBDIR.dita" type="concept">
-      <topicmeta class="- map/topicmeta ">
-        <navtitle class="- topic/navtitle ">Second topic (subdir composite)!</navtitle>
-        <?ditaot usertext?>
-        <linktext class="- map/linktext ">Second topic (subdir composite)!</linktext>
-        <?ditaot usershortdesc?>
-        <shortdesc class="- map/shortdesc "/>
-      </topicmeta>
+  <topicref class="- map/topicref " href="composite_chunkmefirstSUBDIR.dita">
+    <topicmeta class="- map/topicmeta "/>
+    <topicref class="- map/topicref " href="composite_chunkmetooSUBDIR.dita">
+      <topicmeta class="- map/topicmeta "/>
     </topicref>
   </topicref>
 </map>
