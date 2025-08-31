@@ -154,6 +154,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       }
       processLevel--;
       if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
+        attributeStack.pop();
         return;
       }
     }
