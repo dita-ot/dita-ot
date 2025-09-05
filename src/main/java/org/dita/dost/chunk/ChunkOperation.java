@@ -55,6 +55,15 @@ record ChunkOperation(
     Select(final String value) {
       this.value = value;
     }
+
+    public static Select of(String value) {
+      for (Select select : values()) {
+        if (select.value.equals(value)) {
+          return select;
+        }
+      }
+      return null;
+    }
   }
 
   @Override

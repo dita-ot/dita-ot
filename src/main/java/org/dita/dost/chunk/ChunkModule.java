@@ -699,6 +699,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     final ChunkBuilder builder = ChunkOperation
       .builder(chunk.operation())
+      .select(chunk.select())
       .topicref(chunk.topicref())
       .src(chunk.src())
       .dst(dst)
@@ -904,6 +905,16 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     return unmodifiableList(chunks);
   }
 
+  private ChunkOperation.Select getChunkSelect(List<String> values) {
+    for (String value : values) {
+      var select = ChunkOperation.Select.of(value);
+      if (select != null) {
+        return select;
+      }
+    }
+    return null;
+  }
+
   private void collectChunkOperations(
     final URI mapFile,
     final Element elem,
@@ -917,7 +928,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     if (chunk.contains(COMBINE.name)) {
       if (MAP_MAP.matches(elem)) {
         final URI href = URI.create(replaceExtension(mapFile.toString(), FILE_EXTENSION_DITA));
-        final ChunkBuilder builder = ChunkOperation.builder(COMBINE).src(mapFile).dst(href).topicref(elem);
+        final ChunkBuilder builder = ChunkOperation
+          .builder(COMBINE)
+          .select(getChunkSelect(chunk))
+          .src(mapFile)
+          .dst(href)
+          .topicref(elem);
         //     remove contents
         //                elem.removeChild(child);
         getChildElements(elem, MAP_TOPICREF)
@@ -930,6 +946,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
         final ChunkBuilder builder = ChunkOperation
           .builder(COMBINE)
+          .select(getChunkSelect(chunk))
           .src(href)
           //                    .dst(href)
           .topicref(elem);
@@ -955,6 +972,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           final URI href = setFragment(mapFile.resolve(hrefNode.getValue()), null);
           final ChunkBuilder builder = ChunkOperation
             .builder(SPLIT)
+            .select(getChunkSelect(chunk))
             .src(href)
             //                    .dst(href)
             .topicref(elem);
@@ -992,7 +1010,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final Element navtitle = getNavtitle(elem);
     if (hrefNode != null && isDitaFormat(elem) && isLocalScope(elem) && isNormalProcessRole(elem)) {
       final URI href = mapFile.resolve(hrefNode.getValue());
-      final ChunkBuilder builder = ChunkOperation.builder(COMBINE).src(href).topicref(elem);
+      final ChunkBuilder builder = ChunkOperation
+        .builder(COMBINE)
+        .select(getChunkSelect(chunkAttr))
+        .src(href)
+        .topicref(elem);
       for (Element child : getChildElements(elem, MAP_TOPICREF)) {
         for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
           builder.addChild(chunkBuilder);
@@ -1000,7 +1022,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       }
       return Collections.singletonList(builder);
     } else if (navtitle != null) {
-      final ChunkBuilder builder = ChunkOperation.builder(COMBINE).topicref(elem);
+      final ChunkBuilder builder = ChunkOperation.builder(COMBINE).select(getChunkSelect(chunkAttr)).topicref(elem);
       for (Element child : getChildElements(elem, MAP_TOPICREF)) {
         for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
           builder.addChild(chunkBuilder);
