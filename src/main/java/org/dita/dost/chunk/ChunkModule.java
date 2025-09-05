@@ -119,11 +119,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   }
 
   private void removeChunkAttributes(final Element map, final ChunkOperation.Operation operation) {
-    if (map.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(operation.name)) {
+    if (getChunkValues(map).contains(operation.name)) {
       map.removeAttribute(ATTRIBUTE_NAME_CHUNK);
     }
     for (Element topicref : getChildElements(map, MAP_TOPICREF, true)) {
-      if (topicref.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(operation.name)) {
+      if (getChunkValues(topicref).contains(operation.name)) {
         topicref.removeAttribute(ATTRIBUTE_NAME_CHUNK);
       }
     }
@@ -250,9 +250,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     return res;
   }
 
+  private List<String> getChunkValues(Element elem) {
+    var value = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+    if (value.isEmpty()) {
+      return emptyList();
+    }
+    return List.of(WHITESPACE.split(value));
+  }
+
   private Set<URI> getNormalTopicRefs(final URI mapFile, final Document mapDoc) {
     final Element root = mapDoc.getDocumentElement();
-    if (root.getAttribute(ATTRIBUTE_NAME_CHUNK).equals(SPLIT.name)) {
+    if (getChunkValues(root).contains(SPLIT.name)) {
       return emptySet();
     }
     final Set<URI> res = new HashSet<>();
@@ -263,12 +271,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
   private void getNormalTopicRefsWalker(final URI mapFile, final Element root, final Set<URI> res) {
     if (MAP_TOPICREF.matches(root) || MAP_MAP.matches(root)) {
-      final String chunk = root.getAttribute(ATTRIBUTE_NAME_CHUNK);
+      final List<String> chunk = getChunkValues(root);
       final String href = root.getAttribute(ATTRIBUTE_NAME_HREF);
       if (chunk.isEmpty() && !href.isEmpty() && isNormalProcessRole(root) && isDitaFormat(root)) {
         res.add(removeFragment(mapFile.resolve(href)));
       }
-      if (!chunk.equals(COMBINE.name)) {
+      if (!chunk.contains(COMBINE.name)) {
         final NodeList children = root.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
           final Node child = children.item(i);
@@ -902,11 +910,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final List<ChunkOperation> chunks,
     final ChunkOperation.Operation defaultOperation
   ) {
-    String chunk = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+    List<String> chunk = getChunkValues(elem);
     if (chunk.isEmpty() && defaultOperation != null) {
-      chunk = defaultOperation.name().toLowerCase();
+      chunk = List.of(defaultOperation.name().toLowerCase());
     }
-    if (chunk.equals(COMBINE.name)) {
+    if (chunk.contains(COMBINE.name)) {
       if (MAP_MAP.matches(elem)) {
         final URI href = URI.create(replaceExtension(mapFile.toString(), FILE_EXTENSION_DITA));
         final ChunkBuilder builder = ChunkOperation.builder(COMBINE).src(mapFile).dst(href).topicref(elem);
@@ -936,7 +944,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           collectChunkOperations(mapFile, child, chunks, null);
         }
       }
-    } else if (chunk.equals(SPLIT.name)) {
+    } else if (chunk.contains(SPLIT.name)) {
       if (MAP_MAP.matches(elem)) {
         for (Element child : getChildElements(elem, MAP_TOPICREF)) {
           collectChunkOperations(mapFile, child, chunks, SPLIT);
@@ -971,12 +979,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
    * Collect combine chunk contents.
    */
   private List<ChunkBuilder> collectCombineChunks(final URI mapFile, final Element elem) {
-    final String chunkAttr = elem.getAttribute(ATTRIBUTE_NAME_CHUNK);
+    final List<String> chunkAttr = getChunkValues(elem);
     if (!chunkAttr.isEmpty()) {
-      if (chunkAttr.equals(COMBINE.name)) {
+      if (chunkAttr.contains(COMBINE.name)) {
         return Collections.emptyList();
-      } else if (chunkAttr.equals(SPLIT.name)) {
-        logger.warn(MessageUtils.getMessage("DOTJ087W", chunkAttr).setLocation(elem).toString());
+      } else if (chunkAttr.contains(SPLIT.name)) {
+        logger.warn(MessageUtils.getMessage("DOTJ087W", String.join(" ", chunkAttr)).setLocation(elem).toString());
         elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
       }
     }
