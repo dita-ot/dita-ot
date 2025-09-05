@@ -239,7 +239,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final Set<URI> normalTopicRefs = getNormalTopicRefs(mapFile, mapDoc);
     final List<ChunkOperation> res = new ArrayList<>(chunks.size());
     for (ChunkOperation chunk : chunks) {
-      final ChunkBuilder builder = new ChunkBuilder(chunk);
+      final ChunkBuilder builder = ChunkOperation.builder(chunk);
       if (normalTopicRefs.contains(chunk.src())) {
         builder.dst(addSuffixToPath(chunk.src(), "1"));
       } else {
@@ -647,7 +647,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       rewriteMap.put(setFragment(rootChunk.src(), id), dst);
     }
 
-    final ChunkBuilder builder = new ChunkBuilder(rootChunk.operation())
+    final ChunkBuilder builder = ChunkOperation
+      .builder(rootChunk.operation())
       .topicref(rootChunk.topicref())
       .src(rootChunk.src())
       .dst(dst)
@@ -688,7 +689,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       rewriteMap.put(setFragment(chunk.src(), id), dst);
     }
 
-    final ChunkBuilder builder = new ChunkBuilder(chunk.operation())
+    final ChunkBuilder builder = ChunkOperation
+      .builder(chunk.operation())
       .topicref(chunk.topicref())
       .src(chunk.src())
       .dst(dst)
@@ -907,7 +909,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     if (chunk.equals(COMBINE.name)) {
       if (MAP_MAP.matches(elem)) {
         final URI href = URI.create(replaceExtension(mapFile.toString(), FILE_EXTENSION_DITA));
-        final ChunkBuilder builder = new ChunkBuilder(COMBINE).src(mapFile).dst(href).topicref(elem);
+        final ChunkBuilder builder = ChunkOperation.builder(COMBINE).src(mapFile).dst(href).topicref(elem);
         //     remove contents
         //                elem.removeChild(child);
         getChildElements(elem, MAP_TOPICREF)
@@ -918,7 +920,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       } else {
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         final URI href = hrefNode != null ? mapFile.resolve(hrefNode.getValue()) : null;
-        final ChunkBuilder builder = new ChunkBuilder(COMBINE)
+        final ChunkBuilder builder = ChunkOperation
+          .builder(COMBINE)
           .src(href)
           //                    .dst(href)
           .topicref(elem);
@@ -942,7 +945,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final Attr hrefNode = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
         if (hrefNode != null) {
           final URI href = setFragment(mapFile.resolve(hrefNode.getValue()), null);
-          final ChunkBuilder builder = new ChunkBuilder(SPLIT)
+          final ChunkBuilder builder = ChunkOperation
+            .builder(SPLIT)
             .src(href)
             //                    .dst(href)
             .topicref(elem);
@@ -980,7 +984,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final Element navtitle = getNavtitle(elem);
     if (hrefNode != null && isDitaFormat(elem) && isLocalScope(elem) && isNormalProcessRole(elem)) {
       final URI href = mapFile.resolve(hrefNode.getValue());
-      final ChunkBuilder builder = new ChunkBuilder(COMBINE).src(href).topicref(elem);
+      final ChunkBuilder builder = ChunkOperation.builder(COMBINE).src(href).topicref(elem);
       for (Element child : getChildElements(elem, MAP_TOPICREF)) {
         for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
           builder.addChild(chunkBuilder);
@@ -988,7 +992,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       }
       return Collections.singletonList(builder);
     } else if (navtitle != null) {
-      final ChunkBuilder builder = new ChunkBuilder(COMBINE).topicref(elem);
+      final ChunkBuilder builder = ChunkOperation.builder(COMBINE).topicref(elem);
       for (Element child : getChildElements(elem, MAP_TOPICREF)) {
         for (ChunkBuilder chunkBuilder : collectCombineChunks(mapFile, child)) {
           builder.addChild(chunkBuilder);

@@ -79,6 +79,10 @@ record ChunkOperation(
     return new ChunkBuilder(operation);
   }
 
+  public static ChunkBuilder builder(final ChunkOperation operation) {
+    return new ChunkBuilder(operation);
+  }
+
   public static class ChunkBuilder {
 
     private final Operation operation;
@@ -99,7 +103,7 @@ record ChunkOperation(
       this.dst = orig.dst;
       this.id = orig.id;
       this.topicref = orig.topicref;
-      this.children = orig.children.stream().map(ChunkBuilder::new).collect(Collectors.toList());
+      this.children = orig.children.stream().map(ChunkOperation::builder).collect(Collectors.toList());
       this.select = orig.select;
     }
 
@@ -136,8 +140,6 @@ record ChunkOperation(
     }
 
     public ChunkOperation build() {
-      final URI src = this.src;
-      final URI dst = this.dst;
       final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).toList();
       return new ChunkOperation(operation, src, dst, id, topicref, cos, select);
     }
