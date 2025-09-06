@@ -98,7 +98,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   }
 
   private void rewriteToCompatibilityMode(Document mapDoc) {
-    List<Element> elements = XMLUtils.toList(mapDoc.getElementsByTagName("*"));
+    List<Element> elements = toList(mapDoc.getElementsByTagName("*"));
     for (Element elem : elements) {
       var chunkAttr = elem.getAttributeNode(ATTRIBUTE_NAME_CHUNK);
       if (chunkAttr != null) {
@@ -136,7 +136,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     if (!combineRewriteMap.isEmpty() && !splitRewriteMap.isEmpty()) {
       final Map<URI, URI> rewriteMap = new HashMap<>(combineRewriteMap);
       rewriteMap.putAll(splitRewriteMap);
-      final Map<URI, URI> rewriteMapAll = Collections.unmodifiableMap(rewriteMap);
+      final Map<URI, URI> rewriteMapAll = unmodifiableMap(rewriteMap);
 
       final Collection<FileInfo> topics = job.getFileInfo(DitaUtils::isDitaFormat);
       (parallel ? topics.parallelStream() : topics.stream()).forEach(fi -> {
@@ -159,7 +159,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final List<Element> elements = toList(doc.getDocumentElement().getElementsByTagName("*"));
     for (Element link : elements) {
       if (TOPIC_LINK.matches(link) || TOPIC_XREF.matches(link)) {
-        final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
         final URI abs = src.resolve(href);
         final URI rewrite = rewriteMap.get(abs);
         if (rewrite != null) {
@@ -553,7 +553,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final List<Element> elements = toList(doc.getDocumentElement().getElementsByTagName("*"));
     for (Element link : elements) {
       if (TOPIC_LINK.matches(link) || TOPIC_XREF.matches(link)) {
-        final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
         final URI abs = src.resolve(href);
         final URI rewrite = rewriteMap.get(abs);
         if (rewrite != null) {
@@ -830,7 +830,15 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           }
           mergeTopic(rootChunk, child, dstTopic);
         } else {
+          // TODO check select and only import what is needed
           final Element imported = (Element) dstTopic.getOwnerDocument().importNode(root, true);
+          if (child.select() == ChunkOperation.Select.BRANCH) {
+            // should already be only branch
+          } else if (child.select() == ChunkOperation.Select.TOPIC) {
+            for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
+              imported.removeChild(childTopic);
+            }
+          }
           rewriteTopicId(imported, child.id());
           relativizeLinks(imported, child.src(), rootChunk.dst());
           added = (Element) dstTopic.appendChild(imported);
@@ -851,9 +859,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   private Element getElement(URI src, ChunkOperation.Select select) throws IOException {
     logger.info("Reading {0}", src);
     final Document chunkDoc = job.getStore().getDocument(src);
-    if (
-      src.getFragment() != null && (select == ChunkOperation.Select.BRANCH || select == ChunkOperation.Select.TOPIC)
-    ) {
+    if (select == ChunkOperation.Select.DOCUMENT) {
+      return chunkDoc.getDocumentElement();
+    }
+    if (src.getFragment() != null) {
       final NodeList children = chunkDoc.getElementsByTagName("*");
       for (int i = 0; i < children.getLength(); i++) {
         final Node child = children.item(i);
@@ -862,9 +871,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
       }
       return null;
-    } else {
-      return chunkDoc.getDocumentElement();
     }
+    return chunkDoc.getDocumentElement();
   }
 
   private Element getLastChildTopic(final Element dita) {
@@ -890,7 +898,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final List<Element> elements = toList(topic.getElementsByTagName("*"));
     for (Element link : elements) {
       if (TOPIC_LINK.matches(link) || TOPIC_XREF.matches(link)) {
-        final URI href = URLUtils.toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
+        final URI href = toURI(link.getAttribute(ATTRIBUTE_NAME_HREF));
         final URI abs = src.resolve(href);
         final URI rel = getRelativePath(dst.resolve("."), abs);
         link.setAttribute(ATTRIBUTE_NAME_HREF, rel.toString());
@@ -915,7 +923,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return select;
       }
     }
-    return null;
+    return ChunkOperation.Select.DOCUMENT;
   }
 
   private void collectChunkOperations(
@@ -1003,7 +1011,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     final List<String> chunkAttr = getChunkValues(elem);
     if (!chunkAttr.isEmpty()) {
       if (chunkAttr.contains(COMBINE.name)) {
-        return Collections.emptyList();
+        return emptyList();
       } else if (chunkAttr.contains(SPLIT.name)) {
         logger.warn(MessageUtils.getMessage("DOTJ087W", String.join(" ", chunkAttr)).setLocation(elem).toString());
         elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
@@ -1023,7 +1031,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           builder.addChild(chunkBuilder);
         }
       }
-      return Collections.singletonList(builder);
+      return singletonList(builder);
     } else if (navtitle != null) {
       final ChunkBuilder builder = ChunkOperation.builder(COMBINE).select(getChunkSelect(chunkAttr)).topicref(elem);
       for (Element child : getChildElements(elem, MAP_TOPICREF)) {
@@ -1031,7 +1039,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           builder.addChild(chunkBuilder);
         }
       }
-      return Collections.singletonList(builder);
+      return singletonList(builder);
     } else {
       return getChildElements(elem, MAP_TOPICREF)
         .stream()
