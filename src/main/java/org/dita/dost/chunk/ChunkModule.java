@@ -735,7 +735,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   private Document merge(final ChunkOperation rootChunk) throws IOException {
     Document doc;
     if (rootChunk.src() != null) {
-      Element dstTopic = getElement(rootChunk.src());
+      Element dstTopic = getElement(rootChunk.src(), rootChunk.select());
+      // FIXME: If select-document, dstTopic = dstTopic.getDocumentElement() ???
       doc = dstTopic.getOwnerDocument();
       if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
         final Element lastChildTopic = getLastChildTopic(dstTopic);
@@ -814,7 +815,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     for (ChunkOperation child : chunk.children()) {
       Element added;
       if (child.src() != null) {
-        final Element root = getElement(child.src());
+        final Element root = getElement(child.src(), child.select());
         if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
           final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);
           int i = 1;
@@ -847,10 +848,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Element getElement(URI src) throws IOException {
+  private Element getElement(URI src, ChunkOperation.Select select) throws IOException {
     logger.info("Reading {0}", src);
     final Document chunkDoc = job.getStore().getDocument(src);
-    if (src.getFragment() != null) {
+    if (
+      src.getFragment() != null && (select == ChunkOperation.Select.BRANCH || select == ChunkOperation.Select.TOPIC)
+    ) {
       final NodeList children = chunkDoc.getElementsByTagName("*");
       for (int i = 0; i < children.getLength(); i++) {
         final Node child = children.item(i);

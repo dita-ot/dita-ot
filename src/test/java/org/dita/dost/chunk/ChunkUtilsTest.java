@@ -27,6 +27,7 @@ class ChunkUtilsTest {
     strings = {
       "multiple-to-content.ditamap",
       "nested-to-content.ditamap",
+      "select-document.ditamap",
       "top-level-to-content.ditamap",
       "top-level-by-topic.ditamap",
       "only-by-topic.ditamap",
