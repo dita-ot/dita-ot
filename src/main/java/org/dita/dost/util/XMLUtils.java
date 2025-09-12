@@ -1442,6 +1442,23 @@ public final class XMLUtils {
   }
 
   /**
+   * Insert node after reference element
+   *
+   * @param ref   node to insert after
+   * @param child content to insert, must be in the same document as argument {@code ref}
+   */
+  public static Node insertAfter(final Node ref, final Node child) {
+    final Node parent = ref.getParentNode();
+    final Node nextSibling = ref.getNextSibling();
+    if (nextSibling != null) {
+      parent.insertBefore(child, nextSibling);
+    } else {
+      parent.appendChild(child);
+    }
+    return child;
+  }
+
+  /**
    * Check format is dita.
    */
   public static Predicate<XdmNode> isDitaFormat() {

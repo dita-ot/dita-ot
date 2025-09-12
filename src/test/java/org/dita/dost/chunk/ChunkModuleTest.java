@@ -50,6 +50,8 @@ public class ChunkModuleTest extends AbstractModuleTest {
       Arguments.of("uplevels-parallel", Collections.emptyMap(), 0),
       Arguments.of("format", Collections.emptyMap(), 0),
       Arguments.of("nested", Collections.emptyMap(), 0),
+      Arguments.of("nested-select-branch", Collections.emptyMap(), 0),
+      Arguments.of("nested-select-topic", Collections.emptyMap(), 0)
       Arguments.of("scope", Collections.emptyMap(), 0),
       Arguments.of("topicgroup", Collections.emptyMap(), 1),
       Arguments.of("topichead", Collections.emptyMap(), 1),

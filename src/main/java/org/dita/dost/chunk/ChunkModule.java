@@ -13,6 +13,7 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
+import static org.dita.dost.chunk.ChunkOperation.Select.TOPIC;
 import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
 import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
@@ -657,6 +658,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
 
     final ChunkBuilder builder = ChunkOperation
       .builder(rootChunk.operation())
+      .select(rootChunk.select())
       .topicref(rootChunk.topicref())
       .src(rootChunk.src())
       .dst(dst)
@@ -736,7 +738,12 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     Document doc;
     if (rootChunk.src() != null) {
       Element dstTopic = getElement(rootChunk.src(), rootChunk.select());
-      // FIXME: If select-document, dstTopic = dstTopic.getDocumentElement() ???
+      if (rootChunk.select() == TOPIC) {
+        dstTopic = (Element) dstTopic.cloneNode(true);
+        for (Element topicChild : getChildElements(dstTopic, TOPIC_TOPIC)) {
+          dstTopic.removeChild(topicChild);
+        }
+      }
       doc = dstTopic.getOwnerDocument();
       if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
         final Element lastChildTopic = getLastChildTopic(dstTopic);
@@ -820,28 +827,47 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);
           int i = 1;
           for (final Element topic : rootTopics) {
-            final Element imported;
-            imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
+            final Element imported = importSelectedTopic(topic, dstTopic.getOwnerDocument(), child.select());
             rewriteTopicId(imported, child.id());
             relativizeLinks(imported, child.src(), rootChunk.dst());
-            added = (Element) dstTopic.appendChild(imported);
+            added =
+              (Element) dstTopic.appendChild(
+                switch (rootChunk.select()) {
+                  case DOCUMENT -> {
+                    for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
+                      if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
+                        yield imported;
+                      }
+                    }
+                    throw new RuntimeException("Unable to find matching ID");
+                  }
+                  case BRANCH, TOPIC -> imported;
+                }
+              );
             //                        if (i++ == rootTopics.size()) {
             //                        }
           }
           mergeTopic(rootChunk, child, dstTopic);
         } else {
           // TODO check select and only import what is needed
-          final Element imported = (Element) dstTopic.getOwnerDocument().importNode(root, true);
-          if (child.select() == ChunkOperation.Select.BRANCH) {
-            // should already be only branch
-          } else if (child.select() == ChunkOperation.Select.TOPIC) {
-            for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
-              imported.removeChild(childTopic);
-            }
-          }
+          final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
           rewriteTopicId(imported, child.id());
           relativizeLinks(imported, child.src(), rootChunk.dst());
-          added = (Element) dstTopic.appendChild(imported);
+          added =
+            (Element) XMLUtils.insertAfter(
+              dstTopic,
+              switch (rootChunk.select()) {
+                case DOCUMENT -> {
+                  for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
+                    if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
+                      yield imported;
+                    }
+                  }
+                  throw new RuntimeException("Unable to find matching ID");
+                }
+                case BRANCH, TOPIC -> imported;
+              }
+            );
           mergeTopic(rootChunk, child, added);
         }
       } else {
@@ -856,12 +882,26 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
   }
 
+  private Element importSelectedTopic(Element src, Document dst, ChunkOperation.Select select) {
+    return switch (select) {
+      case DOCUMENT -> (Element) dst.importNode(src.getOwnerDocument().getDocumentElement(), true);
+      case BRANCH -> (Element) dst.importNode(src, true);
+      case TOPIC -> {
+        var imported = (Element) dst.importNode(src, true);
+        for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
+          imported.removeChild(childTopic);
+        }
+        yield imported;
+      }
+    };
+  }
+
   private Element getElement(URI src, ChunkOperation.Select select) throws IOException {
     logger.info("Reading {0}", src);
     final Document chunkDoc = job.getStore().getDocument(src);
-    if (select == ChunkOperation.Select.DOCUMENT) {
-      return chunkDoc.getDocumentElement();
-    }
+    //    if (select == ChunkOperation.Select.DOCUMENT) {
+    //      return chunkDoc.getDocumentElement();
+    //    }
     if (src.getFragment() != null) {
       final NodeList children = chunkDoc.getElementsByTagName("*");
       for (int i = 0; i < children.getLength(); i++) {
