@@ -1,0 +1,28 @@
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic class="- topic/topic " id="topic_c1" ditaarch:DITAArchVersion="2.0">
+    <title class="- topic/title ">c1</title>
+    <topic class="- topic/topic " id="topic_c2" ditaarch:DITAArchVersion="2.0">
+      <title class="- topic/title ">c2</title>
+    </topic>
+        <dita ditaarch:DITAArchVersion="2.0" id="topic_d2"><!-- FIXME: Remove dita -->
+        <topic class="- topic/topic " id="topic_d1" ditaarch:DITAArchVersion="2.0">
+          <title class="- topic/title ">d1</title>
+          <topic class="- topic/topic " id="topic_d2" ditaarch:DITAArchVersion="2.0">
+            <title class="- topic/title ">d2</title>
+          </topic>
+        </topic>
+        <topic class="- topic/topic " id="topic_d3" ditaarch:DITAArchVersion="2.0">
+          <title class="- topic/title ">d3</title>
+          <topic class="- topic/topic " id="topic_d4" ditaarch:DITAArchVersion="2.0">
+            <title class="- topic/title ">d4</title>
+          </topic>
+        </topic>
+        </dita>
+  </topic>
+  <topic class="- topic/topic " id="topic_c3" ditaarch:DITAArchVersion="2.0">
+    <title class="- topic/title ">c1</title>
+    <topic class="- topic/topic " id="topic_c4" ditaarch:DITAArchVersion="2.0">
+      <title class="- topic/title ">c2</title>
+    </topic>
+  </topic>
+</dita>
