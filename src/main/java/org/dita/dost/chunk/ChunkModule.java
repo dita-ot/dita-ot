@@ -13,7 +13,7 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
-import static org.dita.dost.chunk.ChunkOperation.Select.TOPIC;
+import static org.dita.dost.chunk.ChunkOperation.Select.*;
 import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
 import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
@@ -744,13 +744,20 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           dstTopic.removeChild(topicChild);
         }
       }
+      var dstRoot =
+        switch (rootChunk.select()) {
+          case TOPIC, BRANCH -> dstTopic;
+          case DOCUMENT -> dstTopic.getOwnerDocument().getDocumentElement();
+        };
+
       doc = dstTopic.getOwnerDocument();
-      if (dstTopic.getNodeName().equals(ELEMENT_NAME_DITA)) {
+      if (dstRoot.getNodeName().equals(ELEMENT_NAME_DITA)) {
         final Element lastChildTopic = getLastChildTopic(dstTopic);
         if (lastChildTopic != null) {
           dstTopic = lastChildTopic;
         }
       } else if (MAP_MAP.matches(dstTopic)) {
+        // XXX: When is this possible?
         final Element navtitle = getNavtitle(rootChunk.topicref());
         doc = xmlUtils.newDocument();
         if (navtitle != null) {
@@ -768,10 +775,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       } else {
         final Element ditaWrapper = createDita(doc);
         doc.replaceChild(ditaWrapper, doc.getDocumentElement());
-        if (dstTopic.getParentNode() != null) {
-          dstTopic = (Element) dstTopic.getParentNode().removeChild(dstTopic);
+        if (dstRoot.getParentNode() != null) {
+          // XXX: Should this clone the element
+          dstRoot = (Element) dstRoot.getParentNode().removeChild(dstRoot);
         }
-        ditaWrapper.appendChild(dstTopic);
+        ditaWrapper.appendChild(dstRoot);
       }
       mergeTopic(rootChunk, rootChunk, dstTopic);
     } else {
