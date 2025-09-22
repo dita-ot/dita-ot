@@ -3,8 +3,7 @@
     <title class="- topic/title ">c1</title>
     <topic class="- topic/topic " id="topic_c2" ditaarch:DITAArchVersion="2.0">
       <title class="- topic/title ">c2</title>
-    </topic>
-        <dita ditaarch:DITAArchVersion="2.0" id="topic_d2"><!-- FIXME: Remove dita -->
+      <dita ditaarch:DITAArchVersion="2.0" id="topic_d2"><!-- FIXME: Remove dita -->
         <topic class="- topic/topic " id="topic_d1" ditaarch:DITAArchVersion="2.0">
           <title class="- topic/title ">d1</title>
           <topic class="- topic/topic " id="topic_d2" ditaarch:DITAArchVersion="2.0">
@@ -17,7 +16,8 @@
             <title class="- topic/title ">d4</title>
           </topic>
         </topic>
-        </dita>
+      </dita>
+    </topic>
   </topic>
   <topic class="- topic/topic " id="topic_c3" ditaarch:DITAArchVersion="2.0">
     <title class="- topic/title ">c1</title>

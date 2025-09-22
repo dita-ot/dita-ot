@@ -774,11 +774,13 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
       } else {
         final Element ditaWrapper = createDita(doc);
+        //        ditaWrapper.setAttribute("debug", "A");
         doc.replaceChild(ditaWrapper, doc.getDocumentElement());
         if (dstRoot.getParentNode() != null) {
           // XXX: Should this clone the element
           dstRoot = (Element) dstRoot.getParentNode().removeChild(dstRoot);
         }
+        //        dstRoot.setAttribute("debug", "B");
         ditaWrapper.appendChild(dstRoot);
       }
       mergeTopic(rootChunk, rootChunk, dstTopic);
@@ -838,20 +840,26 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
             final Element imported = importSelectedTopic(topic, dstTopic.getOwnerDocument(), child.select());
             rewriteTopicId(imported, child.id());
             relativizeLinks(imported, child.src(), rootChunk.dst());
-            added =
-              (Element) dstTopic.appendChild(
-                switch (rootChunk.select()) {
-                  case DOCUMENT -> {
-                    for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
-                      if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
-                        yield imported;
-                      }
-                    }
-                    throw new RuntimeException("Unable to find matching ID");
+            Element selected =
+              switch (rootChunk.select()) {
+                case DOCUMENT -> {
+                  if (child.src().getFragment() == null) {
+                    yield imported;
                   }
-                  case BRANCH, TOPIC -> imported;
+                  if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
+                    yield imported;
+                  }
+                  for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
+                    if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
+                      yield importedTopic;
+                    }
+                  }
+                  throw new RuntimeException("Unable to find matching ID A");
                 }
-              );
+                case BRANCH, TOPIC -> imported;
+              };
+            //            selected.setAttribute("debug", "C");
+            added = (Element) dstTopic.appendChild(selected);
             //                        if (i++ == rootTopics.size()) {
             //                        }
           }
@@ -861,21 +869,28 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
           rewriteTopicId(imported, child.id());
           relativizeLinks(imported, child.src(), rootChunk.dst());
-          added =
-            (Element) XMLUtils.insertAfter(
-              dstTopic,
-              switch (rootChunk.select()) {
-                case DOCUMENT -> {
-                  for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
-                    if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-                      yield imported;
-                    }
-                  }
-                  throw new RuntimeException("Unable to find matching ID");
+          Element selected =
+            switch (rootChunk.select()) {
+              case DOCUMENT -> {
+                if (child.src().getFragment() == null) {
+                  yield imported;
                 }
-                case BRANCH, TOPIC -> imported;
+                if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
+                  yield imported;
+                }
+                for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
+                  if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
+                    //                    yield imported;
+                    yield importedTopic;
+                  }
+                }
+                throw new RuntimeException("Unable to find matching ID B");
               }
-            );
+              case BRANCH, TOPIC -> imported;
+            };
+          //          selected.setAttribute("debug", "D");
+          //          added = (Element) XMLUtils.insertAfter(dstTopic, selected);
+          added = (Element) dstTopic.appendChild(selected);
           mergeTopic(rootChunk, child, added);
         }
       } else {
@@ -1062,6 +1077,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         return emptyList();
       } else if (chunkAttr.contains(SPLIT.name)) {
         logger.warn(MessageUtils.getMessage("DOTJ087W", String.join(" ", chunkAttr)).setLocation(elem).toString());
+        elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
+      } else {
         elem.removeAttribute(ATTRIBUTE_NAME_CHUNK);
       }
     }
