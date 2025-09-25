@@ -13,7 +13,7 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static net.sf.saxon.s9api.streams.Steps.descendant;
 import static org.dita.dost.chunk.ChunkOperation.Operation.COMBINE;
 import static org.dita.dost.chunk.ChunkOperation.Operation.SPLIT;
-import static org.dita.dost.chunk.ChunkOperation.Select.*;
+import static org.dita.dost.chunk.ChunkOperation.Select.TOPIC;
 import static org.dita.dost.chunk.ChunkUtils.WHITESPACE;
 import static org.dita.dost.chunk.ChunkUtils.isCompatible;
 import static org.dita.dost.module.ChunkModule.ROOT_CHUNK_OVERRIDE;
@@ -43,12 +43,9 @@ import org.dita.dost.module.AbstractPipelineModuleImpl;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.Configuration;
-import org.dita.dost.util.DitaUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.Job.FileInfo.Builder;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 
 /**
@@ -774,13 +771,11 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         }
       } else {
         final Element ditaWrapper = createDita(doc);
-        //        ditaWrapper.setAttribute("debug", "A");
         doc.replaceChild(ditaWrapper, doc.getDocumentElement());
         if (dstRoot.getParentNode() != null) {
           // XXX: Should this clone the element
           dstRoot = (Element) dstRoot.getParentNode().removeChild(dstRoot);
         }
-        //        dstRoot.setAttribute("debug", "B");
         ditaWrapper.appendChild(dstRoot);
       }
       mergeTopic(rootChunk, rootChunk, dstTopic);
@@ -834,34 +829,27 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       if (child.src() != null) {
         final Element root = getElement(child.src(), child.select());
         if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
-          final List<Element> rootTopics = getChildElements(root, TOPIC_TOPIC);
-          int i = 1;
-          for (final Element topic : rootTopics) {
-            final Element imported = importSelectedTopic(topic, dstTopic.getOwnerDocument(), child.select());
+          final List<Element> importedTopics =
+            switch (child.select()) {
+              case DOCUMENT, BRANCH -> getChildElements(root, TOPIC_TOPIC)
+                .stream()
+                .map(topic -> (Element) dstTopic.getOwnerDocument().importNode(topic, true))
+                .toList();
+              case TOPIC -> getChildElements(root, TOPIC_TOPIC)
+                .stream()
+                .map(topic -> {
+                  var imported = (Element) dstTopic.getOwnerDocument().importNode(topic, true);
+                  for (Element childTopic : XMLUtils.getChildElements(imported, Constants.TOPIC_TOPIC)) {
+                    imported.removeChild(childTopic);
+                  }
+                  return imported;
+                })
+                .toList();
+            };
+          for (final Element imported : importedTopics) {
             rewriteTopicId(imported, child.id());
             relativizeLinks(imported, child.src(), rootChunk.dst());
-            Element selected =
-              switch (rootChunk.select()) {
-                case DOCUMENT -> {
-                  if (child.src().getFragment() == null) {
-                    yield imported;
-                  }
-                  if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
-                    yield imported;
-                  }
-                  for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
-                    if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(topic.getAttribute(ATTRIBUTE_NAME_ID))) {
-                      yield importedTopic;
-                    }
-                  }
-                  throw new RuntimeException("Unable to find matching ID A");
-                }
-                case BRANCH, TOPIC -> imported;
-              };
-            //            selected.setAttribute("debug", "C");
-            added = (Element) dstTopic.appendChild(selected);
-            //                        if (i++ == rootTopics.size()) {
-            //                        }
+            dstTopic.appendChild(imported);
           }
           mergeTopic(rootChunk, child, dstTopic);
         } else {
@@ -880,7 +868,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 }
                 for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
                   if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-                    //                    yield imported;
                     yield importedTopic;
                   }
                 }
@@ -888,8 +875,6 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
               }
               case BRANCH, TOPIC -> imported;
             };
-          //          selected.setAttribute("debug", "D");
-          //          added = (Element) XMLUtils.insertAfter(dstTopic, selected);
           added = (Element) dstTopic.appendChild(selected);
           mergeTopic(rootChunk, child, added);
         }
@@ -915,6 +900,27 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           imported.removeChild(childTopic);
         }
         yield imported;
+      }
+    };
+  }
+
+  private List<Element> importSelectedTopics(Element src, Document dst, ChunkOperation.Select select) {
+    return switch (select) {
+      case DOCUMENT -> {
+        var imported = (Element) dst.importNode(src.getOwnerDocument().getDocumentElement(), true);
+        if (imported.getNodeName().equals(ELEMENT_NAME_DITA)) {
+          yield getChildElements(imported, TOPIC_TOPIC);
+        } else {
+          yield List.of(imported);
+        }
+      }
+      case BRANCH -> List.of((Element) dst.importNode(src, true));
+      case TOPIC -> {
+        var imported = (Element) dst.importNode(src, true);
+        for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
+          imported.removeChild(childTopic);
+        }
+        yield List.of(imported);
       }
     };
   }
