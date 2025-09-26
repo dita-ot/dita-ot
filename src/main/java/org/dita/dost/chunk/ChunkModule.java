@@ -825,7 +825,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   private void mergeTopic(final ChunkOperation rootChunk, final ChunkOperation chunk, final Element dstTopic)
     throws IOException {
     for (ChunkOperation child : chunk.children()) {
-      Element added;
+      Element added = null;
       if (child.src() != null) {
         final Element root = getElement(child.src(), child.select());
         if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
@@ -849,9 +849,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           for (final Element imported : importedTopics) {
             rewriteTopicId(imported, child.id());
             relativizeLinks(imported, child.src(), rootChunk.dst());
-            dstTopic.appendChild(imported);
+            added = (Element) dstTopic.appendChild(imported);
           }
-          mergeTopic(rootChunk, child, dstTopic);
+          mergeTopic(rootChunk, child, added);
         } else {
           // TODO check select and only import what is needed
           final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
