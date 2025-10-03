@@ -23,17 +23,6 @@ record ChunkOperation(
   List<ChunkOperation> children,
   Select select
 ) {
-  private ChunkOperation(
-    org.dita.dost.chunk.ChunkOperation.Operation operation,
-    URI src,
-    URI dst,
-    String id,
-    Element topicref,
-    List<ChunkOperation> children
-  ) {
-    this(operation, src, dst, id, topicref, children, Select.DOCUMENT);
-  }
-
   public enum Operation {
     COMBINE("combine"),
     SPLIT("split");

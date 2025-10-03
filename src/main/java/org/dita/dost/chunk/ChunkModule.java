@@ -734,7 +734,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   private Document merge(final ChunkOperation rootChunk) throws IOException {
     Document doc;
     if (rootChunk.src() != null) {
-      Element dstTopic = getElement(rootChunk.src(), rootChunk.select());
+      Element dstTopic = getElement(rootChunk.src());
       if (rootChunk.select() == TOPIC) {
         dstTopic = (Element) dstTopic.cloneNode(true);
         for (Element topicChild : getChildElements(dstTopic, TOPIC_TOPIC)) {
@@ -754,7 +754,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           dstTopic = lastChildTopic;
         }
       } else if (MAP_MAP.matches(dstTopic)) {
-        // XXX: When is this possible?
+        // XXX: When is this possible? At least in `map` test
         final Element navtitle = getNavtitle(rootChunk.topicref());
         doc = xmlUtils.newDocument();
         if (navtitle != null) {
@@ -827,7 +827,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     for (ChunkOperation child : chunk.children()) {
       Element added = null;
       if (child.src() != null) {
-        final Element root = getElement(child.src(), child.select());
+        final Element root = getElement(child.src());
         if (root.getNodeName().equals(ELEMENT_NAME_DITA)) {
           final List<Element> importedTopics =
             switch (child.select()) {
@@ -847,7 +847,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 .toList();
             };
           for (final Element imported : importedTopics) {
-            rewriteTopicId(imported, child.id());
+            rewriteTopicId(imported, child);
             relativizeLinks(imported, child.src(), rootChunk.dst());
             added = (Element) dstTopic.appendChild(imported);
           }
@@ -855,7 +855,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         } else {
           // TODO check select and only import what is needed
           final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
-          rewriteTopicId(imported, child.id());
+          rewriteTopicId(imported, child);
           relativizeLinks(imported, child.src(), rootChunk.dst());
           Element selected =
             switch (rootChunk.select()) {
@@ -904,33 +904,9 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     };
   }
 
-  private List<Element> importSelectedTopics(Element src, Document dst, ChunkOperation.Select select) {
-    return switch (select) {
-      case DOCUMENT -> {
-        var imported = (Element) dst.importNode(src.getOwnerDocument().getDocumentElement(), true);
-        if (imported.getNodeName().equals(ELEMENT_NAME_DITA)) {
-          yield getChildElements(imported, TOPIC_TOPIC);
-        } else {
-          yield List.of(imported);
-        }
-      }
-      case BRANCH -> List.of((Element) dst.importNode(src, true));
-      case TOPIC -> {
-        var imported = (Element) dst.importNode(src, true);
-        for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
-          imported.removeChild(childTopic);
-        }
-        yield List.of(imported);
-      }
-    };
-  }
-
-  private Element getElement(URI src, ChunkOperation.Select select) throws IOException {
+  private Element getElement(URI src) throws IOException {
     logger.info("Reading {0}", src);
     final Document chunkDoc = job.getStore().getDocument(src);
-    //    if (select == ChunkOperation.Select.DOCUMENT) {
-    //      return chunkDoc.getDocumentElement();
-    //    }
     if (src.getFragment() != null) {
       final NodeList children = chunkDoc.getElementsByTagName("*");
       for (int i = 0; i < children.getLength(); i++) {
@@ -959,8 +935,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     return imported;
   }
 
-  private void rewriteTopicId(final Element topic, final String id) {
-    topic.setAttribute(ATTRIBUTE_NAME_ID, id);
+  private void rewriteTopicId(final Element topic, final ChunkOperation chunk) {
+    //    if (Objects.equals(chunk.src().getFragment(), topic.getAttribute(ATTRIBUTE_NAME_ID))) {
+    topic.setAttribute(ATTRIBUTE_NAME_ID, chunk.id());
+    //    }
   }
 
   private void relativizeLinks(final Element topic, final URI src, final URI dst) {
