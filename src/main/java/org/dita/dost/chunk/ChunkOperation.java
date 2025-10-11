@@ -20,7 +20,8 @@ record ChunkOperation(
   URI dst,
   String id,
   Element topicref,
-  List<ChunkOperation> children
+  List<ChunkOperation> children,
+  Select select
 ) {
   public enum Operation {
     COMBINE("combine"),
@@ -30,6 +31,27 @@ record ChunkOperation(
 
     Operation(final String name) {
       this.name = name;
+    }
+  }
+
+  public enum Select {
+    DOCUMENT("select-document"),
+    BRANCH("select-branch"),
+    TOPIC("select-topic");
+
+    public final String value;
+
+    Select(final String value) {
+      this.value = value;
+    }
+
+    public static Select of(String value) {
+      for (Select select : values()) {
+        if (select.value.equals(value)) {
+          return select;
+        }
+      }
+      return null;
     }
   }
 
@@ -55,6 +77,10 @@ record ChunkOperation(
     return new ChunkBuilder(operation);
   }
 
+  public static ChunkBuilder builder(final ChunkOperation operation) {
+    return new ChunkBuilder(operation);
+  }
+
   public static class ChunkBuilder {
 
     private final Operation operation;
@@ -63,6 +89,7 @@ record ChunkOperation(
     private String id;
     private Element topicref;
     private List<ChunkBuilder> children = new ArrayList<>();
+    private Select select = Select.DOCUMENT;
 
     public ChunkBuilder(final Operation operation) {
       this.operation = operation;
@@ -74,7 +101,13 @@ record ChunkOperation(
       this.dst = orig.dst;
       this.id = orig.id;
       this.topicref = orig.topicref;
-      this.children = orig.children.stream().map(ChunkBuilder::new).collect(Collectors.toList());
+      this.children = orig.children.stream().map(ChunkOperation::builder).collect(Collectors.toList());
+      this.select = orig.select;
+    }
+
+    public ChunkBuilder select(final Select select) {
+      this.select = select;
+      return this;
     }
 
     public ChunkBuilder src(final URI src) {
@@ -105,10 +138,8 @@ record ChunkOperation(
     }
 
     public ChunkOperation build() {
-      final URI src = this.src;
-      final URI dst = this.dst;
       final List<ChunkOperation> cos = children.stream().map(ChunkBuilder::build).toList();
-      return new ChunkOperation(operation, src, dst, id, topicref, cos);
+      return new ChunkOperation(operation, src, dst, id, topicref, cos, select);
     }
   }
 }
