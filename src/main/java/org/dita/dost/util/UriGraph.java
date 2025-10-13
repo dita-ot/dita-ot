@@ -73,4 +73,21 @@ public class UriGraph {
     }
     return res;
   }
+
+  public List<URI> get(URI from) {
+    Integer i = indexMap.get(from);
+    if (i == null) {
+      return Collections.emptyList();
+    }
+    // TODO: This should access the data directly
+    boolean[] data = graph.getData()[i];
+    int size = data.length;
+    List<URI> res = new ArrayList<>(size);
+    for (Map.Entry<URI, Integer> entry : indexMap.entrySet()) {
+      if (data[entry.getValue()]) {
+        res.add(entry.getKey());
+      }
+    }
+    return res;
+  }
 }

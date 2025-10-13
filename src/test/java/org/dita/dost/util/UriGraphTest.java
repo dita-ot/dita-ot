@@ -36,6 +36,12 @@ public class UriGraphTest {
   }
 
   @Test
+  void add_same() {
+    act.add(a, a);
+    assertTrue(act.isEdge(a, a));
+  }
+
+  @Test
   void add_duplicate() {
     act.add(a, b);
     act.add(a, b);
@@ -73,5 +79,16 @@ public class UriGraphTest {
     act.add(c, a);
     act.add(b, c);
     assertEquals(List.of(Map.entry(a, b), Map.entry(a, c), Map.entry(b, c), Map.entry(c, a)), act.getAll());
+  }
+
+  @Test
+  void get() {
+    act.add(a, b);
+    act.add(a, c);
+    act.add(c, a);
+    act.add(b, c);
+    assertEquals(List.of(b, c), act.get(a));
+    assertEquals(List.of(a), act.get(c));
+    assertEquals(List.of(c), act.get(b));
   }
 }
