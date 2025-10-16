@@ -36,7 +36,9 @@ public final class StringUtils {
    * @param delim -
    *            Description of the Parameter
    * @return java.lang.String
+   * @deprecated since 4.4
    */
+  @Deprecated
   @SuppressWarnings("rawtypes")
   public static String join(final Collection coll, final String delim) {
     final StringBuilder buff = new StringBuilder(256);

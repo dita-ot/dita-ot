@@ -15,7 +15,6 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.getDitaVersion;
 import static org.dita.dost.util.FileUtils.getFragment;
 import static org.dita.dost.util.FileUtils.replaceExtension;
-import static org.dita.dost.util.StringUtils.join;
 import static org.dita.dost.util.StringUtils.split;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
@@ -143,7 +142,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
     final Element root = doc.getDocumentElement();
     if (rootChunkOverride != null) {
-      final String c = join(rootChunkOverride, " ");
+      final String c = String.join(" ", rootChunkOverride);
       logger.debug("Use override root chunk {}", c);
       root.setAttribute(ATTRIBUTE_NAME_CHUNK, c);
     }
