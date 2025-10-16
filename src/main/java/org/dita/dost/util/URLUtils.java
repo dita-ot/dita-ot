@@ -40,7 +40,9 @@ public final class URLUtils {
    * @return a corrected URL. Never null.
    * @exception MalformedURLException
    *                when the argument is null.
+   * @deprecated since 4.4
    */
+  @Deprecated
   public static URL correct(final File file) throws MalformedURLException {
     if (file == null) {
       throw new MalformedURLException("The url is null");
@@ -57,7 +59,9 @@ public final class URLUtils {
    * @return a corrected URL. Never null.
    * @exception MalformedURLException
    *                when the argument is null.
+   * @deprecated since 4.4
    */
+  @Deprecated
   public static URL correct(final URL url) throws MalformedURLException {
     if (url == null) {
       throw new MalformedURLException("The url is null");
@@ -73,7 +77,9 @@ public final class URLUtils {
    *
    * @param s the string to decode
    * @return the newly decoded string
+   * @deprecated since 4.4
    */
+  @Deprecated
   public static String decode(final String s) {
     try {
       return URLDecoder.decode(s, UTF8);
@@ -88,7 +94,9 @@ public final class URLUtils {
    * @param s
    *            the string to be decoded
    * @return the decoded string
+   * @deprecated since 4.4
    */
+  @Deprecated
   private static String uncorrect(final String s) {
     if (s == null) {
       return null;
@@ -175,7 +183,9 @@ public final class URLUtils {
    *            The file URL.
    * @return The canonical or absolute file, or null if the protocol is not
    *         file.
+   * @deprecated since 4.4
    */
+  @Deprecated
   public static File getCanonicalFileFromFileUrl(final URL url) {
     File file = null;
     if (url == null) {
@@ -211,7 +221,9 @@ public final class URLUtils {
    *            will consider that is an URL that contains an anchor or a
    *            query.
    * @return The corrected URL.
+   * @deprecated since 4.4
    */
+  @Deprecated
   private static String correct(String url, final boolean forceCorrection) {
     if (url == null) {
       return null;
@@ -277,7 +289,9 @@ public final class URLUtils {
    *                 The file name string.
    * @return string -
    *                 URL
+   * @deprecated since 4.4
    */
+  @Deprecated
   public static String getURL(final String fileName) {
     if (fileName.startsWith("file:/")) {
       return fileName;
