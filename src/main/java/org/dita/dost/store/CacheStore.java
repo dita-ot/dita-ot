@@ -33,6 +33,7 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.wrapper.RebasedDocument;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -328,6 +329,12 @@ public class CacheStore extends AbstractStore implements Store {
           Sender.send(source, receiver, new ParseOptions());
         } catch (final RuntimeException e) {
           throw e;
+        } catch (XPathException e) {
+          if (e.getCause() instanceof StopParsingException) {
+            // expected exit
+            return;
+          }
+          throw new DITAOTException("Failed to transform " + src + ": " + e.getMessage(), e);
         } catch (final Exception e) {
           throw new DITAOTException("Failed to transform " + src + ": " + e.getMessage(), e);
         }
