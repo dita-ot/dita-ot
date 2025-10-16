@@ -66,8 +66,10 @@ public final class StringUtils {
    * @param value map to serializer
    * @param delim entry delimiter
    * @return concatenated map
+   * @deprecated since 4.4
    */
   @SuppressWarnings({ "rawtypes", "unchecked" })
+  @Deprecated
   public static String join(final Map value, final String delim) {
     if (value == null || value.isEmpty()) {
       return "";
