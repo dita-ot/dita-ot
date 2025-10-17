@@ -54,7 +54,7 @@ public class ImageMetadataModuleTest {
     job.setInputDir(srcDir.toURI());
     job.addAll(
       Stream
-        .of("img.xxx", "img.png", "img.gif", "img.jpg")
+        .of("img.xxx", "img.png", "img.gif", "img.jpg", "img.svg")
         .map(p -> new Builder().uri(create(p)).src(new File(srcDir, p).toURI()).format("html").build())
         .collect(Collectors.toList())
     );
@@ -75,6 +75,7 @@ public class ImageMetadataModuleTest {
     assertEquals("image", job.getFileInfo(create("img.png")).format);
     assertEquals("image", job.getFileInfo(create("img.gif")).format);
     assertEquals("image", job.getFileInfo(create("img.jpg")).format);
+    assertEquals("image", job.getFileInfo(create("img.svg")).format);
     assertEquals("image", job.getFileInfo(create("img.xxx")).format);
   }
 
