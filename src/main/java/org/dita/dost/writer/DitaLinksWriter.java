@@ -115,7 +115,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
           logger.error(e.getMessage(), e);
         }
       }
-      final String t = StringUtils.join(topicIdStack, SLASH);
+      final String t = String.join(SLASH, topicIdStack);
       if (indexEntries.containsKey(t)) {
         curMatchTopic = t;
       } else if (indexEntries.containsKey(topicIdStack.peekFirst())) {

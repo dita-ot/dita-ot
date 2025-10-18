@@ -15,7 +15,15 @@ import org.xml.sax.helpers.AttributesImpl;
 
 public class SaxCache {
 
-  public interface SaxEvent {
+  public sealed interface SaxEvent
+    permits
+      StartPrefixMappingEvent,
+      EndPrefixMappingEvent,
+      StartElementEvent,
+      EndElementEvent,
+      CharactersEvent,
+      IgnorableWhitespaceEvent,
+      ProcessingInstructionEvent {
     void write(ContentHandler handler) throws SAXException;
   }
 

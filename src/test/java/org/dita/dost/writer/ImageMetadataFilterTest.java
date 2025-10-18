@@ -63,7 +63,7 @@ public class ImageMetadataFilterTest {
     );
     assertEquals(
       Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.xxx")
+        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .stream()
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),
@@ -91,7 +91,7 @@ public class ImageMetadataFilterTest {
     );
     assertEquals(
       Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.xxx")
+        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .stream()
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),

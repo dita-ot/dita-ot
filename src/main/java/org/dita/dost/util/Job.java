@@ -321,6 +321,11 @@ public final class Job {
     lastModified = getStore().getLastModified(jobFile.toURI());
   }
 
+  /**
+   * @deprecated since 4.4
+   * @throws IOException
+   */
+  @Deprecated
   public Document serialize() throws IOException {
     try {
       final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();

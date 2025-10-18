@@ -6,6 +6,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.dita.dost.exception.StopParsingException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -122,11 +123,6 @@ public class DetectLang extends Task {
       }
     }
   }
-
-  /**
-   * Exception to signal deliberate parsing stop.
-   */
-  private static final class StopParsingException extends SAXException {}
 
   /**
    * Sets property in active ant project with name specified inpropertyName,

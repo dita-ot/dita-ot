@@ -95,7 +95,7 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
             if (!valueSet.contains(token)) {
               logger.warn(
                 MessageUtils
-                  .getMessage("DOTJ049W", attrName.toString(), elemName, attrValue, StringUtils.join(valueSet, ", "))
+                  .getMessage("DOTJ049W", attrName.toString(), elemName, attrValue, String.join(", ", valueSet))
                   .setLocation(atts)
                   .toString()
               );

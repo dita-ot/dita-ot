@@ -21,6 +21,7 @@ import java.io.Writer;
 import java.net.URI;
 import java.util.*;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.util.*;
@@ -461,6 +462,11 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
       job.getStore().transform(ditaTopicFile.toURI(), parser);
     } catch (final RuntimeException e) {
       throw e;
+    } catch (DITAOTException e) {
+      if (e.getCause() instanceof StopParsingException) {
+        // expected exit
+      }
+      logger.error(e.getMessage(), e);
     } catch (final Exception e) {
       logger.error(e.getMessage(), e);
     }

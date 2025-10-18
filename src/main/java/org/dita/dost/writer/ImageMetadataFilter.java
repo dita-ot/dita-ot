@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.reader.SvgMetadataReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -187,6 +188,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
   private Attributes readSvgMetadata(final URI imgInput) {
     try (final InputStream in = getInputStream(imgInput)) {
       reader.parse(new InputSource(in));
+    } catch (StopParsingException e) {
       return svgMetadataReader.getDimensions().getAttributes();
     } catch (final IOException | SAXException e) {
       logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);

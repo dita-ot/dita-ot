@@ -9,7 +9,6 @@
 package org.dita.dost.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -45,6 +44,11 @@ public class RoseTree<T> {
     this.children = null;
   }
 
+  /**
+   * Add child tree.
+   *
+   * @param child child tree
+   */
   public synchronized void addChild(RoseTree<T> child) {
     if (children == null) {
       children = new ArrayList<>();
@@ -52,10 +56,20 @@ public class RoseTree<T> {
     children.add(child);
   }
 
+  /**
+   * Get node value.
+   *
+   * @return node value
+   */
   public T getValue() {
     return value;
   }
 
+  /**
+   * Get all children of tree.
+   *
+   * @return tree children
+   */
   public List<RoseTree<T>> getChildren() {
     if (children == null) {
       return Collections.emptyList();
@@ -63,6 +77,11 @@ public class RoseTree<T> {
     return Collections.unmodifiableList(children);
   }
 
+  /**
+   * Flatten tree values in depth-first order.
+   *
+   * @return all tree node values
+   */
   public Stream<T> flatten() {
     if (children == null) {
       return Stream.of(value);
