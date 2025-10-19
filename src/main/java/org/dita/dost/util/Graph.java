@@ -11,6 +11,11 @@ package org.dita.dost.util;
 /**
  * Implementation of directed Graph using Adjacent Matrix.
  *
+ * <h2>Thread safety</h2>
+ *
+ * <p>Graphs are not safe for use by multiple concurrent threads. If a Graph is to be used by more than one thread then
+ * access to the Graph should be controlled by appropriate synchronization.</p>
+ *
  * @see <a href="https://en.wikipedia.org/wiki/Adjacency_matrix#Directed_graphs">Adjacent Matrix</a>
  */
 public final class Graph {
@@ -43,15 +48,13 @@ public final class Graph {
       throw new IllegalArgumentException();
     }
     if (source >= size || destination >= size) {
-      synchronized (this) {
-        int newSize = Math.max(source, destination) + 1;
-        boolean[][] newAdjacentMatrix = new boolean[newSize][newSize];
-        for (int i = 0; i < size; i++) {
-          System.arraycopy(adjacentMatrix[i], 0, newAdjacentMatrix[i], 0, size);
-        }
-        size = newSize;
-        adjacentMatrix = newAdjacentMatrix;
+      int newSize = Math.max(source, destination) + 1;
+      boolean[][] newAdjacentMatrix = new boolean[newSize][newSize];
+      for (int i = 0; i < size; i++) {
+        System.arraycopy(adjacentMatrix[i], 0, newAdjacentMatrix[i], 0, size);
       }
+      size = newSize;
+      adjacentMatrix = newAdjacentMatrix;
     }
     adjacentMatrix[source][destination] = true;
   }
