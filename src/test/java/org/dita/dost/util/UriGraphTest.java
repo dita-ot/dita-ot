@@ -32,44 +32,44 @@ public class UriGraphTest {
   @Test
   void add() {
     act.add(a, b);
-    assertTrue(act.isEdge(a, b));
+    assertTrue(act.contains(a, b));
   }
 
   @Test
   void add_same() {
     act.add(a, a);
-    assertTrue(act.isEdge(a, a));
+    assertTrue(act.contains(a, a));
   }
 
   @Test
   void add_duplicate() {
     act.add(a, b);
     act.add(a, b);
-    assertTrue(act.isEdge(a, b));
+    assertTrue(act.contains(a, b));
   }
 
   @Test
   void remove() {
     act.add(a, b);
     act.remove(a, b);
-    assertFalse(act.isEdge(a, b));
+    assertFalse(act.contains(a, b));
   }
 
   @Test
   void remove_notFound() {
     act.remove(a, b);
-    assertFalse(act.isEdge(a, b));
+    assertFalse(act.contains(a, b));
   }
 
   @Test
-  void isEdge() {
+  void contains() {
     act.add(a, b);
-    assertTrue(act.isEdge(a, b));
+    assertTrue(act.contains(a, b));
   }
 
   @Test
-  void isEdge_notFound() {
-    assertFalse(act.isEdge(a, b));
+  void contains_notFound() {
+    assertFalse(act.contains(a, b));
   }
 
   @Test
@@ -78,7 +78,7 @@ public class UriGraphTest {
     act.add(a, c);
     act.add(c, a);
     act.add(b, c);
-    assertEquals(List.of(Map.entry(a, b), Map.entry(a, c), Map.entry(b, c), Map.entry(c, a)), act.getAll());
+    assertEquals(Map.of(a, List.of(b, c), b, List.of(c), c, List.of(a)), act.getAll());
   }
 
   @Test

@@ -63,8 +63,7 @@ public class UriGraph {
     }
   }
 
-  // TODO: Rename to contains
-  public boolean isEdge(URI from, URI to) {
+  public boolean contains(URI from, URI to) {
     assert from.isAbsolute();
     assert to.isAbsolute();
     readLock.lock();
@@ -80,11 +79,10 @@ public class UriGraph {
     }
   }
 
-  // TODO: This should be Map<URI, List<URI>>
-  public List<Map.Entry<URI, URI>> getAll() {
+  public Map<URI, List<URI>> getAll() {
     readLock.lock();
     try {
-      List<Map.Entry<URI, URI>> res = new ArrayList<>();
+      Map<URI, List<URI>> res = new HashMap<>();
       // TODO: This should access the data directly
       boolean[][] data = graph.getData();
       int size = data.length;
@@ -95,7 +93,9 @@ public class UriGraph {
       for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
           if (data[i][j]) {
-            res.add(Map.entry(uris[i], uris[j]));
+            var value = res.getOrDefault(uris[i], new ArrayList<>());
+            value.add(uris[j]);
+            res.put(uris[i], value);
           }
         }
       }
