@@ -83,16 +83,14 @@ public class UriGraph {
     readLock.lock();
     try {
       Map<URI, List<URI>> res = new HashMap<>();
-      // TODO: This should access the data directly
-      boolean[][] data = graph.getData();
-      int size = data.length;
+      int size = graph.getSize();
       URI[] uris = new URI[size];
       for (Map.Entry<URI, Integer> entry : indexMap.entrySet()) {
         uris[entry.getValue()] = entry.getKey();
       }
       for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-          if (data[i][j]) {
+          if (graph.isEdge(i, j)) {
             var value = res.getOrDefault(uris[i], new ArrayList<>());
             value.add(uris[j]);
             res.put(uris[i], value);
