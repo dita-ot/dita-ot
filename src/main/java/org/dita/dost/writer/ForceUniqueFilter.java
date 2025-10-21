@@ -22,7 +22,6 @@ import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Create copy-to attributes for duplicate topicrefs.
@@ -161,6 +160,8 @@ public final class ForceUniqueFilter extends AbstractXMLFilter {
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
 
     final Optional<String> classValue = classElementStack.removeFirst();
     if (classValue.isPresent() && ignoreStack.peek() && MAP_TOPICREF.matches(classValue.get())) {
