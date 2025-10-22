@@ -103,7 +103,7 @@ jobs:
         run: |
           echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: Create pull-request
-        uses: mislav/bump-homebrew-formula-action@v2
+        uses: mislav/bump-homebrew-formula-action@v3
         with:
           formula-name: dita-ot
           tag-name: ${{ env.tag }}
