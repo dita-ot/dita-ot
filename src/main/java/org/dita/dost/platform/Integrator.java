@@ -24,7 +24,6 @@ import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
@@ -49,7 +48,6 @@ import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -112,9 +110,9 @@ public final class Integrator {
   private final Map<String, Value> templateSet;
   private final File ditaDir;
   /**
-   * Plugin configuration file.
+   * Plugin configuration files.
    */
-  private final Set<File> descSet;
+  private final Set<File> pluginFiles;
   private final XMLReader reader;
   private final Document pluginsDoc;
   private final PluginParser parser;
@@ -137,7 +135,7 @@ public final class Integrator {
     this.ditaDir = ditaDir;
     pluginTable = new HashMap<>(16);
     templateSet = new HashMap<>(16);
-    descSet = new HashSet<>(16);
+    pluginFiles = new HashSet<>(16);
     loadedPlugin = new HashSet<>(16);
     featureTable = new HashMap<>(16);
     extensionPoints = new HashSet<>();
@@ -201,7 +199,7 @@ public final class Integrator {
     }
 
     // Get the list of plugin directories from the properties.
-    final String[] pluginDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
+    final String[] pluginRootDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
 
     final Set<String> pluginIgnores = new HashSet<>();
     if (properties.getProperty(CONF_PLUGIN_IGNORES) != null) {
@@ -220,24 +218,26 @@ public final class Integrator {
 
     for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
       final String t = tmpl.trim();
-      if (t.length() != 0) {
+      if (!t.isEmpty()) {
         logger.warn(MessageUtils.getMessage("DOTJ080W", "templates", "template").toString());
         templateSet.put(t, null);
       }
     }
 
-    for (final String pluginDir2 : pluginDirs) {
-      File pluginDir = new File(pluginDir2);
-      if (!pluginDir.isAbsolute()) {
-        pluginDir = new File(ditaDir, pluginDir.getPath());
+    for (final String pluginDir2 : pluginRootDirs) {
+      File pluginRootDir = new File(pluginDir2);
+      if (!pluginRootDir.isAbsolute()) {
+        pluginRootDir = new File(ditaDir, pluginRootDir.getPath());
       }
-      final File[] pluginFiles = pluginDir.listFiles();
-
-      for (int i = 0; (pluginFiles != null) && (i < pluginFiles.length); i++) {
-        final File f = pluginFiles[i];
-        final File descFile = new File(pluginFiles[i], "plugin.xml");
-        if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()) {
-          descSet.add(descFile);
+      final File[] pluginDirs = pluginRootDir.listFiles();
+      if (pluginDirs != null) {
+        for (final File f : pluginDirs) {
+          if (f.isDirectory()) {
+            final File pluginFile = new File(f, "plugin.xml");
+            if (!pluginIgnores.contains(f.getName()) && pluginFile.exists()) {
+              pluginFiles.add(pluginFile);
+            }
+          }
         }
       }
     }
@@ -965,9 +965,9 @@ public final class Integrator {
   private void mergePlugins() {
     final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
     pluginsDoc.appendChild(root);
-    if (!descSet.isEmpty()) {
+    if (!pluginFiles.isEmpty()) {
       final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
-      for (final File descFile : descSet) {
+      for (final File descFile : pluginFiles) {
         logger.trace("Read plug-in configuration {}", descFile.getPath());
         final Element plugin = parseDesc(descFile);
         if (plugin != null) {
