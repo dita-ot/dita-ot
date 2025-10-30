@@ -169,6 +169,8 @@ public final class Integrator {
       final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware(true);
       pluginsDoc = factory.newDocumentBuilder().newDocument();
+      final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
+      pluginsDoc.appendChild(root);
     } catch (ParserConfigurationException e) {
       throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
     }
@@ -216,6 +218,7 @@ public final class Integrator {
       }
     }
 
+    // Deprecated
     for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
       final String t = tmpl.trim();
       if (!t.isEmpty()) {
@@ -272,8 +275,6 @@ public final class Integrator {
    * Generate and process plugin files.
    */
   private void integrate() throws Exception {
-    writePlugins();
-
     // Collect information for each feature id and generate a feature table.
     final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
     fileGen.setLogger(logger);
@@ -963,9 +964,8 @@ public final class Integrator {
    * Merge plugin configuration files.
    */
   private void mergePlugins() {
-    final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
-    pluginsDoc.appendChild(root);
     if (!pluginFiles.isEmpty()) {
+      final Element root = pluginsDoc.getDocumentElement();
       final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
       for (final File descFile : pluginFiles) {
         logger.trace("Read plug-in configuration {}", descFile.getPath());
@@ -977,9 +977,10 @@ public final class Integrator {
         }
       }
     }
+    writePlugins();
   }
 
-  private void writePlugins() throws TransformerException {
+  private void writePlugins() {
     final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
     logger.trace("Writing {}", plugins);
     try {
