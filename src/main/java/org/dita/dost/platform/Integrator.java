@@ -178,10 +178,7 @@ public final class Integrator {
     pluginList = getPluginIds(readPlugins());
   }
 
-  /**
-   * Execute point of Integrator.
-   */
-  public void execute() throws Exception {
+  private void init() {
     // Read the properties file, if it exists.
     properties = new Properties();
     if (propertiesFile != null) {
@@ -194,7 +191,10 @@ public final class Integrator {
       properties.putAll(Configuration.configuration);
     }
     if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
-      properties.setProperty(CONF_PLUGIN_DIRS, configuration.getOrDefault(CONF_PLUGIN_DIRS, "plugins;demo"));
+      properties.setProperty(
+        CONF_PLUGIN_DIRS,
+        configuration.getOrDefault(CONF_PLUGIN_DIRS, String.join(PARAM_VALUE_SEPARATOR, "plugins", "demo"))
+      );
     }
     if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
       properties.setProperty(CONF_PLUGIN_IGNORES, configuration.getOrDefault(CONF_PLUGIN_IGNORES, ""));
@@ -241,7 +241,13 @@ public final class Integrator {
         }
       }
     }
+  }
 
+  /**
+   * Execute point of Integrator.
+   */
+  public void execute() throws Exception {
+    init();
     mergePlugins();
     integrate();
     logChanges(pluginList, getPluginIds(pluginsDoc));
