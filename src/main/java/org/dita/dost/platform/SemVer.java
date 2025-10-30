@@ -8,6 +8,9 @@
 
 package org.dita.dost.platform;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +23,8 @@ import java.util.stream.Stream;
  * <pre>
  * version   ::= major( '.' minor ( '.' micro ( '.' qualifier )? )? )?
  * major     ::= number
- * minor     ::=number
- * micro     ::=number
+ * minor     ::= number
+ * micro     ::= number
  * qualifier ::= ( alphanum | '_' | '-' )+
  * </pre>
  */
@@ -39,6 +42,7 @@ public class SemVer implements Comparable<SemVer> {
     this.preRelease = Collections.emptyList();
   }
 
+  @JsonCreator
   public SemVer(String version) {
     String value = version;
     String preRel = null;
@@ -114,6 +118,7 @@ public class SemVer implements Comparable<SemVer> {
   }
 
   @Override
+  @JsonValue
   public String toString() {
     return String.format("%d.%d.%d", major, minor, patch);
   }
