@@ -25,7 +25,7 @@ record Features(
   SemVer pluginVersion,
   File pluginDir,
   File ditaDir,
-  Map<String, ExtensionPoint> extensionPoints,
+  List<ExtensionPoint> extensionPoints,
   Map<String, List<Value>> features,
   List<PluginRequirement> requiredPlugins,
   Map<String, String> metaTable,
@@ -42,7 +42,7 @@ record Features(
     private SemVer pluginVersion;
     private File pluginDir;
     private File ditaDir;
-    private final Map<String, ExtensionPoint> extensionPoints;
+    private final List<ExtensionPoint> extensionPoints;
     private final Map<String, List<Value>> featureTable;
     private final List<PluginRequirement> requireList;
     private final Map<String, String> metaTable;
@@ -52,7 +52,7 @@ record Features(
      * Constructor init pluginDir.
      */
     public Builder() {
-      this.extensionPoints = new HashMap<>();
+      this.extensionPoints = new ArrayList<>();
       this.featureTable = new HashMap<>();
       this.requireList = new ArrayList<>();
       this.metaTable = new HashMap<>();
@@ -65,7 +65,7 @@ record Features(
         pluginVersion,
         pluginDir,
         ditaDir,
-        Map.copyOf(extensionPoints),
+        List.copyOf(extensionPoints),
         featureTable
           .entrySet()
           .stream()
@@ -98,7 +98,7 @@ record Features(
     }
 
     Builder addExtensionPoint(String extensionPointId, String name) {
-      extensionPoints.put(extensionPointId, new ExtensionPoint(extensionPointId, name));
+      extensionPoints.add(new ExtensionPoint(extensionPointId, name));
       return this;
     }
 

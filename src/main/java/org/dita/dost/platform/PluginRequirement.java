@@ -16,7 +16,7 @@ import java.util.StringTokenizer;
 /**
  * PluginRequirement class.
  */
-record PluginRequirement(List<String> plugins, boolean required) {
+public record PluginRequirement(List<String> plugins, boolean required) {
   static Builder builder() {
     return new Builder();
   }

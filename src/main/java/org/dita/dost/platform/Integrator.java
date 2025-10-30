@@ -20,6 +20,8 @@ import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.toList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.net.URI;
@@ -870,24 +872,25 @@ public final class Integrator {
    * @param plugin plugin ID
    * @return {@code true}> if plugin was loaded, otherwise {@code false}
    */
-  private boolean loadPlugin(final String plugin) {
+  private void loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
       final Plugin pluginFeatures = pluginTable.get(plugin);
       final Map<String, List<Value>> featureSet = pluginFeatures.features();
       for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
-        final String key = currentFeature.getKey();
+        final String extensionPointId = currentFeature.getKey();
         final List<Value> values = currentFeature.getValue();
-        if (!extensionPoints.contains(key)) {
-          throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
+        if (!extensionPoints.contains(extensionPointId)) {
+          throw new RuntimeException(
+            "Plug-in %s uses an undefined extension point %s".formatted(plugin, extensionPointId)
+          );
         }
-        if (featureTable.containsKey(key)) {
-          final List<Value> value = featureTable.get(key);
+        if (featureTable.containsKey(extensionPointId)) {
+          final List<Value> value = featureTable.get(extensionPointId);
           value.addAll(values);
-          featureTable.put(key, value);
+          featureTable.put(extensionPointId, value);
         } else {
           //Make shallow clone to avoid making modifications directly to list inside the current feature.
-          List<Value> currentFeatureValue = values;
-          featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
+          featureTable.put(extensionPointId, values != null ? new ArrayList(values) : null);
         }
       }
 
@@ -897,9 +900,6 @@ public final class Integrator {
         templateSet.put(templatePath, new Value.StringValue(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -1001,7 +1001,7 @@ public final class Integrator {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
       final Plugin plugin = parser.getPlugin();
-      extensionPoints.addAll(plugin.extensionPoints().keySet());
+      extensionPoints.addAll(plugin.extensionPoints().stream().map(ExtensionPoint::id).toList());
       pluginTable.put(plugin.pluginId(), plugin);
       return root;
     } catch (final RuntimeException e) {

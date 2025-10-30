@@ -10,7 +10,6 @@ package org.dita.dost.platform;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
