@@ -38,7 +38,7 @@ public class PluginParserTest {
       new SemVer(1, 2, 3),
       resourceDir,
       resourceDir,
-      Map.of(),
+      List.of(),
       Map.of(
         "type_file",
         List.of(new PathValue("dummy", resourceDir, "foo"), new PathValue("dummy", resourceDir, "bar")),

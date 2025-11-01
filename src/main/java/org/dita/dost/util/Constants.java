@@ -1696,8 +1696,11 @@ public final class Constants {
   /** Property name for print transtypes. */
   public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
   public static final String CONF_TRANSTYPES = "transtypes";
+
   /** Property name for template files. */
+  @Deprecated
   public static final String CONF_TEMPLATES = "templates";
+
   /** Plugin configuration file name. */
   public static final String PLUGIN_CONF = "plugins.xml";
 
