@@ -115,13 +115,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- TODO: change property initialization to not use physical files -->
     <mkdir dir="${dita.temp.dir}"/>
-    <echoxml file="${dita.temp.dir}/.job.xml">
-      <job>
-        <property name="temp-file-name-scheme">
-          <string>org.dita.dost.module.reader.HashTempFileScheme</string>
-        </property>
-      </job>
-    </echoxml>
+
     <condition property="map.filter-on-parse" value="true" else="false">
       <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
