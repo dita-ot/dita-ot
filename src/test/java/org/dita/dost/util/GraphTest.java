@@ -185,4 +185,24 @@ public class GraphTest {
 
     assertThrows(IllegalArgumentException.class, () -> act.isEdge(0, -1));
   }
+
+  @Test
+  void getData() {
+    final Graph act = new Graph(2);
+    act.addEdge(0, 0);
+    act.addEdge(1, 0);
+    act.addEdge(1, 1);
+
+    assertArrayEquals(new boolean[][] { { true, false }, { true, true } }, act.getData());
+  }
+
+  @Test
+  void getData_oneRow() {
+    final Graph act = new Graph(2);
+    act.addEdge(0, 0);
+    act.addEdge(1, 0);
+    act.addEdge(1, 1);
+
+    assertArrayEquals(new boolean[] { true, false }, act.getData(0));
+  }
 }

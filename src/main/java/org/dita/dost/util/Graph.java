@@ -8,6 +8,8 @@
 
 package org.dita.dost.util;
 
+import java.util.Arrays;
+
 /**
  * Implementation of directed Graph using Adjacent Matrix.
  *
@@ -41,6 +43,10 @@ public final class Graph {
       System.arraycopy(adjacentMatrix[i], 0, res[i], 0, size);
     }
     return res;
+  }
+
+  public boolean[] getData(int i) {
+    return Arrays.copyOf(adjacentMatrix[i], size);
   }
 
   public void addEdge(int source, int destination) {
