@@ -1,3 +1,4 @@
+# https://github.com/gradle/actions/tree/main/wrapper-validation
 name: "Validate Gradle Wrapper"
 on:
   pull_request:
@@ -6,5 +7,5 @@ jobs:
     name: "Validation"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v3
+      - uses: actions/checkout@v5
+      - uses: gradle/actions/wrapper-validation@v5
