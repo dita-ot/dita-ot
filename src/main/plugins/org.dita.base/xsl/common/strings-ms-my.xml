@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Rajah</variable>
    <variable id="Table">Jadual</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Tajuk seterusnya</variable>
    <variable id="Previous topic">Tajuk sebelumnya</variable>
    <variable id="Parent topic">Tajuk induk</variable>
