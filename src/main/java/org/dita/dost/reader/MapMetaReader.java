@@ -96,6 +96,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     TOPIC_UNKNOWN.matcher,
     MAP_LINKTEXT.matcher,
     TOPIC_LINKTEXT.matcher,
+    TOPIC_TITLEALT.matcher,
     MAP_SHORTDESC.matcher,
     TOPIC_SHORTDESC.matcher,
     TOPIC_NAVTITLE.matcher,
