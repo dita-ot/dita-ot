@@ -4,7 +4,8 @@
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup " processing-role="resource-only">
     <topicref class="- map/topicref " href="product-specific/push-to-generic-task-01-via-conkeyref.dita" processing-role="resource-only" type="task">
       <topicmeta class="- map/topicmeta ">
-        <navtitle class="- topic/navtitle ">Conref push task using conkeyref</navtitle>
+        <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Conref push task using conkeyref</navtitle>
         <?ditaot gentext?>
         <linktext class="- map/linktext ">Conref push task using conkeyref</linktext>
       </topicmeta>
@@ -12,18 +13,21 @@
   </topicgroup>
   <topichead class="+ map/topicref mapgroup-d/topichead ">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">Main Navigation Tree</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Main Navigation Tree</navtitle>
     </topicmeta>
     <topicref class="- map/topicref " href="common/generic-task-01.dita" keys="generic-task-01" type="task">
       <topicmeta class="- map/topicmeta ">
-        <navtitle class="- topic/navtitle ">Some Generic Task</navtitle>
+        <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Some Generic Task</navtitle>
         <?ditaot gentext?>
         <linktext class="- map/linktext ">Some Generic Task</linktext>
       </topicmeta>
     </topicref>
     <topicref class="- map/topicref " href="common/keyref-verification.dita" type="topic">
       <topicmeta class="- map/topicmeta ">
-        <navtitle class="- topic/navtitle ">Keyref Verification Topic</navtitle>
+        <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Keyref Verification Topic</navtitle>
         <?ditaot gentext?>
         <linktext class="- map/linktext ">Keyref Verification Topic</linktext>
       </topicmeta>

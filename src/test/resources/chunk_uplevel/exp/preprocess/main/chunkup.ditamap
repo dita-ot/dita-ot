@@ -6,13 +6,15 @@
   <title class="- topic/title ">Input map</title>
   <topicref class="- map/topicref " href="composite_chunkmefirst.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">First topic in main dir!</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">First topic in main dir!</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">First topic in main dir!</linktext>
     </topicmeta>
     <topicref class="- map/topicref " href="composite_chunkmetoo.dita" type="concept">
       <topicmeta class="- map/topicmeta ">
-        <navtitle class="- topic/navtitle ">Second topic in main dir!</navtitle>
+        <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Second topic in main dir!</navtitle>
         <?ditaot gentext?>
         <linktext class="- map/linktext ">Second topic in main dir!</linktext>
       </topicmeta>
