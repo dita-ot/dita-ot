@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><?path2project?><?path2project-uri ./?><?path2rootmap-uri ./?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  cascade="nomerge"
+  class="- map/map "
+  ditaarch:DITAArchVersion="2.0"
+  id="Bats37"
+  specializations="@props/deliveryTarget">
+  <title class="- topic/title ">Test DITA 2.0 link title element</title>
+  <topicref class="- map/topicref " href="bats.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+        title-role="navigation">Programming elements</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- map/linktext ">access the link using firefox 2.0</linktext>
+      <linktitle class="+ topic/titlealt alternativeTitles-d/linktitle "
+        title-role="linking">access the link using firefox 2.0</linktitle>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="batcaring.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+        title-role="navigation">batcaring</navtitle>
+      <?ditaot usertext?>
+      <linktext class="- topic/linktext ">1.3 link text from nested map</linktext>
+      <linktitle class="+ topic/titlealt alternativeTitles-d/linktitle "
+        title-role="linking">1.3 link text from nested map</linktitle>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="batfeeding.dita" type="topic">
+    <topicmeta class="- map/topicmeta ">
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+        title-role="navigation">batfeeding</navtitle>
+      <?ditaot gentext?>
+      <linktext class="- map/linktext ">batfeeding</linktext>
+      <linktitle class="+ topic/titlealt alternativeTitles-d/linktitle "
+        title-role="linking">batfeeding</linktitle>
+    </topicmeta>
+  </topicref>
+</map>
