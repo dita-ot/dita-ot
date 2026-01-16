@@ -44,7 +44,7 @@ dependencies {
     implementation group: 'xerces', name: 'xercesImpl', version:'2.12.2'
     implementation group: 'xml-apis', name: 'xml-apis', version:'1.4.01'
     implementation group: 'xml-resolver', name: 'xml-resolver', version:'1.2'
-    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.7'
+    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.9'
     implementation group: 'org.xmlresolver', name: 'xmlresolver', version: '5.3.3'
     implementation group: 'com.ibm.icu', name: 'icu4j', version: '77.1'
     implementation group: 'org.apache.ant', name: 'ant', version:'1.10.15'
