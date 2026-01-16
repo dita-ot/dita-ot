@@ -11,6 +11,8 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -19,6 +21,8 @@ import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StoreBuilder;
 import org.dita.dost.util.CatalogUtils;
+import org.dita.dost.util.Configuration;
+import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 
 /**
@@ -48,6 +52,14 @@ public final class InitializeProjectTask extends Task {
     }
     final Store store = getStore(xmlUtils);
     getProject().addReference(ANT_REFERENCE_STORE, store);
+
+    try {
+      final Job job = new Job(new File(getProject().getProperty("dita.temp.dir")), store);
+      job.setProperty("temp-file-name-scheme", Configuration.configuration.get("temp-file-name-scheme"));
+      getProject().addReference(ANT_REFERENCE_JOB, job);
+    } catch (final IOException e) {
+      throw new BuildException("Failed to initialize project: " + e.getMessage(), e);
+    }
   }
 
   private Store getStore(XMLUtils xmlUtils) {
