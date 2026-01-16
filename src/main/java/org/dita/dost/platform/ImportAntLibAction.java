@@ -11,6 +11,9 @@ package org.dita.dost.platform;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 
+import java.io.File;
+
+import org.apache.commons.io.FileSystem;
 import org.dita.dost.util.FileUtils;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -26,7 +29,7 @@ final class ImportAntLibAction extends ImportAction {
    */
   @Override
   public void getResult(final ContentHandler retBuf) throws SAXException {
-    final String templateFilePath = paramTable.get(FileGenerator.PARAM_TEMPLATE);
+    final String ditaDirPath = paramTable.get(FileGenerator.PARAM_DITA_DIR);
     for (final Value value : valueSet) {
       final String path;
       if (value instanceof Value.PathValue pathValue) {
@@ -35,25 +38,18 @@ final class ImportAntLibAction extends ImportAction {
         logger.error("Ant import must be a file feature: " + value.value());
         continue;
       }
-      final String resolvedValue = FileUtils.getRelativeUnixPath(templateFilePath, path);
-      if (FileUtils.isAbsolutePath(resolvedValue)) {
-        // if resolvedValue is absolute path
-        retBuf.startElement(
-          NULL_NS_URI,
-          "pathelement",
-          "pathelement",
-          new AttributesBuilder().add("location", resolvedValue).build()
-        );
-        retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
-      } else { // if resolvedValue is relative path
-        retBuf.startElement(
-          NULL_NS_URI,
-          "pathelement",
-          "pathelement",
-          new AttributesBuilder().add("location", "${dita.dir}${file.separator}" + resolvedValue).build()
-        );
-        retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
-      }
+      // Use DITA directory instead of template file path for correct relative path calculation
+      final String basePath = ditaDirPath + File.separator + "dummy";
+      
+      final String resolvedValue = FileUtils.getRelativeUnixPath(basePath, path);
+
+      retBuf.startElement(
+        NULL_NS_URI,
+        "pathelement",
+        "pathelement",
+        new AttributesBuilder().add("location", "${dita.dir}/" + resolvedValue).build()
+      );
+      retBuf.endElement(NULL_NS_URI, "pathelement", "pathelement");
     }
   }
 }
