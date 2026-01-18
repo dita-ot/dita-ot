@@ -67,11 +67,12 @@ dependencies {
     implementation group: 'org.apache.ant', name: 'ant-apache-resolver', version:'1.10.15'
     testImplementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.19.0'
     testImplementation  group: 'nu.validator', name: 'htmlparser', version: '1.4.16'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.10.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '6.0.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '6.0.2'
     testImplementation  group: 'org.xmlunit', name: 'xmlunit-core', version: '2.10.2'
     testImplementation group: 'io.xspec', name: 'xspec', version: '3.2.2'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '6.0.2'
 }
 
 node {
@@ -466,7 +467,9 @@ tasks.register('dist', Zip) {
             exclude "bin/ant.*"
         }
         from(distTempDir) {
-            fileMode = 0755
+            filePermissions {
+                unix(0755)
+            }
             include "bin/dita"
             include "bin/dita.bat"
             // legacy build scripts
