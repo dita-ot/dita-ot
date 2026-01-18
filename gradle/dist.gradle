@@ -58,7 +58,7 @@ def licenses = [
  * See https://infra.apache.org/licensing-howto.html
  */
 tasks.register('generateNotices') {
-    description "Generate notices file for bundled dependencies"
+    description = "Generate notices file for bundled dependencies"
     def notices = file("${distTempDir}/NOTICES.txt")
     outputs.file(notices)
     doLast {
