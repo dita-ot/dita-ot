@@ -30,6 +30,8 @@ base {
 java {
     sourceCompatibility = 17
     targetCompatibility = 17
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -109,18 +111,8 @@ tasks.named("processResources") {
     ]
 }
 
-tasks.register('sourcesJar', Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = 'sources'
-}
-
-tasks.register('javadocJar', Jar) {
-    from javadoc
-    archiveClassifier = 'javadoc'
-}
-
-artifacts {
-    archives jar, javadocJar, sourcesJar
+tasks.named('assemble') {
+    dependsOn jar, javadocJar, sourcesJar
 }
 
 tasks.named("test") {
