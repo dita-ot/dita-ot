@@ -404,6 +404,11 @@ tasks.register('generateJavadocs', Javadoc) {
     destinationDir = file("${distTempDir}/doc/api")
     onlyIf { shouldGenerateDocs() }
 }
+bundledPlugins.forEach { name, url ->
+    tasks.named('generateJavadocs') {
+        dependsOn "integrateDist${name}"
+    }
+}
 
 def plugins = [
         "org.dita.html5",
