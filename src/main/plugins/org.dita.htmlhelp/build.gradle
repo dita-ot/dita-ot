@@ -19,16 +19,17 @@ repositories {
 }
 dependencies {
     implementation rootProject
-    implementation group: 'commons-io', name: 'commons-io', version: '2.19.0'
-    implementation group: 'net.sf.saxon', name: 'Saxon-HE', version: '12.9'
-    implementation group: 'org.apache.ant', name: 'ant', version:'1.10.15'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.17'
+    implementation "commons-io:commons-io:2.19.0"
+    implementation "net.sf.saxon:Saxon-HE:12.9"
+    implementation "org.apache.ant:ant:1.10.15"
+    implementation "org.slf4j:slf4j-api:2.0.17"
     testImplementation rootProject
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.2'
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.10.2'
-    testImplementation group: 'org.xmlunit', name: 'xmlunit-core', version: '2.10.2'
-    testImplementation group: 'nu.validator', name: 'htmlparser', version:'1.4.16'
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:6.0.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:6.0.2"
+    testImplementation "org.xmlunit:xmlunit-core:2.10.2"
+    testImplementation "nu.validator:htmlparser:1.4.16"
     testImplementation rootProject.sourceSets.test.output
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:6.0.2"
 }
 
 tasks.named("test", Test)  {
