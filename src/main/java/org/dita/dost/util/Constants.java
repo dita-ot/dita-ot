@@ -1719,7 +1719,12 @@ public final class Constants {
   @Deprecated
   public static final String PI_PATH2PROJ_TARGET = "path2project";
 
+  /** Deprecated since 4.2 */
+  @Deprecated
   public static final String PI_PATH2PROJ_TARGET_URI = "path2project-uri";
+
+  /** Deprecated since 4.2 */
+  @Deprecated
   public static final String PI_PATH2ROOTMAP_TARGET_URI = "path2rootmap-uri";
 
   /** Deprecated since 2.3 */
