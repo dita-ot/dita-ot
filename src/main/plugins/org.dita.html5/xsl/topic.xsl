@@ -172,6 +172,13 @@ See the accompanying LICENSE file for applicable license.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+
+    <!--Check if the overall document is RTL -->
+    <xsl:variable name="BIDIRECTIONAL_DOCUMENT">
+     <xsl:call-template name="bidi-area">
+        <xsl:with-param name="parentlang" select="$defaultLanguage"/>
+      </xsl:call-template>
+    </xsl:variable>
   
   <!-- these elements are never processed in a conventional presentation. can be overridden. -->
   <xsl:template match="*[contains(@class, ' topic/no-topic-nesting ')]"/>
@@ -1841,6 +1848,20 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="@* | node()" mode="commonattributes">
     <xsl:param name="default-output-class" as="xs:string*"/>
     <xsl:apply-templates select="@xml:lang"/>
+
+    <xsl:if test="$BIDIRECTIONAL_DOCUMENT='true' and not(@dir)">
+      <xsl:choose>
+        <xsl:when  test="contains(@class,' pr-d/')">
+         <xsl:attribute name="dir">auto</xsl:attribute>
+        </xsl:when>
+        <xsl:when  test="contains(@class,' sw-d/')">
+         <xsl:attribute name="dir">auto</xsl:attribute>
+        </xsl:when>
+        <xsl:when  test="contains(@class,' xml-d/')">
+         <xsl:attribute name="dir">auto</xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
     <xsl:apply-templates select="@dir"/>
     <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]/@style" mode="add-ditaval-style"/>
     <xsl:apply-templates select="." mode="set-output-class">
