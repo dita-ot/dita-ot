@@ -27,8 +27,7 @@ class ChunkUtilsTest {
     strings = {
       "multiple-to-content.ditamap",
       "nested-to-content.ditamap",
-      // TODO: Disable select support for now
-      //      "select-document.ditamap",
+      "select-document.ditamap",
       "top-level-to-content.ditamap",
       "top-level-by-topic.ditamap",
       "only-by-topic.ditamap",
