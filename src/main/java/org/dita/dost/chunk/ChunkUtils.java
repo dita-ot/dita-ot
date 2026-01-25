@@ -53,10 +53,9 @@ public class ChunkUtils {
         chunkTree.stream().flatMap(RoseTree::flatten).flatMap(Set::stream),
         override != null ? override.stream() : Stream.empty()
       )
-      // TODO: Disable select support for now
-      //      .filter(token ->
-      //        !token.equals(CHUNK_SELECT_DOCUMENT) && !token.equals(CHUNK_SELECT_BRANCH) && !token.equals(CHUNK_SELECT_TOPIC)
-      //      )
+      .filter(token ->
+        !token.equals(CHUNK_SELECT_DOCUMENT) && !token.equals(CHUNK_SELECT_BRANCH) && !token.equals(CHUNK_SELECT_TOPIC)
+      )
       .collect(Collectors.toSet());
     // Only combine
     if (tokens.size() == 1 && tokens.contains(CHUNK_TO_CONTENT)) {
