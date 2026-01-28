@@ -15,6 +15,7 @@ See the accompanying LICENSE file for applicable license.
           depends="html5.init,
                    build-init,
                    preprocess2,
+                   html5.copy-mathml,
                    html5.topic,
                    html5.map,
                    html5.css"/>
@@ -248,6 +249,12 @@ See the accompanying LICENSE file for applicable license.
 
   <target name="html5.copy-css-user" if="user.copycss.yes">
     <copy file="${user.css.real}" todir="${user.csspath.real}"/>
+  </target>
+
+<target name="html5.copy-mathml" description="Copy MathML files to temp">
+    <copy todir="${dita.temp.dir}">
+      <fileset dir="${user.input.dir}" includes="**/*.mml"/>         
+    </copy>
   </target>
 
 </project>
