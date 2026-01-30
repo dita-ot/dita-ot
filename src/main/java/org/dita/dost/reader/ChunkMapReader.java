@@ -55,7 +55,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
   public static final String CHUNK_SELECT_BRANCH = "select-branch";
   public static final String CHUNK_SELECT_TOPIC = "select-topic";
   public static final String CHUNK_SELECT_DOCUMENT = "select-document";
-  private static final String CHUNK_BY_DOCUMENT = "by-document";
+  public static final String CHUNK_BY_DOCUMENT = "by-document";
   public static final String CHUNK_BY_TOPIC = "by-topic";
   public static final String CHUNK_TO_CONTENT = "to-content";
   public static final String CHUNK_TO_NAVIGATION = "to-navigation";
