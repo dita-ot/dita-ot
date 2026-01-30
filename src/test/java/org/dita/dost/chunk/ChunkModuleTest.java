@@ -28,6 +28,7 @@ import org.dita.dost.store.CacheStore;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -76,6 +77,11 @@ public class ChunkModuleTest extends AbstractModuleTest {
     );
   }
 
+  @BeforeEach
+  void setup() {
+    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
+  }
+
   @ParameterizedTest
   @MethodSource("data")
   public void serialFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
@@ -83,7 +89,6 @@ public class ChunkModuleTest extends AbstractModuleTest {
     tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
-    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     test();
   }
@@ -95,7 +100,6 @@ public class ChunkModuleTest extends AbstractModuleTest {
     tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
-    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
     chunkModule.setParallel(true);
     test();
@@ -108,7 +112,6 @@ public class ChunkModuleTest extends AbstractModuleTest {
     tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
-    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
     test();
   }
@@ -120,7 +123,6 @@ public class ChunkModuleTest extends AbstractModuleTest {
     tempDir = new File(tempBaseDir, testCase);
     this.params = params;
     this.warningCount = warningCount;
-    this.logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
     job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
     chunkModule.setParallel(true);
     test();
