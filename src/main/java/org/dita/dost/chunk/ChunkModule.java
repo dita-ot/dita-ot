@@ -758,19 +758,19 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         final Element navtitle = getNavtitle(rootChunk.topicref());
         doc = xmlUtils.newDocument();
         if (navtitle != null) {
-          final Element ditaWrapper = createDita(doc);
+          final Element ditaWrapper = createDita(doc, dstTopic);
           doc.appendChild(ditaWrapper);
           final Element topic = createTopic(doc, rootChunk.id());
           topic.appendChild(createTitle(doc, navtitle));
           ditaWrapper.appendChild(topic);
           mergeTopic(rootChunk, rootChunk, topic);
         } else {
-          final Element ditaWrapper = createDita(doc);
+          final Element ditaWrapper = createDita(doc, dstTopic);
           doc.appendChild(ditaWrapper);
           mergeTopic(rootChunk, rootChunk, ditaWrapper);
         }
       } else {
-        final Element ditaWrapper = createDita(doc);
+        final Element ditaWrapper = createDita(doc, dstTopic);
         doc.replaceChild(ditaWrapper, doc.getDocumentElement());
         if (dstRoot.getParentNode() != null) {
           // XXX: Should this clone the element
@@ -783,7 +783,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       final Element navtitle = getNavtitle(rootChunk.topicref());
       if (navtitle != null) {
         doc = xmlUtils.newDocument();
-        final Element ditaWrapper = createDita(doc);
+        final Element ditaWrapper = createDita(doc, rootChunk.topicref());
         doc.appendChild(ditaWrapper);
         final Element topic = createTopic(doc, rootChunk.id());
         topic.appendChild(createTitle(doc, navtitle));
@@ -791,7 +791,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         mergeTopic(rootChunk, rootChunk, topic);
       } else {
         doc = xmlUtils.newDocument();
-        final Element ditaWrapper = createDita(doc);
+        final Element ditaWrapper = createDita(doc, rootChunk.topicref());
         doc.appendChild(ditaWrapper);
         mergeTopic(rootChunk, rootChunk, ditaWrapper);
       }
@@ -809,12 +809,17 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     return title;
   }
 
-  private Element createDita(final Document doc) {
+  private Element createDita(final Document doc, final Element src) {
+    String version = src.getOwnerDocument().getDocumentElement().getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
+    return createDita(doc, version);
+  }
+
+  private Element createDita(final Document doc, final String version) {
     final Element ditaWrapper = doc.createElement(ELEMENT_NAME_DITA);
     ditaWrapper.setAttributeNS(
       DITA_NAMESPACE,
       ATTRIBUTE_PREFIX_DITAARCHVERSION + ":" + ATTRIBUTE_NAME_DITAARCHVERSION,
-      "2.0"
+      Objects.requireNonNullElse(version, "2.0")
     );
     return ditaWrapper;
   }
