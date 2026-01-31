@@ -1,0 +1,6 @@
+<val>
+  <prop att="product" val="p1" action="flag"
+        backcolor="pink" color="red" add-outputclass="warning" style="underline"/>
+  <prop att="product" val="p2" action="flag"
+          backcolor="pink" color="red" outputclass="warning" style="underline"/>
+</val>
