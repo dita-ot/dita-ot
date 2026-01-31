@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/Attribute_map5?><?workdir-uri file:/var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/Attribute_map5/?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
+  <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?>
+  <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?>
+  <?path2project?>
+  <?path2project-uri ./?>
+  <topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="parent1"
+    xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+    class="- topic/topic ">
+    <title class="- topic/title ">parent1</title>
+    <shortdesc class="- topic/shortdesc ">You maintain your solution to ensure that all components
+      are operating at maximum efficiency.</shortdesc>
+    <body class="- topic/body ">
+      <lines xml:space="preserve" class="- topic/lines ">
+<ph id="prodname" class="- topic/ph ">
+<ph product="ABase_ph" rev="rev1" class="- topic/ph ">ThisProduct</ph>
+<ph product="AExtra_ph" class="- topic/ph ">ThisProduct</ph>
+<ph product="Another_ph" class="- topic/ph ">AnotherProduct</ph>
+</ph>
+</lines>
+    </body>
+    <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?>
+    <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?>
+    <?path2project?>
+    <?path2project-uri ./?>
+    <topic id="child1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+      class="- topic/topic ">
+      <title class="- topic/title ">child1</title>
+      <body class="- topic/body ">
+        <section class="- topic/section ">
+          <p class="- topic/p ">Use the task topic to describe the steps of a particular task, or to
+            provide an overview of a higher-level task. The task topic includes sections for
+            describing the context, prerequisites, actual steps, expected results, example, and
+            expected next steps for a task.<indexterm class="- topic/indexterm ">Task
+              elements</indexterm>
+          </p>
+        </section>
+      </body>
+    </topic>
+    <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?>
+    <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?>
+    <?path2project?>
+    <?path2project-uri ./?>
+    <topic id="child3" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+      class="- topic/topic ">
+      <title class="- topic/title ">child3</title>
+      <body class="- topic/body ">
+        <section class="- topic/section ">
+          <p class="- topic/p ">The software domain elements are used to describe the operation of a
+            software program.<indexterm class="- topic/indexterm ">Domains elements<indexterm
+                class="- topic/indexterm ">software elements</indexterm>
+            </indexterm><indexterm class="- topic/indexterm ">software elements</indexterm></p>
+        </section>
+      </body>
+      <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?>
+      <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?>
+      <?path2project?>
+      <?path2project-uri ./?>
+      <topic id="grandchild3" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+        class="- topic/topic ">
+        <title class="- topic/title ">grandchild3</title>
+        <body class="- topic/body ">
+          <section class="- topic/section ">
+            <p class="- topic/p ">DITA topics support two types of tables. One is the most common
+              table format used in industry, the &lt;<apiname class="+ topic/keyword pr-d/apiname "
+                >CALS table</apiname>&gt; (or more recently known also as the Oasis Table Exchange
+              Model). The CALS table supports the spanning of multiple rows or columns for special
+              layout or organizational needs, and provides a wide variety of controls over the
+              display properties of the data and even the table structure itself.<indexterm
+                class="- topic/indexterm ">Table elements</indexterm>
+            </p>
+            <p class="- topic/p ">The other table structure in DITA is called &lt;<apiname
+                class="+ topic/keyword pr-d/apiname ">simpletable</apiname>&gt;. As the name
+              implies, it is structurally less sophisticated than the CALS table, and can be used as
+              a very simple, regular table for which close control of formatting is not as
+              important. However, the main advantage of simpletable is for describing lists of data
+              with regular headings, such as telephone directory listings, display adapter
+              configuration data, or API properties. </p>
+          </section>
+        </body>
+      </topic>
+    </topic>
+  </topic>
+</dita>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/map7?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/map7/?><?path2project?><?path2project-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge"
+  class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   ">
+  <topicref chunk="by-topic" class="- map/topicref " href="N1.dita#N1">
+    <topicref class="- map/topicref " href="N1a.dita" xtrf="generated_by_chunk">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Nesting topic 1 - child</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Nesting topic 1 - child</linktext>
+        <?ditaot genshortdesc?>
+        <shortdesc class="- map/shortdesc ">[llama llama]</shortdesc>
+      </topicmeta>
+    </topicref>
+  </topicref>
+  <topicref chunk="by-topic" class="- map/topicref " href="Chunk0.dita#N1">
+    <topicref class="- map/topicref " href="Chunk1.dita" xtrf="generated_by_chunk">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Nesting topic 1 - child</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Nesting topic 1 - child</linktext>
+        <?ditaot genshortdesc?>
+        <shortdesc class="- map/shortdesc ">[llama llama]</shortdesc>
+      </topicmeta>
+    </topicref>
+  </topicref>
+</map>
