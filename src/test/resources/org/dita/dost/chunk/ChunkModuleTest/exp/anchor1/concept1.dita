@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1/?><?path2project?><?path2project-uri ./?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
+  <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1?>
+  <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1/?>
+  <?path2project?>
+  <?path2project-uri ./?>
+  <concept xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="concept1r"
+    xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic concept)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+    class="- topic/topic concept/concept ">
+    <title class="- topic/title ">Concept1</title>
+    <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+      and abstract.</shortdesc>
+    <conbody class="- topic/body  concept/conbody ">
+      <p class="- topic/p ">Type <b class="+ topic/ph hi-d/b ">your</b> text here.</p>
+      <ul class="- topic/ul ">
+        <li class="- topic/li ">an interesting point</li>
+        <li class="- topic/li ">another interesting point</li>
+      </ul>
+      <section class="- topic/section ">
+        <title class="- topic/title ">Subheading</title>
+        <p class="- topic/p ">Here's a little section in a concept.</p>
+      </section>
+      <example class="- topic/example ">
+        <title class="- topic/title ">Example</title>
+        <p class="- topic/p ">Here's a little example section in a concept.</p>
+      </example>
+    </conbody>
+    <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1?>
+    <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1/?>
+    <?path2project?>
+    <?path2project-uri ./?>
+    <reference id="reference1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic reference)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+      class="- topic/topic       reference/reference ">
+      <title class="- topic/title ">reference1</title>
+      <shortdesc class="- topic/shortdesc ">Put your short description here; used for first
+        paragraph and abstract.</shortdesc>
+      <refbody class="- topic/body        reference/refbody ">
+        <example class="- topic/example "><title class="- topic/title ">Sample</title>sample
+          content</example>
+      </refbody>
+    </reference>
+    <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1?>
+    <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map1/?>
+    <?path2project?>
+    <?path2project-uri ./?>
+    <task id="task1" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+      domains="(topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+      class="- topic/topic task/task ">
+      <title class="- topic/title ">task1</title>
+      <shortdesc class="- topic/shortdesc ">Put your short description here; used for first
+        paragraph and abstract.</shortdesc>
+      <prolog class="- topic/prolog ">
+        <metadata class="- topic/metadata ">
+          <keywords class="- topic/keywords "> </keywords>
+        </metadata>
+      </prolog>
+      <taskbody class="- topic/body task/taskbody ">
+        <steps class="- topic/ol task/steps ">
+          <step class="- topic/li task/step ">
+            <cmd class="- topic/ph task/cmd ">Do this</cmd>
+          </step>
+          <step class="- topic/li task/step ">
+            <cmd class="- topic/ph task/cmd ">And finally, this.</cmd>
+          </step>
+        </steps>
+      </taskbody>
+    </task>
+  </concept>
+</dita>

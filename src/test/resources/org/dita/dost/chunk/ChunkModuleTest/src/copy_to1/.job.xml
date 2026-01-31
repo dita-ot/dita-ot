@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><job>
+  <property name="generatecopyouter">
+    <string>NOT_GENERATEOUTTER</string>
+  </property>
+  <property name="user.input.dir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testresult/chunk_fix_copy_to/preprocess/map1</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string/>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="relflagimagelist">
+    <string/>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>map1.ditamap</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/</string>
+  </property>
+  <property name="user.input.file">
+    <string>map1.ditamap</string>
+  </property>
+  <property name="uplevels">
+    <string/>
+  </property>
+  <files>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicYbranch.dita" uri="topicYbranch.dita" path="topicYbranch.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicY.dita" uri="topicY.dita" path="topicY.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/document.dita" uri="document.dita" path="document.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentX.dita" uri="documentX.dita" path="documentX.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/documentY.dita" uri="documentY.dita" path="documentY.dita" format="dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/topicX.dita" uri="topicX.dita" path="topicX.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/map1.ditamap" uri="map1.ditamap" path="map1.ditamap" format="ditamap" input="true"/>
+    <file result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/Z.dita" uri="Z.dita" path="Z.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_copy_to/src/ditabase.dita" uri="ditabase.dita" path="ditabase.dita" format="dita" target="true"/>
+  </files>
+</job>

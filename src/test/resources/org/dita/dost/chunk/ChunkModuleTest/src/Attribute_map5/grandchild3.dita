@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="grandchild3" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic ">
+  <title class="- topic/title ">grandchild3</title>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <p class="- topic/p ">DITA topics support two types of tables. One is the most common table
+        format used in industry, the &lt;<apiname class="+ topic/keyword pr-d/apiname ">CALS
+          table</apiname>&gt; (or more recently known also as the Oasis Table Exchange Model). The
+        CALS table supports the spanning of multiple rows or columns for special layout or
+        organizational needs, and provides a wide variety of controls over the display properties of
+        the data and even the table structure itself.<indexterm class="- topic/indexterm ">Table
+          elements</indexterm>
+      </p>
+      <p class="- topic/p ">The other table structure in DITA is called &lt;<apiname
+          class="+ topic/keyword pr-d/apiname ">simpletable</apiname>&gt;. As the name implies, it
+        is structurally less sophisticated than the CALS table, and can be used as a very simple,
+        regular table for which close control of formatting is not as important. However, the main
+        advantage of simpletable is for describing lists of data with regular headings, such as
+        telephone directory listings, display adapter configuration data, or API properties. </p>
+    </section>
+  </body>
+</topic>

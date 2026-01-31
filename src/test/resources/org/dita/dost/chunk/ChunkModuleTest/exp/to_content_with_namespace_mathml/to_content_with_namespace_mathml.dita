@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><?workdir /D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_mathml\temp\xhtml?><?workdir-uri file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/temp/xhtml/?><?path2rootmap-uri ./?><?workdir /D:\git\dita-ot\src\test\resources\ChunkModuleTest\src\to_content_with_namespace_mathml\temp\xhtml?><?workdir-uri file:/D:/git/dita-ot/src/test/resources/ChunkModuleTest/src/to_content_with_namespace_mathml/temp/xhtml/?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+      ditaarch:DITAArchVersion="1.3">
+    <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+        xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topic_dhk_slh_m4b"
+        domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+        class="- topic/topic "
+
+         specializations="@props/deliveryTarget">
+        <title class="- topic/title "
+
+            />
+        <body class="- topic/body "
+
+            >
+            <p class="- topic/p "
+
+                >the streaming operator for particle type <equation-inline
+                    class="+ topic/ph equation-d/equation-inline "
+
+                    ><mathml class="+ topic/foreign mathml-d/mathml "
+
+                        >
+                        <m:math xmlns:m="http://www.w3.org/1998/Math/MathML">
+                            <m:mrow>
+                                <m:mi>i</m:mi>
+                            </m:mrow>
+                        </m:math>
+                    </mathml></equation-inline>
+            </p>
+        </body>
+    </topic>
+</dita>

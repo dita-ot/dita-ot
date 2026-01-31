@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/ByTopic_batseparate0?><?workdir-uri file:/var/folders/p2/pbpbnbdn3db6hns_6j1jdyd00000gn/T/org.dita.dost.module.ChunkModuleTest/ByTopic_batseparate0/?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="1.3">
+  <?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/batseparate0?>
+  <?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkByTopicTest/preprocess/batseparate0/?>
+  <?path2project?>
+  <?path2project-uri ./?>
+  <task xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="batcleaning"
+    xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+    domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+    class="- topic/topic task/task ">
+    <title class="- topic/title ">Cleaningtitle</title>
+    <shortdesc class="- topic/shortdesc ">cleaning shortdesc</shortdesc>
+    <taskbody class="- topic/body task/taskbody ">
+      <prereq class="- topic/section task/prereq ">Cleaning prereq</prereq>
+      <steps class="- topic/ol task/steps ">
+        <step class="- topic/li task/step ">
+          <cmd class="- topic/ph task/cmd ">clean.</cmd>
+        </step>
+      </steps>
+    </taskbody>
+  </task>
+</dita>

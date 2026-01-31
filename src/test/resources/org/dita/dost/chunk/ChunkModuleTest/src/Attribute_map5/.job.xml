@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><job>
+  <property name="generatecopyouter">
+    <string>NOT_GENERATEOUTTER</string>
+  </property>
+  <property name="user.input.dir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testresult/ChunkAttributeTest/preprocess/map5</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map5.ditamap</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string/>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="relflagimagelist">
+    <string/>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map5.ditamap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>map5.ditamap</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/</string>
+  </property>
+  <property name="user.input.file">
+    <string>map5.ditamap</string>
+  </property>
+  <property name="uplevels">
+    <string/>
+  </property>
+  <files>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child1.dita" uri="child1.dita" path="child1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parent1.dita" uri="parent1.dita" path="parent1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/parentchunk.dita" uri="parentchunk.dita" path="parentchunk.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/grandchild3.dita" uri="grandchild3.dita" path="grandchild3.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child2.dita" uri="child2.dita" path="child2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child2chunk.dita" uri="child2chunk.dita" path="child2chunk.dita"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/child3.dita" uri="child3.dita" path="child3.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/grandchild2.dita" uri="grandchild2.dita" path="grandchild2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/ChunkAttributeTest/src/map5.ditamap" uri="map5.ditamap" path="map5.ditamap" format="ditamap" input="true"/>
+  </files>
+</job>

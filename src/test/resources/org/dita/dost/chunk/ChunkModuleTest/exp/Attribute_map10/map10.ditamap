@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map10?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map10/?><?path2project?><?path2project-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge"
+  chunk="by-topic" class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  id="mapten">
+  <title class="- topic/title ">titleofmap10chunck</title>
+  <topicref class="- map/topicref " href="X.dita#X"/>
+  <topicref chunk="to-navigation" class="- map/topicref " href="Chunk1.dita#Y">
+    <topicref class="- map/topicref " href="Y1.dita" xtrf="generated_by_chunk">
+      <topicmeta class="- map/topicmeta ">
+        <navtitle class="- topic/navtitle ">Y1</navtitle>
+        <?ditaot gentext?>
+        <linktext class="- map/linktext ">Y1</linktext>
+        <?ditaot genshortdesc?>
+        <shortdesc class="- map/shortdesc "/>
+      </topicmeta>
+      <topicref class="- map/topicref " href="Y1a.dita" xtrf="generated_by_chunk">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">Y1a</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">Y1a</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc "/>
+        </topicmeta>
+      </topicref>
+    </topicref>
+    <topicref chunk="select-document" class="- map/topicref " href="Chunk2.dita#Z">
+      <topicref class="- map/topicref " href="Z1.dita" xtrf="generated_by_chunk">
+        <topicmeta class="- map/topicmeta ">
+          <navtitle class="- topic/navtitle ">%univ-atts;</navtitle>
+          <?ditaot gentext?>
+          <linktext class="- map/linktext ">%univ-atts;</linktext>
+          <?ditaot genshortdesc?>
+          <shortdesc class="- map/shortdesc ">Universal attributes is a parameter entity declaration
+            in the topic DTD that includes:</shortdesc>
+        </topicmeta>
+      </topicref>
+    </topicref>
+  </topicref>
+</map>

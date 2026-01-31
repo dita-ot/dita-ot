@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_hogs_memory?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_hogs_memory/?><?path2project?><?path2project-uri ./?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="merge"
+  class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  id="mapID">
+  <title class="- topic/title "
+    >this is the map title</title>
+  <topicref chunk="to-content select-topic" class="- map/topicref " copy-to="dita2.dita"
+    href="dita2.dita#AAA">
+    <topicref class="- map/topicref " href="dita2.dita#topicIDSUB">
+      <topicref class="- map/topicref " href="dita2.dita#unique_0"
+      > </topicref>
+    </topicref>
+  </topicref>
+  <topicref chunk="to-content select-topic" class="- map/topicref " copy-to="dita3.dita"
+    href="dita3.dita#B"/>
+  <topicref chunk="to-content select-topic" class="- map/topicref " copy-to="dita4.dita"
+    href="dita4.dita#C"/>
+  <topicref chunk="to-content select-topic" class="- map/topicref " copy-to="dita5.dita"
+    href="dita5.dita#D"
+  />
+</map>

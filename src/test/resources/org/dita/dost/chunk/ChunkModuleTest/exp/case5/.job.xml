@@ -1,0 +1,166 @@
+<?xml version="1.0" ?>
+<job>
+  <property name="generatecopyouter">
+    <string>NOT_GENERATEOUTTER</string>
+  </property>
+  <property name="user.input.dir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src</string>
+  </property>
+  <property name="default.cascade">
+    <string>nomerge</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testresult/chunk_fix_case5/preprocess</string>
+  </property>
+  <property name="plugin.org.dita.eclipsehelp.dir">
+    <string>plugins/org.dita.eclipsehelp</string>
+  </property>
+  <property name="plugin.org.dita.odt.dir">
+    <string>plugins/org.dita.odt</string>
+  </property>
+  <property name="plugin.org.dita.htmlhelp.dir">
+    <string>plugins/org.dita.htmlhelp</string>
+  </property>
+  <property name="temp-file-name-scheme">
+    <string>org.dita.dost.module.reader.DefaultTempFileScheme</string>
+  </property>
+  <property name="plugin.org.dita.eclipsecontent.dir">
+    <string>plugins/org.dita.eclipsecontent</string>
+  </property>
+  <property name="plugin.org.dita.base.dir">
+    <string>plugins/org.dita.base</string>
+  </property>
+  <property name="transtypes">
+    <string>pdf;pdf2;tocjs;xhtml;eclipsehelp;html5;htmlhelp;javahelp;troff</string>
+  </property>
+  <property name="plugindirs">
+    <string>plugins;demo</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita11.dir">
+    <string>plugins/org.dita.specialization.dita11</string>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="plugin.org.dita.wordrtf.dir">
+    <string>plugins/org.dita.wordrtf</string>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="plugin.ignores">
+    <string></string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="plugin.org.dita.specialization.eclipsemap.dir">
+    <string>plugins/org.dita.specialization.eclipsemap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>case5.ditamap</string>
+  </property>
+  <property name="user.input.file">
+    <string>case5.ditamap</string>
+  </property>
+  <property name="plugin.org.dita.pdf.dir">
+    <string>plugins/org.dita.pdf</string>
+  </property>
+  <property name="plugin.org.dita.pdf2.dir">
+    <string>plugins/org.dita.pdf2</string>
+  </property>
+  <property name="plugin.org.dita.specialization.dita132.dir">
+    <string>plugins/org.dita.specialization.dita132</string>
+  </property>
+  <property name="print_transtypes">
+    <string>pdf2;pdf;legacypdf;odt</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/case5.ditamap</string>
+  </property>
+  <property name="supported_resource_extensions">
+    <string>.pdf;.swf</string>
+  </property>
+  <property name="plugin.org.dita.np.dir">
+    <string>plugins/org.dita.np</string>
+  </property>
+  <property name="plugin.org.dita.xhtml.dir">
+    <string>plugins/org.dita.xhtml</string>
+  </property>
+  <property name="plugin.org.dita.docbook.dir">
+    <string>plugins/org.dita.docbook</string>
+  </property>
+  <property name="chunk.id-generation-scheme">
+    <string>counter</string>
+  </property>
+  <property name="org.dita.pdf2.index.frame-markup">
+    <string>false</string>
+  </property>
+  <property name="plugin.org.dita.javahelp.dir">
+    <string>plugins/org.dita.javahelp</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string></string>
+  </property>
+  <property name="plugin.org.dita-ot.html.dir">
+    <string>plugins/org.dita-ot.html</string>
+  </property>
+  <property name="relflagimagelist">
+    <string></string>
+  </property>
+  <property name="supported_html_extensions">
+    <string>.htm;.html</string>
+  </property>
+  <property name="otrelease">
+    <string>1.2</string>
+  </property>
+  <property name="supported_image_extensions">
+    <string>.bmp;.svg;.png;.tif;.jpg;.gif;.jpeg;.tiff;.eps</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/case5.ditamap</string>
+  </property>
+  <property name="otversion">
+    <string>1.2.3</string>
+  </property>
+  <property name="plugin.com.sophos.tocjs.dir">
+    <string>plugins/com.sophos.tocjs</string>
+  </property>
+  <property name="plugin.org.dita.troff.dir">
+    <string>plugins/org.dita.troff</string>
+  </property>
+  <property name="org.dita.pdf2.i18n.enabled">
+    <string>true</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/</string>
+  </property>
+  <property name="uplevels">
+    <string></string>
+  </property>
+  <files>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/ditabase.dita"
+          uri="three.dita" path="three.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/three.dita"
+          format="dita" target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/ditabase.dita"
+          uri="four.dita" path="four.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/four.dita"
+          format="dita" target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/ditabase.dita"
+          uri="one.dita" path="one.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/one.dita"
+          format="dita" target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/ditabase.dita"
+          uri="two.dita" path="two.dita"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/two.dita"
+          format="dita" target="true"></file>
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/case5.ditamap"
+          uri="case5.ditamap" path="case5.ditamap"
+          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case5/src/case5.ditamap"
+          format="ditamap" input="true"></file>
+  </files>
+</job>
