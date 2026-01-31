@@ -636,7 +636,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       if (ATTRIBUTE_NAME_HREF.equals(attrName) && canFollow(attrValue)) {
         if (followLinks()) {
           hrefTargets.add(filename);
-          toOutFile(filename, atts);
+          toOutFile(filename, atts, false);
         }
       } else if (ATTRIBUTE_NAME_COPY_TO.equals(attrName)) {
         final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
@@ -711,7 +711,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
         // Collect only conref target topic files
         conrefTargets.add(filename);
-        toOutFile(filename, atts);
+        toOutFile(filename, atts, true);
       }
     }
   }
@@ -795,7 +795,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
     }
   }
 
-  private void toOutFile(final URI filename, final Attributes atts) throws SAXException {
+  private void toOutFile(final URI filename, final Attributes atts, boolean isResourceOnly) throws SAXException {
     assert filename.isAbsolute();
     final String[] prop = { filename.toString(), currentFile.toString() };
     if (job.getGeneratecopyouter() == Job.Generate.NOT_GENERATEOUTTER) {
@@ -803,7 +803,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         if (job.getOutterControl() == Job.OutterControl.FAIL) {
           final MessageBean msgBean = MessageUtils.getMessage("DOTJ035F", prop).setLocation(atts);
           throw new SAXParseException(null, null, new DITAOTException(msgBean, null, msgBean.toString()));
-        } else if (job.getOutterControl() == Job.OutterControl.WARN) {
+        } else if (job.getOutterControl() == Job.OutterControl.WARN && !isResourceOnly) {
           final MessageBean msgBean = MessageUtils.getMessage("DOTJ036W", prop).setLocation(atts);
           logger.warn(msgBean.toString());
         }

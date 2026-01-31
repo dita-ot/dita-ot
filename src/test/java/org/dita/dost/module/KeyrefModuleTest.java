@@ -126,7 +126,7 @@ public class KeyrefModuleTest {
     final KeyScope scope = new KeyScope(
       "scope",
       "scope",
-      Map.of("key", new KeyDef("key", create("target.dita"), null, null, null, null)),
+      Map.of("key", new KeyDef("key", create("target.dita"), null, null, null, null, 1)),
       emptyList()
     );
     final List<ResolveTask> src = singletonList(
@@ -141,7 +141,7 @@ public class KeyrefModuleTest {
     final KeyScope exp = new KeyScope(
       "scope",
       "scope",
-      Map.of("key", new KeyDef("key", create("target-1.dita"), null, null, null, null)),
+      Map.of("key", new KeyDef("key", create("target-1.dita"), null, null, null, null, 1)),
       emptyList()
     );
 
@@ -155,9 +155,9 @@ public class KeyrefModuleTest {
       "scope",
       Map.of(
         "key",
-        new KeyDef("key", create("target.dita"), null, null, null, null),
+        new KeyDef("key", create("target.dita"), null, null, null, null, 1),
         "element",
-        new KeyDef("element", create("target.dita#target/element"), null, null, null, null)
+        new KeyDef("element", create("target.dita#target/element"), null, null, null, null, 1)
       ),
       emptyList()
     );
@@ -169,9 +169,9 @@ public class KeyrefModuleTest {
       "scope",
       Map.of(
         "key",
-        new KeyDef("key", create("target-1.dita"), null, null, null, null),
+        new KeyDef("key", create("target-1.dita"), null, null, null, null, 1),
         "element",
-        new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null)
+        new KeyDef("element", create("target-1.dita#target/element"), null, null, null, null, 1)
       ),
       emptyList()
     );
@@ -197,9 +197,9 @@ public class KeyrefModuleTest {
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null)
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1)
       ),
       emptyList()
     );
@@ -208,9 +208,9 @@ public class KeyrefModuleTest {
       null,
       Map.of(
         "VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null)
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1)
       ),
       singletonList(childScope)
     );
@@ -251,13 +251,13 @@ public class KeyrefModuleTest {
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR",
-        new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR2",
-        new KeyDef("A.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("A.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR3",
-        new KeyDef("A.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null)
+        new KeyDef("A.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null, 1)
       ),
       EMPTY_LIST
     );
@@ -266,13 +266,13 @@ public class KeyrefModuleTest {
       "B",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "B.VAR",
-        new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "B.VAR2",
-        new KeyDef("B.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("B.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
         "B.VAR3",
-        new KeyDef("B.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null)
+        new KeyDef("B.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null, 1)
       ),
       EMPTY_LIST
     );
@@ -372,9 +372,9 @@ public class KeyrefModuleTest {
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1),
         "A.VAR",
-        new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+        new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1)
       ),
       EMPTY_LIST
     );
@@ -383,9 +383,9 @@ public class KeyrefModuleTest {
       "B",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null),
+        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1),
         "B.VAR",
-        new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null)
+        new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1)
       ),
       EMPTY_LIST
     );
@@ -435,7 +435,7 @@ public class KeyrefModuleTest {
     job.add(inputMapFileInfo);
     final XdmNode act = parse(inputMapFileInfo.src);
     Map<String, KeyDef> defsMap = new HashMap<>();
-    defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null));
+    defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null, 1));
 
     KeyScope submap1 = new KeyScope("submap", "mapref[6]map[6].submap", defsMap, List.of());
     KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, List.of());

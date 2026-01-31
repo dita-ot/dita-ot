@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic_gjc_pws_yg">
+  <title>a</title>
+  <body>
+    <p><xref href="b.dita"/></p>
+    <p><xref href="topics/c.dita"/></p>
+    <p><xref href="maps/e.dita"/></p>
+    <image href="images/carwash.gif"/>
+  </body>
+  <related-links>
+    <link href="b.dita"/>
+    <link href="topics/c.dita"/>
+    <link href="maps/e.dita"/>
+  </related-links>
+</topic>

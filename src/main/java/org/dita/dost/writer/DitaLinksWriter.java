@@ -91,6 +91,15 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     topicIdStack.clear();
     firstTopic = true;
     getContentHandler().startDocument();
+    getContentHandler().startPrefixMapping(ATTRIBUTE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
+    getContentHandler().startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+  }
+
+  @Override
+  public void endDocument() throws SAXException {
+    getContentHandler().endPrefixMapping(ATTRIBUTE_PREFIX_DITAARCHVERSION);
+    getContentHandler().endPrefixMapping(DITA_OT_NS_PREFIX);
+    getContentHandler().endDocument();
   }
 
   @Override
@@ -115,7 +124,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
           logger.error(e.getMessage(), e);
         }
       }
-      final String t = StringUtils.join(topicIdStack, SLASH);
+      final String t = String.join(SLASH, topicIdStack);
       if (indexEntries.containsKey(t)) {
         curMatchTopic = t;
       } else if (indexEntries.containsKey(topicIdStack.peekFirst())) {

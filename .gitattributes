@@ -27,7 +27,7 @@
 *.hxx text=auto
 *.py text=auto
 *.rb text=auto
-*.java text=auto
+*.java text=auto eol=lf
 *.html text=auto
 *.htm text=auto
 *.css text=auto

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="topicmerge" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic ">
+  <title class="- topic/title ">Topic merge</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">The topic merge feature improves the build speed of DITA files and reduces
+      the possibility of meeting the out of memory exception in the build process. As illustrated in
+      the following figure, when you run the build in previous releases of DITA Open Toolkit, the
+      build speed is slow and you are likely to get out of memory exception.</p>
+    <p class="- topic/p ">With this enhanced topic merge feature, you will be less likely to meet
+      the out of memory exception error when you build output through DITA files. The intermediate
+      merged file will keep the structure information in the DITA map, and the structured toc will
+      be reflected in the output.</p>
+    <p rev="r4" class="- topic/p ">To know more about this topic feature, you can write a script
+      file first. DITA OT 1.3 offers a module, <codeph class="+ topic/ph pr-d/codeph "
+        >TopicMerge</codeph>, that helps you implement this feature. You can use this module to
+      generate the merged files. A sample usage of this module is as follows.</p>
+    <p rev="r3" class="- topic/p ">Then, you need to type in the command window.<note
+        class="- topic/note ">The path for -Dinput must be an absolute path</note></p>
+  </body>
+</topic>

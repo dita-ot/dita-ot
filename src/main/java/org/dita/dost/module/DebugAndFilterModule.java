@@ -107,7 +107,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     } catch (final RuntimeException e) {
       throw e;
     } catch (final Exception e) {
-      e.printStackTrace();
+      //      e.printStackTrace();
       throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
     }
 

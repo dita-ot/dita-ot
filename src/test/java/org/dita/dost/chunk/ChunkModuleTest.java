@@ -50,6 +50,10 @@ public class ChunkModuleTest extends AbstractModuleTest {
       Arguments.of("uplevels-parallel", Collections.emptyMap(), 0),
       Arguments.of("format", Collections.emptyMap(), 0),
       Arguments.of("nested", Collections.emptyMap(), 0),
+      // TODO: Disable select support for now
+      //      Arguments.of("nested-select-branch", Collections.emptyMap(), 0),
+      //      Arguments.of("nested-select-branch-compound", Collections.emptyMap(), 0),
+      //      Arguments.of("nested-select-topic", Collections.emptyMap(), 0),
       Arguments.of("scope", Collections.emptyMap(), 0),
       Arguments.of("topicgroup", Collections.emptyMap(), 1),
       Arguments.of("topichead", Collections.emptyMap(), 1),
@@ -62,7 +66,14 @@ public class ChunkModuleTest extends AbstractModuleTest {
       Arguments.of("split-map", Collections.emptyMap(), 0),
       Arguments.of("chunk-combine-within-split", Collections.emptyMap(), 0),
       Arguments.of("managing-links", Collections.emptyMap(), 0),
-      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0)
+      Arguments.of("managing-links-duplicates", Collections.emptyMap(), 0),
+      Arguments.of("anchor2", Collections.emptyMap(), 0),
+      Arguments.of("ByTopic_map5", Collections.emptyMap(), 0),
+      Arguments.of("topicgroup_chunk", Collections.emptyMap(), 0),
+      Arguments.of("chunk_map_tocontent", Collections.emptyMap(), 0),
+      Arguments.of("chunk_duplicate_tocontent", Collections.emptyMap(), 0),
+      Arguments.of("chunk_rewrite_tocontent", Collections.emptyMap(), 0),
+      Arguments.of("conflict_to_content", Collections.emptyMap(), 0)
     );
   }
 

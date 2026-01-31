@@ -96,15 +96,11 @@ for every pull request.
 
 ### Formatting code
 
-Requirements:
-
-- Node.js
-
 Prettier is used retain consistent Java formatting.
 
 1.  Run Prettier:
     ```shell
-    npm run fmt
+    ./gradlew spotlessApply
     ```
 
 ### Distribution builds

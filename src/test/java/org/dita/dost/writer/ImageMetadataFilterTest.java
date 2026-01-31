@@ -40,7 +40,7 @@ public class ImageMetadataFilterTest {
   private static File tempDir;
 
   @BeforeAll
-  public static void setup() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(ImageMetadataFilterTest.class);
   }
 
@@ -63,7 +63,7 @@ public class ImageMetadataFilterTest {
     );
     assertEquals(
       Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.xxx")
+        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .stream()
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),
@@ -91,7 +91,7 @@ public class ImageMetadataFilterTest {
     );
     assertEquals(
       Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.xxx")
+        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .stream()
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),

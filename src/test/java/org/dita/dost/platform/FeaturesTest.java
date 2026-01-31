@@ -29,7 +29,7 @@ public class FeaturesTest {
   private static Document doc;
 
   @BeforeAll
-  public static void setUp() throws Exception {
+  public static void setUpAll() throws Exception {
     doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
   }
 

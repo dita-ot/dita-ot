@@ -38,8 +38,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
                 xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
                 xmlns:mappull="http://dita-ot.sourceforge.net/ns/200704/mappull"
                 xmlns:ditamsg="http://dita-ot.sourceforge.net/ns/200704/ditamsg"
+                xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
                 xmlns:saxon="http://saxon.sf.net/"
-                exclude-result-prefixes="xs dita-ot mappull ditamsg saxon">
+                exclude-result-prefixes="xs dita-ot mappull ditamsg saxon ditaarch">
   <xsl:import href="plugin:org.dita.base:xsl/common/output-message.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-utilities.xsl"/>
   <xsl:import href="plugin:org.dita.base:xsl/common/dita-textonly.xsl"/>
@@ -579,6 +580,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <xsl:when
         test="$scope='external' and not($format='dita')">
         <xsl:choose>
+          <xsl:when test="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+            <xsl:value-of select="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]"/>
+          </xsl:when>
           <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
             <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
           </xsl:when>
@@ -597,6 +601,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!--if it's external and dita, leave it undefined as fallback, so the file extension can be processed in the final output stage-->
       <xsl:when test="$scope='external'">
         <xsl:choose>
+          <xsl:when test="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+            <xsl:value-of select="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]"/>
+          </xsl:when>
           <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
             <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
           </xsl:when>
@@ -611,6 +618,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:when>
       <xsl:when test="$scope='peer'">
         <xsl:choose>
+          <xsl:when test="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+            <xsl:value-of select="*/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]"/>
+          </xsl:when>
           <xsl:when test="*/*[contains(@class,' topic/navtitle ')]">
             <xsl:value-of select="*/*[contains(@class,' topic/navtitle ')]"/>
           </xsl:when>          
@@ -641,6 +651,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
         <xsl:variable name="target" select="if (exists($doc)) then (key('topic-by-id', $topicid, $doc)[1]) else ()" as="element()?"/>
         <xsl:choose>
           <xsl:when
+            test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/prolog ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+            <xsl:apply-templates
+              select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/prolog ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]"
+              mode="get-title-content"/>
+          </xsl:when>
+          <xsl:when
             test="$target[contains(@class, $classval)]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
               select="($target[contains(@class, $classval)])[1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]"
@@ -666,6 +682,12 @@ Other modes can be found within the code, and may or may not prove useful for ov
       <!--grabbing text from the first topic in another file-->
       <xsl:when test="$topicpos='firstinfile'">
         <xsl:choose>
+          <xsl:when
+            test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/prolog ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+            <xsl:apply-templates
+              select="($doc//*[contains(@class, ' topic/topic ')])[1]/*[contains(@class, ' topic/prolog ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]"
+              mode="get-title-content"/>
+          </xsl:when>
           <xsl:when
             test="$doc//*[contains(@class, ' topic/topic ')][1]/*[contains(@class, ' topic/titlealts ')]/*[contains(@class, ' topic/navtitle ')]">
             <xsl:apply-templates
@@ -749,7 +771,11 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!--navtitle-->
     <xsl:variable name="navtitle" as="item()*">
       <xsl:choose>
-        <xsl:when test="(not(*/*[contains(@class,' topic/navtitle ')]) and not(@navtitle)) or not($locktitle='yes')">
+        <!-- Grab navtitle if no locktitle, or if
+             (no DITA 1.x <navtitle>, no DITA 1.x @navtitle, no DITA 2.x navtitle) -->
+        <xsl:when test="not($locktitle='yes') or
+                        (not(*/*[contains(@class,' topic/navtitle ')]) and not(@navtitle) and
+                         not(*/*[dita-ot:matches-navtitle-titlealt(@class, @title-role)]))">
           <xsl:apply-templates select="." mode="mappull:get-stuff_get-navtitle">
             <xsl:with-param name="type" select="$type"/>
             <xsl:with-param name="scope" select="$scope"/>
@@ -826,6 +852,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!-- Set the navtitle when pointing to a non-DITA resource. -->
   <xsl:template match="*" mode="mappull:get-navtitle-for-non-dita" as="xs:string?">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
@@ -840,6 +869,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   <!-- Set the link text when pointing to a non-DITA resource. -->
   <xsl:template match="*" mode="mappull:get-linktext-for-non-dita">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
@@ -862,10 +894,23 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <xsl:param name="classval" as="xs:string"/>
     <xsl:param name="doc" as="document-node()?"/>
     <xsl:choose>
-      <!-- If linktext is already specified, use that -->
+      <!-- If DITA 2.0 linktitle is specified, use that, and create linktext for 1.x compatability -->
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktitle-titlealt(@class, @title-role)]">
+        <xsl:apply-templates select="." mode="mappull:add-usertext-PI"/>
+        <linktext class="- map/linktext ">
+          <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktitle-titlealt(@class, @title-role)]/node()"/>
+        </linktext>
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktitle-titlealt(@class, @title-role)]"/>
+      </xsl:when>
+      <!-- If linktext is already specified, use that. If this is a 1.x submap in 2.x root map, create linktitle as well. -->
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]">
         <xsl:apply-templates select="." mode="mappull:add-usertext-PI"/>
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]"/>
+        <xsl:if test="/*/@ditaarch:DITAArchVersion='2.0'">
+          <linktitle class="+ topic/titlealt alternativeTitles-d/linktitle " title-role="linking">
+            <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-linktext-class(@class)]/node()"/>
+          </linktitle>
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="linktext" as="xs:string?">
@@ -937,9 +982,15 @@ Other modes can be found within the code, and may or may not prove useful for ov
         </xsl:variable>
         <xsl:if test="not($linktext='#none#')">
           <xsl:apply-templates select="." mode="mappull:add-gentext-PI"/>
+          <!-- If using DITA 2.0 maps, also generate linktitle -->
           <linktext class="- map/linktext ">
             <xsl:copy-of select="$linktext"/>
           </linktext>
+          <xsl:if test="/*/@ditaarch:DITAArchVersion='2.0'">
+            <linktitle class="+ topic/titlealt alternativeTitles-d/linktitle " title-role="linking">
+              <xsl:copy-of select="$linktext"/>
+            </linktitle>
+          </xsl:if>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -949,6 +1000,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
        cannot be used. The mode name describes each specific condition.-->
   <xsl:template match="*" mode="mappull:get-linktext_external-and-non-dita">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
@@ -958,6 +1012,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
   <xsl:template match="*" mode="mappull:get-linktext_external-dita">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
@@ -967,6 +1024,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
   <xsl:template match="*" mode="mappull:get-linktext_peer-dita">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]" mode="text-only"/>
+      </xsl:when>
       <xsl:when test="@navtitle"><xsl:value-of select="@navtitle"/></xsl:when>
       <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]">
         <xsl:apply-templates select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]" mode="text-only"/>
@@ -1054,13 +1114,19 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!--navtitle-->
     <xsl:choose>
       <xsl:when test="not($navtitle='#none#')">
-        <navtitle class="- topic/navtitle ">
+        <!-- This uses a mix of class attributes from DITA 1.x and 2.0,
+             for compatibility with later processing that uses either.
+             The title-role attribute is only valid (and required) for 2.0. -->
+        <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle " title-role="navigation">
           <xsl:copy-of select="$navtitle"/>
         </navtitle>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates
           select="*[contains(@class, ' map/topicmeta ')]/*[contains(@class, ' topic/navtitle ')]"
+        />
+        <xsl:apply-templates
+          select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class, @title-role)]"
         />
       </xsl:otherwise>
     </xsl:choose>
@@ -1088,14 +1154,22 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:apply-templates>
     <!--metadata to be written - if we add logic at some point to pull metadata from topics into the map-->
     <xsl:apply-templates
-      select="*[contains(@class, ' map/topicmeta ')]/*[not(dita-ot:matches-linktext-class(@class))][not(dita-ot:matches-shortdesc-class(@class))][not(contains(@class, ' topic/navtitle '))]|
-      *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
+      select="*[contains(@class, ' map/topicmeta ')]/*[not(dita-ot:matches-linktext-class(@class))]
+                                                      [not(dita-ot:matches-linktitle-titlealt(@class,@title-role))]
+                                                      [not(dita-ot:matches-shortdesc-class(@class))]
+                                                      [not(contains(@class, ' topic/navtitle '))]
+                                                      [not(dita-ot:matches-navtitle-titlealt(@class,@title-role))] |
+                                                      *[contains(@class, ' map/topicmeta ')]/processing-instruction()"
     />
   </xsl:template>
 
   <!-- When the link text cannot be retrieved for a topic, use this to determine fallback text. -->
   <xsl:template match="*" mode="mappull:linktext-fallback" as="node()*">
     <xsl:choose>
+      <xsl:when test="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+        <xsl:copy-of select="*[contains(@class, ' map/topicmeta ')]/*[dita-ot:matches-navtitle-titlealt(@class,@title-role)]/node()"/>
+        <xsl:apply-templates select="." mode="ditamsg:no-linktext-using-fallback"/>
+      </xsl:when>
       <xsl:when test="@navtitle">
         <xsl:value-of select="@navtitle"/>
         <xsl:apply-templates select="." mode="ditamsg:no-linktext-using-fallback"/>
@@ -1291,12 +1365,13 @@ Other modes can be found within the code, and may or may not prove useful for ov
   </xsl:template>
  
   <!-- Added on 20110125 for bug:Navtitle Construction Does not Preserve Markup - ID: 3157890  start -->
-  <xsl:template match="*[contains(@class,' topic/title ')]|*[contains(@class, ' topic/navtitle ')]" mode="get-title-content">    
+  <xsl:template match="*[contains(@class,' topic/title ')]|*[contains(@class, ' topic/navtitle ')]|*[contains(@class,' topic/titlealt ')]" mode="get-title-content">
     <xsl:apply-templates select="*|comment()|processing-instruction()|text()" />  
   </xsl:template>
   
   <xsl:template match="*[contains(@class,' topic/title ')]//text() |
-                       *[contains(@class,' topic/navtitle ')]//text()" >
+                       *[contains(@class,' topic/navtitle ')]//text() |
+                       *[dita-ot:matches-navtitle-titlealt(@class,@title-role)]//text()" >
     <xsl:if test="not(normalize-space(substring(., 1, 1)))">
       <xsl:text> </xsl:text>
     </xsl:if>
@@ -1306,4 +1381,15 @@ Other modes can be found within the code, and may or may not prove useful for ov
     </xsl:if>
   </xsl:template>
   
+  <!-- For DITA 1.3 and DITA 2.0 compatibility, on a navtitle, update @class to
+    use tokens from both versions of DITA, and add @title-role -->
+  <xsl:template match="*[contains(@class,' topic/navtitle ') or dita-ot:matches-navtitle-titlealt(@class,@title-role)]">
+    <xsl:copy>
+      <xsl:apply-templates select="@* except @class"/>
+      <xsl:attribute name="class" select="'- topic/navtitle topic/titlealt alternativeTitles-d/navtitle '"/>
+      <xsl:attribute name="title-role" select="'navigation'"/>
+      <xsl:apply-templates select="*|comment()|processing-instruction()|text()"/>
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/topicgroup_chunk?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/topicgroup_chunk/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="topicID" ditaarch:DITAArchVersion="2.0"
+       domains="(topic markup-d xml-d)" class="- topic/topic ">
+  <title class="- topic/title ">Child of topichead</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">head child</p>
+  </body>
+</topic>

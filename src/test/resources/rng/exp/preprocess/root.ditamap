@@ -4,7 +4,8 @@
      domains="(topic abbrev-d) (topic delay-d) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (map mapgroup-d) (topic markup-d xml-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) a(props deliveryTarget)">
   <topicref class="- map/topicref " href="task.dita" type="task">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">Task</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Task</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">Task</linktext>
       <?ditaot genshortdesc?>

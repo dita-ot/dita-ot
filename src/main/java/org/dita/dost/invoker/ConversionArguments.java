@@ -9,6 +9,7 @@
 package org.dita.dost.invoker;
 
 import static org.dita.dost.invoker.ArgumentParser.getPluginArguments;
+import static org.dita.dost.invoker.Main.ANT_PROJECT_DELIVERABLE;
 import static org.dita.dost.invoker.Main.locale;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
@@ -17,6 +18,9 @@ import static org.dita.dost.util.XMLUtils.toList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
@@ -41,7 +45,7 @@ public class ConversionArguments extends Arguments {
     ARGUMENTS.put("-f", new StringArgument("transtype", null));
     ARGUMENTS.put("--format", new StringArgument("transtype", null));
     ARGUMENTS.put("--transtype", new StringArgument("transtype", null));
-    ARGUMENTS.put("--deliverable", new StringArgument("project.deliverable", null));
+    ARGUMENTS.put("--deliverable", new StringArgument(ANT_PROJECT_DELIVERABLE, null));
     ARGUMENTS.put("-i", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("--input", new FileOrUriArgument("args.input", null));
     ARGUMENTS.put("-r", new FileOrUriArgument("args.resources", null));
@@ -80,6 +84,7 @@ public class ConversionArguments extends Arguments {
 
   public final List<String> inputs = new ArrayList<>();
   public final List<String> formats = new ArrayList<>();
+  public final List<String> deliverables = new ArrayList<>();
   private final List<String> resources = new ArrayList<>();
 
   /**
@@ -124,8 +129,6 @@ public class ConversionArguments extends Arguments {
         handleArgListener(args);
       } else if (arg.startsWith("-D")) {
         definedProps.putAll(handleArgDefine(arg, args));
-      } else if (isLongForm(arg, "-logger")) {
-        handleArgLogger(args);
       } else if (isLongForm(arg, "-inputhandler")) {
         handleArgInputHandler(args);
       } else if (isLongForm(arg, "-emacs") || arg.equals("-e")) {
@@ -140,6 +143,8 @@ public class ConversionArguments extends Arguments {
         handleArgInput(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-format") || arg.equals("-f")) {
         handleArgFormat(arg, args, ARGUMENTS.get(getArgumentName(arg)));
+      } else if (isLongForm(arg, "-deliverable")) {
+        handleArgDeliverable(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-filter")) {
         handleArgFilter(arg, args, ARGUMENTS.get(getArgumentName(arg)));
       } else if (isLongForm(arg, "-resource") || arg.equals("-r")) {
@@ -191,7 +196,7 @@ public class ConversionArguments extends Arguments {
   }
 
   private void validate() {
-    if (definedProps.containsKey("project.deliverable") && projectFile == null) {
+    if (!deliverables.isEmpty() && projectFile == null) {
       throw new CliException(locale.getString("conversion.error.project_not_defined"));
     }
   }
@@ -259,6 +264,14 @@ public class ConversionArguments extends Arguments {
     formats.add(argument.getValue(entry.getValue()));
   }
 
+  private void handleArgDeliverable(final String arg, final Deque<String> args, final Argument argument) {
+    final Map.Entry<String, String> entry = parse(arg, args);
+    if (entry.getValue() == null || entry.getValue().isBlank()) {
+      throw new BuildException("Missing value for deliverable " + entry.getKey());
+    }
+    deliverables.add(argument.getValue(entry.getValue()));
+  }
+
   private void handleArgFilter(final String arg, final Deque<String> args, final Argument argument) {
     final Map.Entry<String, String> entry = parse(arg, args);
     if (entry.getValue() == null || entry.getValue().isBlank()) {
@@ -288,19 +301,6 @@ public class ConversionArguments extends Arguments {
       throw new BuildException("Missing value for property " + entry.getKey());
     }
     return Map.of(argument.property, argument.getValue(entry.getValue()));
-  }
-
-  /**
-   * Handle the --logger argument.
-   */
-  private void handleArgLogger(final Deque<String> args) {
-    if (loggerClassname != null) {
-      throw new BuildException("Only one logger class may be specified.");
-    }
-    loggerClassname = args.pop();
-    if (loggerClassname == null) {
-      throw new BuildException("You must specify a classname when using the -logger argument");
-    }
   }
 
   /**
@@ -362,14 +362,10 @@ public class ConversionArguments extends Arguments {
     for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
       final String filename = propertyFiles.elementAt(propertyFileIndex);
       final Properties props = new Properties();
-      FileInputStream fis = null;
-      try {
-        fis = new FileInputStream(filename);
+      try (var fis = Files.newInputStream(Path.of(filename));) {
         props.load(fis);
       } catch (final IOException e) {
         System.out.println("Could not load property file " + filename + ": " + e.getMessage());
-      } finally {
-        FileUtils.close(fis);
       }
 
       // ensure that -D properties take precedence
@@ -415,6 +411,7 @@ public class ConversionArguments extends Arguments {
       buf
         .options(null, "deliverable", "name", locale.getString("conversion.option.deliverable"))
         .options("l", "logfile", "file", locale.getString("conversion.option.logfile"))
+        .options(null, "logger", "json|className", locale.getString("conversion.option.logger"))
         .options(null, "propertyfile", "file", locale.getString("conversion.option.propertyfile"))
         .options(null, "repeat", "num", locale.getString("conversion.option.repeat"))
         .options("t", "temp", "dir", locale.getString("conversion.option.temp"));

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<topic xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
-       xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="splitThisRoot" ditaarch:DITAArchVersion="2.0"
-       specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
-       class="- topic/topic "
-       domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)">
+<topic
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="splitThisRoot" ditaarch:DITAArchVersion="2.0"
+    specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
+    class="- topic/topic "
+    domains="a(props audience) a(props deliveryTarget) a(props otherprops) a(props platform) a(props product)">
   <title class="- topic/title ">Root topic</title>
   <topic id="splitThisChild" ditaarch:DITAArchVersion="2.0"
          specializations="@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"

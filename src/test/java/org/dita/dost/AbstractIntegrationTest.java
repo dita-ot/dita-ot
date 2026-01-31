@@ -11,8 +11,7 @@ package org.dita.dost;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.URI;
@@ -35,6 +34,7 @@ import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.Job;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.function.Executable;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -44,6 +44,7 @@ public abstract class AbstractIntegrationTest {
    * Message codes where duplicates are ignored in message count.
    */
   private static final String[] ignoreDuplicates = new String[] { "DOTJ037W" };
+  private final Collection<Executable> compareResults = new ArrayList<>();
 
   enum Transtype {
     PREPROCESS("xhtml", true, "preprocess", "build-init", "preprocess"),
@@ -61,7 +62,8 @@ public abstract class AbstractIntegrationTest {
       "build-init",
       "preprocess2",
       "xhtml.topics",
-      "dita.map.xhtml"
+      "dita.map.xhtml",
+      "copy-css"
     );
 
     final String name;
@@ -74,7 +76,7 @@ public abstract class AbstractIntegrationTest {
       this(
         name,
         compareTemp,
-        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt"),
+        Set.of("html", "htm", "xhtml", "hhk", "xml", "dita", "ditamap", "fo", "txt", "gif", "jpg", "png"),
         exp,
         targets
       );
@@ -199,7 +201,7 @@ public abstract class AbstractIntegrationTest {
   }
 
   @BeforeAll
-  public static void setUpBeforeClass() throws Exception {
+  public static void setUpAll() throws Exception {
     final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     db = dbf.newDocumentBuilder();
@@ -221,14 +223,15 @@ public abstract class AbstractIntegrationTest {
   protected File test() throws Throwable {
     final File actDir = run();
     compare();
+    assertAll(compareResults);
     return actDir;
   }
 
   protected File run() throws Throwable {
     final File testDir = Paths.get("src", "test", "resources").resolve(name).toFile();
     final File srcDir = new File(testDir, SRC_DIR);
-    final File outDir = new File(baseTempDir, testDir.getName() + File.separator + "out");
-    final File tempDir = new File(baseTempDir, testDir.getName() + File.separator + "temp");
+    final File outDir = new File(baseTempDir, name + File.separator + "out");
+    final File tempDir = new File(baseTempDir, name + File.separator + "temp");
 
     final Map<String, String> builder = new HashMap<>();
     args.forEach((k, v) -> {
@@ -245,9 +248,12 @@ public abstract class AbstractIntegrationTest {
 
     try {
       this.log = runOt(testDir, transtype, tempDir, outDir, params, targets);
-      assertEquals(warnCount, countMessages(log, Project.MSG_WARN));
-      assertEquals(errorCount, countMessages(log, Project.MSG_ERR));
-
+      final List<TestListener.Message> warnings = getMessages(log, Project.MSG_WARN);
+      final List<TestListener.Message> errors = getMessages(log, Project.MSG_ERR);
+      assertAll(
+        () -> assertEquals(warnCount, warnings.size(), "warnCount mismatch: " + warnings + "\n"),
+        () -> assertEquals(errorCount, errors.size(), "errorCount mismatch: " + errors + "\n")
+      );
       this.actDir = transtype.compareTemp ? tempDir : outDir;
     } catch (final RuntimeException e) {
       throw e;
@@ -307,8 +313,8 @@ public abstract class AbstractIntegrationTest {
     System.err.println("Log end");
   }
 
-  private int countMessages(final List<TestListener.Message> messages, final int level) {
-    int count = 0;
+  private List<TestListener.Message> getMessages(final List<TestListener.Message> messages, final int level) {
+    List<TestListener.Message> filteredMessages = new ArrayList<>();
     final Set<String> duplicates = new HashSet<>();
     messages:for (final TestListener.Message m : messages) {
       if (m.level == level) {
@@ -321,10 +327,10 @@ public abstract class AbstractIntegrationTest {
             }
           }
         }
-        count++;
+        filteredMessages.add(m);
       }
     }
-    return count;
+    return filteredMessages;
   }
 
   /**
@@ -414,43 +420,41 @@ public abstract class AbstractIntegrationTest {
     }
   }
 
-  private int getMessageCount(final Project project, final String type) {
-    int errorCount = 0;
-    if (isWindows() && project.getProperty("exp.message-count." + type + ".windows") != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type + ".windows"));
-    } else if (project.getProperty("exp.message-count." + type) != null) {
-      errorCount = Integer.parseInt(project.getProperty("exp.message-count." + type));
-    }
-    return errorCount;
-  }
-
   private void compare(final File expDir, final File actDir) throws Throwable {
     final Collection<String> files = getFiles(expDir, actDir);
     for (final String name : files) {
       final File exp = new File(expDir, name);
       final File act = new File(actDir, name);
-      if (exp.isDirectory()) {
+      if (exp.isDirectory() || (!exp.exists() && act.isDirectory())) {
         compare(exp, act);
       } else {
-        final String ext = FileUtils.getExtension(name);
-        try {
-          if (ext == null) {} else if (
-            ext.equals("html") || ext.equals("htm") || ext.equals("xhtml") || ext.equals("hhk")
-          ) {
-            assertXMLEqual(parseHtml(exp), parseHtml(act));
-          } else if (ext.equals("xml") || ext.equals("dita") || ext.equals("ditamap") || ext.equals("fo")) {
-            assertXMLEqual(parseXml(exp), parseXml(act));
-          } else if (ext.equals("txt")) {
-            assertArrayEquals(readTextFile(exp), readTextFile(act));
-          }
-        } catch (final RuntimeException ex) {
-          throw ex;
-        } catch (final Throwable ex) {
-          throw new Throwable(
-            "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": " + ex.getMessage(),
-            ex
-          );
+        if (exp.exists() && act.exists()) {
+          compareFileContents(exp, act);
+        } else {
+          reportMissingFile(exp, act);
         }
+      }
+    }
+  }
+
+  private void reportMissingFile(File exp, File act) {
+    String errorMessage = "Missing file: " + (!exp.exists() ? exp.getAbsolutePath() : act.getAbsolutePath()) + "\n";
+    System.out.print(errorMessage);
+    compareResults.add(() -> fail(errorMessage));
+  }
+
+  private void compareFileContents(File exp, File act) {
+    String message = "Failed comparing " + exp.getAbsolutePath() + " and " + act.getAbsolutePath() + ": ";
+    final String ext = FileUtils.getExtension(exp.getName());
+    if (ext != null) {
+      // prettier-ignore
+      switch (ext) {
+        case "html", "htm", "xhtml", "hhk" ->
+          compareResults.add(() -> assertXMLEqual(parseHtml(exp), parseHtml(act), message));
+        case "xml", "dita", "ditamap", "fo" ->
+          compareResults.add(() -> assertXMLEqual(parseXml(exp), parseXml(act), message));
+        case "txt" ->
+          compareResults.add(() -> assertArrayEquals(readTextFile(exp), readTextFile(act), message));
       }
     }
   }
@@ -460,7 +464,10 @@ public abstract class AbstractIntegrationTest {
   private Collection<String> getFiles(File expDir, File actDir) {
     final FileFilter filter = f ->
       f.isDirectory() ||
-      (this.transtype.compareable.contains(FileUtils.getExtension(f.getName())) && !ignorable.contains(f.getName()));
+      (
+        this.transtype.compareable.contains(FileUtils.getExtension(f.getName().toLowerCase())) &&
+        !ignorable.contains(f.getName())
+      );
     final Set<String> buf = new HashSet<>();
     final File[] exp = expDir.listFiles(filter);
     if (exp != null) {
@@ -482,9 +489,7 @@ public abstract class AbstractIntegrationTest {
    */
   private String[] readTextFile(final File f) throws IOException {
     final List<String> buf = new ArrayList<>();
-    try (
-      final BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))
-    ) {
+    try (final BufferedReader r = Files.newBufferedReader(f.toPath(), StandardCharsets.UTF_8)) {
       String l;
       while ((l = r.readLine()) != null) {
         buf.add(l);
@@ -502,9 +507,6 @@ public abstract class AbstractIntegrationTest {
   }
 
   private Document parseXml(final File f) throws SAXException, IOException {
-    if (!f.exists()) {
-      throw new AssertionError(new FileNotFoundException(f.toString()));
-    }
     final Document d = db.parse(f);
     final NodeList elems = d.getElementsByTagName("*");
     for (int i = 0; i < elems.getLength(); i++) {
@@ -615,7 +617,7 @@ public abstract class AbstractIntegrationTest {
     private final Pattern infoPattern = Pattern.compile("\\[\\w+I\\]");
     private final Pattern debugPattern = Pattern.compile("\\[\\w+D\\]");
 
-    public final List<TestListener.Message> messages = new ArrayList<>();
+    public final List<Message> messages = new ArrayList<>();
     final PrintStream out;
     final PrintStream err;
 
@@ -626,32 +628,32 @@ public abstract class AbstractIntegrationTest {
 
     @Override
     public void buildStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "build started: " + event.getMessage()));
+      messages.add(new Message(-1, "build started: " + event.getMessage()));
     }
 
     @Override
     public void buildFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "build finished: " + event.getMessage()));
+      messages.add(new Message(-1, "build finished: " + event.getMessage()));
     }
 
     @Override
     public void targetStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, event.getTarget().getName() + ":"));
+      messages.add(new Message(-1, event.getTarget().getName() + ":"));
     }
 
     @Override
     public void targetFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(-1, "target finished: " + event.getTarget().getName()));
+      messages.add(new Message(-1, "target finished: " + event.getTarget().getName()));
     }
 
     @Override
     public void taskStarted(BuildEvent event) {
-      messages.add(new TestListener.Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
+      messages.add(new Message(Project.MSG_DEBUG, "task started: " + event.getTask().getTaskName()));
     }
 
     @Override
     public void taskFinished(BuildEvent event) {
-      messages.add(new TestListener.Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
+      messages.add(new Message(Project.MSG_DEBUG, "task finished: " + event.getTask().getTaskName()));
     }
 
     @Override
@@ -683,7 +685,7 @@ public abstract class AbstractIntegrationTest {
         //                    err.println(message);
       }
 
-      messages.add(new TestListener.Message(level, message));
+      messages.add(new Message(level, message));
     }
 
     record Message(int level, String message) {}

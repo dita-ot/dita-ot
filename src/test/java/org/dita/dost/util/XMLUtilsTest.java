@@ -63,7 +63,7 @@ public class XMLUtilsTest {
   private static File tempDir;
 
   @BeforeAll
-  public static void setUp() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(XMLUtilsTest.class);
   }
 
@@ -116,10 +116,9 @@ public class XMLUtilsTest {
   }
 
   @Test
-  public void testAddOrSetAttributeAttributesImplNode() throws ParserConfigurationException {
+  public void testAddOrSetAttributeAttributesImplNode() {
     final AttributesImpl atts = new AttributesImpl();
-    final DOMImplementation dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
-    final Document doc = dom.createDocument(null, "foo", null);
+    final Document doc = createDocument();
 
     doc.getDocumentElement().setAttribute("foo", "foo");
     final Attr att = doc.getDocumentElement().getAttributeNode("foo");
@@ -152,9 +151,8 @@ public class XMLUtilsTest {
   }
 
   @Test
-  public void testGetStringValue() throws ParserConfigurationException {
-    final DOMImplementation dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
-    final Document doc = dom.createDocument(null, "foo", null);
+  public void testGetStringValue() {
+    final Document doc = createDocument();
 
     final Element root = doc.getDocumentElement();
     root.appendChild(doc.createTextNode("foo"));
@@ -165,6 +163,15 @@ public class XMLUtilsTest {
     root.appendChild(nested);
     root.appendChild(doc.createTextNode(" bar"));
     assertEquals("foo nested bar", XMLUtils.getStringValue(root));
+  }
+
+  private static Document createDocument() {
+    try {
+      final DOMImplementation dom = DocumentBuilderFactory.newInstance().newDocumentBuilder().getDOMImplementation();
+      return dom.createDocument(null, "foo", null);
+    } catch (final ParserConfigurationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Test
@@ -560,6 +567,37 @@ public class XMLUtilsTest {
     final CustomXMLReader reader = (CustomXMLReader) act.get();
     assertNull(reader.getProcessingMode());
     assertEquals(List.of("custom"), List.copyOf(reader.getFormats()));
+  }
+
+  @Test
+  void insertAfter_noFollowingSibling() {
+    var doc = createDocument();
+    var root = doc.getDocumentElement();
+    var child = doc.createElement("child");
+    root.appendChild(child);
+
+    XMLUtils.insertAfter(child, doc.createElement("insert"));
+
+    var act = root.getChildNodes();
+    assertEquals("child", act.item(0).getNodeName());
+    assertEquals("insert", act.item(1).getNodeName());
+  }
+
+  @Test
+  void insertAfter_hasFollowingSibling() {
+    var doc = createDocument();
+    var root = doc.getDocumentElement();
+    var child = doc.createElement("child");
+    root.appendChild(child);
+    var next = doc.createElement("next");
+    root.appendChild(next);
+
+    XMLUtils.insertAfter(child, doc.createElement("insert"));
+
+    var act = root.getChildNodes();
+    assertEquals("child", act.item(0).getNodeName());
+    assertEquals("insert", act.item(1).getNodeName());
+    assertEquals("next", act.item(2).getNodeName());
   }
 
   @AfterAll

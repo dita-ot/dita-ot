@@ -1,0 +1,20 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+     domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         "
+     ditaarch:DITAArchVersion="2.0">
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keytext" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keytext class="- map/keytext ">keytext content</keytext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keytext-href" href="http://example.com" scope="external" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keytext class="- map/keytext ">keytext content</keytext>
+    </topicmeta>
+  </keydef>
+  <keydef class="+ map/topicref mapgroup-d/keydef " keys="keytext-href-desc" href="http://example.com" scope="external" processing-role="resource-only">
+    <topicmeta class="- map/topicmeta ">
+      <keytext class="- map/keytext ">keytext content</keytext>
+      <shortdesc class="- topic/shortdesc ">shortdesc content</shortdesc>
+    </topicmeta>
+  </keydef>
+</map>

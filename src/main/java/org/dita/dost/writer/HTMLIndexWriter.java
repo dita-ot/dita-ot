@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 import javax.xml.transform.Transformer;
 import org.dita.dost.exception.DITAOTException;
@@ -38,9 +39,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
   @Override
   public void write(final File filename) throws DITAOTException {
-    OutputStream out = null;
-    try {
-      out = new FileOutputStream(filename);
+    try (var out = Files.newOutputStream(filename.toPath())) {
       final XMLSerializer serializer = XMLSerializer.newInstance(out);
       final Transformer transformer = serializer.getTransformerHandler().getTransformer();
       transformer.setOutputProperty(DOCTYPE_PUBLIC, "-//IETF//DTD HTML//EN");
@@ -78,14 +77,6 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
       serializer.writeEndDocument();
     } catch (final Exception e) {
       throw new DITAOTException(e);
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (final IOException e) {
-          logger.error(e.getMessage(), e);
-        }
-      }
     }
   }
 

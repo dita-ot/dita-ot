@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<val>
+  <prop att="group1" action="passthrough"/>
+  <prop att="group2" val="val2-3" action="passthrough"/>
+  <prop att="group2" val="val2-1" action="passthrough"/>
+  <prop att="product" val="val3-3" action="passthrough"/>
+  <prop att="product" val="val3-1" action="passthrough"/>
+</val>

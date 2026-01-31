@@ -15,6 +15,7 @@ import java.io.*;
 import java.net.URI;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
@@ -154,7 +155,7 @@ public class SubjectSchemeReader {
     final Properties prop = new Properties();
     for (final Map.Entry<URI, Set<URI>> entry : m.entrySet()) {
       final URI key = entry.getKey();
-      final String value = StringUtils.join(entry.getValue(), COMMA);
+      final String value = entry.getValue().stream().map(URI::toString).collect(Collectors.joining(COMMA));
       prop.setProperty(key.getPath(), value);
     }
     try (OutputStream os = job.getStore().getOutputStream(outputFile.toURI())) {

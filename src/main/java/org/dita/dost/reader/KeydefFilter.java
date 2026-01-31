@@ -41,6 +41,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
   /** Map to store multi-level keyrefs */
   private final Map<String, String> keysRefMap;
   private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
+  private final Queue<Integer> versionStack = new LinkedList<>();
 
   /**
    * Constructor.
@@ -83,6 +84,12 @@ public final class KeydefFilter extends AbstractXMLFilter {
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
     attributeStack.push(atts);
+    var ditaArchVersion = atts.getValue(DITA_NAMESPACE, "DITAArchVersion");
+    if (ditaArchVersion != null) {
+      versionStack.add((int) Math.floor(Double.parseDouble(ditaArchVersion)));
+    } else {
+      versionStack.add(versionStack.peek());
+    }
 
     handleKeysAttr(atts);
 
@@ -90,10 +97,11 @@ public final class KeydefFilter extends AbstractXMLFilter {
   }
 
   @Override
-  public void endElement(String uri, String localName, String qName) throws SAXException {
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
 
     attributeStack.pop();
+    versionStack.add(versionStack.remove());
   }
 
   /**
@@ -132,7 +140,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
               attrScope != null &&
               (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))
             ) {
-              keysDefMap.put(key, new KeyDef(key, target, attrScope, attrFormat, null, null));
+              keysDefMap.put(key, new KeyDef(key, target, attrScope, attrFormat, null, null, versionStack.peek()));
             } else {
               String tail = null;
               if (target.getFragment() != null) {
@@ -144,7 +152,15 @@ public final class KeydefFilter extends AbstractXMLFilter {
               }
               keysDefMap.put(
                 key,
-                new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, attrFormat, null, null)
+                new KeyDef(
+                  key,
+                  setFragment(target, tail),
+                  ATTR_SCOPE_VALUE_LOCAL,
+                  attrFormat,
+                  null,
+                  null,
+                  versionStack.peek()
+                )
               );
             }
           } else if (!StringUtils.isEmptyString(keyRef)) {
@@ -153,7 +169,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
           } else {
             // target is null or empty, it is useful in the future
             // when consider the content of key definition
-            keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
+            keysDefMap.put(key, new KeyDef(key, null, null, null, null, null, versionStack.peek()));
           }
         } else {
           logger.info(MessageUtils.getMessage("DOTJ045I", key).setLocation(atts).toString());

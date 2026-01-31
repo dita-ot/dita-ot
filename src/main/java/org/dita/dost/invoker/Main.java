@@ -39,9 +39,13 @@ import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -87,7 +91,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private static final String ANT_TRANSTYPE = "transtype";
   private static final String ANT_PLUGIN_FILE = "plugin.file";
   private static final String ANT_PLUGIN_ID = "plugin.id";
-  private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+  public static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
   private static final String ANT_PROJECT_CONTEXT = "project.context";
   private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
   private static final Map<String, String> RESERVED_PARAMS = Map.of(
@@ -393,7 +397,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       if (conversionArgs.projectFile == null) {
         projectProps = collectArguments(conversionArgs.inputs, conversionArgs.formats, definedProps);
       } else {
-        projectProps = collectProperties(conversionArgs.projectFile, definedProps);
+        projectProps = collectProperties(conversionArgs, definedProps);
       }
       final String tempDirToken = "temp" + LocalDateTime.now().format(dateTimeFormatter);
       for (Map<String, Object> projectProp : projectProps) {
@@ -448,7 +452,12 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (args.logFile != null) {
       PrintStream logTo;
       try {
-        logTo = new PrintStream(new FileOutputStream(args.logFile));
+        logTo =
+          new PrintStream(
+            Files.newOutputStream(args.logFile.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE),
+            false,
+            StandardCharsets.UTF_8
+          );
       } catch (final IOException ioe) {
         throw new CliException(
           "Cannot write to the specified log file. Make sure the path exists and you have write permissions."
@@ -708,23 +717,37 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     }
   }
 
-  private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
+  private List<Map<String, Object>> collectProperties(
+    final ConversionArguments conversionArgs,
+    final Map<String, Object> definedProps
+  ) {
+    final File projectFile = conversionArgs.projectFile;
+    final Set<String> deliverables = Set.copyOf(conversionArgs.deliverables);
+
     final URI base = projectFile.toURI();
     final org.dita.dost.project.Project project = readProjectFile(projectFile);
 
-    return collectProperties(project, base, definedProps);
+    return collectProperties(project, base, deliverables, definedProps);
   }
 
   @VisibleForTesting
   List<Map<String, Object>> collectProperties(
     final org.dita.dost.project.Project project,
     final URI base,
+    final Set<String> deliverables,
     final Map<String, Object> definedProps
   ) {
-    final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
+    final List<org.dita.dost.project.Project.Deliverable> projectDeliverables = project.deliverables();
+    if (!deliverables.isEmpty()) {
+      for (String runDeliverable : deliverables) {
+        if (projectDeliverables.stream().noneMatch(d -> d.id().equals(runDeliverable))) {
+          throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
+        }
+      }
+    }
 
-    final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables())
-      .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id(), runDeliverable))
+    final List<Map<String, Object>> projectProps = zipWithIndex(projectDeliverables)
+      .filter(entry -> deliverables.isEmpty() || deliverables.contains(entry.getKey().id()))
       .map(entry -> {
         final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
         final Map<String, Object> props = new HashMap<>(definedProps);
@@ -785,9 +808,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return props;
       })
       .collect(Collectors.toList());
-    if (runDeliverable != null && projectProps.isEmpty()) {
-      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
-    }
 
     return projectProps;
   }
@@ -1162,8 +1182,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("legacy")) {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
-      logger = new DefaultLogger();
-      ((DefaultLogger) logger).useColor(args.useColor);
+      logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
+    }
+
+    if (logger instanceof JsonLogger jsonLogger && args.logFile != null) {
+      jsonLogger.setArray(true);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);

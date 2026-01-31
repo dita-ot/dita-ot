@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
   <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-    ditaarch:DITAArchVersion="2.0" id="topic_a">
+         ditaarch:DITAArchVersion="2.0" id="topic_a">
     <title class="- topic/title ">a</title>
     <body class="- topic/body ">
       <image class="- topic/image " href="a.png"/>
@@ -42,7 +42,7 @@
       </related-links>
     </topic>
     <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-      ditaarch:DITAArchVersion="2.0" id="topic_b">
+           ditaarch:DITAArchVersion="2.0" id="topic_b">
       <title class="- topic/title ">b</title>
       <body class="- topic/body ">
         <image class="- topic/image " href="../a.png"/>
@@ -84,7 +84,7 @@
       </topic>
     </topic>
     <topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
-      ditaarch:DITAArchVersion="2.0" id="topic_c">
+           ditaarch:DITAArchVersion="2.0" id="topic_c">
       <title class="- topic/title ">c</title>
       <body class="- topic/body ">
         <image class="- topic/image " href="../../a.png"/>

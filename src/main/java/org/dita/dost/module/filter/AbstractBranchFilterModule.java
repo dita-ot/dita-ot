@@ -16,6 +16,7 @@ import static org.dita.dost.util.XMLUtils.getChildElement;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.log.DITAOTLogger;
@@ -177,7 +178,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
       logger.error(e.getMessage(), e);
     }
 
-    prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+    prop.setProperty(REL_FLAGIMAGE_LIST, newSet.stream().map(URI::toString).collect(Collectors.joining(COMMA)));
   }
 
   private FileInfo getOrCreateFileInfo(final URI file) {

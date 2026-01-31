@@ -20,6 +20,8 @@ import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.toList;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.net.URI;
@@ -42,13 +44,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -87,6 +87,7 @@ public final class Integrator {
   private static final String FEAT_TRANSTYPES = "dita.conductor.transtype.check";
   private static final String FEAT_LIB_EXTENSIONS = "dita.conductor.lib.import";
   private static final String ELEM_PLUGINS = "plugins";
+  public static final String ELEM_PLUGIN = "plugin";
 
   private static final String LIB_DIR = "lib";
   private static final String CONFIG_DIR = "config";
@@ -111,9 +112,9 @@ public final class Integrator {
   private final Map<String, Value> templateSet;
   private final File ditaDir;
   /**
-   * Plugin configuration file.
+   * Plugin configuration files.
    */
-  private final Set<File> descSet;
+  private final Set<File> pluginFiles;
   private final XMLReader reader;
   private final Document pluginsDoc;
   private final PluginParser parser;
@@ -136,7 +137,7 @@ public final class Integrator {
     this.ditaDir = ditaDir;
     pluginTable = new HashMap<>(16);
     templateSet = new HashMap<>(16);
-    descSet = new HashSet<>(16);
+    pluginFiles = new HashSet<>(16);
     loadedPlugin = new HashSet<>(16);
     featureTable = new HashMap<>(16);
     extensionPoints = new HashSet<>();
@@ -170,6 +171,8 @@ public final class Integrator {
       final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware(true);
       pluginsDoc = factory.newDocumentBuilder().newDocument();
+      final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
+      pluginsDoc.appendChild(root);
     } catch (ParserConfigurationException e) {
       throw new RuntimeException("Failed to initialize XML parser: " + e.getMessage(), e);
     }
@@ -177,10 +180,7 @@ public final class Integrator {
     pluginList = getPluginIds(readPlugins());
   }
 
-  /**
-   * Execute point of Integrator.
-   */
-  public void execute() throws Exception {
+  private void init() {
     // Read the properties file, if it exists.
     properties = new Properties();
     if (propertiesFile != null) {
@@ -193,14 +193,17 @@ public final class Integrator {
       properties.putAll(Configuration.configuration);
     }
     if (!properties.containsKey(CONF_PLUGIN_DIRS)) {
-      properties.setProperty(CONF_PLUGIN_DIRS, configuration.getOrDefault(CONF_PLUGIN_DIRS, "plugins;demo"));
+      properties.setProperty(
+        CONF_PLUGIN_DIRS,
+        configuration.getOrDefault(CONF_PLUGIN_DIRS, String.join(PARAM_VALUE_SEPARATOR, "plugins", "demo"))
+      );
     }
     if (!properties.containsKey(CONF_PLUGIN_IGNORES)) {
       properties.setProperty(CONF_PLUGIN_IGNORES, configuration.getOrDefault(CONF_PLUGIN_IGNORES, ""));
     }
 
     // Get the list of plugin directories from the properties.
-    final String[] pluginDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
+    final String[] pluginRootDirs = properties.getProperty(CONF_PLUGIN_DIRS).split(PARAM_VALUE_SEPARATOR);
 
     final Set<String> pluginIgnores = new HashSet<>();
     if (properties.getProperty(CONF_PLUGIN_IGNORES) != null) {
@@ -217,30 +220,39 @@ public final class Integrator {
       }
     }
 
+    // Deprecated
     for (final String tmpl : properties.getProperty(CONF_TEMPLATES, "").split(PARAM_VALUE_SEPARATOR)) {
       final String t = tmpl.trim();
-      if (t.length() != 0) {
+      if (!t.isEmpty()) {
         logger.warn(MessageUtils.getMessage("DOTJ080W", "templates", "template").toString());
         templateSet.put(t, null);
       }
     }
 
-    for (final String pluginDir2 : pluginDirs) {
-      File pluginDir = new File(pluginDir2);
-      if (!pluginDir.isAbsolute()) {
-        pluginDir = new File(ditaDir, pluginDir.getPath());
+    for (final String pluginDir2 : pluginRootDirs) {
+      File pluginRootDir = new File(pluginDir2);
+      if (!pluginRootDir.isAbsolute()) {
+        pluginRootDir = new File(ditaDir, pluginRootDir.getPath());
       }
-      final File[] pluginFiles = pluginDir.listFiles();
-
-      for (int i = 0; (pluginFiles != null) && (i < pluginFiles.length); i++) {
-        final File f = pluginFiles[i];
-        final File descFile = new File(pluginFiles[i], "plugin.xml");
-        if (pluginFiles[i].isDirectory() && !pluginIgnores.contains(f.getName()) && descFile.exists()) {
-          descSet.add(descFile);
+      final File[] pluginDirs = pluginRootDir.listFiles();
+      if (pluginDirs != null) {
+        for (final File f : pluginDirs) {
+          if (f.isDirectory()) {
+            final File pluginFile = new File(f, "plugin.xml");
+            if (!pluginIgnores.contains(f.getName()) && pluginFile.exists()) {
+              pluginFiles.add(pluginFile);
+            }
+          }
         }
       }
     }
+  }
 
+  /**
+   * Execute point of Integrator.
+   */
+  public void execute() throws Exception {
+    init();
     mergePlugins();
     integrate();
     logChanges(pluginList, getPluginIds(pluginsDoc));
@@ -265,8 +277,6 @@ public final class Integrator {
    * Generate and process plugin files.
    */
   private void integrate() throws Exception {
-    writePlugins();
-
     // Collect information for each feature id and generate a feature table.
     final FileGenerator fileGen = new FileGenerator(featureTable, pluginTable);
     fileGen.setLogger(logger);
@@ -300,7 +310,7 @@ public final class Integrator {
         }
       }
     }
-    configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, StringUtils.join(imgExts, CONF_LIST_SEPARATOR));
+    configuration.put(CONF_SUPPORTED_IMAGE_EXTENSIONS, String.join(CONF_LIST_SEPARATOR, imgExts));
     // extensions
     configuration.put(CONF_SUPPORTED_HTML_EXTENSIONS, readExtensions(FEAT_HTML_EXTENSIONS));
     configuration.put(CONF_SUPPORTED_RESOURCE_EXTENSIONS, readExtensions(FEAT_RESOURCE_EXTENSIONS));
@@ -330,7 +340,7 @@ public final class Integrator {
     if (printTranstypeValue != null) {
       printTranstypes.addAll(Arrays.asList(printTranstypeValue.split(PARAM_VALUE_SEPARATOR)));
     }
-    configuration.put(CONF_PRINT_TRANSTYPES, StringUtils.join(printTranstypes, CONF_LIST_SEPARATOR));
+    configuration.put(CONF_PRINT_TRANSTYPES, String.join(CONF_LIST_SEPARATOR, printTranstypes));
 
     for (final Entry<String, Plugin> e : pluginTable.entrySet()) {
       final Plugin f = e.getValue();
@@ -524,7 +534,7 @@ public final class Integrator {
         .map(Path::getFileName)
         .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
         .forEach(copy);
-      copy.accept(Paths.get("plugins.xml"));
+      copy.accept(Paths.get(PLUGIN_CONF));
       copy.accept(Paths.get("configuration.properties"));
       copy.accept(Paths.get("CatalogManager.properties"));
       copy.accept(Paths.get("org.dita.dost.platform", "plugin.properties"));
@@ -726,7 +736,7 @@ public final class Integrator {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
       logger.trace("Generate start command shell {}", outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
+      out = Files.newBufferedWriter(outFile.toPath());
 
       out.write(
         """
@@ -799,7 +809,7 @@ public final class Integrator {
         throw new RuntimeException("Failed to make directory " + outFile.getParentFile().getAbsolutePath());
       }
       logger.trace("Generate start command batch {}", outFile.getPath());
-      out = new BufferedWriter(new FileWriter(outFile));
+      out = Files.newBufferedWriter(outFile.toPath());
 
       out.write(
         """
@@ -852,7 +862,7 @@ public final class Integrator {
         }
       }
     }
-    return StringUtils.join(exts, CONF_LIST_SEPARATOR);
+    return String.join(CONF_LIST_SEPARATOR, exts);
   }
 
   /**
@@ -862,24 +872,25 @@ public final class Integrator {
    * @param plugin plugin ID
    * @return {@code true}> if plugin was loaded, otherwise {@code false}
    */
-  private boolean loadPlugin(final String plugin) {
+  private void loadPlugin(final String plugin) {
     if (checkPlugin(plugin)) {
       final Plugin pluginFeatures = pluginTable.get(plugin);
       final Map<String, List<Value>> featureSet = pluginFeatures.features();
       for (final Map.Entry<String, List<Value>> currentFeature : featureSet.entrySet()) {
-        final String key = currentFeature.getKey();
+        final String extensionPointId = currentFeature.getKey();
         final List<Value> values = currentFeature.getValue();
-        if (!extensionPoints.contains(key)) {
-          throw new RuntimeException("Plug-in %s uses an undefined extension point %s".formatted(plugin, key));
+        if (!extensionPoints.contains(extensionPointId)) {
+          throw new RuntimeException(
+            "Plug-in %s uses an undefined extension point %s".formatted(plugin, extensionPointId)
+          );
         }
-        if (featureTable.containsKey(key)) {
-          final List<Value> value = featureTable.get(key);
+        if (featureTable.containsKey(extensionPointId)) {
+          final List<Value> value = featureTable.get(extensionPointId);
           value.addAll(values);
-          featureTable.put(key, value);
+          featureTable.put(extensionPointId, value);
         } else {
           //Make shallow clone to avoid making modifications directly to list inside the current feature.
-          List<Value> currentFeatureValue = values;
-          featureTable.put(key, currentFeatureValue != null ? new ArrayList<>(currentFeatureValue) : null);
+          featureTable.put(extensionPointId, values != null ? new ArrayList(values) : null);
         }
       }
 
@@ -889,9 +900,6 @@ public final class Integrator {
         templateSet.put(templatePath, new Value.StringValue(pluginFeatures.pluginId(), templateName));
       }
       loadedPlugin.add(plugin);
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -927,7 +935,7 @@ public final class Integrator {
   }
 
   private Document readPlugins() {
-    final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
+    final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + PLUGIN_CONF);
     if (!plugins.exists()) {
       return null;
     }
@@ -944,7 +952,7 @@ public final class Integrator {
     if (doc == null) {
       return Collections.emptySet();
     }
-    final List<Element> ps = toList(doc.getElementsByTagName("plugin"));
+    final List<Element> ps = toList(doc.getElementsByTagName(ELEM_PLUGIN));
     return ps
       .stream()
       .filter(p -> p.getAttributeNode("id") != null)
@@ -956,13 +964,12 @@ public final class Integrator {
    * Merge plugin configuration files.
    */
   private void mergePlugins() {
-    final Element root = pluginsDoc.createElement(ELEM_PLUGINS);
-    pluginsDoc.appendChild(root);
-    if (!descSet.isEmpty()) {
-      final URI b = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml").toURI();
-      for (final File descFile : descSet) {
+    if (!pluginFiles.isEmpty()) {
+      final Element root = pluginsDoc.getDocumentElement();
+      final URI b = new File(ditaDir, CONFIG_DIR + File.separator + PLUGIN_CONF).toURI();
+      for (final File descFile : pluginFiles) {
         logger.trace("Read plug-in configuration {}", descFile.getPath());
-        final Element plugin = parseDesc(descFile);
+        final Element plugin = parsePluginFile(descFile);
         if (plugin != null) {
           final URI base = getRelativePath(b, descFile.toURI());
           plugin.setAttributeNS(XML_NS_URI, XML_NS_PREFIX + ":base", base.toString());
@@ -970,10 +977,12 @@ public final class Integrator {
         }
       }
     }
+
+    writePlugins();
   }
 
-  private void writePlugins() throws TransformerException {
-    final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + "plugins.xml");
+  private void writePlugins() {
+    final File plugins = new File(ditaDir, CONFIG_DIR + File.separator + PLUGIN_CONF);
     logger.trace("Writing {}", plugins);
     try {
       new XMLUtils().writeDocument(pluginsDoc, plugins);
@@ -987,13 +996,13 @@ public final class Integrator {
    *
    * @param descFile plugin configuration
    */
-  private Element parseDesc(final File descFile) {
+  private Element parsePluginFile(final File descFile) {
     try {
       parser.setPluginDir(descFile.getParentFile());
       final Element root = parser.parse(descFile.getAbsoluteFile());
-      final Plugin f = parser.getPlugin();
-      extensionPoints.addAll(f.extensionPoints().keySet());
-      pluginTable.put(f.pluginId(), f);
+      final Plugin plugin = parser.getPlugin();
+      extensionPoints.addAll(plugin.extensionPoints().stream().map(ExtensionPoint::id).toList());
+      pluginTable.put(plugin.pluginId(), plugin);
       return root;
     } catch (final RuntimeException e) {
       throw e;

@@ -11,6 +11,7 @@ import static org.dita.dost.platform.Integrator.CONF_PARSER_FORMAT;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import org.dita.dost.platform.Integrator;
 
@@ -64,7 +65,7 @@ public final class Configuration {
           Integrator.class.getPackage().getName() + File.separator + GEN_CONF_PROPERTIES
         );
         if (configurationFile.exists()) {
-          plugingConfigurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+          plugingConfigurationInputStream = new BufferedInputStream(Files.newInputStream(configurationFile.toPath()));
           pluginProperties.load(plugingConfigurationInputStream);
         }
       }
@@ -93,7 +94,7 @@ public final class Configuration {
       } else {
         final File configurationFile = new File("config", CONF_PROPERTIES);
         if (configurationFile.exists()) {
-          configurationInputStream = new BufferedInputStream(new FileInputStream(configurationFile));
+          configurationInputStream = new BufferedInputStream(Files.newInputStream(configurationFile.toPath()));
           properties.load(configurationInputStream);
         }
       }

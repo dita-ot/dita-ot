@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_conflict_to_content/preprocess?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_conflict_to_content/preprocess/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map "
+     ditaarch:DITAArchVersion="2.0"
+     domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   ">
+  <topicref class="- map/topicref " copy-to="map5.dita" href="t1.dita">
+    <topicref class="- map/topicref " href="t2.dita"/>
+  </topicref>
+  <topicref class="- map/topicref " href="map1.dita#N1"/>
+</map>

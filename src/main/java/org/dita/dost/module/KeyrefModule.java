@@ -23,6 +23,7 @@ import static org.dita.dost.util.XMLUtils.isDitaFormat;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +46,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.KeyScope;
 import org.dita.dost.writer.ConkeyrefFilter;
-import org.dita.dost.writer.KeyrefPaser;
+import org.dita.dost.writer.KeyrefParser;
 import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
@@ -148,9 +149,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         .toList();
       final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
 
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null).forEach(this::processFile);
+      final Map<URI, String> topicIdCache = new ConcurrentHashMap<>();
 
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null).forEach(this::processFile);
+      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null)
+        .forEach(r -> processFile(r, topicIdCache));
+
+      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null)
+        .forEach(r -> processFile(r, topicIdCache));
 
       // Store job configuration updates
       for (final URI file : normalProcessingRole) {
@@ -265,7 +270,15 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       if (href != null && rewrites.containsKey(stripFragment(href))) {
         href = setFragment(rewrites.get(stripFragment(href)), href.getFragment());
       }
-      final KeyDef newKey = new KeyDef(oldKey.keys, href, oldKey.scope, oldKey.format, oldKey.source, oldKey.element);
+      final KeyDef newKey = new KeyDef(
+        oldKey.keys,
+        href,
+        oldKey.scope,
+        oldKey.format,
+        oldKey.source,
+        oldKey.element,
+        oldKey.version
+      );
       newKeys.put(key.getKey(), newKey);
     }
     return new KeyScope(
@@ -475,7 +488,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
    * Process key references in a topic. Topic is stored with a new name if it's
    * been processed before.
    */
-  private void processFile(final ResolveTask r) {
+  private void processFile(final ResolveTask r, final Map<URI, String> topicIdCache) {
     final List<XMLFilter> filters = new ArrayList<>();
 
     final ConkeyrefFilter conkeyrefFilter = new ConkeyrefFilter();
@@ -491,11 +504,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     );
     filters.add(topicFragmentFilter);
 
-    final KeyrefPaser parser = new KeyrefPaser();
+    final KeyrefParser parser = new KeyrefParser();
     parser.setLogger(logger);
     parser.setJob(job);
     parser.setKeyDefinition(r.scope);
     parser.setCurrentFile(job.tempDirURI.resolve(r.in.uri));
+    parser.setTopicIdCache(topicIdCache);
     filters.add(parser);
 
     try {

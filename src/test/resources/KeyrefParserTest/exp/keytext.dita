@@ -1,0 +1,44 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- topic/topic "
+       domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+       id="a" ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">Keytext</title>
+  <body class="- topic/body ">
+    <p class="- topic/p ">
+      <keyword class="- topic/keyword " keyref="keytext">keytext content</keyword>
+      <keyword class="- topic/keyword " keyref="keytext">non-empty</keyword>
+      <xref class="- topic/xref " keyref="keytext-href" href="http://example.com" scope="external">keytext content</xref>
+      <xref class="- topic/xref " keyref="keytext-href" href="http://example.com" scope="external">non-empty</xref>
+      <xref class="- topic/xref " keyref="keytext-href-desc" href="http://example.com" scope="external">keytext content<shortdesc class="- topic/shortdesc ">shortdesc content</shortdesc></xref>
+      <xref class="- topic/xref " keyref="keytext-href-desc" href="http://example.com" scope="external">non-empty</xref>
+      <image class="- topic/image " keyref="keytext-href" href="http://example.com" scope="external">
+        <alt class="- topic/alt ">keytext content</alt>
+      </image>
+      <image class="- topic/image " keyref="keytext-href" href="http://example.com" scope="external">non-empty</image>
+      <data class="- topic/data " keyref="keytext">keytext content</data>
+      <data class="- topic/data " keyref="keytext">non-empty</data>
+      <data class="- topic/data " keyref="keytext-href" href="http://example.com" scope="external">keytext content</data>
+      <data class="- topic/data " keyref="keytext-href" href="http://example.com" scope="external">non-empty</data>
+    </p>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " keyref="keytext">
+      <linktext class="- topic/linktext ">keytext content</linktext>
+    </link>
+    <link class="- topic/link " keyref="keytext">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
+    <link class="- topic/link " keyref="keytext-href" href="http://example.com" scope="external">
+    <linktext class="- topic/linktext ">keytext content</linktext>
+    </link>
+    <link class="- topic/link " keyref="keytext-href" href="http://example.com" scope="external">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
+    <link class="- topic/link " keyref="keytext-href-desc" href="http://example.com" scope="external">
+      <linktext class="- topic/linktext ">keytext content</linktext>
+      <shortdesc class="- topic/shortdesc ">shortdesc content</shortdesc>
+    </link>
+    <link class="- topic/link " keyref="keytext-href-desc" href="http://example.com" scope="external">
+      <linktext class="- topic/linktext ">non-empty</linktext>
+    </link>
+  </related-links>
+</topic>

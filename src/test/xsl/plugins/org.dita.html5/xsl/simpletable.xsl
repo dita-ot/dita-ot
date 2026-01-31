@@ -7,8 +7,8 @@
                 version="3.0"
                 exclude-result-prefixes="xs dita-ot table simpletable">
   
-  <xsl:import href="../../../../../main/plugins/org.dita.html5/xsl/functions.xsl"/>
-  <xsl:import href="../../../../../main/plugins/org.dita.html5/xsl/simpletable.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/functions.xsl"/>
+  <xsl:import href="plugin:org.dita.html5:xsl/simpletable.xsl"/>
 
   <!-- Mocks -->
 

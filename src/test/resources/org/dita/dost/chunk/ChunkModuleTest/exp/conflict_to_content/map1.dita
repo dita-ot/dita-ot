@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0"
+         domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+         id="N1" xml:lang="en-us">
+    <title class="- topic/title ">Nesting topic 1 - parent</title>
+    <shortdesc class="- topic/shortdesc ">[llama llama]</shortdesc>
+    <body class="- topic/body ">
+      <p class="- topic/p ">[and a koala]</p>
+    </body>
+    <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0"
+           domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+           id="N1a" xml:lang="en-us">
+      <title class="- topic/title ">Nesting topic 1 - child</title>
+      <shortdesc class="- topic/shortdesc ">[llama llama]</shortdesc>
+      <body class="- topic/body ">
+        <p class="- topic/p ">[and a koala]</p>
+      </body>
+    </topic>
+  </topic>
+</dita>

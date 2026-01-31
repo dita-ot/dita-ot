@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -392,7 +393,7 @@ public final class ExtensibleAntInvoker extends Task {
       if (!isValid(getProject(), getLocation(), i.ifProperty, null)) {
         continue;
       }
-      try (BufferedReader r = new BufferedReader(new FileReader(i.file))) {
+      try (BufferedReader r = Files.newBufferedReader(i.file.toPath())) {
         for (String l = r.readLine(); l != null; l = r.readLine()) {
           inc.add(new File(l));
         }

@@ -730,8 +730,8 @@ public final class XMLUtils {
     }
 
     try (
-      final InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-      final OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))
+      final InputStream in = new BufferedInputStream(Files.newInputStream(inputFile.toPath()));
+      final OutputStream out = new BufferedOutputStream(Files.newOutputStream(outputFile.toPath()))
     ) {
       XMLReader reader = getXMLReader();
       for (final XMLFilter filter : filters) {
@@ -1439,6 +1439,23 @@ public final class XMLUtils {
         parent.appendChild(doc.importNode(child, true));
       }
     }
+  }
+
+  /**
+   * Insert node after reference element
+   *
+   * @param ref   node to insert after
+   * @param child content to insert, must be in the same document as argument {@code ref}
+   */
+  public static Node insertAfter(final Node ref, final Node child) {
+    final Node parent = ref.getParentNode();
+    final Node nextSibling = ref.getNextSibling();
+    if (nextSibling != null) {
+      parent.insertBefore(child, nextSibling);
+    } else {
+      parent.appendChild(child);
+    }
+    return child;
   }
 
   /**

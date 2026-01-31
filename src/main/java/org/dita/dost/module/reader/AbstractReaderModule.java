@@ -954,7 +954,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       logger.error(e.getMessage(), e);
     }
 
-    prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+    prop.setProperty(REL_FLAGIMAGE_LIST, newSet.stream().map(URI::toString).collect(Collectors.joining(COMMA)));
   }
 
   void init() throws DITAOTException {

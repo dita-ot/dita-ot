@@ -1,7 +1,8 @@
-<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
-     class="- map/map "
-     ditaarch:DITAArchVersion="2.0">
-   <topicref class="- map/topicref " href="a.dita#topic_a2" chunk="combine">
-      <topicref class="- map/topicref " href="b.dita#topic_b2"/>
-   </topicref>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map " ditaarch:DITAArchVersion="2.0">
+  <topicref class="- map/topicref " href="a.dita#topic_a2" chunk="combine">
+    <topicref class="- map/topicref " href="b.dita#topic_b2"/>
+  </topicref>
+  <topicref class="- map/topicref " href="c.dita#topic_c2" chunk="combine">
+      <topicref class="- map/topicref " href="d.dita#topic_d2"/>
+    </topicref>
 </map>

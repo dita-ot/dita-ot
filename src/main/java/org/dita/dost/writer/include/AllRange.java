@@ -14,6 +14,9 @@ import org.dita.dost.writer.CoderefResolver;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
+/**
+ * Range that includes all lines.
+ */
 public class AllRange implements Range {
 
   ContentHandler handler;
@@ -34,8 +37,10 @@ public class AllRange implements Range {
       } else {
         handler.characters(CoderefResolver.XML_NEWLINE, 0, CoderefResolver.XML_NEWLINE.length);
       }
-      final char[] ch = line.toCharArray();
-      handler.characters(ch, 0, ch.length);
+      if (!line.isEmpty()) {
+        final char[] ch = line.toCharArray();
+        handler.characters(ch, 0, ch.length);
+      }
     }
   }
 }

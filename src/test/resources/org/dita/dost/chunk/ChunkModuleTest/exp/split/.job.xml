@@ -4,8 +4,10 @@
   </property>
   <files>
     <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
-    <file src="file:/a.dita" uri="a_topic_b.dita" path="a_topic_b.dita" result="file:/a_topic_b.dita" format="dita" target="true"/>
-    <file src="file:/a.dita" uri="a_topic_c.dita" path="a_topic_c.dita" result="file:/a_topic_c.dita" format="dita" target="true"/>
+    <file src="file:/a.dita" uri="a_topic_b.dita" path="a_topic_b.dita" result="file:/a_topic_b.dita" format="dita"
+          target="true"/>
+    <file src="file:/a.dita" uri="a_topic_c.dita" path="a_topic_c.dita" result="file:/a_topic_c.dita" format="dita"
+          target="true"/>
     <file src="file:/combine.ditamap" uri="combine.ditamap" path="combine.ditamap" format="ditamap" input="true"/>
   </files>
 </job>

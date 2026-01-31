@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -53,20 +54,10 @@ public class IndexTermReaderTest {
     final XMLReader xmlReader = XMLUtils.getXMLReader();
     xmlReader.setContentHandler(handler);
     final File source = new File(resourceDir, "concept.dita");
-    FileInputStream inputStream = null;
-    try {
-      inputStream = new FileInputStream(source);
+    try (var inputStream = Files.newInputStream(source.toPath())) {
       xmlReader.parse(new InputSource(inputStream));
     } catch (final Exception e) {
       fail(e.getMessage());
-    } finally {
-      if (inputStream != null) {
-        try {
-          inputStream.close();
-        } catch (final IOException e) {
-          fail(e.getMessage());
-        }
-      }
     }
     final List<IndexTerm> act = indexTermCollection.getTermList();
 

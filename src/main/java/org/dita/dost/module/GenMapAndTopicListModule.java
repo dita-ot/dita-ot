@@ -536,7 +536,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       final String key = e.getKey();
       final KeyDef value = e.getValue();
       if (schemeSet.contains(currentFile)) {
-        schemekeydefMap.put(key, new KeyDef(key, value.href, value.scope, value.format, currentFile, null));
+        schemekeydefMap.put(
+          key,
+          new KeyDef(key, value.href, value.scope, value.format, currentFile, null, value.version)
+        );
       }
     }
 
@@ -1028,7 +1031,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     final Collection<KeyDef> res = new ArrayList<>(keydefs.size());
     for (final KeyDef k : keydefs) {
       final URI source = tempFileNameScheme.generateTempFileName(k.source);
-      res.add(new KeyDef(k.keys, k.href, k.scope, k.format, source, null));
+      res.add(new KeyDef(k.keys, k.href, k.scope, k.format, source, null, k.version));
     }
     return res;
   }
@@ -1073,6 +1076,6 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       logger.error(e.getMessage(), e);
     }
 
-    prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+    prop.setProperty(REL_FLAGIMAGE_LIST, newSet.stream().map(URI::toString).collect(Collectors.joining(COMMA)));
   }
 }

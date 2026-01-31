@@ -32,6 +32,7 @@ import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
@@ -137,6 +138,8 @@ public class StreamStore extends AbstractStore implements Store {
       final XMLReader xmlReader = XMLUtils.getXMLReader();
       xmlReader.setContentHandler(contentHandler);
       xmlReader.parse(input.toString());
+    } catch (StopParsingException e) {
+      // expected exit
     } catch (SAXException | IOException e) {
       throw new DITAOTException(e);
     }
@@ -374,10 +377,10 @@ public class StreamStore extends AbstractStore implements Store {
     final URI f = getUri(path);
     if (isTempFile(f)) {
       if (LOG) System.err.println("  getInputStream:" + f);
-      return new FileInputStream(toFile(f));
+      return Files.newInputStream(toFile(f).toPath());
     } else if ("file".equals(path.getScheme())) {
       if (LOG) System.err.println("  getInputStream:" + path);
-      return new FileInputStream(toFile(path));
+      return Files.newInputStream(toFile(path).toPath());
     } else {
       if (LOG) System.err.println("  getInputStream:" + f);
       return f.toURL().openStream();

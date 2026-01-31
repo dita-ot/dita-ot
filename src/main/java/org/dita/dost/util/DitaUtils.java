@@ -30,8 +30,17 @@ public class DitaUtils {
     return isDitaFormat(fi.format);
   }
 
+  // TOOD: Rename to isDitaTopic
   public static boolean isDitaFormat(final String format) {
     return format == null || format.isEmpty() || format.equals(ATTR_FORMAT_VALUE_DITA);
+  }
+
+  public static boolean isDitaMap(final Job.FileInfo fi) {
+    return isDitaMap(fi.format);
+  }
+
+  public static boolean isDitaMap(final String format) {
+    return Objects.equals(format, ATTR_FORMAT_VALUE_DITAMAP);
   }
 
   public static boolean isLocalScope(final Element elem) {

@@ -8,6 +8,7 @@
 
 package org.dita.dost.platform;
 
+import static org.dita.dost.platform.Integrator.ELEM_PLUGIN;
 import static org.dita.dost.util.Constants.PLUGIN_CONF;
 import static org.dita.dost.util.XMLUtils.toList;
 
@@ -29,7 +30,7 @@ public class Plugins {
    * Read the list of installed plugins
    */
   public static List<Map.Entry<String, String>> getInstalledPlugins() {
-    final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName("plugin"));
+    final List<Element> plugins = toList(getPluginConfiguration().getElementsByTagName(ELEM_PLUGIN));
     return plugins
       .stream()
       .map((Element elem) ->

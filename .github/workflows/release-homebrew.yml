@@ -1,0 +1,35 @@
+name: Release Homebrew
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: Version
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  homebrew:
+    if: github.repository == 'dita-ot/dita-ot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set tag name
+        run: |
+          echo "tag=${{ inputs.version }}" >> $GITHUB_ENV
+      - name: Create pull-request
+        uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: dita-ot
+          tag-name: ${{ env.tag }}
+          base-branch: master
+          download-url: https://github.com/dita-ot/dita-ot/releases/download/${{ env.tag }}/dita-ot-${{ env.tag }}.zip
+          commit-message: |
+            {{formulaName}} {{version}}
+
+            Created via GitHub Action
+        env:
+          COMMITTER_TOKEN: ${{ secrets.HOMEBREW_COMMITTER_TOKEN }}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map>
+  <title>DITA Topic Map</title>
+  <topicref href="../a.dita" processing-role="resource-only"/>
+  <topicref href="../b.dita" processing-role="resource-only"/>
+  <topicref href="../topics/c.dita" processing-role="resource-only"/>
+  <topicref href="../topics/d.dita" processing-role="resource-only"/>
+  <topicref href="e.dita"/>
+  <topicref href="f.dita"/>
+  <topicref href="../images/carwash.gif" processing-role="resource-only" format="image"/>
+</map>
