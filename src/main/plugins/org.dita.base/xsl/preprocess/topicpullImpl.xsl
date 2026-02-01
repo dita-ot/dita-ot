@@ -83,6 +83,10 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
            match="*[contains(@class, ' topic/table ')][*[contains(@class, ' topic/title ')]]"
            use="'include'"/>
   
+  <xsl:key name="count.topic.equations"
+           match="*[contains(@class, ' equation-d/equation-block ')][*[contains(@class, ' equation-d/equation-number ')]]"
+           use="'include'"/>
+  
   <xsl:key name="nontopicElementsById" match="*[@id][not(dita-ot:is-topic(.))]" use="@id"/>
   <xsl:key name="topicsById" match="*[contains(@class, ' topic/topic ')][@id]" use="@id"/>
 
@@ -931,6 +935,27 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
     <xsl:sequence select="()"/>
   </xsl:template>
 
+  <!-- Pull link text for a equation. Uses mode="topicpull:equation-linktext" to output the text.  -->
+  <xsl:template match="*[contains(@class, ' equation-d/equation-block ')][child::*[contains(@class, ' equation-d/equation-number ')]]"
+    mode="topicpull:resolvelinktext">
+    <xsl:variable name="eqn-count-actual">
+      <xsl:apply-templates select="*[contains(@class,' equation-d/equation-number ')][1]" mode="topicpull:eqnnumber"/>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="topicpull:equation-linktext">
+      <xsl:with-param name="eqntext">
+        <xsl:call-template name="getVariable">
+          <xsl:with-param name="id" select="'Equation'"/>
+        </xsl:call-template>
+      </xsl:with-param>
+      <xsl:with-param name="eqncount" select="$eqn-count-actual"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  
+  <!-- If a link is to an equation number, assume the parent is the real target, process accordingly -->
+  <xsl:template match="*[contains(@class,' equation-d/equation-number ')]" mode="topicpull:resolvelinktext">
+    <xsl:apply-templates select=".." mode="#current"/>
+  </xsl:template>
+
   <!--No link text found; use the href, unless it contains .dita, in which case defer to the final output pass to decide what to do with the file extension-->
   <xsl:template match="*" mode="topicpull:otherblock-linktext-fallback">
     <xsl:choose>
@@ -1122,6 +1147,64 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
         <xsl:number from="/*" count="key('count.topic.table','exclude')" level="any"/>
       </xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <!-- Compute the text for a link to an equation -->
+  <xsl:template match="*" mode="topicpull:equation-linktext">
+    <xsl:param name="eqntext"/>
+    <xsl:param name="eqncount"/>
+    
+    <xsl:value-of select="$eqntext"/>
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="'figure-number-separator'"/>
+    </xsl:call-template>
+    <xsl:value-of select="$eqncount"/>
+  </xsl:template>  
+  
+  <xsl:template match="*[lang('hu')]" mode="topicpull:equation-linktext">
+    <!-- Hungarian: "1. Figure " -->
+    <xsl:param name="eqntext"/>
+    <xsl:param name="eqncount"/>
+    
+    <xsl:value-of select="$eqncount"/>
+    <xsl:call-template name="getVariable">
+      <xsl:with-param name="id" select="'figure-number-separator'"/>
+    </xsl:call-template>
+    <xsl:value-of select="$eqntext"/>
+  </xsl:template>
+  
+  <xsl:template match="*" mode="topicpull:equation-linktext-fallback">
+    <xsl:choose>
+      <xsl:when test="starts-with(@href,'#')">
+        <xsl:value-of select="@href"/>
+      </xsl:when>
+      <xsl:when test="empty(@format) or @format = 'dita'">
+        <xsl:sequence select="()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@href"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="." mode="ditamsg:cannot-retrieve-linktext"/>
+  </xsl:template>
+  
+  <!-- Determine the number of the equation being linked to -->
+  <xsl:template match="." mode="topicpull:eqnnumber">
+    <xsl:choose>
+      <xsl:when test="text() and normalize-space(text())">
+        <xsl:value-of select="normalize-space(text())"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="compute-number">
+          <xsl:with-param name="all">
+            <xsl:number from="/*" count="key('count.topic.equations','include')" level="any"/>
+          </xsl:with-param>
+          <xsl:with-param name="except">
+            <xsl:number from="/*" count="key('count.topic.equations','exclude')" level="any"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Set link text when linking to a list item in an ordered list -->

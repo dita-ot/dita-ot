@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Attēls</variable>
    <variable id="Table">Tabula</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Nākamā tēma</variable>
    <variable id="Previous topic">Iepriekšējā tēma</variable>
    <variable id="Parent topic">Vecāktēma</variable>
