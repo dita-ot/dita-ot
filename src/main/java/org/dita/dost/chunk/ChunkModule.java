@@ -753,6 +753,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         if (lastChildTopic != null) {
           dstTopic = lastChildTopic;
         }
+        mergeTopic(rootChunk, rootChunk, dstTopic);
       } else if (MAP_MAP.matches(dstTopic)) {
         // XXX: When is this possible? At least in `map` test
         final Element navtitle = getNavtitle(rootChunk.topicref());
@@ -777,8 +778,8 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           dstRoot = (Element) dstRoot.getParentNode().removeChild(dstRoot);
         }
         ditaWrapper.appendChild(dstRoot);
+        mergeTopic(rootChunk, rootChunk, dstTopic);
       }
-      mergeTopic(rootChunk, rootChunk, dstTopic);
     } else {
       final Element navtitle = getNavtitle(rootChunk.topicref());
       if (navtitle != null) {
