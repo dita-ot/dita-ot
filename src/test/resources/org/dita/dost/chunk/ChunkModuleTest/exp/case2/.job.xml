@@ -142,13 +142,10 @@
     <string></string>
   </property>
   <files>
-    <file uri="case2.dita" path="case2.dita"
+    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/case2.ditamap"
+          uri="case2.dita" path="case2.dita"
           result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/case2.dita"
           format="dita"></file>
-    <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/nested.dita"
-          uri="nested.dita" path="nested.dita"
-          result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/nested.dita"
-          format="dita" target="true"></file>
     <file src="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/case2.ditamap"
           uri="case2.ditamap" path="case2.ditamap"
           result="file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk_fix_case2/src/case2.ditamap"

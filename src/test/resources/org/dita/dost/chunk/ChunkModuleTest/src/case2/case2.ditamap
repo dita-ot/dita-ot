@@ -6,8 +6,6 @@
   xml:lang="en-us">
   <title class="- topic/title ">Split ditabase, missing top topic</title>
   <topicref href="ditabase.dita#one" class="- map/topicref ">
-    <topicgroup class="+ map/topicref mapgroup-d/topicgroup " toc="yes">
-      <topicref href="nested.dita" class="- map/topicref "/>
-    </topicgroup>
+    <topicref href="nested.dita" class="- map/topicref "/>
   </topicref>
 </map>
