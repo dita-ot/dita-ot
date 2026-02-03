@@ -855,38 +855,23 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
                 })
                 .toList();
             };
+          rewriteTopicId(importedTopics.get(0), child);
           for (final Element imported : importedTopics) {
-            rewriteTopicId(imported, child);
             relativizeLinks(imported, child.src(), rootChunk.dst());
             added = (Element) dstTopic.appendChild(imported);
           }
           mergeTopic(rootChunk, child, added);
         } else {
-          final Map.Entry<Element, List<Element>> imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
+          final Map.Entry<Element, List<Element>> imported = importSelectedTopic(
+            root,
+            dstTopic.getOwnerDocument(),
+            child.select()
+          );
           rewriteTopicId(imported.getKey(), child);
           for (var i : imported.getValue()) {
             relativizeLinks(i, child.src(), rootChunk.dst());
             dstTopic.appendChild(i);
           }
-//          Element selected =
-//            switch (rootChunk.select()) {
-//              case DOCUMENT -> {
-//                if (child.src().getFragment() == null) {
-//                  yield imported;
-//                }
-//                if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-//                  yield imported;
-//                }
-//                for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
-//                  if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-//                    yield importedTopic;
-//                  }
-//                }
-//                throw new RuntimeException("Unable to find matching ID B");
-//              }
-//              case BRANCH, TOPIC -> imported;
-//            };
-
           mergeTopic(rootChunk, child, imported.getKey());
         }
       } else {

@@ -10,10 +10,10 @@
 
 
 
-  <topicref chunk="to-content" class="- map/topicref " href="dita1.dita#topicID1"
+  <topicref class="- map/topicref " href="dita1.dita#topicID1"
    >
     <topicref class="- map/topicref " href="dita1.dita#topicIDSUB"/>
-    <topicref chunk="to-content" class="- map/topicref " href="dita2.dita#topicID1"
+    <topicref class="- map/topicref " href="dita2.dita#topicID1"
      >
       <topicref class="- map/topicref " href="dita2.dita#topicIDSUB"
       />
