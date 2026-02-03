@@ -811,7 +811,10 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   }
 
   private Element createDita(final Document doc, final Element src) {
-    String version = src.getOwnerDocument().getDocumentElement().getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
+    String version = src
+      .getOwnerDocument()
+      .getDocumentElement()
+      .getAttributeNS(DITA_NAMESPACE, ATTRIBUTE_NAME_DITAARCHVERSION);
     return createDita(doc, version);
   }
 
@@ -859,8 +862,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           }
           mergeTopic(rootChunk, child, added);
         } else {
-          // TODO check select and only import what is needed
-          final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
+          final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select()).getKey();
           rewriteTopicId(imported, child);
           relativizeLinks(imported, child.src(), rootChunk.dst());
           Element selected =
@@ -896,16 +898,31 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  private Element importSelectedTopic(Element src, Document dst, ChunkOperation.Select select) {
+  /**
+   * Import selected topic and topics that are pulled along.
+   *
+   * @return mey is selected element; value is a list of topic level topics, including selected element
+   */
+  private Map.Entry<Element, List<Element>> importSelectedTopic(
+    Element src,
+    Document dst,
+    ChunkOperation.Select select
+  ) {
     return switch (select) {
-      case DOCUMENT -> (Element) dst.importNode(src.getOwnerDocument().getDocumentElement(), true);
-      case BRANCH -> (Element) dst.importNode(src, true);
+      case DOCUMENT -> {
+        var imported = (Element) dst.importNode(getRootTopic(src), true);
+        yield Map.entry(imported, List.of(imported));
+      }
+      case BRANCH -> {
+        var imported = (Element) dst.importNode(src, true);
+        yield Map.entry(imported, List.of(imported));
+      }
       case TOPIC -> {
         var imported = (Element) dst.importNode(src, true);
         for (Element childTopic : getChildElements(imported, TOPIC_TOPIC)) {
           imported.removeChild(childTopic);
         }
-        yield imported;
+        yield Map.entry(imported, List.of(imported));
       }
     };
   }
@@ -1110,5 +1127,23 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
         .orElse(null);
     }
     return null;
+  }
+
+  private Element getRootTopic(final Element topic) {
+    Element root = topic.getOwnerDocument().getDocumentElement();
+    if (true || !root.getNodeName().equals(ELEMENT_NAME_DITA)) {
+      return root;
+    }
+    Element current = topic;
+    while (true) {
+      Node parent = current.getParentNode();
+      if (parent == null || parent instanceof Document) {
+        return current;
+      } else if (parent instanceof Element parentElement && parentElement.getNodeName().equals(ELEMENT_NAME_DITA)) {
+        return current;
+      } else {
+        current = (Element) parent;
+      }
+    }
   }
 }
