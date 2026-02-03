@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
       ditaarch:DITAArchVersion="1.3">
-  <!-- FIXME -->
-  <dita ditaarch:DITAArchVersion="1.3"
-           domains="(topic task)                            (topic concept)                            (topic concept glossentry)                            (topic concept glossgroup)                            (topic reference)                            (topic troubleshooting++task) (topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
-           id="one">
   <concept
     id="one"
     ditaarch:DITAArchVersion="1.3"
@@ -15,6 +11,15 @@
     <conbody class="- topic/body  concept/conbody ">
       <p class="- topic/p ">content</p>
     </conbody>
+    <concept id="nested" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
+        domains="(topic concept)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+        class="- topic/topic concept/concept ">
+        <title class="- topic/title ">Nested concept</title>
+        <shortdesc class="- topic/shortdesc ">shortdesc</shortdesc>
+        <conbody class="- topic/body  concept/conbody ">
+          <p class="- topic/p ">content</p>
+        </conbody>
+      </concept>
   </concept>
   <concept
     id="two"
@@ -59,16 +64,5 @@
     <conbody class="- topic/body  concept/conbody ">
       <p class="- topic/p ">content</p>
     </conbody>
-
   </concept>
-  <concept id="nested" xml:lang="en-us" ditaarch:DITAArchVersion="1.3"
-        domains="(topic concept)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
-        class="- topic/topic concept/concept ">
-        <title class="- topic/title ">Nested concept</title>
-        <shortdesc class="- topic/shortdesc ">shortdesc</shortdesc>
-        <conbody class="- topic/body  concept/conbody ">
-          <p class="- topic/p ">content</p>
-        </conbody>
-      </concept>
-  </dita>
 </dita>

@@ -862,29 +862,32 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
           }
           mergeTopic(rootChunk, child, added);
         } else {
-          final Element imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select()).getKey();
-          rewriteTopicId(imported, child);
-          relativizeLinks(imported, child.src(), rootChunk.dst());
-          Element selected =
-            switch (rootChunk.select()) {
-              case DOCUMENT -> {
-                if (child.src().getFragment() == null) {
-                  yield imported;
-                }
-                if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-                  yield imported;
-                }
-                for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
-                  if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
-                    yield importedTopic;
-                  }
-                }
-                throw new RuntimeException("Unable to find matching ID B");
-              }
-              case BRANCH, TOPIC -> imported;
-            };
-          added = (Element) dstTopic.appendChild(selected);
-          mergeTopic(rootChunk, child, added);
+          final Map.Entry<Element, List<Element>> imported = importSelectedTopic(root, dstTopic.getOwnerDocument(), child.select());
+          rewriteTopicId(imported.getKey(), child);
+          for (var i : imported.getValue()) {
+            relativizeLinks(i, child.src(), rootChunk.dst());
+            dstTopic.appendChild(i);
+          }
+//          Element selected =
+//            switch (rootChunk.select()) {
+//              case DOCUMENT -> {
+//                if (child.src().getFragment() == null) {
+//                  yield imported;
+//                }
+//                if (imported.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
+//                  yield imported;
+//                }
+//                for (Element importedTopic : getChildElements(imported, TOPIC_TOPIC, true)) {
+//                  if (importedTopic.getAttribute(ATTRIBUTE_NAME_ID).equals(root.getAttribute(ATTRIBUTE_NAME_ID))) {
+//                    yield importedTopic;
+//                  }
+//                }
+//                throw new RuntimeException("Unable to find matching ID B");
+//              }
+//              case BRANCH, TOPIC -> imported;
+//            };
+
+          mergeTopic(rootChunk, child, imported.getKey());
         }
       } else {
         final Element imported = createTopic(dstTopic.getOwnerDocument(), child.id());
@@ -901,7 +904,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   /**
    * Import selected topic and topics that are pulled along.
    *
-   * @return mey is selected element; value is a list of topic level topics, including selected element
+   * @return key is selected element; value is a list of topic level topics, including selected element
    */
   private Map.Entry<Element, List<Element>> importSelectedTopic(
     Element src,
@@ -910,8 +913,18 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
   ) {
     return switch (select) {
       case DOCUMENT -> {
-        var imported = (Element) dst.importNode(getRootTopic(src), true);
-        yield Map.entry(imported, List.of(imported));
+        var root = src.getOwnerDocument().getDocumentElement();
+        List<Element> roots = root.getNodeName().equals(ELEMENT_NAME_DITA)
+          ? getChildElements(root, TOPIC_TOPIC)
+          : List.of(root);
+        var imported = roots.stream().map(r -> (Element) dst.importNode(r, true)).toList();
+        Element selected = imported
+          .stream()
+          .flatMap(topic -> Stream.concat(Stream.of(topic), getChildElements(topic, TOPIC_TOPIC, true).stream()))
+          .filter(topic -> topic.getAttribute(ATTRIBUTE_NAME_ID).equals(src.getAttribute(ATTRIBUTE_NAME_ID)))
+          .findFirst()
+          .orElse(imported.get(0));
+        yield Map.entry(selected, imported);
       }
       case BRANCH -> {
         var imported = (Element) dst.importNode(src, true);
