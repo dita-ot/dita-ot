@@ -9,7 +9,6 @@ package org.dita.dost.util;
 
 import static java.net.URI.create;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,8 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.junit.jupiter.api.*;
@@ -56,6 +53,19 @@ public final class JobTest {
   public void testSetProperty() {
     job.setProperty("foo", "bar");
     assertEquals("bar", job.getProperty("foo"));
+  }
+
+  @Test
+  public void removePropertyExisting() {
+    job.setProperty("foo", "bar");
+    job.removeProperty("foo");
+    assertNull(job.getProperty("foo"));
+  }
+
+  @Test
+  public void removePropertyNonexistent() {
+    job.removeProperty("foo");
+    assertNull(job.getProperty("foo"));
   }
 
   @Test
@@ -159,6 +169,87 @@ public final class JobTest {
   }
 
   @Test
+  public void getResultBaseDirUplevels() {
+    job.setInputDir(URI.create("file:/foo/bar/"));
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("map.ditamap"))
+        .isInput(true)
+        .result(create("file:/foo/bar/common/map.ditamap"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("topics/topic.dita"))
+        .result(create("file:/foo/bar/topics/topic.dita"))
+        .build()
+    );
+    job.add(new Job.FileInfo.Builder().uri(create("topics/null.dita")).build());
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("topics/task.dita"))
+        .result(create("file:/foo/bar/topics/task.dita"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("common/topic.dita"))
+        .result(create("file:/foo/bar/common/topic.dita"))
+        .build()
+    );
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getResultBaseDirNormalFirstTime() {
+    job.setInputDir(URI.create("file:/foo/bar/"));
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("map.ditamap"))
+        .isInput(true)
+        .result(create("file:/foo/bar/map.ditamap"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("topics/topic.dita"))
+        .result(create("file:/foo/bar/topics/topic.dita"))
+        .build()
+    );
+    job.add(new Job.FileInfo.Builder().uri(create("topics/null.dita")).build());
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("topics/task.dita"))
+        .result(create("file:/foo/bar/topics/task.dita"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("common/topic.dita"))
+        .result(create("file:/foo/bar/common/topic.dita"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("common/topic.dita"))
+        .result(create("file:/foo/common/topic.dita"))
+        .isResourceOnly(true)
+        .build()
+    );
+
+    URI exp = create("file:/foo/bar/");
+    assertEquals(exp, job.getResultBaseDirNormal());
+    assertEquals(exp, create(job.getProperty(Job.FILE_SET_BASE_DIR_NORMAL)));
+  }
+
+  @Test
+  public void getResultBaseDirNormalSecondTime() {
+    job.setProperty(Job.FILE_SET_BASE_DIR_NORMAL, "someBaseDir");
+    assertEquals(create("someBaseDir"), job.getResultBaseDirNormal());
+  }
+
+  @Test
   public void getBaseDirExternal() {
     job.setInputDir(URI.create("file:/foo/bar/"));
     job.add(
@@ -180,6 +271,26 @@ public final class JobTest {
 
   @Test
   public void getBaseDirSubdir() {
+    job.setInputDir(URI.create("file:/foo/bar/maps/"));
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("maps/map.ditamap"))
+        .isInput(true)
+        .result(create("file:/foo/bar/maps/map.ditamap"))
+        .build()
+    );
+    job.add(
+      new Job.FileInfo.Builder()
+        .uri(create("topics/topic.dita"))
+        .result(create("file:/foo/bar/topics/topic.dita"))
+        .build()
+    );
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getResultBaseDirSiblingDir() {
     job.setInputDir(URI.create("file:/foo/bar/maps/"));
     job.add(
       new Job.FileInfo.Builder()
@@ -222,25 +333,28 @@ public final class JobTest {
     job.setInputDir(URI.create("file:/main/maps/"));
     job.add(
       new Job.FileInfo.Builder()
-        .uri(create("main/maps/map.ditamap"))
+        .uri(create("content/maps/map.ditamap"))
         .isInput(true)
-        .result(create("file:/main/maps/map.ditamap"))
+        .result(create("file:/main/content/maps/map.ditamap"))
         .build()
     );
     job.add(
       new Job.FileInfo.Builder()
-        .uri(create("main/topics/topic.dita"))
-        .result(create("file:/main/topics/topic.dita"))
+        .uri(create("content/topics/topic.dita"))
+        .result(create("file:/main/content/topics/topic.dita"))
         .build()
     );
     job.add(
       new Job.FileInfo.Builder()
         .uri(create("reuse/reuse.dita"))
-        .result(create("file:/reuse/reuse.dita"))
+        .result(create("file:/main/reuse/reuse.dita"))
         .isResourceOnly(true)
         .build()
     );
-
-    assertEquals(create("file:/main/"), job.getResultBaseDir());
+    assertAll(
+      () -> assertEquals(create("file:/main/"), job.getResultBaseDir(), "basedir with all files"),
+      () ->
+        assertEquals(create("file:/main/content/"), job.getResultBaseDirNormal(), "basedir without resource-only files")
+    );
   }
 }

@@ -20,8 +20,11 @@ import java.util.Objects;
 import javax.xml.namespace.QName;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.*;
+import org.dita.dost.util.AttributeStack;
+import org.dita.dost.util.Constants;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.StringUtils;
+import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -104,7 +107,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
     getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.toURI().resolve(".").toString());
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-    if (!path2Project.getPath().isEmpty()) {
+    if (path2Project != null && !path2Project.getPath().isEmpty()) {
       getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
       getContentHandler()
         .processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString() + URI_SEPARATOR);

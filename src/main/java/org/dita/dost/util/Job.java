@@ -97,6 +97,10 @@ public final class Job {
   /** Map of serialization attributes to file info boolean fields. */
   private static final Map<String, Field> attrToFieldMap = new HashMap<>();
 
+  /** base directories for the file collection **/
+  static final String FILE_SET_BASE_DIR = "baseDir";
+  static final String FILE_SET_BASE_DIR_NORMAL = "baseDirNormal";
+
   static {
     try {
       attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
@@ -411,6 +415,7 @@ public final class Job {
    */
   public void add(final FileInfo fileInfo) {
     files.put(fileInfo.uri, fileInfo);
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
   }
 
   /**
@@ -419,6 +424,7 @@ public final class Job {
    * @return removed file info, {@code null} if not found
    */
   public FileInfo remove(final FileInfo fileInfo) {
+    removeProperty(FILE_SET_BASE_DIR_NORMAL);
     return files.remove(fileInfo.uri);
   }
 
@@ -456,6 +462,15 @@ public final class Job {
    */
   public Object setProperty(final String key, final String value) {
     return prop.put(key, value);
+  }
+
+  /**
+   * Remove property value.
+   *
+   * @param key property key
+   */
+  public void removeProperty(final String key) {
+    prop.remove(key);
   }
 
   /**
@@ -1157,12 +1172,32 @@ public final class Job {
   /**
    * Get common result base directory for all files.
    */
-  @VisibleForTesting
   public URI getResultBaseDir() {
+    return getFilteredBaseDir(all -> true);
+  }
+
+  /**
+   * Get common result base directory for processing-role="normal" files.
+   */
+  public URI getResultBaseDirNormal() {
+    String baseDirNormal = getProperty(FILE_SET_BASE_DIR_NORMAL);
+    if (baseDirNormal != null) {
+      return URI.create(baseDirNormal);
+    } else {
+      URI baseDirNormalUri = getFilteredBaseDir(fi -> !fi.isResourceOnly);
+      setProperty(FILE_SET_BASE_DIR_NORMAL, baseDirNormalUri.toString());
+      return baseDirNormalUri;
+    }
+  }
+
+  /**
+   * Get common result base directory based on a filter.
+   */
+  private URI getFilteredBaseDir(Predicate<FileInfo> filter) {
     final Collection<FileInfo> fis = getFileInfo();
     URI baseDir = getFileInfo(fi -> fi.isInput).iterator().next().result.resolve(".");
     for (final FileInfo fi : fis) {
-      if (fi.result != null && !fi.isResourceOnly) {
+      if (fi.result != null && filter.test(fi)) {
         final URI res = fi.result.resolve(".");
         baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
       }
@@ -1171,6 +1206,9 @@ public final class Job {
     return baseDir;
   }
 
+  /**
+   * Get the common base directory of a pair of files.
+   */
   @VisibleForTesting
   URI getCommonBase(final URI left, final URI right) {
     assert left.isAbsolute();
