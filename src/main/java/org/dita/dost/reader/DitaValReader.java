@@ -210,6 +210,18 @@ public final class DitaValReader implements AbstractReader {
 
   private Flag readFlag(Element elem) {
     final String style = getValue(elem, ATTRIBUTE_NAME_STYLE);
+    var outputClass = getValue(elem, ATTRIBUTE_NAME_ADD_OUTPUTCLASS);
+    if (outputClass == null) {
+      outputClass = getValue(elem, ATTRIBUTE_NAME_OUTPUTCLASS);
+      if (outputClass != null) {
+        logger.warn(
+          MessageUtils
+            .getMessage("DOTA014W", ATTRIBUTE_NAME_OUTPUTCLASS, ATTRIBUTE_NAME_ADD_OUTPUTCLASS)
+            .setLocation(elem)
+            .toString()
+        );
+      }
+    }
     return new Flag(
       elem.getLocalName(),
       getValue(elem, ATTRIBUTE_NAME_COLOR),
@@ -218,7 +230,7 @@ public final class DitaValReader implements AbstractReader {
       getValue(elem, ATTRIBUTE_NAME_CHANGEBAR),
       readFlagImage(elem, "startflag"),
       readFlagImage(elem, "endflag"),
-      getValue(elem, ATTRIBUTE_NAME_OUTPUTCLASS)
+      outputClass
     );
   }
 
