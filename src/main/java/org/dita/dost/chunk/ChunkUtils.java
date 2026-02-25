@@ -10,6 +10,7 @@ package org.dita.dost.chunk;
 
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CHUNK;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_COPY_TO;
 import static org.dita.dost.util.Constants.MAP_TOPICREF;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
@@ -43,6 +44,9 @@ public class ChunkUtils {
    * @return {@code true} if map can be rewritten to DITA 2.x
    */
   public static boolean isCompatible(Document doc, Set<String> override) {
+    if (hasCopyToWithChunk(doc.getDocumentElement())) {
+      return false;
+    }
     var chunkTree = getChunkTree(doc);
     // Has chunks
     if (chunkTree.isEmpty() && (override == null || override.isEmpty())) {
@@ -107,6 +111,18 @@ public class ChunkUtils {
     List<RoseTree<Set<String>>> res = new ArrayList<>();
     collectChunkTreeTokens(doc.getDocumentElement(), res);
     return res;
+  }
+
+  private static boolean hasCopyToWithChunk(Element elem) {
+    if (elem.hasAttribute(ATTRIBUTE_NAME_CHUNK) && elem.hasAttribute(ATTRIBUTE_NAME_COPY_TO)) {
+      return true;
+    }
+    for (Element child : getChildElements(elem, MAP_TOPICREF)) {
+      if (hasCopyToWithChunk(child)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static void collectChunkTreeTokens(Element elem, List<RoseTree<Set<String>>> dst) {
