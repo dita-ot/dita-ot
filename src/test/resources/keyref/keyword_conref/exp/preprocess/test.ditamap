@@ -9,7 +9,8 @@
   </keydef>
   <topicref class="- map/topicref " href="b.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">a</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">a</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">a</linktext>
     </topicmeta>

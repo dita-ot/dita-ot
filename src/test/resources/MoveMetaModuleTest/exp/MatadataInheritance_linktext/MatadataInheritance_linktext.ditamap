@@ -6,7 +6,8 @@
   id="Bats3" specializations="@props/deliveryTarget" title="Bats3">
   <topicref class="- map/topicref " navtitle="Bats" href="bats.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">Programming elements</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Programming elements</navtitle>
       <?ditaot usertext?>
       <linktext class="- map/linktext ">access the link using firefox</linktext>
     </topicmeta>
@@ -14,7 +15,8 @@
 
   <topicref class="- map/topicref " navtitle="Caring for your fruit bat" href="batcaring.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">batcaring</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">batcaring</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">batcaring</linktext>
     </topicmeta>
@@ -22,7 +24,8 @@
 
   <topicref class="- map/topicref " navtitle="Feeding your bat" href="batfeeding.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">batfeeding</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">batfeeding</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">batfeeding</linktext>
     </topicmeta>

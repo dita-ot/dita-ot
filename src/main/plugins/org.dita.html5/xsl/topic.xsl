@@ -1977,7 +1977,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- Get all profiling attributes for this element -->
     <xsl:variable name="profiling-attrs" as="attribute()*">
-      <xsl:sequence select="@props | @audience | @platform | @product | @otherprops | @deliveryTarget"/>
+      <xsl:sequence select="@props | @audience | @platform | @product | @otherprops | @deliveryTarget | @importance"/>
       <xsl:sequence select="@*[local-name(.) = $specialized-attr-names]"/>
     </xsl:variable>
 

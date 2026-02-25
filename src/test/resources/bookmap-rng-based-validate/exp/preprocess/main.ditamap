@@ -9,14 +9,16 @@
   </booktitle>
   <chapter class="- map/topicref bookmap/chapter " href="t1.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">T1</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">T1</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">T1</linktext>
     </topicmeta>
   </chapter>
   <chapter class="- map/topicref bookmap/chapter " href="t2.dita" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">T2</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">T2</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">T2</linktext>
       <?ditaot genshortdesc?>

@@ -96,7 +96,7 @@ for every pull request.
 
 ### Formatting code
 
-Prettier is used retain consistent Java formatting.
+Prettier is used to retain consistent Java formatting.
 
 1.  Run Prettier:
     ```shell

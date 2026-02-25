@@ -1102,7 +1102,7 @@ See the accompanying LICENSE file for applicable license.
 <!-- process the TM tag -->
 <!-- removed priority 1 : should not be needed -->
 <xsl:template match="*[contains(@class, ' topic/tm ')]" name="topic.tm">
-
+  <xsl:param name="root" select="root()" as="document-node()" tunnel="yes"/>
   <xsl:apply-templates select="*[contains(@class, ' ditaot-d/ditaval-startprop ')]" mode="out-of-line"/>
   <xsl:apply-templates/> <!-- output the TM content -->
 
@@ -1122,7 +1122,7 @@ See the accompanying LICENSE file for applicable license.
         <xsl:if test="ancestor::*[contains(@class, ' topic/title ')]/parent::*[contains(@class, ' topic/topic ')]">
           <xsl:choose>
             <!-- Not the first one in a title -->
-            <xsl:when test="generate-id(.) != generate-id(key('tm', .)[1])">skip</xsl:when>
+            <xsl:when test="generate-id(.) != generate-id($root/key('tm', .)[1])">skip</xsl:when>
             <!-- First one in the topic, BUT it appears in a shortdesc or body -->
             <xsl:when test="//*[contains(@class, ' topic/shortdesc ') or contains(@class, ' topic/body ')]//*[contains(@class, ' topic/tm ')][@trademark = $tmvalue]">skip</xsl:when>
             <xsl:otherwise>use</xsl:otherwise>
@@ -1137,7 +1137,7 @@ See the accompanying LICENSE file for applicable license.
           <!-- If in a title or prolog, skip -->
           <xsl:when test="ancestor::*[contains(@class, ' topic/title ') or contains(@class, ' topic/prolog ')]/parent::*[contains(@class, ' topic/topic ')]">skip</xsl:when>
           <!-- If first in the document, use it -->
-          <xsl:when test="generate-id(.) = generate-id(key('tm', .)[1])">use</xsl:when>
+          <xsl:when test="generate-id(.) = generate-id($root/key('tm', .)[1])">use</xsl:when>
           <!-- If there is another before this that is in the body or shortdesc, skip -->
           <xsl:when test="preceding::*[contains(@class, ' topic/tm ')][@trademark = $tmvalue][ancestor::*[contains(@class, ' topic/body ') or contains(@class, ' topic/shortdesc ')]]">skip</xsl:when>
           <!-- Otherwise, any before this must be in a title or ignored section -->

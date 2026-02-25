@@ -810,7 +810,7 @@ public final class FilterUtils {
         propAtts.add("style", String.join(" ", style));
       }
       if (outputClass != null) {
-        propAtts.add("outputclass", outputClass);
+        propAtts.add(ATTRIBUTE_NAME_ADD_OUTPUTCLASS, outputClass);
       }
       if (changebar != null) {
         propAtts.add("changebar", changebar);
