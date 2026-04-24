@@ -274,7 +274,7 @@ public class TestUtils {
       .build();
     if (diff.hasDifferences()) {
       var errorMessage = message + System.lineSeparator() + diff.fullDescription() + System.lineSeparator();
-      System.out.print(errorMessage);
+      //      System.out.print(errorMessage);
       var expWriter = new StringWriter();
       var actWriter = new StringWriter();
       try {
@@ -287,7 +287,7 @@ public class TestUtils {
       } catch (TransformerException ex) {
         fail(errorMessage);
       }
-      assertEquals(expWriter, actWriter, errorMessage);
+      assertEquals(expWriter.toString(), actWriter.toString(), errorMessage);
     }
   }
 

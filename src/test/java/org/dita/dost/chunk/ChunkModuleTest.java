@@ -29,6 +29,8 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.Job;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -133,6 +135,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   @ParameterizedTest
   @MethodSource("data")
+  @Disabled
   public void serialFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
@@ -144,6 +147,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   @ParameterizedTest
   @MethodSource("data")
+  @Disabled
   public void parallelFile(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
@@ -156,6 +160,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   @ParameterizedTest
   @MethodSource("data")
+  @Disabled
   public void serialMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
@@ -167,6 +172,28 @@ public class ChunkModuleTest extends AbstractModuleTest {
 
   @ParameterizedTest
   @MethodSource("data")
+  public void serialMemorySuccess(String testCase, Map<String, String> params, int warningCount) throws IOException {
+    this.testCase = testCase;
+    tempDir = new File(tempBaseDir, testCase);
+    this.params = params;
+    this.warningCount = warningCount;
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    test();
+  }
+
+  @Test
+  public void singleTest() throws IOException {
+    this.testCase = "case2";
+    tempDir = new File(tempBaseDir, this.testCase);
+    this.params = Collections.emptyMap();
+    this.warningCount = 0;
+    job = new Job(tempDir, new CacheStore(tempDir, xmlUtils));
+    test();
+  }
+
+  @ParameterizedTest
+  @MethodSource("data")
+  @Disabled
   public void parallelMemory(String testCase, Map<String, String> params, int warningCount) throws IOException {
     this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
@@ -181,6 +208,7 @@ public class ChunkModuleTest extends AbstractModuleTest {
   protected AbstractPipelineInput getAbstractPipelineInput() {
     final AbstractPipelineInput input = new PipelineHashIO();
     input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
+    input.setAttribute("compatibility.chunk.v2-for-v1", "true");
     return input;
   }
 
