@@ -599,43 +599,62 @@ public final class Job {
    */
   public static final class FileInfo {
 
-    /** Absolute source URI. */
+    /** Absolute source URI.
+     * @deprecated use {@link #src()} instead. */
     public URI src;
-    /** File URI. */
+    /** File URI.
+     * @deprecated use {@link #uri()} instead */
     public final URI uri;
-    /** File path. */
+    /** File path.
+     * @deprecated use {@link #file()} instead */
     public final File file;
-    /** Absolute result URI. */
+    /** Absolute result URI.
+     * @deprecated use {@link #result()} instead */
     public URI result;
-    /** File format. */
+    /** File format.
+     * @deprecated use {@link #format()} instead */
     public String format;
-    /** File has a conref. */
+    /** File has a conref.
+     * @deprecated use {@link #hasConref()} instead */
     public boolean hasConref;
-    /** File is part of chunk. */
+    /** File is part of chunk.
+     * @deprecated use {@link #isChunked()} instead */
     public boolean isChunked;
-    /** File has links. Only applies to topics. */
+    /** File has links. Only applies to topics.
+     * @deprecated use {@link #hasLink()} instead */
     public boolean hasLink;
-    /** File is resource only. */
+    /** File is resource only.
+     * @deprecated use {@link #isResourceOnly()} instead */
     public boolean isResourceOnly;
-    /** File is a link target. */
+    /** File is a link target.
+     * @deprecated use {@link #isTarget()} instead */
     public boolean isTarget;
-    /** File is a push conref source. */
+    /** File is a push conref source.
+     * @deprecated use {@link #isConrefPush()} instead */
     public boolean isConrefPush;
-    /** File has a keyref. */
+    /** File has a keyref.
+     * @deprecated use {@link #hasKeyref()} instead */
     public boolean hasKeyref;
-    /** File has coderef. */
+    /** File has coderef.
+     * @deprecated use {@link #hasCoderef()} instead */
     public boolean hasCoderef;
-    /** File is a subject scheme. */
+    /** File is a subject scheme.
+     * @deprecated use {@link #isSubjectScheme()} instead */
     public boolean isSubjectScheme;
-    /** File is a coderef target. */
+    /** File is a coderef target.
+     * @deprecated use {@link #isSubtarget()} instead */
     public boolean isSubtarget;
-    /** File is a flagging image. */
+    /** File is a flagging image.
+     * @deprecated use {@link #isFlagImage()} instead */
     public boolean isFlagImage;
-    /** Source file is outside base directory. */
+    /** Source file is outside base directory.
+     * @deprecated use {@link #isOutDita()} instead */
     public boolean isOutDita;
-    /** File is input document that is used as processing root. */
+    /** File is input document that is used as processing root.
+     * @deprecated use {@link #isInput()} instead */
     public boolean isInput;
-    /** Additional input resource. */
+    /** Additional input resource.
+     * @deprecated use {@link #isInputResource()} instead */
     public boolean isInputResource;
 
     FileInfo(final URI src, final URI uri, final File file) {
@@ -752,6 +771,82 @@ public final class Job {
         isInput,
         isInputResource
       );
+    }
+
+    public URI src() {
+      return src;
+    }
+
+    public URI uri() {
+      return uri;
+    }
+
+    public File file() {
+      return file;
+    }
+
+    public URI result() {
+      return result;
+    }
+
+    public String format() {
+      return format;
+    }
+
+    public boolean hasConref() {
+      return hasConref;
+    }
+
+    public boolean isChunked() {
+      return isChunked;
+    }
+
+    public boolean hasLink() {
+      return hasLink;
+    }
+
+    public boolean isResourceOnly() {
+      return isResourceOnly;
+    }
+
+    public boolean isTarget() {
+      return isTarget;
+    }
+
+    public boolean isConrefPush() {
+      return isConrefPush;
+    }
+
+    public boolean hasKeyref() {
+      return hasKeyref;
+    }
+
+    public boolean hasCoderef() {
+      return hasCoderef;
+    }
+
+    public boolean isSubjectScheme() {
+      return isSubjectScheme;
+    }
+
+    public boolean isSubtarget() {
+      return isSubtarget;
+    }
+
+    public boolean isFlagImage() {
+      return isFlagImage;
+    }
+
+    public boolean isOutDita() {
+      return isOutDita;
+    }
+
+    public boolean isInput() {
+      return isInput;
+    }
+
+    public boolean isInputResource() {
+      return isInputResource;
     }
 
     public static Builder builder() {
