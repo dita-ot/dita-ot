@@ -70,10 +70,10 @@ public class TopicReaderModuleTest {
     job.add(new Job.FileInfo.Builder().src(root.resolve("mysite.dita")).uri(URI.create("mysite.dita")).build());
     job.add(new Job.FileInfo.Builder().src(root.resolve("myproduct.dita")).uri(URI.create("myproduct.dita")).build());
     job
-      .getFileInfo(fi -> fi.isInput)
+      .getFileInfo(fi -> fi.isInput())
       .forEach(fi -> {
         try {
-          Files.copy(Paths.get(fi.src), Paths.get(job.tempDirURI.resolve(fi.uri)));
+          Files.copy(Paths.get(fi.src()), Paths.get(job.tempDirURI.resolve(fi.uri())));
         } catch (IOException e) {
           throw new RuntimeException(e);
         }

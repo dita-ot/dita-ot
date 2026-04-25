@@ -102,9 +102,9 @@ public class ConrefPushModuleTest extends AbstractModuleTest {
   protected AbstractPipelineModule getModule() {
     final ConrefPushModule conrefPushModule = new ConrefPushModule();
     conrefPushModule.setFileInfoFilter(fileInfo ->
-      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITA) ||
-      fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP) &&
-      fileInfo.isInput
+      fileInfo.format().equals(ATTR_FORMAT_VALUE_DITA) ||
+      fileInfo.format().equals(ATTR_FORMAT_VALUE_DITAMAP) &&
+      fileInfo.isInput()
     );
     return conrefPushModule;
   }

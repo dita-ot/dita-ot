@@ -75,7 +75,7 @@ public final class ConkeyrefFilter extends AbstractXMLFilter {
    * @return updated href URI
    */
   private URI getRelativePath(final URI keyMap, final URI href) {
-    final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap)).map(fi -> fi.uri).orElse(null);
+    final URI inputMap = Optional.ofNullable(job.getFileInfo(keyMap)).map(Job.FileInfo::uri).orElse(null);
     final URI keyValue;
     if (inputMap != null) {
       final URI tmpMap = job.tempDirURI.resolve(inputMap);

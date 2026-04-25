@@ -165,9 +165,9 @@ public class GenMapAndTopicListModuleTest {
 
   private void assertPaths(final FileInfo fi, final URI src, final URI path) {
     if (src != null) {
-      assertEquals(fi.src, src);
+      assertEquals(fi.src(), src);
     }
-    assertEquals(fi.uri, path);
+    assertEquals(fi.uri(), path);
   }
 
   @Test
@@ -268,11 +268,21 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of("main.ditamap", "link-from-normal.dita", "link-from-resource-only.dita", "normal.dita"),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -297,11 +307,21 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(FileInfo::isResourceOnly)
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of("main.ditamap", "normal.dita"),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -324,11 +344,21 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(FileInfo::isResourceOnly)
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of("main.ditamap", "normal.dita"),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -347,7 +377,12 @@ public class GenMapAndTopicListModuleTest {
         "conref-from-resource-only.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(FileInfo::isResourceOnly)
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of(
@@ -358,7 +393,12 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "normal.dita"
       ),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -381,7 +421,12 @@ public class GenMapAndTopicListModuleTest {
         "conref-from-resource-only.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(FileInfo::isResourceOnly)
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of(
@@ -390,7 +435,12 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "normal.dita"
       ),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -411,7 +461,12 @@ public class GenMapAndTopicListModuleTest {
         "conref-from-resource-only.dita",
         "conref-from-normal-ALSORESOURCEONLY.dita"
       ),
-      job.getFileInfo().stream().filter(f -> f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(FileInfo::isResourceOnly)
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
     assertEquals(
       Set.of(
@@ -420,7 +475,12 @@ public class GenMapAndTopicListModuleTest {
         "link-from-resource-only-ALSORESOURCEONLY.dita",
         "normal.dita"
       ),
-      job.getFileInfo().stream().filter(f -> !f.isResourceOnly).map(fi -> fi.uri.toString()).collect(Collectors.toSet())
+      job
+        .getFileInfo()
+        .stream()
+        .filter(f -> !f.isResourceOnly())
+        .map(fi -> fi.uri().toString())
+        .collect(Collectors.toSet())
     );
   }
 
@@ -444,7 +504,7 @@ public class GenMapAndTopicListModuleTest {
 
     final Job job = generate(inputDir, inputMap, outDir, tempDir);
     FileInfo fileInfo = job.getFileInfo(new URI("figures/ISO_7010_W012.svg"));
-    assertEquals("image", fileInfo.format);
+    assertEquals("image", fileInfo.format());
   }
 
   private Set<String> readLines(final File f) throws IOException {

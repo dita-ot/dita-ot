@@ -84,8 +84,8 @@ final class IncludeText {
     //        if (tempFile.exists() && fi != null && PR_D_CODEREF.localName.equals(fi.format)) {
     //            return tempFile;
     //        }
-    if (fi != null && "file".equals(fi.src.getScheme())) {
-      return new File(fi.src);
+    if (fi != null && "file".equals(fi.src().getScheme())) {
+      return new File(fi.src());
     }
     return null;
   }

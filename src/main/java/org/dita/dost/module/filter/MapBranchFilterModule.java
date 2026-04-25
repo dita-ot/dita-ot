@@ -59,8 +59,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+    final FileInfo fi = job.getFileInfo(FileInfo::isInput).iterator().next();
+    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
       return null;
     }
     processMap(fi);
@@ -78,7 +78,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    * Process map for branch replication.
    */
   protected void processMap(final FileInfo fi) {
-    this.map = fi.uri;
+    this.map = fi.uri();
     currentFile = job.tempDirURI.resolve(map);
     ditavalFile =
       Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).map(File::toURI).orElse(null);
@@ -161,9 +161,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
               final URI absTarget = stripFragment(currentFile.resolve(attr.getValue()));
               final FileInfo hrefFileInfo = job.getFileInfo(absTarget);
               if (hrefFileInfo != null) {
-                final URI newResult = addSuffix(hrefFileInfo.result, suffix);
+                final URI newResult = addSuffix(hrefFileInfo.result(), suffix);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).uri(dstUri).result(newResult);
-                if (hrefFileInfo.format == null) {
+                if (hrefFileInfo.format() == null) {
                   dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
                 }
                 final FileInfo dstFileInfo = dstBuilder.build();
@@ -353,15 +353,15 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
 
         final URI dstSource;
-        dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+        dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result(), filter);
         final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
         final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).result(dstSource).uri(dstTemp);
-        if (dstBuilder.build().format == null) {
+        if (dstBuilder.build().format() == null) {
           dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
         }
-        if (hrefFileInfo.src == null && href != null) {
+        if (hrefFileInfo.src() == null && href != null) {
           if (copyToFileInfo != null) {
-            dstBuilder.src(copyToFileInfo.src);
+            dstBuilder.src(copyToFileInfo.src());
           }
         }
         final FileInfo dstFileInfo = dstBuilder.build();

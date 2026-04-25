@@ -41,7 +41,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         .stream()
         .parallel()
         .forEach(f -> {
-          final URI file = job.tempDirURI.resolve(f.uri);
+          final URI file = job.tempDirURI.resolve(f.uri());
           logger.info("Processing " + file);
           try {
             job.getStore().transform(file, getProcessingPipe(f));
@@ -51,7 +51,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         });
     } else {
       for (final FileInfo f : fis) {
-        final URI file = job.tempDirURI.resolve(f.uri);
+        final URI file = job.tempDirURI.resolve(f.uri());
         logger.info("Processing " + file);
         try {
           job.getStore().transform(file, getProcessingPipe(f));
@@ -69,7 +69,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
    * @param fi current file being processed
    */
   private List<XMLFilter> getProcessingPipe(final FileInfo fi) {
-    final URI fileToParse = job.tempDirURI.resolve(fi.uri);
+    final URI fileToParse = job.tempDirURI.resolve(fi.uri());
     assert fileToParse.isAbsolute();
     return filters
       .stream()

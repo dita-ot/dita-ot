@@ -45,7 +45,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
     init(input);
 
     for (final FileInfo f : job.getFileInfo(fileInfoFilter)) {
-      final URI file = job.tempDirURI.resolve(f.uri);
+      final URI file = job.tempDirURI.resolve(f.uri());
       logger.info("Processing {0}", file);
 
       try {
@@ -157,13 +157,13 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
 
   private XdmNode getMapDocument() throws DITAOTException {
     final Collection<FileInfo> fis = job.getFileInfo(f ->
-      f.isInput && Objects.equals(f.format, ATTR_FORMAT_VALUE_DITAMAP)
+      f.isInput() && Objects.equals(f.format(), ATTR_FORMAT_VALUE_DITAMAP)
     );
     if (fis.isEmpty()) {
       return null;
     }
     final FileInfo fi = fis.iterator().next();
-    final URI currentFile = job.tempDirURI.resolve(fi.uri);
+    final URI currentFile = job.tempDirURI.resolve(fi.uri());
     try {
       logger.debug("Reading {0}", currentFile);
       return job.getStore().getImmutableNode(currentFile);

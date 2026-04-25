@@ -100,7 +100,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
       job
         .getFileInfo()
         .stream()
-        .filter(f -> isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))
+        .filter(f -> isFormatDita(f.format()) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format()))
         .forEach(this::processFile);
 
       job.write();
@@ -115,18 +115,18 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   }
 
   private void processFile(final FileInfo f) {
-    currentFile = f.src;
-    if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
-      logger.warn("Ignoring a copy-to file " + f.result);
+    currentFile = f.src();
+    if (f.src() == null || !exists(f.src()) || !f.src().equals(f.result())) {
+      logger.warn("Ignoring a copy-to file " + f.result());
       return;
-    } else if (f.uri.isAbsolute() && !f.uri.toString().startsWith(job.tempDirURI.toString())) {
+    } else if (f.uri().isAbsolute() && !f.uri().toString().startsWith(job.tempDirURI.toString())) {
       //The file is outside the temp dir, we cannot write to itself
-      throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri);
+      throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri());
     }
-    outputFile = new File(job.tempDirURI.resolve(f.uri));
-    logger.info("Processing " + f.src + " to " + outputFile.toURI());
+    outputFile = new File(job.tempDirURI.resolve(f.uri()));
+    logger.info("Processing " + f.src() + " to " + outputFile.toURI());
 
-    final Set<URI> schemaSet = dic.get(f.uri);
+    final Set<URI> schemaSet = dic.get(f.uri());
     if (schemaSet != null && !schemaSet.isEmpty()) {
       logger.debug("Loading subject schemes");
       subjectSchemeReader.reset();
@@ -149,7 +149,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     try {
       reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger, processingMode));
 
-      XMLReader parser = XMLUtils.getXmlReader(f.format, processingMode).orElse(reader);
+      XMLReader parser = XMLUtils.getXmlReader(f.format(), processingMode).orElse(reader);
       XMLReader xmlSource = parser;
       for (final XMLFilter filter : getProcessingPipe(currentFile)) {
         filter.setParent(xmlSource);
@@ -165,7 +165,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
       } catch (final SAXNotRecognizedException e) {}
 
-      in = new InputSource(f.src.toString());
+      in = new InputSource(f.src().toString());
 
       final ContentHandler result = job.getStore().getContentHandler(outputFile.toURI());
 
@@ -183,7 +183,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
       }
     }
 
-    if (isFormatDita(f.format)) {
+    if (isFormatDita(f.format())) {
       if (typeFilter.getDitaClass() == null) {
         f.format = ATTR_FORMAT_VALUE_DITA;
       } else {
@@ -360,7 +360,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
         final Document parentRoot;
         if (!tmprel.exists()) {
-          final URI src = job.getFileInfo(parent).src;
+          final URI src = job.getFileInfo(parent).src();
           parentRoot = job.getStore().getDocument(src);
         } else {
           parentRoot = job.getStore().getDocument(tmprel.toURI());
