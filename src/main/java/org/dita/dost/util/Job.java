@@ -599,62 +599,84 @@ public final class Job {
    */
   public static final class FileInfo {
 
-    /** Absolute source URI.
-     * @deprecated use {@link #src()} instead. */
-    public URI src;
-    /** File URI.
-     * @deprecated use {@link #uri()} instead */
-    public final URI uri;
-    /** File path.
-     * @deprecated use {@link #file()} instead */
-    public final File file;
-    /** Absolute result URI.
-     * @deprecated use {@link #result()} instead */
-    public URI result;
+    /** Absolute source URI. */
+    private final URI src;
+    /** File URI. */
+    private final URI uri;
+    /** File path. */
+    private final File file;
+    /** Absolute result URI. */
+    private URI result;
+
     /** File format.
      * @deprecated use {@link #format()} instead */
+    @Deprecated
     public String format;
+
     /** File has a conref.
      * @deprecated use {@link #hasConref()} instead */
+    @Deprecated
     public boolean hasConref;
-    /** File is part of chunk.
-     * @deprecated use {@link #isChunked()} instead */
+
+    /** File is part of chunk. */
     public boolean isChunked;
+
     /** File has links. Only applies to topics.
      * @deprecated use {@link #hasLink()} instead */
+    @Deprecated
     public boolean hasLink;
+
     /** File is resource only.
      * @deprecated use {@link #isResourceOnly()} instead */
+    @Deprecated
     public boolean isResourceOnly;
+
     /** File is a link target.
      * @deprecated use {@link #isTarget()} instead */
+    @Deprecated
     public boolean isTarget;
+
     /** File is a push conref source.
      * @deprecated use {@link #isConrefPush()} instead */
+    @Deprecated
     public boolean isConrefPush;
+
     /** File has a keyref.
      * @deprecated use {@link #hasKeyref()} instead */
+    @Deprecated
     public boolean hasKeyref;
+
     /** File has coderef.
      * @deprecated use {@link #hasCoderef()} instead */
+    @Deprecated
     public boolean hasCoderef;
+
     /** File is a subject scheme.
      * @deprecated use {@link #isSubjectScheme()} instead */
+    @Deprecated
     public boolean isSubjectScheme;
+
     /** File is a coderef target.
      * @deprecated use {@link #isSubtarget()} instead */
+    @Deprecated
     public boolean isSubtarget;
+
     /** File is a flagging image.
      * @deprecated use {@link #isFlagImage()} instead */
+    @Deprecated
     public boolean isFlagImage;
+
     /** Source file is outside base directory.
      * @deprecated use {@link #isOutDita()} instead */
+    @Deprecated
     public boolean isOutDita;
-    /** File is input document that is used as processing root.
-     * @deprecated use {@link #isInput()} instead */
+
+    /** File is input document that is used as processing root. */
     public boolean isInput;
+
     /** Additional input resource.
      * @deprecated use {@link #isInputResource()} instead */
+    @Deprecated
     public boolean isInputResource;
 
     FileInfo(final URI src, final URI uri, final File file) {
