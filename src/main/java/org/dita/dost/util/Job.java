@@ -14,6 +14,8 @@ import static org.dita.dost.util.URLUtils.*;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -94,25 +96,51 @@ public final class Job {
   /** File name for temporary input file list file */
   public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
-  /** Map of serialization attributes to file info boolean fields. */
-  private static final Map<String, Field> attrToFieldMap = new HashMap<>();
+  /** Map of deserialization attributes to file info boolean fields. */
+  private static final Map<String, Method> attrToGetterMap = new HashMap<>();
 
   static {
     try {
-      attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));
-      attrToFieldMap.put(ATTRIBUTE_INPUT, FileInfo.class.getField("isInput"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));
-      attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));
-      attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
-      attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));
-      attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
-      attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
-      attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
-      attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
-    } catch (final NoSuchFieldException e) {
+      attrToGetterMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getMethod("isChunked"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getMethod("hasLink"));
+      attrToGetterMap.put(ATTRIBUTE_INPUT, FileInfo.class.getMethod("isInput"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getMethod("hasConref"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getMethod("hasKeyref"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getMethod("hasCoderef"));
+      attrToGetterMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getMethod("isResourceOnly"));
+      attrToGetterMap.put(ATTRIBUTE_TARGET, FileInfo.class.getMethod("isTarget"));
+      attrToGetterMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getMethod("isConrefPush"));
+      attrToGetterMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getMethod("isSubjectScheme"));
+      attrToGetterMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getMethod("isOutDita"));
+      attrToGetterMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getMethod("isFlagImage"));
+      attrToGetterMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getMethod("isSubtarget"));
+    } catch (final NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /** Map of serialization attributes to file info boolean fields. */
+  private static final Map<String, Method> attrToSetterMap = new HashMap<>();
+
+  static {
+    try {
+      attrToSetterMap.put(ATTRIBUTE_CHUNKED, FileInfo.Builder.class.getMethod("isChunked", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_LINK, FileInfo.Builder.class.getMethod("hasLink", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_INPUT, FileInfo.Builder.class.getMethod("isInput", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.Builder.class.getMethod("hasConref", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.Builder.class.getMethod("hasKeyref", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.Builder.class.getMethod("hasCoderef", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.Builder.class.getMethod("isResourceOnly", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_TARGET, FileInfo.Builder.class.getMethod("isTarget", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.Builder.class.getMethod("isConrefPush", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.Builder.class.getMethod("isSubjectScheme", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.Builder.class.getMethod("isOutDita", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.Builder.class.getMethod("isFlagImage", boolean.class));
+      attrToSetterMap.put(
+        ATTRIBUTE_SUBSIDIARY_TARGET_LIST,
+        FileInfo.Builder.class.getMethod("isSubtarget", boolean.class)
+      );
+    } catch (final NoSuchMethodException e) {
       throw new RuntimeException(e);
     }
   }
@@ -249,13 +277,15 @@ public final class Job {
             i.result = src;
           }
           i.format = atts.getValue(ATTRIBUTE_FORMAT);
+          FileInfo.Builder b = FileInfo.builder(i);
           try {
-            for (Map.Entry<String, Field> e : attrToFieldMap.entrySet()) {
-              e.getValue().setBoolean(i, Boolean.parseBoolean(atts.getValue(e.getKey())));
+            for (Map.Entry<String, Method> e : attrToSetterMap.entrySet()) {
+              e.getValue().invoke(b, Boolean.parseBoolean(atts.getValue(e.getKey())));
             }
-          } catch (final IllegalAccessException ex) {
+          } catch (InvocationTargetException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
           }
+          i = b.build();
           files.put(i.uri(), i);
         }
       }
@@ -390,13 +420,13 @@ public final class Job {
         out.writeAttribute(ATTRIBUTE_FORMAT, i.format());
       }
       try {
-        for (Map.Entry<String, Field> e : attrToFieldMap.entrySet()) {
-          final boolean v = e.getValue().getBoolean(i);
+        for (Map.Entry<String, Method> e : attrToGetterMap.entrySet()) {
+          final boolean v = (boolean) e.getValue().invoke(i);
           if (v) {
             out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
           }
         }
-      } catch (final IllegalAccessException ex) {
+      } catch (InvocationTargetException | IllegalAccessException ex) {
         throw new RuntimeException(ex);
       }
       out.writeEndElement(); //file
