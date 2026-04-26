@@ -164,8 +164,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       for (final URI file : normalProcessingRole) {
         final FileInfo f = job.getFileInfo(file);
         if (f != null) {
-          f.isResourceOnly = false;
-          job.add(f);
+          var b = FileInfo.builder(f).isResourceOnly(false);
+          job.add(b.build());
         }
       }
 
