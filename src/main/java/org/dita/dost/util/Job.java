@@ -1002,6 +1002,10 @@ public final class Job {
         return this;
       }
 
+      public URI src() {
+        return src;
+      }
+
       public Builder src(final URI src) {
         assert src.isAbsolute();
         this.src = src;
@@ -1020,9 +1024,17 @@ public final class Job {
         return this;
       }
 
+      public URI result() {
+        return result;
+      }
+
       public Builder result(final URI result) {
         this.result = result;
         return this;
+      }
+
+      public String format() {
+        return format;
       }
 
       public Builder format(final String format) {
