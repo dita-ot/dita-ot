@@ -266,18 +266,14 @@ public final class Job {
           final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
           final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
           final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
-          FileInfo i;
+          final FileInfo.Builder b = FileInfo.builder().src(src);
           if (uri != null) {
-            i = new FileInfo(src, uri, toFile(uri));
+            b.uri(uri);
           } else {
-            i = new FileInfo(src, toURI(path), path);
+            b.file(path);
           }
-          i.result = toURI(atts.getValue(ATTRIBUTE_RESULT));
-          if (i.result == null) {
-            i.result = src;
-          }
-          i.format = atts.getValue(ATTRIBUTE_FORMAT);
-          FileInfo.Builder b = FileInfo.builder(i);
+          b.result(Objects.requireNonNullElse(toURI(atts.getValue(ATTRIBUTE_RESULT)), src));
+          b.format(atts.getValue(ATTRIBUTE_FORMAT));
           try {
             for (Map.Entry<String, Method> e : attrToSetterMap.entrySet()) {
               e.getValue().invoke(b, Boolean.parseBoolean(atts.getValue(e.getKey())));
@@ -285,7 +281,7 @@ public final class Job {
           } catch (InvocationTargetException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
           }
-          i = b.build();
+          var i = b.build();
           files.put(i.uri(), i);
         }
       }
