@@ -311,26 +311,33 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
       }
     }
 
+    var buf = new HashMap<URI, FileInfo.Builder>();
     for (final URI file : topicList) {
       // FIXME
-      final FileInfo ff = job.getOrCreateFileInfo(stripFragment(file));
-      ff.format = ATTR_FORMAT_VALUE_DITA;
+      final FileInfo.Builder b = FileInfo.builder(job.getOrCreateFileInfo(stripFragment(file)));
+      b.format(ATTR_FORMAT_VALUE_DITA);
+      buf.put(file, b);
     }
     for (final URI file : ditamapList) {
-      final FileInfo ff = job.getOrCreateFileInfo(file);
-      ff.format = ATTR_FORMAT_VALUE_DITAMAP;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITAMAP);
+      buf.put(file, b);
     }
 
     for (final URI file : chunkedDitamapSet) {
-      final FileInfo f = job.getOrCreateFileInfo(file);
-      f.format = ATTR_FORMAT_VALUE_DITAMAP;
-      f.isResourceOnly = false;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITAMAP).isResourceOnly(false);
+      buf.put(file, b);
     }
     for (final URI file : chunkedTopicSet) {
       // FIXME
-      final FileInfo f = job.getOrCreateFileInfo(stripFragment(file));
-      f.format = ATTR_FORMAT_VALUE_DITA;
-      f.isResourceOnly = false;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITA).isResourceOnly(false);
+      buf.put(file, b);
+    }
+
+    for (FileInfo.Builder b : buf.values()) {
+      job.add(b.build());
     }
 
     try {

@@ -184,15 +184,15 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     }
 
     if (isFormatDita(f.format())) {
+      String format;
       if (typeFilter.getDitaClass() == null) {
-        f.format = ATTR_FORMAT_VALUE_DITA;
+        format = ATTR_FORMAT_VALUE_DITA;
+      } else if (MAP_MAP.matches(typeFilter.getDitaClass())) {
+        format = ATTR_FORMAT_VALUE_DITAMAP;
       } else {
-        if (MAP_MAP.matches(typeFilter.getDitaClass())) {
-          f.format = ATTR_FORMAT_VALUE_DITAMAP;
-        } else {
-          f.format = ATTR_FORMAT_VALUE_DITA;
-        }
+        format = ATTR_FORMAT_VALUE_DITA;
       }
+      job.add(FileInfo.builder(f).format(format).build());
     }
   }
 

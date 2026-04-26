@@ -142,8 +142,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
             getStartDocuments(fi).forEach(this::addToWaitList);
           } else {
             if (isFormatDita(fi.format())) {
-              fi.format = ATTR_FORMAT_VALUE_DITA;
-              job.add(fi);
+              job.add(FileInfo.builder(fi).format(ATTR_FORMAT_VALUE_DITA).build());
             }
             addToWaitList(new Reference(resource, fi.format()));
           }
@@ -191,8 +190,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         getStartDocuments(fi).forEach(this::addToWaitList);
       } else {
         if (fi.format() == null) {
-          fi.format = ATTR_FORMAT_VALUE_DITA;
-          job.add(fi);
+          job.add(FileInfo.builder(fi).format(ATTR_FORMAT_VALUE_DITA).build());
         }
         addToWaitList(new Reference(rootFile, fi.format()));
       }

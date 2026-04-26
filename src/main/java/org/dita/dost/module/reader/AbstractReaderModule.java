@@ -57,7 +57,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
   Predicate<String> formatFilter;
   /** FileInfos keyed by src. */
-  private final Map<URI, Collection<FileInfo>> fileinfos = new ConcurrentHashMap<>();
+  private final Map<URI, Collection<FileInfo.Builder>> fileinfos = new ConcurrentHashMap<>();
   /** Set of all topic files */
   final Set<URI> fullTopicSet = ConcurrentHashMap.newKeySet();
   /** Set of all map files */
@@ -576,11 +576,10 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       final URI f = currentFile.normalize();
       if (!isFormatDita(ref.format)) {
         if (!fileinfos.containsKey(f)) {
-          final FileInfo i = new FileInfo.Builder()
+          final FileInfo.Builder i = new FileInfo.Builder()
             .uri(tempFileNameScheme.generateTempFileName(currentFile))
             .src(currentFile)
-            .format(ref.format)
-            .build();
+            .format(ref.format);
           fileinfos.put(i.src(), Collections.singletonList(i));
         }
       } else {
@@ -701,14 +700,14 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     resourceOnlySet.addAll(res);
 
     for (final URI file : outDitaFilesSet) {
-      createOrUpdateFileInfo(file, fi -> fi.isOutDita = true);
+      createOrUpdateFileInfo(file, fi -> fi.isOutDita(true));
     }
     for (final URI file : fullTopicSet) {
       createOrUpdateFileInfo(
         file,
         fi -> {
           if (isFormatDita(fi.format())) {
-            fi.format = ATTR_FORMAT_VALUE_DITA;
+            fi.format(ATTR_FORMAT_VALUE_DITA);
           }
         }
       );
@@ -718,65 +717,65 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         file,
         fi -> {
           if (fi.format() == null) {
-            fi.format = ATTR_FORMAT_VALUE_DITAMAP;
+            fi.format(ATTR_FORMAT_VALUE_DITAMAP);
           }
         }
       );
     }
     for (final URI file : hrefTopicSet) {
-      createOrUpdateFileInfo(file, fi -> fi.hasLink = true);
+      createOrUpdateFileInfo(file, fi -> fi.hasLink(true));
     }
     for (final URI file : conrefSet) {
-      createOrUpdateFileInfo(file, fi -> fi.hasConref = true);
+      createOrUpdateFileInfo(file, fi -> fi.hasConref(true));
     }
     for (final Reference file : formatSet) {
-      createOrUpdateFileInfo(file.filename, fi -> fi.format = file.format);
+      createOrUpdateFileInfo(file.filename, fi -> fi.format(file.format));
     }
     for (final URI file : flagImageSet) {
       createOrUpdateFileInfo(
         file,
         fi -> {
-          fi.isFlagImage = true;
-          fi.format = ATTR_FORMAT_VALUE_IMAGE;
+          fi.isFlagImage(true);
+          fi.format(ATTR_FORMAT_VALUE_IMAGE);
         }
       );
     }
     for (final String format : htmlSet.keySet()) {
       for (final URI file : htmlSet.get(format)) {
-        createOrUpdateFileInfo(file, fi -> fi.format = format);
+        createOrUpdateFileInfo(file, fi -> fi.format(format));
       }
     }
     for (final URI file : hrefTargetSet) {
-      createOrUpdateFileInfo(file, fi -> fi.isTarget = true);
+      createOrUpdateFileInfo(file, fi -> fi.isTarget(true));
     }
     for (final URI file : schemeSet) {
-      createOrUpdateFileInfo(file, fi -> fi.isSubjectScheme = true);
+      createOrUpdateFileInfo(file, fi -> fi.isSubjectScheme(true));
     }
     for (final URI file : coderefTargetSet) {
       createOrUpdateFileInfo(
         file,
         fi -> {
-          fi.isSubtarget = true;
+          fi.isSubtarget(true);
           if (fi.format() == null) {
-            fi.format = PR_D_CODEREF.localName;
+            fi.format(PR_D_CODEREF.localName);
           }
         }
       );
     }
     for (final URI file : conrefpushSet) {
-      createOrUpdateFileInfo(file, fi -> fi.isConrefPush = true);
+      createOrUpdateFileInfo(file, fi -> fi.isConrefPush(true));
     }
     for (final URI file : keyrefSet) {
-      createOrUpdateFileInfo(file, fi -> fi.hasKeyref = true);
+      createOrUpdateFileInfo(file, fi -> fi.hasKeyref(true));
     }
     for (final URI file : coderefSet) {
-      createOrUpdateFileInfo(file, fi -> fi.hasCoderef = true);
+      createOrUpdateFileInfo(file, fi -> fi.hasCoderef(true));
     }
     for (final URI file : resourceOnlySet) {
-      createOrUpdateFileInfo(file, fi -> fi.isResourceOnly = true);
+      createOrUpdateFileInfo(file, fi -> fi.isResourceOnly(true));
     }
     for (final URI resource : resources) {
-      createOrUpdateFileInfo(resource, fi -> fi.isInputResource = true);
+      createOrUpdateFileInfo(resource, fi -> fi.isInputResource(true));
     }
 
     addFlagImagesSetToProperties(job, relFlagImagesSet);
@@ -793,11 +792,9 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         final URI src = filteredCopyTo.get(fs.src());
         // correct copy-to
         if (src != null) {
-          final FileInfo corr = new FileInfo.Builder(fs).src(src).build();
-          job.add(corr);
-        } else {
-          job.add(fs);
+          fs.src(src);
         }
+        job.add(fs.build());
       });
 
     for (final URI target : filteredCopyTo.keySet()) {
@@ -813,7 +810,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     for (URI f : additionalResourcesSet) {
       final FileInfo fi = job.getFileInfo(f);
       if (!fi.isResourceOnly()) {
-        fi.isInputResource = true;
+        var b = FileInfo.builder(fi).isInputResource(true);
+        job.add(b.build());
       }
     }
 
@@ -827,13 +825,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   /** Filter copy-to where target is used directly. */
   private Map<URI, URI> filterConflictingCopyTo(
     final Map<URI, URI> copyTo,
-    final Collection<Collection<FileInfo>> fileInfos
+    final Collection<Collection<FileInfo.Builder>> fileInfos
   ) {
     final Set<URI> fileinfoTargets = fileInfos
       .stream()
       .flatMap(Collection::stream)
-      .filter(fi -> fi.src().equals(fi.result()))
-      .map(FileInfo::result)
+      .filter(fi -> Objects.equals(fi.src(), fi.result()))
+      .map(FileInfo.Builder::result)
       .collect(Collectors.toSet());
     return copyTo
       .entrySet()
@@ -877,20 +875,23 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     return res;
   }
 
-  private void createOrUpdateFileInfo(final URI file, final Consumer<FileInfo> consumer) {
-    for (final FileInfo fi : getOrCreateFileInfo(fileinfos, file)) {
+  private void createOrUpdateFileInfo(final URI file, final Consumer<FileInfo.Builder> consumer) {
+    for (final FileInfo.Builder fi : getOrCreateFileInfo(fileinfos, file)) {
       consumer.accept(fi);
     }
   }
 
-  private Collection<FileInfo> getOrCreateFileInfo(final Map<URI, Collection<FileInfo>> fileInfos, final URI file) {
+  private Collection<FileInfo.Builder> getOrCreateFileInfo(
+    final Map<URI, Collection<FileInfo.Builder>> fileInfos,
+    final URI file
+  ) {
     assert file.getFragment() == null;
     final URI f = file.normalize();
 
     if (fileInfos.containsKey(f)) {
       return fileInfos.get(f);
     } else {
-      final Collection<FileInfo> prevs = job
+      final Collection<FileInfo.Builder> prevs = job
         .getFileInfo(fi -> Objects.equals(fi.src(), f))
         .stream()
         .map(prev -> {
@@ -901,15 +902,15 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           if (prev.uri() == null) {
             b = b.uri(tempFileNameScheme.generateTempFileName(f));
           }
-          return b.build();
+          return b;
         })
         .collect(Collectors.toList());
       if (!prevs.isEmpty()) {
         fileInfos.put(f, prevs);
         return prevs;
       } else {
-        final Collection<FileInfo> fis = Collections.singletonList(
-          new FileInfo.Builder().src(f).uri(tempFileNameScheme.generateTempFileName(f)).build()
+        final Collection<FileInfo.Builder> fis = Collections.singletonList(
+          new FileInfo.Builder().src(f).uri(tempFileNameScheme.generateTempFileName(f))
         );
         fileInfos.put(f, fis);
         return fis;
