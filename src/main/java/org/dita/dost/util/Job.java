@@ -272,7 +272,7 @@ public final class Job {
           } else {
             b.file(path);
           }
-          b.result(Objects.requireNonNullElse(toURI(atts.getValue(ATTRIBUTE_RESULT)), src));
+          b.result(Optional.ofNullable(toURI(atts.getValue(ATTRIBUTE_RESULT))).orElse(b.src));
           b.format(atts.getValue(ATTRIBUTE_FORMAT));
           try {
             for (Map.Entry<String, Method> e : attrToSetterMap.entrySet()) {
@@ -705,20 +705,99 @@ public final class Job {
     @Deprecated
     public boolean isInputResource;
 
+    /** @deprecated use {@link FileInfo#builder()} instead. */
+    @Deprecated
     FileInfo(final URI src, final URI uri, final File file) {
+      this(
+        src,
+        uri,
+        file,
+        src,
+        null,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      );
+    }
+
+    /** @deprecated use {@link FileInfo#builder()} instead. */
+    @Deprecated
+    FileInfo(final URI uri) {
+      this(
+        null,
+        uri,
+        null,
+        null,
+        null,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      );
+    }
+
+    public FileInfo(
+      URI src,
+      URI uri,
+      File file,
+      URI result,
+      String format,
+      boolean hasConref,
+      boolean isChunked,
+      boolean hasLink,
+      boolean isResourceOnly,
+      boolean isTarget,
+      boolean isConrefPush,
+      boolean hasKeyref,
+      boolean hasCoderef,
+      boolean isSubjectScheme,
+      boolean isSubtarget,
+      boolean isFlagImage,
+      boolean isOutDita,
+      boolean isInput,
+      boolean isInputResource
+    ) {
       if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
       this.src = src;
       this.uri = uri != null ? uri : toURI(file);
-      this.file = uri != null ? toFile(uri) : file;
-      this.result = src;
-    }
-
-    FileInfo(final URI uri) {
-      if (uri == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = null;
-      this.uri = uri;
-      this.file = toFile(uri);
-      this.result = src();
+      this.file = file != null ? file : toFile(uri);
+      this.result = result;
+      this.format = format;
+      this.hasConref = hasConref;
+      this.isChunked = isChunked;
+      this.hasLink = hasLink;
+      this.isResourceOnly = isResourceOnly;
+      this.isTarget = isTarget;
+      this.isConrefPush = isConrefPush;
+      this.hasKeyref = hasKeyref;
+      this.hasCoderef = hasCoderef;
+      this.isSubjectScheme = isSubjectScheme;
+      this.isSubtarget = isSubtarget;
+      this.isFlagImage = isFlagImage;
+      this.isOutDita = isOutDita;
+      this.isInput = isInput;
+      this.isInputResource = isInputResource;
     }
 
     @Override
@@ -1003,7 +1082,7 @@ public final class Job {
       }
 
       public Builder src(final URI src) {
-        assert src.isAbsolute();
+        assert src == null || src.isAbsolute();
         this.src = src;
         return this;
       }

@@ -21,7 +21,27 @@ public final class FileInfoTest {
 
   @Test
   public void testURIConstructor() throws URISyntaxException {
-    final FileInfo f = new FileInfo(new URI("foo" + URI_SEPARATOR + "bar"));
+    final FileInfo f = new FileInfo(
+      null,
+      new URI("foo" + URI_SEPARATOR + "bar"),
+      null,
+      null,
+      null,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    );
     assertEquals(new File("foo" + File.separator + "bar"), f.file());
     assertEquals(new URI("foo" + URI_SEPARATOR + "bar"), f.uri());
   }
