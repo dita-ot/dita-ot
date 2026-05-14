@@ -71,12 +71,12 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     }
 
     try {
-      final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-      final File mapFile = new File(job.tempDirURI.resolve(in.uri));
+      final Job.FileInfo in = job.getFileInfo(FileInfo::isInput).iterator().next();
+      final File mapFile = new File(job.tempDirURI.resolve(in.uri()));
       if (transtype.equals(INDEX_TYPE_ECLIPSEHELP) && isEclipseMap(mapFile.toURI())) {
         for (final FileInfo f : job.getFileInfo()) {
-          if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-            mapReader.read(new File(job.tempDirURI.resolve(f.uri)).getAbsoluteFile());
+          if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format())) {
+            mapReader.read(new File(job.tempDirURI.resolve(f.uri())).getAbsoluteFile());
           }
         }
       } else {
@@ -143,9 +143,9 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     topicRefWriter.setup(conflictTable);
     try {
       for (final FileInfo f : job.getFileInfo()) {
-        if (ATTR_FORMAT_VALUE_DITA.equals(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-          topicRefWriter.setFixpath(relativePath2fix.get(f.uri));
-          final File tmp = new File(job.tempDirURI.resolve(f.uri));
+        if (ATTR_FORMAT_VALUE_DITA.equals(f.format()) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format())) {
+          topicRefWriter.setFixpath(relativePath2fix.get(f.uri()));
+          final File tmp = new File(job.tempDirURI.resolve(f.uri()));
           topicRefWriter.write(tmp);
         }
       }
@@ -167,15 +167,15 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     final Set<URI> hrefTopics = new HashSet<>();
     final Set<URI> chunkTopicSet = mapReader.getChunkTopicSet();
     for (final FileInfo f : job.getFileInfo()) {
-      final URI abs = job.tempDirURI.resolve(f.uri);
-      if (f.isTarget && !chunkTopicSet.contains(abs)) {
-        hrefTopics.add(f.uri);
+      final URI abs = job.tempDirURI.resolve(f.uri());
+      if (f.isTarget() && !chunkTopicSet.contains(abs)) {
+        hrefTopics.add(f.uri());
       }
     }
     for (final FileInfo f : job.getFileInfo()) {
-      final URI abs = job.tempDirURI.resolve(f.uri);
+      final URI abs = job.tempDirURI.resolve(f.uri());
       if (chunkTopicSet.contains(abs)) {
-        final URI s = f.uri;
+        final URI s = f.uri();
         if (s.getFragment() == null) {
           // This entry does not have an anchor, we assume that this
           // topic will
@@ -193,8 +193,8 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     final Set<URI> topicList = new LinkedHashSet<>(128);
     final Set<URI> oldTopicList = new HashSet<>();
     for (final FileInfo f : job.getFileInfo()) {
-      if (ATTR_FORMAT_VALUE_DITA.equals(f.format)) {
-        oldTopicList.add(f.uri);
+      if (ATTR_FORMAT_VALUE_DITA.equals(f.format())) {
+        oldTopicList.add(f.uri());
       }
     }
     for (final URI t : hrefTopics) {
@@ -206,8 +206,8 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     final Set<URI> chunkedDitamapSet = new LinkedHashSet<>(128);
     final Set<URI> ditamapList = new HashSet<>();
     for (final FileInfo f : job.getFileInfo()) {
-      if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format)) {
-        ditamapList.add(f.uri);
+      if (ATTR_FORMAT_VALUE_DITAMAP.equals(f.format())) {
+        ditamapList.add(f.uri());
       }
     }
     for (final Map.Entry<URI, URI> entry : changeTable.entrySet()) {
@@ -311,26 +311,33 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
       }
     }
 
+    var buf = new HashMap<URI, FileInfo.Builder>();
     for (final URI file : topicList) {
       // FIXME
-      final FileInfo ff = job.getOrCreateFileInfo(stripFragment(file));
-      ff.format = ATTR_FORMAT_VALUE_DITA;
+      final FileInfo.Builder b = FileInfo.builder(job.getOrCreateFileInfo(stripFragment(file)));
+      b.format(ATTR_FORMAT_VALUE_DITA);
+      buf.put(file, b);
     }
     for (final URI file : ditamapList) {
-      final FileInfo ff = job.getOrCreateFileInfo(file);
-      ff.format = ATTR_FORMAT_VALUE_DITAMAP;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITAMAP);
+      buf.put(file, b);
     }
 
     for (final URI file : chunkedDitamapSet) {
-      final FileInfo f = job.getOrCreateFileInfo(file);
-      f.format = ATTR_FORMAT_VALUE_DITAMAP;
-      f.isResourceOnly = false;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITAMAP).isResourceOnly(false);
+      buf.put(file, b);
     }
     for (final URI file : chunkedTopicSet) {
       // FIXME
-      final FileInfo f = job.getOrCreateFileInfo(stripFragment(file));
-      f.format = ATTR_FORMAT_VALUE_DITA;
-      f.isResourceOnly = false;
+      final FileInfo.Builder b = buf.computeIfAbsent(file, f -> FileInfo.builder(job.getOrCreateFileInfo(f)));
+      b.format(ATTR_FORMAT_VALUE_DITA).isResourceOnly(false);
+      buf.put(file, b);
+    }
+
+    for (FileInfo.Builder b : buf.values()) {
+      job.add(b.build());
     }
 
     try {

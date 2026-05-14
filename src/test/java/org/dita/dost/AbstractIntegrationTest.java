@@ -396,8 +396,8 @@ public abstract class AbstractIntegrationTest {
       if (store instanceof CacheStore) {
         final Job job = new Job(tempDir.getAbsoluteFile(), store);
         for (Job.FileInfo fileInfo : job.getFileInfo()) {
-          if (fileInfo.uri != null) {
-            final URI f = job.tempDirURI.resolve(fileInfo.uri);
+          if (fileInfo.uri() != null) {
+            final URI f = job.tempDirURI.resolve(fileInfo.uri());
             if (store.exists(f)) {
               final Path dir = Paths.get(f).getParent();
               if (!Files.exists(dir)) {

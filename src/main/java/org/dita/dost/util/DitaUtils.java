@@ -27,7 +27,7 @@ public class DitaUtils {
   }
 
   public static boolean isDitaFormat(final Job.FileInfo fi) {
-    return isDitaFormat(fi.format);
+    return isDitaFormat(fi.format());
   }
 
   // TOOD: Rename to isDitaTopic
@@ -36,7 +36,7 @@ public class DitaUtils {
   }
 
   public static boolean isDitaMap(final Job.FileInfo fi) {
-    return isDitaMap(fi.format);
+    return isDitaMap(fi.format());
   }
 
   public static boolean isDitaMap(final String format) {

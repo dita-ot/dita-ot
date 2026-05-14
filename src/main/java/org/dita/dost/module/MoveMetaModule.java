@@ -54,7 +54,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
    */
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    final Collection<FileInfo> fis = job.getFileInfo(fi -> fi.isInput);
+    final Collection<FileInfo> fis = job.getFileInfo(FileInfo::isInput);
     if (!fis.isEmpty()) {
       final Map<URI, Map<String, Element>> mapSet = getMapMetadata(fis);
       pushMetadata(mapSet);
@@ -81,7 +81,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     }
 
     for (final FileInfo f : fis) {
-      final File inputFile = new File(job.tempDirURI.resolve(f.uri));
+      final File inputFile = new File(job.tempDirURI.resolve(f.uri()));
       final File tmp = new File(inputFile.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis()));
       logger.info("Processing " + inputFile.toURI());
       logger.debug("Processing " + inputFile.toURI() + " to " + tmp.toURI());
@@ -143,9 +143,9 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
           logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
           continue;
         }
-        final URI targetFileName = job.tempDirURI.resolve(fi.uri);
+        final URI targetFileName = job.tempDirURI.resolve(fi.uri());
         assert targetFileName.isAbsolute();
-        if (fi.format != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+        if (fi.format() != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
           mapInserter.setMetaTable(entry.getValue());
           if (job.getStore().exists(targetFileName)) {
             try {
@@ -169,9 +169,9 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
           logger.error("File " + job.tempDirURI.resolve(key) + " was not found.");
           continue;
         }
-        final URI targetFileName = job.tempDirURI.resolve(fi.uri);
+        final URI targetFileName = job.tempDirURI.resolve(fi.uri());
         assert targetFileName.isAbsolute();
-        if (fi.format == null || fi.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+        if (fi.format() == null || fi.format().equals(ATTR_FORMAT_VALUE_DITA)) {
           final String topicid = entry.getKey().getFragment();
           topicInserter.setTopicId(topicid);
           topicInserter.setMetaTable(entry.getValue());
@@ -194,7 +194,7 @@ final class MoveMetaModule extends AbstractPipelineModuleImpl {
     metaReader.setJob(job);
     metaReader.setXmlUtils(xmlUtils);
     for (final FileInfo f : fis) {
-      final File mapFile = job.tempDir.toPath().resolve(f.file.toPath()).toFile();
+      final File mapFile = job.tempDir.toPath().resolve(f.file().toPath()).toFile();
       //FIXME: this reader gets the parent path of input file
       try {
         metaReader.read(mapFile);

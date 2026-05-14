@@ -133,7 +133,11 @@ public final class DITAOTCopy extends Task {
   private List<String> getIncludes() throws IOException {
     if (includes == null && includesFile == null) {
       final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-      return job.getFileInfo(fi -> fi.isFlagImage).stream().map(fi -> fi.file.toString()).collect(Collectors.toList());
+      return job
+        .getFileInfo(Job.FileInfo::isFlagImage)
+        .stream()
+        .map(fi -> fi.file().toString())
+        .collect(Collectors.toList());
     }
     if (includesFile != null) {
       final List<String> res = new ArrayList<>();

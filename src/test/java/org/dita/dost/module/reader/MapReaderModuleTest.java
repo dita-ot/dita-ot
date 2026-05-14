@@ -94,24 +94,24 @@ public class MapReaderModuleTest {
     assertEquals(5, job.getFileInfo().size());
     for (Job.FileInfo fileInfo : job.getFileInfo()) {
       assertEquals(
-        Objects.equals(fileInfo.format, "ditamap"),
-        job.getStore().exists(tempDir.toURI().resolve(fileInfo.uri))
+        Objects.equals(fileInfo.format(), "ditamap"),
+        job.getStore().exists(tempDir.toURI().resolve(fileInfo.uri()))
       );
-      final URI src = srcDir.toURI().relativize(fileInfo.src);
+      final URI src = srcDir.toURI().relativize(fileInfo.src());
       switch (src.toString()) {
         case "root.ditamap":
         case "submap.ditamap":
-          assertEquals("ditamap", fileInfo.format);
+          assertEquals("ditamap", fileInfo.format());
           break;
         case "topic.dita":
         case "subtopic.dita":
-          assertEquals(null, fileInfo.format);
+          assertEquals(null, fileInfo.format());
           break;
         case "ext.pdf":
-          assertEquals("pdf", fileInfo.format);
+          assertEquals("pdf", fileInfo.format());
           break;
         default:
-          throw new RuntimeException("Unmapped " + fileInfo.uri);
+          throw new RuntimeException("Unmapped " + fileInfo.uri());
       }
     }
     assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.WARN));

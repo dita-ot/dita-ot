@@ -116,7 +116,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
     final URI tmp = currentFile.resolve(href);
     final FileInfo fi = job.getFileInfo(tmp);
-    final URI ditaval = fi.src;
+    final URI ditaval = fi.src();
     return filterCache.computeIfAbsent(ditaval, this::getFilterUtils);
   }
 
@@ -144,10 +144,10 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
 
   void addFlagImagesSetToProperties(final Job prop, final Set<URI> set) {
     for (final URI file : flagImageSet) {
-      final FileInfo f = getOrCreateFileInfo(file);
-      f.isFlagImage = true;
-      f.format = ATTR_FORMAT_VALUE_IMAGE;
-      job.add(f);
+      final FileInfo.Builder f = getOrCreateFileInfo(file);
+      f.isFlagImage(true);
+      f.format(ATTR_FORMAT_VALUE_IMAGE);
+      job.add(f.build());
     }
 
     final Set<URI> newSet = new LinkedHashSet<>(128);
@@ -181,7 +181,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     prop.setProperty(REL_FLAGIMAGE_LIST, newSet.stream().map(URI::toString).collect(Collectors.joining(COMMA)));
   }
 
-  private FileInfo getOrCreateFileInfo(final URI file) {
+  private FileInfo.Builder getOrCreateFileInfo(final URI file) {
     assert file.isAbsolute();
     assert file.getFragment() == null;
     final URI f = file.normalize();
@@ -189,7 +189,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
       .ofNullable(job.getFileInfo(f))
       .map(FileInfo.Builder::new)
       .orElse(new FileInfo.Builder().src(file))
-      .uri(tempFileNameScheme.generateTempFileName(file))
-      .build();
+      .uri(tempFileNameScheme.generateTempFileName(file));
   }
 }

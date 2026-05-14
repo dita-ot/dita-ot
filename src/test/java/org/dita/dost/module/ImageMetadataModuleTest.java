@@ -72,11 +72,11 @@ public class ImageMetadataModuleTest {
       new InputSource(new File(expDir, "test.dita").toURI().toString()),
       new InputSource(f.toURI().toString())
     );
-    assertEquals("image", job.getFileInfo(create("img.png")).format);
-    assertEquals("image", job.getFileInfo(create("img.gif")).format);
-    assertEquals("image", job.getFileInfo(create("img.jpg")).format);
-    assertEquals("image", job.getFileInfo(create("img.svg")).format);
-    assertEquals("image", job.getFileInfo(create("img.xxx")).format);
+    assertEquals("image", job.getFileInfo(create("img.png")).format());
+    assertEquals("image", job.getFileInfo(create("img.gif")).format());
+    assertEquals("image", job.getFileInfo(create("img.jpg")).format());
+    assertEquals("image", job.getFileInfo(create("img.svg")).format());
+    assertEquals("image", job.getFileInfo(create("img.xxx")).format());
   }
 
   @AfterAll

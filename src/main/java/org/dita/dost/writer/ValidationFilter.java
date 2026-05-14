@@ -451,7 +451,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
       if (format == null && isLocalScope(scope) && href != null) {
         final URI target = currentFile.resolve(href);
         final Job.FileInfo fi = job.getFileInfo(target);
-        if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+        if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
           switch (processingMode) {
             case STRICT -> throw new RuntimeException(
               MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString()
@@ -462,7 +462,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
               if (res == null) {
                 res = new AttributesImpl(atts);
               }
-              addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
+              addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format());
             }
           }
         }

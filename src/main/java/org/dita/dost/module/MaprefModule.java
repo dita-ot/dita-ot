@@ -68,7 +68,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     if (fileInfoFilter == null) {
-      fileInfoFilter = fileInfo -> fileInfo.format != null && fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
+      fileInfoFilter = fileInfo -> fileInfo.format() != null && fileInfo.format().equals(ATTR_FORMAT_VALUE_DITAMAP);
     }
     final Collection<FileInfo> fileInfos = job.getFileInfo(fileInfoFilter);
     if (fileInfos.isEmpty()) {
@@ -103,7 +103,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
    * Process map references in a map and store the result to temporary file.
    */
   private void processMap(final FileInfo input) throws DITAOTException {
-    final File inputFile = new File(job.tempDirURI.resolve(input.uri));
+    final File inputFile = new File(job.tempDirURI.resolve(input.uri()));
     final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
 
     logger.info("Processing " + inputFile.toURI());
@@ -154,14 +154,14 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
   private FileInfo collectJobInfo(FileInfo fileInfo, Document doc) {
     final FileInfo.Builder builder = new FileInfo.Builder(fileInfo);
     final List<Element> elements = XMLUtils.toList(doc.getElementsByTagName("*"));
-    if (!fileInfo.hasConref) {
+    if (!fileInfo.hasConref()) {
       builder.hasConref(
         elements
           .stream()
           .anyMatch(e -> e.hasAttribute(ATTRIBUTE_NAME_CONREF) || e.hasAttribute(ATTRIBUTE_NAME_CONKEYREF))
       );
     }
-    if (!fileInfo.hasKeyref) {
+    if (!fileInfo.hasKeyref()) {
       builder.hasKeyref(
         elements
           .stream()
@@ -186,8 +186,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
    * Store result map file to store.
    */
   private void replace(final FileInfo input) throws DITAOTException {
-    final File inputFile = new File(job.tempDirURI.resolve(input.uri + FILE_EXTENSION_TEMP));
-    final File outputFile = new File(job.tempDirURI.resolve(input.uri));
+    final File inputFile = new File(job.tempDirURI.resolve(input.uri() + FILE_EXTENSION_TEMP));
+    final File outputFile = new File(job.tempDirURI.resolve(input.uri()));
     try {
       job.getStore().move(inputFile.toURI(), outputFile.toURI());
     } catch (final IOException e) {

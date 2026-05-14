@@ -57,7 +57,7 @@ public class DebugAndFilterModuleTest {
     TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
     final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
     for (final Job.FileInfo fi : job.getFileInfo()) {
-      job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+      job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri())).build());
     }
     job.setInputFile(inputMap.getAbsoluteFile().toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);

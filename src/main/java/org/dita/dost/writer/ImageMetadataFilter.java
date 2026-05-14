@@ -288,7 +288,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     final URI fileName;
     final FileInfo fi = job.getFileInfo(currentFile.resolve(href));
     if (fi != null) {
-      fileName = job.getInputDir().relativize(fi.src);
+      fileName = job.getInputDir().relativize(fi.src());
     } else {
       fileName = href;
     }
@@ -306,7 +306,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     }
 
     if (fi != null) {
-      final URI srcTempURI = job.tempDirURI.resolve(fi.uri);
+      final URI srcTempURI = job.tempDirURI.resolve(fi.uri());
       if (exists(srcTempURI)) {
         logger.debug("Found " + srcTempURI);
         return srcTempURI;

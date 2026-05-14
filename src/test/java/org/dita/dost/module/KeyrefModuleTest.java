@@ -191,15 +191,15 @@ public class KeyrefModuleTest {
         .build();
     job.add(inputMapFileInfo);
 
-    final XdmNode src = parse(inputMapFileInfo.src);
+    final XdmNode src = parse(inputMapFileInfo.src());
     final KeyScope childScope = new KeyScope(
       "A",
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1)
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src(), null, 1)
       ),
       emptyList()
     );
@@ -208,9 +208,9 @@ public class KeyrefModuleTest {
       null,
       Map.of(
         "VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR",
-        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src, null, 1)
+        new KeyDef("VAR", null, "local", "dita", inputMapFileInfo.src(), null, 1)
       ),
       singletonList(childScope)
     );
@@ -226,7 +226,7 @@ public class KeyrefModuleTest {
 
     final Document exp = b.parse(new File(baseDir, "exp" + File.separator + "test.ditamap"));
 
-    final ResolveTask subMapTask = res.stream().filter(r -> r.in().src.equals(subMap)).findFirst().get();
+    final ResolveTask subMapTask = res.stream().filter(r -> r.in().src().equals(subMap)).findFirst().get();
     assertEquals(subMapTask.scope(), childScope);
 
     final Document act = toDocument(destination.getXdmNode());
@@ -245,19 +245,19 @@ public class KeyrefModuleTest {
         .isInput(true)
         .build();
     job.add(inputMapFileInfo);
-    final XdmNode act = parse(inputMapFileInfo.src);
+    final XdmNode act = parse(inputMapFileInfo.src());
     final KeyScope childScope1 = new KeyScope(
       "A",
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR",
-        new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("A.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR2",
-        new KeyDef("A.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("A.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR3",
-        new KeyDef("A.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null, 1)
+        new KeyDef("A.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src(), null, 1)
       ),
       EMPTY_LIST
     );
@@ -266,13 +266,13 @@ public class KeyrefModuleTest {
       "B",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "B.VAR",
-        new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("B.VAR", new URI("topic.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "B.VAR2",
-        new KeyDef("B.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("B.VAR2", new URI("res.dita"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "B.VAR3",
-        new KeyDef("B.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src, null, 1)
+        new KeyDef("B.VAR3", new URI("res.png"), "local", "png", inputMapFileInfo.src(), null, 1)
       ),
       EMPTY_LIST
     );
@@ -288,11 +288,11 @@ public class KeyrefModuleTest {
     receiver.close();
 
     ResolveTask task = res.get(0);
-    assertEquals("topic.dita", task.in().file.toString());
+    assertEquals("topic.dita", task.in().file().toString());
     assertEquals(null, task.scope().name());
 
     task = res.get(1);
-    assertEquals("topic.dita", task.in().file.toString());
+    assertEquals("topic.dita", task.in().file().toString());
     assertEquals("A", task.scope().name());
     KeyDef keyDef = task.scope().keyDefinition().get("VAR");
     assertEquals(new URI("topic.dita"), keyDef.href);
@@ -300,13 +300,13 @@ public class KeyrefModuleTest {
     assertEquals(new URI("topic-1.dita"), keyDef.href);
 
     task = res.get(3);
-    assertEquals("res.png", task.in().file.toString());
+    assertEquals("res.png", task.in().file().toString());
     assertEquals("A", task.scope().name());
     keyDef = task.scope().keyDefinition().get("A.VAR3");
     assertEquals(new URI("res.png"), keyDef.href);
 
     task = res.get(4);
-    assertEquals("topic.dita", task.in().file.toString());
+    assertEquals("topic.dita", task.in().file().toString());
     assertEquals("B", task.scope().name());
     keyDef = task.scope().keyDefinition().get("VAR");
     assertEquals(new URI("topic.dita"), keyDef.href);
@@ -314,13 +314,13 @@ public class KeyrefModuleTest {
     assertEquals(new URI("topic-2.dita"), keyDef.href);
 
     task = res.get(5);
-    assertEquals("res.dita", task.in().file.toString());
+    assertEquals("res.dita", task.in().file().toString());
     assertEquals("B", task.scope().name());
     keyDef = task.scope().keyDefinition().get("B.VAR2");
     assertEquals(new URI("res-1.dita"), keyDef.href);
 
     task = res.get(6);
-    assertEquals("res.png", task.in().file.toString());
+    assertEquals("res.png", task.in().file().toString());
     assertEquals("B", task.scope().name());
     keyDef = task.scope().keyDefinition().get("B.VAR3");
     assertEquals(new URI("res.png"), keyDef.href);
@@ -366,15 +366,15 @@ public class KeyrefModuleTest {
         .isInput(true)
         .build();
     job.add(inputMapFileInfo);
-    final XdmNode act = parse(inputMapFileInfo.src);
+    final XdmNode act = parse(inputMapFileInfo.src());
     final KeyScope childScope1 = new KeyScope(
       "A",
       "A",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "A.VAR",
-        new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1)
+        new KeyDef("A.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src(), null, 1)
       ),
       EMPTY_LIST
     );
@@ -383,9 +383,9 @@ public class KeyrefModuleTest {
       "B",
       Map.of(
         "VAR",
-        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1),
+        new KeyDef("VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src(), null, 1),
         "B.VAR",
-        new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src, null, 1)
+        new KeyDef("B.VAR", new URI("topic.dita#abc"), "local", "dita", inputMapFileInfo.src(), null, 1)
       ),
       EMPTY_LIST
     );
@@ -433,9 +433,9 @@ public class KeyrefModuleTest {
         .isInput(true)
         .build();
     job.add(inputMapFileInfo);
-    final XdmNode act = parse(inputMapFileInfo.src);
+    final XdmNode act = parse(inputMapFileInfo.src());
     Map<String, KeyDef> defsMap = new HashMap<>();
-    defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src, null, 1));
+    defsMap.put("Tool", new KeyDef("Tool", null, "local", "dita", inputMapFileInfo.src(), null, 1));
 
     KeyScope submap1 = new KeyScope("submap", "mapref[6]map[6].submap", defsMap, List.of());
     KeyScope submap2 = new KeyScope("submap", "submap[8]map[6].submap", defsMap, List.of());

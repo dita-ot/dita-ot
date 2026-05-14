@@ -253,12 +253,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
   URI generateOutputFilename(final String id) {
     final FileInfo cfi = job.getFileInfo(stripFragment(currentParsingFile));
-    URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
+    URI result = cfi.result().resolve(id + FILE_EXTENSION_DITA);
     URI temp = tempFileNameScheme.generateTempFileName(result);
     if (id == null || job.getStore().exists(job.tempDirURI.resolve(temp))) { //job.getFileInfo(result) != null
       final URI t = temp;
 
-      result = cfi.result.resolve(generateFilename());
+      result = cfi.result().resolve(generateFilename());
       temp = tempFileNameScheme.generateTempFileName(result);
 
       final FileInfo.Builder b = new FileInfo.Builder(cfi);
@@ -374,7 +374,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
    */
   URI generateOutputFile(final URI ref) {
     final FileInfo srcFi = job.getFileInfo(ref);
-    final URI newSrc = srcFi.src.resolve(generateFilename());
+    final URI newSrc = srcFi.src().resolve(generateFilename());
     final URI tmp = tempFileNameScheme.generateTempFileName(newSrc);
 
     if (job.getFileInfo(tmp) == null) {
