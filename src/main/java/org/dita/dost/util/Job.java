@@ -602,7 +602,7 @@ public final class Job {
     }
     FileInfo i = getFileInfo(file);
     if (i == null) {
-      i = new FileInfo(f);
+      i = FileInfo.builder().uri(f).build();
       add(i);
     }
     return i;
