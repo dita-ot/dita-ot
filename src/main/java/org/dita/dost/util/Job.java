@@ -13,7 +13,6 @@ import static org.dita.dost.util.URLUtils.*;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -603,7 +602,7 @@ public final class Job {
     }
     FileInfo i = getFileInfo(file);
     if (i == null) {
-      i = new FileInfo(f);
+      i = FileInfo.builder().uri(f).build();
       add(i);
     }
     return i;
@@ -1191,26 +1190,27 @@ public final class Job {
         if (uri == null && file == null) {
           throw new IllegalStateException("uri and file may not be null");
         }
-        final FileInfo fi = new FileInfo(src, uri, file);
-        if (result != null) {
-          fi.result = result;
-        }
-        fi.format = format;
-        fi.hasConref = hasConref;
-        fi.isChunked = isChunked;
-        fi.hasLink = hasLink;
-        fi.isResourceOnly = isResourceOnly;
-        fi.isTarget = isTarget;
-        fi.isConrefPush = isConrefPush;
-        fi.hasKeyref = hasKeyref;
-        fi.hasCoderef = hasCoderef;
-        fi.isSubjectScheme = isSubjectScheme;
-        fi.isSubtarget = isSubtarget;
-        fi.isFlagImage = isFlagImage;
-        fi.isOutDita = isOutDita;
-        fi.isInput = isInput;
-        fi.isInputResource = isInputResource;
-        return fi;
+        return new FileInfo(
+          src,
+          uri,
+          file,
+          result != null ? result : src,
+          format,
+          hasConref,
+          isChunked,
+          hasLink,
+          isResourceOnly,
+          isTarget,
+          isConrefPush,
+          hasKeyref,
+          hasCoderef,
+          isSubjectScheme,
+          isSubtarget,
+          isFlagImage,
+          isOutDita,
+          isInput,
+          isInputResource
+        );
       }
     }
   }
