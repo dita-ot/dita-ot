@@ -621,360 +621,48 @@ public final class Job {
 
   /**
    * File info object.
+   *
+   * @param src Absolute source URI.
+   * @param uri File URI.
+   * @param file File path.
+   * @param result Absolute result URI.
+   * @param format File format.
+   * @param hasConref File has a conref.
+   * @param isChunked File is part of chunk.
+   * @param hasLink File has links. Only applies to topics.
+   * @param isResourceOnly File is resource only.
+   * @param isTarget File is a link target.
+   * @param isConrefPush File is a push conref source.
+   * @param hasKeyref File has a keyref.
+   * @param hasCoderef File has coderef.
+   * @param isSubjectScheme File is a subject scheme.
+   * @param isSubtarget File is a coderef target.
+   * @param isFlagImage File is a flagging image.
+   * @param isOutDita Source file is outside base directory.
+   * @param isInput File is input document that is used as processing root.
+   * @param isInputResource Additional input resource.
    */
-  public static final class FileInfo {
-
-    /** Absolute source URI. */
-    private final URI src;
-    /** File URI. */
-    private final URI uri;
-    /** File path. */
-    private final File file;
-    /** Absolute result URI. */
-    private URI result;
-
-    /** File format.
-     * @deprecated use {@link #format()} instead */
-    @Deprecated
-    public String format;
-
-    /** File has a conref.
-     * @deprecated use {@link #hasConref()} instead */
-    @Deprecated
-    public boolean hasConref;
-
-    /** File is part of chunk. */
-    public boolean isChunked;
-
-    /** File has links. Only applies to topics.
-     * @deprecated use {@link #hasLink()} instead */
-    @Deprecated
-    public boolean hasLink;
-
-    /** File is resource only.
-     * @deprecated use {@link #isResourceOnly()} instead */
-    @Deprecated
-    public boolean isResourceOnly;
-
-    /** File is a link target.
-     * @deprecated use {@link #isTarget()} instead */
-    @Deprecated
-    public boolean isTarget;
-
-    /** File is a push conref source.
-     * @deprecated use {@link #isConrefPush()} instead */
-    @Deprecated
-    public boolean isConrefPush;
-
-    /** File has a keyref.
-     * @deprecated use {@link #hasKeyref()} instead */
-    @Deprecated
-    public boolean hasKeyref;
-
-    /** File has coderef.
-     * @deprecated use {@link #hasCoderef()} instead */
-    @Deprecated
-    public boolean hasCoderef;
-
-    /** File is a subject scheme.
-     * @deprecated use {@link #isSubjectScheme()} instead */
-    @Deprecated
-    public boolean isSubjectScheme;
-
-    /** File is a coderef target.
-     * @deprecated use {@link #isSubtarget()} instead */
-    @Deprecated
-    public boolean isSubtarget;
-
-    /** File is a flagging image.
-     * @deprecated use {@link #isFlagImage()} instead */
-    @Deprecated
-    public boolean isFlagImage;
-
-    /** Source file is outside base directory.
-     * @deprecated use {@link #isOutDita()} instead */
-    @Deprecated
-    public boolean isOutDita;
-
-    /** File is input document that is used as processing root. */
-    public boolean isInput;
-
-    /** Additional input resource.
-     * @deprecated use {@link #isInputResource()} instead */
-    @Deprecated
-    public boolean isInputResource;
-
-    /** @deprecated use {@link FileInfo#builder()} instead. */
-    @Deprecated
-    FileInfo(final URI src, final URI uri, final File file) {
-      this(
-        src,
-        uri,
-        file,
-        src,
-        null,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      );
-    }
-
-    /** @deprecated use {@link FileInfo#builder()} instead. */
-    @Deprecated
-    FileInfo(final URI uri) {
-      this(
-        null,
-        uri,
-        null,
-        null,
-        null,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false
-      );
-    }
-
-    public FileInfo(
-      URI src,
-      URI uri,
-      File file,
-      URI result,
-      String format,
-      boolean hasConref,
-      boolean isChunked,
-      boolean hasLink,
-      boolean isResourceOnly,
-      boolean isTarget,
-      boolean isConrefPush,
-      boolean hasKeyref,
-      boolean hasCoderef,
-      boolean isSubjectScheme,
-      boolean isSubtarget,
-      boolean isFlagImage,
-      boolean isOutDita,
-      boolean isInput,
-      boolean isInputResource
-    ) {
-      if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = src;
-      this.uri = uri != null ? uri : toURI(file);
-      this.file = file != null ? file : toFile(uri);
-      this.result = result;
-      this.format = format;
-      this.hasConref = hasConref;
-      this.isChunked = isChunked;
-      this.hasLink = hasLink;
-      this.isResourceOnly = isResourceOnly;
-      this.isTarget = isTarget;
-      this.isConrefPush = isConrefPush;
-      this.hasKeyref = hasKeyref;
-      this.hasCoderef = hasCoderef;
-      this.isSubjectScheme = isSubjectScheme;
-      this.isSubtarget = isSubtarget;
-      this.isFlagImage = isFlagImage;
-      this.isOutDita = isOutDita;
-      this.isInput = isInput;
-      this.isInputResource = isInputResource;
-    }
-
-    @Override
-    public String toString() {
-      return (
-        "FileInfo{" +
-        "src=" +
-        src() +
-        ", result=" +
-        result() +
-        ", uri=" +
-        uri() +
-        ", file=" +
-        file() +
-        ", format='" +
-        format() +
-        '\'' +
-        ", hasConref=" +
-        hasConref() +
-        ", isChunked=" +
-        isChunked() +
-        ", hasLink=" +
-        hasLink() +
-        ", isResourceOnly=" +
-        isResourceOnly() +
-        ", isTarget=" +
-        isTarget() +
-        ", isConrefPush=" +
-        isConrefPush() +
-        ", isInput=" +
-        isInput() +
-        ", isInputResource=" +
-        isInputResource() +
-        ", hasKeyref=" +
-        hasKeyref() +
-        ", hasCoderef=" +
-        hasCoderef() +
-        ", isSubjectScheme=" +
-        isSubjectScheme() +
-        ", isSubtarget=" +
-        isSubtarget() +
-        ", isFlagImage=" +
-        isFlagImage() +
-        ", isOutDita=" +
-        isOutDita() +
-        '}'
-      );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      FileInfo fileInfo = (FileInfo) o;
-      return (
-        hasConref() == fileInfo.hasConref() &&
-        isChunked() == fileInfo.isChunked() &&
-        hasLink() == fileInfo.hasLink() &&
-        isResourceOnly() == fileInfo.isResourceOnly() &&
-        isTarget() == fileInfo.isTarget() &&
-        isConrefPush() == fileInfo.isConrefPush() &&
-        hasKeyref() == fileInfo.hasKeyref() &&
-        hasCoderef() == fileInfo.hasCoderef() &&
-        isSubjectScheme() == fileInfo.isSubjectScheme() &&
-        isSubtarget() == fileInfo.isSubtarget() &&
-        isFlagImage() == fileInfo.isFlagImage() &&
-        isOutDita() == fileInfo.isOutDita() &&
-        isInput() == fileInfo.isInput() &&
-        isInputResource() == fileInfo.isInputResource() &&
-        Objects.equals(src(), fileInfo.src()) &&
-        Objects.equals(uri(), fileInfo.uri()) &&
-        Objects.equals(file(), fileInfo.file()) &&
-        Objects.equals(result(), fileInfo.result()) &&
-        Objects.equals(format(), fileInfo.format())
-      );
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(
-        src(),
-        uri(),
-        file(),
-        result(),
-        format(),
-        hasConref(),
-        isChunked(),
-        hasLink(),
-        isResourceOnly(),
-        isTarget(),
-        isConrefPush(),
-        hasKeyref(),
-        hasCoderef(),
-        isSubjectScheme(),
-        isSubtarget(),
-        isFlagImage(),
-        isOutDita(),
-        isInput(),
-        isInputResource()
-      );
-    }
-
-    public URI src() {
-      return src;
-    }
-
-    public URI uri() {
-      return uri;
-    }
-
-    public File file() {
-      return file;
-    }
-
-    public URI result() {
-      return result;
-    }
-
-    public String format() {
-      return format;
-    }
-
-    public boolean hasConref() {
-      return hasConref;
-    }
-
-    public boolean isChunked() {
-      return isChunked;
-    }
-
-    public boolean hasLink() {
-      return hasLink;
-    }
-
-    public boolean isResourceOnly() {
-      return isResourceOnly;
-    }
-
-    public boolean isTarget() {
-      return isTarget;
-    }
-
-    public boolean isConrefPush() {
-      return isConrefPush;
-    }
-
-    public boolean hasKeyref() {
-      return hasKeyref;
-    }
-
-    public boolean hasCoderef() {
-      return hasCoderef;
-    }
-
-    public boolean isSubjectScheme() {
-      return isSubjectScheme;
-    }
-
-    public boolean isSubtarget() {
-      return isSubtarget;
-    }
-
-    public boolean isFlagImage() {
-      return isFlagImage;
-    }
-
-    public boolean isOutDita() {
-      return isOutDita;
-    }
-
-    public boolean isInput() {
-      return isInput;
-    }
-
-    public boolean isInputResource() {
-      return isInputResource;
-    }
-
+  public record FileInfo(
+    URI src,
+    URI uri,
+    File file,
+    URI result,
+    String format,
+    boolean hasConref,
+    boolean isChunked,
+    boolean hasLink,
+    boolean isResourceOnly,
+    boolean isTarget,
+    boolean isConrefPush,
+    boolean hasKeyref,
+    boolean hasCoderef,
+    boolean isSubjectScheme,
+    boolean isSubtarget,
+    boolean isFlagImage,
+    boolean isOutDita,
+    boolean isInput,
+    boolean isInputResource
+  ) {
     public static Builder builder() {
       return new Builder();
     }
@@ -1192,8 +880,8 @@ public final class Job {
         }
         return new FileInfo(
           src,
-          uri,
-          file,
+          uri != null ? uri : toURI(file),
+          file != null ? file : toFile(uri),
           result != null ? result : src,
           format,
           hasConref,
