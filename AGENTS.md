@@ -4,7 +4,8 @@
 
 - The core toolkit code lives under `src/main/java/org/dita/dost`. Package names generally reflect pipeline roles such as readers, writers, modules, platform integration, logging, and utilities.
 - The runnable toolkit layout is assembled under `src/main`. Treat `src/main/bin`, `src/main/config`, and `src/main/resources` as runtime assets that support the distribution, not as disconnected samples.
-- Built-in transforms live under `src/main/plugins`. These plugin directories are also Gradle subprojects for format-specific behavior such as HTML5, HTML Help, and PDF processing. Keep format-specific changes in the owning plugin when possible; move logic into shared `org.dita.dost` code only when multiple transforms need it.
+- XSLT code common to all transformation types lives under `src/main/plugins/org.dita.base`. Processing that updates the preprocessing steps or that is common to all transform types goes in this plugin.
+- Built-in transforms live under `src/main/plugins`. These plugin directories are also Gradle subprojects for format-specific behavior such as HTML5, HTML Help, and PDF processing. Keep format-specific changes in the owning plugin when possible; move logic into shared `org.dita.dost` (for Java code) or `src/main/plugins/org.dita.base` (for XSLT or Ant code) only when multiple transforms need it.
 - `src/main/docsrc` is a Git submodule for the documentation source. Treat work there as documentation-repo work, not as ordinary changes to the core toolkit repository.
 - `src/main/lib` and generated plugin assets are populated by the build. Prefer changing source files or build logic over hand-editing generated output.
 
