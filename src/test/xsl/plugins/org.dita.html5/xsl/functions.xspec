@@ -253,6 +253,7 @@
 
       <x:expect label="return true()" select="true()"/>
     </x:scenario>
+    
   </x:scenario>
 
   <x:scenario label="table:is-row-header">
@@ -290,6 +291,24 @@
       </x:call>
 
       <x:expect label="return false()" select="false()"/>
+    </x:scenario>
+    
+    <x:scenario label="is row header due to scope">
+      <x:call function="table:is-row-header">
+        <x:param name="node" select="//tbody/row/entry[1]">
+          <table class="- topic/table ">
+            <tgroup cols="1" class="- topic/tgroup ">
+              <tbody class="- topic/tbody ">
+                <row class="- topic/row ">
+                  <entry class="- topic/entry " dita-ot:x="1" scope="row"/>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </x:param>
+      </x:call>
+      
+      <x:expect label="return true()" select="true()"/>
     </x:scenario>
   </x:scenario>
 
