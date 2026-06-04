@@ -98,8 +98,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="entry" as="element()"/>
 
     <xsl:sequence select="
-      table:get-current-table($entry)/@rowheader eq 'firstcol'
-      and xs:integer($entry/@dita-ot:x) eq 1
+      $entry/@scope = ('row', 'rowgroup') or 
+      (table:get-current-table($entry)/@rowheader eq 'firstcol'
+       and xs:integer($entry/@dita-ot:x) eq 1)
     "/>
   </xsl:function>
 
