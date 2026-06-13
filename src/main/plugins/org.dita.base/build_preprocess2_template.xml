@@ -162,12 +162,11 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
-    <local name="inputMapPath"/>
-    <pathconvert property="inputMapPath">
-      <ditafileset format="ditamap" input="true"/>
-    </pathconvert>
+
     <condition property="noMap">
-      <equals arg1="${inputMapPath}" arg2=""/>
+      <resourcecount count="0" when="equal">
+        <ditafileset format="ditamap" input="true"/>
+      </resourcecount>
     </condition>
   </target>
 
