@@ -115,13 +115,7 @@ See the accompanying LICENSE file for applicable license.
 
     <!-- TODO: change property initialization to not use physical files -->
     <mkdir dir="${dita.temp.dir}"/>
-    <echoxml file="${dita.temp.dir}/.job.xml">
-      <job>
-        <property name="temp-file-name-scheme">
-          <string>org.dita.dost.module.reader.HashTempFileScheme</string>
-        </property>
-      </job>
-    </echoxml>
+
     <condition property="map.filter-on-parse" value="true" else="false">
       <equals arg1="${filter-stage}" arg2="early"/>
     </condition>
@@ -168,12 +162,11 @@ See the accompanying LICENSE file for applicable license.
         <dita:extension id="dita.preprocess.map-reader.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
     </pipeline>
-    <local name="inputMapPath"/>
-    <pathconvert property="inputMapPath">
-      <ditafileset format="ditamap" input="true"/>
-    </pathconvert>
+
     <condition property="noMap">
-      <equals arg1="${inputMapPath}" arg2=""/>
+      <resourcecount count="0" when="equal">
+        <ditafileset format="ditamap" input="true"/>
+      </resourcecount>
     </condition>
   </target>
 
