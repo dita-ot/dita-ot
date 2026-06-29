@@ -22,7 +22,7 @@ base {
     group = 'org.dita-ot'
     archivesName = 'dost'
     /** Semver version number */
-    version = '4.4.0'
+    version = '4.4.1'
 
     description = """DITA Open Toolkit"""
 }
@@ -170,7 +170,7 @@ def e2eTestSystemProperties = [
         dita_dir : "${projectDir}/src/main",
         basedir : "${projectDir}/src/test"
 ]
-if (System.getProperty("log_level") != null) 
+if (System.getProperty("log_level") != null)
     e2eTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 
 tasks.register('e2eTest', Test) {
