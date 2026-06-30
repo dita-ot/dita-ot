@@ -23,7 +23,7 @@ dependencies {
     implementation "com.ibm.icu:icu4j:77.1"
     implementation "net.sf.saxon:Saxon-HE:12.9"
     implementation "org.apache.ant:ant:1.10.15"
-    implementation "org.slf4j:slf4j-api:2.0.17"
+    implementation "org.slf4j:slf4j-api:2.0.18"
     implementation "xml-resolver:xml-resolver:1.2"
 }
 sourceSets {
