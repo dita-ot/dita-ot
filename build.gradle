@@ -60,7 +60,7 @@ dependencies {
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
         exclude group: 'org.jspecify', module: 'jspecify'
     }
-    implementation "org.slf4j:slf4j-api:2.0.17"
+    implementation "org.slf4j:slf4j-api:2.0.18"
     implementation "ch.qos.logback:logback-classic:1.5.37"
     implementation "com.fasterxml.jackson.core:jackson-core:2.21.4"
     implementation "com.fasterxml.jackson.core:jackson-databind:2.21.4"
