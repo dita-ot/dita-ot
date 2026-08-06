@@ -32,7 +32,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Wrapper for concept group: "Related concepts" in a <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='concept']" mode="related-links:result-group"
-          name="related-links:result.concept" as="element()">
+          name="related-links:result.concept" as="element()?">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-concept ">

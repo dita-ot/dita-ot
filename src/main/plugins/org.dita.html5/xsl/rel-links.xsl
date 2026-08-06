@@ -284,7 +284,7 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
   </xsl:attribute-set>
   <!-- Override no-name group wrapper template for HTML: output "Related Information" in a <linklist>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')]" mode="related-links:result-group" name="related-links:group-result."
-                as="element()">
+                as="element()?">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="exists($links)">
       <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist">
