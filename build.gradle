@@ -60,14 +60,14 @@ dependencies {
         exclude group: 'com.google.j2objc', module: 'j2objc-annotations'
         exclude group: 'org.jspecify', module: 'jspecify'
     }
-    implementation "org.slf4j:slf4j-api:2.0.17"
-    implementation "ch.qos.logback:logback-classic:1.5.19"
-    implementation "com.fasterxml.jackson.core:jackson-core:2.19.0"
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.19.0"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.0"
+    implementation "org.slf4j:slf4j-api:2.0.18"
+    implementation "ch.qos.logback:logback-classic:1.5.37"
+    implementation "com.fasterxml.jackson.core:jackson-core:2.21.4"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.21.4"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4"
     implementation "org.relaxng:jing:20241231"
     implementation "org.apache.ant:ant-apache-resolver:1.10.15"
-    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0"
+    testImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.4"
     testImplementation  "nu.validator:htmlparser:1.4.16"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:6.0.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:6.0.2"
@@ -170,7 +170,7 @@ def e2eTestSystemProperties = [
         dita_dir : "${projectDir}/src/main",
         basedir : "${projectDir}/src/test"
 ]
-if (System.getProperty("log_level") != null) 
+if (System.getProperty("log_level") != null)
     e2eTestSystemProperties["log_level"] = "${System.getProperty("log_level")}"
 
 tasks.register('e2eTest', Test) {
@@ -242,8 +242,8 @@ def bundledPlugins = [
         "normalize": "https://github.com/dita-ot/org.dita.normalize/archive/refs/tags/2.0.zip",
         "dita11": "https://github.com/dita-ot/org.dita.specialization.dita11/archive/1.1.1.zip",
         "dita12": "https://github.com/dita-ot/org.oasis-open.dita.v1_2/archive/1.2.1.zip",
-        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20260125/org.oasis-open.dita.v2_0.zip",
-        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20260125/org.oasis-open.dita.techcomm.v2_0.zip",
+        "dita20": "https://github.com/dita-ot/dita/releases/download/2.0.0-20260630/org.oasis-open.dita.v2_0.zip",
+        "dita20-techcomm": "https://github.com/dita-ot/dita-techcomm/releases/download/2.0.0-20260630/org.oasis-open.dita.techcomm.v2_0.zip",
         "xdita": "https://github.com/oasis-tcs/dita-lwdita/releases/download/v0.3.0.2/org.oasis-open.xdita.v0_3_2.zip",
         "index": "https://github.com/dita-ot/org.dita.index/releases/download/2.0.0/org.dita.index-2.0.0.zip",
         "axf": "https://github.com/dita-ot/org.dita.pdf2.axf/releases/download/3.6.1/org.dita.pdf2.axf-3.6.1.zip",

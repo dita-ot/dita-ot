@@ -22,7 +22,7 @@ dependencies {
     implementation "commons-io:commons-io:2.19.0"
     implementation "net.sf.saxon:Saxon-HE:12.9"
     implementation "org.apache.ant:ant:1.10.15"
-    implementation "org.slf4j:slf4j-api:2.0.17"
+    implementation "org.slf4j:slf4j-api:2.0.18"
     testImplementation rootProject
     testImplementation "org.junit.jupiter:junit-jupiter-engine:6.0.2"
     testImplementation "org.junit.jupiter:junit-jupiter-params:6.0.2"
