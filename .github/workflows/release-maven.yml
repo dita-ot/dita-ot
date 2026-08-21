@@ -30,6 +30,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
+      - name: Work around duplicate publication artifacts
+        run: |
+          # Tags before the 4.5 release have a build.gradle bug where sourcesJar/javadocJar
+          # are added both by `from components.java` and by explicit `artifact` lines,
+          # causing "multiple artifacts with the identical extension and classifier" on
+          # publish. Fixed on develop; remove this step once no supported release branch
+          # predates that fix.
+          sed -i -E '/^[[:space:]]*artifact sourcesJar[[:space:]]*$/d; /^[[:space:]]*artifact javadocJar[[:space:]]*$/d' build.gradle
       - name: Deploy Maven release
         run: |
           echo "$GPG_ASC" > 24AC15F2.asc
