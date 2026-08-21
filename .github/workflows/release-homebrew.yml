@@ -3,10 +3,14 @@ name: Release Homebrew
 on:
   workflow_dispatch:
     inputs:
-      version:
+      tag:
         type: string
-        description: Version
+        description: Tag name
         required: true
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
 
 permissions:
   contents: write
@@ -14,12 +18,12 @@ permissions:
 
 jobs:
   homebrew:
-    if: github.repository == 'dita-ot/dita-ot'
+    if: github.repository == 'dita-ot/dita-ot' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Set tag name
         run: |
-          echo "tag=${{ inputs.version }}" >> $GITHUB_ENV
+          echo "tag=${{ inputs.tag || github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
       - name: Create pull-request
         uses: mislav/bump-homebrew-formula-action@v4.2
         with:

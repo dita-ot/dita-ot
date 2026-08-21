@@ -1,0 +1,48 @@
+name: Release Maven
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: Tag name
+        required: true
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
+
+jobs:
+  # Publish release to Maven
+  maven:
+    if: github.repository == 'dita-ot/dita-ot' && (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set tag name
+        run: |
+          echo "tag=${{ inputs.tag || github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ env.tag }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: Deploy Maven release
+        run: |
+          echo "$GPG_ASC" > 24AC15F2.asc
+          gpg --dearmor 24AC15F2.asc
+          ./gradlew --no-daemon
+          ./gradlew --no-daemon publish \
+            -PossrhUsername=$OSSRH_USERNAME \
+            -PossrhPassword=$OSSRH_PASSWORD \
+            -Psigning.password=$SIGNING_PASSWORD \
+            -Psigning.keyId=24AC15F2 \
+            -Psigning.secretKeyRingFile=24AC15F2.asc.gpg
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_ASC: ${{ secrets.GPG_ASC }}
