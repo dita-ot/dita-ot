@@ -30,17 +30,19 @@ jobs:
         run: |
           download_url="https://github.com/dita-ot/dita-ot/releases/download/${{ env.tag }}/dita-ot-${{ env.tag }}.zip"
           sha256=$(curl -sL "$download_url" | shasum -a 256 | cut -d' ' -f1)
-          curl -sL -o dita-ot.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/HEAD/Formula/d/dita-ot.rb
-          sed -i -E "s|^([[:space:]]*url \").*(\")\$|\1${download_url}\2|" dita-ot.rb
-          sed -i -E "s|^([[:space:]]*sha256 \")[0-9a-f]+(\")\$|\1${sha256}\2|" dita-ot.rb
+          brew tap-new --no-git dita-ot/ci
+          formula_path="$(brew --repository)/Library/Taps/dita-ot/homebrew-ci/Formula/dita-ot.rb"
+          curl -sL -o "$formula_path" https://raw.githubusercontent.com/Homebrew/homebrew-core/HEAD/Formula/d/dita-ot.rb
+          sed -i -E "s|^([[:space:]]*url \").*(\")\$|\1${download_url}\2|" "$formula_path"
+          sed -i -E "s|^([[:space:]]*sha256 \")[0-9a-f]+(\")\$|\1${sha256}\2|" "$formula_path"
       - name: Build formula from source
-        run: brew install --build-from-source ./dita-ot.rb
+        run: brew install --build-from-source dita-ot/ci/dita-ot
         env:
           HOMEBREW_NO_INSTALL_FROM_API: 1
       - name: Test formula
-        run: brew test dita-ot
+        run: brew test dita-ot/ci/dita-ot
       - name: Audit formula
-        run: brew audit --strict ./dita-ot.rb
+        run: brew audit --strict dita-ot/ci/dita-ot
         env:
           HOMEBREW_NO_INSTALL_FROM_API: 1
       - name: Create pull-request
