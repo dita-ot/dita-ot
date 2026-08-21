@@ -24,6 +24,25 @@ jobs:
       - name: Set tag name
         run: |
           echo "tag=${{ inputs.tag || github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@2026.08.14.1
+      - name: Update formula locally
+        run: |
+          download_url="https://github.com/dita-ot/dita-ot/releases/download/${{ env.tag }}/dita-ot-${{ env.tag }}.zip"
+          sha256=$(curl -sL "$download_url" | shasum -a 256 | cut -d' ' -f1)
+          curl -sL -o dita-ot.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/HEAD/Formula/d/dita-ot.rb
+          sed -i -E "s|^([[:space:]]*url \").*(\")\$|\1${download_url}\2|" dita-ot.rb
+          sed -i -E "s|^([[:space:]]*sha256 \")[0-9a-f]+(\")\$|\1${sha256}\2|" dita-ot.rb
+      - name: Build formula from source
+        run: brew install --build-from-source ./dita-ot.rb
+        env:
+          HOMEBREW_NO_INSTALL_FROM_API: 1
+      - name: Test formula
+        run: brew test dita-ot
+      - name: Audit formula
+        run: brew audit --strict ./dita-ot.rb
+        env:
+          HOMEBREW_NO_INSTALL_FROM_API: 1
       - name: Create pull-request
         uses: mislav/bump-homebrew-formula-action@v4.2
         with:
