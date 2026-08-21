@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "tag=${{ inputs.version }}" >> $GITHUB_ENV
       - name: Create pull-request
-        uses: mislav/bump-homebrew-formula-action@v3
+        uses: mislav/bump-homebrew-formula-action@v4.2
         with:
           formula-name: dita-ot
           tag-name: ${{ env.tag }}
