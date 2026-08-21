@@ -725,7 +725,7 @@ See the accompanying LICENSE file for applicable license.
   
   <!-- Task wrapper for HTML: "Related tasks" in <div>. -->
   <xsl:template match="*[contains(@class, ' topic/link ')][@type='task']" mode="related-links:result-group"
-                name="related-links:result.task" as="element()">
+                name="related-links:result.task" as="element()?">
     <xsl:param name="links" as="node()*"/>
     <xsl:if test="normalize-space(string-join($links, ''))">
       <linklist class="- topic/linklist " xsl:use-attribute-sets="linklist linklist-task">
