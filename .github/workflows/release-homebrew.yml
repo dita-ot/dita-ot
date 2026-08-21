@@ -35,6 +35,7 @@ jobs:
           curl -sL -o "$formula_path" https://raw.githubusercontent.com/Homebrew/homebrew-core/HEAD/Formula/d/dita-ot.rb
           sed -i -E "s|^([[:space:]]*url \").*(\")\$|\1${download_url}\2|" "$formula_path"
           sed -i -E "s|^([[:space:]]*sha256 \")[0-9a-f]+(\")\$|\1${sha256}\2|" "$formula_path"
+          sed -i -E 's|^([[:space:]]*)depends_on "openjdk"|\1depends_on "openjdk@17"|' "$formula_path"
       - name: Build formula from source
         run: brew install --build-from-source dita-ot/ci/dita-ot
         env:
