@@ -29,7 +29,7 @@ jobs:
         with:
           formula-name: dita-ot
           tag-name: ${{ env.tag }}
-          base-branch: master
+          base-branch: main
           download-url: https://github.com/dita-ot/dita-ot/releases/download/${{ env.tag }}/dita-ot-${{ env.tag }}.zip
           commit-message: |
             {{formulaName}} {{version}}
