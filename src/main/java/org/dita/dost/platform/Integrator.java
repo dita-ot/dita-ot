@@ -890,7 +890,7 @@ public final class Integrator {
           featureTable.put(extensionPointId, value);
         } else {
           //Make shallow clone to avoid making modifications directly to list inside the current feature.
-          featureTable.put(extensionPointId, values != null ? new ArrayList(values) : null);
+          featureTable.put(extensionPointId, values != null ? new ArrayList<>(values) : null);
         }
       }
 
