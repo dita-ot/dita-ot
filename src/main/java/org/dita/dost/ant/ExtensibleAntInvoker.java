@@ -260,7 +260,7 @@ public final class ExtensibleAntInvoker extends Task {
           module.setParam(p.getName(), p.getValue());
         }
       }
-      for (final OutputPropertyElem o : ((XsltElem) m).outputProperties) {
+      for (final OutputPropertyElem o : xm.outputProperties) {
         if (!o.isValid()) {
           throw new BuildException("Incomplete outputproperty");
         }
