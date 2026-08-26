@@ -227,7 +227,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
         });
       source
         .select(descendant(Predicates.hasAttribute(ATTRIBUTE_NAME_CONREF)))
-        .forEach(xdmItem -> {
+        .forEach(xdmItem ->
           getConref(xdmItem)
             .ifPresent(href -> {
               FileInfo fi = job.getFileInfo(startFileInfo.src().resolve(href));
@@ -242,8 +242,8 @@ public final class TopicReaderModule extends AbstractReaderModule {
                 res.add(new Reference(fi.src(), format));
                 conrefTargetSet.add(fi.src());
               }
-            });
-        });
+            })
+        );
     } catch (final IOException e) {
       throw new DITAOTException(e);
     }

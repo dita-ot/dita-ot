@@ -301,7 +301,7 @@ public final class PluginInstall {
 
   private Optional<Registry> findPlugin(final Collection<Registry> regs, final SemVerMatch version) {
     if (version == null) {
-      return regs.stream().filter(this::matchingPlatformVersion).max(Comparator.comparing(o -> o.vers()));
+      return regs.stream().filter(this::matchingPlatformVersion).max(Comparator.comparing(Registry::vers));
     } else {
       return regs
         .stream()
