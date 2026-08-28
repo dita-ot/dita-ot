@@ -557,6 +557,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     }
 
     public Branch merge(final Element ditavalref) {
+      assert DITAVAREF_D_DITAVALREF.matches(ditavalref);
+
       return new Branch(
         getPrefix(ditavalref, this.resourcePrefix),
         getSuffix(ditavalref, this.resourceSuffix),
