@@ -491,7 +491,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
    */
   void splitBranches(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
-    if (ditavalRefs.size() > 0) {
+    if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
       for (final Element branch : ditavalRefs) {
         elem.removeChild(branch);
@@ -533,38 +533,23 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  /** Immutable branch definition. */
-  public static class Branch {
-
-    /** Empty root branch */
+  /**
+   * Immutable branch definition.
+   */
+  public record Branch(String resourcePrefix, String resourceSuffix, String keyscopePrefix, String keyscopeSuffix) {
+    /**
+     * Empty root branch
+     */
     public static final Branch EMPTY = new Branch();
-    public final String resourcePrefix;
-    public final String resourceSuffix;
-    public final String keyscopePrefix;
-    public final String keyscopeSuffix;
 
     private Branch() {
-      this.resourcePrefix = null;
-      this.resourceSuffix = null;
-      this.keyscopePrefix = null;
-      this.keyscopeSuffix = null;
+      this(null, null, null, null);
     }
 
-    public Branch(
-      final String resourcePrefix,
-      final String resourceSuffix,
-      final String keyscopePrefix,
-      final String keyscopeSuffix
-    ) {
-      //            final URI prefix = toURI(resourcePrefix).normalize();
-      //            if (prefix.toString().startsWith("..")) {
-      //                throw new Exception("ERROR: Resource prefix may not start with ..");
-      //            }
-      this.resourcePrefix = resourcePrefix;
-      this.resourceSuffix = resourceSuffix;
-      this.keyscopePrefix = keyscopePrefix;
-      this.keyscopeSuffix = keyscopeSuffix;
-    }
+    //            final URI prefix = toURI(resourcePrefix).normalize();
+    //            if (prefix.toString().startsWith("..")) {
+    //                throw new Exception("ERROR: Resource prefix may not start with ..");
+    //            }
 
     @Override
     public String toString() {
