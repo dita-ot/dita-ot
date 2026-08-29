@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Figuur</variable>
    <variable id="Table">Tabel</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Volgend onderwerp</variable>
    <variable id="Previous topic">Vorig onderwerp</variable>
    <variable id="Parent topic">Hoofdonderwerp</variable>
