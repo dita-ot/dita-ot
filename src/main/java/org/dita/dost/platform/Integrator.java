@@ -529,11 +529,12 @@ public final class Integrator {
       };
 
       copy.accept(Paths.get("messages.xml"));
-      Files
-        .list(config)
-        .map(Path::getFileName)
-        .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
-        .forEach(copy);
+      try (var files = Files.list(config)) {
+        files
+          .map(Path::getFileName)
+          .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
+          .forEach(copy);
+      }
       copy.accept(Paths.get(PLUGIN_CONF));
       copy.accept(Paths.get("configuration.properties"));
       copy.accept(Paths.get("CatalogManager.properties"));

@@ -288,12 +288,14 @@ public final class PluginInstall {
   }
 
   private Path findBaseDir(final Path tempPluginDir) throws Exception {
-    try {
-      return Files
-        .find(tempPluginDir, 256, (path, attributes) -> path.getFileName().toString().equals("plugin.xml"))
-        .findFirst()
-        .orElseThrow(() -> new IOException("plugin.xml not found"))
-        .getParent();
+    try (
+      var files = Files.find(
+        tempPluginDir,
+        256,
+        (path, attributes) -> path.getFileName().toString().equals("plugin.xml")
+      )
+    ) {
+      return files.findFirst().orElseThrow(() -> new IOException("plugin.xml not found")).getParent();
     } catch (NoSuchFileException e) {
       throw new Exception(Main.locale.getString("install.error.plugin_xml_not_found"));
     }
