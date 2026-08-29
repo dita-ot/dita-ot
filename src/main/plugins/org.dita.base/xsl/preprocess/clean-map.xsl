@@ -33,7 +33,8 @@ See the accompanying LICENSE file for applicable license.
 
   <xsl:template match="@filter-copy-to"/>
 
-  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')]">
+  <xsl:template match="*[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' topic/navtitle ')] |
+    *[contains(@class, ' mapgroup-d/topicgroup ')]/*/*[contains(@class, ' alternativeTitles-d/navtitle ')]">
     <xsl:call-template name="output-message">
       <xsl:with-param name="id" select="'DOTX072I'"/>
     </xsl:call-template>
