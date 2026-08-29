@@ -11,6 +11,7 @@
         programming languages.<indexterm class="- topic/indexterm ">Domains elements<indexterm
             class="- topic/indexterm ">programming elements</indexterm>
         </indexterm><indexterm class="- topic/indexterm ">programming elements</indexterm></p>
+      <p class="- topic/p ">Some foreign content as well:<foreign class="- topic/foreign "><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://example.com">Link</a></foreign></p>
     </section>
   </body>
 </topic>

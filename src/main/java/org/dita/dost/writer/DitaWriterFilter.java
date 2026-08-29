@@ -143,8 +143,11 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     for (int i = 0; i < attsLen; i++) {
       final String attName = atts.getLocalName(i);
       final String origValue = atts.getValue(i);
+      final String uri = atts.getURI(i);
       String attValue = null;
-      if (origValue.equals(ATTR_VALUE_DITA_USE_CONREF_TARGET)) {
+      if (!uri.isEmpty()) {
+        // This attribute is in a namespace. Ignore it: Dita attributes are not in namespaces.
+      } else if (origValue.equals(ATTR_VALUE_DITA_USE_CONREF_TARGET)) {
         // retain original value
       } else if (ATTRIBUTE_NAME_CONREF.equals(attName)) {
         if (res == null) {
