@@ -28,6 +28,8 @@ import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
@@ -72,6 +74,17 @@ public class FilterUtilsTest {
     assertFalse(f.needExclude(attr(PLATFORM, "amiga unix windows"), new QName[0][0]));
     assertTrue(f.needExclude(attr(PLATFORM, "amiga windows"), new QName[0][0]));
     assertTrue(f.needExclude(attr(PLATFORM, "windows"), new QName[0][0]));
+  }
+
+  @Test
+  public void testNeedExcludeDefaultGroupExclude() {
+    // <p product="appserver(A B)"> is filtered out, because there is no explicit rule for A or B, and values in the "appserver" group inside of @product default to exclude.
+    final Map<FilterKey, Action> fm = new HashMap<>(filterMap);
+    fm.put(new FilterKey(PLATFORM, "appserver"), Action.EXCLUDE);
+    final FilterUtils f = new FilterUtils(false, fm, null, null);
+    f.setLogger(new TestUtils.TestLogger());
+
+    assertFalse(f.needExclude(attr(PLATFORM, "appserver(A B)"), new QName[0][0]));
   }
 
   private final QName lang = new QName(XML_NS_URI, "lang", XML_NS_PREFIX);
@@ -306,10 +319,26 @@ public class FilterUtilsTest {
   }
 
   @Test
-  public void testNeedExcludeGroup() {
+  public void testNeedExcludeGroupWithDefaultExclude() {
     final Map<FilterKey, Action> fm = new HashMap<>();
     fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);
     fm.put(new FilterKey(OS, null), Action.EXCLUDE);
+    fm.put(new FilterKey(PLATFORM, null), Action.EXCLUDE);
+    final FilterUtils f = new FilterUtils(false, fm, null, null);
+    f.setLogger(new TestUtils.TestLogger());
+
+    assertFalse(f.needExclude(attr(PLATFORM, "os(amiga unix windows)"), new QName[0][0]));
+    assertFalse(f.needExclude(attr(PLATFORM, "os(amiga windows)"), new QName[0][0]));
+    assertTrue(f.needExclude(attr(PLATFORM, "gui(amiga windows)"), new QName[0][0]));
+    assertTrue(f.needExclude(attr(PLATFORM, "os(windows)"), new QName[0][0]));
+    assertTrue(f.needExclude(attr(PLATFORM, "   os(   windows   )   "), new QName[0][0]));
+  }
+
+  @Test
+  public void testNeedExcludeGroup() {
+    final Map<FilterKey, Action> fm = new HashMap<>();
+    fm.put(new FilterKey(OS, "amiga"), Action.INCLUDE);
+    //    fm.put(new FilterKey(OS, null), Action.EXCLUDE);
     fm.put(new FilterKey(PLATFORM, null), Action.EXCLUDE);
     final FilterUtils f = new FilterUtils(false, fm, null, null);
     f.setLogger(new TestUtils.TestLogger());
@@ -352,50 +381,40 @@ public class FilterUtilsTest {
     assertTrue(f.needExclude(attr(PLATFORM, "database(mongodb couchbase) unix"), new QName[0][0]));
   }
 
-  @Test
-  public void testGetUngroupedValue() {
+  private static Stream<Arguments> testGetUngroupedValueArguments() {
+    final QName group = QName.valueOf("group");
+    return Stream.of(
+      Arguments.of("", Collections.emptyMap()),
+      Arguments.of("group()", Collections.emptyMap()),
+      Arguments.of("foo bar bax", Map.of(OTHERPROPS, Arrays.asList("foo", "bar", "bax"))),
+      Arguments.of(
+        "foo group(a b c) bar",
+        Map.of(OTHERPROPS, Arrays.asList("foo", "bar"), group, Arrays.asList("a", "b", "c"))
+      ),
+      Arguments.of("foo group(a b c)", Map.of(OTHERPROPS, Arrays.asList("foo"), group, Arrays.asList("a", "b", "c"))),
+      Arguments.of("group(a b c) bar", Map.of(OTHERPROPS, Arrays.asList("bar"), group, Arrays.asList("a", "b", "c"))),
+      Arguments.of(
+        "foo group(a b c) bar group2(d e f) baz",
+        Map.of(
+          OTHERPROPS,
+          Arrays.asList("foo", "bar", "baz"),
+          group,
+          Arrays.asList("a", "b", "c"),
+          QName.valueOf("group2"),
+          Arrays.asList("d", "e", "f")
+        )
+      ),
+      Arguments.of("group(a b) group(c)", Map.of(group, Arrays.asList("a", "b", "c"))),
+      Arguments.of("group1() group(a)", Map.of(group, Arrays.asList("a")))
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("testGetUngroupedValueArguments")
+  public void testGetUngroupedValue(String src, Map<QName, List<String>> exp) {
     final FilterUtils f = new FilterUtils(false);
 
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(null, Arrays.asList("foo", "bar", "bax"));
-      assertEquals(exp, f.getGroups("foo bar bax"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(null, Arrays.asList("foo", "bar"));
-      exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
-      assertEquals(exp, f.getGroups("foo group(a b c) bar"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(null, Arrays.asList("foo"));
-      exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
-      assertEquals(exp, f.getGroups("foo group(a b c)"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(null, Arrays.asList("bar"));
-      exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
-      assertEquals(exp, f.getGroups("group(a b c) bar"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(null, Arrays.asList("foo", "bar", "baz"));
-      exp.put(QName.valueOf("group1"), Arrays.asList("a", "b", "c"));
-      exp.put(QName.valueOf("group2"), Arrays.asList("d", "e", "f"));
-      assertEquals(exp, f.getGroups("foo group1(a b c) bar group2(d e f) baz"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(QName.valueOf("group"), Arrays.asList("a", "b", "c"));
-      assertEquals(exp, f.getGroups("group(a b) group(c)"));
-    }
-    {
-      final Map<QName, List<String>> exp = new HashMap<>();
-      exp.put(QName.valueOf("group2"), Arrays.asList("a"));
-      assertEquals(exp, f.getGroups("group1() group2(a)"));
-    }
+    assertEquals(exp, f.getGroups(OTHERPROPS, src));
   }
 
   private Attributes attr(final QName name, final String value) {
