@@ -9,13 +9,11 @@
 package org.dita.dost.module;
 
 import static java.util.Collections.emptyMap;
-import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isDitaMap;
 import static org.dita.dost.util.Job.USER_INPUT_FILE_LIST_FILE;
 import static org.dita.dost.util.XMLUtils.toErrorReporter;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -35,7 +33,6 @@ import net.sf.saxon.trans.UncheckedXPathException;
 import org.apache.commons.io.FileUtils;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
@@ -274,7 +271,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     }
 
     for (final XmlFilterModule.FilterPair p : filters) {
-      if (p.predicate.test(fi)) {
+      if (p.predicate().test(fi)) {
         final AbstractXMLFilter f = p.newInstance();
         logger.debug("Configure filter " + f.getClass().getCanonicalName());
         f.setCurrentFile(srcFile.toURI());

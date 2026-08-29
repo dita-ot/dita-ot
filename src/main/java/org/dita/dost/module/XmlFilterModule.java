@@ -87,22 +87,11 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
   /**
    * SAX filter with file predicate.
    */
-  public static class FilterPair {
-
-    public final Class<? extends AbstractXMLFilter> filterClass;
-    public final Predicate<FileInfo> predicate;
-    public final Map<String, String> params;
-
-    public FilterPair(
-      final Class<? extends AbstractXMLFilter> filterClass,
-      final Predicate<FileInfo> fileInfoFilter,
-      final Map<String, String> params
-    ) {
-      this.filterClass = filterClass;
-      this.predicate = fileInfoFilter;
-      this.params = params;
-    }
-
+  public record FilterPair(
+    Class<? extends AbstractXMLFilter> filterClass,
+    Predicate<FileInfo> predicate,
+    Map<String, String> params
+  ) {
     public AbstractXMLFilter newInstance() {
       try {
         final AbstractXMLFilter f = filterClass.getDeclaredConstructor().newInstance();
