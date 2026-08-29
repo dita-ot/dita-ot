@@ -145,7 +145,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         })
         .collect(Collectors.toSet());
       final Collection<FileInfo> resourceTopicsFis = job.getFileInfo(fi ->
-        !topicsInMap.contains(fi.uri()) && (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
+        !topicsInMap.contains(fi.uri().toString()) &&
+        (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
       );
       final Collection<FileInfo> resourceFis = Stream
         .concat(resourceMapFis.stream(), resourceTopicsFis.stream())
