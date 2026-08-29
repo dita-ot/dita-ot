@@ -73,7 +73,7 @@ public final class PluginInstallTask extends Task {
     if (pluginFile.contains("@")) {
       final String[] tokens = pluginFile.split("@");
       pluginName = tokens[0];
-      pluginVersion = new SemVerMatch(tokens[1]);
+      pluginVersion = SemVerMatch.of(tokens[1]);
     } else {
       pluginName = pluginFile;
       pluginVersion = null;

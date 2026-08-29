@@ -657,7 +657,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (installFile.contains("@")) {
       final String[] tokens = installFile.split("@");
       pluginInstall.setPluginName(tokens[0]);
-      pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+      pluginInstall.setPluginVersion(SemVerMatch.of(tokens[1]));
     } else {
       pluginInstall.setPluginName(installFile);
       pluginInstall.setPluginVersion(null);

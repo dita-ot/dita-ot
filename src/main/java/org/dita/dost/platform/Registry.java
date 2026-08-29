@@ -36,7 +36,7 @@ public record Registry(String name, SemVer vers, List<Dependency> deps, URI uri,
   public record Dependency(String name, SemVerMatch req) {
     @JsonCreator
     public Dependency(@JsonProperty("name") String name, @JsonProperty("req") String req) {
-      this(name, new SemVerMatch(req));
+      this(name, SemVerMatch.of(req));
     }
   }
 }
