@@ -129,7 +129,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
       final IndexTerm indexTerm = (IndexTerm) elementStack.pop();
       Object obj;
 
-      if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
+      if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().isEmpty()) {
         if (indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()) {
           return;
         } else {

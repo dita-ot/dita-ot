@@ -409,7 +409,7 @@ public class Util {
     if (url == null) {
       return null;
     }
-    if ((url.getAuthority() == null || "".equals(url.getAuthority())) && !"jar".equals(url.getProtocol())) {
+    if ((url.getAuthority() == null || url.getAuthority().isEmpty()) && !"jar".equals(url.getProtocol())) {
       return url;
     }
 

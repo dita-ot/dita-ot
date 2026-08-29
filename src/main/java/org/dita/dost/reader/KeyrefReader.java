@@ -233,7 +233,7 @@ public final class KeyrefReader implements AbstractReader {
   private void readKeyDefinition(final XdmNode elem, final Map<String, KeyDef> keyDefs) {
     final String keyName = elem.attribute(ATTRIBUTE_NAME_KEYS);
     if (keyName != null) {
-      final Integer ditaArchVersion = elem
+      final int ditaArchVersion = elem
         .select(ancestorOrSelf().then(attribute(DITA_NAMESPACE, "DITAArchVersion")))
         .findFirst()
         .map(XdmItem::getStringValue)

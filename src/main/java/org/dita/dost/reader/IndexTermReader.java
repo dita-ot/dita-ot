@@ -179,7 +179,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     // in the list.
     if (indexTermSpecList.contains(localName)) {
       final IndexTerm term = termStack.pop();
-      if (term.getTermName() == null || term.getTermName().trim().equals("")) {
+      if (term.getTermName() == null || term.getTermName().trim().isEmpty()) {
         if (term.getEndAttribute() != null && !term.hasSubTerms()) {
           return;
         } else {

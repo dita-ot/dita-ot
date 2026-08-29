@@ -991,7 +991,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
    */
   private static URI normalizeHrefValue(final URI keyName, final String tail) {
     if (keyName.getFragment() == null) {
-      return toURI(keyName + tail.replaceAll(SLASH, SHARP));
+      return toURI(keyName + tail.replace(SLASH, SHARP));
     }
     return toURI(keyName + tail);
   }
