@@ -818,22 +818,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
   /**
    * File reference with path and optional format.
+   *
+   * @param filename Absolute URI reference
+   * @param format   Format of the reference
    */
-  public static class Reference {
-
-    /**
-     * Absolute URI reference
-     */
-    public final URI filename;
-    /**
-     * Format of the reference
-     */
-    public final String format;
-
-    public Reference(final URI filename, final String format) {
+  public record Reference(URI filename, String format) {
+    public Reference {
       assert filename.isAbsolute() && filename.getFragment() == null;
-      this.filename = filename;
-      this.format = format;
     }
 
     public Reference(final URI filename) {

@@ -320,29 +320,32 @@ public final class TopicReaderModule extends AbstractReaderModule {
   @Override
   void categorizeReferenceFile(final Reference file) {
     // avoid files referred by coderef being added into wait list
-    if (listFilter.getCoderefTargets().contains(file.filename)) {
+    if (listFilter.getCoderefTargets().contains(file.filename())) {
       return;
     }
-    if (formatFilter.test(file.format)) {
-      if (isFormatDita(file.format) && !job.crawlTopics() && !listFilter.getConrefTargets().contains(file.filename)) {
+    if (formatFilter.test(file.format())) {
+      if (
+        isFormatDita(file.format()) && !job.crawlTopics() && !listFilter.getConrefTargets().contains(file.filename())
+      ) {
         return; // Do not process topics linked from within topics
       } else if (
-        isFormatDita(file.format) && (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename))
+        isFormatDita(file.format()) &&
+        (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename()))
       ) {
         addToWaitList(file);
-      } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+      } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format())) {
         formatSet.add(file);
-        if (!exists(file.filename)) {
+        if (!exists(file.filename())) {
           if (processingMode == Configuration.Mode.STRICT) {
             throw new UncheckedDITAOTException(
-              MessageUtils.getMessage("DOTX008E", file.filename.toString()).toException()
+              MessageUtils.getMessage("DOTX008E", file.filename().toString()).toException()
             );
           } else {
-            logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+            logger.warn(MessageUtils.getMessage("DOTX008E", file.filename().toString()).toString());
           }
         }
       } else {
-        htmlSet.put(file.format, file.filename);
+        htmlSet.put(file.format(), file.filename());
       }
     }
   }

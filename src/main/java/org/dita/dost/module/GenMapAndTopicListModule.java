@@ -400,13 +400,13 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
    * @throws DITAOTException if processing failed
    */
   private void processFile(final Reference ref) throws DITAOTException {
-    currentFile = ref.filename;
+    currentFile = ref.filename();
     assert currentFile.isAbsolute();
     logger.info("Processing " + currentFile);
     final String[] params = { currentFile.toString() };
 
     try {
-      XMLReader xmlSource = XMLUtils.getXmlReader(ref.format, processingMode).orElse(reader);
+      XMLReader xmlSource = XMLUtils.getXmlReader(ref.format(), processingMode).orElse(reader);
       for (final XMLFilter f : getProcessingPipe(currentFile)) {
         f.setParent(xmlSource);
         f.setEntityResolver(xmlUtils.getCatalogResolver());
@@ -510,7 +510,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
     for (final Reference file : nonCopytoResult) {
       categorizeReferenceFile(file);
-      updateUplevels(file.filename);
+      updateUplevels(file.filename());
     }
     for (final Map.Entry<URI, URI> e : listFilter.getCopytoMap().entrySet()) {
       final URI source = e.getValue();
@@ -548,7 +548,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     final Set<URI> nonConrefCopytoTargets = listFilter
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename)
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     nonConrefCopytoTargetSet.addAll(nonConrefCopytoTargets);
     coderefTargetSet.addAll(listFilter.getCoderefTargets());
@@ -581,7 +581,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
    * @param ref file path
    */
   private void categorizeCurrentFile(final Reference ref) {
-    final URI currentFile = ref.filename;
+    final URI currentFile = ref.filename();
     if (listFilter.hasConaction()) {
       conrefpushSet.add(currentFile);
     }
@@ -599,10 +599,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
     }
 
     if (listFilter.isDitaTopic()) {
-      if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITA)) {
+      if (ref.format() != null && !ref.format().equals(ATTR_FORMAT_VALUE_DITA)) {
         assert currentFile.getFragment() == null;
         if (!sourceFormat.containsKey(currentFile)) {
-          sourceFormat.put(currentFile, ref.format);
+          sourceFormat.put(currentFile, ref.format());
         }
       }
       fullTopicSet.add(currentFile);
@@ -611,10 +611,10 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
         hrefTopicSet.add(currentFile);
       }
     } else if (listFilter.isDitaMap()) {
-      if (ref.format != null && !ref.format.equals(ATTR_FORMAT_VALUE_DITAMAP)) {
+      if (ref.format() != null && !ref.format().equals(ATTR_FORMAT_VALUE_DITAMAP)) {
         assert currentFile.getFragment() == null;
         if (!sourceFormat.containsKey(currentFile)) {
-          sourceFormat.put(currentFile, ref.format);
+          sourceFormat.put(currentFile, ref.format());
         }
       }
       fullMapSet.add(currentFile);
@@ -628,27 +628,27 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
    */
   private void categorizeReferenceFile(final Reference file) {
     // avoid files referred by coderef being added into wait list
-    if (listFilter.getCoderefTargets().contains(file.filename)) {
+    if (listFilter.getCoderefTargets().contains(file.filename())) {
       return;
     }
     if (
-      isFormatDita(file.format) &&
+      isFormatDita(file.format()) &&
       listFilter.isDitaTopic() &&
       !job.crawlTopics() &&
-      !listFilter.getConrefTargets().contains(file.filename)
+      !listFilter.getConrefTargets().contains(file.filename())
     ) {
       // Do not process topics linked from within topics
-    } else if ((isFormatDita(file.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format))) {
+    } else if ((isFormatDita(file.format()) || ATTR_FORMAT_VALUE_DITAMAP.equals(file.format()))) {
       addToWaitList(file);
-    } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+    } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format())) {
       formatSet.add(file);
-      if (!exists(file.filename)) {
-        logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+      if (!exists(file.filename())) {
+        logger.warn(MessageUtils.getMessage("DOTX008E", file.filename().toString()).toString());
       }
-    } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format)) {
+    } else if (ATTR_FORMAT_VALUE_DITAVAL.equals(file.format())) {
       formatSet.add(file);
     } else {
-      htmlSet.put(file.format, file.filename);
+      htmlSet.put(file.format(), file.filename());
     }
   }
 
@@ -679,13 +679,13 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
    * @param ref reference to absolute system path
    */
   private void addToWaitList(final Reference ref) {
-    final URI file = ref.filename;
+    final URI file = ref.filename();
     assert file.isAbsolute() && file.getFragment() == null;
-    if (doneList.contains(file) || waitList.containsKey(ref.filename) || file.equals(currentFile)) {
+    if (doneList.contains(file) || waitList.containsKey(ref.filename()) || file.equals(currentFile)) {
       return;
     }
 
-    waitList.put(ref.filename, ref);
+    waitList.put(ref.filename(), ref);
   }
 
   /**
@@ -833,7 +833,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       getOrCreateFileInfo(fileinfos, file).hasConref(true);
     }
     for (final Reference file : formatSet) {
-      getOrCreateFileInfo(fileinfos, file.filename).format(file.format);
+      getOrCreateFileInfo(fileinfos, file.filename()).format(file.format());
     }
     for (final URI file : flagImageSet) {
       final FileInfo.Builder f = getOrCreateFileInfo(fileinfos, file);

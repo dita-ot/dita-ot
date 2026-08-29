@@ -131,21 +131,21 @@ public final class MapReaderModule extends AbstractReaderModule {
 
   @Override
   void categorizeReferenceFile(final Reference file) {
-    if (file.format == null || ATTR_FORMAT_VALUE_DITA.equals(file.format)) {
+    if (file.format() == null || ATTR_FORMAT_VALUE_DITA.equals(file.format())) {
       return;
     }
     // Ignore topics
     //        if (formatFilter.test(file.format)) {
-    switch (file.format) {
+    switch (file.format()) {
       case ATTR_FORMAT_VALUE_DITAMAP -> addToWaitList(file);
       case ATTR_FORMAT_VALUE_IMAGE -> {
         formatSet.add(file);
-        if (!exists(file.filename)) {
-          logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+        if (!exists(file.filename())) {
+          logger.warn(MessageUtils.getMessage("DOTX008E", file.filename().toString()).toString());
         }
       }
       case ATTR_FORMAT_VALUE_DITAVAL -> formatSet.add(file);
-      default -> htmlSet.put(file.format, file.filename);
+      default -> htmlSet.put(file.format(), file.filename());
     }
     //        }
   }
