@@ -86,7 +86,7 @@ public abstract class RelaxNGDefaultValues {
   /**
    * Collects default values. Listener for the default values extractor.
    */
-  class DefaultValuesCollector implements DefaultValuesExtractor.DefaultValuesListener {
+  static class DefaultValuesCollector implements DefaultValuesExtractor.DefaultValuesListener {
 
     /**
      * Stores the default attributes as a hash map with the element info as key.
