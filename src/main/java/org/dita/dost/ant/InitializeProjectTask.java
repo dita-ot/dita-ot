@@ -12,7 +12,6 @@ import static org.dita.dost.util.URLUtils.toFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;

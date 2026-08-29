@@ -16,16 +16,13 @@ import static org.dita.dost.util.Constants.ANT_TEMP_DIR;
 import static org.dita.dost.util.XMLUtils.toList;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.util.FileUtils;
 import org.dita.dost.log.MessageUtils;
 import org.dita.dost.platform.Plugins;
 import org.dita.dost.util.Configuration;

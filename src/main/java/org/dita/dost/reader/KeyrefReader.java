@@ -300,7 +300,7 @@ public final class KeyrefReader implements AbstractReader {
   }
 
   private KeyScope inheritParentKeys(final KeyScope current, final Map<String, KeyDef> parent) {
-    if (parent.keySet().isEmpty() && current.childScopes().isEmpty()) {
+    if (parent.isEmpty() && current.childScopes().isEmpty()) {
       return current;
     } else {
       final Map<String, KeyDef> resKeys = new HashMap<>();

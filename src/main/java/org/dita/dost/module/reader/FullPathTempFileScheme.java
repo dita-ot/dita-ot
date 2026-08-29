@@ -8,8 +8,6 @@
 
 package org.dita.dost.module.reader;
 
-import static org.dita.dost.util.URLUtils.toURI;
-
 import java.net.URI;
 
 public class FullPathTempFileScheme implements TempFileNameScheme {

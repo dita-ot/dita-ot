@@ -11,9 +11,6 @@ package org.dita.dost.writer;
 import static javax.xml.transform.OutputKeys.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.List;
 import javax.xml.transform.Transformer;

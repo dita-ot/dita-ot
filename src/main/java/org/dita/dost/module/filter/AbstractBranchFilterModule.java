@@ -27,7 +27,6 @@ import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**

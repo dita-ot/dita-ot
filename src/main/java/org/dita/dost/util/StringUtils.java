@@ -12,7 +12,6 @@ import static java.util.Arrays.asList;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.namespace.QName;
 
