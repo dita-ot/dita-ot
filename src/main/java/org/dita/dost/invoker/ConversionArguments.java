@@ -359,7 +359,7 @@ public class ConversionArguments extends Arguments {
     for (int propertyFileIndex = 0; propertyFileIndex < propertyFiles.size(); propertyFileIndex++) {
       final String filename = propertyFiles.elementAt(propertyFileIndex);
       final Properties props = new Properties();
-      try (var fis = Files.newInputStream(Path.of(filename));) {
+      try (var fis = Files.newInputStream(Path.of(filename))) {
         props.load(fis);
       } catch (final IOException e) {
         System.out.println("Could not load property file " + filename + ": " + e.getMessage());
