@@ -32,7 +32,7 @@ import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 public final class IndexTermCollection {
 
   /** The collection of index terms. */
-  private static IndexTermCollection collection = null;
+  private static final IndexTermCollection collection = null;
   /** The list of all index term. */
   private final List<IndexTerm> termList = new ArrayList<>(16);
 

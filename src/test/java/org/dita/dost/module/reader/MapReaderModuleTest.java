@@ -37,8 +37,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class MapReaderModuleTest {
 
-  File resourceDir = TestUtils.getResourceDir(getClass());
-  File srcDir = new File(resourceDir, "src");
+  final File resourceDir = TestUtils.getResourceDir(getClass());
+  final File srcDir = new File(resourceDir, "src");
   File expDir = new File(resourceDir, "exp");
 
   private MapReaderModule reader;

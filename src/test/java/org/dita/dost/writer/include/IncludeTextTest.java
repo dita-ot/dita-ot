@@ -126,7 +126,7 @@ public class IncludeTextTest {
 
   private static class CharacterBufferContentHandler extends DefaultHandler {
 
-    StringBuilder characters = new StringBuilder();
+    final StringBuilder characters = new StringBuilder();
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {

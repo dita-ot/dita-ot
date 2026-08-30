@@ -126,7 +126,7 @@ public final class Integrator {
   private final Set<String> extensionPoints;
   private final Map<String, Integer> pluginOrder = new HashMap<>();
   private Properties properties;
-  private Set<String> pluginList;
+  private final Set<String> pluginList;
 
   /**
    * Default Constructor.

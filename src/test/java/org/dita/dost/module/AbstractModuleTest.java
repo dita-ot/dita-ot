@@ -44,8 +44,8 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractModuleTest {
 
-  File resourceDir = TestUtils.getResourceDir(getClass());
-  File expBaseDir = new File(resourceDir, "exp");
+  final File resourceDir = TestUtils.getResourceDir(getClass());
+  final File expBaseDir = new File(resourceDir, "exp");
 
   @TempDir
   protected File tempBaseDir;

@@ -56,7 +56,7 @@ public class IncludeResolver extends AbstractXMLFilter {
 
   // Variables ---------------------------------------------------------------
 
-  private Deque<Boolean> ignoreDepth = new ArrayDeque<>();
+  private final Deque<Boolean> ignoreDepth = new ArrayDeque<>();
   private final Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
   private Configuration.Mode processingMode;
 
