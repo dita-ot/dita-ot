@@ -179,7 +179,7 @@ public final class StringUtils {
    * @return true if the string is null or ""
    */
   public static boolean isEmptyString(final String s) {
-    return (s == null || s.trim().length() == 0);
+    return (s == null || s.trim().isEmpty());
   }
 
   /**
@@ -288,7 +288,7 @@ public final class StringUtils {
    */
   public static String escapeRegExp(final String value) {
     final StringBuilder buff = new StringBuilder();
-    if (value == null || value.length() == 0) {
+    if (value == null || value.isEmpty()) {
       return "";
     }
     int index = 0;

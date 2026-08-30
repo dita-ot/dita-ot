@@ -143,7 +143,7 @@ public final class Configuration {
     final List<String> types = new ArrayList<>();
     final String printTranstypes = Configuration.configuration.get(CONF_PRINT_TRANSTYPES);
     if (printTranstypes != null) {
-      if (printTranstypes.trim().length() > 0) {
+      if (!printTranstypes.trim().isEmpty()) {
         for (final String transtype : printTranstypes.split(CONF_LIST_SEPARATOR)) {
           types.add(transtype.trim());
         }
@@ -162,7 +162,7 @@ public final class Configuration {
     final List<String> types = new ArrayList<>();
     final String printTranstypes = Configuration.configuration.get(CONF_TRANSTYPES);
     if (printTranstypes != null) {
-      if (printTranstypes.trim().length() > 0) {
+      if (!printTranstypes.trim().isEmpty()) {
         for (final String transtype : printTranstypes.split(CONF_LIST_SEPARATOR)) {
           types.add(transtype.trim());
         }

@@ -428,7 +428,7 @@ public class Util {
 
       buf.append(protocol);
       buf.append("://");
-      if (!"file".equals(protocol) && user != null && user.trim().length() > 0) {
+      if (!"file".equals(protocol) && user != null && !user.trim().isEmpty()) {
         buf.append(user);
         if (password != null && password.length > 0) {
           buf.append(":");
@@ -443,11 +443,11 @@ public class Util {
       }
       buf.append(url.getPath());
       String query = url.getQuery();
-      if (query != null && query.trim().length() > 0) {
+      if (query != null && !query.trim().isEmpty()) {
         buf.append("?").append(query);
       }
       String ref = url.getRef();
-      if (ref != null && ref.trim().length() > 0) {
+      if (ref != null && !ref.trim().isEmpty()) {
         buf.append("#").append(ref);
       }
     }
@@ -462,7 +462,7 @@ public class Util {
    * @return The escaped user.
    */
   private static String correctUser(String user) {
-    if (user != null && user.trim().length() > 0 && (false || user.indexOf('%') == -1)) {
+    if (user != null && !user.trim().isEmpty() && (false || user.indexOf('%') == -1)) {
       String escaped = escapeSpecialAsciiAndNonAscii(user);
       StringBuilder totalEscaped = new StringBuilder();
       for (int i = 0; i < escaped.length(); i++) {

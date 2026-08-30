@@ -378,6 +378,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static boolean isOutFile(final URI filePathName, final URI inputMap) {
     final URI relativePath = URLUtils.getRelativePath(inputMap, filePathName);
-    return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+    return !(relativePath.getPath().isEmpty() || !relativePath.getPath().startsWith(".."));
   }
 }

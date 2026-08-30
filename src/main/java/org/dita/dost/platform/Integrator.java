@@ -296,14 +296,14 @@ public final class Integrator {
     final Set<String> imgExts = new HashSet<>();
     for (final String ext : properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
       final String e = ext.trim();
-      if (e.length() != 0) {
+      if (!e.isEmpty()) {
         imgExts.add(e);
       }
     }
     if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
       for (final Value ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           imgExts.add(e);
         }
       }
@@ -328,7 +328,7 @@ public final class Integrator {
     if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
       for (final Value ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           printTranstypes.add(e);
         }
       }
@@ -856,7 +856,7 @@ public final class Integrator {
     if (featureTable.containsKey(featureName)) {
       for (final Value ext : featureTable.get(featureName)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           exts.add(e);
         }
       }

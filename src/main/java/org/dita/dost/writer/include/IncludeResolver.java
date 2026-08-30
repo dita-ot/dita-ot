@@ -161,7 +161,7 @@ public class IncludeResolver extends AbstractXMLFilter {
 
     if (TOPIC_INCLUDE.matches(stackItem.cls) || PR_D_CODEREF.matches(stackItem.cls)) {
       final Deque<StackItem> pop = includeStack.pop();
-      assert pop.size() == 0;
+      assert pop.isEmpty();
       final Deque<StackItem> parentStack = includeStack.peek();
       parentStack.pop();
       // ignore

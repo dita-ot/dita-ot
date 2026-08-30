@@ -105,7 +105,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
       serializer.writeCharacters(term.getTermFullName());
       serializer.writeEndElement(); // a
     }
-    if (subTerms.size() > 0) {
+    if (!subTerms.isEmpty()) {
       serializer.writeStartElement("ul");
       for (final IndexTerm subTerm : subTerms) {
         outputIndexTerm(subTerm, serializer);

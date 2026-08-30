@@ -295,7 +295,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    */
   void splitBranches(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
-    if (ditavalRefs.size() > 0) {
+    if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
       for (final Element branch : ditavalRefs) {
         elem.removeChild(branch);

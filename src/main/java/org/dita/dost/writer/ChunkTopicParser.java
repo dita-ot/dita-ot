@@ -239,7 +239,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         // Skip empty parents and @processing-role='resource-only' entries.
         // append into root topic
         if (
-          parentResult.length() > 0 &&
+          !parentResult.isEmpty() &&
           parseFilePath != null &&
           !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)
         ) {

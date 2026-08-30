@@ -197,7 +197,7 @@ public record SemVerMatch(Range start, Range end) {
 
     return new Range(
       match,
-      tokens.size() > 0 && tokens.get(0) != null ? tokens.get(0) : 0,
+      !tokens.isEmpty() && tokens.get(0) != null ? tokens.get(0) : 0,
       tokens.size() > 1 && tokens.get(1) != null ? tokens.get(1) : 0,
       tokens.size() > 2 && tokens.get(2) != null ? tokens.get(2) : 0
     );

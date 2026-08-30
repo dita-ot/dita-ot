@@ -470,7 +470,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
     } catch (final Exception e) {
       logger.error(e.getMessage(), e);
     }
-    if (firstTopicId.length() == 0) {
+    if (firstTopicId.isEmpty()) {
       return null;
     }
     return firstTopicId.toString();

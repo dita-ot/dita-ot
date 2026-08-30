@@ -602,7 +602,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
 
   private void updateReltable(final Element elem) {
     final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-    if (href.length() != 0) {
+    if (!href.isEmpty()) {
       if (changeTable.containsKey(currentFile.resolve(href))) {
         URI res = getRelativePath(currentFile.resolve(FILE_NAME_STUB_DITAMAP), currentFile.resolve(href));
         final String fragment = getFragment(href);
