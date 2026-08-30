@@ -397,7 +397,7 @@ public final class ExtensibleAntInvoker extends Task {
           inc.add(new File(l));
         }
       } catch (IOException e) {
-        logger.error("Failed to read includes file " + i.file + ": " + e.getMessage(), e);
+        logger.error("Failed to read includes file {}: {}", i.file, e.getMessage(), e);
       }
     }
     return inc;

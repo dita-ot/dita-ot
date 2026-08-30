@@ -286,7 +286,7 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
 
   private static final Pattern ARGUMENT = Pattern.compile("\\{}|%s");
 
-  private String addIndex(String msg) {
+  public static String addIndex(String msg) {
     final Matcher matcher = ARGUMENT.matcher(msg);
     final StringBuilder buf = new StringBuilder();
     int start = 0;

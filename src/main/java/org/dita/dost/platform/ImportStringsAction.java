@@ -32,7 +32,7 @@ final class ImportStringsAction extends ImportAction {
       if (value instanceof Value.PathValue pathValue) {
         path = pathValue.getPath();
       } else {
-        logger.error("String import must be a file feature: " + value.value());
+        logger.error("String import must be a file feature: {}", value.value());
         continue;
       }
       buf.startElement(NULL_NS_URI, "stringfile", "stringfile", new AttributesBuilder().build());

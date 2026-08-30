@@ -402,7 +402,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
   private void processFile(final Reference ref) throws DITAOTException {
     currentFile = ref.filename();
     assert currentFile.isAbsolute();
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final String[] params = { currentFile.toString() };
 
     try {
@@ -435,7 +435,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       } else if (processingMode == Mode.STRICT) {
         throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params) + ": " + sax.getMessage(), sax);
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params) + ": " + sax.getMessage(), sax);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params), sax.getMessage(), sax);
       }
       failureList.add(currentFile);
     } catch (final FileNotFoundException e) {
@@ -458,7 +458,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
           e
         );
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ079E", params) + " Cannot load file: " + e.getMessage());
+        logger.error("{} Cannot load file: {}", MessageUtils.getMessage("DOTJ079E", params), e.getMessage());
       }
       failureList.add(currentFile);
     } catch (final Exception e) {
@@ -467,7 +467,7 @@ public final class GenMapAndTopicListModule extends SourceReaderModule {
       } else if (processingMode == Mode.STRICT) {
         throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params) + ": " + e.getMessage(), e);
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params) + ": " + e.getMessage(), e);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params), e.getMessage(), e);
       }
       failureList.add(currentFile);
     }

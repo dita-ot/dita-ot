@@ -93,7 +93,7 @@ public abstract class SourceReaderModule extends AbstractPipelineModuleImpl {
       } catch (final NoClassDefFoundError e) {
         logger.warn("Xerces not available, not using grammar caching");
       } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-        logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+        logger.warn("Failed to set Xerces grammar pool for parser: {}", e.getMessage());
       }
     }
 

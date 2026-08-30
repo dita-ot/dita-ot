@@ -64,7 +64,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
     if (input.getAttribute(ANT_INVOKER_PARAM_DITAVAL) != null) {
       final String[] allDitavalFiles = input.getAttribute(ANT_INVOKER_PARAM_DITAVAL).split(File.pathSeparator);
       for (final String oneDitavalFile : allDitavalFiles) {
-        logger.debug("Evaluating ditaval: " + oneDitavalFile);
+        logger.debug("Evaluating ditaval: {}", oneDitavalFile);
         final URI ditavalInput = toURI(oneDitavalFile);
         URI usingDitavalInput;
         if (ditavalInput.isAbsolute()) {
@@ -119,7 +119,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
         try {
           export.close();
         } catch (final XMLStreamException e) {
-          logger.error("Failed to close merged ditaval file: " + e.getMessage(), e);
+          logger.error("Failed to close merged ditaval file: {}", e.getMessage(), e);
         }
       }
     }
@@ -169,7 +169,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
         }
       }
     } catch (final XMLStreamException e) {
-      logger.error("Failed to generate merged DITAVAL file: " + e.getMessage(), e);
+      logger.error("Failed to generate merged DITAVAL file: {}", e.getMessage(), e);
     }
   }
 }

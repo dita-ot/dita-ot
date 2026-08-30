@@ -119,13 +119,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     this.map = map;
     currentFile = job.tempDirURI.resolve(map);
     // parse
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final Document doc;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       doc = job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
@@ -142,13 +142,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     logger.debug("Filter existing topics");
     filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
 
     try {
       doc.setDocumentURI(currentFile.toString());
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
     }
   }
 
@@ -370,7 +370,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         //                 TODO: Maybe Job should be updated earlier?
         //                job.add(fi);
         renamedTopics.add(srcUri);
-        logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
+        logger.info("Filtering {} to {}", srcAbsUri, dstAbsUri);
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
         writer.setJob(job);
@@ -381,7 +381,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         try {
           job.getStore().transform(URLUtils.removeFragment(srcAbsUri), URLUtils.removeFragment(dstAbsUri), pipe);
         } catch (final DITAOTException e) {
-          logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
+          logger.error("Failed to filter {} to {}: {}", srcAbsUri, dstAbsUri, e.getMessage(), e);
         }
         topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
         topicref.removeAttribute(BRANCH_COPY_TO);
@@ -437,11 +437,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       writer.setCurrentFile(srcAbsUri);
       final List<XMLFilter> pipe = singletonList(writer);
 
-      logger.info("Filtering " + srcAbsUri);
+      logger.info("Filtering {}", srcAbsUri);
       try {
         job.getStore().transform(srcAbsUri, pipe);
       } catch (final DITAOTException e) {
-        logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
+        logger.error("Failed to filter {}: {}", srcAbsUri, e.getMessage(), e);
       }
       filtered.add(srcAbsUri);
     }
@@ -471,7 +471,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     FilterUtils f = filterCache.get(ditaval);
     if (f == null) {
       ditaValReader.filterReset();
-      logger.info("Reading " + ditaval);
+      logger.info("Reading {}", ditaval);
       ditaValReader.read(ditaval);
       Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
       f =

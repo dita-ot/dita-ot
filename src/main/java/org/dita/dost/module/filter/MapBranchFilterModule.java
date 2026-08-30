@@ -83,16 +83,16 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     ditavalFile =
       Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).map(File::toURI).orElse(null);
 
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final Document doc;
     final SubjectScheme subjectSchemeMap;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       final XdmNode node = job.getStore().getImmutableNode(currentFile);
       subjectSchemeMap = getSubjectScheme(node.getOutermostElement());
       doc = xmlUtils.cloneDocument(node);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
@@ -103,11 +103,11 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     logger.debug("Rewrite duplicate topic references");
     rewriteDuplicates(doc.getDocumentElement());
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
     try {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
     }
   }
 

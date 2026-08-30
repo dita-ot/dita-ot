@@ -77,22 +77,22 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
     this.map = map;
     currentFile = job.tempDirURI.resolve(map);
 
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final SubjectScheme subjectSchemeMap;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       subjectSchemeMap = getSubjectScheme(job.getStore().getImmutableNode(currentFile).getOutermostElement());
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
     final Document doc;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       doc = job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
     logger.debug("Filter topics and generate copies");
@@ -100,11 +100,11 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
     logger.debug("Filter existing topics");
     filterTopics(doc.getDocumentElement(), Collections.emptyList(), subjectSchemeMap);
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
     try {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map, e.getMessage(), e);
     }
   }
 
@@ -130,7 +130,7 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
           final FileInfo updatedDstFileInfo = new FileInfo.Builder(dstFileInfo).addContentFields(srcFileInfo).build();
           job.add(updatedDstFileInfo);
         }
-        logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
+        logger.info("Filtering {} to {}", srcAbsUri, dstAbsUri);
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
         writer.setJob(job);
@@ -145,13 +145,13 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
           } catch (FileAlreadyExistsException e) {
             // Ignore
           } catch (IOException e) {
-            logger.error("Failed to create directory " + dstDirUri);
+            logger.error("Failed to create directory {}", dstDirUri);
           }
         }
         try {
           job.getStore().transform(srcAbsUri, dstAbsUri, pipe);
         } catch (final DITAOTException e) {
-          logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
+          logger.error("Failed to filter {} to {}: {}", srcAbsUri, dstAbsUri, e.getMessage(), e);
         }
       }
       topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
@@ -192,11 +192,11 @@ public class TopicBranchFilterModule extends AbstractBranchFilterModule {
       writer.setCurrentFile(srcAbsUri);
       final List<XMLFilter> pipe = singletonList(writer);
 
-      logger.info("Filtering " + srcAbsUri);
+      logger.info("Filtering {}", srcAbsUri);
       try {
         job.getStore().transform(srcAbsUri, pipe);
       } catch (final DITAOTException e) {
-        logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
+        logger.error("Failed to filter {}: {}", srcAbsUri, e.getMessage(), e);
       }
       filtered.add(srcAbsUri);
     }

@@ -237,11 +237,11 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
     for (final URI s : oldTopicList) {
       final URI f = job.tempDirURI.resolve(s);
       if (job.getStore().exists(f)) {
-        logger.debug("Delete " + f);
+        logger.debug("Delete {}", f);
         try {
           job.getStore().delete(f);
         } catch (IOException e) {
-          logger.error("Failed to delete " + f);
+          logger.error("Failed to delete {}", f);
         }
       }
     }
@@ -271,17 +271,17 @@ public final class ChunkModule extends AbstractPipelineModuleImpl {
             // ensure the newly chunked file to the old one
             try {
               if (job.getStore().exists(target)) {
-                logger.debug("Delete " + target);
+                logger.debug("Delete {}", target);
                 job.getStore().delete(target);
               }
-              logger.debug("Move " + from + " to " + target);
+              logger.debug("Move {} to {}", from, target);
               job.getStore().move(from, target);
               final FileInfo fi = job.getFileInfo(from);
               if (fi != null) {
                 job.remove(fi);
               }
             } catch (final IOException e) {
-              logger.error("Failed to replace chunk topic: " + e.getMessage(), e);
+              logger.error("Failed to replace chunk topic: {}", e.getMessage(), e);
             }
             topicList.remove(relativePath);
             chunkedTopicSet.remove(relativePath);

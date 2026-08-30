@@ -170,7 +170,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         rootTopicref.getParentNode().appendChild(siblingStub);
       }
 
-      logger.info("Processing " + currentParsingFile);
+      logger.info("Processing {}", currentParsingFile);
       job.getStore().transform(currentParsingFile, this);
       output.flush();
 
@@ -186,10 +186,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
           output = null;
           if (dotchunk) {
             if (job.getStore().exists(currentParsingFile)) {
-              logger.debug("Delete " + currentParsingFile);
+              logger.debug("Delete {}", currentParsingFile);
               job.getStore().delete(currentParsingFile);
             }
-            logger.debug("Move " + outputFile + " to " + currentParsingFile);
+            logger.debug("Move {} to {}", outputFile, currentParsingFile);
             job.getStore().move(outputFile, currentParsingFile);
             final FileInfo fi = job.getFileInfo(outputFile);
             if (fi != null) {
@@ -243,7 +243,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
       final Document doc = job.getStore().getDocument(absolutePathToFile);
       return doc.getDocumentElement();
     } catch (final IOException e) {
-      logger.error("Failed to parse " + absolutePathToFile + ": " + e.getMessage(), e);
+      logger.error("Failed to parse {}: {}", absolutePathToFile, e.getMessage(), e);
     }
     return null;
   }

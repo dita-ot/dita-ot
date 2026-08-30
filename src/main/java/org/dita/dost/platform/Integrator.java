@@ -285,7 +285,7 @@ public final class Integrator {
     // generate the files from template
     for (final Entry<String, Value> template : templateSet.entrySet()) {
       final File templateFile = new File(ditaDir, template.getKey());
-      logger.trace("Process template " + templateFile.getPath());
+      logger.trace("Process template {}", templateFile.getPath());
       //            fileGen.setPluginId(template.getValue().id);
       fileGen.generate(templateFile);
     }
@@ -663,7 +663,7 @@ public final class Integrator {
         if (lib instanceof Value.PathValue path) {
           return Stream.of(toFile(path.getPath()));
         } else {
-          logger.error("Library import must be a file feature: " + lib.value());
+          logger.error("Library import must be a file feature: {}", lib.value());
           return Stream.empty();
         }
       })

@@ -327,7 +327,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
     try {
       job.getStore().writeDocument(doc, file);
     } catch (final IOException e) {
-      logger.error("Failed to serialize map: " + e.getMessage(), e);
+      logger.error("Failed to serialize map: {}", e.getMessage(), e);
     }
   }
 
@@ -511,7 +511,7 @@ public final class ChunkMapReader extends AbstractDomFilter {
       serializer.writeEndDocument();
       serializer.close();
     } catch (final IOException | SAXException e) {
-      logger.error("Failed to write generated chunk: " + e.getMessage(), e);
+      logger.error("Failed to write generated chunk: {}", e.getMessage(), e);
     }
   }
 

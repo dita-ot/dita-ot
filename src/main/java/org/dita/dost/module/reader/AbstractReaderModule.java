@@ -230,7 +230,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } catch (final NoClassDefFoundError e) {
           logger.warn("Xerces not available, not using grammar caching");
         } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-          logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+          logger.warn("Failed to set Xerces grammar pool for parser: {}", e.getMessage());
         }
       }
       reader.setEntityResolver(xmlUtils.getCatalogResolver());
@@ -358,11 +358,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       } catch (FileAlreadyExistsException e) {
         // Ignore
       } catch (IOException e) {
-        logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
+        logger.error("Failed to create output directory {}", outputDir.getAbsolutePath());
         return;
       }
     }
-    logger.info("Processing " + currentFile + " to " + outputFile.toURI());
+    logger.info("Processing {} to {}", currentFile, outputFile.toURI());
     final String[] params = { currentFile.toString() };
 
     // Verify stub for current file is in Job
@@ -429,7 +429,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           sax
         );
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params).toString(), sax.getMessage(), sax);
       }
       failureList.add(currentFile);
     } catch (final FileNotFoundException e) {
@@ -452,7 +452,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           e
         );
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage());
+        logger.error("{} Cannot load file: {}", MessageUtils.getMessage("DOTJ079E", params).toString(), e.getMessage());
       }
       failureList.add(currentFile);
     } catch (final Exception e) {
@@ -461,7 +461,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       } else if (processingMode == Mode.STRICT) {
         throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params).toString(), e.getMessage(), e);
       }
       failureList.add(currentFile);
     } finally {

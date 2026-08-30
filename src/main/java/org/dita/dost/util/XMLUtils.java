@@ -228,7 +228,7 @@ public final class XMLUtils {
         case "INFO" -> logger.info(msg);
         case "DEBUG" -> logger.debug(msg);
         default -> {
-          logger.error("Message level " + level + " not supported");
+          logger.error("Message level {} not supported", level);
           logger.info(msg);
         }
       }

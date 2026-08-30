@@ -172,7 +172,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     }
     final URI currentFile = job.tempDirURI.resolve(fi.uri());
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       return job.getStore().getImmutableNode(currentFile);
     } catch (final IOException e) {
       throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
@@ -202,7 +202,7 @@ public final class TopicReaderModule extends AbstractReaderModule {
     assert startFileInfo.src() != null;
     final URI tmp = job.tempDirURI.resolve(startFileInfo.uri());
     try {
-      logger.info("Reading " + tmp);
+      logger.info("Reading {}", tmp);
       final XdmNode source = job.getStore().getImmutableNode(tmp);
       final Predicate<? super XdmNode> isTopicref = xdmItem ->
         MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));

@@ -124,13 +124,13 @@ public class IncludeResolver extends AbstractXMLFilter {
         try {
           final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
           if (hrefValue != null) {
-            logger.debug("Resolve " + localName + " " + currentFile.resolve(hrefValue));
+            logger.debug("Resolve {} {}", localName, currentFile.resolve(hrefValue));
             final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
             switch (parse) {
               case "text" -> include =
                 new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
               case "xml" -> include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
-              default -> logger.error("Unsupported include parse " + parse);
+              default -> logger.error("Unsupported include parse {}", parse);
             }
           }
         } catch (final RuntimeException e) {

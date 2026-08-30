@@ -73,7 +73,7 @@ class InsertAction extends XMLFilterImpl implements IAction {
         if (fileName instanceof Value.PathValue pathValue) {
           currentFile = pathValue.getPath();
         } else {
-          logger.error("Catalog import must be a file feature: " + fileName.value());
+          logger.error("Catalog import must be a file feature: {}", fileName.value());
           continue;
         }
         reader.parse(currentFile);

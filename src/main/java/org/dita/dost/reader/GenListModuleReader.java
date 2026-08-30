@@ -642,7 +642,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (copyTo != null) {
           if (copyTo.toString().isEmpty()) {
-            logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
+            logger.warn("Copy-to task [href=\"\" copy-to=\"{}\"] was ignored.", filename);
           } else {
             final URI value = stripFragment(currentDir.resolve(copyTo));
             if (copytoMap.get(filename) != null) {

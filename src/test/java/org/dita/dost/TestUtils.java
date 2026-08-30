@@ -8,6 +8,7 @@
 package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.log.AbstractLogger.addIndex;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.xmlunit.util.IterableNodeList.asList;
@@ -35,6 +36,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
+import org.dita.dost.log.AbstractLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.slf4j.helpers.MarkerIgnoringBase;
@@ -461,21 +463,21 @@ public class TestUtils {
     @Override
     public void error(String format, Object arg) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arg));
       }
     }
 
     @Override
     public void error(String format, Object arg1, Object arg2) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg1, arg2));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arg1, arg2));
       }
     }
 
     @Override
     public void error(String format, Object... arguments) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arguments));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arguments));
       }
     }
 
@@ -556,17 +558,17 @@ public class TestUtils {
 
     @Override
     public void info(String format, Object arg) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void info(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
     public void info(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override
@@ -585,17 +587,17 @@ public class TestUtils {
 
     @Override
     public void warn(String format, Object arg) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void warn(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override
     public void warn(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
@@ -621,7 +623,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arg), null));
       }
     }
 
@@ -630,7 +632,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg1, arg2), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arg1, arg2), null));
       }
     }
 
@@ -639,7 +641,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arguments), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arguments), null));
       }
     }
 
@@ -682,17 +684,17 @@ public class TestUtils {
 
     @Override
     public void debug(String format, Object arg) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void debug(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
     public void debug(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override

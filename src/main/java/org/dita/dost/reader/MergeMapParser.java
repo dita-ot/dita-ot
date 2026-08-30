@@ -129,7 +129,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       setContentHandler(s);
       dirPath = filename.getParentFile();
       topicParser.getContentHandler().startDocument();
-      logger.info("Processing " + filename.toURI());
+      logger.info("Processing {}", filename.toURI());
 
       job.getStore().transform(filename.toURI(), this);
 

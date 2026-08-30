@@ -42,21 +42,21 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         .parallel()
         .forEach(f -> {
           final URI file = job.tempDirURI.resolve(f.uri());
-          logger.info("Processing " + file);
+          logger.info("Processing {}", file);
           try {
             job.getStore().transform(file, getProcessingPipe(f));
           } catch (final DITAOTException e) {
-            logger.error("Failed to process XML filter: " + e.getMessage(), e);
+            logger.error("Failed to process XML filter: {}", e.getMessage(), e);
           }
         });
     } else {
       for (final FileInfo f : fis) {
         final URI file = job.tempDirURI.resolve(f.uri());
-        logger.info("Processing " + file);
+        logger.info("Processing {}", file);
         try {
           job.getStore().transform(file, getProcessingPipe(f));
         } catch (final DITAOTException e) {
-          logger.error("Failed to process XML filter: " + e.getMessage(), e);
+          logger.error("Failed to process XML filter: {}", e.getMessage(), e);
         }
       }
     }
@@ -76,7 +76,7 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
       .filter(p -> p.predicate.test(fi))
       .map(FilterPair::newInstance)
       .peek(f -> {
-        logger.debug("Configure filter " + f.getClass().getCanonicalName());
+        logger.debug("Configure filter {}", f.getClass().getCanonicalName());
         f.setCurrentFile(fileToParse);
         f.setJob(job);
         f.setLogger(logger);

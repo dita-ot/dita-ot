@@ -92,13 +92,13 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
     }
 
     if (destDir != null) {
-      logger.debug("Transforming into " + destDir.getAbsolutePath());
+      logger.debug("Transforming into {}", destDir.getAbsolutePath());
     }
     processor = xmlUtils.getProcessor();
     final XsltCompiler xsltCompiler = processor.newXsltCompiler();
     xsltCompiler.setURIResolver(uriResolver);
     xsltCompiler.setErrorReporter(toErrorReporter(logger));
-    logger.info("Loading stylesheet " + style.getSystemId());
+    logger.info("Loading stylesheet {}", style.getSystemId());
     try {
       templates = xsltCompiler.compile(style);
     } catch (SaxonApiException e) {
@@ -135,16 +135,14 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
           .toList();
         for (Entry<File, File> entry : tmps) {
           try {
-            logger.info("Move " + entry.getKey().toURI() + " to " + entry.getValue().toURI());
+            logger.info("Move {} to {}", entry.getKey().toURI(), entry.getValue().toURI());
             job.getStore().move(entry.getKey().toURI(), entry.getValue().toURI());
           } catch (IOException e) {
             logger.error(
-              String.format(
-                "Failed to move %s to %s: %s",
-                entry.getKey().toURI(),
-                entry.getValue().toURI(),
-                e.getMessage()
-              ),
+              "Failed to move {} to {}: {}",
+              entry.getKey().toURI(),
+              entry.getValue().toURI(),
+              e.getMessage(),
               e
             );
           }
@@ -199,7 +197,7 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
 
   private void transform(final File in, final File out) throws DITAOTException {
     if (reloadstylesheet || t == null) {
-      logger.info("Loading stylesheet " + style.getSystemId());
+      logger.info("Loading stylesheet {}", style.getSystemId());
       t = getTransformer();
     }
     transform(in, out, t);
@@ -208,45 +206,45 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
   private void transform(final File in, final File out, final XsltTransformer t) throws DITAOTException {
     final boolean same = in.getAbsolutePath().equals(out.getAbsolutePath());
     for (Entry<String, String> e : params.entrySet()) {
-      logger.debug("Set parameter " + e.getKey() + " to '" + e.getValue() + "'");
+      logger.debug("Set parameter {} to '{}'", e.getKey(), e.getValue());
       t.setParameter(new QName(e.getKey()), new XdmAtomicValue(e.getValue()));
     }
     if (filenameparameter != null) {
-      logger.debug("Set parameter " + filenameparameter + " to '" + in.getName() + "'");
+      logger.debug("Set parameter {} to '{}'", filenameparameter, in.getName());
       t.setParameter(new QName(filenameparameter), new XdmAtomicValue(in.getName()));
     }
     if (filedirparameter != null) {
       final Path rel = job.tempDir.toPath().relativize(in.getAbsoluteFile().toPath()).getParent();
       final String v = rel != null ? rel.toString() : ".";
-      logger.debug("Set parameter " + filedirparameter + " to '" + v + "'");
+      logger.debug("Set parameter {} to '{}'", filedirparameter, v);
       t.setParameter(new QName(filedirparameter), new XdmAtomicValue(v));
     }
 
     if (properties.isEmpty()) {
       try {
         if (same) {
-          logger.info("Processing " + in.toURI());
+          logger.info("Processing {}", in.toURI());
           job.getStore().transform(in.toURI(), t);
         } else {
-          logger.info("Processing " + in.toURI() + " to " + out.toURI());
+          logger.info("Processing {} to {}", in.toURI(), out.toURI());
           job.getStore().transform(in.toURI(), out.toURI(), t);
         }
       } catch (final UncheckedXPathException e) {
-        logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
+        logger.error("Failed to transform document: {}", e.getXPathException().getMessageAndLocation(), e);
       } catch (final RuntimeException e) {
         throw e;
       } catch (final Exception e) {
-        logger.error("Failed to transform document: " + e.getMessage(), e);
+        logger.error("Failed to transform document: {}", e.getMessage(), e);
       }
       return;
     }
 
     final File tmp = same ? new File(out.getAbsolutePath() + ".tmp" + Long.toString(System.currentTimeMillis())) : out;
     if (same) {
-      logger.info("Processing " + in.toURI());
-      logger.debug("Processing " + in.toURI() + " to " + tmp.toURI());
+      logger.info("Processing {}", in.toURI());
+      logger.debug("Processing {} to {}", in.toURI(), tmp.toURI());
     } else {
-      logger.info("Processing " + in.toURI() + " to " + tmp.toURI());
+      logger.info("Processing {} to {}", in.toURI(), tmp.toURI());
     }
     Destination destination = null;
     try {
@@ -264,16 +262,16 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
       t.setDestination(destination);
       t.transform();
       if (same) {
-        logger.debug("Moving " + tmp.getAbsolutePath() + " to " + out.getAbsolutePath());
+        logger.debug("Moving {} to {}", tmp.getAbsolutePath(), out.getAbsolutePath());
         job.getStore().move(tmp.toURI(), out.toURI());
       }
     } catch (final UncheckedXPathException e) {
-      logger.error("Failed to transform document: " + e.getXPathException().getMessageAndLocation(), e);
-      logger.debug("Remove " + tmp.toURI());
+      logger.error("Failed to transform document: {}", e.getXPathException().getMessageAndLocation(), e);
+      logger.debug("Remove {}", tmp.toURI());
       try {
         job.getStore().delete(tmp.toURI());
       } catch (final IOException e1) {
-        logger.error("Failed to clean up after failed transformation: " + e1, e1);
+        logger.error("Failed to clean up after failed transformation: {}", e1, e1);
       }
     } catch (final RuntimeException e) {
       throw e;
@@ -281,23 +279,23 @@ public final class XsltModule extends AbstractPipelineModuleImpl {
       try {
         throw e.getCause();
       } catch (final XPathException cause) {
-        logger.error("Failed to transform document: " + cause.getMessageAndLocation(), e);
+        logger.error("Failed to transform document: {}", cause.getMessageAndLocation(), e);
       } catch (Throwable throwable) {
-        logger.error("Failed to transform document: " + e.getMessage(), e);
+        logger.error("Failed to transform document: {}", e.getMessage(), e);
       }
-      logger.debug("Remove " + tmp.toURI());
+      logger.debug("Remove {}", tmp.toURI());
       try {
         job.getStore().delete(tmp.toURI());
       } catch (final IOException e1) {
-        logger.error("Failed to clean up after failed transformation: " + e1, e1);
+        logger.error("Failed to clean up after failed transformation: {}", e1, e1);
       }
     } catch (final Exception e) {
-      logger.error("Failed to transform document: " + e.getMessage(), e);
-      logger.debug("Remove " + tmp.toURI());
+      logger.error("Failed to transform document: {}", e.getMessage(), e);
+      logger.debug("Remove {}", tmp.toURI());
       try {
         job.getStore().delete(tmp.toURI());
       } catch (final IOException e1) {
-        logger.error("Failed to clean up after failed transformation: " + e1, e1);
+        logger.error("Failed to clean up after failed transformation: {}", e1, e1);
       }
     } finally {
       try {

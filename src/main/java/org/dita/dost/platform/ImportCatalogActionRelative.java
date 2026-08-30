@@ -30,7 +30,7 @@ final class ImportCatalogActionRelative extends ImportAction {
       if (value instanceof Value.PathValue pathValue) {
         path = pathValue.getPath();
       } else {
-        logger.error("Catalog import must be a file feature: " + value.value());
+        logger.error("Catalog import must be a file feature: {}", value.value());
         continue;
       }
       buf.startElement(

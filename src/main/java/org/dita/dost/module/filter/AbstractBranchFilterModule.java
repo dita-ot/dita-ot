@@ -126,7 +126,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
    * Read DITAVAL file.
    */
   FilterUtils getFilterUtils(final URI ditaval) {
-    logger.info("Reading " + ditaval);
+    logger.info("Reading {}", ditaval);
     ditaValReader.filterReset();
     ditaValReader.read(ditaval);
     flagImageSet.addAll(ditaValReader.getImageList());

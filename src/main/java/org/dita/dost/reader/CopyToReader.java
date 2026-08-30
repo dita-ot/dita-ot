@@ -155,7 +155,7 @@ public final class CopyToReader extends AbstractXMLFilter {
       final URI source = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
       if (source != null) {
         if (source.toString().isEmpty()) {
-          logger.warn("Copy-to task [href=\"\" copy-to=\"" + targetAbs + "\"] was ignored.");
+          logger.warn("Copy-to task [href=\"\" copy-to=\"{}\"] was ignored.", targetAbs);
         } else {
           final URI sourceAbs = stripFragment(currentFile.resolve(source));
           assert sourceAbs.isAbsolute();
