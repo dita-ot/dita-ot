@@ -69,7 +69,7 @@ public class TopicBranchFilterModuleTest extends TopicBranchFilterModule {
       new InputSource(new File(tempDir, "t1-1.xml").toURI().toString())
     );
     assertEquals(getDuplicateTopicFileInfos(), new HashSet<>(job.getFileInfo()));
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Set<FileInfo> getDuplicateTopicFileInfos() {

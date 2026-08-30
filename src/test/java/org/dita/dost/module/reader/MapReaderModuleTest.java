@@ -114,8 +114,8 @@ public class MapReaderModuleTest {
           throw new RuntimeException("Unmapped " + fileInfo.uri());
       }
     }
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.WARN));
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.ERROR));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.WARN));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.ERROR));
   }
 
   @Test

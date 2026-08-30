@@ -190,8 +190,8 @@ public abstract class AbstractModuleTest {
       logger
         .getMessages()
         .stream()
-        .filter(m -> m.level == Message.Level.ERROR)
-        .forEach(m -> System.err.println(m.level + ": " + m.message));
+        .filter(m -> m.level() == Message.Level.ERROR)
+        .forEach(m -> System.err.println(m.level() + ": " + m.message()));
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }

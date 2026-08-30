@@ -298,7 +298,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename())
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     assertEquals(Set.of(srcDirUri.resolve("maps/toolbars.dita")), nonConrefCopytoTargets);
 
@@ -369,7 +369,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename())
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     assertEquals(
       Stream

@@ -17,7 +17,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;

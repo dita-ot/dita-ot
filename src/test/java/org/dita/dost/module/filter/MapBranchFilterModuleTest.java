@@ -177,7 +177,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       .sorted()
       .collect(Collectors.toList());
     assertEquals(filesExp, filesAct);
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   @Test
@@ -261,7 +261,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     );
 
     assertEquals(exp, new HashSet<>(job.getFileInfo()));
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Set<Job.FileInfo> getDuplicateTopicFileInfos() {

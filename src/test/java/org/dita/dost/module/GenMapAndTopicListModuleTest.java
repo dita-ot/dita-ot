@@ -271,7 +271,7 @@ public class GenMapAndTopicListModuleTest {
       job
         .getFileInfo()
         .stream()
-        .filter(f -> f.isResourceOnly())
+        .filter(FileInfo::isResourceOnly)
         .map(fi -> fi.uri().toString())
         .collect(Collectors.toSet())
     );

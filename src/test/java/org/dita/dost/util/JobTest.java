@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job.FileInfo;

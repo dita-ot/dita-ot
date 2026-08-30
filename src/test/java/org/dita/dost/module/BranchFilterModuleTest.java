@@ -227,7 +227,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
       .sorted()
       .collect(Collectors.toList());
     assertEquals(filesExp, filesAct);
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   @Test
@@ -327,7 +327,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     assertEquals(filesExpMain, filesActMain);
     assertEquals(filesExpMainSubdir, filesActMainSubdir);
     assertEquals(filesExpPeer, filesActPeer);
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   @Test
@@ -407,7 +407,7 @@ public class BranchFilterModuleTest extends BranchFilterModule {
     );
 
     assertEquals(exp, new HashSet<>(job.getFileInfo()));
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Set<Job.FileInfo> getDuplicateTopicFileInfos() {

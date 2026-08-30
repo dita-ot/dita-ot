@@ -706,24 +706,13 @@ public class TestUtils {
       return true;
     }
 
-    public static final class Message {
-
+    public record Message(Level level, String message, Throwable exception) {
       public enum Level {
         DEBUG,
         INFO,
         WARN,
         ERROR,
         FATAL,
-      }
-
-      public final Level level;
-      public final String message;
-      public final Throwable exception;
-
-      public Message(final Level level, final String message, final Throwable exception) {
-        this.level = level;
-        this.message = message;
-        this.exception = exception;
       }
 
       @Override
@@ -736,11 +725,6 @@ public class TestUtils {
           Objects.equals(message, message1.message) &&
           Objects.equals(exception, message1.exception)
         );
-      }
-
-      @Override
-      public int hashCode() {
-        return Objects.hash(level, message, exception);
       }
 
       @Override

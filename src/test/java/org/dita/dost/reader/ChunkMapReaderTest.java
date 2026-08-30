@@ -121,7 +121,7 @@ public class ChunkMapReaderTest {
     );
 
     assertEquals(Collections.emptyMap(), mapReader.getConflicTable());
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   @Test
@@ -149,7 +149,7 @@ public class ChunkMapReaderTest {
       mapBuilder().put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita")).build(),
       mapReader.getConflicTable()
     );
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Job createJob(final String map, final String... topics) throws IOException {

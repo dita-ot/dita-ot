@@ -97,7 +97,7 @@ public class DitaValReaderTest {
       Action.INCLUDE
     );
     assertEquals(exp, act);
-    assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
+    assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level()).collect(Collectors.toList()));
   }
 
   @Test
