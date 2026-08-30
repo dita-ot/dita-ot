@@ -175,7 +175,7 @@ public class IncludeResolver extends AbstractXMLFilter {
   }
 
   @Override
-  public void characters(char ch[], int start, int length) throws SAXException {
+  public void characters(char[] ch, int start, int length) throws SAXException {
     final Deque<StackItem> elementStack = includeStack.peek();
     if (!elementStack.peek().include) {
       return;
@@ -184,7 +184,7 @@ public class IncludeResolver extends AbstractXMLFilter {
   }
 
   @Override
-  public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
+  public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
     final Deque<StackItem> elementStack = includeStack.peek();
     if (!elementStack.peek().include) {
       return;

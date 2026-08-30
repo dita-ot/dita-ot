@@ -23,7 +23,7 @@ import java.util.Arrays;
 public final class Graph {
 
   private int size;
-  private boolean adjacentMatrix[][];
+  private boolean[][] adjacentMatrix;
 
   public Graph(int size) {
     if (size < 0) {
