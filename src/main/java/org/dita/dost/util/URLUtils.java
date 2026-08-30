@@ -12,7 +12,6 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
@@ -81,11 +80,7 @@ public final class URLUtils {
    */
   @Deprecated
   public static String decode(final String s) {
-    try {
-      return URLDecoder.decode(s, UTF8);
-    } catch (final UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+    return URLDecoder.decode(s, StandardCharsets.UTF_8);
   }
 
   /**
@@ -496,11 +491,7 @@ public final class URLUtils {
       return null;
     }
     String f;
-    try {
-      f = URLDecoder.decode(filename, UTF8);
-    } catch (final UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+    f = URLDecoder.decode(filename, StandardCharsets.UTF_8);
     f = f.replace(WINDOWS_SEPARATOR, File.separator).replace(UNIX_SEPARATOR, File.separator);
     return new File(f);
   }

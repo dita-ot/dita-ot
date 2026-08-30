@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import javax.xml.stream.XMLOutputFactory;
@@ -96,7 +97,7 @@ public final class MergeDitavalModule extends AbstractPipelineModuleImpl {
         .getStore()
         .getOutputStream(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL).toURI())
     ) {
-      export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, "UTF-8");
+      export = XMLOutputFactory.newInstance().createXMLStreamWriter(exportStream, StandardCharsets.UTF_8.name());
       export.writeStartDocument();
       export.writeStartElement("val");
       export.writeNamespace(DITA_OT_NS_PREFIX, DITA_OT_NAMESPACE);

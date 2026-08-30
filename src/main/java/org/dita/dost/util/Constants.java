@@ -9,6 +9,8 @@ package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.*;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * This class contains all the constants used in DITA-OT.
  *
@@ -1559,8 +1561,13 @@ public final class Constants {
   public static final String COUNTRY_US = "us";
   /**LANGUAGE_EN.*/
   public static final String LANGUAGE_EN = "en";
-  /**UTF8.*/
-  public static final String UTF8 = "UTF-8";
+
+  /**UTF8.
+   * @deprecated use {@link java.nio.charset.StandardCharsets#UTF_8#name() StandardCharsets.UTF_8.name()} instead.
+   */
+  @Deprecated
+  public static final String UTF8 = StandardCharsets.UTF_8.name();
+
   /**SAX_DRIVER_PROPERTY.*/
   public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";
   /**SAX_DRIVER_DEFAULT_CLASS.*/
