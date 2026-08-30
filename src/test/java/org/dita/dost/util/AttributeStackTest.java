@@ -1,25 +1,8 @@
 package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CASCADE;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_DIR;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_FORMAT;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_LANG;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_LINKING;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OTHERPROPS;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PRINT;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PROCESSING_ROLE;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_PROPS;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_REV;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SCOPE;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SEARCH;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TOC;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TRANSLATE;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.BeforeEach;

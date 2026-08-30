@@ -13,7 +13,6 @@ import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

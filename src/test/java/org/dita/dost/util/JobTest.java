@@ -9,7 +9,6 @@ package org.dita.dost.util;
 
 import static java.net.URI.create;
 import static org.dita.dost.util.Constants.*;
-import static org.dita.dost.util.Constants.OS_NAME_WINDOWS;
 import static org.dita.dost.util.URLUtils.toURI;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,9 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job.FileInfo;

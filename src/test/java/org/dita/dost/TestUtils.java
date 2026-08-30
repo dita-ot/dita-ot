@@ -36,7 +36,6 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import nu.validator.htmlparser.dom.HtmlDocumentBuilder;
-import org.dita.dost.log.AbstractLogger;
 import org.dita.dost.log.DITAOTLogger;
 import org.dita.dost.util.CatalogUtils;
 import org.slf4j.helpers.MarkerIgnoringBase;

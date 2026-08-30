@@ -12,7 +12,6 @@ import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
