@@ -26,7 +26,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
   @Override
   public void read(final File filename) throws DITAOTException {
     assert filename.isAbsolute();
-    logger.info("Processing " + filename.toURI());
+    logger.info("Processing {}", filename.toURI());
     Document doc;
     try {
       doc = job.getStore().getDocument(filename.toURI());
@@ -40,7 +40,7 @@ public abstract class AbstractDomFilter implements AbstractReader {
 
     if (resDoc != null) {
       try {
-        logger.debug("Writing " + filename.toURI());
+        logger.debug("Writing {}", filename.toURI());
         resDoc.setDocumentURI(filename.toURI().toString());
         job.getStore().writeDocument(resDoc, filename.toURI());
       } catch (final IOException e) {

@@ -56,7 +56,7 @@ final class ImportPluginCatalogAction extends ImportAction {
       } else {
         location.append(f.pluginDir().toURI());
       }
-      if (location.length() > 0 && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
+      if (!location.isEmpty() && !location.substring(location.length() - 1).equals(UNIX_SEPARATOR)) {
         location.append(UNIX_SEPARATOR);
       }
       buf.startElement(

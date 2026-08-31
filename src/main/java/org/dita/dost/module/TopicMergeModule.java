@@ -103,7 +103,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
       } catch (FileAlreadyExistsException e) {
         // Ignore
       } catch (IOException e) {
-        logger.error("Failed to create directory " + outputDir.getAbsolutePath());
+        logger.error("Failed to create directory {}", outputDir.getAbsolutePath());
       }
     }
     try (final OutputStream output = new BufferedOutputStream(job.getStore().getOutputStream(out.toURI()))) {

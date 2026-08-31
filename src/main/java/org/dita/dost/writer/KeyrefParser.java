@@ -991,7 +991,7 @@ public final class KeyrefParser extends AbstractXMLFilter {
    */
   private static URI normalizeHrefValue(final URI keyName, final String tail) {
     if (keyName.getFragment() == null) {
-      return toURI(keyName + tail.replaceAll(SLASH, SHARP));
+      return toURI(keyName + tail.replace(SLASH, SHARP));
     }
     return toURI(keyName + tail);
   }
@@ -1020,43 +1020,19 @@ public final class KeyrefParser extends AbstractXMLFilter {
 
   // Inner classes -----------------------------------------------------------
 
-  private static final class KeyrefInfo {
-
-    /** DITA class. */
-    final DitaClass type;
-    /** Map of key reference to reference attributes. */
-    final Map<String, String> attrs;
-    /** Element has nested elements. */
-    final boolean hasNestedElements;
-    /** Element is empty. */
-    final boolean isEmpty;
-
+  /**
+   * @param type              DITA class.
+   * @param attrs             Map of key reference to reference attributes.
+   * @param hasNestedElements Element has nested elements.
+   * @param isEmpty           Element is empty.
+   */
+  private record KeyrefInfo(DitaClass type, Map<String, String> attrs, boolean isEmpty, boolean hasNestedElements) {
     /**
      * Construct a new key reference info object.
      *
-     * @param type element type
-     * @param attrs Map of key reference to reference attributes
-     * @param isEmpty flag if element is empty
-     * @param hasNestedElements element is a reference type
-     */
-    KeyrefInfo(
-      final DitaClass type,
-      final Map<String, String> attrs,
-      final boolean isEmpty,
-      final boolean hasNestedElements
-    ) {
-      this.type = type;
-      this.attrs = attrs;
-      this.isEmpty = isEmpty;
-      this.hasNestedElements = hasNestedElements;
-    }
-
-    /**
-     * Construct a new key reference info object.
-     *
-     * @param type element type
-     * @param refAttr reference attribute name
-     * @param isEmpty flag if element is empty
+     * @param type              element type
+     * @param refAttr           reference attribute name
+     * @param isEmpty           flag if element is empty
      * @param hasNestedElements element is a reference type
      */
     KeyrefInfo(final DitaClass type, final String refAttr, final boolean isEmpty, final boolean hasNestedElements) {

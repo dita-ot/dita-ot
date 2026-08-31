@@ -194,7 +194,7 @@ public class URLUtilsTest {
   @Test
   public void testGetRelativePath() throws URISyntaxException {
     assertEquals(new URI("../"), URLUtils.getRelativePath(new URI("map/map.ditamap")));
-    assertEquals(null, URLUtils.getRelativePath(new URI("map.ditamap")));
+    assertNull(URLUtils.getRelativePath(new URI("map.ditamap")));
     assertEquals(new URI("../../"), URLUtils.getRelativePath(new URI("map1/map2/map.ditamap")));
   }
 

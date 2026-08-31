@@ -349,7 +349,7 @@ public class ConkeyrefFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
 
   private ConkeyrefFilter getConkeyrefFilter() throws IOException {

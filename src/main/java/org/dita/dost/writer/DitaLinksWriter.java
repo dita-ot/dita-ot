@@ -22,7 +22,6 @@ import java.util.Deque;
 import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

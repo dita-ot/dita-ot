@@ -231,7 +231,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
       if (fragment != null) {
         attValue = stripFragment(attValue);
       }
-      if (attValue.toString().length() != 0) {
+      if (!attValue.toString().isEmpty()) {
         final URI current = currentFile.resolve(attValue);
         final FileInfo f = job.getFileInfo(current);
         if (f != null) {

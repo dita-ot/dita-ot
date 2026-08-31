@@ -189,7 +189,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().isEmpty()) {
       timestampStack.push(clock.instant().toEpochMilli());
       try {
         writeStart(MessageBean.Type.INFO);
@@ -216,7 +216,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
     if (target.getUnless() != null && evaluate(event.getProject(), target.getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !target.getName().isEmpty()) {
       try {
         writeStart(MessageBean.Type.INFO);
         generator.writeStringField(FIELD_TARGET, target.getName());
@@ -237,7 +237,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void taskStarted(final BuildEvent event) {
     final Task task = event.getTask();
-    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
+    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().isEmpty()) {
       timestampStack.push(clock.instant().toEpochMilli());
       try {
         writeStart(toLevel(event));
@@ -259,7 +259,7 @@ public class JsonLogger extends AbstractLogger implements BuildLogger {
   @Override
   public void taskFinished(final BuildEvent event) {
     final Task task = event.getTask();
-    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().equals("")) {
+    if (Project.MSG_DEBUG <= msgOutputLevel && !task.getTaskName().isEmpty()) {
       try {
         writeStart(toLevel(event));
         generator.writeStringField(FIELD_TARGET, task.getOwningTarget().getName());

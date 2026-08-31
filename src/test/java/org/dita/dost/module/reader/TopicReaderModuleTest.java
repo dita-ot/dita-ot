@@ -70,7 +70,7 @@ public class TopicReaderModuleTest {
     job.add(new Job.FileInfo.Builder().src(root.resolve("mysite.dita")).uri(URI.create("mysite.dita")).build());
     job.add(new Job.FileInfo.Builder().src(root.resolve("myproduct.dita")).uri(URI.create("myproduct.dita")).build());
     job
-      .getFileInfo(fi -> fi.isInput())
+      .getFileInfo(Job.FileInfo::isInput)
       .forEach(fi -> {
         try {
           Files.copy(Paths.get(fi.src()), Paths.get(job.tempDirURI.resolve(fi.uri())));

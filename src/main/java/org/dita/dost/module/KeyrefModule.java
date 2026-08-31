@@ -109,7 +109,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       final Job.FileInfo in = job.getFileInfo(FileInfo::isInput).iterator().next();
       final URI mapFile = in.uri();
       final XdmNode doc = readMap(in);
-      logger.info("Reading " + job.tempDirURI.resolve(mapFile));
+      logger.info("Reading {}", job.tempDirURI.resolve(mapFile));
       reader.read(job.tempDirURI.resolve(mapFile), doc);
 
       final KeyScope startScope = reader.getKeyDefinition();
@@ -123,12 +123,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         .map(fi -> {
           try {
             final XdmNode d = readMap(fi);
-            logger.info("Reading " + job.tempDirURI.resolve(fi.uri()));
+            logger.info("Reading {}", job.tempDirURI.resolve(fi.uri()));
             final KeyrefReader r = new KeyrefReader();
             r.setLogger(logger);
             r.read(job.tempDirURI.resolve(fi.uri()), d);
             final KeyScope s = r.getKeyDefinition();
-            logger.debug("Writing " + job.tempDirURI.resolve(fi.uri()));
+            logger.debug("Writing {}", job.tempDirURI.resolve(fi.uri()));
             writeMap(fi, d);
             return s;
           } catch (DITAOTException e) {
@@ -145,7 +145,8 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
         })
         .collect(Collectors.toSet());
       final Collection<FileInfo> resourceTopicsFis = job.getFileInfo(fi ->
-        !topicsInMap.contains(fi.uri()) && (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
+        !topicsInMap.contains(fi.uri().toString()) &&
+        (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
       );
       final Collection<FileInfo> resourceFis = Stream
         .concat(resourceMapFis.stream(), resourceTopicsFis.stream())
@@ -194,7 +195,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     Destination destination = null;
     try {
       final URI file = job.tempDirURI.resolve(map.uri());
-      logger.debug("Writing " + file);
+      logger.debug("Writing {}", file);
       destination = job.getStore().getDestination(file);
       final PipelineConfiguration pipe = doc.getUnderlyingNode().getConfiguration().makePipelineConfiguration();
       final Receiver receiver = new NamespaceReducer(destination.getReceiver(pipe, new SerializationProperties()));
@@ -519,18 +520,18 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     filters.add(parser);
 
     try {
-      logger.debug("Using " + (r.scope.name() != null ? r.scope.name() + " scope" : "root scope"));
+      logger.debug("Using {}", r.scope.name() != null ? r.scope.name() + " scope" : "root scope");
       if (r.out != null) {
-        logger.info("Processing " + job.tempDirURI.resolve(r.in.uri()) + " to " + job.tempDirURI.resolve(r.out.uri()));
+        logger.info("Processing {} to {}", job.tempDirURI.resolve(r.in.uri()), job.tempDirURI.resolve(r.out.uri()));
         job.getStore().transform(job.tempDirURI.resolve(r.in.uri()), job.tempDirURI.resolve(r.out.uri()), filters);
       } else {
-        logger.info("Processing " + job.tempDirURI.resolve(r.in.uri()));
+        logger.info("Processing {}", job.tempDirURI.resolve(r.in.uri()));
         job.getStore().transform(job.tempDirURI.resolve(r.in.uri()), filters);
       }
       // validate resource-only list
       normalProcessingRole.addAll(parser.getNormalProcessingRoleTargets());
     } catch (final DITAOTException e) {
-      logger.error("Failed to process key references: " + e.getMessage(), e);
+      logger.error("Failed to process key references: {}", e.getMessage(), e);
     }
   }
 

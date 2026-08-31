@@ -10,8 +10,7 @@ package org.dita.dost.reader;
 import static java.util.Collections.emptySet;
 import static javax.xml.XMLConstants.XML_NS_URI;
 import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,17 +62,17 @@ public class DitaValReaderTest {
     reader.setJob(job);
     reader.read(ditavalFile.toURI());
     final Map<FilterKey, Action> map = reader.getFilterMap();
-    assertTrue(map.get(new FilterKey(AUDIENCE, "Cindy")) instanceof FilterUtils.Include);
-    assertTrue(map.get(new FilterKey(QName.valueOf("produt"), "p1")) instanceof FilterUtils.Flag);
-    assertTrue(map.get(new FilterKey(PRODUCT, "ABase_ph")) instanceof FilterUtils.Exclude);
-    assertTrue(map.get(new FilterKey(PRODUCT, "AExtra_ph")) instanceof FilterUtils.Include);
-    assertTrue(map.get(new FilterKey(PRODUCT, "Another_ph")) instanceof FilterUtils.Exclude);
-    assertTrue(map.get(new FilterKey(PLATFORM, "Windows")) instanceof FilterUtils.Flag);
-    assertTrue(map.get(new FilterKey(PLATFORM, "Linux")) instanceof FilterUtils.Flag);
-    assertTrue(map.get(new FilterKey(KEYWORD, "key1")) instanceof FilterUtils.Exclude);
-    assertTrue(map.get(new FilterKey(KEYWORD, "key2")) instanceof FilterUtils.Flag);
-    assertTrue(map.get(new FilterKey(KEYWORD, "key3")) instanceof FilterUtils.Include);
-    assertTrue(map.get(new FilterKey(PROPS, null)) instanceof FilterUtils.Include);
+    assertInstanceOf(FilterUtils.Include.class, map.get(new FilterKey(AUDIENCE, "Cindy")));
+    assertInstanceOf(FilterUtils.Flag.class, map.get(new FilterKey(QName.valueOf("produt"), "p1")));
+    assertInstanceOf(FilterUtils.Exclude.class, map.get(new FilterKey(PRODUCT, "ABase_ph")));
+    assertInstanceOf(FilterUtils.Include.class, map.get(new FilterKey(PRODUCT, "AExtra_ph")));
+    assertInstanceOf(FilterUtils.Exclude.class, map.get(new FilterKey(PRODUCT, "Another_ph")));
+    assertInstanceOf(FilterUtils.Flag.class, map.get(new FilterKey(PLATFORM, "Windows")));
+    assertInstanceOf(FilterUtils.Flag.class, map.get(new FilterKey(PLATFORM, "Linux")));
+    assertInstanceOf(FilterUtils.Exclude.class, map.get(new FilterKey(KEYWORD, "key1")));
+    assertInstanceOf(FilterUtils.Flag.class, map.get(new FilterKey(KEYWORD, "key2")));
+    assertInstanceOf(FilterUtils.Include.class, map.get(new FilterKey(KEYWORD, "key3")));
+    assertInstanceOf(FilterUtils.Include.class, map.get(new FilterKey(PROPS, null)));
   }
 
   @Test
@@ -97,7 +96,7 @@ public class DitaValReaderTest {
       Action.INCLUDE
     );
     assertEquals(exp, act);
-    assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level).collect(Collectors.toList()));
+    assertEquals(List.of(WARN), logger.getMessages().stream().map(msg -> msg.level()).collect(Collectors.toList()));
   }
 
   @Test

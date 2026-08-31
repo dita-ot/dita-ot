@@ -421,7 +421,7 @@ public class XMLUtilsTest {
 
     final List<Message> act = logger.getMessages();
     assertEquals(1, act.size());
-    assertEquals("abc text suffix", act.get(0).message);
+    assertEquals("abc text suffix", act.get(0).message());
   }
 
   @Test
@@ -432,9 +432,9 @@ public class XMLUtilsTest {
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
-    assertEquals("msg", message.message);
-    assertEquals(null, message.exception);
-    assertEquals(Message.Level.ERROR, message.level);
+    assertEquals("msg", message.message());
+    assertNull(message.exception());
+    assertEquals(Message.Level.ERROR, message.level());
   }
 
   @Test
@@ -453,9 +453,9 @@ public class XMLUtilsTest {
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
-    assertEquals("msg", message.message);
-    assertEquals(null, message.exception);
-    assertEquals(Message.Level.ERROR, message.level);
+    assertEquals("msg", message.message());
+    assertNull(message.exception());
+    assertEquals(Message.Level.ERROR, message.level());
   }
 
   @Test
@@ -472,9 +472,9 @@ public class XMLUtilsTest {
 
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
-    assertEquals("foo:///bar:1:2: msg", message.message);
-    assertEquals(null, message.exception);
-    assertEquals(Message.Level.WARN, message.level);
+    assertEquals("foo:///bar:1:2: msg", message.message());
+    assertNull(message.exception());
+    assertEquals(Message.Level.WARN, message.level());
   }
 
   //    @Test

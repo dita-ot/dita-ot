@@ -83,16 +83,16 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     ditavalFile =
       Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).map(File::toURI).orElse(null);
 
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final Document doc;
     final SubjectScheme subjectSchemeMap;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       final XdmNode node = job.getStore().getImmutableNode(currentFile);
       subjectSchemeMap = getSubjectScheme(node.getOutermostElement());
       doc = xmlUtils.cloneDocument(node);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
@@ -103,11 +103,11 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     logger.debug("Rewrite duplicate topic references");
     rewriteDuplicates(doc.getDocumentElement());
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
     try {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
     }
   }
 
@@ -295,7 +295,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    */
   void splitBranches(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
-    if (ditavalRefs.size() > 0) {
+    if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
       for (final Element branch : ditavalRefs) {
         elem.removeChild(branch);
@@ -321,10 +321,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final Branch currentFilter = filter.merge(ditavalref);
         processAttributes(branch, currentFilter);
         final Branch childFilter = new Branch(
-          currentFilter.resourcePrefix,
-          currentFilter.resourceSuffix,
-          Optional.empty(),
-          Optional.empty()
+          currentFilter.resourcePrefix(),
+          currentFilter.resourceSuffix(),
+          null,
+          null
         );
         // process children of all branches
         for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
@@ -343,7 +343,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   private void processAttributes(final Element elem, final Branch filter) {
-    if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
+    if (filter.resourcePrefix() != null || filter.resourceSuffix() != null) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
       final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
       final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
@@ -375,19 +375,27 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     }
 
-    if (filter.keyscopePrefix.isPresent() || filter.keyscopeSuffix.isPresent()) {
+    if (filter.keyscopePrefix() != null || filter.keyscopeSuffix() != null) {
       final StringBuilder buf = new StringBuilder();
       final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
       if (!keyscope.isEmpty()) {
         for (final String key : keyscope.trim().split("\\s+")) {
-          filter.keyscopePrefix.ifPresent(buf::append);
+          if (filter.keyscopePrefix() != null) {
+            buf.append(filter.keyscopePrefix());
+          }
           buf.append(key);
-          filter.keyscopeSuffix.ifPresent(buf::append);
+          if (filter.keyscopeSuffix() != null) {
+            buf.append(filter.keyscopeSuffix());
+          }
           buf.append(' ');
         }
       } else {
-        filter.keyscopePrefix.ifPresent(buf::append);
-        filter.keyscopeSuffix.ifPresent(buf::append);
+        if (filter.keyscopePrefix() != null) {
+          buf.append(filter.keyscopePrefix());
+        }
+        if (filter.keyscopeSuffix() != null) {
+          buf.append(filter.keyscopeSuffix());
+        }
       }
       elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
     }
@@ -395,25 +403,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   static URI generateCopyTo(final URI href, final Branch filter) {
     final StringBuilder buf = new StringBuilder(href.toString());
-    final Optional<String> suffix = filter.resourceSuffix;
-    suffix.ifPresent(s -> {
+    final String suffix = filter.resourceSuffix();
+    if (suffix != null) {
       final int sep = buf.lastIndexOf(URI_SEPARATOR);
       final int i = buf.lastIndexOf(".");
       if (i != -1 && (sep == -1 || i > sep)) {
-        buf.insert(i, s);
+        buf.insert(i, suffix);
       } else {
-        buf.append(s);
+        buf.append(suffix);
       }
-    });
-    final Optional<String> prefix = filter.resourcePrefix;
-    prefix.ifPresent(s -> {
+    }
+    final String prefix = filter.resourcePrefix();
+    if (prefix != null) {
       final int i = buf.lastIndexOf(URI_SEPARATOR);
       if (i != -1) {
-        buf.insert(i + 1, s);
+        buf.insert(i + 1, prefix);
       } else {
-        buf.insert(0, s);
+        buf.insert(0, prefix);
       }
-    });
+    }
     return toURI(buf.toString());
   }
 }

@@ -9,7 +9,7 @@ publications:
   - name: "args.rellinks"
     value: "noparent"
   - name: "args.cssroot"
-    file: "../../resources"
+    path: "../../resources"
 contexts:
 - name: "Site"
   id: "site"

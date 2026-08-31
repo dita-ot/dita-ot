@@ -117,11 +117,11 @@ public class FileUtilsTest {
   public void testGetRelativePathFile() {
     if (File.separator.equals(SEPARATOR_WINDOWS)) {
       assertEquals(new File(".."), FileUtils.getRelativePath(new File("map\\map.ditamap")));
-      assertEquals(null, FileUtils.getRelativePath(new File("map.ditamap")));
+      assertNull(FileUtils.getRelativePath(new File("map.ditamap")));
       assertEquals(new File("..\\..\\"), FileUtils.getRelativePath(new File("map1\\map2\\map.ditamap")));
     } else {
       assertEquals(new File(".."), FileUtils.getRelativePath(new File("map/map.ditamap")));
-      assertEquals(null, FileUtils.getRelativePath(new File("map.ditamap")));
+      assertNull(FileUtils.getRelativePath(new File("map.ditamap")));
       assertEquals(new File("../../"), FileUtils.getRelativePath(new File("map1/map2/map.ditamap")));
     }
   }
@@ -283,7 +283,7 @@ public class FileUtilsTest {
     assertEquals("baz", FileUtils.getFragment("foo", "baz"));
     assertEquals("bar", FileUtils.getFragment("foo#bar", null));
     assertEquals("", FileUtils.getFragment("foo#", null));
-    assertEquals(null, FileUtils.getFragment("foo", null));
+    assertNull(FileUtils.getFragment("foo", null));
   }
 
   @Test

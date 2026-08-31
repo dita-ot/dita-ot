@@ -91,7 +91,7 @@ public class LinkFilter extends AbstractXMLFilter {
 
   @VisibleForTesting
   URI getHref(final URI target) {
-    if (target.getFragment() != null && (target.getPath() == null || target.getPath().equals(""))) {
+    if (target.getFragment() != null && (target.getPath() == null || target.getPath().isEmpty())) {
       return target;
     }
     final URI targetAbs = stripFragment(currentFile.resolve(target));

@@ -177,109 +177,59 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       .sorted()
       .collect(Collectors.toList());
     assertEquals(filesExp, filesAct);
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
-
-  private static final Optional<String> ABSENT_STRING = Optional.empty();
 
   @Test
   public void testGenerateCopyTo() {
-    assertEquals(
-      URI.create("foo.bar"),
-      generateCopyTo(URI.create("foo.bar"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING))
-    );
+    assertEquals(URI.create("foo.bar"), generateCopyTo(URI.create("foo.bar"), new Branch(null, null, null, null)));
     assertEquals(
       URI.create("baz-foo.bar"),
-      generateCopyTo(
-        URI.create("foo.bar"),
-        new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("foo.bar"), new Branch("baz-", null, null, null))
     );
     assertEquals(
       URI.create("foo-baz.bar"),
-      generateCopyTo(
-        URI.create("foo.bar"),
-        new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("foo.bar"), new Branch(null, "-baz", null, null))
     );
     assertEquals(
       URI.create("qux-foo-baz.bar"),
-      generateCopyTo(
-        URI.create("foo.bar"),
-        new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("foo.bar"), new Branch("qux-", "-baz", null, null))
     );
     assertEquals(
       URI.create("sub.dir/foo.bar"),
-      generateCopyTo(
-        URI.create("sub.dir/foo.bar"),
-        new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(null, null, null, null))
     );
     assertEquals(
       URI.create("sub.dir/baz-foo.bar"),
-      generateCopyTo(
-        URI.create("sub.dir/foo.bar"),
-        new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch("baz-", null, null, null))
     );
     assertEquals(
       URI.create("sub.dir/foo-baz.bar"),
-      generateCopyTo(
-        URI.create("sub.dir/foo.bar"),
-        new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch(null, "-baz", null, null))
     );
     assertEquals(
       URI.create("sub.dir/qux-foo-baz.bar"),
-      generateCopyTo(
-        URI.create("sub.dir/foo.bar"),
-        new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo.bar"), new Branch("qux-", "-baz", null, null))
     );
-    assertEquals(
-      URI.create("foo"),
-      generateCopyTo(URI.create("foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING))
-    );
-    assertEquals(
-      URI.create("baz-foo"),
-      generateCopyTo(URI.create("foo"), new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING))
-    );
-    assertEquals(
-      URI.create("foo-baz"),
-      generateCopyTo(URI.create("foo"), new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING))
-    );
-    assertEquals(
-      URI.create("qux-foo-baz"),
-      generateCopyTo(
-        URI.create("foo"),
-        new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
-    );
+    assertEquals(URI.create("foo"), generateCopyTo(URI.create("foo"), new Branch(null, null, null, null)));
+    assertEquals(URI.create("baz-foo"), generateCopyTo(URI.create("foo"), new Branch("baz-", null, null, null)));
+    assertEquals(URI.create("foo-baz"), generateCopyTo(URI.create("foo"), new Branch(null, "-baz", null, null)));
+    assertEquals(URI.create("qux-foo-baz"), generateCopyTo(URI.create("foo"), new Branch("qux-", "-baz", null, null)));
     assertEquals(
       URI.create("sub.dir/foo"),
-      generateCopyTo(URI.create("sub.dir/foo"), new Branch(ABSENT_STRING, ABSENT_STRING, ABSENT_STRING, ABSENT_STRING))
+      generateCopyTo(URI.create("sub.dir/foo"), new Branch(null, null, null, null))
     );
     assertEquals(
       URI.create("sub.dir/baz-foo"),
-      generateCopyTo(
-        URI.create("sub.dir/foo"),
-        new Branch(Optional.of("baz-"), ABSENT_STRING, ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo"), new Branch("baz-", null, null, null))
     );
     assertEquals(
       URI.create("sub.dir/foo-baz"),
-      generateCopyTo(
-        URI.create("sub.dir/foo"),
-        new Branch(ABSENT_STRING, Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo"), new Branch(null, "-baz", null, null))
     );
     assertEquals(
       URI.create("sub.dir/qux-foo-baz"),
-      generateCopyTo(
-        URI.create("sub.dir/foo"),
-        new Branch(Optional.of("qux-"), Optional.of("-baz"), ABSENT_STRING, ABSENT_STRING)
-      )
+      generateCopyTo(URI.create("sub.dir/foo"), new Branch("qux-", "-baz", null, null))
     );
   }
 
@@ -311,7 +261,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     );
 
     assertEquals(exp, new HashSet<>(job.getFileInfo()));
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Set<Job.FileInfo> getDuplicateTopicFileInfos() {

@@ -179,7 +179,7 @@ public class StreamStore extends AbstractStore implements Store {
     }
     Serializer result = null;
     try {
-      XMLReader reader = xmlUtils.getXMLReader();
+      XMLReader reader = XMLUtils.getXMLReader();
       for (final XMLFilter filter : filters) {
         // ContentHandler must be reset so e.g. Saxon 9.1 will reassign ContentHandler
         // when reusing filter with multiple Transformers.

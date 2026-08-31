@@ -447,7 +447,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // Normalize buildFile for re-import detection
     buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
-    logger.debug("Buildfile " + buildFile);
+    logger.debug("Buildfile {}", buildFile);
 
     if (args.logFile != null) {
       PrintStream logTo;
@@ -608,7 +608,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .max(Integer::compare)
         .get();
       templates.forEach(dir ->
-        logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+        logger.info("{}{}  {}", dir.getKey(), " ".repeat(width - dir.getKey().length()), dir.getValue())
       );
     }
   }
@@ -657,7 +657,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (installFile.contains("@")) {
       final String[] tokens = installFile.split("@");
       pluginInstall.setPluginName(tokens[0]);
-      pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+      pluginInstall.setPluginVersion(SemVerMatch.of(tokens[1]));
     } else {
       pluginInstall.setPluginName(installFile);
       pluginInstall.setPluginVersion(null);
@@ -703,7 +703,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private Map<String, Object> readProperties(File localPropertiesFile) {
-    logger.debug("Reading " + localPropertiesFile);
+    logger.debug("Reading {}", localPropertiesFile);
     try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
       final Properties localProperties = new Properties();
       localProperties.load(in);
@@ -712,7 +712,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .stream()
         .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
     } catch (IOException e) {
-      logger.error("Failed to read " + localPropertiesFile, e);
+      logger.error("Failed to read {}", localPropertiesFile, e);
       return Collections.emptyMap();
     }
   }
@@ -943,7 +943,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final int length = pairs.stream().map(Map.Entry::getKey).map(String::length).reduce(Integer::max).orElse(0);
     for (Map.Entry<String, String> pair : pairs) {
       logger.info(
-        Strings.padEnd(pair.getKey(), length, ' ') + (pair.getValue() != null ? ("  " + pair.getValue()) : "")
+        "{}{}",
+        Strings.padEnd(pair.getKey(), length, ' '),
+        pair.getValue() != null ? ("  " + pair.getValue()) : ""
       );
     }
   }
@@ -962,7 +964,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final File parent = file.getParentFile();
 
     if (parent != null) {
-      logger.trace("Searching in " + parent.getAbsolutePath());
+      logger.trace("Searching in {}", parent.getAbsolutePath());
     }
 
     return parent;
@@ -982,7 +984,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * not
    */
   private File findBuildFile(final String start, final String suffix) {
-    logger.debug("Searching for " + suffix);
+    logger.debug("Searching for {}", suffix);
 
     File parent = new File(new File(start).getAbsolutePath());
     File file = new File(parent, suffix);
@@ -1082,7 +1084,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ProjectHelper.configureProject(project, buildFile);
 
         // make sure that we have a target to execute
-        if (targets.size() == 0) {
+        if (targets.isEmpty()) {
           if (project.getDefaultTarget() != null) {
             targets.addElement(project.getDefaultTarget());
           }

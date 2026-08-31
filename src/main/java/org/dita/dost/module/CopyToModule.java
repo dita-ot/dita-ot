@@ -194,11 +194,11 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     final File path2rootmap = getPathtoRootmap(target, inputMapInTemp);
     XMLFilter filter = new CopyToFilter(workdir, path2project, path2rootmap, src, target);
 
-    logger.info("Processing " + src + " to " + target);
+    logger.info("Processing {} to {}", src, target);
     try {
       job.getStore().transform(src, target, Collections.singletonList(filter));
     } catch (final DITAOTException e) {
-      logger.error("Failed to write copy-to file: " + e.getMessage(), e);
+      logger.error("Failed to write copy-to file: {}", e.getMessage(), e);
     }
   }
 
@@ -378,6 +378,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static boolean isOutFile(final URI filePathName, final URI inputMap) {
     final URI relativePath = URLUtils.getRelativePath(inputMap, filePathName);
-    return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+    return !(relativePath.getPath().isEmpty() || !relativePath.getPath().startsWith(".."));
   }
 }

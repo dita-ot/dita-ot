@@ -133,7 +133,7 @@ public final class DitaValReader implements AbstractReader {
     try {
       doc = job.getStore().getDocument(input);
     } catch (IOException e) {
-      logger.error("Failed to read DITAVAL file: " + e.getMessage(), e);
+      logger.error("Failed to read DITAVAL file: {}", e.getMessage(), e);
       return;
     }
 

@@ -642,7 +642,7 @@ public final class GenListModuleReader extends AbstractXMLFilter {
         final URI copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
         if (copyTo != null) {
           if (copyTo.toString().isEmpty()) {
-            logger.warn("Copy-to task [href=\"\" copy-to=\"" + filename + "\"] was ignored.");
+            logger.warn("Copy-to task [href=\"\" copy-to=\"{}\"] was ignored.", filename);
           } else {
             final URI value = stripFragment(currentDir.resolve(copyTo));
             if (copytoMap.get(filename) != null) {
@@ -818,22 +818,13 @@ public final class GenListModuleReader extends AbstractXMLFilter {
 
   /**
    * File reference with path and optional format.
+   *
+   * @param filename Absolute URI reference
+   * @param format   Format of the reference
    */
-  public static class Reference {
-
-    /**
-     * Absolute URI reference
-     */
-    public final URI filename;
-    /**
-     * Format of the reference
-     */
-    public final String format;
-
-    public Reference(final URI filename, final String format) {
+  public record Reference(URI filename, String format) {
+    public Reference {
       assert filename.isAbsolute() && filename.getFragment() == null;
-      this.filename = filename;
-      this.format = format;
     }
 
     public Reference(final URI filename) {

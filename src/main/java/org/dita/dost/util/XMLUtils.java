@@ -20,6 +20,7 @@ import static org.dita.dost.util.Constants.*;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -107,7 +108,7 @@ public final class XMLUtils {
     configureSaxonCollationResolvers(config);
     processor = new Processor(config);
     xsltCompiler = processor.newXsltCompiler();
-    xsltCompiler.setURIResolver(catalogResolver);
+    xsltCompiler.setResourceResolver(new ResourceResolverWrappingURIResolver(catalogResolver));
   }
 
   /**
@@ -122,7 +123,7 @@ public final class XMLUtils {
   static void configureSaxonExtensions(final net.sf.saxon.Configuration conf) {
     for (ExtensionFunctionDefinition def : ServiceLoader.load(ExtensionFunctionDefinition.class)) {
       try {
-        conf.registerExtensionFunction(def.getClass().newInstance());
+        conf.registerExtensionFunction(def.getClass().getDeclaredConstructor().newInstance());
       } catch (InstantiationException e) {
         throw new RuntimeException(
           "Failed to register " +
@@ -133,7 +134,7 @@ public final class XMLUtils {
           e.getMessage(),
           e
         );
-      } catch (IllegalAccessException e) {
+      } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
         throw new RuntimeException(e);
       }
     }
@@ -146,7 +147,7 @@ public final class XMLUtils {
   static void configureSaxonCollationResolvers(final net.sf.saxon.Configuration conf) {
     for (DelegatingCollationUriResolver resolver : ServiceLoader.load(DelegatingCollationUriResolver.class)) {
       try {
-        final DelegatingCollationUriResolver newResolver = resolver.getClass().newInstance();
+        final DelegatingCollationUriResolver newResolver = resolver.getClass().getDeclaredConstructor().newInstance();
         final CollationURIResolver currentResolver = conf.getCollationURIResolver();
         if (currentResolver != null) {
           newResolver.setBaseResolver(currentResolver);
@@ -162,7 +163,7 @@ public final class XMLUtils {
           e.getMessage(),
           e
         );
-      } catch (IllegalAccessException e) {
+      } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
         throw new RuntimeException(e);
       }
     }
@@ -227,7 +228,7 @@ public final class XMLUtils {
         case "INFO" -> logger.info(msg);
         case "DEBUG" -> logger.debug(msg);
         default -> {
-          logger.error("Message level " + level + " not supported");
+          logger.error("Message level {} not supported", level);
           logger.info(msg);
         }
       }
@@ -509,7 +510,7 @@ public final class XMLUtils {
           queue.offer((Element) node);
         }
       }
-      if (pe.getAttribute(ATTRIBUTE_NAME_CLASS) == null || !classValue.matches(pe)) {
+      if (pe.getAttributeNode(ATTRIBUTE_NAME_CLASS) == null || !classValue.matches(pe)) {
         continue;
       }
       final Attr value = pe.getAttributeNode(attrName);
@@ -577,7 +578,7 @@ public final class XMLUtils {
     final net.sf.saxon.s9api.QName name = attr.getNodeName();
     addOrSetAttribute(
       atts,
-      name.getNamespaceURI(),
+      name.getNamespaceUri().toString(),
       name.getLocalName(),
       name.getPrefix().isEmpty() ? name.getLocalName() : (name.getPrefix() + ":" + name.getLocalName()),
       "CDATA",
@@ -835,7 +836,7 @@ public final class XMLUtils {
    * Close source.
    */
   public static void close(final Source input) throws IOException {
-    if (input != null && input instanceof final StreamSource s) {
+    if (input instanceof final StreamSource s) {
       final InputStream i = s.getInputStream();
       if (i != null) {
         i.close();
@@ -852,7 +853,7 @@ public final class XMLUtils {
    * Close result.
    */
   public static void close(final Result result) throws IOException {
-    if (result != null && result instanceof final StreamResult r) {
+    if (result instanceof final StreamResult r) {
       final OutputStream o = r.getOutputStream();
       if (o != null) {
         o.close();
@@ -941,7 +942,7 @@ public final class XMLUtils {
       if (format.equals(e.getKey())) {
         try {
           // XMLReaderFactory.createXMLReader cannot be used
-          final XMLReader r = (XMLReader) Class.forName(e.getValue()).newInstance();
+          final XMLReader r = (XMLReader) Class.forName(e.getValue()).getDeclaredConstructor().newInstance();
           final Map<String, Boolean> features = parserFeatures.getOrDefault(e.getKey(), emptyMap());
           for (final Map.Entry<String, Boolean> feature : features.entrySet()) {
             try {
@@ -966,7 +967,13 @@ public final class XMLUtils {
             // Ignore
           }
           return Optional.of(r);
-        } catch (final InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
+        } catch (
+          final InstantiationException
+          | ClassNotFoundException
+          | IllegalAccessException
+          | NoSuchMethodException
+          | InvocationTargetException ex
+        ) {
           throw new SAXException(ex);
         }
       }
@@ -1061,7 +1068,7 @@ public final class XMLUtils {
 
   public XsltCompiler getXsltCompiler() {
     XsltCompiler res = processor.newXsltCompiler();
-    res.setURIResolver(catalogResolver);
+    res.setResourceResolver(new ResourceResolverWrappingURIResolver(catalogResolver));
     return res;
   }
 

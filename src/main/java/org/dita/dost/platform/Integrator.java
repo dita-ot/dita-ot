@@ -20,8 +20,6 @@ import static org.dita.dost.util.URLUtils.getRelativePath;
 import static org.dita.dost.util.URLUtils.toFile;
 import static org.dita.dost.util.XMLUtils.toList;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
 import java.net.URI;
@@ -128,7 +126,7 @@ public final class Integrator {
   private final Set<String> extensionPoints;
   private final Map<String, Integer> pluginOrder = new HashMap<>();
   private Properties properties;
-  private Set<String> pluginList;
+  private final Set<String> pluginList;
 
   /**
    * Default Constructor.
@@ -287,7 +285,7 @@ public final class Integrator {
     // generate the files from template
     for (final Entry<String, Value> template : templateSet.entrySet()) {
       final File templateFile = new File(ditaDir, template.getKey());
-      logger.trace("Process template " + templateFile.getPath());
+      logger.trace("Process template {}", templateFile.getPath());
       //            fileGen.setPluginId(template.getValue().id);
       fileGen.generate(templateFile);
     }
@@ -298,14 +296,14 @@ public final class Integrator {
     final Set<String> imgExts = new HashSet<>();
     for (final String ext : properties.getProperty(CONF_SUPPORTED_IMAGE_EXTENSIONS, "").split(CONF_LIST_SEPARATOR)) {
       final String e = ext.trim();
-      if (e.length() != 0) {
+      if (!e.isEmpty()) {
         imgExts.add(e);
       }
     }
     if (featureTable.containsKey(FEAT_IMAGE_EXTENSIONS)) {
       for (final Value ext : featureTable.get(FEAT_IMAGE_EXTENSIONS)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           imgExts.add(e);
         }
       }
@@ -330,7 +328,7 @@ public final class Integrator {
     if (featureTable.containsKey(FEAT_PRINT_TRANSTYPES)) {
       for (final Value ext : featureTable.get(FEAT_PRINT_TRANSTYPES)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           printTranstypes.add(e);
         }
       }
@@ -529,11 +527,12 @@ public final class Integrator {
       };
 
       copy.accept(Paths.get("messages.xml"));
-      Files
-        .list(config)
-        .map(Path::getFileName)
-        .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
-        .forEach(copy);
+      try (var files = Files.list(config)) {
+        files
+          .map(Path::getFileName)
+          .filter(path -> path.toString().startsWith("messages_") && path.toString().endsWith(".properties"))
+          .forEach(copy);
+      }
       copy.accept(Paths.get(PLUGIN_CONF));
       copy.accept(Paths.get("configuration.properties"));
       copy.accept(Paths.get("CatalogManager.properties"));
@@ -664,7 +663,7 @@ public final class Integrator {
         if (lib instanceof Value.PathValue path) {
           return Stream.of(toFile(path.getPath()));
         } else {
-          logger.error("Library import must be a file feature: " + lib.value());
+          logger.error("Library import must be a file feature: {}", lib.value());
           return Stream.empty();
         }
       })
@@ -857,7 +856,7 @@ public final class Integrator {
     if (featureTable.containsKey(featureName)) {
       for (final Value ext : featureTable.get(featureName)) {
         final String e = ext.value().trim();
-        if (e.length() != 0) {
+        if (!e.isEmpty()) {
           exts.add(e);
         }
       }
@@ -890,7 +889,7 @@ public final class Integrator {
           featureTable.put(extensionPointId, value);
         } else {
           //Make shallow clone to avoid making modifications directly to list inside the current feature.
-          featureTable.put(extensionPointId, values != null ? new ArrayList(values) : null);
+          featureTable.put(extensionPointId, values != null ? new ArrayList<>(values) : null);
         }
       }
 

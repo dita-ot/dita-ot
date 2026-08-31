@@ -124,7 +124,7 @@ record Features(
       }
       while (valueTokenizer.hasMoreElements()) {
         final String valueElement = valueTokenizer.nextToken();
-        if (valueElement != null && valueElement.trim().length() != 0) {
+        if (valueElement != null && !valueElement.trim().isEmpty()) {
           if (isFile && !FileUtils.isAbsolutePath(valueElement)) {
             if (featureId.equals("ant.import")) {
               valueBuffer.add(new Value.PathValue(this.pluginId, pluginDir, valueElement.trim()));

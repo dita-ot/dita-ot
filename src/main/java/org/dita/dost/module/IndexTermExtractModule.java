@@ -116,7 +116,7 @@ public class IndexTermExtractModule extends AbstractPipelineModuleImpl {
     //RFE 2987769 Eclipse index-see
     indexTermCollection.setPipelineHashIO((PipelineHashIO) input);
 
-    if (encoding != null && encoding.trim().length() > 0) {
+    if (encoding != null && !encoding.trim().isEmpty()) {
       IndexTerm.setTermLocale(StringUtils.getLocale(encoding));
     }
   }

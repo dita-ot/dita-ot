@@ -8,10 +8,7 @@
 package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_CLASS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,8 +36,8 @@ public class DitaClassTest {
 
   @Test
   public void testEqualsObject() {
-    assertTrue(new DitaClass("- foo/bar baz/qux ").equals(new DitaClass("- foo/bar baz/qux ")));
-    assertTrue(new DitaClass("- foo/bar baz/qux ").equals(new DitaClass("-  foo/bar  baz/qux  ")));
+    assertEquals(new DitaClass("- foo/bar baz/qux "), new DitaClass("- foo/bar baz/qux "));
+    assertEquals(new DitaClass("- foo/bar baz/qux "), new DitaClass("-  foo/bar  baz/qux  "));
   }
 
   @Test
@@ -107,13 +104,13 @@ public class DitaClassTest {
   public void getInstance_same() {
     final DitaClass first = DitaClass.getInstance("- foo/bar ");
     final DitaClass second = DitaClass.getInstance("- foo/bar ");
-    assertTrue(first == second);
+    assertSame(first, second);
   }
 
   @Test
   public void getInstance_differentWhitespace() {
     final DitaClass first = DitaClass.getInstance("- foo/bar ");
     final DitaClass second = DitaClass.getInstance("-  foo/bar  ");
-    assertTrue(first == second);
+    assertSame(first, second);
   }
 }

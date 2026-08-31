@@ -14,7 +14,6 @@ import static org.dita.dost.util.URLUtils.toFile;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
@@ -260,7 +259,7 @@ public final class ExtensibleAntInvoker extends Task {
           module.setParam(p.getName(), p.getValue());
         }
       }
-      for (final OutputPropertyElem o : ((XsltElem) m).outputProperties) {
+      for (final OutputPropertyElem o : xm.outputProperties) {
         if (!o.isValid()) {
           throw new BuildException("Incomplete outputproperty");
         }
@@ -398,7 +397,7 @@ public final class ExtensibleAntInvoker extends Task {
           inc.add(new File(l));
         }
       } catch (IOException e) {
-        logger.error("Failed to read includes file " + i.file + ": " + e.getMessage(), e);
+        logger.error("Failed to read includes file {}: {}", i.file, e.getMessage(), e);
       }
     }
     return inc;

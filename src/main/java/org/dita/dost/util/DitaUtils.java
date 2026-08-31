@@ -17,7 +17,6 @@ import java.util.Objects;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 public class DitaUtils {
 

@@ -9,8 +9,7 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,8 +36,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class MapReaderModuleTest {
 
-  File resourceDir = TestUtils.getResourceDir(getClass());
-  File srcDir = new File(resourceDir, "src");
+  final File resourceDir = TestUtils.getResourceDir(getClass());
+  final File srcDir = new File(resourceDir, "src");
   File expDir = new File(resourceDir, "exp");
 
   private MapReaderModule reader;
@@ -105,7 +104,7 @@ public class MapReaderModuleTest {
           break;
         case "topic.dita":
         case "subtopic.dita":
-          assertEquals(null, fileInfo.format());
+          assertNull(fileInfo.format());
           break;
         case "ext.pdf":
           assertEquals("pdf", fileInfo.format());
@@ -114,8 +113,8 @@ public class MapReaderModuleTest {
           throw new RuntimeException("Unmapped " + fileInfo.uri());
       }
     }
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.WARN));
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.ERROR));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.WARN));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.ERROR));
   }
 
   @Test

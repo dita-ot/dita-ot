@@ -8,6 +8,7 @@
 package org.dita.dost.module;
 
 import static java.util.Collections.singletonList;
+import static java.util.Objects.requireNonNullElse;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.StringUtils.getExtProps;
@@ -118,13 +119,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     this.map = map;
     currentFile = job.tempDirURI.resolve(map);
     // parse
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final Document doc;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       doc = job.getStore().getDocument(currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
@@ -141,13 +142,13 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     logger.debug("Filter existing topics");
     filterTopics(doc.getDocumentElement(), Collections.emptyList());
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
 
     try {
       doc.setDocumentURI(currentFile.toString());
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
     }
   }
 
@@ -369,7 +370,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         //                 TODO: Maybe Job should be updated earlier?
         //                job.add(fi);
         renamedTopics.add(srcUri);
-        logger.info("Filtering " + srcAbsUri + " to " + dstAbsUri);
+        logger.info("Filtering {} to {}", srcAbsUri, dstAbsUri);
         final ProfilingFilter writer = new ProfilingFilter();
         writer.setLogger(logger);
         writer.setJob(job);
@@ -380,7 +381,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         try {
           job.getStore().transform(URLUtils.removeFragment(srcAbsUri), URLUtils.removeFragment(dstAbsUri), pipe);
         } catch (final DITAOTException e) {
-          logger.error("Failed to filter " + srcAbsUri + " to " + dstAbsUri + ": " + e.getMessage(), e);
+          logger.error("Failed to filter {} to {}: {}", srcAbsUri, dstAbsUri, e.getMessage(), e);
         }
         topicref.setAttribute(ATTRIBUTE_NAME_HREF, copyTo);
         topicref.removeAttribute(BRANCH_COPY_TO);
@@ -436,11 +437,11 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       writer.setCurrentFile(srcAbsUri);
       final List<XMLFilter> pipe = singletonList(writer);
 
-      logger.info("Filtering " + srcAbsUri);
+      logger.info("Filtering {}", srcAbsUri);
       try {
         job.getStore().transform(srcAbsUri, pipe);
       } catch (final DITAOTException e) {
-        logger.error("Failed to filter " + srcAbsUri + ": " + e.getMessage(), e);
+        logger.error("Failed to filter {}: {}", srcAbsUri, e.getMessage(), e);
       }
       filtered.add(srcAbsUri);
     }
@@ -470,7 +471,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     FilterUtils f = filterCache.get(ditaval);
     if (f == null) {
       ditaValReader.filterReset();
-      logger.info("Reading " + ditaval);
+      logger.info("Reading {}", ditaval);
       ditaValReader.read(ditaval);
       Map<FilterUtils.FilterKey, FilterUtils.Action> filterMap = ditaValReader.getFilterMap();
       f =
@@ -490,7 +491,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
    */
   void splitBranches(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
-    if (ditavalRefs.size() > 0) {
+    if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
       for (final Element branch : ditavalRefs) {
         elem.removeChild(branch);
@@ -515,12 +516,7 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
         branch.appendChild(ditavalref);
         final Branch currentFilter = filter.merge(ditavalref);
         processAttributes(branch, currentFilter);
-        final Branch childFilter = new Branch(
-          currentFilter.resourcePrefix,
-          currentFilter.resourceSuffix,
-          Optional.empty(),
-          Optional.empty()
-        );
+        final Branch childFilter = new Branch(currentFilter.resourcePrefix, currentFilter.resourceSuffix, null, null);
         // process children of all branches
         for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
@@ -537,38 +533,23 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     }
   }
 
-  /** Immutable branch definition. */
-  public static class Branch {
-
-    /** Empty root branch */
+  /**
+   * Immutable branch definition.
+   */
+  public record Branch(String resourcePrefix, String resourceSuffix, String keyscopePrefix, String keyscopeSuffix) {
+    /**
+     * Empty root branch
+     */
     public static final Branch EMPTY = new Branch();
-    public final Optional<String> resourcePrefix;
-    public final Optional<String> resourceSuffix;
-    public final Optional<String> keyscopePrefix;
-    public final Optional<String> keyscopeSuffix;
 
     private Branch() {
-      this.resourcePrefix = Optional.empty();
-      this.resourceSuffix = Optional.empty();
-      this.keyscopePrefix = Optional.empty();
-      this.keyscopeSuffix = Optional.empty();
+      this(null, null, null, null);
     }
 
-    public Branch(
-      final Optional<String> resourcePrefix,
-      final Optional<String> resourceSuffix,
-      final Optional<String> keyscopePrefix,
-      final Optional<String> keyscopeSuffix
-    ) {
-      //            final URI prefix = toURI(resourcePrefix).normalize();
-      //            if (prefix.toString().startsWith("..")) {
-      //                throw new Exception("ERROR: Resource prefix may not start with ..");
-      //            }
-      this.resourcePrefix = resourcePrefix;
-      this.resourceSuffix = resourceSuffix;
-      this.keyscopePrefix = keyscopePrefix;
-      this.keyscopeSuffix = keyscopeSuffix;
-    }
+    //            final URI prefix = toURI(resourcePrefix).normalize();
+    //            if (prefix.toString().startsWith("..")) {
+    //                throw new Exception("ERROR: Resource prefix may not start with ..");
+    //            }
 
     @Override
     public String toString() {
@@ -576,6 +557,8 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
     }
 
     public Branch merge(final Element ditavalref) {
+      assert DITAVAREF_D_DITAVALREF.matches(ditavalref);
+
       return new Branch(
         getPrefix(ditavalref, this.resourcePrefix),
         getSuffix(ditavalref, this.resourceSuffix),
@@ -584,39 +567,55 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       );
     }
 
-    private Optional<String> get(final Element ditavalref, final DitaClass cls) {
+    private String get(final Element ditavalref, final DitaClass cls) {
       for (final Element ditavalmeta : getChildElements(ditavalref, DITAVAREF_D_DITAVALMETA)) {
         final Optional<Element> childElements = getChildElement(ditavalmeta, cls);
         if (childElements.isPresent()) {
-          return Optional.of(getStringValue(childElements.get()));
+          return getStringValue(childElements.get());
         }
       }
-      return Optional.empty();
+      return null;
     }
 
-    private Optional<String> getPrefix(final Element ditavalref, final Optional<String> oldValue) {
-      final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
-      return v.map(s -> Optional.of(oldValue.orElse("") + s)).orElse(oldValue);
+    private String getPrefix(final Element ditavalref, final String oldValue) {
+      final String v = get(ditavalref, DITAVAREF_D_DVR_RESOURCEPREFIX);
+      if (v != null) {
+        return requireNonNullElse(oldValue, "") + v;
+      } else {
+        return oldValue;
+      }
     }
 
-    private Optional<String> getSuffix(final Element ditavalref, final Optional<String> oldValue) {
-      final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
-      return v.map(s -> Optional.of(s + oldValue.orElse(""))).orElse(oldValue);
+    private String getSuffix(final Element ditavalref, final String oldValue) {
+      final String v = get(ditavalref, DITAVAREF_D_DVR_RESOURCESUFFIX);
+      if (v != null) {
+        return v + requireNonNullElse(oldValue, "");
+      } else {
+        return oldValue;
+      }
     }
 
-    private Optional<String> getKeyscopePrefix(final Element ditavalref, final Optional<String> oldValue) {
-      final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
-      return v.map(s -> Optional.of(oldValue.orElse("") + s)).orElse(oldValue);
+    private String getKeyscopePrefix(final Element ditavalref, final String oldValue) {
+      final String v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPEPREFIX);
+      if (v != null) {
+        return requireNonNullElse(oldValue, "") + v;
+      } else {
+        return oldValue;
+      }
     }
 
-    private Optional<String> getKeyscopeSuffix(final Element ditavalref, final Optional<String> oldValue) {
-      final Optional<String> v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
-      return v.map(s -> Optional.of(s + oldValue.orElse(""))).orElse(oldValue);
+    private String getKeyscopeSuffix(final Element ditavalref, final String oldValue) {
+      final String v = get(ditavalref, DITAVAREF_D_DVR_KEYSCOPESUFFIX);
+      if (v != null) {
+        return v + requireNonNullElse(oldValue, "");
+      } else {
+        return oldValue;
+      }
     }
   }
 
   private void processAttributes(final Element elem, final Branch filter) {
-    if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
+    if (filter.resourcePrefix != null || filter.resourceSuffix != null) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
       final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
       final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
@@ -649,19 +648,27 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
       }
     }
 
-    if (filter.keyscopePrefix.isPresent() || filter.keyscopeSuffix.isPresent()) {
+    if (filter.keyscopePrefix != null || filter.keyscopeSuffix != null) {
       final StringBuilder buf = new StringBuilder();
       final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
       if (!keyscope.isEmpty()) {
         for (final String key : keyscope.trim().split("\\s+")) {
-          filter.keyscopePrefix.ifPresent(buf::append);
+          if (filter.keyscopePrefix != null) {
+            buf.append(filter.keyscopePrefix);
+          }
           buf.append(key);
-          filter.keyscopeSuffix.ifPresent(buf::append);
+          if (filter.keyscopeSuffix != null) {
+            buf.append(filter.keyscopeSuffix);
+          }
           buf.append(' ');
         }
       } else {
-        filter.keyscopePrefix.ifPresent(buf::append);
-        filter.keyscopeSuffix.ifPresent(buf::append);
+        if (filter.keyscopePrefix != null) {
+          buf.append(filter.keyscopePrefix);
+        }
+        if (filter.keyscopeSuffix != null) {
+          buf.append(filter.keyscopeSuffix);
+        }
       }
       elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
     }
@@ -669,25 +676,25 @@ public class BranchFilterModule extends AbstractPipelineModuleImpl {
 
   static URI generateCopyTo(final URI href, final Branch filter) {
     final StringBuilder buf = new StringBuilder(href.toString());
-    final Optional<String> suffix = filter.resourceSuffix;
-    suffix.ifPresent(s -> {
+    final String suffix = filter.resourceSuffix;
+    if (suffix != null) {
       final int sep = buf.lastIndexOf(URI_SEPARATOR);
       final int i = buf.lastIndexOf(".");
       if (i != -1 && (sep == -1 || i > sep)) {
-        buf.insert(i, s);
+        buf.insert(i, suffix);
       } else {
-        buf.append(s);
+        buf.append(suffix);
       }
-    });
-    final Optional<String> prefix = filter.resourcePrefix;
-    prefix.ifPresent(s -> {
+    }
+    final String prefix = filter.resourcePrefix;
+    if (prefix != null) {
       final int i = buf.lastIndexOf(URI_SEPARATOR);
       if (i != -1) {
-        buf.insert(i + 1, s);
+        buf.insert(i + 1, prefix);
       } else {
-        buf.insert(0, s);
+        buf.insert(0, prefix);
       }
-    });
+    }
     return toURI(buf.toString());
   }
 }

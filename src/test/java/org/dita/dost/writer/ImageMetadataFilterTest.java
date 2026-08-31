@@ -16,12 +16,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.dita.dost.TestUtils;
-import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
@@ -62,9 +60,8 @@ public class ImageMetadataFilterTest {
       new InputSource(f.toURI().toString())
     );
     assertEquals(
-      Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
-        .stream()
+      Stream
+        .of("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),
       cache.keySet()
@@ -90,9 +87,8 @@ public class ImageMetadataFilterTest {
       new InputSource(f.toURI().toString())
     );
     assertEquals(
-      Arrays
-        .asList("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
-        .stream()
+      Stream
+        .of("img.png", "img.gif", "img.jpg", "img.svg", "img.xxx")
         .map(img -> new File(srcDir, img).toURI())
         .collect(Collectors.toSet()),
       cache.keySet()

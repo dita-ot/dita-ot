@@ -25,7 +25,7 @@ class AllRangeTest {
     public final List<String> lines = new ArrayList<>();
 
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char[] ch, int start, int length) throws SAXException {
       lines.add(new String(ch, start, length));
     }
   }

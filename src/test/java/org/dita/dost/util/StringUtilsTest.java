@@ -21,7 +21,7 @@ public class StringUtilsTest {
   @Test
   public void testAssembleString() {
     String result = null;
-    final Collection<Object> input = new ArrayList<Object>();
+    final Collection<Object> input = new ArrayList<>();
     result = StringUtils.join((Collection<Object>) null, ";");
     assertEquals("", result);
     result = StringUtils.join(Collections.emptyList(), ";");

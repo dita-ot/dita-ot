@@ -175,7 +175,7 @@ public class SubjectSchemeReader {
     if (!job.getStore().exists(scheme.toURI())) {
       throw new IllegalStateException();
     }
-    logger.debug("Load subject scheme " + scheme);
+    logger.debug("Load subject scheme {}", scheme);
 
     try {
       final XdmNode doc = job.getStore().getImmutableNode(scheme.toURI());

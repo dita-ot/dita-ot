@@ -7,8 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import static java.net.URI.create;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;

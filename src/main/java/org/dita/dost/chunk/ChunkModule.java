@@ -435,7 +435,7 @@ public class ChunkModule extends AbstractPipelineModuleImpl {
       try {
         job.getStore().delete(tmp);
       } catch (IOException e) {
-        logger.error("Failed to delete " + tmp, e);
+        logger.error("Failed to delete {}", tmp, e);
       }
       var tmpFileInfo = job.getFileInfo(tmp);
       if (tmpFileInfo != null) {

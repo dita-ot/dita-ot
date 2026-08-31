@@ -292,7 +292,7 @@ class DefaultLogger extends AbstractLogger implements BuildLogger {
     if (event.getTarget().getUnless() != null && evaluate(event.getProject(), event.getTarget().getUnless())) {
       return;
     }
-    if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().equals("")) {
+    if (Project.MSG_INFO <= msgOutputLevel && !event.getTarget().getName().isEmpty()) {
       final String msg;
       if (event.getTarget().getDescription() == null) {
         msg = null;

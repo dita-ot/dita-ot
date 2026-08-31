@@ -117,14 +117,14 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   private void processFile(final FileInfo f) {
     currentFile = f.src();
     if (f.src() == null || !exists(f.src()) || !f.src().equals(f.result())) {
-      logger.warn("Ignoring a copy-to file " + f.result());
+      logger.warn("Ignoring a copy-to file {}", f.result());
       return;
     } else if (f.uri().isAbsolute() && !f.uri().toString().startsWith(job.tempDirURI.toString())) {
       //The file is outside the temp dir, we cannot write to itself
       throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri());
     }
     outputFile = new File(job.tempDirURI.resolve(f.uri()));
-    logger.info("Processing " + f.src() + " to " + outputFile.toURI());
+    logger.info("Processing {} to {}", f.src(), outputFile.toURI());
 
     final Set<URI> schemaSet = dic.get(f.uri());
     if (schemaSet != null && !schemaSet.isEmpty()) {
@@ -545,7 +545,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
    */
   private static boolean isOutFile(final File filePathName, final File inputMap) {
     final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
-    return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+    return !(relativePath.getPath().isEmpty() || !relativePath.getPath().startsWith(".."));
   }
 
   /**

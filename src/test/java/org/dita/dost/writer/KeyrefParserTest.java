@@ -26,7 +26,6 @@ import net.sf.saxon.sapling.SaplingElement;
 import net.sf.saxon.sapling.SaplingNode;
 import net.sf.saxon.sapling.SaplingText;
 import net.sf.saxon.sapling.Saplings;
-import org.apache.commons.io.IOUtils;
 import org.dita.dost.TestUtils;
 import org.dita.dost.reader.KeyrefReader;
 import org.dita.dost.store.StreamStore;

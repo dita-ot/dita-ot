@@ -527,7 +527,7 @@ public class KeyrefReaderTest {
     keyrefreader.read(filename.toURI(), readMap(filename));
 
     assertEquals(1, logger.getMessages().size());
-    assertEquals("[DOTJ069E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message);
+    assertEquals("[DOTJ069E][ERROR] Circular key definition same -> same.", logger.getMessages().get(0).message());
   }
 
   @Test
@@ -542,7 +542,7 @@ public class KeyrefReaderTest {
     assertEquals(3, logger.getMessages().size());
     final Set<String> act = new HashSet<>(3);
     for (final Message msg : logger.getMessages()) {
-      act.add(msg.message);
+      act.add(msg.message());
     }
     assertEquals(
       new HashSet<>(

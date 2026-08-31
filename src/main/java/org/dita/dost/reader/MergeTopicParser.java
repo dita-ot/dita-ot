@@ -179,7 +179,7 @@ public final class MergeTopicParser extends XMLFilterImpl {
     dirPath = dir;
     try {
       final URI f = dir.toPath().resolve(filePath).toAbsolutePath().toFile().toURI();
-      logger.info("Processing " + f);
+      logger.info("Processing {}", f);
       job.getStore().transform(f, this);
     } catch (final RuntimeException e) {
       throw e;

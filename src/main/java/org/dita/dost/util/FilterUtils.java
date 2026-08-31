@@ -770,7 +770,7 @@ public final class FilterUtils {
       if (outputClassAttr.length() != 0) {
         atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
       }
-      if (styleAttr.length() != 0) {
+      if (!styleAttr.isEmpty()) {
         atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
       }
       contentHandler.startElement(

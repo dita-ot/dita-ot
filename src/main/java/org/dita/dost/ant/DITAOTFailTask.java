@@ -211,7 +211,7 @@ public final class DITAOTFailTask extends Exit {
    * @return true if there is no if condition, or the named property exists
    */
   private boolean testIfCondition() {
-    if (ifCondition == null || "".equals(ifCondition)) {
+    if (ifCondition == null || ifCondition.isEmpty()) {
       return true;
     }
     return getProject().getProperty(ifCondition) != null;
@@ -223,7 +223,7 @@ public final class DITAOTFailTask extends Exit {
    *  or there is a named property but it doesn't exist
    */
   private boolean testUnlessCondition() {
-    if (unlessCondition == null || "".equals(unlessCondition)) {
+    if (unlessCondition == null || unlessCondition.isEmpty()) {
       return true;
     }
     return getProject().getProperty(unlessCondition) == null;

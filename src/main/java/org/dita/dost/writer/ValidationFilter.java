@@ -214,8 +214,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
                   MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString()
                 );
                 case SKIP -> logger.error(
-                  MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() +
-                  ", using authored value."
+                  "{}, using authored value.",
+                  MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString()
                 );
                 case LAX -> {
                   final URI corrected = URLUtils.setFragment(
@@ -227,16 +227,15 @@ public final class ValidationFilter extends AbstractXMLFilter {
                   }
                   res.setValue(res.getIndex(attrName), currentFile.toString());
                   logger.error(
-                    MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() +
-                    ", using " +
-                    corrected +
-                    "."
+                    "{}, using {}.",
+                    MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString(),
+                    corrected
                   );
                 }
               }
             }
           } catch (IOException e) {
-            logger.debug(String.format("Failed to resolve real path for %s: %s", p, e.getMessage()), e);
+            logger.debug("Failed to resolve real path for {}: {}", p, e.getMessage(), e);
           }
         }
       } catch (final URISyntaxException e) {
@@ -246,7 +245,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
             e
           );
           case SKIP -> logger.error(
-            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
+            "{}, using invalid value.",
+            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator)
           );
           case LAX -> {
             try {
@@ -256,14 +256,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
               }
               res.setValue(res.getIndex(attrName), uri.toASCIIString());
               logger.error(
-                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) +
-                ", using '" +
-                uri.toASCIIString() +
-                "'."
+                "{}, using '{}'.",
+                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator),
+                uri.toASCIIString()
               );
             } catch (final URISyntaxException e1) {
               logger.error(
-                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
+                "{}, using invalid value.",
+                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator)
               );
             }
           }
@@ -295,7 +295,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
             logger.warn(MessageUtils.getMessage("DOTJ075W", href.toString()).setLocation(locator).toString());
           }
           default -> logger.warn(
-            MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value."
+            "{}, using invalid value.",
+            MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator)
           );
         }
       }

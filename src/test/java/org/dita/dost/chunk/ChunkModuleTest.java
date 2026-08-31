@@ -138,8 +138,8 @@ public class ChunkModuleTest extends AbstractModuleTest {
   public void test() {
     initStore(job.getStore());
     super.test();
-    final List<Message> warnings = logger.getMessages().stream().filter(m -> m.level == WARN).toList();
-    warnings.forEach(m -> System.err.println(m.level + ": " + m.message));
+    final List<Message> warnings = logger.getMessages().stream().filter(m -> m.level() == WARN).toList();
+    warnings.forEach(m -> System.err.println(m.level() + ": " + m.message()));
     assertEquals(warningCount, warnings.size());
   }
 

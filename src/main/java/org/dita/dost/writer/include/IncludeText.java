@@ -127,7 +127,7 @@ final class IncludeText {
         } else {
           final Matcher mi = Pattern.compile("^token=([^,\\s)]*)(?:,\\s*([^,\\s)]+))?$").matcher(fragment);
           if (mi.matches()) {
-            if (mi.group(1) != null && mi.group(1).length() != 0) {
+            if (mi.group(1) != null && !mi.group(1).isEmpty()) {
               startId = mi.group(1);
             }
             if (mi.group(2) != null) {

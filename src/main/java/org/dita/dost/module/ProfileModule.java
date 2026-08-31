@@ -56,7 +56,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
           job.getStore().delete(file);
         }
       } catch (final Exception e) {
-        logger.error("Failed to profile " + file + ": " + e.getMessage(), e);
+        logger.error("Failed to profile {}: {}", file, e.getMessage(), e);
       }
     }
 

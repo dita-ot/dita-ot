@@ -28,11 +28,11 @@ public record Project(
       toStream(src.deliverables)
         .map(deliverable ->
           new Deliverable(
-            deliverable.name,
-            deliverable.id,
-            build(deliverable.context, base),
-            deliverable.output,
-            build(deliverable.publication, base)
+            deliverable.name(),
+            deliverable.id(),
+            build(deliverable.context(), base),
+            deliverable.output(),
+            build(deliverable.publication(), base)
           )
         )
         .collect(Collectors.toList()),
@@ -66,18 +66,25 @@ public record Project(
       return null;
     }
     return new Publication(
-      publication.name,
-      publication.id,
-      publication.idref,
-      publication.transtype,
-      toStream(publication.params)
+      publication.name(),
+      publication.id(),
+      publication.idref(),
+      publication.transtype(),
+      toStream(publication.params())
         .map(param ->
-          new Publication.Param(param.name, param.value, resolveURI(param.href, base), resolvePath(param.path, base))
+          new Publication.Param(
+            param.name(),
+            param.value(),
+            resolveURI(param.href(), base),
+            resolvePath(param.path(), base)
+          )
         )
         .collect(Collectors.toList()),
       new Deliverable.Profile(
-        publication.profiles != null
-          ? publication.profiles.ditavals
+        publication.profiles() != null
+          ? publication
+            .profiles()
+            .ditavals()
             .stream()
             .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
             .collect(Collectors.toList())
@@ -91,20 +98,23 @@ public record Project(
       return null;
     }
     return new Context(
-      context.name,
-      context.id,
-      context.idref,
-      context.input != null
+      context.name(),
+      context.id(),
+      context.idref(),
+      context.input() != null
         ? new Deliverable.Inputs(
-          context.input
+          context
+            .input()
             .stream()
             .map(input -> new Deliverable.Inputs.Input(resolveURI(input, base)))
             .collect(Collectors.toList())
         )
         : new Deliverable.Inputs(Collections.emptyList()),
       new Deliverable.Profile(
-        context.profiles != null
-          ? context.profiles.ditavals
+        context.profiles() != null
+          ? context
+            .profiles()
+            .ditavals()
             .stream()
             .map(ditaval -> new Deliverable.Profile.DitaVal(resolveURI(ditaval, base)))
             .collect(Collectors.toList())

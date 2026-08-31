@@ -10,7 +10,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

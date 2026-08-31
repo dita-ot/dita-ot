@@ -8,9 +8,7 @@
 package org.dita.dost.writer;
 
 import static org.dita.dost.TestUtils.assertXMLEqual;
-import static org.dita.dost.util.Constants.ANT_INVOKER_EXT_PARAM_PROCESSING_MODE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
@@ -19,12 +17,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
-import net.sf.saxon.trans.XPathException;
 import org.dita.dost.TestUtils.CachingLogger;
-import org.dita.dost.util.Configuration;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;

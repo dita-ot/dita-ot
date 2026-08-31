@@ -36,7 +36,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
       reader.setXmlUtils(xmlUtils);
       for (final FileInfo f : fis) {
         final File file = new File(job.tempDirURI.resolve(f.uri()));
-        logger.info("Reading " + file.toURI());
+        logger.info("Reading {}", file.toURI());
         //FIXME: this reader calculate parent directory
         reader.read(file.getAbsoluteFile());
       }
@@ -53,7 +53,7 @@ final class ConrefPushModule extends AbstractPipelineModuleImpl {
         try {
           parser.read(entry.getKey());
         } catch (final DITAOTException e) {
-          logger.error("Failed to process push conref: " + e.getMessage(), e);
+          logger.error("Failed to process push conref: {}", e.getMessage(), e);
         }
       }
     }

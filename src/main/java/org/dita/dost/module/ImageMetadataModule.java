@@ -110,7 +110,7 @@ final class ImageMetadataModule extends AbstractPipelineModuleImpl {
       }
       final FileInfo fi = job.getFileInfo(rel);
       if (fi != null) {
-        logger.debug("Set " + fi.uri() + " format to " + ATTR_FORMAT_VALUE_IMAGE);
+        logger.debug("Set {} format to " + ATTR_FORMAT_VALUE_IMAGE, fi.uri());
         job.add(new FileInfo.Builder(fi).format(ATTR_FORMAT_VALUE_IMAGE).build());
       }
     }

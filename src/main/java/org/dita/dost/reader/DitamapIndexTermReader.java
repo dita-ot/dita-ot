@@ -129,7 +129,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
       final IndexTerm indexTerm = (IndexTerm) elementStack.pop();
       Object obj;
 
-      if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().equals("")) {
+      if (indexTerm.getTermName() == null || indexTerm.getTermName().trim().isEmpty()) {
         if (indexTerm.getEndAttribute() != null && !indexTerm.hasSubTerms()) {
           return;
         } else {
@@ -177,7 +177,7 @@ public final class DitamapIndexTermReader extends AbstractXMLReader {
 
     final StringBuilder buffer = new StringBuilder();
     if (!href.contains(COLON_DOUBLE_SLASH) && !FileUtils.isAbsolutePath(href)) {
-      if (mapPath != null && mapPath.length() != 0) {
+      if (mapPath != null && !mapPath.isEmpty()) {
         buffer.append(mapPath);
         buffer.append(SLASH);
       }

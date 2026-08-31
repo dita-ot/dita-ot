@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;

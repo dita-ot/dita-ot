@@ -101,9 +101,9 @@ final class FileGenerator extends XMLFilterImpl {
     } catch (final RuntimeException e) {
       throw e;
     } catch (final TransformerException e) {
-      logger.error("Failed to transform " + fileName + ": " + e.getMessageAndLocation(), e);
+      logger.error("Failed to transform {}: {}", fileName, e.getMessageAndLocation(), e);
     } catch (final Exception e) {
-      logger.error("Failed to transform " + fileName + ": " + e.getMessage(), e);
+      logger.error("Failed to transform {}: {}", fileName, e.getMessage(), e);
     }
   }
 

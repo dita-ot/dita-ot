@@ -10,7 +10,6 @@ package org.dita.dost.module;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.ATTR_FORMAT_VALUE_DITAMAP;
 import static org.dita.dost.util.Constants.INPUT_DIR_URI;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.IOException;

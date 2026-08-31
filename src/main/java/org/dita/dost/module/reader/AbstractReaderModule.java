@@ -230,7 +230,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         } catch (final NoClassDefFoundError e) {
           logger.warn("Xerces not available, not using grammar caching");
         } catch (final SAXNotRecognizedException | SAXNotSupportedException e) {
-          logger.warn("Failed to set Xerces grammar pool for parser: " + e.getMessage());
+          logger.warn("Failed to set Xerces grammar pool for parser: {}", e.getMessage());
         }
       }
       reader.setEntityResolver(xmlUtils.getCatalogResolver());
@@ -345,7 +345,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @throws DITAOTException if processing failed
    */
   void readFile(final Reference ref, final URI parseFile) throws DITAOTException {
-    currentFile = ref.filename.normalize();
+    currentFile = ref.filename().normalize();
     assert currentFile.isAbsolute();
     final URI src = parseFile != null ? parseFile : currentFile;
     assert src.isAbsolute();
@@ -358,11 +358,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       } catch (FileAlreadyExistsException e) {
         // Ignore
       } catch (IOException e) {
-        logger.error("Failed to create output directory " + outputDir.getAbsolutePath());
+        logger.error("Failed to create output directory {}", outputDir.getAbsolutePath());
         return;
       }
     }
-    logger.info("Processing " + currentFile + " to " + outputFile.toURI());
+    logger.info("Processing {} to {}", currentFile, outputFile.toURI());
     final String[] params = { currentFile.toString() };
 
     // Verify stub for current file is in Job
@@ -381,7 +381,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
 
     try {
       final DITAOTXMLErrorHandler errorHandler = new DITAOTXMLErrorHandler(src.toString(), logger, processingMode);
-      XMLReader parser = XMLUtils.getXmlReader(ref.format, processingMode).orElse(reader);
+      XMLReader parser = XMLUtils.getXmlReader(ref.format(), processingMode).orElse(reader);
       parser.setErrorHandler(errorHandler);
       XMLReader xmlSource = parser;
       for (final XMLFilter f : getProcessingPipe(currentFile)) {
@@ -429,7 +429,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           sax
         );
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + sax.getMessage(), sax);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params).toString(), sax.getMessage(), sax);
       }
       failureList.add(currentFile);
     } catch (final FileNotFoundException e) {
@@ -452,7 +452,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
           e
         );
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ079E", params).toString() + " Cannot load file: " + e.getMessage());
+        logger.error("{} Cannot load file: {}", MessageUtils.getMessage("DOTJ079E", params).toString(), e.getMessage());
       }
       failureList.add(currentFile);
     } catch (final Exception e) {
@@ -461,7 +461,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       } else if (processingMode == Mode.STRICT) {
         throw new DITAOTException(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
       } else {
-        logger.error(MessageUtils.getMessage("DOTJ013E", params).toString() + ": " + e.getMessage(), e);
+        logger.error("{}: {}", MessageUtils.getMessage("DOTJ013E", params).toString(), e.getMessage(), e);
       }
       failureList.add(currentFile);
     } finally {
@@ -521,7 +521,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     final Set<URI> nonConrefCopytoTargets = listFilter
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename)
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     nonConrefCopytoTargetSet.addAll(nonConrefCopytoTargets);
     coderefTargetSet.addAll(listFilter.getCoderefTargets());
@@ -554,7 +554,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @param ref file path
    */
   void categorizeCurrentFile(final Reference ref) {
-    final URI currentFile = ref.filename;
+    final URI currentFile = ref.filename();
     if (listFilter.hasConaction()) {
       conrefpushSet.add(currentFile);
     }
@@ -574,12 +574,12 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     if (listFilter.isDitaTopic()) {
       assert currentFile.getFragment() == null;
       final URI f = currentFile.normalize();
-      if (!isFormatDita(ref.format)) {
+      if (!isFormatDita(ref.format())) {
         if (!fileinfos.containsKey(f)) {
           final FileInfo.Builder i = new FileInfo.Builder()
             .uri(tempFileNameScheme.generateTempFileName(currentFile))
             .src(currentFile)
-            .format(ref.format);
+            .format(ref.format());
           fileinfos.put(i.src(), Collections.singletonList(i));
         }
       } else {
@@ -617,13 +617,13 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
    * @param ref reference to absolute system path
    */
   void addToWaitList(final Reference ref) {
-    final URI file = ref.filename;
+    final URI file = ref.filename();
     assert file.isAbsolute() && file.getFragment() == null;
-    if (doneList.contains(file) || waitList.containsKey(ref.filename) || file.equals(currentFile)) {
+    if (doneList.contains(file) || waitList.containsKey(ref.filename()) || file.equals(currentFile)) {
       return;
     }
 
-    waitList.put(ref.filename, ref);
+    waitList.put(ref.filename(), ref);
   }
 
   /**
@@ -729,7 +729,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
       createOrUpdateFileInfo(file, fi -> fi.hasConref(true));
     }
     for (final Reference file : formatSet) {
-      createOrUpdateFileInfo(file.filename, fi -> fi.format(file.format));
+      createOrUpdateFileInfo(file.filename(), fi -> fi.format(file.format()));
     }
     for (final URI file : flagImageSet) {
       createOrUpdateFileInfo(

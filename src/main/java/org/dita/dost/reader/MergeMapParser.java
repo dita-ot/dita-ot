@@ -18,9 +18,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Stack;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -132,7 +129,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       setContentHandler(s);
       dirPath = filename.getParentFile();
       topicParser.getContentHandler().startDocument();
-      logger.info("Processing " + filename.toURI());
+      logger.info("Processing {}", filename.toURI());
 
       job.getStore().transform(filename.toURI(), this);
 

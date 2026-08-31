@@ -38,7 +38,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
   @Override
   public void write(final File outputFilename) throws DITAOTException {
     setCurrentFile(outputFilename.toURI());
-    logger.info("Process " + outputFilename.toURI());
+    logger.info("Process {}", outputFilename.toURI());
     super.write(outputFilename);
   }
 
@@ -189,7 +189,7 @@ public final class TopicRefWriter extends AbstractXMLFilter {
         return hrefValue; // no change
       } else {
         final URI conTarget = conflictTable.get(stripFragment(changeTarget));
-        logger.debug("Update " + changeTarget + " to " + conTarget);
+        logger.debug("Update {} to {}", changeTarget, conTarget);
         if (conTarget != null && !conTarget.toString().isEmpty()) {
           final URI p = getRelativePath(rootPathName, conTarget);
           if (elementID == null) {

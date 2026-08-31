@@ -13,7 +13,6 @@ import static org.dita.dost.util.XMLUtils.AttributesBuilder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +56,7 @@ public class ValidationFilterTest {
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en-GB").build());
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("en-us", res.get(0));
     assertEquals("en-GB", res.get(1));
   }
@@ -97,7 +96,7 @@ public class ValidationFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("http://example.com/foo/bar%20baz:qux", res.get(0));
     assertEquals("http://example.com/valid/bar+baz:qux", res.get(1));
   }
@@ -159,7 +158,7 @@ public class ValidationFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("sub/backslash.dita#topic/back", res.get(0));
     assertEquals("sub/slash.dita#topic/valid", res.get(1));
   }
@@ -196,7 +195,7 @@ public class ValidationFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.WARN, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.WARN, l.getMessages().get(0).level());
     assertEquals("http://example.com/broken", res.get(0));
   }
 
@@ -245,7 +244,7 @@ public class ValidationFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.WARN, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.WARN, l.getMessages().get(0).level());
   }
 
   @Test
@@ -291,7 +290,7 @@ public class ValidationFilterTest {
 
     assertEquals(2, l.getMessages().size());
     for (final Message m : l.getMessages()) {
-      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);
+      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level());
     }
   }
 
@@ -338,7 +337,7 @@ public class ValidationFilterTest {
 
     assertEquals(2, l.getMessages().size());
     for (final Message m : l.getMessages()) {
-      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level);
+      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level());
     }
   }
 
@@ -366,6 +365,6 @@ public class ValidationFilterTest {
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("person", "jobrole(programmer)").build());
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
 }

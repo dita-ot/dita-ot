@@ -140,7 +140,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         final IndexTerm indexTerm = termStack.peek();
         temp = trimSpaceAtStart(temp, indexTerm.getTermName());
         indexTerm.setTermName(setOrAppend(indexTerm.getTermName(), temp, false));
-      } else if (insideSortingAs && temp.length() > 0) {
+      } else if (insideSortingAs && !temp.isEmpty()) {
         final IndexTerm indexTerm = termStack.peek();
         temp = trimSpaceAtStart(temp, indexTerm.getTermKey());
         indexTerm.setTermKey(setOrAppend(indexTerm.getTermKey(), temp, false));
@@ -179,7 +179,7 @@ public final class IndexTermReader extends AbstractXMLReader {
     // in the list.
     if (indexTermSpecList.contains(localName)) {
       final IndexTerm term = termStack.pop();
-      if (term.getTermName() == null || term.getTermName().trim().equals("")) {
+      if (term.getTermName() == null || term.getTermName().trim().isEmpty()) {
         if (term.getEndAttribute() != null && !term.hasSubTerms()) {
           return;
         } else {
@@ -235,7 +235,7 @@ public final class IndexTermReader extends AbstractXMLReader {
         if (title == null) { //Guard against zero-content titles
           title = "***";
         }
-        if (titleMap.size() == 0) {
+        if (titleMap.isEmpty()) {
           defaultTitle = title;
         }
         titleMap.put(topicIdStack.peek(), title);
