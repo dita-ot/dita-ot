@@ -107,7 +107,7 @@ public final class JobTest {
       assertEquals(create("file:/foo/"), job.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
       assertEquals(create("file:/foo/"), job.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
       assertEquals(create("file:/"), job.getCommonBase(create("file:/foo/a/b/c"), create("file:/bar/b/c/d")));
-      assertEquals(null, job.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
+      assertNull(job.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
     }
   }
 
@@ -118,8 +118,8 @@ public final class JobTest {
       assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/a"), create("file:/F:/bar/b")));
       assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/b")));
       assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/baz/b")));
-      assertEquals(null, job.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
-      assertEquals(null, job.getCommonBase(create("file:/f:/bar/a"), create("https://example.com/baz/b")));
+      assertNull(job.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
+      assertNull(job.getCommonBase(create("file:/f:/bar/a"), create("https://example.com/baz/b")));
     }
   }
 
@@ -230,7 +230,7 @@ public final class JobTest {
       var act = FileInfo.builder().uri(create("uri.dita")).build();
       assertEquals(create("uri.dita"), act.uri());
       assertEquals(new File("uri.dita"), act.file());
-      assertEquals(null, act.result());
+      assertNull(act.result());
     }
 
     @Test
@@ -238,7 +238,7 @@ public final class JobTest {
       var act = FileInfo.builder().file(new File("file.dita")).build();
       assertEquals(create("file.dita"), act.uri());
       assertEquals(new File("file.dita"), act.file());
-      assertEquals(null, act.result());
+      assertNull(act.result());
     }
 
     @Test

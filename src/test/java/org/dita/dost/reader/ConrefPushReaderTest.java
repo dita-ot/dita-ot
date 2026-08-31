@@ -57,7 +57,7 @@ public class ConrefPushReaderTest {
     pushReader.read(filename.getAbsoluteFile());
 
     final Map<File, Hashtable<MoveKey, DocumentFragment>> pushSet = pushReader.getPushMap();
-    assertEquals(1, pushSet.entrySet().size());
+    assertEquals(1, pushSet.size());
     final Hashtable<MoveKey, DocumentFragment> act = pushSet.values().iterator().next();
     assertXMLEqual(
       toDocument(act.get(new MoveKey("#X/A", "pushbefore"))),

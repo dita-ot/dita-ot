@@ -465,7 +465,7 @@ public class GenListModuleReaderTest {
   private XMLReader initXMLReader(final File ditaDir, final boolean validate, final File rootFile)
     throws SAXException, IOException {
     final XMLReader parser = XMLUtils.getXMLReader();
-    if (validate == true) {
+    if (validate) {
       parser.setFeature(FEATURE_VALIDATION, true);
       try {
         parser.setFeature(FEATURE_VALIDATION_SCHEMA, true);

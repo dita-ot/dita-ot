@@ -289,7 +289,7 @@ public class KeyrefModuleTest {
 
     ResolveTask task = res.get(0);
     assertEquals("topic.dita", task.in().file().toString());
-    assertEquals(null, task.scope().name());
+    assertNull(task.scope().name());
 
     task = res.get(1);
     assertEquals("topic.dita", task.in().file().toString());

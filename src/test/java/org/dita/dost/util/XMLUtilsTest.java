@@ -433,7 +433,7 @@ public class XMLUtilsTest {
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
     assertEquals("msg", message.message());
-    assertEquals(null, message.exception());
+    assertNull(message.exception());
     assertEquals(Message.Level.ERROR, message.level());
   }
 
@@ -454,7 +454,7 @@ public class XMLUtilsTest {
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
     assertEquals("msg", message.message());
-    assertEquals(null, message.exception());
+    assertNull(message.exception());
     assertEquals(Message.Level.ERROR, message.level());
   }
 
@@ -473,7 +473,7 @@ public class XMLUtilsTest {
     assertEquals(1, logger.getMessages().size());
     final Message message = logger.getMessages().get(0);
     assertEquals("foo:///bar:1:2: msg", message.message());
-    assertEquals(null, message.exception());
+    assertNull(message.exception());
     assertEquals(Message.Level.WARN, message.level());
   }
 

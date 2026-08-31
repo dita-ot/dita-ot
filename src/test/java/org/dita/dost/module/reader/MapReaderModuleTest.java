@@ -9,8 +9,7 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -105,7 +104,7 @@ public class MapReaderModuleTest {
           break;
         case "topic.dita":
         case "subtopic.dita":
-          assertEquals(null, fileInfo.format());
+          assertNull(fileInfo.format());
           break;
         case "ext.pdf":
           assertEquals("pdf", fileInfo.format());

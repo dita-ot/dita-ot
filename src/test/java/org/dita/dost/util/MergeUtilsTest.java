@@ -53,7 +53,7 @@ public class MergeUtilsTest {
 
   @Test
   public void testAddIdString() {
-    assertEquals(null, mergeUtils.addId(null));
+    assertNull(mergeUtils.addId(null));
     assertEquals("unique_1", mergeUtils.addId(toURI("a.xml#topicid")));
     assertEquals("unique_2", mergeUtils.addId(toURI("a.xml#topicid2")));
     assertNull(mergeUtils.addId(null));
@@ -69,10 +69,10 @@ public class MergeUtilsTest {
   public void testGetIdValue() {
     mergeUtils.addId(toURI("a.xml#topicid"));
     mergeUtils.addId(toURI("a.xml#topicid2"));
-    assertEquals(null, mergeUtils.getIdValue(null));
+    assertNull(mergeUtils.getIdValue(null));
     assertEquals("unique_1", mergeUtils.getIdValue(toURI("a.xml#topicid")));
     assertEquals("unique_2", mergeUtils.getIdValue(toURI("a.xml#topicid2")));
-    assertEquals(null, mergeUtils.getIdValue(toURI(" ")));
+    assertNull(mergeUtils.getIdValue(toURI(" ")));
   }
 
   @Test

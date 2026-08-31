@@ -367,7 +367,7 @@ public abstract class AbstractIntegrationTest {
       project.fireBuildStarted();
       project.init();
       project.setUserProperty("transtype", transtype.name);
-      if (transtype.equals("pdf") || transtype.equals("pdf2")) {
+      if (transtype.equals(Transtype.PDF) || transtype.toString().equals("pdf2")) {
         project.setUserProperty("pdf.formatter", "fop");
         project.setUserProperty("fop.formatter.output-format", "text/plain");
       }

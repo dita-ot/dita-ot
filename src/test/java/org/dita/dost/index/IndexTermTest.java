@@ -88,7 +88,7 @@ public class IndexTermTest {
 
   @Test
   public void testGetTermName() {
-    assertEquals(null, unset.getTermName());
+    assertNull(unset.getTermName());
     assertEquals("", empty.getTermName());
     assertEquals("  \t  \n  ", whitespace.getTermName());
     assertEquals("3.14159265", number.getTermName());
@@ -109,7 +109,7 @@ public class IndexTermTest {
 
   @Test
   public void testGetTermKey() {
-    assertEquals(null, unset.getTermKey());
+    assertNull(unset.getTermKey());
     assertEquals("", empty.getTermKey());
     assertEquals("  \t  \n  ", whitespace.getTermKey());
     assertEquals("3.14159265", number.getTermKey());
@@ -180,14 +180,14 @@ public class IndexTermTest {
 
   @Test
   public void testEqualsObject() {
-    assertTrue(simple.equals(simple));
+    assertEquals(simple, simple);
     final IndexTerm s = new IndexTerm();
     s.setTermName("simple");
     s.setTermKey("simple");
-    assertTrue(simple.equals(s));
-    assertFalse(simple.equals(nested));
-    assertFalse(simple.equals(null));
-    assertFalse(simple.equals(""));
+    assertEquals(simple, s);
+    assertNotEquals(simple, nested);
+    assertNotEquals(null, simple);
+    assertNotEquals("", simple);
   }
 
   @Test
@@ -258,7 +258,7 @@ public class IndexTermTest {
     final IndexTerm i = new IndexTerm();
     assertNull(i.getTermPrefix());
     i.setTermPrefix(null);
-    assertEquals(null, i.getTermPrefix());
+    assertNull(i.getTermPrefix());
     i.setTermPrefix(SEE);
     assertEquals(SEE, i.getTermPrefix());
   }
@@ -303,7 +303,7 @@ public class IndexTermTest {
     more.addSubTerm(new IndexTerm());
     more.updateSubTerm();
     for (final IndexTerm m : more.getSubTerms()) {
-      assertFalse(SEE_ALSO.equals(m));
+      assertNotEquals(SEE_ALSO, m);
     }
   }
 
