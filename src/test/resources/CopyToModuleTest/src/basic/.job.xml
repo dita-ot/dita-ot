@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><job>
+  <property name="generatecopyouter">
+    <string>NOT_GENERATEOUTTER</string>
+  </property>
+  <property name="user.input.dir">
+    <string>/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testresult/chunk_fix_anchor/preprocess/map1</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string/>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="relflagimagelist">
+    <string/>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>TC2.ditamap</string>
+  </property>
+  <property name="user.input.dir.uri">
+    <string>file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/</string>
+  </property>
+  <property name="user.input.file">
+    <string>TC2.ditamap</string>
+  </property>
+  <property name="uplevels">
+    <string/>
+  </property>
+  <files>
+    <file src="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap" uri="TC2.ditamap" path="TC2.ditamap" format="ditamap" input="true"/>
+    <file src="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/test1.dita" uri="test1.dita" path="test1.dita" format="dita" target="true"/>
+    <file src="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/test2.dita" uri="test2.dita" path="test2.dita" format="dita" target="true"/>
+    <file src="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/test3.dita" uri="test3.dita" path="test3.dita" format="dita" target="true"/>
+    <file uri="newtest2.dita" path="newtest2.dita"
+          result="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/newtest2.dita"></file>
+    <file uri="newtest3.dita" path="newtest3.dita"
+          result="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/newtest3.dita"></file>
+  </files>
+</job>
