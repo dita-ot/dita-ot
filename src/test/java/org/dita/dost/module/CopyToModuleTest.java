@@ -5,7 +5,6 @@ import static org.dita.dost.TestUtils.CachingLogger.Message.Level.WARN;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import org.dita.dost.TestUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
@@ -31,12 +30,12 @@ public class CopyToModuleTest extends AbstractModuleTest {
   public void testCopyTo() throws IOException, SAXException {
     testCase = "basic";
     tempDir = new File(tempBaseDir, testCase);
-//    params = Map.of("force-unique", "true");
+    //    params = Map.of("force-unique", "true");
     //    this.warningCount = warningCount;
     logger = new TestUtils.CachingLogger(mode.equals(Configuration.Mode.STRICT));
-//    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
+    //    job = new Job(tempDir, new StreamStore(tempDir, xmlUtils));
 
-//    initStore(job.getStore());
+    //    initStore(job.getStore());
     super.test();
     final List<TestUtils.CachingLogger.Message> warnings = logger
       .getMessages()
