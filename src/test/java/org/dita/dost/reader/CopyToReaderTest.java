@@ -24,7 +24,8 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -49,9 +50,10 @@ public class CopyToReaderTest {
     parser.setContentHandler(reader);
   }
 
-  @Test
-  public void testGetCopytoMap() throws Exception {
-    final URI inputFile = new File(srcDir, "test.ditamap").toURI();
+  @ParameterizedTest
+  @ValueSource(strings = { "test.ditamap", "test_dita2.ditamap" })
+  public void testGetCopytoMap(String file) throws Exception {
+    final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 
@@ -70,9 +72,10 @@ public class CopyToReaderTest {
     assertEquals(0, logger.getMessages().size());
   }
 
-  @Test
-  public void testGetCopytoMapKeyref() throws Exception {
-    final URI inputFile = new File(srcDir, "keyref.ditamap").toURI();
+  @ParameterizedTest
+  @ValueSource(strings = { "keyref.ditamap", "keyref_dita2.ditamap" })
+  public void testGetCopytoMapKeyref(String file) throws Exception {
+    final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 
@@ -85,9 +88,10 @@ public class CopyToReaderTest {
     assertEquals(0, logger.getMessages().size());
   }
 
-  @Test
-  public void testGetCopytoMapSame() throws Exception {
-    final URI inputFile = new File(srcDir, "same.ditamap").toURI();
+  @ParameterizedTest
+  @ValueSource(strings = { "same.ditamap", "same_dita2.ditamap" })
+  public void testGetCopytoMapSame(String file) throws Exception {
+    final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
     parser.parse(inputFile.toString());
 

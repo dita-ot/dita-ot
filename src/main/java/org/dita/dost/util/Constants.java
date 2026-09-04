@@ -1376,11 +1376,15 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_DELIVERY_TARGET = "deliveryTarget";
   public static final String ATTRIBUTE_NAME_SUBJECTREFS = "subjectrefs";
   public static final String ATTRIBUTE_NAME_ADD_OUTPUTCLASS = "add-outputclass";
+  public static final String ATTRIBUTE_NAME_APPID = "appid";
+  public static final String ATTRIBUTE_NAME_APPID_ROLE = "appid-role";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
   public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
   public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";
+
+  public static final String ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR = "deliverable-anchor";
 
   /** URI path separator. */
   public static final String URI_SEPARATOR = "/";
