@@ -1,0 +1,14 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+   specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
+   ditaarch:DITAArchVersion="2.0">
+  <topicref class="- map/topicref " href="source-a.dita">
+    <topicmeta class="- map/topicmeta ">
+      <resourceid class="- topic/resourceid " appid="target" appid-role="deliverable-anchor"/>
+    </topicmeta>
+  </topicref>
+  <topicref class="- map/topicref " href="source-b.dita">
+    <topicmeta class="- map/topicmeta ">
+      <resourceid class="- topic/resourceid " appid="target" appid-role="deliverable-anchor"/>
+    </topicmeta>
+  </topicref>
+</map>
