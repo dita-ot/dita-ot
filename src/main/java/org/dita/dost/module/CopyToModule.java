@@ -127,12 +127,26 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
 
     for (final Map.Entry<URI, URI> e : reader.getCopyToMap().entrySet()) {
       final URI target = job.tempDirURI.relativize(e.getKey());
-      final FileInfo targetFi = job.getFileInfo(target);
+      FileInfo targetFi = job.getFileInfo(target);
       final URI source = job.tempDirURI.relativize(e.getValue());
       final FileInfo sourceFi = job.getFileInfo(source);
       // Filter when copy-to was ignored (so target is not in job),
+      if (targetFi == null) {
+        //        continue;
+        logger.info("Copy-to target was not in job, but continue anyway");
+        targetFi =
+          FileInfo
+            .builder()
+            // XXX: Can we pass this?
+            //            .src(sourceFi.src())
+            .uri(target)
+            .result(e.getKey())
+            .format(sourceFi.format())
+            .build();
+      }
       // or where target is used directly
-      if (targetFi == null || (targetFi != null && targetFi.src() != null)) {
+      if (targetFi != null && targetFi.src() != null) {
+        logger.warn("Copy-to target " + targetFi.uri() + " is used directly, skipping");
         continue;
       }
       copyToMap.put(targetFi, sourceFi);
@@ -148,8 +162,12 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private void performCopytoTask(final Map<FileInfo, FileInfo> copyToMap) {
     for (final Map.Entry<FileInfo, FileInfo> entry : copyToMap.entrySet()) {
-      final URI copytoTarget = entry.getKey().uri();
-      final URI copytoSource = entry.getValue().uri();
+      final FileInfo copytoTargetFi = entry.getKey();
+      final FileInfo copytoSourceFi = entry.getValue();
+      assert copytoTargetFi != null;
+      assert copytoSourceFi != null;
+      final URI copytoTarget = copytoTargetFi.uri();
+      final URI copytoSource = copytoSourceFi.uri();
       final URI srcFile = job.tempDirURI.resolve(copytoSource);
       final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
@@ -160,10 +178,12 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         final URI inputMapInTemp = job.tempDirURI.resolve(input.uri());
         copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
         // add new file info into job
-        final FileInfo src = job.getFileInfo(copytoSource);
-        assert src != null;
-        final FileInfo dst = job.getFileInfo(copytoTarget);
-        assert dst != null;
+        //        final FileInfo src = job.getFileInfo(copytoSource);
+        //        assert src != null;
+        final FileInfo src = copytoSourceFi;
+        //        final FileInfo dst = job.getFileInfo(copytoTarget);
+        //        assert dst != null;
+        final FileInfo dst = copytoTargetFi;
         final URI dstTemp = tempFileNameScheme.generateTempFileName(dst.result());
         final FileInfo res = new FileInfo.Builder(src).result(dst.result()).uri(dstTemp).build();
         job.add(res);
