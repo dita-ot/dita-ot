@@ -21,6 +21,8 @@ import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -28,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ValidationFilterTest {
 
   private ValidationFilter f;
+  private TestUtils.CachingLogger l;
 
   @BeforeEach
   public void setUp() {
@@ -35,6 +38,8 @@ public class ValidationFilterTest {
     f.setValidateMap(Collections.emptyMap());
     f.setProcessingMode(Configuration.Mode.LAX);
     f.setCurrentFile(URI.create("file:/foo/bar.dita"));
+    l = new TestUtils.CachingLogger();
+    f.setLogger(l);
   }
 
   @Test
@@ -49,8 +54,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en_us").build());
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en-GB").build());
@@ -73,8 +76,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -112,8 +113,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -141,8 +140,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -175,8 +172,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -202,8 +197,6 @@ public class ValidationFilterTest {
   @Test
   public void testId() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -250,8 +243,6 @@ public class ValidationFilterTest {
   @Test
   public void testKeys() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -297,8 +288,6 @@ public class ValidationFilterTest {
   @Test
   public void testKeyscope() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -344,8 +333,6 @@ public class ValidationFilterTest {
   @Test
   public void testAttributeGeneralization() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -364,6 +351,73 @@ public class ValidationFilterTest {
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("jobrole", "admin").build());
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("person", "jobrole(programmer)").build());
 
+    assertEquals(1, l.getMessages().size());
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "path", "path?query", "path#fragment", "path?query#fragment" })
+  public void testAppid_deliveryAnchor_valid(String value) throws SAXException {
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_RESOURCEID.localName,
+      TOPIC_RESOURCEID.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_APPID, value)
+        .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+        .build()
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_deliveryAnchor_invalid(String value) {
+    f.setProcessingMode(Configuration.Mode.STRICT);
+
+    assertThrows(
+      RuntimeException.class,
+      () ->
+        f.startElement(
+          NULL_NS_URI,
+          TOPIC_RESOURCEID.localName,
+          TOPIC_RESOURCEID.localName,
+          new AttributesBuilder()
+            .add(ATTRIBUTE_NAME_APPID, value)
+            .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+            .build()
+        )
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_notDeliveryAnchor_valid(String value) {
+    assertDoesNotThrow(() ->
+      f.startElement(
+        NULL_NS_URI,
+        TOPIC_RESOURCEID.localName,
+        TOPIC_RESOURCEID.localName,
+        new AttributesBuilder().add(ATTRIBUTE_NAME_APPID, value).add(ATTRIBUTE_NAME_APPID_ROLE, "other").build()
+      )
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_deliveryAnchor_skip(String value) {
+    f.setProcessingMode(Configuration.Mode.SKIP);
+
+    assertDoesNotThrow(() ->
+      f.startElement(
+        NULL_NS_URI,
+        TOPIC_RESOURCEID.localName,
+        TOPIC_RESOURCEID.localName,
+        new AttributesBuilder()
+          .add(ATTRIBUTE_NAME_APPID, value)
+          .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+          .build()
+      )
+    );
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
