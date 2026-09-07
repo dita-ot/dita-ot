@@ -12,8 +12,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.FileUtils.getExtension;
-import static org.dita.dost.util.URLUtils.stripFragment;
-import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
 import java.util.*;
@@ -203,8 +202,11 @@ public final class CopyToReader extends AbstractXMLFilter {
     }
 
     if (previousHrefAbs != null) {
-      var copyTo = toURI(appId + "." + getExtension(previousHrefAbs.getPath()));
+      var copyTo = toURI(appId);
       if (copyTo != null) {
+        if (getExtension(copyTo.getPath()) == null) {
+          copyTo = setPath(copyTo, copyTo.getPath() + "." + getExtension(previousHrefAbs.getPath()));
+        }
         final URI copyToAbs = stripFragment(currentFile.resolve(copyTo));
         assert copyToAbs.isAbsolute();
         final URI copyToSourceAbs = copyToMap.get(copyToAbs);
