@@ -1,0 +1,19 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
+  ditaarch:DITAArchVersion="2.0">
+  <title class="- topic/title ">My map</title>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="test.ditaval" processing-role="resource-only"></ditavalref>
+    <topicref class="- map/topicref " href="t1-1.xml">
+      <topicref class="- map/topicref " href="t1-1.xml#nested"/>
+      <topicref class="- map/topicref " href="t1-1.xml#nested2"/>
+    </topicref>
+  </topicgroup>
+  <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
+    <ditavalref class="+ map/topicref ditavalref-d/ditavalref " format="ditaval" href="test2.ditaval" processing-role="resource-only"></ditavalref>
+    <topicref class="- map/topicref " href="t1.xml">
+      <topicref class="- map/topicref " href="t1.xml#nested"/>
+      <topicref class="- map/topicref " href="t1.xml#nested2"/>
+    </topicref>
+  </topicgroup>
+</map>
