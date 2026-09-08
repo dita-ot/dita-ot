@@ -89,7 +89,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input" })
+  @ValueSource(strings = { "input", "input_dita2" })
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
     final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -104,7 +104,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input" })
+  @ValueSource(strings = { "input", "input_dita2" })
   public void testProcessMap(String file) throws SAXException, IOException {
     final MapBranchFilterModule m = new MapBranchFilterModule();
     final Job job = getJob(file);
