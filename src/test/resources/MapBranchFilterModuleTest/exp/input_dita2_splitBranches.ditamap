@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+   class="- map/map "
+   specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
+   ditaarch:DITAArchVersion="2.0">
+   <title class="- topic/title ">DITA Topic Map</title>
+   <topicref class="- map/topicref " href="install.dita"
+      keyscope="install">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+         format="ditaval" href="linux.ditaval"
+         processing-role="resource-only"/>
+      <topicref class="- map/topicref " href="perform-install.dita"
+         keyscope="perform-install"/>
+      <topicref class="- map/topicref " href="perform-install.dita"
+         keyscope="perform-install">
+         <topicmeta class="- map/topicmeta ">
+            <resourceid appid="installation-procedure"
+               appid-role="deliverable-anchor"
+               class="- topic/resourceid "/>
+         </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-novice.dita" href="configure.dita"
+         keyscope="novice-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="novice.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-novice</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">novice-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-admin.dita" href="configure.dita"
+         keyscope="admin-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="advanced.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-admin</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">admin-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         href="http://example.com/install.dita" scope="external"/>
+   </topicref>
+   <topicref class="- map/topicref " filter-copy-to="install-mac.dita"
+      href="install.dita" keyscope="mac-install">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+         format="ditaval" href="mac.ditaval"
+         processing-role="resource-only">
+         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+            <dvrResourceSuffix
+               class="+ topic/data ditavalref-d/dvrResourceSuffix "
+               name="dvrResourceSuffix">-mac</dvrResourceSuffix>
+            <dvrKeyscopePrefix
+               class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+               name="dvrKeyscopePrefix">mac-</dvrKeyscopePrefix>
+         </ditavalmeta>
+      </ditavalref>
+      <topicref class="- map/topicref "
+         filter-copy-to="perform-install-mac.dita"
+         href="perform-install.dita" keyscope="perform-install"/>
+      <topicref class="- map/topicref "
+         filter-copy-to="perform-install-mac.dita"
+         href="perform-install.dita" keyscope="perform-install">
+         <topicmeta class="- map/topicmeta ">
+            <resourceid appid="installation-procedure"
+               appid-role="deliverable-anchor"
+               class="- topic/resourceid "/>
+         </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-novice-mac.dita" href="configure.dita"
+         keyscope="novice-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="novice.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-novice</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">novice-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-admin-mac.dita" href="configure.dita"
+         keyscope="admin-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="advanced.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-admin</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">admin-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         href="http://example.com/install.dita" scope="external"/>
+   </topicref>
+   <topicref class="- map/topicref " filter-copy-to="install-win.dita"
+      href="install.dita" keyscope="win-install">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+         format="ditaval" href="win.ditaval"
+         processing-role="resource-only">
+         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+            <dvrResourceSuffix
+               class="+ topic/data ditavalref-d/dvrResourceSuffix "
+               name="dvrResourceSuffix">-win</dvrResourceSuffix>
+            <dvrKeyscopePrefix
+               class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+               name="dvrKeyscopePrefix">win-</dvrKeyscopePrefix>
+         </ditavalmeta>
+      </ditavalref>
+      <topicref class="- map/topicref "
+         filter-copy-to="perform-install-win.dita"
+         href="perform-install.dita" keyscope="perform-install"/>
+      <topicref class="- map/topicref "
+         filter-copy-to="perform-install-win.dita"
+         href="perform-install.dita" keyscope="perform-install">
+         <topicmeta class="- map/topicmeta ">
+            <resourceid appid="installation-procedure"
+               appid-role="deliverable-anchor"
+               class="- topic/resourceid "/>
+         </topicmeta>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-novice-win.dita" href="configure.dita"
+         keyscope="novice-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="novice.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-novice</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">novice-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         filter-copy-to="configure-admin-win.dita" href="configure.dita"
+         keyscope="admin-configure">
+         <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+            format="ditaval" href="advanced.ditaval"
+            processing-role="resource-only">
+            <ditavalmeta
+               class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+               <dvrResourceSuffix
+                  class="+ topic/data ditavalref-d/dvrResourceSuffix "
+                  name="dvrResourceSuffix">-admin</dvrResourceSuffix>
+               <dvrKeyscopePrefix
+                  class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+                  name="dvrKeyscopePrefix">admin-</dvrKeyscopePrefix>
+            </ditavalmeta>
+         </ditavalref>
+      </topicref>
+      <topicref class="- map/topicref "
+         href="http://example.com/install.dita" scope="external"/>
+   </topicref>
+   <topicref class="- map/topicref " filter-copy-to="install-linux.dita"
+      href="install.dita" keyscope="linux-">
+      <ditavalref class="+ map/topicref ditavalref-d/ditavalref "
+         format="ditaval" href="mac.ditaval"
+         processing-role="resource-only">
+         <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+            <dvrResourceSuffix
+               class="+ topic/data ditavalref-d/dvrResourceSuffix "
+               name="dvrResourceSuffix">-linux</dvrResourceSuffix>
+            <dvrKeyscopePrefix
+               class="+ topic/data ditavalref-d/dvrKeyscopePrefix "
+               name="dvrKeyscopePrefix">linux-</dvrKeyscopePrefix>
+         </ditavalmeta>
+      </ditavalref>
+   </topicref>
+   <topicref class="- map/topicref " href="install.dita">
+      <topicmeta class="- map/topicmeta ">
+         <resourceid appid="getting-started"
+            appid-role="deliverable-anchor" class="- topic/resourceid "/>
+      </topicmeta>
+   </topicref>
+</map>
