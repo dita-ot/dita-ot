@@ -10,13 +10,14 @@ package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.getDitaVersion;
 import static org.dita.dost.util.DitaUtils.isExternalScope;
+import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.getCascadeValue;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +31,13 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
+import org.xmlresolver.utils.URIUtils;
 
 /**
  * Branch filter module for map processing.
@@ -96,6 +100,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       return;
     }
 
+    cascadeAppId(doc.getDocumentElement());
+
     logger.debug("Split branches and generate copy-to");
     splitBranches(doc.getDocumentElement(), Branch.EMPTY);
     logger.debug("Filter map");
@@ -108,6 +114,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
       logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
+    }
+  }
+
+  private void cascadeAppId(Element root) {
+    if (getDitaVersion(root) >= 2.0) {
+      logger.warn("Cascade appid to copy-to");
+      var resourceids = getChildElements(root, TOPIC_RESOURCEID, true);
+      for (Element resourceid : resourceids) {
+        if (resourceid.getAttribute(ATTRIBUTE_NAME_APPID_ROLE).equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
+          var topicref = (Element) resourceid.getParentNode().getParentNode();
+          var appid = resourceid.getAttribute(ATTRIBUTE_NAME_APPID);
+          if (!appid.contains(".")) {
+            var href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
+            var ext = getExtension(FileUtils.getName(href));
+            appid = appid + "." + ext;
+          }
+          topicref.setAttribute(ATTRIBUTE_NAME_COPY_TO, appid);
+        }
+      }
     }
   }
 
@@ -342,10 +367,24 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     }
   }
 
+//  private String getCopyTo(Element elem) {
+//    var copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
+//    if (!copyTo.isEmpty()) {
+//      return copyTo;
+//    }
+//    return getChildElement(elem, MAP_TOPICMETA)
+//          .flatMap(topicmeta -> getChildElement(topicmeta, TOPIC_RESOURCEID))
+//          .filter(resourceid -> resourceid.getAttribute(ATTRIBUTE_NAME_APPID_ROLE).equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR))
+//          .map(resourceid -> resourceid.getAttribute(ATTRIBUTE_NAME_APPID))
+//          .map(appid -> appid.contains(".") ? appid : appid + "." + getExtension(FileUtils.getName(elem.getAttribute(ATTRIBUTE_NAME_HREF))))
+//          .orElse("");
+//  }
+
   private void processAttributes(final Element elem, final Branch filter) {
     if (filter.resourcePrefix() != null || filter.resourceSuffix() != null) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-      final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
+      String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
+//      String copyTo = getCopyTo(elem);
       final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
       if ((!href.isEmpty() || !copyTo.isEmpty()) && !isExternalScope(scope)) {
         final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
