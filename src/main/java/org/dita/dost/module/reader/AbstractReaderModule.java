@@ -122,6 +122,8 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
   private boolean gramcache = true;
   /** Profiling is enabled. */
   private boolean profilingEnabled;
+  /** Show key duplicates */
+  private boolean showKeyDuplicates;
   String transtype;
   private File ditavalFile;
   FilterUtils filterUtils;
@@ -191,6 +193,7 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
     keydefFilter.setLogger(logger);
     keydefFilter.setCurrentFile(rootFile);
     keydefFilter.setJob(job);
+    keydefFilter.setShowKeyDuplicates(showKeyDuplicates);
 
     nullHandler = new DefaultHandler();
 
@@ -317,6 +320,11 @@ public abstract class AbstractReaderModule extends AbstractPipelineModuleImpl {
         .orElse(true);
     if (profilingEnabled) {
       ditavalFile = Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).orElse(null);
+    }
+    
+    showKeyDuplicates = true;
+    if (input.getAttribute(ANT_INVOKER_PARAM_SHOW_KEY_DUPLICATES) != null) {
+      showKeyDuplicates = Boolean.parseBoolean(input.getAttribute(ANT_INVOKER_PARAM_SHOW_KEY_DUPLICATES));
     }
   }
 
