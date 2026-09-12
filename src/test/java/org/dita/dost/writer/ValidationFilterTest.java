@@ -21,6 +21,8 @@ import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -366,5 +368,31 @@ public class ValidationFilterTest {
 
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "path", "path?query", "path#fragment", "path?query#fragment" })
+  public void testAppid_valid(String value) throws SAXException {
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_RESOURCEID.localName,
+      TOPIC_RESOURCEID.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_APPID, value).build()
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_invalid(String value) {
+    assertThrows(
+      SAXException.class,
+      () ->
+        f.startElement(
+          NULL_NS_URI,
+          TOPIC_RESOURCEID.localName,
+          TOPIC_RESOURCEID.localName,
+          new AttributesBuilder().add(ATTRIBUTE_NAME_APPID, value).build()
+        )
+    );
   }
 }

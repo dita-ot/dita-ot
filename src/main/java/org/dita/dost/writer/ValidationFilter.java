@@ -95,6 +95,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     modified = validateId(localName, atts, modified);
     modified = validateReference(ATTRIBUTE_NAME_HREF, atts, modified);
     modified = validateReference(ATTRIBUTE_NAME_CONREF, atts, modified);
+    modified = validateAppid(atts, modified);
     modified = validateScope(atts, modified);
     modified = processFormatDitamap(atts, modified);
     validateKeys(atts);
@@ -183,6 +184,69 @@ public final class ValidationFilter extends AbstractXMLFilter {
         topicIds.add(id);
       }
     }
+    return res;
+  }
+
+  /**
+   * Validate {@code appid} attribute.
+   */
+  private AttributesImpl validateAppid(Attributes atts, AttributesImpl modified) throws SAXException {
+    var res = modified;
+    var appid = atts.getValue(ATTRIBUTE_NAME_APPID);
+    if (appid != null) {
+      URI uri = null;
+      try {
+        uri = new URI(appid);
+      } catch (URISyntaxException e) {
+        switch (processingMode) {
+          case STRICT -> throw new RuntimeException(
+            MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator) +
+            ": " +
+            e.getMessage(),
+            e
+          );
+          case SKIP -> {
+            logger.error(
+              "{}, using invalid value.",
+              MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator)
+            );
+            return res;
+          }
+          case LAX -> {
+            try {
+              uri = new URI(URLUtils.clean(appid.trim()));
+              if (res == null) {
+                res = new AttributesImpl(atts);
+              }
+              res.setValue(res.getIndex(ATTRIBUTE_NAME_APPID), uri.toASCIIString());
+              logger.error(
+                "{}, using '{}'.",
+                MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator),
+                uri.toASCIIString()
+              );
+            } catch (final URISyntaxException e1) {
+              logger.error(
+                "{}, using invalid value.",
+                MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator)
+              );
+              return res;
+            }
+          }
+        }
+      }
+
+      if (uri != null) {
+        if (uri.getScheme() != null || uri.getAuthority() != null) {
+          throw new SAXException("appid value can only contain path, query and fragment components");
+        }
+        if (uri.getPath() == null || uri.getPath().isEmpty()) {
+          throw new SAXException("appid value must have a path components");
+        } else if (uri.getPath().contains("/")) {
+          throw new SAXException("appid value must contain only the last path component of a URI path");
+        }
+      }
+    }
+
     return res;
   }
 

@@ -25,26 +25,24 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.InputSource;
 
 public class TopicBranchFilterModuleTest extends TopicBranchFilterModule {
 
   private final File resourceDir = TestUtils.getResourceDir(TopicBranchFilterModuleTest.class);
-  private final File expDir = new File(resourceDir, "exp");
 
   @TempDir
   private File tempDir;
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    TestUtils.copy(new File(resourceDir, "src"), tempDir);
-  }
+  @ParameterizedTest
+  @ValueSource(strings = { "test", "test_dita2" })
+  public void testDuplicateTopic(String dir) throws IOException {
+    final File expDir = new File(resourceDir, "exp" + File.separator + dir);
+    TestUtils.copy(new File(resourceDir, "src" + File.separator + dir), tempDir);
 
-  @Test
-  public void testDuplicateTopic() throws IOException {
     final TopicBranchFilterModule m = new TopicBranchFilterModule();
     final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     job.setInputDir(tempDir.toURI());

@@ -1,0 +1,13 @@
+﻿<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+	class="- topic/topic "
+	domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+	id="test1" ditaarch:DITAArchVersion="1.3" xml:lang="en-us">
+	<title class="- topic/title ">test 1</title>
+	<body class="- topic/body ">
+		<p class="- topic/p " id="content1"> content of test1 </p>
+		<p class="- topic/p " conref="test1.dita#test1/content1"/>
+		<p class="- topic/p " conref="#test1/content1"/>
+		<p class="- topic/p " conref="test2.dita#test2/content2"/>
+		<p class="- topic/p " conref="test3.dita#test3/content3"/>
+	</body>
+</topic>

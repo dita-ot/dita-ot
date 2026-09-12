@@ -223,7 +223,13 @@ public abstract class AbstractModuleTest {
       } else {
         final Document expDoc = getDocument(exp);
         final Document actDoc = store.getDocument(act.toURI());
-        assertXMLEqual(expDoc, actDoc);
+        try {
+          assertXMLEqual(expDoc, actDoc);
+        } catch (AssertionError e) {
+          System.err.println(new File(actDir, name) + ":");
+          Files.copy(new File(actDir, name).toPath(), System.err);
+          throw e;
+        }
       }
     }
     if (new File(expDir, ".job.xml").exists()) {
