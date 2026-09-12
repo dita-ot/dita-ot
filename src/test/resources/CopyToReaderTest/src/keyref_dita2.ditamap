@@ -1,7 +1,7 @@
 <map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
   specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
   ditaarch:DITAArchVersion="2.0">
-  <topicref class="- map/topicref " href="keyref-source-a.dita" keys="x" processing-role="resource-only">
+  <topicref class="- map/topicref " href="keyref-source-a.dita" keys="x" processing-role="resource-only" copy-to="keyref-target.dita">
     <topicmeta class="- map/topicmeta ">
       <resourceid class="- topic/resourceid " appid="keyref-target" appid-role="deliverable-anchor"/>
     </topicmeta>

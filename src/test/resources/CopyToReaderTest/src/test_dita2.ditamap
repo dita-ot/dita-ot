@@ -2,26 +2,26 @@
  specializations="@props/audience                            @props/deliveryTarget                            @props/otherprops                            @props/platform                            @props/product   "
  ditaarch:DITAArchVersion="2.0">
   <topicref class="- map/topicref " href="none.dita"/>
-  <topicref class="- map/topicref " href="topic.dita">
+  <topicref class="- map/topicref " href="topic.dita" copy-to="direct.dita">
     <topicmeta class="- map/topicmeta ">
       <resourceid class="- topic/resourceid " appid="direct" appid-role="deliverable-anchor"/>
     </topicmeta>
   </topicref>
-  <topicref class="- map/topicref " href="topic.dita">
+  <topicref class="- map/topicref " href="topic.dita" copy-to="keyref.dita">
     <topicmeta class="- map/topicmeta ">
     <resourceid class="- topic/resourceid " appid="keyref.dita" appid-role="deliverable-anchor"/>
   </topicmeta>
   </topicref>
-  <topicref class="- map/topicref " href="a.dita">
+  <topicref class="- map/topicref " href="a.dita" copy-to="b.dita">
     <topicmeta class="- map/topicmeta ">
       <resourceid class="- topic/resourceid " appid="b" appid-role="deliverable-anchor"/>
     </topicmeta>
   </topicref>
-  <topicref class="- map/topicref " href="chunk.dita" chunk="to-content">
+  <topicref class="- map/topicref " href="chunk.dita" chunk="to-content" copy-to="chunk-target.dita">
     <topicmeta class="- map/topicmeta ">
       <resourceid class="- topic/resourceid " appid="chunk-target" appid-role="deliverable-anchor"/>
     </topicmeta>
-    <topicref class="- map/topicref " copy-to="skip-b.dita" href="skip-a.dita">
+    <topicref class="- map/topicref " href="skip-a.dita" copy-to="skip-b.dita">
       <topicmeta class="- map/topicmeta ">
         <resourceid class="- topic/resourceid " appid="skip-b" appid-role="deliverable-anchor"/>
       </topicmeta>
