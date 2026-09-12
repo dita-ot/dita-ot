@@ -5,15 +5,15 @@
   ditaarch:DITAArchVersion="2.0">
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup "
     collection-type="family">
-    <topicref class="- map/topicref " href="test2.dita"
-      impose-role="keeptarget">
+    <topicref class="- map/topicref " copy-to="newtest2.dita"
+      href="test2.dita" impose-role="keeptarget">
       <topicmeta class="- map/topicmeta ">
         <resourceid class="- topic/resourceid " appid="newtest2"
           appid-role="deliverable-anchor"/>
       </topicmeta>
     </topicref>
-    <topicref class="- map/topicref " href="test2.dita"
-      impose-role="keeptarget">
+    <topicref class="- map/topicref " copy-to="newtest2.dita"
+      href="test2.dita" impose-role="keeptarget">
       <topicmeta class="- map/topicmeta ">
         <resourceid class="- topic/resourceid " appid="newtest2"
           appid-role="deliverable-anchor"/>
@@ -23,8 +23,8 @@
 
   <topicgroup class="+ map/topicref mapgroup-d/topicgroup "
     collection-type="family">
-    <topicref class="- map/topicref " href="test3.dita"
-      impose-role="keeptarget">
+    <topicref class="- map/topicref " copy-to="newtest3.dita"
+      href="test3.dita" impose-role="keeptarget">
       <topicmeta class="- map/topicmeta ">
         <linktitle
           class="+ topic/titlealt alternativeTitles-d/linktitle "
@@ -34,8 +34,8 @@
           appid-role="deliverable-anchor"/>
       </topicmeta>
     </topicref>
-    <topicref class="- map/topicref " href="test3.dita"
-      impose-role="keeptarget">
+    <topicref class="- map/topicref " copy-to="newtest3.dita"
+      href="test3.dita" impose-role="keeptarget">
       <topicmeta class="- map/topicmeta ">
         <linktitle
           class="+ topic/titlealt alternativeTitles-d/linktitle "
@@ -45,8 +45,8 @@
           appid-role="deliverable-anchor"/>
       </topicmeta>
     </topicref>
-    <topicref class="- map/topicref " href="test3.dita"
-      impose-role="keeptarget">
+    <topicref class="- map/topicref " copy-to="newtest3.dita"
+      href="test3.dita" impose-role="keeptarget">
       <topicmeta class="- map/topicmeta ">
         <linktitle
           class="+ topic/titlealt alternativeTitles-d/linktitle "
