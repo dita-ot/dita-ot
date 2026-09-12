@@ -100,8 +100,8 @@ public final class CopyToReader extends AbstractXMLFilter {
 
     if (MAP_TOPICREF.matches(classValue)) {
       parseAttribute(atts);
-    } else if (TOPIC_RESOURCEID.matches(classValue)) {
-      parseResourceId(atts);
+      //    } else if (TOPIC_RESOURCEID.matches(classValue)) {
+      //      parseResourceId(atts);
     }
 
     getContentHandler().startElement(uri, localName, qName, atts);
@@ -185,54 +185,53 @@ public final class CopyToReader extends AbstractXMLFilter {
       }
     }
   }
-
-  /**
-   * Parse the input attributes for needed information.
-   *
-   * @param atts all attributes
-   */
-  private void parseResourceId(final Attributes atts) {
-    var appIdRole = atts.getValue(ATTRIBUTE_NAME_APPID_ROLE);
-    if (appIdRole == null || !appIdRole.equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
-      return;
-    }
-    var appId = atts.getValue(ATTRIBUTE_NAME_APPID);
-    if (appId == null || appId.isBlank()) {
-      return;
-    }
-
-    if (previousHrefAbs != null) {
-      var copyTo = toURI(appId);
-      if (copyTo != null) {
-        if (getExtension(copyTo.getPath()) == null) {
-          copyTo = setPath(copyTo, copyTo.getPath() + "." + getExtension(previousHrefAbs.getPath()));
-        }
-        final URI copyToAbs = stripFragment(currentFile.resolve(copyTo));
-        assert copyToAbs.isAbsolute();
-        final URI copyToSourceAbs = copyToMap.get(copyToAbs);
-        if (copyToSourceAbs != null) {
-          if (!copyToAbs.equals(copyToSourceAbs)) {
-            logger.warn(
-              MessageUtils
-                .getMessage(
-                  "DOTX065W",
-                  currentFile.resolve(".").relativize(previousHrefAbs).toString(),
-                  copyToAbs.toString()
-                )
-                .setLocation(atts)
-                .toString()
-            );
-          }
-        } else if (
-          atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)
-        ) {
-          // Ignore
-        } else {
-          copyToMap.put(copyToAbs, previousHrefAbs);
-        }
-      }
-    }
-  }
+  //  /**
+  //   * Parse the input attributes for needed information.
+  //   *
+  //   * @param atts all attributes
+  //   */
+  //  private void parseResourceId(final Attributes atts) {
+  //    var appIdRole = atts.getValue(ATTRIBUTE_NAME_APPID_ROLE);
+  //    if (appIdRole == null || !appIdRole.equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
+  //      return;
+  //    }
+  //    var appId = atts.getValue(ATTRIBUTE_NAME_APPID);
+  //    if (appId == null || appId.isBlank()) {
+  //      return;
+  //    }
+  //
+  //    if (previousHrefAbs != null) {
+  //      var copyTo = toURI(appId);
+  //      if (copyTo != null) {
+  //        if (getExtension(copyTo.getPath()) == null) {
+  //          copyTo = setPath(copyTo, copyTo.getPath() + "." + getExtension(previousHrefAbs.getPath()));
+  //        }
+  //        final URI copyToAbs = stripFragment(currentFile.resolve(copyTo));
+  //        assert copyToAbs.isAbsolute();
+  //        final URI copyToSourceAbs = copyToMap.get(copyToAbs);
+  //        if (copyToSourceAbs != null) {
+  //          if (!copyToAbs.equals(copyToSourceAbs)) {
+  //            logger.warn(
+  //              MessageUtils
+  //                .getMessage(
+  //                  "DOTX065W",
+  //                  currentFile.resolve(".").relativize(previousHrefAbs).toString(),
+  //                  copyToAbs.toString()
+  //                )
+  //                .setLocation(atts)
+  //                .toString()
+  //            );
+  //          }
+  //        } else if (
+  //          atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)
+  //        ) {
+  //          // Ignore
+  //        } else {
+  //          copyToMap.put(copyToAbs, previousHrefAbs);
+  //        }
+  //      }
+  //    }
+  //  }
   //  private String getFormat(Attributes atts) {
   //    final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
   //    if (TOPIC_IMAGE.matches(attrClass)) {
