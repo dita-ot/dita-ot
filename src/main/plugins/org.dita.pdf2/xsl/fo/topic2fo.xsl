@@ -98,6 +98,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/xml-domain.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/svg-domain-attr.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/svg-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/equation-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/mathml-domain.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/hazard-d-attr.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/hazard-d.xsl"/>
     

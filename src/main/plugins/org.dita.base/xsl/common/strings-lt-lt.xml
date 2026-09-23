@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Piešinys</variable>
    <variable id="Table">Lentelė</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Paskesnė tema</variable>
    <variable id="Previous topic">Ankstesnė tema</variable>
    <variable id="Parent topic">Pradinė tema</variable>
