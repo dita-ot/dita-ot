@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.net.URI;
 import java.util.Map;
@@ -137,7 +138,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
    * @param qName element name
    * @param atts input attributes
    */
-  private Attributes processAttributes(final String qName, final Attributes atts) {
+  @VisibleForTesting
+  Attributes processAttributes(final String qName, final Attributes atts) {
     AttributesImpl res = null;
     final int attsLen = atts.getLength();
     for (int i = 0; i < attsLen; i++) {
