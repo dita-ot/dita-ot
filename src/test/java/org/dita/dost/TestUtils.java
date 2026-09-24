@@ -9,8 +9,7 @@ package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.dita.dost.log.AbstractLogger.addIndex;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 import java.io.*;
@@ -21,6 +20,7 @@ import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -257,6 +257,23 @@ public class TestUtils {
       OutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()))
     ) {
       serializer.transform(new SAXSource(parser, new InputSource(in)), new StreamResult(out));
+    }
+  }
+
+  public static void assertAttributesEquals(Attributes exp, Attributes act) {
+    assertEquals(
+      exp.getLength(),
+      act.getLength(),
+      "expected: <%s> but was: <%s>".formatted(
+          IntStream.range(0, exp.getLength()).mapToObj(exp::getLocalName).toList(),
+          IntStream.range(0, act.getLength()).mapToObj(act::getLocalName).toList()
+        )
+    );
+    for (int i = 0; i < exp.getLength(); i++) {
+      var j = act.getIndex(exp.getURI(i), exp.getLocalName(i));
+      assertNotEquals(-1, j);
+      assertEquals(exp.getType(i), act.getType(j));
+      assertEquals(exp.getValue(i), act.getValue(j));
     }
   }
 
