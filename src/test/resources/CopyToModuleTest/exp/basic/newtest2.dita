@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+       class="- topic/topic "
+       ditaarch:DITAArchVersion="1.3"
+       domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+       id="test2"
+       xml:lang="en-us">
+   <title class="- topic/title ">test 2</title>
+   <body class="- topic/body ">
+      <p class="- topic/p " id="content2"> content of test2 </p>
+   </body>
+   <related-links class="- topic/related-links ">
+      <link class="- topic/link " href="#./content2"/>
+   </related-links>
+</topic>
