@@ -2,8 +2,47 @@
   <property name="generatecopyouter">
     <string>NOT_GENERATEOUTTER</string>
   </property>
+  <property name="user.input.dir">
+    <string>/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic</string>
+  </property>
+  <property name="outputdir">
+    <string>/Users/jelovirt/Work/dita-ot/src/test/testsuite/testresult/chunk_fix_anchor/preprocess/map1</string>
+  </property>
+  <property name="onlytopicinmap">
+    <string>false</string>
+  </property>
+  <property name="InputMapDir.uri">
+    <string>file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap</string>
+  </property>
+  <property name="tempdirToinputmapdir.relative.value">
+    <string/>
+  </property>
+  <property name="user.input.file.listfile">
+    <string>usr.input.file.list</string>
+  </property>
+  <property name="relflagimagelist">
+    <string/>
+  </property>
+  <property name="outercontrol">
+    <string>WARN</string>
+  </property>
+  <property name="relflagimagefile">
+    <string>relflagimage.list</string>
+  </property>
+  <property name="InputMapDir">
+    <string>/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap</string>
+  </property>
+  <property name="user.input.file.uri">
+    <string>TC2.ditamap</string>
+  </property>
   <property name="user.input.dir.uri">
     <string>file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/</string>
+  </property>
+  <property name="user.input.file">
+    <string>TC2.ditamap</string>
+  </property>
+  <property name="uplevels">
+    <string/>
   </property>
   <files>
     <file src="file:/Users/jarno.elovirta/work/github.com/dita-ot/dita-ot/src/test/resources/CopyToModuleTest/src/basic/TC2.ditamap" uri="TC2.ditamap" path="TC2.ditamap" format="ditamap" input="true"/>
