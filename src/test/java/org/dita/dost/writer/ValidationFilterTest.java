@@ -21,6 +21,8 @@ import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -28,6 +30,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ValidationFilterTest {
 
   private ValidationFilter f;
+  private TestUtils.CachingLogger l;
 
   @BeforeEach
   public void setUp() {
@@ -35,6 +38,8 @@ public class ValidationFilterTest {
     f.setValidateMap(Collections.emptyMap());
     f.setProcessingMode(Configuration.Mode.LAX);
     f.setCurrentFile(URI.create("file:/foo/bar.dita"));
+    l = new TestUtils.CachingLogger();
+    f.setLogger(l);
   }
 
   @Test
@@ -49,16 +54,30 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
+    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en-GB").build());
+
+    assertEquals(0, l.getMessages().size());
+    assertEquals("en-GB", res.get(0));
+  }
+
+  @Test
+  public void testXMLLang_lax() throws SAXException {
+    final List<String> res = new ArrayList<>();
+    f.setContentHandler(
+      new DefaultHandler() {
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+          throws SAXException {
+          res.add(atts.getValue(XML_NS_URI, "lang"));
+        }
+      }
+    );
 
     f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en_us").build());
-    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add(XML_NS_URI, "lang", "en-GB").build());
 
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("en-us", res.get(0));
-    assertEquals("en-GB", res.get(1));
   }
 
   @Test
@@ -73,18 +92,7 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_XREF.localName,
-      TOPIC_XREF.localName,
-      new AttributesBuilder()
-        .add(ATTRIBUTE_NAME_HREF, "http://example.com/foo\\bar baz:qux")
-        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
-        .build()
-    );
     f.startElement(
       NULL_NS_URI,
       TOPIC_XREF.localName,
@@ -95,10 +103,36 @@ public class ValidationFilterTest {
         .build()
     );
 
+    assertEquals(0, l.getMessages().size());
+    assertEquals("http://example.com/valid/bar+baz:qux", res.get(0));
+  }
+
+  @Test
+  public void testHref_lax() throws SAXException {
+    final List<String> res = new ArrayList<>();
+    f.setContentHandler(
+      new DefaultHandler() {
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+          throws SAXException {
+          res.add(atts.getValue(ATTRIBUTE_NAME_HREF));
+        }
+      }
+    );
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_XREF.localName,
+      TOPIC_XREF.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_HREF, "http://example.com/foo\\bar baz:qux")
+        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+        .build()
+    );
+
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("http://example.com/foo/bar%20baz:qux", res.get(0));
-    assertEquals("http://example.com/valid/bar+baz:qux", res.get(1));
   }
 
   @Test
@@ -112,8 +146,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -141,15 +173,7 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_KEYWORD.localName,
-      TOPIC_KEYWORD.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_CONREF, "sub\\backslash.dita#topic/back").build()
-    );
     f.startElement(
       NULL_NS_URI,
       TOPIC_KEYWORD.localName,
@@ -157,10 +181,33 @@ public class ValidationFilterTest {
       new AttributesBuilder().add(ATTRIBUTE_NAME_CONREF, "sub/slash.dita#topic/valid").build()
     );
 
+    assertEquals(0, l.getMessages().size());
+    assertEquals("sub/slash.dita#topic/valid", res.get(0));
+  }
+
+  @Test
+  public void testConref_lax() throws SAXException {
+    final List<String> res = new ArrayList<>();
+    f.setContentHandler(
+      new DefaultHandler() {
+        @Override
+        public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
+          throws SAXException {
+          res.add(atts.getValue(ATTRIBUTE_NAME_CONREF));
+        }
+      }
+    );
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_KEYWORD.localName,
+      TOPIC_KEYWORD.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CONREF, "sub\\backslash.dita#topic/back").build()
+    );
+
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
     assertEquals("sub/backslash.dita#topic/back", res.get(0));
-    assertEquals("sub/slash.dita#topic/valid", res.get(1));
   }
 
   @Test
@@ -175,8 +222,6 @@ public class ValidationFilterTest {
         }
       }
     );
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -200,10 +245,8 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testId() throws SAXException {
+  public void testId_invalid() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -221,26 +264,7 @@ public class ValidationFilterTest {
       NULL_NS_URI,
       TOPIC_P.localName,
       TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_P.toString()).add(ATTRIBUTE_NAME_ID, "second").build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
       new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_P.toString()).add(ATTRIBUTE_NAME_ID, "first").build()
-    );
-    assertEquals(1, l.getMessages().size());
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_TOPIC.localName,
-      TOPIC_TOPIC.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString()).add(ATTRIBUTE_NAME_ID, "topic").build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_P.toString()).add(ATTRIBUTE_NAME_ID, "second").build()
     );
 
     assertEquals(1, l.getMessages().size());
@@ -248,104 +272,110 @@ public class ValidationFilterTest {
   }
 
   @Test
-  public void testKeys() throws SAXException {
+  public void testId() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder()
-        .add(ATTRIBUTE_NAME_KEYS, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=")
-        .build()
+      TOPIC_TOPIC.localName,
+      TOPIC_TOPIC.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString()).add(ATTRIBUTE_NAME_ID, "topic").build()
     );
     f.startElement(
       NULL_NS_URI,
       TOPIC_P.localName,
       TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, "foo bar baz").build()
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_P.toString()).add(ATTRIBUTE_NAME_ID, "second").build()
+    );
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_TOPIC.localName,
+      TOPIC_TOPIC.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_TOPIC.toString()).add(ATTRIBUTE_NAME_ID, "topic").build()
     );
     f.startElement(
       NULL_NS_URI,
       TOPIC_P.localName,
       TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, " foo ").build()
+      new AttributesBuilder().add(ATTRIBUTE_NAME_CLASS, TOPIC_P.toString()).add(ATTRIBUTE_NAME_ID, "second").build()
     );
+
     assertEquals(0, l.getMessages().size());
-
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, "foo/bar").build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, "foo\u00E4bar").build()
-    );
-
-    assertEquals(2, l.getMessages().size());
-    for (final Message m : l.getMessages()) {
-      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level());
-    }
   }
 
-  @Test
-  public void testKeyscope() throws SAXException {
-    f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
-
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder()
-        .add(ATTRIBUTE_NAME_KEYSCOPE, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=")
-        .build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, "foo bar baz").build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, " foo ").build()
-    );
-    assertEquals(0, l.getMessages().size());
-
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, "foo/bar").build()
-    );
-    f.startElement(
-      NULL_NS_URI,
-      TOPIC_P.localName,
-      TOPIC_P.localName,
-      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, "foo\u00E4bar").build()
-    );
-
-    assertEquals(2, l.getMessages().size());
-    for (final Message m : l.getMessages()) {
-      assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, m.level());
+  @ParameterizedTest
+  @ValueSource(
+    strings = {
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=", "foo bar baz", " foo ",
     }
+  )
+  public void testKeys(String keys) throws SAXException {
+    f.setContentHandler(new DefaultHandler());
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_P.localName,
+      TOPIC_P.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, keys).build()
+    );
+
+    assertEquals(0, l.getMessages().size());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "foo/bar", "foo\u00E4bar" })
+  public void testKeys_invalid(String keys) throws SAXException {
+    f.setContentHandler(new DefaultHandler());
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_P.localName,
+      TOPIC_P.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYS, keys).build()
+    );
+
+    assertEquals(1, l.getMessages().size());
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
+  }
+
+  @ParameterizedTest
+  @ValueSource(
+    strings = {
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:@!$&'()*+,;=", "foo bar baz", " foo ",
+    }
+  )
+  public void testKeyscope(String keyscope) throws SAXException {
+    f.setContentHandler(new DefaultHandler());
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_P.localName,
+      TOPIC_P.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, keyscope).build()
+    );
+
+    assertEquals(0, l.getMessages().size());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "foo/bar", "foo\u00E4bar" })
+  public void testKeyscope_invalid(String keyscope) throws SAXException {
+    f.setContentHandler(new DefaultHandler());
+
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_P.localName,
+      TOPIC_P.localName,
+      new AttributesBuilder().add(ATTRIBUTE_NAME_KEYSCOPE, keyscope).build()
+    );
+
+    assertEquals(1, l.getMessages().size());
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
 
   @Test
   public void testAttributeGeneralization() throws SAXException {
     f.setContentHandler(new DefaultHandler());
-    final TestUtils.CachingLogger l = new TestUtils.CachingLogger();
-    f.setLogger(l);
 
     f.startElement(
       NULL_NS_URI,
@@ -353,17 +383,97 @@ public class ValidationFilterTest {
       "x",
       new AttributesBuilder().add(ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)").build()
     );
+
+    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("jobrole", "admin").build());
+    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("person", "jobrole(programmer)").build());
+
     assertEquals(0, l.getMessages().size());
+  }
+
+  @Test
+  public void testAttributeGeneralization_multiple() throws SAXException {
+    f.setContentHandler(new DefaultHandler());
+
+    f.startElement(
+      NULL_NS_URI,
+      "x",
+      "x",
+      new AttributesBuilder().add(ATTRIBUTE_NAME_DOMAINS, "a(props person jobrole)").build()
+    );
     f.startElement(
       NULL_NS_URI,
       "x",
       "x",
       new AttributesBuilder().add("person", "jobrole(programmer)").add("jobrole", "admin").build()
     );
-    assertEquals(1, l.getMessages().size());
-    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("jobrole", "admin").build());
-    f.startElement(NULL_NS_URI, "x", "x", new AttributesBuilder().add("person", "jobrole(programmer)").build());
 
+    assertEquals(1, l.getMessages().size());
+    assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "path", "path?query", "path#fragment", "path?query#fragment" })
+  public void testAppid_deliveryAnchor_valid(String value) throws SAXException {
+    f.startElement(
+      NULL_NS_URI,
+      TOPIC_RESOURCEID.localName,
+      TOPIC_RESOURCEID.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_APPID, value)
+        .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+        .build()
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_deliveryAnchor_invalid(String value) {
+    f.setProcessingMode(Configuration.Mode.STRICT);
+
+    assertThrows(
+      RuntimeException.class,
+      () ->
+        f.startElement(
+          NULL_NS_URI,
+          TOPIC_RESOURCEID.localName,
+          TOPIC_RESOURCEID.localName,
+          new AttributesBuilder()
+            .add(ATTRIBUTE_NAME_APPID, value)
+            .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+            .build()
+        )
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_notDeliveryAnchor_valid(String value) {
+    assertDoesNotThrow(() ->
+      f.startElement(
+        NULL_NS_URI,
+        TOPIC_RESOURCEID.localName,
+        TOPIC_RESOURCEID.localName,
+        new AttributesBuilder().add(ATTRIBUTE_NAME_APPID, value).add(ATTRIBUTE_NAME_APPID_ROLE, "other").build()
+      )
+    );
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "dir/path", "//host/path", "https://host/path", "?query", "#fragment" })
+  public void testAppid_deliveryAnchor_skip(String value) {
+    f.setProcessingMode(Configuration.Mode.SKIP);
+
+    assertDoesNotThrow(() ->
+      f.startElement(
+        NULL_NS_URI,
+        TOPIC_RESOURCEID.localName,
+        TOPIC_RESOURCEID.localName,
+        new AttributesBuilder()
+          .add(ATTRIBUTE_NAME_APPID, value)
+          .add(ATTRIBUTE_NAME_APPID_ROLE, ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)
+          .build()
+      )
+    );
     assertEquals(1, l.getMessages().size());
     assertEquals(TestUtils.CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
