@@ -11,7 +11,6 @@ import static org.dita.dost.reader.ChunkMapReader.CHUNK_TO_CONTENT;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
-import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
@@ -45,8 +44,6 @@ public final class CopyToReader extends AbstractXMLFilter {
    * Stack for cascading attributes.
    */
   private final AttributeStack attributeStack = new AttributeStack();
-
-  private URI previousHrefAbs;
 
   /**
    * Get the copy-to map.
@@ -100,8 +97,6 @@ public final class CopyToReader extends AbstractXMLFilter {
 
     if (MAP_TOPICREF.matches(classValue)) {
       parseAttribute(atts);
-      //    } else if (TOPIC_RESOURCEID.matches(classValue)) {
-      //      parseResourceId(atts);
     }
 
     getContentHandler().startElement(uri, localName, qName, atts);
@@ -134,24 +129,9 @@ public final class CopyToReader extends AbstractXMLFilter {
    * @param atts all attributes
    */
   private void parseAttribute(final Attributes atts) {
-    // external resource is filtered here.
-    //    if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
-    //      return;
-    //    }
-    //    var attrScope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
-    //    if (
-    //      ATTR_SCOPE_VALUE_EXTERNAL.equals(attrScope) ||
-    //      ATTR_SCOPE_VALUE_PEER.equals(attrScope) ||
-    //      // FIXME: testing for :// here is incorrect, rely on href scope instead
-    //      target.toString().contains(COLON_DOUBLE_SLASH) ||
-    //      target.toString().startsWith(SHARP)
-    //    ) {
-    //      return;
-    //    }
-
-    if (atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)) {
-      previousHrefAbs = null;
-    } else {
+    if (
+      atts.getValue(ATTRIBUTE_NAME_CHUNK) == null || !atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)
+    ) {
       final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
 
       if (
@@ -161,7 +141,6 @@ public final class CopyToReader extends AbstractXMLFilter {
       ) {
         final URI hrefAbs = stripFragment(currentFile.resolve(href));
         assert hrefAbs.isAbsolute();
-        previousHrefAbs = hrefAbs;
 
         var copyTo = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
         if (copyTo != null) {
@@ -178,87 +157,8 @@ public final class CopyToReader extends AbstractXMLFilter {
           } else {
             copyToMap.put(copyToAbs, hrefAbs);
           }
-          previousHrefAbs = null;
         }
-      } else {
-        previousHrefAbs = null;
       }
     }
   }
-  //  /**
-  //   * Parse the input attributes for needed information.
-  //   *
-  //   * @param atts all attributes
-  //   */
-  //  private void parseResourceId(final Attributes atts) {
-  //    var appIdRole = atts.getValue(ATTRIBUTE_NAME_APPID_ROLE);
-  //    if (appIdRole == null || !appIdRole.equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
-  //      return;
-  //    }
-  //    var appId = atts.getValue(ATTRIBUTE_NAME_APPID);
-  //    if (appId == null || appId.isBlank()) {
-  //      return;
-  //    }
-  //
-  //    if (previousHrefAbs != null) {
-  //      var copyTo = toURI(appId);
-  //      if (copyTo != null) {
-  //        if (getExtension(copyTo.getPath()) == null) {
-  //          copyTo = setPath(copyTo, copyTo.getPath() + "." + getExtension(previousHrefAbs.getPath()));
-  //        }
-  //        final URI copyToAbs = stripFragment(currentFile.resolve(copyTo));
-  //        assert copyToAbs.isAbsolute();
-  //        final URI copyToSourceAbs = copyToMap.get(copyToAbs);
-  //        if (copyToSourceAbs != null) {
-  //          if (!copyToAbs.equals(copyToSourceAbs)) {
-  //            logger.warn(
-  //              MessageUtils
-  //                .getMessage(
-  //                  "DOTX065W",
-  //                  currentFile.resolve(".").relativize(previousHrefAbs).toString(),
-  //                  copyToAbs.toString()
-  //                )
-  //                .setLocation(atts)
-  //                .toString()
-  //            );
-  //          }
-  //        } else if (
-  //          atts.getValue(ATTRIBUTE_NAME_CHUNK) != null && atts.getValue(ATTRIBUTE_NAME_CHUNK).contains(CHUNK_TO_CONTENT)
-  //        ) {
-  //          // Ignore
-  //        } else {
-  //          copyToMap.put(copyToAbs, previousHrefAbs);
-  //        }
-  //      }
-  //    }
-  //  }
-  //  private String getFormat(Attributes atts) {
-  //    final String attrClass = atts.getValue(ATTRIBUTE_NAME_CLASS);
-  //    if (TOPIC_IMAGE.matches(attrClass)) {
-  //      return ATTR_FORMAT_VALUE_IMAGE;
-  //    } else if (TOPIC_OBJECT.matches(attrClass)) {
-  //      throw new IllegalArgumentException();
-  //      //return ATTR_FORMAT_VALUE_HTML;
-  //    } else {
-  //      return attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
-  //    }
-  //  }
-
-  //  /**
-  //   * Check if format is DITA topic.
-  //   *
-  //   * @param attrFormat format attribute value, may be {@code null}
-  //   * @return {@code true} if DITA topic, otherwise {@code false}
-  //   */
-  //  public static boolean isFormatDita(final String attrFormat) {
-  //    if (attrFormat == null || attrFormat.equals(ATTR_FORMAT_VALUE_DITA)) {
-  //      return true;
-  //    }
-  //    for (final String f : ditaFormat) {
-  //      if (f.equals(attrFormat)) {
-  //        return true;
-  //      }
-  //    }
-  //    return false;
-  //  }
 }

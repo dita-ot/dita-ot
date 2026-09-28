@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.dita.dost.TestUtils;
-import org.dita.dost.TestUtils.CachingLogger.Message;
 import org.dita.dost.util.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
