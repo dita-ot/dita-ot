@@ -367,24 +367,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     }
   }
 
-  //  private String getCopyTo(Element elem) {
-  //    var copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-  //    if (!copyTo.isEmpty()) {
-  //      return copyTo;
-  //    }
-  //    return getChildElement(elem, MAP_TOPICMETA)
-  //          .flatMap(topicmeta -> getChildElement(topicmeta, TOPIC_RESOURCEID))
-  //          .filter(resourceid -> resourceid.getAttribute(ATTRIBUTE_NAME_APPID_ROLE).equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR))
-  //          .map(resourceid -> resourceid.getAttribute(ATTRIBUTE_NAME_APPID))
-  //          .map(appid -> appid.contains(".") ? appid : appid + "." + getExtension(FileUtils.getName(elem.getAttribute(ATTRIBUTE_NAME_HREF))))
-  //          .orElse("");
-  //  }
-
   private void processAttributes(final Element elem, final Branch filter) {
     if (filter.resourcePrefix() != null || filter.resourceSuffix() != null) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
-      String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-      //      String copyTo = getCopyTo(elem);
+      final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
       final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
       if ((!href.isEmpty() || !copyTo.isEmpty()) && !isExternalScope(scope)) {
         final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
