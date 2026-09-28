@@ -176,6 +176,16 @@ public interface ITPreprocessBase {
   }
 
   @Test
+  default void conrefSameFileXref() throws Throwable {
+    builder()
+      .name(Paths.get("conref", "conref_same_file_xref"))
+      .transtype(PREPROCESS)
+      .input(Paths.get("conref_same_file_xref.dita"))
+      .put("validate", "false")
+      .test();
+  }
+
+  @Test
   default void conrefinsubmap() throws Throwable {
     builder()
       .name(Paths.get("conref", "conrefinsubmap"))
