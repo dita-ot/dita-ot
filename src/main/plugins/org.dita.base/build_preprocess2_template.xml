@@ -314,8 +314,9 @@ See the accompanying LICENSE file for applicable license.
     </pipeline>
   </target>
 
-  <target name="topic-copy-to">
-    <pipeline message="Resolve copy-to." taskname="copy-to">
+  <target name="topic-copy-to"
+          description="Process copy-to">
+    <pipeline message="Process copy-to" taskname="copy-to">
       <module class="org.dita.dost.module.CopyToModule">
         <param name="force-unique" value="${force-unique}" if:set="force-unique"/>
       </module>
