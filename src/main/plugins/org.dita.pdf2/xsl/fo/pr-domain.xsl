@@ -381,7 +381,7 @@ See the accompanying LICENSE file for applicable license.
             <!-- TODO: Replace with mode="commonattributes" -->
             <xsl:call-template name="commonattributes"/>
             <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-                <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+                <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
             </xsl:if>
             <xsl:if test="@importance='optional'"> [</xsl:if>
             <xsl:choose>
@@ -443,7 +443,7 @@ See the accompanying LICENSE file for applicable license.
 
     <xsl:template name="makeGroup">
         <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-            <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+            <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
         </xsl:if>
         <xsl:if test="@importance='optional'">[</xsl:if>
         <xsl:if test="name()='groupchoice'">{</xsl:if>

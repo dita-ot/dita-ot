@@ -625,13 +625,13 @@ Each child is indented, the linktext is bold, and the shortdesc appears in norma
     <xsl:choose>
       <!-- if this is a first-level linklist with no child links in it, put it in a div (flush left)-->
       <xsl:when test="(empty(parent::*) or parent::*[contains(@class, ' topic/related-links ')])
-                      and not(child::*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')])">
+                      and not(*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')])">
         <div class="linklist">
           <xsl:apply-templates select="." mode="processlinklist"/>
         </div>
       </xsl:when>
       <!-- When it contains children, indent with child class -->
-      <xsl:when test="child::*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]">
+      <xsl:when test="*[contains(@class, ' topic/link ')][@role = ('child', 'descendant')]">
         <div class="linklistwithchild">
           <xsl:apply-templates select="." mode="processlinklist">
             <xsl:with-param name="default-list-type" select="'linklistwithchild'"/>
