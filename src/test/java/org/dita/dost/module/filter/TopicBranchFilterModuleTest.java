@@ -38,7 +38,7 @@ public class TopicBranchFilterModuleTest extends TopicBranchFilterModule {
   private File tempDir;
 
   @ParameterizedTest
-  @ValueSource(strings = { "test" })
+  @ValueSource(strings = { "test", "test_dita2" })
   public void testDuplicateTopic(String dir) throws IOException {
     final File expDir = new File(resourceDir, "exp" + File.separator + dir);
     TestUtils.copy(new File(resourceDir, "src" + File.separator + dir), tempDir);
