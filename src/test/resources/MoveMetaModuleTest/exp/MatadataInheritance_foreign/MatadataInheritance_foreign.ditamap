@@ -11,6 +11,7 @@
       <?ditaot gentext?>
       <linktext class="- map/linktext ">Programming elements</linktext>
       <foreign class="- topic/foreign "> foreign1 </foreign>
+	  <foreign class="- topic/foreign "><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://example.com">Link</a></foreign>
     </topicmeta>
     <?Pub Caret1?>
     <topicref class="- map/topicref " navtitle="Caring for your fruit bat" href="batcaring.dita" type="topic">
