@@ -79,7 +79,7 @@
             filter-copy-to="perform-install-mac.dita"
             href="perform-install.dita" keyscope="perform-install"/>
         <topicref class="- map/topicref "
-            filter-copy-to="perform-install-mac.dita"
+            filter-copy-to="installation-procedure-mac.dita"
             href="perform-install.dita" keyscope="perform-install">
             <topicmeta class="- map/topicmeta ">
                 <resourceid appid="installation-procedure"
@@ -147,7 +147,7 @@
             filter-copy-to="perform-install-win.dita"
             href="perform-install.dita" keyscope="perform-install"/>
         <topicref class="- map/topicref "
-            filter-copy-to="perform-install-win.dita"
+            filter-copy-to="installation-procedure-win.dita"
             href="perform-install.dita" keyscope="perform-install">
             <topicmeta class="- map/topicmeta ">
                 <resourceid appid="installation-procedure"

@@ -119,18 +119,49 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   private void cascadeAppId(Element root) {
     if (getDitaVersion(root) >= 2.0) {
-      logger.warn("Cascade appid to copy-to");
+      logger.info("Cascade appid to copy-to");
       var resourceids = getChildElements(root, TOPIC_RESOURCEID, true);
       for (Element resourceid : resourceids) {
         if (resourceid.getAttribute(ATTRIBUTE_NAME_APPID_ROLE).equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
           var topicref = (Element) resourceid.getParentNode().getParentNode();
+          var href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
+          if (href.isEmpty()) {
+            logger.debug("Deliverable anchor source not defined");
+            return;
+          }
+          var hrefAbs = stripFragment(currentFile.resolve(href));
+          var srcFi = job.getFileInfo(hrefAbs);
+          if (srcFi == null) {
+            logger.error("Deliverable anchor source {} not found", hrefAbs);
+            return;
+          }
+
           var appid = resourceid.getAttribute(ATTRIBUTE_NAME_APPID);
+          if (appid.isEmpty()) {
+            logger.debug("Deliverable anchor target defined");
+            return;
+          }
+          // TODO: Support fragment in appid
           if (!appid.contains(".")) {
-            var href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
-            var ext = getExtension(FileUtils.getName(href));
+            var ext = getExtension(FileUtils.getName(srcFi.src().toString()));
             appid = appid + "." + ext;
           }
-          topicref.setAttribute(ATTRIBUTE_NAME_COPY_TO, appid);
+
+          // FIXME: Should this be result()?
+          var dstSrcAbs = srcFi.src().resolve(appid);
+          var dstFi = FileInfo
+            .builder(srcFi)
+            // XXX: null source is used to identify copy-to targets for 1.x processing
+            .src(null)
+            .uri(tempFileNameScheme.generateTempFileName(dstSrcAbs))
+            .result(dstSrcAbs)
+            .build();
+          job.add(dstFi);
+          var copyToAbs = job.tempDirURI.resolve(dstFi.uri());
+          var copyTo = currentFile.resolve(".").relativize(copyToAbs);
+
+          logger.info("Generate copy-to {}", copyTo);
+          topicref.setAttribute(ATTRIBUTE_NAME_COPY_TO, copyTo.toString());
         }
       }
     }
