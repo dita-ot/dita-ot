@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN"
+ "topic.dtd">
+<!--
+  Reproducer for https://github.com/dita-ot/dita-ot/issues/4794
+
+  A same-file conref pulls a paragraph from this very file. That paragraph
+  contains an <xref> whose href points to the topic root with no element ID
+  (bare "#topic-id" form). Before the fix this caused a crash:
+
+    An empty sequence is not allowed as the first argument of
+    dita-ot:relativize.strip-and-prefix()
+
+  because dita-ot:relativize() received two identical file URIs and the
+  strip-and-prefix recursive helper recursed until both token sequences were
+  empty, violating its xs:string+ type constraint.
+-->
+<topic id="source">
+  <title>Same-file conref with topic-root xref</title>
+  <body>
+    <!-- The element that is conref'd in below. It contains a bare #topic-id
+         xref — this is the trigger for the bug. -->
+    <p id="reused">See <xref href="#source"/>.</p>
+    <!-- Pulls the paragraph above from this same file. -->
+    <p conref="#source/reused"/>
+  </body>
+</topic>
