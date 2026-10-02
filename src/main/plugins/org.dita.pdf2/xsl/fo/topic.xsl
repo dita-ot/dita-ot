@@ -141,7 +141,7 @@ See the accompanying LICENSE file for applicable license.
                       <xsl:with-param name="marker-class-name" as="xs:string">current-h2</xsl:with-param>
                     </xsl:apply-templates>
                 </xsl:if>
-                <fo:wrapper id="{parent::node()/@id}"/>
+                <fo:wrapper id="{../@id}"/>
                 <fo:wrapper>
                     <xsl:attribute name="id">
                         <xsl:call-template name="generate-toc-id">

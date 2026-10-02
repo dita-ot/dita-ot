@@ -64,7 +64,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template match="*[contains(@class,' pr-d/var ') or contains(@class,' syntaxdiagram-d/var ')]" mode="process-syntaxdiagram">
    <var>
     <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-      <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+      <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
     </xsl:if>
     <xsl:if test="@importance='optional'"> [</xsl:if>
     <xsl:choose>
@@ -167,7 +167,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template name="dogroup">
       <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-        <xsl:if test="count(preceding-sibling::*)!=0"> |</xsl:if>
+        <xsl:if test="exists(preceding-sibling::*)"> |</xsl:if>
       </xsl:if>
     <xsl:if test="@importance='optional'"> [</xsl:if>
     <xsl:if test="contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')"> {</xsl:if>
@@ -192,7 +192,7 @@ See the accompanying LICENSE file for applicable license.
                 mode="process-syntaxdiagram">
   <kbd><b>
     <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-      <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+      <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
     </xsl:if>
     <xsl:if test="@importance='optional'"> [</xsl:if>
     <xsl:choose>
@@ -206,7 +206,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/oper ') or contains(@class,' syntaxdiagram-d/oper ')]"  mode="process-syntaxdiagram">
     <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-      <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+      <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
     </xsl:if>
     <kbd>
       <xsl:call-template name="commonattributes"/>
@@ -218,7 +218,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/delim ') or contains(@class,' syntaxdiagram-d/delim ')]" mode="process-syntaxdiagram">
     <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-      <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+      <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
     </xsl:if>
     <kbd>
       <xsl:call-template name="commonattributes"/>
@@ -230,7 +230,7 @@ See the accompanying LICENSE file for applicable license.
   
   <xsl:template match="*[contains(@class,' pr-d/sep ') or contains(@class,' syntaxdiagram-d/sep ')]" mode="process-syntaxdiagram">
     <xsl:if test="parent::*[contains(@class,' pr-d/groupchoice ') or contains(@class,' syntaxdiagram-d/groupchoice ')]">
-      <xsl:if test="count(preceding-sibling::*)!=0"> | </xsl:if>
+      <xsl:if test="exists(preceding-sibling::*)"> | </xsl:if>
     </xsl:if>
     <kbd>
       <xsl:call-template name="commonattributes"/>
