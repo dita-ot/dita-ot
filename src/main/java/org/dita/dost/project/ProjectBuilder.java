@@ -43,14 +43,7 @@ public class ProjectBuilder {
     this.contexts = contexts;
   }
 
-  public static class Deliverable {
-
-    public final String name;
-    public final String id;
-    public final Context context;
-    public final URI output;
-    public final Publication publication;
-
+  public record Deliverable(String name, String id, Context context, URI output, Publication publication) {
     @JsonCreator
     public Deliverable(
       @JsonProperty("name") String name,
@@ -66,10 +59,7 @@ public class ProjectBuilder {
       this.publication = publication;
     }
 
-    public static class Profile {
-
-      public final List<URI> ditavals;
-
+    public record Profile(List<URI> ditavals) {
       @JsonCreator
       public Profile(@JsonProperty("ditavals") List<URI> ditavals) {
         this.ditavals = ditavals;
@@ -77,14 +67,7 @@ public class ProjectBuilder {
     }
   }
 
-  public static class Context {
-
-    public final String name;
-    public final String id;
-    public final String idref;
-    public final List<URI> input;
-    public final Deliverable.Profile profiles;
-
+  public record Context(String name, String id, String idref, List<URI> input, Deliverable.Profile profiles) {
     @JsonCreator
     public Context(
       @JsonProperty("name") String name,
@@ -101,15 +84,14 @@ public class ProjectBuilder {
     }
   }
 
-  public static class Publication {
-
-    public final String name;
-    public final String id;
-    public final String idref;
-    public final String transtype;
-    public final List<Param> params;
-    public final Deliverable.Profile profiles;
-
+  public record Publication(
+    String name,
+    String id,
+    String idref,
+    String transtype,
+    List<Param> params,
+    Deliverable.Profile profiles
+  ) {
     @JsonCreator
     public Publication(
       @JsonProperty("name") String name,
@@ -127,19 +109,13 @@ public class ProjectBuilder {
       this.profiles = profiles;
     }
 
-    public static class Param {
-
-      public final String name;
-      public final String value;
-      public final URI href;
-      public final URI path;
-
+    public record Param(String name, String value, URI href, URI path) {
       @JsonCreator
       public Param(
         @JsonProperty("name") String name,
         @JsonProperty("value") String value,
         @JsonProperty("href") URI href,
-        @JsonProperty("file") URI path
+        @JsonProperty("path") URI path
       ) {
         this.name = name;
         this.value = value;

@@ -10,6 +10,8 @@ package org.dita.dost.reader;
 
 import static org.dita.dost.module.GenMapAndTopicListModule.ELEMENT_STUB;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isLocalScope;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 
 import java.io.File;
 import java.net.URI;
@@ -94,6 +96,7 @@ public final class MapMetaReader extends AbstractDomFilter {
     TOPIC_UNKNOWN.matcher,
     MAP_LINKTEXT.matcher,
     TOPIC_LINKTEXT.matcher,
+    TOPIC_TITLEALT.matcher,
     MAP_SHORTDESC.matcher,
     TOPIC_SHORTDESC.matcher,
     TOPIC_NAVTITLE.matcher,
@@ -159,7 +162,7 @@ public final class MapMetaReader extends AbstractDomFilter {
       .map(Node::getNodeValue)
       .map(URLUtils::toURI)
       .orElse(null);
-    final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+    final String scopeAttr = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
     Map<String, Element> current = Collections.emptyMap();
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
@@ -221,7 +224,7 @@ public final class MapMetaReader extends AbstractDomFilter {
       .map(Node::getNodeValue)
       .map(URLUtils::toURI)
       .orElse(null);
-    final Attr scopeAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_SCOPE);
+    final String scopeAttr = getCascadeValue(topicref, ATTRIBUTE_NAME_SCOPE);
     final Attr formatAttr = topicref.getAttributeNode(ATTRIBUTE_NAME_FORMAT);
     Map<String, Element> current = mergeMeta(Collections.emptyMap(), inheritance, cascadeSet);
     final boolean hasDitaTopicTarget = hrefAttr != null && isLocalScope(scopeAttr) && isDitaFormat(formatAttr);
@@ -254,10 +257,6 @@ public final class MapMetaReader extends AbstractDomFilter {
         topicref.insertBefore(newMeta, topicref.getFirstChild());
       }
     }
-  }
-
-  private boolean isLocalScope(final Attr scopeAttr) {
-    return scopeAttr == null || scopeAttr.getNodeValue().equals(ATTR_SCOPE_VALUE_LOCAL);
   }
 
   private boolean isDitaFormat(final Attr formatAttr) {

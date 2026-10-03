@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_map_tocontent/chunk_map_tocontent?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/test/testsuite/testcase/chunk/temp/chunk_map_tocontent/chunk_map_tocontent/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA 1.3 Topic//EN?><?doctype-system file:/C:/SAXONIBMJDK/demo/dita12/dtd12/technicalContent/dtd/topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="TopicID"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)    "
+  class="- topic/topic "
+ >
+  <title class="- topic/title "
+   >HI</title>
+  <body class="- topic/body "
+   >
+    <p class="- topic/p "
+     >
+      <image href="" placement="inline" class="- topic/image "
+       />
+    </p>
+  </body>
+</topic>

@@ -30,9 +30,9 @@
                 <p class="- topic/p ">3.x</p>
                 3.x
               </entry>
-              <entry class="- topic/entry " colname="c2"><p class="- topic/p ">2015.1 through 2017.2</p>4.x
+              <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="2"><p class="- topic/p ">2015.1 through 2017.2</p>4.x
               </entry>
-              <entry class="- topic/entry " colname="c3"><p class="- topic/p ">2017.3 through 2018.1</p>5.x
+              <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="2"><p class="- topic/p ">2017.3 through 2018.1</p>5.x
               </entry>
             </row>
           </thead>
@@ -41,20 +41,20 @@
               <entry class="- topic/entry " colname="col1" dita-ot:x="1" dita-ot:y="3" morerows="2">Agent</entry>
               <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="3">3.x</entry>
               <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="3">✓</entry>
-              <entry class="- topic/entry " colname="c2">✓</entry>
-              <entry class="- topic/entry " colname="c3">✓</entry>
+              <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="3">✓</entry>
+              <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="3">✓</entry>
             </row>
             <row class="- topic/row ">
               <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="4">4.x</entry>
               <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="4"/>
-              <entry class="- topic/entry " colname="c2">✓</entry>
-              <entry class="- topic/entry " colname="c3">✓</entry>
+              <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="4">✓</entry>
+              <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="4">✓</entry>
             </row>
             <row class="- topic/row ">
               <entry class="- topic/entry " colname="col2" dita-ot:x="2" dita-ot:y="5">5.x</entry>
               <entry class="- topic/entry " colname="col3" dita-ot:x="3" dita-ot:y="5"/>
-              <entry class="- topic/entry " colname="c2"/>
-              <entry class="- topic/entry " colname="c3">✓</entry>
+              <entry class="- topic/entry " colname="col4" dita-ot:x="4" dita-ot:y="5"/>
+              <entry class="- topic/entry " colname="col5" dita-ot:x="5" dita-ot:y="5">✓</entry>
             </row>
           </tbody>
         </tgroup>

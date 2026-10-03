@@ -738,8 +738,8 @@ public final class FilterUtils {
       final Job.FileInfo flagFi = job.getFileInfo(img.href);
       if (flagFi != null) {
         final Job.FileInfo current = job.getFileInfo(currentFile);
-        final URI flag = job.tempDirURI.resolve(flagFi.uri);
-        final URI curr = job.tempDirURI.resolve(current.uri);
+        final URI flag = job.tempDirURI.resolve(flagFi.uri());
+        final URI curr = job.tempDirURI.resolve(current.uri());
         rel = URLUtils.getRelativePath(curr, flag);
       } else {
         rel = img.href;
@@ -770,7 +770,7 @@ public final class FilterUtils {
       if (outputClassAttr.length() != 0) {
         atts.add(ATTRIBUTE_NAME_OUTPUTCLASS, outputClassAttr.toString());
       }
-      if (styleAttr.length() != 0) {
+      if (!styleAttr.isEmpty()) {
         atts.add(ATTRIBUTE_NAME_STYLE, styleAttr.toString());
       }
       contentHandler.startElement(
@@ -810,7 +810,7 @@ public final class FilterUtils {
         propAtts.add("style", String.join(" ", style));
       }
       if (outputClass != null) {
-        propAtts.add("outputclass", outputClass);
+        propAtts.add(ATTRIBUTE_NAME_ADD_OUTPUTCLASS, outputClass);
       }
       if (changebar != null) {
         propAtts.add("changebar", changebar);

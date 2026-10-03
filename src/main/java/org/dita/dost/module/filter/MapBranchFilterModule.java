@@ -10,10 +10,12 @@ package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 import static org.dita.dost.util.XMLUtils.getChildElements;
 
 import java.io.File;
@@ -57,8 +59,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+    final FileInfo fi = job.getFileInfo(FileInfo::isInput).iterator().next();
+    if (!ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
       return null;
     }
     processMap(fi);
@@ -76,21 +78,21 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    * Process map for branch replication.
    */
   protected void processMap(final FileInfo fi) {
-    this.map = fi.uri;
+    this.map = fi.uri();
     currentFile = job.tempDirURI.resolve(map);
     ditavalFile =
       Optional.of(new File(job.tempDir, FILE_NAME_MERGED_DITAVAL)).filter(File::exists).map(File::toURI).orElse(null);
 
-    logger.info("Processing " + currentFile);
+    logger.info("Processing {}", currentFile);
     final Document doc;
     final SubjectScheme subjectSchemeMap;
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       final XdmNode node = job.getStore().getImmutableNode(currentFile);
       subjectSchemeMap = getSubjectScheme(node.getOutermostElement());
       doc = xmlUtils.cloneDocument(node);
     } catch (final IOException e) {
-      logger.error("Failed to parse " + currentFile, e);
+      logger.error("Failed to parse {}", currentFile, e);
       return;
     }
 
@@ -101,11 +103,11 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
     logger.debug("Rewrite duplicate topic references");
     rewriteDuplicates(doc.getDocumentElement());
 
-    logger.debug("Writing " + currentFile);
+    logger.debug("Writing {}", currentFile);
     try {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
-      logger.error("Failed to serialize " + map.toString() + ": " + e.getMessage(), e);
+      logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
     }
   }
 
@@ -159,9 +161,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
               final URI absTarget = stripFragment(currentFile.resolve(attr.getValue()));
               final FileInfo hrefFileInfo = job.getFileInfo(absTarget);
               if (hrefFileInfo != null) {
-                final URI newResult = addSuffix(hrefFileInfo.result, suffix);
+                final URI newResult = addSuffix(hrefFileInfo.result(), suffix);
                 final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).uri(dstUri).result(newResult);
-                if (hrefFileInfo.format == null) {
+                if (hrefFileInfo.format() == null) {
                   dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
                 }
                 final FileInfo dstFileInfo = dstBuilder.build();
@@ -213,7 +215,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       if (
         MAP_TOPICREF.matches(elem) &&
         isDitaFormat(elem.getAttributeNode(ATTRIBUTE_NAME_FORMAT)) &&
-        !elem.getAttribute(ATTRIBUTE_NAME_SCOPE).equals(ATTR_SCOPE_VALUE_EXTERNAL)
+        !isExternalScope(elem)
       ) {
         res.add(elem);
       }
@@ -293,7 +295,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    */
   void splitBranches(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
-    if (ditavalRefs.size() > 0) {
+    if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
       for (final Element branch : ditavalRefs) {
         elem.removeChild(branch);
@@ -319,10 +321,10 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         final Branch currentFilter = filter.merge(ditavalref);
         processAttributes(branch, currentFilter);
         final Branch childFilter = new Branch(
-          currentFilter.resourcePrefix,
-          currentFilter.resourceSuffix,
-          Optional.empty(),
-          Optional.empty()
+          currentFilter.resourcePrefix(),
+          currentFilter.resourceSuffix(),
+          null,
+          null
         );
         // process children of all branches
         for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
@@ -341,25 +343,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   private void processAttributes(final Element elem, final Branch filter) {
-    if (filter.resourcePrefix.isPresent() || filter.resourceSuffix.isPresent()) {
+    if (filter.resourcePrefix() != null || filter.resourceSuffix() != null) {
       final String href = elem.getAttribute(ATTRIBUTE_NAME_HREF);
       final String copyTo = elem.getAttribute(ATTRIBUTE_NAME_COPY_TO);
-      final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
-      if ((!href.isEmpty() || !copyTo.isEmpty()) && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
+      final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
+      if ((!href.isEmpty() || !copyTo.isEmpty()) && !isExternalScope(scope)) {
         final FileInfo hrefFileInfo = job.getFileInfo(currentFile.resolve(href));
 
         final FileInfo copyToFileInfo = !copyTo.isEmpty() ? job.getFileInfo(currentFile.resolve(copyTo)) : null;
 
         final URI dstSource;
-        dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result, filter);
+        dstSource = generateCopyTo((copyToFileInfo != null ? copyToFileInfo : hrefFileInfo).result(), filter);
         final URI dstTemp = tempFileNameScheme.generateTempFileName(dstSource);
         final FileInfo.Builder dstBuilder = new FileInfo.Builder(hrefFileInfo).result(dstSource).uri(dstTemp);
-        if (dstBuilder.build().format == null) {
+        if (dstBuilder.build().format() == null) {
           dstBuilder.format(ATTR_FORMAT_VALUE_DITA);
         }
-        if (hrefFileInfo.src == null && href != null) {
+        if (hrefFileInfo.src() == null && href != null) {
           if (copyToFileInfo != null) {
-            dstBuilder.src(copyToFileInfo.src);
+            dstBuilder.src(copyToFileInfo.src());
           }
         }
         final FileInfo dstFileInfo = dstBuilder.build();
@@ -373,19 +375,27 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     }
 
-    if (filter.keyscopePrefix.isPresent() || filter.keyscopeSuffix.isPresent()) {
+    if (filter.keyscopePrefix() != null || filter.keyscopeSuffix() != null) {
       final StringBuilder buf = new StringBuilder();
       final String keyscope = elem.getAttribute(ATTRIBUTE_NAME_KEYSCOPE);
       if (!keyscope.isEmpty()) {
         for (final String key : keyscope.trim().split("\\s+")) {
-          filter.keyscopePrefix.ifPresent(buf::append);
+          if (filter.keyscopePrefix() != null) {
+            buf.append(filter.keyscopePrefix());
+          }
           buf.append(key);
-          filter.keyscopeSuffix.ifPresent(buf::append);
+          if (filter.keyscopeSuffix() != null) {
+            buf.append(filter.keyscopeSuffix());
+          }
           buf.append(' ');
         }
       } else {
-        filter.keyscopePrefix.ifPresent(buf::append);
-        filter.keyscopeSuffix.ifPresent(buf::append);
+        if (filter.keyscopePrefix() != null) {
+          buf.append(filter.keyscopePrefix());
+        }
+        if (filter.keyscopeSuffix() != null) {
+          buf.append(filter.keyscopeSuffix());
+        }
       }
       elem.setAttribute(ATTRIBUTE_NAME_KEYSCOPE, buf.toString().trim());
     }
@@ -393,25 +403,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   static URI generateCopyTo(final URI href, final Branch filter) {
     final StringBuilder buf = new StringBuilder(href.toString());
-    final Optional<String> suffix = filter.resourceSuffix;
-    suffix.ifPresent(s -> {
+    final String suffix = filter.resourceSuffix();
+    if (suffix != null) {
       final int sep = buf.lastIndexOf(URI_SEPARATOR);
       final int i = buf.lastIndexOf(".");
       if (i != -1 && (sep == -1 || i > sep)) {
-        buf.insert(i, s);
+        buf.insert(i, suffix);
       } else {
-        buf.append(s);
+        buf.append(suffix);
       }
-    });
-    final Optional<String> prefix = filter.resourcePrefix;
-    prefix.ifPresent(s -> {
+    }
+    final String prefix = filter.resourcePrefix();
+    if (prefix != null) {
       final int i = buf.lastIndexOf(URI_SEPARATOR);
       if (i != -1) {
-        buf.insert(i + 1, s);
+        buf.insert(i + 1, prefix);
       } else {
-        buf.insert(0, s);
+        buf.insert(0, prefix);
       }
-    });
+    }
     return toURI(buf.toString());
   }
 }

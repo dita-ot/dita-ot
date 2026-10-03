@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dita xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" ditaarch:DITAArchVersion="2.0">
+  <topic class="- topic/topic " ditaarch:DITAArchVersion="2.0" domains="(topic markup-d xml-d)" id="topicID">
+    <title class="- topic/title ">Child of topicgroup</title>
+    <body class="- topic/body ">
+      <p class="- topic/p ">group child</p>
+    </body>
+  </topic>
+</dita>

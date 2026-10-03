@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.MessageUtils;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -95,7 +94,7 @@ public class SubjectSchemeFilter extends AbstractXMLFilter {
             if (!valueSet.contains(token)) {
               logger.warn(
                 MessageUtils
-                  .getMessage("DOTJ049W", attrName.toString(), elemName, attrValue, StringUtils.join(valueSet, ", "))
+                  .getMessage("DOTJ049W", attrName.toString(), elemName, attrValue, String.join(", ", valueSet))
                   .setLocation(atts)
                   .toString()
               );

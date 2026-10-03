@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map2/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Task//EN?><?doctype-system task.dtd?><?Pub Sty _display FontColor="red"?><?Pub Inc?>
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="task1" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic task)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)                            (topic task strictTaskbody-c)   "
+  class="- topic/topic task/task ">
+  <title class="- topic/title ">task1</title>
+  <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+    and abstract.</shortdesc>
+  <prolog class="- topic/prolog ">
+    <metadata class="- topic/metadata ">
+      <keywords class="- topic/keywords "> </keywords>
+    </metadata>
+  </prolog>
+  <taskbody class="- topic/body task/taskbody ">
+    <steps class="- topic/ol task/steps ">
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Do this</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">And finally, this.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

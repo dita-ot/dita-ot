@@ -10,6 +10,7 @@ package org.dita.dost.reader;
 
 import static javax.xml.transform.OutputKeys.OMIT_XML_DECLARATION;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isDitaFormat;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
@@ -48,6 +49,7 @@ public final class MergeMapParser extends XMLFilterImpl {
   private File tempdir = null;
 
   private final Stack<String> processStack;
+  private final AttributeStack attributeStack;
   private int processLevel;
   private final ByteArrayOutputStream topicBuffer;
   private final SAXTransformerFactory stf;
@@ -60,6 +62,7 @@ public final class MergeMapParser extends XMLFilterImpl {
    */
   public MergeMapParser() {
     processStack = new Stack<>();
+    attributeStack = new AttributeStack(ATTRIBUTE_NAME_PROCESSING_ROLE, ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
     processLevel = 0;
     util = new MergeUtils();
     topicParser = new MergeTopicParser(util);
@@ -126,7 +129,7 @@ public final class MergeMapParser extends XMLFilterImpl {
       setContentHandler(s);
       dirPath = filename.getParentFile();
       topicParser.getContentHandler().startDocument();
-      logger.info("Processing " + filename.toURI());
+      logger.info("Processing {}", filename.toURI());
 
       job.getStore().transform(filename.toURI(), this);
 
@@ -148,10 +151,12 @@ public final class MergeMapParser extends XMLFilterImpl {
       }
       processLevel--;
       if (ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(value)) {
+        attributeStack.pop();
         return;
       }
     }
     getContentHandler().endElement(uri, localName, qName);
+    attributeStack.pop();
   }
 
   @Override
@@ -164,6 +169,8 @@ public final class MergeMapParser extends XMLFilterImpl {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes attributes)
     throws SAXException {
+    attributeStack.push(attributes);
+
     final String attrValue = attributes.getValue(ATTRIBUTE_NAME_PROCESSING_ROLE);
     if (attrValue != null) {
       processStack.push(attrValue);
@@ -184,9 +191,9 @@ public final class MergeMapParser extends XMLFilterImpl {
       URI attValue = toURI(attributes.getValue(ATTRIBUTE_NAME_HREF));
       if (attValue != null) {
         atts = new AttributesImpl(attributes);
-        final String scopeValue = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-        final String formatValue = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-        if (isLocalScope(scopeValue) && (formatValue == null || ATTR_FORMAT_VALUE_DITA.equals(formatValue))) {
+        var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+        var format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+        if (isLocalScope(scope) && isDitaFormat(format)) {
           final URI ohref = attValue;
           final URI copyToValue = toURI(atts.getValue(ATTRIBUTE_NAME_COPY_TO));
           if (copyToValue != null && !copyToValue.toString().isEmpty()) {
@@ -236,8 +243,8 @@ public final class MergeMapParser extends XMLFilterImpl {
     // if list item not in visitedSet then call MergeTopicParser to parse it
     try {
       for (final FileInfo f : job.getFileInfo()) {
-        if (f.isTarget) {
-          String element = f.file.getPath();
+        if (f.isTarget()) {
+          String element = f.file().getPath();
           if (!dirPath.equals(tempdir)) {
             element =
               FileUtils.getRelativeUnixPath(
@@ -245,10 +252,10 @@ public final class MergeMapParser extends XMLFilterImpl {
                 tempdir.toPath().resolve(element).toAbsolutePath().toString()
               );
           }
-          final URI abs = job.tempDirURI.resolve(f.uri);
+          final URI abs = job.tempDirURI.resolve(f.uri());
           if (!util.isVisited(abs)) {
             util.visit(abs);
-            if (!f.isResourceOnly) {
+            if (!f.isResourceOnly()) {
               //ensure the file exists
               final File file = dirPath.toPath().resolve(element).toFile();
               if (job.getStore().exists(file.toURI())) {

@@ -11,8 +11,10 @@ import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.*;
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -93,25 +95,51 @@ public final class Job {
   /** File name for temporary input file list file */
   public static final String USER_INPUT_FILE_LIST_FILE = "usr.input.file.list";
 
-  /** Map of serialization attributes to file info boolean fields. */
-  private static final Map<String, Field> attrToFieldMap = new HashMap<>();
+  /** Map of deserialization attributes to file info boolean fields. */
+  private static final Map<String, Method> attrToGetterMap = new HashMap<>();
 
   static {
     try {
-      attrToFieldMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getField("isChunked"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getField("hasLink"));
-      attrToFieldMap.put(ATTRIBUTE_INPUT, FileInfo.class.getField("isInput"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getField("hasConref"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getField("hasKeyref"));
-      attrToFieldMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getField("hasCoderef"));
-      attrToFieldMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getField("isResourceOnly"));
-      attrToFieldMap.put(ATTRIBUTE_TARGET, FileInfo.class.getField("isTarget"));
-      attrToFieldMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getField("isConrefPush"));
-      attrToFieldMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getField("isSubjectScheme"));
-      attrToFieldMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getField("isOutDita"));
-      attrToFieldMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getField("isFlagImage"));
-      attrToFieldMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getField("isSubtarget"));
-    } catch (final NoSuchFieldException e) {
+      attrToGetterMap.put(ATTRIBUTE_CHUNKED, FileInfo.class.getMethod("isChunked"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_LINK, FileInfo.class.getMethod("hasLink"));
+      attrToGetterMap.put(ATTRIBUTE_INPUT, FileInfo.class.getMethod("isInput"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.class.getMethod("hasConref"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.class.getMethod("hasKeyref"));
+      attrToGetterMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.class.getMethod("hasCoderef"));
+      attrToGetterMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.class.getMethod("isResourceOnly"));
+      attrToGetterMap.put(ATTRIBUTE_TARGET, FileInfo.class.getMethod("isTarget"));
+      attrToGetterMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.class.getMethod("isConrefPush"));
+      attrToGetterMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.class.getMethod("isSubjectScheme"));
+      attrToGetterMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.class.getMethod("isOutDita"));
+      attrToGetterMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.class.getMethod("isFlagImage"));
+      attrToGetterMap.put(ATTRIBUTE_SUBSIDIARY_TARGET_LIST, FileInfo.class.getMethod("isSubtarget"));
+    } catch (final NoSuchMethodException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /** Map of serialization attributes to file info boolean fields. */
+  private static final Map<String, Method> attrToSetterMap = new HashMap<>();
+
+  static {
+    try {
+      attrToSetterMap.put(ATTRIBUTE_CHUNKED, FileInfo.Builder.class.getMethod("isChunked", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_LINK, FileInfo.Builder.class.getMethod("hasLink", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_INPUT, FileInfo.Builder.class.getMethod("isInput", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_CONREF, FileInfo.Builder.class.getMethod("hasConref", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_KEYREF, FileInfo.Builder.class.getMethod("hasKeyref", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_HAS_CODEREF, FileInfo.Builder.class.getMethod("hasCoderef", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_RESOURCE_ONLY, FileInfo.Builder.class.getMethod("isResourceOnly", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_TARGET, FileInfo.Builder.class.getMethod("isTarget", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_CONREF_PUSH, FileInfo.Builder.class.getMethod("isConrefPush", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_SUBJECT_SCHEME, FileInfo.Builder.class.getMethod("isSubjectScheme", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_OUT_DITA_FILES_LIST, FileInfo.Builder.class.getMethod("isOutDita", boolean.class));
+      attrToSetterMap.put(ATTRIBUTE_FLAG_IMAGE_LIST, FileInfo.Builder.class.getMethod("isFlagImage", boolean.class));
+      attrToSetterMap.put(
+        ATTRIBUTE_SUBSIDIARY_TARGET_LIST,
+        FileInfo.Builder.class.getMethod("isSubtarget", boolean.class)
+      );
+    } catch (final NoSuchMethodException e) {
       throw new RuntimeException(e);
     }
   }
@@ -156,7 +184,7 @@ public final class Job {
     this.tempDirURI = tempDir.toURI();
     this.jobFile = new File(tempDir, JOB_FILE);
     this.prop = prop;
-    this.files.putAll(files.stream().collect(Collectors.toMap(fi -> fi.uri, Function.identity())));
+    this.files.putAll(files.stream().collect(Collectors.toMap(FileInfo::uri, Function.identity())));
   }
 
   public Store getStore() {
@@ -181,7 +209,7 @@ public final class Job {
   private void read() throws IOException {
     lastModified = getStore().getLastModified(jobFile.toURI());
     if (getStore().exists(jobFile.toURI())) {
-      try (final InputStream in = new FileInputStream(jobFile)) {
+      try {
         getStore().transform(jobFile.toURI(), new JobHandler(prop, files));
       } catch (final DITAOTException e) {
         throw new IOException("Failed to read job file: " + e.getMessage());
@@ -237,25 +265,23 @@ public final class Job {
           final URI src = toURI(atts.getValue(ATTRIBUTE_SRC));
           final URI uri = toURI(atts.getValue(ATTRIBUTE_URI));
           final File path = toFile(atts.getValue(ATTRIBUTE_PATH));
-          FileInfo i;
+          final FileInfo.Builder b = FileInfo.builder().src(src);
           if (uri != null) {
-            i = new FileInfo(src, uri, toFile(uri));
+            b.uri(uri);
           } else {
-            i = new FileInfo(src, toURI(path), path);
+            b.file(path);
           }
-          i.result = toURI(atts.getValue(ATTRIBUTE_RESULT));
-          if (i.result == null) {
-            i.result = src;
-          }
-          i.format = atts.getValue(ATTRIBUTE_FORMAT);
+          b.result(Optional.ofNullable(toURI(atts.getValue(ATTRIBUTE_RESULT))).orElse(b.src));
+          b.format(atts.getValue(ATTRIBUTE_FORMAT));
           try {
-            for (Map.Entry<String, Field> e : attrToFieldMap.entrySet()) {
-              e.getValue().setBoolean(i, Boolean.parseBoolean(atts.getValue(e.getKey())));
+            for (Map.Entry<String, Method> e : attrToSetterMap.entrySet()) {
+              e.getValue().invoke(b, Boolean.parseBoolean(atts.getValue(e.getKey())));
             }
-          } catch (final IllegalAccessException ex) {
+          } catch (InvocationTargetException | IllegalAccessException ex) {
             throw new RuntimeException(ex);
           }
-          files.put(i.uri, i);
+          var i = b.build();
+          files.put(i.uri(), i);
         }
       }
     }
@@ -320,6 +346,11 @@ public final class Job {
     lastModified = getStore().getLastModified(jobFile.toURI());
   }
 
+  /**
+   * @deprecated since 4.4
+   * @throws IOException
+   */
+  @Deprecated
   public Document serialize() throws IOException {
     try {
       final Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -372,25 +403,25 @@ public final class Job {
     out.writeStartElement(ELEMENT_FILES);
     for (final FileInfo i : fs) {
       out.writeStartElement(ELEMENT_FILE);
-      if (i.src != null) {
-        out.writeAttribute(ATTRIBUTE_SRC, i.src.toString());
+      if (i.src() != null) {
+        out.writeAttribute(ATTRIBUTE_SRC, i.src().toString());
       }
-      out.writeAttribute(ATTRIBUTE_URI, i.uri.toString());
-      out.writeAttribute(ATTRIBUTE_PATH, i.file.getPath());
-      if (i.result != null) {
-        out.writeAttribute(ATTRIBUTE_RESULT, i.result.toString());
+      out.writeAttribute(ATTRIBUTE_URI, i.uri().toString());
+      out.writeAttribute(ATTRIBUTE_PATH, i.file().getPath());
+      if (i.result() != null) {
+        out.writeAttribute(ATTRIBUTE_RESULT, i.result().toString());
       }
-      if (i.format != null) {
-        out.writeAttribute(ATTRIBUTE_FORMAT, i.format);
+      if (i.format() != null) {
+        out.writeAttribute(ATTRIBUTE_FORMAT, i.format());
       }
       try {
-        for (Map.Entry<String, Field> e : attrToFieldMap.entrySet()) {
-          final boolean v = e.getValue().getBoolean(i);
+        for (Map.Entry<String, Method> e : attrToGetterMap.entrySet()) {
+          final boolean v = (boolean) e.getValue().invoke(i);
           if (v) {
             out.writeAttribute(e.getKey(), Boolean.TRUE.toString());
           }
         }
-      } catch (final IllegalAccessException ex) {
+      } catch (InvocationTargetException | IllegalAccessException ex) {
         throw new RuntimeException(ex);
       }
       out.writeEndElement(); //file
@@ -404,7 +435,7 @@ public final class Job {
    * Add file info. If file info with the same file already exists, it will be replaced.
    */
   public void add(final FileInfo fileInfo) {
-    files.put(fileInfo.uri, fileInfo);
+    files.put(fileInfo.uri(), fileInfo);
   }
 
   /**
@@ -413,7 +444,7 @@ public final class Job {
    * @return removed file info, {@code null} if not found
    */
   public FileInfo remove(final FileInfo fileInfo) {
-    return files.remove(fileInfo.uri);
+    return files.remove(fileInfo.uri());
   }
 
   /**
@@ -462,8 +493,8 @@ public final class Job {
     return files
       .values()
       .stream()
-      .filter(fi -> fi.isInput)
-      .map(fi -> getInputDir().relativize(fi.src))
+      .filter(FileInfo::isInput)
+      .map(fi -> getInputDir().relativize(fi.src()))
       .findAny()
       .orElse(null);
   }
@@ -552,7 +583,7 @@ public final class Job {
       return files
         .values()
         .stream()
-        .filter(fileInfo -> file.equals(fileInfo.src) || file.equals(fileInfo.result))
+        .filter(fileInfo -> file.equals(fileInfo.src()) || file.equals(fileInfo.result()))
         .findFirst()
         .orElse(null);
     }
@@ -571,7 +602,7 @@ public final class Job {
     }
     FileInfo i = getFileInfo(file);
     if (i == null) {
-      i = new FileInfo(f);
+      i = FileInfo.builder().uri(f).build();
       add(i);
     }
     return i;
@@ -590,164 +621,48 @@ public final class Job {
 
   /**
    * File info object.
+   *
+   * @param src Absolute source URI.
+   * @param uri File URI.
+   * @param file File path.
+   * @param result Absolute result URI.
+   * @param format File format.
+   * @param hasConref File has a conref.
+   * @param isChunked File is part of chunk.
+   * @param hasLink File has links. Only applies to topics.
+   * @param isResourceOnly File is resource only.
+   * @param isTarget File is a link target.
+   * @param isConrefPush File is a push conref source.
+   * @param hasKeyref File has a keyref.
+   * @param hasCoderef File has coderef.
+   * @param isSubjectScheme File is a subject scheme.
+   * @param isSubtarget File is a coderef target.
+   * @param isFlagImage File is a flagging image.
+   * @param isOutDita Source file is outside base directory.
+   * @param isInput File is input document that is used as processing root.
+   * @param isInputResource Additional input resource.
    */
-  public static final class FileInfo {
-
-    /** Absolute source URI. */
-    public URI src;
-    /** File URI. */
-    public final URI uri;
-    /** File path. */
-    public final File file;
-    /** Absolute result URI. */
-    public URI result;
-    /** File format. */
-    public String format;
-    /** File has a conref. */
-    public boolean hasConref;
-    /** File is part of chunk. */
-    public boolean isChunked;
-    /** File has links. Only applies to topics. */
-    public boolean hasLink;
-    /** File is resource only. */
-    public boolean isResourceOnly;
-    /** File is a link target. */
-    public boolean isTarget;
-    /** File is a push conref source. */
-    public boolean isConrefPush;
-    /** File has a keyref. */
-    public boolean hasKeyref;
-    /** File has coderef. */
-    public boolean hasCoderef;
-    /** File is a subject scheme. */
-    public boolean isSubjectScheme;
-    /** File is a coderef target. */
-    public boolean isSubtarget;
-    /** File is a flagging image. */
-    public boolean isFlagImage;
-    /** Source file is outside base directory. */
-    public boolean isOutDita;
-    /** File is input document that is used as processing root. */
-    public boolean isInput;
-    /** Additional input resource. */
-    public boolean isInputResource;
-
-    FileInfo(final URI src, final URI uri, final File file) {
-      if (uri == null && file == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = src;
-      this.uri = uri != null ? uri : toURI(file);
-      this.file = uri != null ? toFile(uri) : file;
-      this.result = src;
-    }
-
-    FileInfo(final URI uri) {
-      if (uri == null) throw new IllegalArgumentException(new NullPointerException());
-      this.src = null;
-      this.uri = uri;
-      this.file = toFile(uri);
-      this.result = src;
-    }
-
-    @Override
-    public String toString() {
-      return (
-        "FileInfo{" +
-        "src=" +
-        src +
-        ", result=" +
-        result +
-        ", uri=" +
-        uri +
-        ", file=" +
-        file +
-        ", format='" +
-        format +
-        '\'' +
-        ", hasConref=" +
-        hasConref +
-        ", isChunked=" +
-        isChunked +
-        ", hasLink=" +
-        hasLink +
-        ", isResourceOnly=" +
-        isResourceOnly +
-        ", isTarget=" +
-        isTarget +
-        ", isConrefPush=" +
-        isConrefPush +
-        ", isInput=" +
-        isInput +
-        ", isInputResource=" +
-        isInputResource +
-        ", hasKeyref=" +
-        hasKeyref +
-        ", hasCoderef=" +
-        hasCoderef +
-        ", isSubjectScheme=" +
-        isSubjectScheme +
-        ", isSubtarget=" +
-        isSubtarget +
-        ", isFlagImage=" +
-        isFlagImage +
-        ", isOutDita=" +
-        isOutDita +
-        '}'
-      );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      FileInfo fileInfo = (FileInfo) o;
-      return (
-        hasConref == fileInfo.hasConref &&
-        isChunked == fileInfo.isChunked &&
-        hasLink == fileInfo.hasLink &&
-        isResourceOnly == fileInfo.isResourceOnly &&
-        isTarget == fileInfo.isTarget &&
-        isConrefPush == fileInfo.isConrefPush &&
-        hasKeyref == fileInfo.hasKeyref &&
-        hasCoderef == fileInfo.hasCoderef &&
-        isSubjectScheme == fileInfo.isSubjectScheme &&
-        isSubtarget == fileInfo.isSubtarget &&
-        isFlagImage == fileInfo.isFlagImage &&
-        isOutDita == fileInfo.isOutDita &&
-        isInput == fileInfo.isInput &&
-        isInputResource == fileInfo.isInputResource &&
-        Objects.equals(src, fileInfo.src) &&
-        Objects.equals(uri, fileInfo.uri) &&
-        Objects.equals(file, fileInfo.file) &&
-        Objects.equals(result, fileInfo.result) &&
-        Objects.equals(format, fileInfo.format)
-      );
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(
-        src,
-        uri,
-        file,
-        result,
-        format,
-        hasConref,
-        isChunked,
-        hasLink,
-        isResourceOnly,
-        isTarget,
-        isConrefPush,
-        hasKeyref,
-        hasCoderef,
-        isSubjectScheme,
-        isSubtarget,
-        isFlagImage,
-        isOutDita,
-        isInput,
-        isInputResource
-      );
-    }
-
+  public record FileInfo(
+    URI src,
+    URI uri,
+    File file,
+    URI result,
+    String format,
+    boolean hasConref,
+    boolean isChunked,
+    boolean hasLink,
+    boolean isResourceOnly,
+    boolean isTarget,
+    boolean isConrefPush,
+    boolean hasKeyref,
+    boolean hasCoderef,
+    boolean isSubjectScheme,
+    boolean isSubtarget,
+    boolean isFlagImage,
+    boolean isOutDita,
+    boolean isInput,
+    boolean isInputResource
+  ) {
     public static Builder builder() {
       return new Builder();
     }
@@ -781,50 +696,50 @@ public final class Job {
       public Builder() {}
 
       public Builder(final FileInfo orig) {
-        src = orig.src;
-        uri = orig.uri;
-        file = orig.file;
-        result = orig.result;
-        format = orig.format;
-        hasConref = orig.hasConref;
-        isChunked = orig.isChunked;
-        hasLink = orig.hasLink;
-        isResourceOnly = orig.isResourceOnly;
-        isTarget = orig.isTarget;
-        isConrefPush = orig.isConrefPush;
-        hasKeyref = orig.hasKeyref;
-        hasCoderef = orig.hasCoderef;
-        isSubjectScheme = orig.isSubjectScheme;
-        isSubtarget = orig.isSubtarget;
-        isFlagImage = orig.isFlagImage;
-        isOutDita = orig.isOutDita;
-        isInput = orig.isInput;
-        isInputResource = orig.isInputResource;
+        src = orig.src();
+        uri = orig.uri();
+        file = orig.file();
+        result = orig.result();
+        format = orig.format();
+        hasConref = orig.hasConref();
+        isChunked = orig.isChunked();
+        hasLink = orig.hasLink();
+        isResourceOnly = orig.isResourceOnly();
+        isTarget = orig.isTarget();
+        isConrefPush = orig.isConrefPush();
+        hasKeyref = orig.hasKeyref();
+        hasCoderef = orig.hasCoderef();
+        isSubjectScheme = orig.isSubjectScheme();
+        isSubtarget = orig.isSubtarget();
+        isFlagImage = orig.isFlagImage();
+        isOutDita = orig.isOutDita();
+        isInput = orig.isInput();
+        isInputResource = orig.isInputResource();
       }
 
       /**
        * Add file info to this builder. Only non-null and true values will be added.
        */
       public Builder add(final FileInfo orig) {
-        if (orig.src != null) src = orig.src;
-        if (orig.uri != null) uri = orig.uri;
-        if (orig.file != null) file = orig.file;
-        if (orig.result != null) result = orig.result;
-        if (orig.format != null) format = orig.format;
-        if (orig.hasConref) hasConref = orig.hasConref;
-        if (orig.isChunked) isChunked = orig.isChunked;
-        if (orig.hasLink) hasLink = orig.hasLink;
-        if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
-        if (orig.isTarget) isTarget = orig.isTarget;
-        if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
-        if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
-        if (orig.hasCoderef) hasCoderef = orig.hasCoderef;
-        if (orig.isSubjectScheme) isSubjectScheme = orig.isSubjectScheme;
-        if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
-        if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
-        if (orig.isOutDita) isOutDita = orig.isOutDita;
-        if (orig.isInput) isInput = orig.isInput;
-        if (orig.isInputResource) isInputResource = orig.isInputResource;
+        if (orig.src() != null) src = orig.src();
+        if (orig.uri() != null) uri = orig.uri();
+        if (orig.file() != null) file = orig.file();
+        if (orig.result() != null) result = orig.result();
+        if (orig.format() != null) format = orig.format();
+        if (orig.hasConref()) hasConref = orig.hasConref();
+        if (orig.isChunked()) isChunked = orig.isChunked();
+        if (orig.hasLink()) hasLink = orig.hasLink();
+        if (orig.isResourceOnly()) isResourceOnly = orig.isResourceOnly();
+        if (orig.isTarget()) isTarget = orig.isTarget();
+        if (orig.isConrefPush()) isConrefPush = orig.isConrefPush();
+        if (orig.hasKeyref()) hasKeyref = orig.hasKeyref();
+        if (orig.hasCoderef()) hasCoderef = orig.hasCoderef();
+        if (orig.isSubjectScheme()) isSubjectScheme = orig.isSubjectScheme();
+        if (orig.isSubtarget()) isSubtarget = orig.isSubtarget();
+        if (orig.isFlagImage()) isFlagImage = orig.isFlagImage();
+        if (orig.isOutDita()) isOutDita = orig.isOutDita();
+        if (orig.isInput()) isInput = orig.isInput();
+        if (orig.isInputResource()) isInputResource = orig.isInputResource();
         return this;
       }
 
@@ -833,15 +748,15 @@ public final class Job {
         //                if (orig.uri != null) uri = orig.uri;
         //                if (orig.file != null) file = orig.file;
         //                if (orig.result != null) result = orig.result;
-        if (orig.format != null) format = orig.format;
-        if (orig.hasConref) hasConref = orig.hasConref;
-        if (orig.isChunked) isChunked = orig.isChunked;
-        if (orig.hasLink) hasLink = orig.hasLink;
+        if (orig.format() != null) format = orig.format();
+        if (orig.hasConref()) hasConref = orig.hasConref();
+        if (orig.isChunked()) isChunked = orig.isChunked();
+        if (orig.hasLink()) hasLink = orig.hasLink();
         //                if (orig.isResourceOnly) isResourceOnly = orig.isResourceOnly;
         //                if (orig.isTarget) isTarget = orig.isTarget;
-        if (orig.isConrefPush) isConrefPush = orig.isConrefPush;
-        if (orig.hasKeyref) hasKeyref = orig.hasKeyref;
-        if (orig.hasCoderef) hasCoderef = orig.hasCoderef;
+        if (orig.isConrefPush()) isConrefPush = orig.isConrefPush();
+        if (orig.hasKeyref()) hasKeyref = orig.hasKeyref();
+        if (orig.hasCoderef()) hasCoderef = orig.hasCoderef();
         //                if (orig.isSubjectScheme) isSubjectScheme = orig.isSubjectScheme;
         //                if (orig.isSubtarget) isSubtarget = orig.isSubtarget;
         //                if (orig.isFlagImage) isFlagImage = orig.isFlagImage;
@@ -849,8 +764,12 @@ public final class Job {
         return this;
       }
 
+      public URI src() {
+        return src;
+      }
+
       public Builder src(final URI src) {
-        assert src.isAbsolute();
+        assert src == null || src.isAbsolute();
         this.src = src;
         return this;
       }
@@ -867,9 +786,17 @@ public final class Job {
         return this;
       }
 
+      public URI result() {
+        return result;
+      }
+
       public Builder result(final URI result) {
         this.result = result;
         return this;
+      }
+
+      public String format() {
+        return format;
       }
 
       public Builder format(final String format) {
@@ -951,26 +878,27 @@ public final class Job {
         if (uri == null && file == null) {
           throw new IllegalStateException("uri and file may not be null");
         }
-        final FileInfo fi = new FileInfo(src, uri, file);
-        if (result != null) {
-          fi.result = result;
-        }
-        fi.format = format;
-        fi.hasConref = hasConref;
-        fi.isChunked = isChunked;
-        fi.hasLink = hasLink;
-        fi.isResourceOnly = isResourceOnly;
-        fi.isTarget = isTarget;
-        fi.isConrefPush = isConrefPush;
-        fi.hasKeyref = hasKeyref;
-        fi.hasCoderef = hasCoderef;
-        fi.isSubjectScheme = isSubjectScheme;
-        fi.isSubtarget = isSubtarget;
-        fi.isFlagImage = isFlagImage;
-        fi.isOutDita = isOutDita;
-        fi.isInput = isInput;
-        fi.isInputResource = isInputResource;
-        return fi;
+        return new FileInfo(
+          src,
+          uri != null ? uri : toURI(file),
+          file != null ? file : toFile(uri),
+          result != null ? result : src,
+          format,
+          hasConref,
+          isChunked,
+          hasLink,
+          isResourceOnly,
+          isTarget,
+          isConrefPush,
+          hasKeyref,
+          hasCoderef,
+          isSubjectScheme,
+          isSubtarget,
+          isFlagImage,
+          isOutDita,
+          isInput,
+          isInputResource
+        );
       }
     }
   }
@@ -1111,8 +1039,8 @@ public final class Job {
     return files
       .values()
       .stream()
-      .filter(fi -> fi.isInput)
-      .map(fi -> fi.src)
+      .filter(FileInfo::isInput)
+      .map(FileInfo::src)
       .findAny()
       .orElseGet(() -> Optional.ofNullable((String) prop.get(PROPERTY_INPUT_MAP_URI)).map(URLUtils::toURI).orElse(null)
       );
@@ -1146,5 +1074,63 @@ public final class Job {
     }
     tempFileNameScheme.setBaseDir(getInputDir());
     return tempFileNameScheme;
+  }
+
+  /**
+   * Get common result base directory for all files.
+   */
+  @VisibleForTesting
+  public URI getResultBaseDir() {
+    final Collection<FileInfo> fis = getFileInfo();
+    URI baseDir = getFileInfo(FileInfo::isInput).iterator().next().result().resolve(".");
+    for (final FileInfo fi : fis) {
+      if (fi.result() != null && !fi.isResourceOnly()) {
+        final URI res = fi.result().resolve(".");
+        baseDir = Optional.ofNullable(getCommonBase(baseDir, res)).orElse(baseDir);
+      }
+    }
+
+    return baseDir;
+  }
+
+  @VisibleForTesting
+  URI getCommonBase(final URI left, final URI right) {
+    assert left.isAbsolute();
+    assert right.isAbsolute();
+    if (!left.getScheme().equals(right.getScheme())) {
+      return null;
+    }
+    final URI l = left.resolve(".");
+    final URI r = right.resolve(".");
+    final String lp = l.getPath();
+    final String rp = r.getPath();
+    if (lp.equals(rp)) {
+      return l;
+    }
+    if (lp.startsWith(rp)) {
+      return r;
+    }
+    if (rp.startsWith(lp)) {
+      return l;
+    }
+    final String[] la = left.getPath().split("/");
+    final String[] ra = right.getPath().split("/");
+    int i = 0;
+    final int len = Math.min(la.length, ra.length);
+    for (; i < len; i++) {
+      if (la[i].equals(ra[i])) {
+        //
+      } else {
+        final int common = Math.max(0, i);
+        final List<String> commons = Arrays.asList(la).subList(0, common);
+        if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS) && commons.size() <= 1) {
+          return null;
+        } else {
+          final String path = String.join("/", commons) + "/";
+          return URLUtils.setPath(left, path);
+        }
+      }
+    }
+    return null;
   }
 }

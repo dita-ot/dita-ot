@@ -11,7 +11,6 @@ import static org.dita.dost.util.Constants.*;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -133,11 +132,15 @@ public final class DITAOTCopy extends Task {
   private List<String> getIncludes() throws IOException {
     if (includes == null && includesFile == null) {
       final Job job = getProject().getReference(ANT_REFERENCE_JOB);
-      return job.getFileInfo(fi -> fi.isFlagImage).stream().map(fi -> fi.file.toString()).collect(Collectors.toList());
+      return job
+        .getFileInfo(Job.FileInfo::isFlagImage)
+        .stream()
+        .map(fi -> fi.file().toString())
+        .collect(Collectors.toList());
     }
     if (includesFile != null) {
       final List<String> res = new ArrayList<>();
-      try (BufferedReader r = new BufferedReader(new FileReader(includesFile))) {
+      try (BufferedReader r = Files.newBufferedReader(includesFile.toPath())) {
         String line;
         while ((line = r.readLine()) != null) {
           if (!line.trim().isEmpty()) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkFixChunkTest/preprocess/map6?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkFixChunkTest/preprocess/map6/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Map//EN?><?doctype-system map.dtd?><?Pub Sty _display FontColor="red"?><?Pub Inc?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" cascade="nomerge"
+  class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   ">
+  <topicref copy-to="nestedchunk.dita" href="nested1.dita#N1" class="- map/topicref "
+    chunk="to-content select-topic"/>
+</map>

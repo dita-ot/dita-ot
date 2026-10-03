@@ -69,13 +69,13 @@ public class JobMapper implements FileNameMapper {
     }
     final String res =
       switch (type) {
-        case TEMP -> fi.file.getPath();
+        case TEMP -> fi.file().getPath();
         case RESULT -> {
-          if (fi.result == null) {
+          if (fi.result() == null) {
             yield sourceFileName;
           } else {
             final URI base = job.getInputDir();
-            final URI rel = base.relativize(fi.result);
+            final URI rel = base.relativize(fi.result());
             yield toFile(rel).getPath();
           }
         }

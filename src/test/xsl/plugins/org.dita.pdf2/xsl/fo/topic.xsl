@@ -5,8 +5,8 @@
   exclude-result-prefixes="xs dita-ot"
   version="3.0">
   
-  <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/cfg/fo/attrs/basic-settings.xsl"/>
-  <xsl:import href="../../../../../../main/plugins/org.dita.pdf2/xsl/fo/topic.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/basic-settings.xsl"/>
+  <xsl:import href="plugin:org.dita.pdf2:xsl/fo/topic.xsl"/>
   
   <!-- Mocks -->
   <xsl:variable name="writing-mode"/>

@@ -12,12 +12,10 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.*;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.KeyDef;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
@@ -42,6 +40,8 @@ public final class KeydefFilter extends AbstractXMLFilter {
   private final Map<String, KeyDef> keysDefMap;
   /** Map to store multi-level keyrefs */
   private final Map<String, String> keysRefMap;
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
+  private final Queue<Integer> versionStack = new LinkedList<>();
 
   /**
    * Constructor.
@@ -77,14 +77,31 @@ public final class KeydefFilter extends AbstractXMLFilter {
     currentDir = null;
     keysDefMap.clear();
     keysRefMap.clear();
+    attributeStack.clear();
   }
 
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+    var ditaArchVersion = atts.getValue(DITA_NAMESPACE, "DITAArchVersion");
+    if (ditaArchVersion != null) {
+      versionStack.add((int) Math.floor(Double.parseDouble(ditaArchVersion)));
+    } else {
+      versionStack.add(versionStack.peek());
+    }
+
     handleKeysAttr(atts);
 
     getContentHandler().startElement(uri, localName, qName, atts);
+  }
+
+  @Override
+  public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+    getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
+    versionStack.add(versionStack.remove());
   }
 
   /**
@@ -110,7 +127,6 @@ public final class KeydefFilter extends AbstractXMLFilter {
       if (copyTo != null) {
         target = copyTo;
       }
-
       final String keyRef = atts.getValue(ATTRIBUTE_NAME_KEYREF);
 
       // Many keys can be defined in a single definition, like
@@ -118,13 +134,13 @@ public final class KeydefFilter extends AbstractXMLFilter {
       for (final String key : attrValue.trim().split("\\s+")) {
         if (!keysDefMap.containsKey(key)) {
           if (target != null && !target.toString().isEmpty()) {
-            final String attrScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
-            final String attrFormat = atts.getValue(ATTRIBUTE_NAME_FORMAT);
+            final String attrScope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+            final String attrFormat = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
             if (
               attrScope != null &&
               (attrScope.equals(ATTR_SCOPE_VALUE_EXTERNAL) || attrScope.equals(ATTR_SCOPE_VALUE_PEER))
             ) {
-              keysDefMap.put(key, new KeyDef(key, target, attrScope, attrFormat, null, null));
+              keysDefMap.put(key, new KeyDef(key, target, attrScope, attrFormat, null, null, versionStack.peek()));
             } else {
               String tail = null;
               if (target.getFragment() != null) {
@@ -136,7 +152,15 @@ public final class KeydefFilter extends AbstractXMLFilter {
               }
               keysDefMap.put(
                 key,
-                new KeyDef(key, setFragment(target, tail), ATTR_SCOPE_VALUE_LOCAL, attrFormat, null, null)
+                new KeyDef(
+                  key,
+                  setFragment(target, tail),
+                  ATTR_SCOPE_VALUE_LOCAL,
+                  attrFormat,
+                  null,
+                  null,
+                  versionStack.peek()
+                )
               );
             }
           } else if (!StringUtils.isEmptyString(keyRef)) {
@@ -145,7 +169,7 @@ public final class KeydefFilter extends AbstractXMLFilter {
           } else {
             // target is null or empty, it is useful in the future
             // when consider the content of key definition
-            keysDefMap.put(key, new KeyDef(key, null, null, null, null, null));
+            keysDefMap.put(key, new KeyDef(key, null, null, null, null, null, versionStack.peek()));
           }
         } else {
           logger.info(MessageUtils.getMessage("DOTJ045I", key).setLocation(atts).toString());

@@ -67,7 +67,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             toURI("main.ditamap"),
-            null
+            null,
+            1
           )
         )
       )
@@ -102,7 +103,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             toURI("main.ditamap"),
-            null
+            null,
+            1
           )
         )
       )
@@ -138,7 +140,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             toURI("main.ditamap"),
-            null
+            null,
+            1
           )
         )
       )
@@ -174,7 +177,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             toURI("main.ditamap"),
-            null
+            null,
+            1
           )
         )
       )
@@ -235,7 +239,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             job.tempDirURI.resolve("maps/root.map"),
-            null
+            null,
+            1
           )
         )
       )
@@ -296,7 +301,8 @@ public class ConkeyrefFilterTest {
             ATTR_SCOPE_VALUE_LOCAL,
             ATTR_FORMAT_VALUE_DITA,
             URI.create("main.ditamap"),
-            null
+            null,
+            1
           )
         )
       )
@@ -343,7 +349,7 @@ public class ConkeyrefFilterTest {
     );
 
     assertEquals(1, l.getMessages().size());
-    assertEquals(CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level);
+    assertEquals(CachingLogger.Message.Level.ERROR, l.getMessages().get(0).level());
   }
 
   private ConkeyrefFilter getConkeyrefFilter() throws IOException {

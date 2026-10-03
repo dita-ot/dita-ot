@@ -335,7 +335,7 @@ public final class DitaIndexWriter extends AbstractXMLWriter {
     } catch (final RuntimeException e) {
       throw e;
     } catch (final Exception e) {
-      logger.error("Failed to replace " + inputFile + ": " + e.getMessage());
+      logger.error("Failed to replace {}: {}", inputFile, e.getMessage());
     }
   }
 

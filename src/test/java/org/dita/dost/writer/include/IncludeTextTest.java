@@ -121,12 +121,12 @@ public class IncludeTextTest {
   }
 
   private Path createIncludeFile(Charset charset) throws IOException {
-    return Files.write(new File(tempDir, "include.txt").toPath(), DATA.getBytes(charset));
+    return Files.writeString(new File(tempDir, "include.txt").toPath(), DATA, charset);
   }
 
   private static class CharacterBufferContentHandler extends DefaultHandler {
 
-    StringBuilder characters = new StringBuilder();
+    final StringBuilder characters = new StringBuilder();
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {

@@ -36,7 +36,7 @@ public final class FileUtils {
   static {
     final List<String> sie = new ArrayList<>();
     final String imageExtensions = Configuration.configuration.get(CONF_SUPPORTED_IMAGE_EXTENSIONS);
-    if (imageExtensions != null && imageExtensions.length() > 0) {
+    if (imageExtensions != null && !imageExtensions.isEmpty()) {
       Collections.addAll(sie, imageExtensions.split(CONF_LIST_SEPARATOR));
     } else {
       System.err.println("Failed to read supported image extensions from configuration, using defaults.");
@@ -61,7 +61,7 @@ public final class FileUtils {
   static {
     final List<String> she = new ArrayList<>();
     final String extensions = Configuration.configuration.get(CONF_SUPPORTED_HTML_EXTENSIONS);
-    if (extensions != null && extensions.length() > 0) {
+    if (extensions != null && !extensions.isEmpty()) {
       Collections.addAll(she, extensions.split(CONF_LIST_SEPARATOR));
     } else {
       System.err.println("Failed to read supported HTML extensions from configuration, using defaults.");
@@ -80,7 +80,7 @@ public final class FileUtils {
   static {
     final List<String> sre = new ArrayList<>();
     final String extensions = Configuration.configuration.get(CONF_SUPPORTED_RESOURCE_EXTENSIONS);
-    if (extensions != null && extensions.length() > 0) {
+    if (extensions != null && !extensions.isEmpty()) {
       Collections.addAll(sre, extensions.split(CONF_LIST_SEPARATOR));
     } else {
       System.err.println("Failed to read supported resource file extensions from configuration, using defaults.");
@@ -343,7 +343,7 @@ public final class FileUtils {
   @Deprecated
   public static File resolve(final String basedir, final String filepath) {
     final File pathname = new File(normalizePath(stripFragment(filepath), File.separator));
-    if (basedir == null || basedir.length() == 0) {
+    if (basedir == null || basedir.isEmpty()) {
       return pathname;
     }
     final String normilizedPath = new File(basedir, pathname.getPath()).getPath();
@@ -424,7 +424,7 @@ public final class FileUtils {
    * @return true if path is absolute and false otherwise.
    */
   public static boolean isAbsolutePath(final String path) {
-    if (path == null || path.trim().length() == 0) {
+    if (path == null || path.trim().isEmpty()) {
       return false;
     }
 

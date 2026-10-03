@@ -16,12 +16,12 @@ public class SemVerMatchTest {
 
   @Test
   public void testParse() {
-    new SemVerMatch("1.2.3-4.z.5");
+    SemVerMatch.of("1.2.3-4.z.5");
   }
 
   @Test
   public void testParseInvalid() {
-    assertThrows(IllegalArgumentException.class, () -> new SemVerMatch("1.2.3+meta"));
+    assertThrows(IllegalArgumentException.class, () -> SemVerMatch.of("1.2.3+meta"));
   }
 
   @Test
@@ -31,21 +31,21 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 2, 4)
       ),
-      new SemVerMatch("1.2.3")
+      SemVerMatch.of("1.2.3")
     );
   }
 
   @Test
   public void testXRangeConstructor() {
     //    * := >=0.0.0 (Any version satisfies)
-    assertEquals(new SemVerMatch(new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0), null), new SemVerMatch("*"));
+    assertEquals(new SemVerMatch(new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0), null), SemVerMatch.of("*"));
     //        1.x := >=1.0.0 <2.0.0 (Matching major version)
     assertEquals(
       new SemVerMatch(
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
       ),
-      new SemVerMatch("1.x")
+      SemVerMatch.of("1.x")
     );
     //        1.2.x := >=1.2.0 <1.3.0 (Matching major and minor versions)
     assertEquals(
@@ -53,17 +53,17 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
       ),
-      new SemVerMatch("1.2.x")
+      SemVerMatch.of("1.2.x")
     );
     //        "" (empty string) := * := >=0.0.0
-    assertEquals(new SemVerMatch(new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0), null), new SemVerMatch("*"));
+    assertEquals(new SemVerMatch(new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0), null), SemVerMatch.of("*"));
     //        1 := 1.x.x := >=1.0.0 <2.0.0
     assertEquals(
       new SemVerMatch(
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
       ),
-      new SemVerMatch("1")
+      SemVerMatch.of("1")
     );
     //        1.2 := 1.2.x := >=1.2.0 <1.3.0
     assertEquals(
@@ -71,7 +71,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
       ),
-      new SemVerMatch("1.2")
+      SemVerMatch.of("1.2")
     );
   }
 
@@ -83,7 +83,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
       ),
-      new SemVerMatch("~1.2.3")
+      SemVerMatch.of("~1.2.3")
     );
     //        ~1.2 := >=1.2.0 <1.(2+1).0 := >=1.2.0 <1.3.0 (Same as 1.2.x)
     assertEquals(
@@ -91,7 +91,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
       ),
-      new SemVerMatch("~1.2")
+      SemVerMatch.of("~1.2")
     );
     //        ~1 := >=1.0.0 <(1+1).0.0 := >=1.0.0 <2.0.0 (Same as 1.x)
     assertEquals(
@@ -99,7 +99,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
       ),
-      new SemVerMatch("~1")
+      SemVerMatch.of("~1")
     );
     //        ~0.2.3 := >=0.2.3 <0.(2+1).0 := >=0.2.3 <0.3.0
     assertEquals(
@@ -107,7 +107,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 3),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
       ),
-      new SemVerMatch("~0.2.3")
+      SemVerMatch.of("~0.2.3")
     );
     //        ~0.2 := >=0.2.0 <0.(2+1).0 := >=0.2.0 <0.3.0 (Same as 0.2.x)
     assertEquals(
@@ -115,7 +115,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
       ),
-      new SemVerMatch("~0.2")
+      SemVerMatch.of("~0.2")
     );
     //        ~0 := >=0.0.0 <(0+1).0.0 := >=0.0.0 <1.0.0 (Same as 0.x)
     assertEquals(
@@ -123,7 +123,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
       ),
-      new SemVerMatch("~0")
+      SemVerMatch.of("~0")
     );
     //        ~1.2.3-beta.2 := >=1.2.3-beta.2 <1.3.0
     //        assertEquals(
@@ -131,13 +131,13 @@ public class SemVerMatchTest {
     //                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
     //                        new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 3, 0)
     //                ),
-    //                new SemVerMatch("~1.2.3-beta.2"));
+    //                SemVerMatch.of("~1.2.3-beta.2"));
   }
 
   @Test
   public void testCaretConstructor() {
     //        ^1.2.3 := >=1.2.3 <2.0.0
-    final SemVerMatch actual1 = new SemVerMatch("^1.2.3");
+    final SemVerMatch actual1 = SemVerMatch.of("^1.2.3");
     assertEquals(
       new SemVerMatch(
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
@@ -151,7 +151,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 2, 3),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 3, 0)
       ),
-      new SemVerMatch("^0.2.3")
+      SemVerMatch.of("^0.2.3")
     );
     //        ^0.0.3 := >=0.0.3 <0.0.4
     assertEquals(
@@ -159,7 +159,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 3),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 0, 4)
       ),
-      new SemVerMatch("^0.0.3")
+      SemVerMatch.of("^0.0.3")
     );
     //        ^1.2.3-beta.2 := >=1.2.3-beta.2 <2.0.0
     //        assertEquals(
@@ -167,24 +167,24 @@ public class SemVerMatchTest {
     //                        new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 3),
     //                        new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
     //                ),
-    //                new SemVerMatch("1.2.3-beta.2"));
+    //                SemVerMatch.of("1.2.3-beta.2"));
     //        ^0.0.3-beta := >=0.0.3-beta <0.0.4
     //        assertEquals(
     //                new SemVerMatch(
     //                        new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 3),
     //                        new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 0, 4)
     //                ),
-    //                new SemVerMatch("^0.0.3-beta"));
+    //                SemVerMatch.of("^0.0.3-beta"));
     //        ^1.2.x := >=1.2.0 <2.0.0
     assertEquals(
       new SemVerMatch(
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 2, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
       ),
-      new SemVerMatch("^1.2.x")
+      SemVerMatch.of("^1.2.x")
     );
     //        ^0.0.x := >=0.0.0 <0.1.0
-    final SemVerMatch actual = new SemVerMatch("^0.0.x");
+    final SemVerMatch actual = SemVerMatch.of("^0.0.x");
     assertEquals(
       new SemVerMatch(
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
@@ -198,7 +198,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 0, 1, 0)
       ),
-      new SemVerMatch("^0.0")
+      SemVerMatch.of("^0.0")
     );
     //        ^1.x := >=1.0.0 <2.0.0
     assertEquals(
@@ -206,7 +206,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 1, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 2, 0, 0)
       ),
-      new SemVerMatch("^1.x")
+      SemVerMatch.of("^1.x")
     );
     //        ^0.x := >=0.0.0 <1.0.0
     assertEquals(
@@ -214,7 +214,7 @@ public class SemVerMatchTest {
         new SemVerMatch.Range(SemVerMatch.Match.GE, 0, 0, 0),
         new SemVerMatch.Range(SemVerMatch.Match.LT, 1, 0, 0)
       ),
-      new SemVerMatch("^0.x")
+      SemVerMatch.of("^0.x")
     );
   }
 

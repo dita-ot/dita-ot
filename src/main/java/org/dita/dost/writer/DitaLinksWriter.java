@@ -11,8 +11,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.getRelativePath;
-import static org.dita.dost.util.XMLUtils.AttributesBuilder;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import java.util.Deque;
 import java.util.Map;
 import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.util.Job;
-import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -61,8 +59,8 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
   @Override
   public void setJob(final Job job) {
     super.setJob(job);
-    final Job.FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    baseURI = job.tempDir.toURI().resolve(in.uri);
+    final Job.FileInfo in = job.getFileInfo(Job.FileInfo::isInput).iterator().next();
+    baseURI = job.tempDir.toURI().resolve(in.uri());
   }
 
   /**
@@ -92,6 +90,15 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     topicIdStack.clear();
     firstTopic = true;
     getContentHandler().startDocument();
+    getContentHandler().startPrefixMapping(ATTRIBUTE_PREFIX_DITAARCHVERSION, DITA_NAMESPACE);
+    getContentHandler().startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+  }
+
+  @Override
+  public void endDocument() throws SAXException {
+    getContentHandler().endPrefixMapping(ATTRIBUTE_PREFIX_DITAARCHVERSION);
+    getContentHandler().endPrefixMapping(DITA_OT_NS_PREFIX);
+    getContentHandler().endDocument();
   }
 
   @Override
@@ -116,7 +123,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
           logger.error(e.getMessage(), e);
         }
       }
-      final String t = StringUtils.join(topicIdStack, SLASH);
+      final String t = String.join(SLASH, topicIdStack);
       if (indexEntries.containsKey(t)) {
         curMatchTopic = t;
       } else if (indexEntries.containsKey(topicIdStack.peekFirst())) {
@@ -176,7 +183,7 @@ public final class DitaLinksWriter extends AbstractXMLFilter {
     for (final Element desc : getChildElements(dst, TOPIC_DESC, true)) {
       for (final Element elem : getChildElements(desc, true)) {
         final Attr href = elem.getAttributeNode(ATTRIBUTE_NAME_HREF);
-        final String scope = elem.getAttribute(ATTRIBUTE_NAME_SCOPE);
+        final String scope = getCascadeValue(elem, ATTRIBUTE_NAME_SCOPE);
         if (href != null && !scope.equals(ATTR_SCOPE_VALUE_EXTERNAL)) {
           final URI abs = baseURI.resolve(href.getValue());
           final URI rel = getRelativePath(currentFile, abs);

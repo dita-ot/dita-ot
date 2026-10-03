@@ -341,7 +341,7 @@ public final class IndexTerm implements Comparable<IndexTerm> {
    * @return true if has subterms, false or else.
    */
   public boolean hasSubTerms() {
-    return subTerms != null && subTerms.size() > 0;
+    return subTerms != null && !subTerms.isEmpty();
   }
 
   /**

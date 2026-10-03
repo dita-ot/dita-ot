@@ -239,7 +239,7 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         // Skip empty parents and @processing-role='resource-only' entries.
         // append into root topic
         if (
-          parentResult.length() > 0 &&
+          !parentResult.isEmpty() &&
           parseFilePath != null &&
           !ATTR_PROCESSING_ROLE_VALUE_RESOURCE_ONLY.equals(processRoleValue)
         ) {
@@ -360,6 +360,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     final String id = atts.getValue(ATTRIBUTE_NAME_ID);
 
@@ -408,6 +410,8 @@ public final class ChunkTopicParser extends AbstractChunkTopicParser {
         include = false;
       }
     }
+
+    attributeStack.pop();
   }
 
   private void increaseNamespaceLevel(String uri) {

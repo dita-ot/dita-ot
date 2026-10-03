@@ -81,6 +81,7 @@ public class ChunkModuleOldTest extends AbstractModuleTest {
   protected AbstractPipelineInput getAbstractPipelineInput() {
     final AbstractPipelineInput input = new PipelineHashIO();
     input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
+    input.setAttribute("compatibility.chunk.v2-for-v1", "false");
     return input;
   }
 

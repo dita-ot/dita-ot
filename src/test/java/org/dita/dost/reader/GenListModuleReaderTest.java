@@ -91,8 +91,11 @@ public class GenListModuleReaderTest {
         .build()
     );
     assertEquals(1, reader.getNonConrefCopytoTargets().size());
-    assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format);
-    assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonConrefCopytoTargets().iterator().next().filename);
+    assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format());
+    assertEquals(
+      inputDir.toURI().resolve("image.png"),
+      reader.getNonConrefCopytoTargets().iterator().next().filename()
+    );
     assertEquals(1, reader.getNonTopicrefReferenceSet().size());
     assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonTopicrefReferenceSet().iterator().next());
   }
@@ -112,8 +115,11 @@ public class GenListModuleReaderTest {
         .build()
     );
     assertEquals(1, reader.getNonConrefCopytoTargets().size());
-    assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format);
-    assertEquals(inputDir.toURI().resolve("image.png"), reader.getNonConrefCopytoTargets().iterator().next().filename);
+    assertEquals(ATTR_FORMAT_VALUE_IMAGE, reader.getNonConrefCopytoTargets().iterator().next().format());
+    assertEquals(
+      inputDir.toURI().resolve("image.png"),
+      reader.getNonConrefCopytoTargets().iterator().next().filename()
+    );
     assertEquals(0, reader.getNonTopicrefReferenceSet().size());
     assertFalse(reader.getNonTopicrefReferenceSet().iterator().hasNext());
   }
@@ -208,7 +214,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename)
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     assertEquals(
       Set.of(
@@ -292,7 +298,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename)
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     assertEquals(Set.of(srcDirUri.resolve("maps/toolbars.dita")), nonConrefCopytoTargets);
 
@@ -363,7 +369,7 @@ public class GenListModuleReaderTest {
     final Set<URI> nonConrefCopytoTargets = reader
       .getNonConrefCopytoTargets()
       .stream()
-      .map(r -> r.filename)
+      .map(Reference::filename)
       .collect(Collectors.toSet());
     assertEquals(
       Stream
@@ -459,7 +465,7 @@ public class GenListModuleReaderTest {
   private XMLReader initXMLReader(final File ditaDir, final boolean validate, final File rootFile)
     throws SAXException, IOException {
     final XMLReader parser = XMLUtils.getXMLReader();
-    if (validate == true) {
+    if (validate) {
       parser.setFeature(FEATURE_VALIDATION, true);
       try {
         parser.setFeature(FEATURE_VALIDATION_SCHEMA, true);

@@ -26,8 +26,8 @@ public class LangUtilsTest {
   @Test
   public void pair_null() {
     final Map.Entry<String, String> act = LangUtils.pair(null, null);
-    assertEquals(null, act.getKey());
-    assertEquals(null, act.getValue());
+    assertNull(act.getKey());
+    assertNull(act.getValue());
   }
 
   @Test
@@ -45,7 +45,7 @@ public class LangUtilsTest {
     final List<String> src = new ArrayList<>();
     src.add(null);
     final List<Map.Entry<String, Integer>> act = LangUtils.zipWithIndex(src).toList();
-    assertEquals(null, act.get(0).getKey());
+    assertNull(act.get(0).getKey());
     assertEquals(0, act.get(0).getValue().intValue());
   }
 

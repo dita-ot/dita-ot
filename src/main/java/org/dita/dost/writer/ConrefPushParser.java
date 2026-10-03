@@ -73,13 +73,14 @@ public final class ConrefPushParser extends AbstractDomFilter {
       final URI relativePath = toURI(
         filename.getAbsolutePath().substring(new File(normalize(tempDir.toString())).getPath().length() + 1)
       );
-      final FileInfo f = job.getOrCreateFileInfo(relativePath);
+      var f = FileInfo.builder(job.getOrCreateFileInfo(relativePath));
       if (hasConref) {
-        f.hasConref = true;
+        f.hasConref(true);
       }
       if (hasKeyref) {
-        f.hasKeyref = true;
+        f.hasKeyref(true);
       }
+      job.add(f.build());
       job.write();
     } catch (final RuntimeException e) {
       throw e;

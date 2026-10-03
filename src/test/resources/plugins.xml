@@ -295,8 +295,6 @@ public IDs and system IDs for any DTD modules included in this plugin. -->
     </param>
     <param desc="Specifies the master file for your documentation project." name="args.input" required="true" type="file"/>
     <param desc="Specifies the base directory for your documentation project." name="args.input.dir" type="dir"/>
-    <!-- Deprecated since 2.5 -->
-    <param deprecated="true" desc="Specifies the location where DITA-OT places log files for your project." name="args.logdir" type="dir"/>
     <param desc="Specifies the name of the output file without file extension." name="args.output.base" type="string"/>
     <param desc="Specifies how cross references to tables are styled." name="args.tablelink.style" type="enum">
       <val>NUMBER</val>

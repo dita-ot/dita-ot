@@ -98,8 +98,8 @@ public class FileGeneratorTest {
 
   private abstract static class AbstractAction implements IAction {
 
-    protected List<Value> inputs = new ArrayList<>();
-    protected Map<String, String> params = new HashMap<>();
+    protected final List<Value> inputs = new ArrayList<>();
+    protected final Map<String, String> params = new HashMap<>();
     protected Map<String, Plugin> features;
 
     @Override

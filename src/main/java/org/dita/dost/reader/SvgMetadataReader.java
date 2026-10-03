@@ -9,6 +9,7 @@ package org.dita.dost.reader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.writer.ImageMetadataFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -41,6 +42,7 @@ public class SvgMetadataReader extends AbstractXMLReader {
     ) {
       dimensions.width = atts.getValue(WIDTH_ATTR);
       dimensions.height = atts.getValue(HEIGHT_ATTR);
+      throw new StopParsingException();
     }
   }
 

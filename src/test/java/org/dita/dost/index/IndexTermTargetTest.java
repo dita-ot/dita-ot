@@ -66,13 +66,13 @@ public class IndexTermTargetTest {
 
   @Test
   public void testEqualsObject() {
-    assertTrue(simple.equals(simple));
+    assertEquals(simple, simple);
     final IndexTermTarget s = new IndexTermTarget();
     s.setTargetName("name");
     s.setTargetURI("base");
-    assertTrue(simple.equals(s));
-    assertFalse(simple.equals(null));
-    assertFalse(simple.equals(""));
+    assertEquals(simple, s);
+    assertNotEquals(null, simple);
+    assertNotEquals("", simple);
   }
 
   @Test

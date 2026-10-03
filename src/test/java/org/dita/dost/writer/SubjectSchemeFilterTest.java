@@ -118,9 +118,7 @@ class SubjectSchemeFilterTest {
 
   private static Attributes attributes(Map<String, String> atts) {
     var res = new AttributesImpl();
-    atts.forEach((name, value) -> {
-      res.addAttribute(XMLConstants.NULL_NS_URI, name, name, "CDATA", value);
-    });
+    atts.forEach((name, value) -> res.addAttribute(XMLConstants.NULL_NS_URI, name, name, "CDATA", value));
     return res;
   }
 

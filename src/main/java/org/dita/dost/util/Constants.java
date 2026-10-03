@@ -9,6 +9,8 @@ package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.*;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * This class contains all the constants used in DITA-OT.
  *
@@ -791,6 +793,7 @@ public final class Constants {
     "- topic/body learningBase/learningBasebody learningSummary/learningSummarybody "
   );
   public static final DitaClass MAP_ANCHOR = DitaClass.getInstance("- map/anchor ");
+  public static final DitaClass MAP_KEYTEXT = DitaClass.getInstance("- map/keytext ");
   public static final DitaClass MAP_LINKTEXT = DitaClass.getInstance("- map/linktext ");
   public static final DitaClass MAP_MAP = DitaClass.getInstance("- map/map ");
   public static final DitaClass MAP_NAVREF = DitaClass.getInstance("- map/navref ");
@@ -1140,6 +1143,7 @@ public final class Constants {
   public static final DitaClass TOPIC_THEAD = DitaClass.getInstance("- topic/thead ");
   public static final DitaClass TOPIC_TITLE = DitaClass.getInstance("- topic/title ");
   public static final DitaClass TOPIC_TITLEALTS = DitaClass.getInstance("- topic/titlealts ");
+  public static final DitaClass TOPIC_TITLEALT = DitaClass.getInstance("- topic/titlealt ");
   public static final DitaClass TOPIC_TM = DitaClass.getInstance("- topic/tm ");
   public static final DitaClass TOPIC_TOPIC = DitaClass.getInstance("- topic/topic ");
   public static final DitaClass TOPIC_UL = DitaClass.getInstance("- topic/ul ");
@@ -1357,6 +1361,10 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_DELIVERYTARGET = "deliveryTarget";
   /**cascade attribute.*/
   public static final String ATTRIBUTE_NAME_CASCADE = "cascade";
+  public static final String ATTRIBUTE_NAME_LINKING = "linking";
+  public static final String ATTRIBUTE_NAME_SEARCH = "search";
+  public static final String ATTRIBUTE_NAME_DIR = "dir";
+  public static final String ATTRIBUTE_NAME_TRANSLATE = "translate";
   public static final String ATTRIBUTE_NAME_COLS = "cols";
   public static final String ATTRIBUTE_NAME_VALUE = "value";
   public static final String ATTRIBUTE_NAME_VALUETYPE = "valuetype";
@@ -1364,11 +1372,19 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_BACKCOLOR = "backcolor";
   public static final String ATTRIBUTE_NAME_STYLE = "style";
   public static final String ATTRIBUTE_NAME_CHANGEBAR = "changebar";
+  public static final String ATTRIBUTE_NAME_TITLE_ROLE = "title-role";
+  public static final String ATTRIBUTE_NAME_DELIVERY_TARGET = "deliveryTarget";
+  public static final String ATTRIBUTE_NAME_SUBJECTREFS = "subjectrefs";
+  public static final String ATTRIBUTE_NAME_ADD_OUTPUTCLASS = "add-outputclass";
+  public static final String ATTRIBUTE_NAME_APPID = "appid";
+  public static final String ATTRIBUTE_NAME_APPID_ROLE = "appid-role";
 
   public static final String ATTRIBUTE_VALUETYPE_VALUE_REF = "ref";
 
   public static final String ATTRIBUTE_CASCADE_VALUE_MERGE = "merge";
   public static final String ATTRIBUTE_CASCADE_VALUE_NOMERGE = "nomerge";
+
+  public static final String ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR = "deliverable-anchor";
 
   /** URI path separator. */
   public static final String URI_SEPARATOR = "/";
@@ -1549,8 +1565,13 @@ public final class Constants {
   public static final String COUNTRY_US = "us";
   /**LANGUAGE_EN.*/
   public static final String LANGUAGE_EN = "en";
-  /**UTF8.*/
-  public static final String UTF8 = "UTF-8";
+
+  /**UTF8.
+   * @deprecated use {@link java.nio.charset.StandardCharsets#UTF_8#name() StandardCharsets.UTF_8.name()} instead.
+   */
+  @Deprecated
+  public static final String UTF8 = StandardCharsets.UTF_8.name();
+
   /**SAX_DRIVER_PROPERTY.*/
   public static final String SAX_DRIVER_PROPERTY = "org.xml.sax.driver";
   /**SAX_DRIVER_DEFAULT_CLASS.*/
@@ -1687,8 +1708,11 @@ public final class Constants {
   /** Property name for print transtypes. */
   public static final String CONF_PRINT_TRANSTYPES = "print_transtypes";
   public static final String CONF_TRANSTYPES = "transtypes";
+
   /** Property name for template files. */
+  @Deprecated
   public static final String CONF_TEMPLATES = "templates";
+
   /** Plugin configuration file name. */
   public static final String PLUGIN_CONF = "plugins.xml";
 

@@ -8,8 +8,7 @@
 
 package org.dita.dost.invoker;
 
-import static java.util.Collections.emptyMap;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
@@ -19,12 +18,16 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.dita.dost.project.Project;
 import org.dita.dost.project.ProjectFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class MainProjectTest {
 
@@ -40,13 +43,16 @@ public class MainProjectTest {
     factory.setLax(true);
   }
 
-  @Test
-  public void collectProperties_simple() throws IOException, URISyntaxException {
+  @ParameterizedTest
+  @ValueSource(strings = { "site" })
+  @NullSource
+  public void collectProperties_simple(String deliverable) throws IOException, URISyntaxException {
     projectFile = getClass().getClassLoader().getResource("org/dita/dost/project/simple.xml").toURI();
     project = factory.load(projectFile);
     final URI baseDir = projectFile.resolve("");
 
-    final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
+    final Set<String> deliverables = deliverable != null ? singleton(deliverable) : emptySet();
+    final List<Map<String, Object>> act = main.collectProperties(project, projectFile, deliverables, emptyMap());
 
     final Map<String, Object> exp = Map.of(
       "project.deliverable",
@@ -79,7 +85,7 @@ public class MainProjectTest {
     project = factory.load(projectFile);
     final URI baseDir = projectFile.resolve("");
 
-    final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptyMap());
+    final List<Map<String, Object>> act = main.collectProperties(project, projectFile, emptySet(), emptyMap());
 
     final Map<String, Object> exp = Map.of(
       "project.deliverable",

@@ -33,15 +33,19 @@ public class TopicCleanFilter extends AbstractXMLFilter {
 
   @Override
   public void startDocument() throws SAXException {
-    final int stepsToRootDir = fi.result.getPath().split("/").length - 1;
+    calculatePathToProjectDirs();
+  }
+
+  void calculatePathToProjectDirs() {
+    final int stepsToRootDir = fi.result().getPath().split("/").length - 1;
     pathToRootDir = stepsToRootDir == 0 ? SINGLE_URI_STEP : URI_STEP.repeat(stepsToRootDir);
     pathToMapDir =
       job
-        .getFileInfo(fi -> fi.isInput && Objects.equals(fi.format, ATTR_FORMAT_VALUE_DITAMAP))
+        .getFileInfo(fi -> fi.isInput() && Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP))
         .stream()
         .findAny()
         .map(startFile -> {
-          final String relativePath = getRelativePath(fi.uri, startFile.uri).resolve(".").getPath();
+          final String relativePath = getRelativePath(fi.uri(), startFile.uri()).resolve(".").getPath();
           //          return relativePath.getPath().split("/").length;
           return relativePath;
         })
@@ -50,6 +54,11 @@ public class TopicCleanFilter extends AbstractXMLFilter {
 
   @Override
   public void processingInstruction(String target, String data) throws SAXException {
+    final String res = getProcessingInstruction(target, data);
+    getContentHandler().processingInstruction(target, res);
+  }
+
+  String getProcessingInstruction(String target, String data) {
     final String res =
       switch (target) {
         case "path2project" -> pathToRootDir.equals(SINGLE_URI_STEP)
@@ -59,6 +68,6 @@ public class TopicCleanFilter extends AbstractXMLFilter {
         case "path2rootmap-uri" -> pathToMapDir != null ? pathToMapDir : data;
         default -> data;
       };
-    getContentHandler().processingInstruction(target, res);
+    return res;
   }
 }

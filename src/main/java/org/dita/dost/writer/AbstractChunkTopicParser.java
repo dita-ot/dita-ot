@@ -11,6 +11,7 @@ package org.dita.dost.writer;
 import static javax.xml.XMLConstants.*;
 import static org.dita.dost.reader.ChunkMapReader.*;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.isExternalScope;
 import static org.dita.dost.util.URLUtils.*;
 import static org.dita.dost.util.XMLUtils.*;
 
@@ -20,13 +21,11 @@ import java.io.Writer;
 import java.net.URI;
 import java.util.*;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.module.ChunkModule.ChunkFilenameGenerator;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.Job;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.TopicIdParser;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -86,6 +85,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
   final NamespaceSupport namespaces = new NamespaceSupport();
   final HashMap<String, Integer> namespaceMap = new HashMap<>();
+  final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE);
 
   @Override
   public void setJob(final Job job) {
@@ -253,12 +253,12 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
 
   URI generateOutputFilename(final String id) {
     final FileInfo cfi = job.getFileInfo(stripFragment(currentParsingFile));
-    URI result = cfi.result.resolve(id + FILE_EXTENSION_DITA);
+    URI result = cfi.result().resolve(id + FILE_EXTENSION_DITA);
     URI temp = tempFileNameScheme.generateTempFileName(result);
     if (id == null || job.getStore().exists(job.tempDirURI.resolve(temp))) { //job.getFileInfo(result) != null
       final URI t = temp;
 
-      result = cfi.result.resolve(generateFilename());
+      result = cfi.result().resolve(generateFilename());
       temp = tempFileNameScheme.generateTempFileName(result);
 
       final FileInfo.Builder b = new FileInfo.Builder(cfi);
@@ -296,8 +296,8 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
       }
     }
     final String href = resAtts.getValue(ATTRIBUTE_NAME_HREF);
-    final String scope = resAtts.getValue(ATTRIBUTE_NAME_SCOPE);
-    if (href != null && !ATTR_SCOPE_VALUE_EXTERNAL.equals(scope)) {
+    final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+    if (href != null && !isExternalScope(scope)) {
       // if current @href value needs to be updated
       URI relative = getRelativePath(outputFile, currentParsingFile);
       if (conflictTable.containsKey(outputFile)) {
@@ -374,7 +374,7 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
    */
   URI generateOutputFile(final URI ref) {
     final FileInfo srcFi = job.getFileInfo(ref);
-    final URI newSrc = srcFi.src.resolve(generateFilename());
+    final URI newSrc = srcFi.src().resolve(generateFilename());
     final URI tmp = tempFileNameScheme.generateTempFileName(newSrc);
 
     if (job.getFileInfo(tmp) == null) {
@@ -462,10 +462,15 @@ public abstract class AbstractChunkTopicParser extends AbstractXMLWriter {
       job.getStore().transform(ditaTopicFile.toURI(), parser);
     } catch (final RuntimeException e) {
       throw e;
+    } catch (DITAOTException e) {
+      if (e.getCause() instanceof StopParsingException) {
+        // expected exit
+      }
+      logger.error(e.getMessage(), e);
     } catch (final Exception e) {
       logger.error(e.getMessage(), e);
     }
-    if (firstTopicId.length() == 0) {
+    if (firstTopicId.isEmpty()) {
       return null;
     }
     return firstTopicId.toString();

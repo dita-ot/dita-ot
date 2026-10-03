@@ -12,10 +12,10 @@ import static org.dita.dost.util.Job.Generate.NOT_GENERATEOUTTER;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.*;
 import org.dita.dost.TestUtils;
 import org.dita.dost.exception.DITAOTException;
@@ -41,7 +41,7 @@ public class DebugAndFilterModuleTest {
   private File inputDir;
 
   @BeforeAll
-  public static void setUpClass() {
+  public static void setUpAll() {
     CatalogUtils.setDitaDir(new File("src" + File.separator + "main").getAbsoluteFile());
   }
 
@@ -56,12 +56,12 @@ public class DebugAndFilterModuleTest {
     TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
     final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
     for (final Job.FileInfo fi : job.getFileInfo()) {
-      job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri)).build());
+      job.add(new Job.FileInfo.Builder(fi).src(inputDir.toURI().resolve(fi.uri())).build());
     }
     job.setInputFile(inputMap.getAbsoluteFile().toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
     job.setOutputDir(outDir);
-    job.setProperty(INPUT_DIR, inputDir.getAbsolutePath());
+    job.setProperty(INPUT_DIR_URI, inputDir.toURI().toString());
     job.setInputDir(inputDir.getAbsoluteFile().toURI());
     job.write();
 
@@ -111,7 +111,7 @@ public class DebugAndFilterModuleTest {
     parser.setEntityResolver(CatalogUtils.getCatalogResolver());
     parser.setContentHandler(handler);
     for (final File f : files) {
-      try (InputStream in = new FileInputStream(new File(tmpDir, f.getPath()))) {
+      try (InputStream in = Files.newInputStream(new File(tmpDir, f.getPath()).toPath())) {
         handler.setSource(new File(inputDir, copyto.containsKey(f) ? copyto.get(f).getPath() : f.getPath()));
         parser.parse(new InputSource(in));
       }
@@ -133,8 +133,10 @@ public class DebugAndFilterModuleTest {
     tmpDir = new File(tempDir, "temp");
     TestUtils.copy(new File(resourceDir, "temp"), tmpDir);
     final Job job = new Job(tmpDir, new StreamStore(tmpDir, new XMLUtils()));
-    URI outside = new File("/etc/passwd").toURI();
-    job.add(new Job.FileInfo.Builder().src(outside).uri(outside).build());
+    File outsideFile = new File(System.getProperty("java.io.tmpdir"), "outerfile.dita");
+    outsideFile.createNewFile();
+    URI outsideFileURI = outsideFile.toURI();
+    job.add(new Job.FileInfo.Builder().src(outsideFileURI).uri(outsideFileURI).build());
     job.setInputFile(inputMap.getAbsoluteFile().toURI());
     job.setGeneratecopyouter(NOT_GENERATEOUTTER);
     job.setOutputDir(outDir);
@@ -157,12 +159,8 @@ public class DebugAndFilterModuleTest {
     module.setXmlUtils(new XMLUtils());
     module.setProcessingPipe(Collections.emptyList());
 
-    try {
-      module.execute(pipelineInput);
-      assertTrue(false);
-    } catch (Exception ex) {
-      assertEquals("Cannot write outside of the temporary files folder: file:/etc/passwd", ex.getMessage());
-    }
+    Exception ex = assertThrows(Exception.class, () -> module.execute(pipelineInput));
+    assertEquals("Cannot write outside of the temporary files folder: " + outsideFileURI, ex.getMessage());
   }
 
   private static class TestHandler implements ContentHandler {

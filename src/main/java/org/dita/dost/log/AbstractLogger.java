@@ -11,7 +11,6 @@ import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.tools.ant.Project;
-import org.dita.dost.invoker.Main;
 import org.dita.dost.util.Configuration;
 import org.slf4j.helpers.MarkerIgnoringBase;
 
@@ -232,27 +231,6 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
       return;
     }
     StringBuilder buf = null;
-    if (!legacyFormat) {
-      if (level == Project.MSG_ERR) {
-        buf = new StringBuilder();
-        if (useColor) {
-          buf.append(ANSI_RED);
-        }
-        buf.append(Main.locale.getString("error_msg").formatted(""));
-        if (useColor) {
-          buf.append(ANSI_RESET);
-        }
-      } else if (level == Project.MSG_WARN) {
-        buf = new StringBuilder();
-        if (useColor) {
-          buf.append(ANSI_YELLOW);
-        }
-        buf.append(Main.locale.getString("warn_msg").formatted(""));
-        if (useColor) {
-          buf.append(ANSI_RESET);
-        }
-      }
-    }
     if (args.length > 0) {
       if (buf == null) {
         buf = new StringBuilder();
@@ -308,7 +286,7 @@ public abstract class AbstractLogger extends MarkerIgnoringBase implements DITAO
 
   private static final Pattern ARGUMENT = Pattern.compile("\\{}|%s");
 
-  private String addIndex(String msg) {
+  public static String addIndex(String msg) {
     final Matcher matcher = ARGUMENT.matcher(msg);
     final StringBuilder buf = new StringBuilder();
     int start = 0;

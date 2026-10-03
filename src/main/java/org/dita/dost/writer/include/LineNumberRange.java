@@ -13,11 +13,20 @@ import java.io.IOException;
 import org.dita.dost.writer.CoderefResolver;
 import org.xml.sax.SAXException;
 
+/**
+ * Line number based range that defines start and end line numbers for the included range.
+ * Start and end lines are inclusive.
+ */
 public class LineNumberRange extends AllRange implements Range {
 
   private final int start;
   private final int end;
 
+  /**
+   * Create a new line number range.
+   * @param start start line, inclusive zero-based numbering
+   * @param end end line, inclusive zero-based numbering
+   */
   public LineNumberRange(final int start, final int end) {
     this.start = start;
     this.end = end;
@@ -34,8 +43,10 @@ public class LineNumberRange extends AllRange implements Range {
         } else {
           handler.characters(CoderefResolver.XML_NEWLINE, 0, CoderefResolver.XML_NEWLINE.length);
         }
-        final char[] ch = line.toCharArray();
-        handler.characters(ch, 0, ch.length);
+        if (!line.isEmpty()) {
+          final char[] ch = line.toCharArray();
+          handler.characters(ch, 0, ch.length);
+        }
       }
       line = codeReader.readLine();
     }

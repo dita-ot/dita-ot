@@ -8,8 +8,6 @@
 
 package org.dita.dost.module.reader;
 
-import static org.dita.dost.util.URLUtils.toURI;
-
 import java.net.URI;
 
 public class FullPathTempFileScheme implements TempFileNameScheme {
@@ -17,7 +15,7 @@ public class FullPathTempFileScheme implements TempFileNameScheme {
   @Override
   public URI generateTempFileName(final URI src) {
     assert src.isAbsolute();
-    final URI rel = toURI(src.getPath().substring(1));
+    final URI rel = URI.create(src.toString().replaceFirst("file:/.+?/", ""));
     return rel;
   }
 }

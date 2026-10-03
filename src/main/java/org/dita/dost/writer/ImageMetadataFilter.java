@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.reader.SvgMetadataReader;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
@@ -92,11 +93,11 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     svgMetadataReader.setLogger(logger);
     svgMetadataReader.setJob(job);
     currentFile = filename.toURI();
-    logger.info("Processing " + filename.getAbsolutePath());
+    logger.info("Processing {}", filename.getAbsolutePath());
     try {
       super.write(filename);
     } catch (DITAOTException e) {
-      logger.error("Failed to read image metadata: " + e.getMessage(), e);
+      logger.error("Failed to read image metadata: {}", e.getMessage(), e);
     }
   }
 
@@ -123,7 +124,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
           Attributes m = cache.computeIfAbsent(imgInput, this::readMetadata);
           a.addAll(m);
         } else {
-          logger.error("Image file " + href + " not found");
+          logger.error("Image file {} not found", href);
         }
       }
       depth = 1;
@@ -176,7 +177,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
   }
 
   private Attributes readMetadata(final URI imgInput) {
-    logger.info("Reading " + imgInput);
+    logger.info("Reading {}", imgInput);
     final String mimeType = getMimeType(imgInput);
     return switch (mimeType) {
       case "image/svg+xml" -> readSvgMetadata(imgInput);
@@ -187,9 +188,10 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
   private Attributes readSvgMetadata(final URI imgInput) {
     try (final InputStream in = getInputStream(imgInput)) {
       reader.parse(new InputSource(in));
+    } catch (StopParsingException e) {
       return svgMetadataReader.getDimensions().getAttributes();
     } catch (final IOException | SAXException e) {
-      logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
+      logger.error("Failed to read image {} metadata: {}", imgInput, e.getMessage(), e);
     }
     return EMPTY_ATTR;
   }
@@ -204,7 +206,7 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
         iis = ImageIO.createImageInputStream(in);
         final Iterator<ImageReader> i = ImageIO.getImageReaders(iis);
         if (!i.hasNext()) {
-          logger.info("Image " + imgInput + " format not supported");
+          logger.info("Image {} format not supported", imgInput);
         } else {
           r = i.next();
           r.setInput(iis);
@@ -240,11 +242,11 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
       }
     } catch (ArrayIndexOutOfBoundsException e) {
       // Know issue when reading JPEG metadata
-      logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
+      logger.error("Failed to read image {} metadata: {}", imgInput, e.getMessage(), e);
     } catch (final RuntimeException e) {
       throw e;
     } catch (final Exception e) {
-      logger.error("Failed to read image " + imgInput + " metadata: " + e.getMessage(), e);
+      logger.error("Failed to read image {} metadata: {}", imgInput, e.getMessage(), e);
     }
     return EMPTY_ATTR;
   }
@@ -286,34 +288,34 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     final URI fileName;
     final FileInfo fi = job.getFileInfo(currentFile.resolve(href));
     if (fi != null) {
-      fileName = job.getInputDir().relativize(fi.src);
+      fileName = job.getInputDir().relativize(fi.src());
     } else {
       fileName = href;
     }
 
     final URI outputURI = outputDir.toURI().resolve(fileName);
     if (exists(outputURI)) {
-      logger.debug("Found " + outputURI);
+      logger.debug("Found {}", outputURI);
       return outputURI;
     }
 
     final URI tempURI = job.tempDirURI.resolve(fileName);
     if (exists(tempURI)) {
-      logger.debug("Found " + tempURI);
+      logger.debug("Found {}", tempURI);
       return tempURI;
     }
 
     if (fi != null) {
-      final URI srcTempURI = job.tempDirURI.resolve(fi.uri);
+      final URI srcTempURI = job.tempDirURI.resolve(fi.uri());
       if (exists(srcTempURI)) {
-        logger.debug("Found " + srcTempURI);
+        logger.debug("Found {}", srcTempURI);
         return srcTempURI;
       }
     }
 
     final URI srcURI = job.getInputDir().resolve(fileName);
     if (exists(srcURI)) {
-      logger.debug("Found " + srcURI);
+      logger.debug("Found {}", srcURI);
       return srcURI;
     }
 

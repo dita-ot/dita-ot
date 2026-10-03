@@ -14,8 +14,8 @@ import static org.dita.dost.util.URLUtils.toFile;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -259,7 +259,7 @@ public final class ExtensibleAntInvoker extends Task {
           module.setParam(p.getName(), p.getValue());
         }
       }
-      for (final OutputPropertyElem o : ((XsltElem) m).outputProperties) {
+      for (final OutputPropertyElem o : xm.outputProperties) {
         if (!o.isValid()) {
           throw new BuildException("Incomplete outputproperty");
         }
@@ -392,12 +392,12 @@ public final class ExtensibleAntInvoker extends Task {
       if (!isValid(getProject(), getLocation(), i.ifProperty, null)) {
         continue;
       }
-      try (BufferedReader r = new BufferedReader(new FileReader(i.file))) {
+      try (BufferedReader r = Files.newBufferedReader(i.file.toPath())) {
         for (String l = r.readLine(); l != null; l = r.readLine()) {
           inc.add(new File(l));
         }
       } catch (IOException e) {
-        logger.error("Failed to read includes file " + i.file + ": " + e.getMessage(), e);
+        logger.error("Failed to read includes file {}: {}", i.file, e.getMessage(), e);
       }
     }
     return inc;
@@ -693,11 +693,11 @@ public final class ExtensibleAntInvoker extends Task {
 
     public Predicate<FileInfo> toFilter() {
       return f ->
-        (formats.isEmpty() || formats.contains(f.format != null ? f.format : ATTR_FORMAT_VALUE_DITA)) &&
-        (hasConref == null || f.hasConref == hasConref) &&
-        (isInput == null || f.isInput == isInput) &&
-        (isInputResource == null || f.isInputResource == isInputResource) &&
-        (isResourceOnly == null || f.isResourceOnly == isResourceOnly);
+        (formats.isEmpty() || formats.contains(f.format() != null ? f.format() : ATTR_FORMAT_VALUE_DITA)) &&
+        (hasConref == null || f.hasConref() == hasConref) &&
+        (isInput == null || f.isInput() == isInput) &&
+        (isInputResource == null || f.isInputResource() == isInputResource) &&
+        (isResourceOnly == null || f.isResourceOnly() == isResourceOnly);
     }
   }
 

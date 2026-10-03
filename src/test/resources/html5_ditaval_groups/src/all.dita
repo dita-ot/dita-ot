@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE topic PUBLIC "-//OASIS//DTD DITA Topic//EN" "topic.dtd">
+<topic id="topic-1"
+       domains="(topic abbrev-d) a(props deliveryTarget) (topic equation-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic mathml-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic svg-d) (topic ui-d) (topic ut-d) a(props os) (topic markup-d xml-d)">
+  <title>Topic title</title>
+  <body>
+    <p product="group1(val1-3 val1-2) foo(bar) group1(val1-1) baz"/>
+    <p product="group2(val2-3 val2-2) foo(bar) group2(val2-1) baz"/>
+    <p product="group3(val3-3 val3-2) foo(bar) group3(val3-1) baz"/>
+  </body>
+</topic>

@@ -10,7 +10,6 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -101,9 +100,15 @@ public final class NormalizeSimpleTableFilter extends AbstractXMLFilter {
     Span prev;
     if (tableState.previousRow != null) {
       for (
-        prev = tableState.previousRow.get(tableState.currentColumn);
+        prev =
+          tableState.currentColumn < tableState.previousRow.size()
+            ? tableState.previousRow.get(tableState.currentColumn)
+            : null;
         prev != null && prev.y > 1;
-        prev = tableState.previousRow.get(tableState.currentColumn)
+        prev =
+          tableState.currentColumn < tableState.previousRow.size()
+            ? tableState.previousRow.get(tableState.currentColumn)
+            : null
       ) {
         for (int i = 0; i < prev.x; i++) {
           tableState.currentColumn = tableState.currentColumn + 1; //prev.x - 1;

@@ -22,10 +22,7 @@ import org.dita.dost.module.reader.TempFileNameScheme;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.reader.CopyToReader;
-import org.dita.dost.util.Constants;
-import org.dita.dost.util.Job;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.writer.ForceUniqueFilter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -83,7 +80,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    * Process start map to read copy-to map and write unique topic references.
    */
   private void processMap() throws DITAOTException {
-    final URI in = job.tempDirURI.resolve(job.getFileInfo(fi -> fi.isInput).iterator().next().uri);
+    final URI in = job.tempDirURI.resolve(job.getFileInfo(FileInfo::isInput).iterator().next().uri());
 
     final List<XMLFilter> pipe = getProcessingPipe(in);
 
@@ -135,7 +132,7 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
       final FileInfo sourceFi = job.getFileInfo(source);
       // Filter when copy-to was ignored (so target is not in job),
       // or where target is used directly
-      if (targetFi == null || (targetFi != null && targetFi.src != null)) {
+      if (targetFi == null || (targetFi != null && targetFi.src() != null)) {
         continue;
       }
       copyToMap.put(targetFi, sourceFi);
@@ -151,24 +148,24 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private void performCopytoTask(final Map<FileInfo, FileInfo> copyToMap) {
     for (final Map.Entry<FileInfo, FileInfo> entry : copyToMap.entrySet()) {
-      final URI copytoTarget = entry.getKey().uri;
-      final URI copytoSource = entry.getValue().uri;
+      final URI copytoTarget = entry.getKey().uri();
+      final URI copytoSource = entry.getValue().uri();
       final URI srcFile = job.tempDirURI.resolve(copytoSource);
       final URI targetFile = job.tempDirURI.resolve(copytoTarget);
 
       if (job.getStore().exists(targetFile)) {
         logger.warn(MessageUtils.getMessage("DOTX064W", copytoTarget.getPath()).toString());
       } else {
-        final FileInfo input = job.getFileInfo(fi -> fi.isInput).iterator().next();
-        final URI inputMapInTemp = job.tempDirURI.resolve(input.uri);
+        final FileInfo input = job.getFileInfo(FileInfo::isInput).iterator().next();
+        final URI inputMapInTemp = job.tempDirURI.resolve(input.uri());
         copyFileWithPIReplaced(srcFile, targetFile, copytoTarget, inputMapInTemp);
         // add new file info into job
         final FileInfo src = job.getFileInfo(copytoSource);
         assert src != null;
         final FileInfo dst = job.getFileInfo(copytoTarget);
         assert dst != null;
-        final URI dstTemp = tempFileNameScheme.generateTempFileName(dst.result);
-        final FileInfo res = new FileInfo.Builder(src).result(dst.result).uri(dstTemp).build();
+        final URI dstTemp = tempFileNameScheme.generateTempFileName(dst.result());
+        final FileInfo res = new FileInfo.Builder(src).result(dst.result()).uri(dstTemp).build();
         job.add(res);
       }
     }
@@ -197,11 +194,11 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     final File path2rootmap = getPathtoRootmap(target, inputMapInTemp);
     XMLFilter filter = new CopyToFilter(workdir, path2project, path2rootmap, src, target);
 
-    logger.info("Processing " + src + " to " + target);
+    logger.info("Processing {} to {}", src, target);
     try {
       job.getStore().transform(src, target, Collections.singletonList(filter));
     } catch (final DITAOTException e) {
-      logger.error("Failed to write copy-to file: " + e.getMessage(), e);
+      logger.error("Failed to write copy-to file: {}", e.getMessage(), e);
     }
   }
 
@@ -218,6 +215,8 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    * </ul>
    */
   private static final class CopyToFilter extends XMLFilterImpl {
+
+    private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE);
 
     private final File workdir;
     private final File path2project;
@@ -238,10 +237,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
     @Override
     public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
       throws SAXException {
+      attributeStack.push(atts);
+
       Attributes resAtts = atts;
+      var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       if (
         (TOPIC_XREF.matches(atts) || TOPIC_LINK.matches(atts) || TOPIC_IMAGE.matches(atts)) &&
-        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, atts.getValue(ATTRIBUTE_NAME_SCOPE))
+        !Objects.equals(ATTR_SCOPE_VALUE_EXTERNAL, scope)
       ) {
         final String value = atts.getValue(ATTRIBUTE_NAME_HREF);
         if (value != null && !value.startsWith("#")) {
@@ -249,6 +251,13 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
         }
       }
       getContentHandler().startElement(uri, localName, qName, resAtts);
+    }
+
+    @Override
+    public void endElement(final String uri, final String localName, final String qName) throws SAXException {
+      getContentHandler().endElement(uri, localName, qName);
+
+      attributeStack.pop();
     }
 
     private String updateHref(final String value) {
@@ -369,6 +378,6 @@ public final class CopyToModule extends AbstractPipelineModuleImpl {
    */
   private static boolean isOutFile(final URI filePathName, final URI inputMap) {
     final URI relativePath = URLUtils.getRelativePath(inputMap, filePathName);
-    return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+    return !(relativePath.getPath().isEmpty() || !relativePath.getPath().startsWith(".."));
   }
 }

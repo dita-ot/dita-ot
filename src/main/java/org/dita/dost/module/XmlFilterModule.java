@@ -41,22 +41,22 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
         .stream()
         .parallel()
         .forEach(f -> {
-          final URI file = job.tempDirURI.resolve(f.uri);
-          logger.info("Processing " + file);
+          final URI file = job.tempDirURI.resolve(f.uri());
+          logger.info("Processing {}", file);
           try {
             job.getStore().transform(file, getProcessingPipe(f));
           } catch (final DITAOTException e) {
-            logger.error("Failed to process XML filter: " + e.getMessage(), e);
+            logger.error("Failed to process XML filter: {}", e.getMessage(), e);
           }
         });
     } else {
       for (final FileInfo f : fis) {
-        final URI file = job.tempDirURI.resolve(f.uri);
-        logger.info("Processing " + file);
+        final URI file = job.tempDirURI.resolve(f.uri());
+        logger.info("Processing {}", file);
         try {
           job.getStore().transform(file, getProcessingPipe(f));
         } catch (final DITAOTException e) {
-          logger.error("Failed to process XML filter: " + e.getMessage(), e);
+          logger.error("Failed to process XML filter: {}", e.getMessage(), e);
         }
       }
     }
@@ -69,14 +69,14 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
    * @param fi current file being processed
    */
   private List<XMLFilter> getProcessingPipe(final FileInfo fi) {
-    final URI fileToParse = job.tempDirURI.resolve(fi.uri);
+    final URI fileToParse = job.tempDirURI.resolve(fi.uri());
     assert fileToParse.isAbsolute();
     return filters
       .stream()
       .filter(p -> p.predicate.test(fi))
       .map(FilterPair::newInstance)
       .peek(f -> {
-        logger.debug("Configure filter " + f.getClass().getCanonicalName());
+        logger.debug("Configure filter {}", f.getClass().getCanonicalName());
         f.setCurrentFile(fileToParse);
         f.setJob(job);
         f.setLogger(logger);
@@ -87,22 +87,11 @@ public final class XmlFilterModule extends AbstractPipelineModuleImpl {
   /**
    * SAX filter with file predicate.
    */
-  public static class FilterPair {
-
-    public final Class<? extends AbstractXMLFilter> filterClass;
-    public final Predicate<FileInfo> predicate;
-    public final Map<String, String> params;
-
-    public FilterPair(
-      final Class<? extends AbstractXMLFilter> filterClass,
-      final Predicate<FileInfo> fileInfoFilter,
-      final Map<String, String> params
-    ) {
-      this.filterClass = filterClass;
-      this.predicate = fileInfoFilter;
-      this.params = params;
-    }
-
+  public record FilterPair(
+    Class<? extends AbstractXMLFilter> filterClass,
+    Predicate<FileInfo> predicate,
+    Map<String, String> params
+  ) {
     public AbstractXMLFilter newInstance() {
       try {
         final AbstractXMLFilter f = filterClass.getDeclaredConstructor().newInstance();

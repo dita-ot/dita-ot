@@ -6,6 +6,7 @@
     <image class="- topic/image " href="img.jpg" placement="inline"/>
     <image class="- topic/image " href="img.png" placement="inline"/>
     <image class="- topic/image " href="img.gif" placement="inline"/>
+    <image class="- topic/image " href="img.svg" placement="inline"/>
     <image class="- topic/image " href="img.xxx" placement="inline"/>
   </body>
 </topic>

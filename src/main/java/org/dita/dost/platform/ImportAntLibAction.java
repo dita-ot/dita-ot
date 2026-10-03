@@ -32,7 +32,7 @@ final class ImportAntLibAction extends ImportAction {
       if (value instanceof Value.PathValue pathValue) {
         path = pathValue.getPath();
       } else {
-        logger.error("Ant import must be a file feature: " + value.value());
+        logger.error("Ant import must be a file feature: {}", value.value());
         continue;
       }
       final String resolvedValue = FileUtils.getRelativeUnixPath(templateFilePath, path);

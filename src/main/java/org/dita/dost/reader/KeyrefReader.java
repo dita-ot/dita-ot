@@ -9,13 +9,13 @@
 package org.dita.dost.reader;
 
 import static net.sf.saxon.s9api.streams.Predicates.isElement;
-import static net.sf.saxon.s9api.streams.Steps.child;
-import static net.sf.saxon.s9api.streams.Steps.precedingSibling;
+import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.module.filter.MapBranchFilterModule.BRANCH_COPY_TO;
 import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.KeyScope.ROOT_ID;
 import static org.dita.dost.util.URLUtils.toURI;
+import static org.dita.dost.util.XMLUtils.getCascadeValue;
 import static org.dita.dost.util.XMLUtils.rootElement;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -28,9 +28,7 @@ import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.expr.parser.Loc;
 import net.sf.saxon.om.*;
-import net.sf.saxon.s9api.XdmDestination;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XdmNodeKind;
+import net.sf.saxon.s9api.*;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.UncheckedXPathException;
 import net.sf.saxon.trans.XPathException;
@@ -235,6 +233,12 @@ public final class KeyrefReader implements AbstractReader {
   private void readKeyDefinition(final XdmNode elem, final Map<String, KeyDef> keyDefs) {
     final String keyName = elem.attribute(ATTRIBUTE_NAME_KEYS);
     if (keyName != null) {
+      final int ditaArchVersion = elem
+        .select(ancestorOrSelf().then(attribute(DITA_NAMESPACE, "DITAArchVersion")))
+        .findFirst()
+        .map(XdmItem::getStringValue)
+        .map(v -> (int) Math.floor(Double.parseDouble(v)))
+        .orElse(1);
       for (final String key : keyName.trim().split("\\s+")) {
         if (!keyDefs.containsKey(key)) {
           final XdmNode copy = elem;
@@ -245,9 +249,9 @@ public final class KeyrefReader implements AbstractReader {
                 ? copy.attribute(ATTRIBUTE_NAME_COPY_TO)
                 : copy.attribute(ATTRIBUTE_NAME_HREF)
           );
-          final String scope = copy.attribute(ATTRIBUTE_NAME_SCOPE);
+          final String scope = getCascadeValue(copy, ATTRIBUTE_NAME_SCOPE);
           final String format = copy.attribute(ATTRIBUTE_NAME_FORMAT);
-          final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy);
+          final KeyDef keyDef = new KeyDef(key, href, scope, format, currentFile, copy, ditaArchVersion);
           keyDefs.put(key, keyDef);
         }
       }
@@ -276,7 +280,8 @@ public final class KeyrefReader implements AbstractReader {
         oldKeyDef.scope,
         oldKeyDef.format,
         oldKeyDef.source,
-        oldKeyDef.element
+        oldKeyDef.element,
+        oldKeyDef.version
       );
       if (!keys.containsKey(newKeyDef.keys)) {
         keys.put(newKeyDef.keys, newKeyDef);
@@ -295,7 +300,7 @@ public final class KeyrefReader implements AbstractReader {
   }
 
   private KeyScope inheritParentKeys(final KeyScope current, final Map<String, KeyDef> parent) {
-    if (parent.keySet().isEmpty() && current.childScopes().isEmpty()) {
+    if (parent.isEmpty() && current.childScopes().isEmpty()) {
       return current;
     } else {
       final Map<String, KeyDef> resKeys = new HashMap<>();
@@ -346,7 +351,15 @@ public final class KeyrefReader implements AbstractReader {
         keyRefDef = resolveIntermediate(scope, keyRefDef, ct);
       }
       final XdmNode res = mergeMetadata(keyRefDef.element, elem);
-      return new KeyDef(keyDef.keys, keyRefDef.href, keyRefDef.scope, keyRefDef.format, keyRefDef.source, res);
+      return new KeyDef(
+        keyDef.keys,
+        keyRefDef.href,
+        keyRefDef.scope,
+        keyRefDef.format,
+        keyRefDef.source,
+        res,
+        keyRefDef.version
+      );
     } else {
       return keyDef;
     }

@@ -34,6 +34,7 @@ public final class MessageBean {
     WARN,
     INFO,
     DEBUG,
+    TRACE,
   }
 
   public static final String FATAL = Type.FATAL.name();
@@ -41,6 +42,7 @@ public final class MessageBean {
   public static final String WARN = Type.WARN.name();
   public static final String INFO = Type.INFO.name();
   public static final String DEBUG = Type.DEBUG.name();
+  public static final String TRACE = Type.TRACE.name();
 
   public final String id;
   public final Type type;

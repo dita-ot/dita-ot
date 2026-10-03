@@ -17,7 +17,7 @@
         },
         {
           "name": "args.cssroot",
-          "file": "../../resources"
+          "path": "../../resources"
         }
       ]
     }

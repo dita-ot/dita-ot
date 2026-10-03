@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map2?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/chunk_fix_anchor/preprocess/map2/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Reference//EN?><?doctype-system reference.dtd?><?Pub Inc?>
+<reference xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="reference1" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic reference)                            (topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic       reference/reference ">
+  <title class="- topic/title ">reference1</title>
+  <shortdesc class="- topic/shortdesc ">Put your short description here; used for first paragraph
+    and abstract.</shortdesc>
+  <refbody class="- topic/body        reference/refbody ">
+    <example class="- topic/example "><title class="- topic/title ">Sample</title>sample
+      content</example>
+  </refbody>
+</reference>

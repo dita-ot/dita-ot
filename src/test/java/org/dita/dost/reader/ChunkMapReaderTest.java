@@ -52,6 +52,7 @@ public class ChunkMapReaderTest {
     mapReader = new ChunkMapReader();
     mapReader.setLogger(logger);
     mapReader.setXmlUtils(xmlUtils);
+    mapReader.setCompatibilityMode(false);
   }
 
   @Test
@@ -120,7 +121,7 @@ public class ChunkMapReaderTest {
     );
 
     assertEquals(Collections.emptyMap(), mapReader.getConflicTable());
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   @Test
@@ -148,7 +149,7 @@ public class ChunkMapReaderTest {
       mapBuilder().put(prefixTemp("Chunk2.dita"), prefixTemp("Chunk1.dita")).build(),
       mapReader.getConflicTable()
     );
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Job createJob(final String map, final String... topics) throws IOException {
@@ -835,6 +836,7 @@ public class ChunkMapReaderTest {
 
     mapReader.setRootChunkOverride("to-content");
     mapReader.setJob(job);
+    mapReader.setCompatibilityMode(false);
 
     TestUtils.copy(new File(srcDir, "mapNoChunk.ditamap"), new File(tempDir, "mapNoChunk.ditamap"));
     job.add(

@@ -7,11 +7,10 @@
  */
 package org.dita.dost.util;
 
-import static org.dita.dost.util.Constants.INPUT_DIR;
-import static org.dita.dost.util.Constants.INPUT_DIR_URI;
+import static java.net.URI.create;
+import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,23 +18,30 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import org.dita.dost.TestUtils;
 import org.dita.dost.store.StreamStore;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.dita.dost.util.Job.FileInfo;
+import org.junit.jupiter.api.*;
 
 public final class JobTest {
 
   private static final File resourceDir = TestUtils.getResourceDir(JobTest.class);
   private static final File srcDir = new File(resourceDir, "src");
   private static File tempDir;
-  private static Job job;
+  private Job job;
 
   @BeforeAll
-  public static void setUp() throws IOException {
+  public static void setUpAll() throws IOException {
     tempDir = TestUtils.createTempDir(JobTest.class);
     TestUtils.copy(srcDir, tempDir);
+  }
+
+  @BeforeEach
+  public void setUp() throws IOException {
     job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
+  }
+
+  @AfterAll
+  public static void tearDown() throws IOException {
+    TestUtils.forceDelete(tempDir);
   }
 
   @Test
@@ -54,7 +60,7 @@ public final class JobTest {
   public void testGetFileInfo() throws URISyntaxException {
     final URI relative = new URI("foo/bar.dita");
     final URI absolute = tempDir.toURI().resolve(relative);
-    final Job.FileInfo fi = new Job.FileInfo.Builder().uri(relative).build();
+    final FileInfo fi = FileInfo.builder().uri(relative).build();
     job.add(fi);
     assertEquals(fi, job.getFileInfo(relative));
     assertEquals(fi, job.getFileInfo(absolute));
@@ -76,7 +82,7 @@ public final class JobTest {
   public void write_performance_large() throws IOException {
     for (int i = 0; i < 60_000; i++) {
       job.add(
-        Job.FileInfo
+        FileInfo
           .builder()
           .src(new File(tempDir, "topic_" + i + ".dita").toURI())
           .uri(new File("topic_" + i + ".dita").toURI())
@@ -93,8 +99,170 @@ public final class JobTest {
     System.out.println(((end - start)) + " ms");
   }
 
-  @AfterAll
-  public static void tearDown() throws IOException {
-    TestUtils.forceDelete(tempDir);
+  @Test
+  public void getCommonBase_unix() {
+    if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+      assertEquals(create("file:/foo/bar/"), job.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/bar/b")));
+      assertEquals(create("file:/foo/"), job.getCommonBase(create("file:/foo/a"), create("file:/foo/bar/b")));
+      assertEquals(create("file:/foo/"), job.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/b")));
+      assertEquals(create("file:/foo/"), job.getCommonBase(create("file:/foo/bar/a"), create("file:/foo/baz/b")));
+      assertEquals(create("file:/"), job.getCommonBase(create("file:/foo/a/b/c"), create("file:/bar/b/c/d")));
+      assertNull(job.getCommonBase(create("file:/foo/bar/a"), create("https://example.com/baz/b")));
+    }
+  }
+
+  @Test
+  public void getCommonBase_windows() {
+    if (OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
+      assertEquals(create("file:/F:/bar/"), job.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/bar/b")));
+      assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/a"), create("file:/F:/bar/b")));
+      assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/b")));
+      assertEquals(create("file:/F:/"), job.getCommonBase(create("file:/F:/bar/a"), create("file:/F:/baz/b")));
+      assertNull(job.getCommonBase(create("file:/C:/a"), create("file:/D:/b")));
+      assertNull(job.getCommonBase(create("file:/f:/bar/a"), create("https://example.com/baz/b")));
+    }
+  }
+
+  @Test
+  public void getResultBaseDir() {
+    job.setInputDir(create("file:/foo/bar/"));
+    job.add(
+      FileInfo.builder().uri(create("map.ditamap")).isInput(true).result(create("file:/foo/bar/map.ditamap")).build()
+    );
+    job.add(
+      FileInfo.builder().uri(create("topics/topic.dita")).result(create("file:/foo/bar/topics/topic.dita")).build()
+    );
+    job.add(FileInfo.builder().uri(create("topics/null.dita")).build());
+    job.add(
+      FileInfo.builder().uri(create("topics/task.dita")).result(create("file:/foo/bar/topics/task.dita")).build()
+    );
+    job.add(
+      FileInfo.builder().uri(create("common/topic.dita")).result(create("file:/foo/bar/common/topic.dita")).build()
+    );
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getBaseDirExternal() {
+    job.setInputDir(create("file:/foo/bar/"));
+    job.add(
+      FileInfo.builder().uri(create("map.ditamap")).isInput(true).result(create("file:/foo/bar/map.ditamap")).build()
+    );
+    job.add(
+      FileInfo
+        .builder()
+        .uri(create("topics/topic.dita"))
+        .result(create("https://example.com/topics/bar/topics/topic.dita"))
+        .build()
+    );
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getBaseDirSubdir() {
+    job.setInputDir(create("file:/foo/bar/maps/"));
+    job.add(
+      FileInfo
+        .builder()
+        .uri(create("maps/map.ditamap"))
+        .isInput(true)
+        .result(create("file:/foo/bar/maps/map.ditamap"))
+        .build()
+    );
+    job.add(
+      FileInfo.builder().uri(create("topics/topic.dita")).result(create("file:/foo/bar/topics/topic.dita")).build()
+    );
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getBaseDirSupdir() {
+    job.setInputDir(create("file:/foo/bar/maps/"));
+    job.add(
+      FileInfo
+        .builder()
+        .uri(create("maps/map.ditamap"))
+        .isInput(true)
+        .result(create("file:/foo/bar/maps/map.ditamap"))
+        .build()
+    );
+    job.add(FileInfo.builder().uri(create("topics/topic.dita")).result(create("file:/foo/bar/topic.dita")).build());
+
+    assertEquals(create("file:/foo/bar/"), job.getResultBaseDir());
+  }
+
+  @Test
+  public void getBaseDirResourceOnly() {
+    job.getFileInfo().forEach(job::remove);
+
+    job.setInputDir(create("file:/main/maps/"));
+    job.add(
+      FileInfo
+        .builder()
+        .uri(create("main/maps/map.ditamap"))
+        .isInput(true)
+        .result(create("file:/main/maps/map.ditamap"))
+        .build()
+    );
+    job.add(
+      FileInfo.builder().uri(create("main/topics/topic.dita")).result(create("file:/main/topics/topic.dita")).build()
+    );
+    job.add(
+      FileInfo
+        .builder()
+        .uri(create("reuse/reuse.dita"))
+        .result(create("file:/reuse/reuse.dita"))
+        .isResourceOnly(true)
+        .build()
+    );
+
+    assertEquals(create("file:/main/"), job.getResultBaseDir());
+  }
+
+  @Nested
+  class Builder {
+
+    @Test
+    void uri() {
+      var act = FileInfo.builder().uri(create("uri.dita")).build();
+      assertEquals(create("uri.dita"), act.uri());
+      assertEquals(new File("uri.dita"), act.file());
+      assertNull(act.result());
+    }
+
+    @Test
+    void file() {
+      var act = FileInfo.builder().file(new File("file.dita")).build();
+      assertEquals(create("file.dita"), act.uri());
+      assertEquals(new File("file.dita"), act.file());
+      assertNull(act.result());
+    }
+
+    @Test
+    void withoutUriOrFile() {
+      assertThrows(IllegalStateException.class, () -> FileInfo.builder().build());
+    }
+
+    @Test
+    void src() {
+      var act = FileInfo.builder().src(create("file:///src.dita")).uri(create("uri.dita")).build();
+      assertEquals(create("file:///src.dita"), act.src());
+      assertEquals(create("file:///src.dita"), act.result());
+    }
+
+    @Test
+    void result() {
+      var act = FileInfo
+        .builder()
+        .src(create("file:///src.dita"))
+        .uri(create("uri.dita"))
+        .result(create("file:///result.dita"))
+        .build();
+      assertEquals(create("file:///src.dita"), act.src());
+      assertEquals(create("file:///result.dita"), act.result());
+    }
   }
 }

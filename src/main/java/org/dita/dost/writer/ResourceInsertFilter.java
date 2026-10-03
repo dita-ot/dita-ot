@@ -33,7 +33,7 @@ public final class ResourceInsertFilter extends AbstractXMLFilter {
     super.startElement(uri, localName, qName, atts);
     if (!added) {
       for (URI resource : resources) {
-        logger.info("add resource " + resource);
+        logger.info("add resource {}", resource);
         super.startElement(
           NULL_NS_URI,
           MAP_TOPICREF.localName,

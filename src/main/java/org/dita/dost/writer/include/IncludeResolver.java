@@ -56,7 +56,7 @@ public class IncludeResolver extends AbstractXMLFilter {
 
   // Variables ---------------------------------------------------------------
 
-  private Deque<Boolean> ignoreDepth = new ArrayDeque<>();
+  private final Deque<Boolean> ignoreDepth = new ArrayDeque<>();
   private final Deque<Deque<StackItem>> includeStack = new ArrayDeque<>();
   private Configuration.Mode processingMode;
 
@@ -124,13 +124,13 @@ public class IncludeResolver extends AbstractXMLFilter {
         try {
           final URI hrefValue = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
           if (hrefValue != null) {
-            logger.debug("Resolve " + localName + " " + currentFile.resolve(hrefValue));
+            logger.debug("Resolve {} {}", localName, currentFile.resolve(hrefValue));
             final String parse = getParse(atts.getValue(ATTRIBUTE_NAME_PARSE));
             switch (parse) {
               case "text" -> include =
                 new IncludeText(job, currentFile, getContentHandler(), logger, processingMode).include(atts);
               case "xml" -> include = new IncludeXml(job, currentFile, getContentHandler(), logger).include(atts);
-              default -> logger.error("Unsupported include parse " + parse);
+              default -> logger.error("Unsupported include parse {}", parse);
             }
           }
         } catch (final RuntimeException e) {
@@ -161,7 +161,7 @@ public class IncludeResolver extends AbstractXMLFilter {
 
     if (TOPIC_INCLUDE.matches(stackItem.cls) || PR_D_CODEREF.matches(stackItem.cls)) {
       final Deque<StackItem> pop = includeStack.pop();
-      assert pop.size() == 0;
+      assert pop.isEmpty();
       final Deque<StackItem> parentStack = includeStack.peek();
       parentStack.pop();
       // ignore
@@ -175,7 +175,7 @@ public class IncludeResolver extends AbstractXMLFilter {
   }
 
   @Override
-  public void characters(char ch[], int start, int length) throws SAXException {
+  public void characters(char[] ch, int start, int length) throws SAXException {
     final Deque<StackItem> elementStack = includeStack.peek();
     if (!elementStack.peek().include) {
       return;
@@ -184,7 +184,7 @@ public class IncludeResolver extends AbstractXMLFilter {
   }
 
   @Override
-  public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
+  public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
     final Deque<StackItem> elementStack = includeStack.peek();
     if (!elementStack.peek().include) {
       return;

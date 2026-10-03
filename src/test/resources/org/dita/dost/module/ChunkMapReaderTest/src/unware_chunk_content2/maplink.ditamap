@@ -1,0 +1,11 @@
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" class="- map/map "
+  domains="(map mapgroup-d)                            (topic abbrev-d)                            (topic delay-d)                            a(props deliveryTarget)                            (map ditavalref-d)                            (map glossref-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  id="link" title="maplink" ditaarch:DITAArchVersion="1.3">
+  <topicref chunk="to-content" class="- map/topicref " href="one.dita">
+    <topicref class="- map/topicref " href="one.dita">
+      <topicref class="- map/topicref " href="one.dita">
+        <topicref class="- map/topicref " href="one.dita"/>
+      </topicref>
+    </topicref>
+  </topicref>
+</map>

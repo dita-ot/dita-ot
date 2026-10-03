@@ -33,25 +33,25 @@ public class XmlReaderTest {
       final ProjectBuilder project = xmlReader.read(in, URI.create("classpath:org/dita/dost/project/simple.xml"));
       assertEquals(1, project.deliverables.size());
       final ProjectBuilder.Deliverable deliverable = project.deliverables.get(0);
-      assertEquals("Name", deliverable.name);
-      assertEquals("site", deliverable.id);
-      assertNotNull(deliverable.context);
-      assertEquals("Site", deliverable.context.name);
-      assertEquals("site", deliverable.context.id);
-      assertEquals(null, deliverable.context.idref);
-      assertNotNull(deliverable.context.input);
-      assertEquals(1, deliverable.context.profiles.ditavals.size());
-      assertEquals("./site", deliverable.output.toString());
-      final ProjectBuilder.Publication publication = deliverable.publication;
-      assertEquals("Site", publication.name);
-      assertEquals("sitePub", publication.id);
-      assertEquals(null, publication.idref);
-      assertEquals("html5", publication.transtype);
-      assertEquals(5, publication.params.size());
-      assertEquals("args.gen.task.lbl", publication.params.get(0).name);
-      assertEquals("YES", publication.params.get(0).value);
-      assertEquals(null, publication.params.get(0).href);
-      assertEquals("", publication.params.get(4).value);
+      assertEquals("Name", deliverable.name());
+      assertEquals("site", deliverable.id());
+      assertNotNull(deliverable.context());
+      assertEquals("Site", deliverable.context().name());
+      assertEquals("site", deliverable.context().id());
+      assertNull(deliverable.context().idref());
+      assertNotNull(deliverable.context().input());
+      assertEquals(1, deliverable.context().profiles().ditavals().size());
+      assertEquals("./site", deliverable.output().toString());
+      final ProjectBuilder.Publication publication = deliverable.publication();
+      assertEquals("Site", publication.name());
+      assertEquals("sitePub", publication.id());
+      assertNull(publication.idref());
+      assertEquals("html5", publication.transtype());
+      assertEquals(5, publication.params().size());
+      assertEquals("args.gen.task.lbl", publication.params().get(0).name());
+      assertEquals("YES", publication.params().get(0).value());
+      assertNull(publication.params().get(0).href());
+      assertEquals("", publication.params().get(4).value());
       assertTrue(project.includes.isEmpty());
       assertTrue(project.publications.isEmpty());
       assertTrue(project.contexts.isEmpty());
@@ -75,7 +75,7 @@ public class XmlReaderTest {
       final ProjectBuilder project = xmlReader.read(input, null);
       assertEquals(1, project.deliverables.size());
       assertEquals(0, project.publications.size());
-      assertEquals("common-sitePub2", project.deliverables.get(0).publication.idref);
+      assertEquals("common-sitePub2", project.deliverables.get(0).publication().idref());
     }
   }
 

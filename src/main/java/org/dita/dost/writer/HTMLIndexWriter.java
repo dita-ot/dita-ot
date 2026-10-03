@@ -11,9 +11,8 @@ package org.dita.dost.writer;
 import static javax.xml.transform.OutputKeys.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.List;
 import javax.xml.transform.Transformer;
 import org.dita.dost.exception.DITAOTException;
@@ -38,14 +37,12 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
 
   @Override
   public void write(final File filename) throws DITAOTException {
-    OutputStream out = null;
-    try {
-      out = new FileOutputStream(filename);
+    try (var out = Files.newOutputStream(filename.toPath())) {
       final XMLSerializer serializer = XMLSerializer.newInstance(out);
       final Transformer transformer = serializer.getTransformerHandler().getTransformer();
       transformer.setOutputProperty(DOCTYPE_PUBLIC, "-//IETF//DTD HTML//EN");
       transformer.setOutputProperty(METHOD, "html");
-      transformer.setOutputProperty(ENCODING, "UTF-8");
+      transformer.setOutputProperty(ENCODING, StandardCharsets.UTF_8.name());
 
       serializer.writeStartDocument();
       serializer.writeStartElement("html");
@@ -78,14 +75,6 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
       serializer.writeEndDocument();
     } catch (final Exception e) {
       throw new DITAOTException(e);
-    } finally {
-      if (out != null) {
-        try {
-          out.close();
-        } catch (final IOException e) {
-          logger.error(e.getMessage(), e);
-        }
-      }
     }
   }
 
@@ -117,7 +106,7 @@ public final class HTMLIndexWriter extends AbstractExtendDitaWriter {
       serializer.writeCharacters(term.getTermFullName());
       serializer.writeEndElement(); // a
     }
-    if (subTerms.size() > 0) {
+    if (!subTerms.isEmpty()) {
       serializer.writeStartElement("ul");
       for (final IndexTerm subTerm : subTerms) {
         outputIndexTerm(subTerm, serializer);

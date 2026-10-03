@@ -22,6 +22,7 @@ public final class DitaMapMetaWriter extends AbstractDitaMetaWriter {
   private static final List<DitaClass> topicmetaPosition = Collections.singletonList(TOPIC_TITLE);
   private static final List<DitaClass> topicmetaOrder = Collections.unmodifiableList(
     Arrays.asList(
+      TOPIC_TITLEALT,
       TOPIC_NAVTITLE,
       MAP_LINKTEXT,
       TOPIC_LINKTEXT,

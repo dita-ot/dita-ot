@@ -13,6 +13,8 @@ import static org.dita.dost.util.URLUtils.*;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import org.dita.dost.exception.DITAOTException;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.log.DITAOTLogger;
 
 /**
@@ -143,6 +145,13 @@ public final class MergeUtils {
     final TopicIdParser parser = new TopicIdParser(firstTopicId);
     try {
       job.getStore().transform(file, parser);
+    } catch (RuntimeException e) {
+      throw e;
+    } catch (DITAOTException e) {
+      if (e.getCause() instanceof StopParsingException) {
+        // expected exit
+      }
+      logger.error(e.getMessage(), e);
     } catch (final Exception e) {
       logger.error(e.getMessage(), e);
     }

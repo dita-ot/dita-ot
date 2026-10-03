@@ -13,6 +13,7 @@ import static org.dita.dost.util.Constants.*;
 import static org.dita.dost.util.DitaUtils.isLocalScope;
 import static org.dita.dost.util.URLUtils.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.net.URI;
 import java.util.Map;
@@ -20,11 +21,8 @@ import java.util.Objects;
 import javax.xml.namespace.QName;
 import org.dita.dost.module.DebugAndFilterModule;
 import org.dita.dost.module.reader.TempFileNameScheme;
-import org.dita.dost.util.Constants;
+import org.dita.dost.util.*;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -63,6 +61,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   /** File infos by src. */
   private Map<URI, FileInfo> fileInfoMap;
   private TempFileNameScheme tempFileNameScheme;
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
 
   public DitaWriterFilter() {}
 
@@ -87,18 +86,14 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     getContentHandler().endElement(uri, localName, qName);
+
+    attributeStack.pop();
   }
 
   @Override
   public void startDocument() throws SAXException {
     // XXX May be require fixup
-    final URI relativeToMap = URLUtils.getRelativePath(job.getInputFile(), currentFile);
-    final File path2Project = DebugAndFilterModule.getPathtoProject(
-      toFile(relativeToMap),
-      toFile(currentFile),
-      toFile(job.getInputFile()),
-      job
-    );
+    final File path2Project = DebugAndFilterModule.getPathtoProject(toFile(currentFile), job);
     final File path2rootmap = toFile(getRelativePath(currentFile, job.getInputFile())).getParentFile();
     getContentHandler().startDocument();
     if (!OS_NAME.toLowerCase().contains(OS_NAME_WINDOWS)) {
@@ -110,7 +105,7 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
     getContentHandler().processingInstruction(PI_WORKDIR_TARGET_URI, outputFile.toURI().resolve(".").toString());
     getContentHandler().ignorableWhitespace(new char[] { '\n' }, 0, 1);
-    if (path2Project != null) {
+    if (!path2Project.getPath().isEmpty()) {
       getContentHandler().processingInstruction(PI_PATH2PROJ_TARGET, path2Project.getPath() + File.separator);
       getContentHandler()
         .processingInstruction(PI_PATH2PROJ_TARGET_URI, toURI(path2Project).toString() + URI_SEPARATOR);
@@ -130,6 +125,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     final Attributes res = processAttributes(qName, atts);
 
     getContentHandler().startElement(uri, localName, qName, res);
@@ -141,7 +138,8 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
    * @param qName element name
    * @param atts input attributes
    */
-  private Attributes processAttributes(final String qName, final Attributes atts) {
+  @VisibleForTesting
+  Attributes processAttributes(final String qName, final Attributes atts) {
     AttributesImpl res = null;
     final int attsLen = atts.getLength();
     for (int i = 0; i < attsLen; i++) {
@@ -156,15 +154,16 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
         }
         attValue = replaceHREF(ATTRIBUTE_NAME_CONREF, atts).toString();
       } else if (ATTRIBUTE_NAME_HREF.equals(attName) || ATTRIBUTE_NAME_COPY_TO.equals(attName)) {
-        if (isLocalScope(atts.getValue(ATTRIBUTE_NAME_SCOPE))) {
+        var scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
+        if (isLocalScope(scope)) {
           if (res == null) {
             res = new AttributesImpl(atts);
           }
           attValue = replaceHREF(attName, atts).toString();
         }
       } else if (ATTRIBUTE_NAME_FORMAT.equals(attName)) {
-        final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-        final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+        final String format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+        final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
         // verify format is correct
         if (isFormatDita(format) && isLocalScope(scope)) {
           if (res == null) {
@@ -234,13 +233,13 @@ public final class DitaWriterFilter extends AbstractXMLFilter {
       if (fragment != null) {
         attValue = stripFragment(attValue);
       }
-      if (attValue.toString().length() != 0) {
+      if (!attValue.toString().isEmpty()) {
         final URI current = currentFile.resolve(attValue);
         final FileInfo f = job.getFileInfo(current);
         if (f != null) {
           final FileInfo cfi = job.getFileInfo(currentFile);
-          final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri);
-          final URI targetTemp = job.tempDirURI.resolve(f.uri);
+          final URI currrentFileTemp = job.tempDirURI.resolve(cfi.uri());
+          final URI targetTemp = job.tempDirURI.resolve(f.uri());
           attValue = getRelativePath(currrentFileTemp, targetTemp);
         } else if (tempFileNameScheme != null) {
           final URI currrentFileTemp = job.tempDirURI.resolve(tempFileNameScheme.generateTempFileName(currentFile));

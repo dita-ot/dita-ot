@@ -170,7 +170,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
         rootTopicref.getParentNode().appendChild(siblingStub);
       }
 
-      logger.info("Processing " + currentParsingFile);
+      logger.info("Processing {}", currentParsingFile);
       job.getStore().transform(currentParsingFile, this);
       output.flush();
 
@@ -186,10 +186,10 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
           output = null;
           if (dotchunk) {
             if (job.getStore().exists(currentParsingFile)) {
-              logger.debug("Delete " + currentParsingFile);
+              logger.debug("Delete {}", currentParsingFile);
               job.getStore().delete(currentParsingFile);
             }
-            logger.debug("Move " + outputFile + " to " + currentParsingFile);
+            logger.debug("Move {} to {}", outputFile, currentParsingFile);
             job.getStore().move(outputFile, currentParsingFile);
             final FileInfo fi = job.getFileInfo(outputFile);
             if (fi != null) {
@@ -243,7 +243,7 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
       final Document doc = job.getStore().getDocument(absolutePathToFile);
       return doc.getDocumentElement();
     } catch (final IOException e) {
-      logger.error("Failed to parse " + absolutePathToFile + ": " + e.getMessage(), e);
+      logger.error("Failed to parse {}: {}", absolutePathToFile, e.getMessage(), e);
     }
     return null;
   }
@@ -255,9 +255,9 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     final FileInfo srcFi = job.getFileInfo(base);
     final URI dst;
     if (file != null) {
-      dst = srcFi.result.resolve(file);
+      dst = srcFi.result().resolve(file);
     } else {
-      dst = setPath(srcFi.result, srcFi.result.getPath() + FILE_EXTENSION_CHUNK);
+      dst = setPath(srcFi.result(), srcFi.result().getPath() + FILE_EXTENSION_CHUNK);
     }
     final URI tmp = tempFileNameScheme.generateTempFileName(dst);
 
@@ -273,6 +273,8 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
+
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     final String id = atts.getValue(ATTRIBUTE_NAME_ID);
     final AttributesImpl attsMod = new AttributesImpl(atts);
@@ -407,5 +409,6 @@ public final class SeparateChunkTopicParser extends AbstractChunkTopicParser {
     }
 
     lang.pop();
+    attributeStack.pop();
   }
 }

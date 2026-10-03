@@ -480,7 +480,7 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
         if (!alreadyDeclared) {
           String prefix = null;
           String rawname = a.localName();
-          if (a.namespace() != null && a.namespace().length() > 0) {
+          if (a.namespace() != null && !a.namespace().isEmpty()) {
             prefix = context.getPrefix(a.namespace());
             if (prefix == null) {
               for (int i = 0; i < atts.getLength(); i++) {
@@ -493,7 +493,7 @@ public class RelaxNGDefaultsComponent implements XMLDocumentHandler, XMLComponen
               }
             }
 
-            if (prefix != null && prefix.length() > 0) {
+            if (prefix != null && !prefix.isEmpty()) {
               rawname = prefix + ":" + a.localName();
               // double check in case of no namespace aware parsers.
               // if we want to fully handle this case we may need further

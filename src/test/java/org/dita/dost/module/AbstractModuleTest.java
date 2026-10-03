@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
@@ -43,8 +44,8 @@ import org.xml.sax.SAXException;
 
 public abstract class AbstractModuleTest {
 
-  File resourceDir = TestUtils.getResourceDir(getClass());
-  File expBaseDir = new File(resourceDir, "exp");
+  final File resourceDir = TestUtils.getResourceDir(getClass());
+  final File expBaseDir = new File(resourceDir, "exp");
 
   @TempDir
   protected File tempBaseDir;
@@ -151,18 +152,15 @@ public abstract class AbstractModuleTest {
   protected void initStore(Store cache) {
     if (cache instanceof CacheStore) {
       final File srcDir = new File(resourceDir, "src" + File.separator + testCase);
-      try {
-        Files
-          .walk(srcDir.toPath())
-          .filter(Files::isRegularFile)
-          .forEach(src -> {
-            final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
-            try (OutputStream out = cache.getOutputStream(dst)) {
-              Files.copy(src, out);
-            } catch (IOException e) {
-              throw new UncheckedIOException(e);
-            }
-          });
+      try (Stream<Path> files = Files.walk(srcDir.toPath()).filter(Files::isRegularFile)) {
+        files.forEach(src -> {
+          final URI dst = tempDir.toPath().resolve(srcDir.toPath().relativize(src)).toUri();
+          try (OutputStream out = cache.getOutputStream(dst)) {
+            Files.copy(src, out);
+          } catch (IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        });
       } catch (IOException e) {
         throw new UncheckedIOException(e);
       }
@@ -192,8 +190,8 @@ public abstract class AbstractModuleTest {
       logger
         .getMessages()
         .stream()
-        .filter(m -> m.level == Message.Level.ERROR)
-        .forEach(m -> System.err.println(m.level + ": " + m.message));
+        .filter(m -> m.level() == Message.Level.ERROR)
+        .forEach(m -> System.err.println(m.level() + ": " + m.message()));
     } catch (final Exception e) {
       throw new RuntimeException(e);
     }

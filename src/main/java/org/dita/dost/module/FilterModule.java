@@ -77,11 +77,11 @@ final class FilterModule extends AbstractPipelineModuleImpl {
     }
 
     for (final FileInfo f : job.getFileInfo(fileInfoFilter)) {
-      final File file = new File(job.tempDir, f.file.getPath());
-      logger.info("Processing " + file.getAbsolutePath());
+      final File file = new File(job.tempDir, f.file().getPath());
+      logger.info("Processing {}", file.getAbsolutePath());
 
       subjectSchemeReader.reset();
-      final Set<URI> schemaSet = dic.get(f.uri);
+      final Set<URI> schemaSet = dic.get(f.uri());
       if (schemaSet != null && !schemaSet.isEmpty()) {
         logger.info("Loading subject schemes");
         for (final URI schema : schemaSet) {
@@ -98,12 +98,12 @@ final class FilterModule extends AbstractPipelineModuleImpl {
       try {
         writer.write(file.getAbsoluteFile());
         if (!writer.hasElementOutput()) {
-          logger.info("All content in " + file.getAbsolutePath() + " was filtered out");
+          logger.info("All content in {} was filtered out", file.getAbsolutePath());
           job.remove(f);
           FileUtils.delete(file);
         }
       } catch (final Exception e) {
-        logger.error("Failed to profile " + file.getAbsolutePath() + ": " + e.getMessage());
+        logger.error("Failed to profile {}: {}", file.getAbsolutePath(), e.getMessage());
       }
     }
 

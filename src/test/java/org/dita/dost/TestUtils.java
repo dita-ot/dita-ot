@@ -8,14 +8,19 @@
 package org.dita.dost;
 
 import static org.apache.commons.io.FileUtils.copyFile;
+import static org.dita.dost.log.AbstractLogger.addIndex;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.xmlunit.util.IterableNodeList.asList;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -122,23 +127,9 @@ public class TestUtils {
    * @throws IOException if reading file failed
    */
   public static String readFileToString(final File file, final boolean ignoreHead) throws IOException {
-    final StringBuilder std = new StringBuilder();
-    try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-      boolean firstLine = true;
-      if (ignoreHead) {
-        in.readLine();
-      }
-      String str;
-      while ((str = in.readLine()) != null) {
-        if (!firstLine) {
-          std.append("\n");
-        } else {
-          firstLine = false;
-        }
-        std.append(str);
-      }
+    try (BufferedReader in = Files.newBufferedReader(file.toPath())) {
+      return in.lines().skip(ignoreHead ? 1 : 0).collect(Collectors.joining("\n"));
     }
-    return std.toString();
   }
 
   /**
@@ -151,7 +142,7 @@ public class TestUtils {
    */
   public static String readXmlToString(final File file, final boolean normalize, final boolean clean) throws Exception {
     final Writer std = new CharArrayWriter();
-    try (InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+    try (InputStream in = new BufferedInputStream(Files.newInputStream(file.toPath()))) {
       final Transformer serializer = TransformerFactory.newInstance().newTransformer();
       XMLReader p = XMLReaderFactory.createXMLReader();
       p.setEntityResolver(CatalogUtils.getCatalogResolver());
@@ -262,32 +253,59 @@ public class TestUtils {
     final XMLReader parser = XMLReaderFactory.createXMLReader();
     parser.setEntityResolver(CatalogUtils.getCatalogResolver());
     try (
-      InputStream in = new BufferedInputStream(new FileInputStream(src));
-      OutputStream out = new BufferedOutputStream(new FileOutputStream(dst))
+      InputStream in = new BufferedInputStream(Files.newInputStream(src.toPath()));
+      OutputStream out = new BufferedOutputStream(Files.newOutputStream(dst.toPath()))
     ) {
       serializer.transform(new SAXSource(parser, new InputSource(in)), new StreamResult(out));
     }
   }
 
+  public static void assertAttributesEquals(Attributes exp, Attributes act) {
+    assertEquals(
+      exp.getLength(),
+      act.getLength(),
+      "expected: <%s> but was: <%s>".formatted(
+          IntStream.range(0, exp.getLength()).mapToObj(exp::getLocalName).toList(),
+          IntStream.range(0, act.getLength()).mapToObj(act::getLocalName).toList()
+        )
+    );
+    for (int i = 0; i < exp.getLength(); i++) {
+      var j = act.getIndex(exp.getURI(i), exp.getLocalName(i));
+      assertNotEquals(-1, j);
+      assertEquals(exp.getType(i), act.getType(j));
+      assertEquals(exp.getValue(i), act.getValue(j));
+    }
+  }
+
   public static void assertXMLEqual(Document exp, Document act) {
-    final Diff d = DiffBuilder
-      .compare(ignoreComments(exp))
-      .withTest(ignoreComments(act))
+    assertXMLEqual(exp, act, "");
+  }
+
+  public static void assertXMLEqual(Document exp, Document act, String message) {
+    final Diff diff = DiffBuilder
+      .compare(exp)
+      .withTest(act)
+      .ignoreComments()
       .ignoreWhitespace()
       .normalizeWhitespace()
       .withNodeFilter(node -> node.getNodeType() != Node.PROCESSING_INSTRUCTION_NODE)
       .build();
-    if (d.hasDifferences()) {
+    if (diff.hasDifferences()) {
+      var errorMessage = message + System.lineSeparator() + diff.fullDescription() + System.lineSeparator();
+      System.out.print(errorMessage);
+      var expWriter = new StringWriter();
+      var actWriter = new StringWriter();
       try {
         var transformerFactory = TransformerFactory.newInstance();
-        transformerFactory.newTransformer().transform(new DOMSource(exp), new StreamResult(System.out));
-        System.out.println();
-        transformerFactory.newTransformer().transform(new DOMSource(act), new StreamResult(System.out));
-        System.out.println();
+        var transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(new DOMSource(exp), new StreamResult(expWriter));
+        transformer.transform(new DOMSource(act), new StreamResult(actWriter));
       } catch (TransformerException ex) {
-        //
+        fail(errorMessage);
       }
-      throw new AssertionError(d.toString());
+      assertEquals(expWriter, actWriter, errorMessage);
     }
   }
 
@@ -461,21 +479,21 @@ public class TestUtils {
     @Override
     public void error(String format, Object arg) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arg));
       }
     }
 
     @Override
     public void error(String format, Object arg1, Object arg2) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arg1, arg2));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arg1, arg2));
       }
     }
 
     @Override
     public void error(String format, Object... arguments) {
       if (failOnError) {
-        throw new AssertionError("Error message was thrown: " + MessageFormat.format(format, arguments));
+        throw new AssertionError("Error message was thrown: " + MessageFormat.format(addIndex(format), arguments));
       }
     }
 
@@ -556,17 +574,17 @@ public class TestUtils {
 
     @Override
     public void info(String format, Object arg) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void info(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
     public void info(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.INFO, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.INFO, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override
@@ -585,17 +603,17 @@ public class TestUtils {
 
     @Override
     public void warn(String format, Object arg) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void warn(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override
     public void warn(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.WARN, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.WARN, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
@@ -621,7 +639,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arg), null));
       }
     }
 
@@ -630,7 +648,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arg1, arg2), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arg1, arg2), null));
       }
     }
 
@@ -639,7 +657,7 @@ public class TestUtils {
       if (strict) {
         throw new RuntimeException();
       } else {
-        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(format, arguments), null));
+        buf.add(new Message(Message.Level.ERROR, MessageFormat.format(addIndex(format), arguments), null));
       }
     }
 
@@ -682,17 +700,17 @@ public class TestUtils {
 
     @Override
     public void debug(String format, Object arg) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arg), null));
     }
 
     @Override
     public void debug(String format, Object arg1, Object arg2) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arg1, arg2), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arg1, arg2), null));
     }
 
     @Override
     public void debug(String format, Object... arguments) {
-      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(format, arguments), null));
+      buf.add(new Message(Message.Level.DEBUG, MessageFormat.format(addIndex(format), arguments), null));
     }
 
     @Override
@@ -705,24 +723,13 @@ public class TestUtils {
       return true;
     }
 
-    public static final class Message {
-
+    public record Message(Level level, String message, Throwable exception) {
       public enum Level {
         DEBUG,
         INFO,
         WARN,
         ERROR,
         FATAL,
-      }
-
-      public final Level level;
-      public final String message;
-      public final Throwable exception;
-
-      public Message(final Level level, final String message, final Throwable exception) {
-        this.level = level;
-        this.message = message;
-        this.exception = exception;
       }
 
       @Override
@@ -735,11 +742,6 @@ public class TestUtils {
           Objects.equals(message, message1.message) &&
           Objects.equals(exception, message1.exception)
         );
-      }
-
-      @Override
-      public int hashCode() {
-        return Objects.hash(level, message, exception);
       }
 
       @Override

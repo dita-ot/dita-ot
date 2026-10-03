@@ -32,7 +32,7 @@ import org.dita.dost.writer.IDitaTranstypeIndexWriter;
 public final class IndexTermCollection {
 
   /** The collection of index terms. */
-  private static IndexTermCollection collection = null;
+  private static final IndexTermCollection collection = null;
   /** The list of all index term. */
   private final List<IndexTerm> termList = new ArrayList<>(16);
 
@@ -134,7 +134,7 @@ public final class IndexTermCollection {
    * Sort term list extracted from dita files base on Locale.
    */
   public void sort() {
-    if (IndexTerm.getTermLocale() == null || IndexTerm.getTermLocale().getLanguage().trim().length() == 0) {
+    if (IndexTerm.getTermLocale() == null || IndexTerm.getTermLocale().getLanguage().trim().isEmpty()) {
       IndexTerm.setTermLocale(new Locale(LANGUAGE_EN, COUNTRY_US));
     }
 
@@ -157,7 +157,7 @@ public final class IndexTermCollection {
     StringBuilder buff = new StringBuilder(outputFileRoot);
     AbstractWriter abstractWriter = null;
 
-    if (indexClass != null && indexClass.length() > 0) {
+    if (indexClass != null && !indexClass.isEmpty()) {
       //Instantiate the class value
       Class<?> anIndexClass;
       try {

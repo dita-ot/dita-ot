@@ -15,7 +15,9 @@ import static org.dita.dost.util.XMLUtils.toMessageListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.s9api.*;
@@ -40,6 +42,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
 
   private Processor processor;
   private XsltExecutable templates;
+  private Map<String, String> parameters;
 
   private void init(final AbstractPipelineInput input) {
     processor = xmlUtils.getProcessor();
@@ -54,6 +57,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
         e
       );
     }
+    this.parameters = Collections.unmodifiableMap(input.getAttributes());
   }
 
   /**
@@ -64,7 +68,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     if (fileInfoFilter == null) {
-      fileInfoFilter = fileInfo -> fileInfo.format != null && fileInfo.format.equals(ATTR_FORMAT_VALUE_DITAMAP);
+      fileInfoFilter = fileInfo -> fileInfo.format() != null && fileInfo.format().equals(ATTR_FORMAT_VALUE_DITAMAP);
     }
     final Collection<FileInfo> fileInfos = job.getFileInfo(fileInfoFilter);
     if (fileInfos.isEmpty()) {
@@ -99,10 +103,10 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
    * Process map references in a map and store the result to temporary file.
    */
   private void processMap(final FileInfo input) throws DITAOTException {
-    final File inputFile = new File(job.tempDirURI.resolve(input.uri));
+    final File inputFile = new File(job.tempDirURI.resolve(input.uri()));
     final File outputFile = new File(inputFile.getAbsolutePath() + FILE_EXTENSION_TEMP);
 
-    logger.info("Processing " + inputFile.toURI());
+    logger.info("Processing {}", inputFile.toURI());
     Document doc;
     try {
       doc = xmlUtils.newDocument();
@@ -112,6 +116,7 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
       transformer.setMessageListener(toMessageListener(logger, processingMode));
 
       transformer.setParameter(new QName("file-being-processed"), XdmItem.makeValue(inputFile.getName()));
+      parameters.forEach((key, value) -> transformer.setParameter(new QName(key), XdmItem.makeValue(value)));
 
       final Source source = job.getStore().getSource(inputFile.toURI());
       transformer.setSource(source);
@@ -149,14 +154,14 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
   private FileInfo collectJobInfo(FileInfo fileInfo, Document doc) {
     final FileInfo.Builder builder = new FileInfo.Builder(fileInfo);
     final List<Element> elements = XMLUtils.toList(doc.getElementsByTagName("*"));
-    if (!fileInfo.hasConref) {
+    if (!fileInfo.hasConref()) {
       builder.hasConref(
         elements
           .stream()
           .anyMatch(e -> e.hasAttribute(ATTRIBUTE_NAME_CONREF) || e.hasAttribute(ATTRIBUTE_NAME_CONKEYREF))
       );
     }
-    if (!fileInfo.hasKeyref) {
+    if (!fileInfo.hasKeyref()) {
       builder.hasKeyref(
         elements
           .stream()
@@ -181,8 +186,8 @@ final class MaprefModule extends AbstractPipelineModuleImpl {
    * Store result map file to store.
    */
   private void replace(final FileInfo input) throws DITAOTException {
-    final File inputFile = new File(job.tempDirURI.resolve(input.uri + FILE_EXTENSION_TEMP));
-    final File outputFile = new File(job.tempDirURI.resolve(input.uri));
+    final File inputFile = new File(job.tempDirURI.resolve(input.uri() + FILE_EXTENSION_TEMP));
+    final File outputFile = new File(job.tempDirURI.resolve(input.uri()));
     try {
       job.getStore().move(inputFile.toURI(), outputFile.toURI());
     } catch (final IOException e) {

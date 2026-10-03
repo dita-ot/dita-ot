@@ -47,7 +47,7 @@ public class ProcessorTest {
   }
 
   @Test
-  public void testBroken() throws DITAOTException, IOException, URISyntaxException {
+  public void testBroken() throws IOException, URISyntaxException {
     assertThrows(
       DITAOTException.class,
       () -> {
@@ -64,7 +64,7 @@ public class ProcessorTest {
   }
 
   @Test
-  public void testCleanTempOnFailure() throws DITAOTException, IOException, URISyntaxException {
+  public void testCleanTempOnFailure() throws IOException, URISyntaxException {
     assertThrows(
       DITAOTException.class,
       () -> {

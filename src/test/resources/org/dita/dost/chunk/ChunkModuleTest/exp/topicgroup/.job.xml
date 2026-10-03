@@ -5,7 +5,7 @@
   <files>
     <file src="file:/a.dita" uri="a.dita" path="a.dita" format="dita" target="true"/>
     <file src="file:/topicgroup.ditamap" uri="topicgroup.ditamap" path="topicgroup.ditamap" format="ditamap"
-      input="true"/>
+          input="true"/>
     <file uri="Chunk1.dita" path="Chunk1.dita" format="dita"/>
     <file uri="Chunk2.dita" path="Chunk2.dita" format="dita"/>
   </files>

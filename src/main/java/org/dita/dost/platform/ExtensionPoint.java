@@ -17,7 +17,7 @@ import java.util.Objects;
  * @since 1.5.3
  * @author Jarno Elovirta
  */
-record ExtensionPoint(String id, String name) {
+public record ExtensionPoint(String id, String name) {
   public ExtensionPoint {
     Objects.requireNonNull(id);
   }

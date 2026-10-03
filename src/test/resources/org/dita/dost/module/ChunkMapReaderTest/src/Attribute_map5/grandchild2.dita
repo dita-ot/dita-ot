@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><?workdir /Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5?><?workdir-uri file:/Users/jelovirt/Work/dita-ot/src/main/temp/ChunkAttributeTest/preprocess/map5/?><?path2project?><?path2project-uri ./?><?doctype-public -//OASIS//DTD DITA Topic//EN?><?doctype-system topic.dtd?>
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" id="grandchild2" xml:lang="en-us"
+  ditaarch:DITAArchVersion="1.3"
+  domains="(topic abbrev-d)                            a(props deliveryTarget)                            (topic equation-d)                            (topic hazard-d)                            (topic hi-d)                            (topic indexing-d)                            (topic markup-d)                            (topic mathml-d)                            (topic pr-d)                            (topic relmgmt-d)                            (topic sw-d)                            (topic svg-d)                            (topic ui-d)                            (topic ut-d)                            (topic markup-d xml-d)   "
+  class="- topic/topic ">
+  <title class="- topic/title ">grandchild2</title>
+  <body class="- topic/body ">
+    <section class="- topic/section ">
+      <p class="- topic/p ">Several DITA elements exist either for architectural reasons or for
+        support of specialized markup yet to be designed. Although there is little need to use these
+        elements unless you are directed to, some of them, such as &lt;<apiname
+          class="+ topic/keyword pr-d/apiname ">boolean</apiname>&gt; and &lt;<apiname
+          class="+ topic/keyword pr-d/apiname ">state</apiname>&gt;, can be used if your content
+        makes use of these semantic distinctions. A discussion of signals on a gate of an integrated
+        logic circuit, for example, might use the state element to represent either on or off
+        conditions of that gate.<indexterm class="- topic/indexterm ">Specialization
+          elements</indexterm>
+      </p>
+    </section>
+  </body>
+</topic>

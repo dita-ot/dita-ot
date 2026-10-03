@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import javax.xml.namespace.QName;
 import org.dita.dost.log.MessageUtils;
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.StringUtils;
 import org.dita.dost.util.URLUtils;
@@ -39,6 +40,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   private Locator locator;
   /** Deque of domains attibute values */
   private final Deque<QName[][]> domains = new LinkedList<>();
+  private final AttributeStack attributeStack = new AttributeStack(ATTRIBUTE_NAME_SCOPE, ATTRIBUTE_NAME_FORMAT);
   private Mode processingMode;
 
   /**
@@ -76,6 +78,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
     final String d = atts.getValue(ATTRIBUTE_NAME_DOMAINS);
     if (d != null) {
       domains.addFirst(StringUtils.getExtProps(d));
@@ -92,6 +95,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
     modified = validateId(localName, atts, modified);
     modified = validateReference(ATTRIBUTE_NAME_HREF, atts, modified);
     modified = validateReference(ATTRIBUTE_NAME_CONREF, atts, modified);
+    modified = validateAppid(atts, modified);
     modified = validateScope(atts, modified);
     modified = processFormatDitamap(atts, modified);
     validateKeys(atts);
@@ -106,6 +110,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
   public void endElement(final String uri, final String localName, final String qName) throws SAXException {
     domains.removeFirst();
     super.endElement(uri, localName, qName);
+    attributeStack.pop();
   }
 
   // Validation methods
@@ -183,6 +188,85 @@ public final class ValidationFilter extends AbstractXMLFilter {
   }
 
   /**
+   * Validate {@code appid} attribute.
+   */
+  private AttributesImpl validateAppid(Attributes atts, AttributesImpl modified) throws SAXException {
+    var res = modified;
+    var appid = atts.getValue(ATTRIBUTE_NAME_APPID);
+    if (appid == null) {
+      return res;
+    }
+    var appidRole = atts.getValue(ATTRIBUTE_NAME_APPID_ROLE);
+    if (appidRole == null || !appidRole.equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
+      return res;
+    }
+
+    URI uri = null;
+    try {
+      uri = new URI(appid);
+    } catch (URISyntaxException e) {
+      switch (processingMode) {
+        case STRICT -> throw new RuntimeException(
+          MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator) + ": " + e.getMessage(),
+          e
+        );
+        case SKIP -> {
+          logger.error(
+            "{}, using invalid value.",
+            MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator)
+          );
+          return res;
+        }
+        case LAX -> {
+          try {
+            uri = new URI(URLUtils.clean(appid.trim()));
+            if (res == null) {
+              res = new AttributesImpl(atts);
+            }
+            res.setValue(res.getIndex(ATTRIBUTE_NAME_APPID), uri.toASCIIString());
+            logger.error(
+              "{}, using '{}'.",
+              MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator),
+              uri.toASCIIString()
+            );
+          } catch (final URISyntaxException e1) {
+            logger.error(
+              "{}, using invalid value.",
+              MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator)
+            );
+            return res;
+          }
+        }
+      }
+    }
+
+    if (uri != null) {
+      String msg = null;
+      if (uri.getScheme() != null || uri.getAuthority() != null) {
+        msg = "appid value can only contain path, query and fragment components";
+      } else if (uri.getPath() == null || uri.getPath().isEmpty()) {
+        msg = "appid value must have a path components";
+      } else if (uri.getPath().contains("/")) {
+        msg = "appid value must contain only the last path component of a URI path";
+      }
+      if (msg != null) {
+        switch (processingMode) {
+          case STRICT -> throw new RuntimeException(
+            MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator) + ": " + msg
+          );
+          case LAX, SKIP -> logger.error(
+            "{}: {}",
+            MessageUtils.getMessage("DOTJ054E", ATTRIBUTE_NAME_APPID, appid).setLocation(locator),
+            msg
+          );
+        }
+      }
+    }
+
+    return res;
+  }
+
+  /**
    * Validate and fix {@code href} or {@code conref} attribute for URI validity.
    *
    * @return modified attributes, {@code null} if there have been no changes
@@ -210,8 +294,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
                   MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString()
                 );
                 case SKIP -> logger.error(
-                  MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() +
-                  ", using authored value."
+                  "{}, using authored value.",
+                  MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString()
                 );
                 case LAX -> {
                   final URI corrected = URLUtils.setFragment(
@@ -223,16 +307,15 @@ public final class ValidationFilter extends AbstractXMLFilter {
                   }
                   res.setValue(res.getIndex(attrName), currentFile.toString());
                   logger.error(
-                    MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString() +
-                    ", using " +
-                    corrected +
-                    "."
+                    "{}, using {}.",
+                    MessageUtils.getMessage("DOTJ083E", abs.toString()).setLocation(locator).toString(),
+                    corrected
                   );
                 }
               }
             }
           } catch (IOException e) {
-            logger.debug(String.format("Failed to resolve real path for %s: %s", p, e.getMessage()), e);
+            logger.debug("Failed to resolve real path for {}: {}", p, e.getMessage(), e);
           }
         }
       } catch (final URISyntaxException e) {
@@ -242,7 +325,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
             e
           );
           case SKIP -> logger.error(
-            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
+            "{}, using invalid value.",
+            MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator)
           );
           case LAX -> {
             try {
@@ -252,14 +336,14 @@ public final class ValidationFilter extends AbstractXMLFilter {
               }
               res.setValue(res.getIndex(attrName), uri.toASCIIString());
               logger.error(
-                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) +
-                ", using '" +
-                uri.toASCIIString() +
-                "'."
+                "{}, using '{}'.",
+                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator),
+                uri.toASCIIString()
               );
             } catch (final URISyntaxException e1) {
               logger.error(
-                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator) + ", using invalid value."
+                "{}, using invalid value.",
+                MessageUtils.getMessage("DOTJ054E", attrName, href).setLocation(locator)
               );
             }
           }
@@ -276,7 +360,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
    */
   private AttributesImpl validateScope(final Attributes atts, final AttributesImpl modified) {
     AttributesImpl res = modified;
-    final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
     final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
     if (scope == null && href != null && href.isAbsolute()) {
       final boolean sameScheme = Objects.equals(currentFile.getScheme(), href.getScheme());
@@ -291,7 +375,8 @@ public final class ValidationFilter extends AbstractXMLFilter {
             logger.warn(MessageUtils.getMessage("DOTJ075W", href.toString()).setLocation(locator).toString());
           }
           default -> logger.warn(
-            MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator) + ", using invalid value."
+            "{}, using invalid value.",
+            MessageUtils.getMessage("DOTJ076W", href.toString()).setLocation(locator)
           );
         }
       }
@@ -324,7 +409,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
             if (!StringUtils.isEmptyString(s) && !valueSet.contains(s)) {
               logger.warn(
                 MessageUtils
-                  .getMessage("DOTJ049W", attrName.toString(), qName, attrValue, StringUtils.join(valueSet, COMMA))
+                  .getMessage("DOTJ049W", attrName.toString(), qName, attrValue, String.join(COMMA, valueSet))
                   .setLocation(atts)
                   .toString()
               );
@@ -441,13 +526,13 @@ public final class ValidationFilter extends AbstractXMLFilter {
     AttributesImpl res = modified;
     final String cls = atts.getValue(ATTRIBUTE_NAME_CLASS);
     if (MAP_TOPICREF.matches(cls)) {
-      final String format = atts.getValue(ATTRIBUTE_NAME_FORMAT);
-      final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      final String format = attributeStack.peek(ATTRIBUTE_NAME_FORMAT);
+      final String scope = attributeStack.peek(ATTRIBUTE_NAME_SCOPE);
       final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
       if (format == null && isLocalScope(scope) && href != null) {
         final URI target = currentFile.resolve(href);
         final Job.FileInfo fi = job.getFileInfo(target);
-        if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+        if (fi != null && ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
           switch (processingMode) {
             case STRICT -> throw new RuntimeException(
               MessageUtils.getMessage("DOTJ061E").setLocation(locator).toString()
@@ -458,7 +543,7 @@ public final class ValidationFilter extends AbstractXMLFilter {
               if (res == null) {
                 res = new AttributesImpl(atts);
               }
-              addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format);
+              addOrSetAttribute(res, ATTRIBUTE_NAME_FORMAT, fi.format());
             }
           }
         }

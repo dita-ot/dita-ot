@@ -17,8 +17,8 @@ public interface Plugin {
   File pluginDir();
   File ditaDir();
   SemVer pluginVersion();
-  /** Extension point by extension point id.  */
-  Map<String, ExtensionPoint> extensionPoints();
+  /** Extension points.  */
+  List<ExtensionPoint> extensionPoints();
   /** List of feature values by feature id. */
   Map<String, List<Value>> features();
   /** Required plug-ins. */

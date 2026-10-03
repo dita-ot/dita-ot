@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre
+FROM --platform=$BUILDPLATFORM eclipse-temurin:17-jre
 ARG VERSION
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]

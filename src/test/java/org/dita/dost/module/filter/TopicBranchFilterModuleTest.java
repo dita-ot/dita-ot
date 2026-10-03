@@ -25,26 +25,24 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.InputSource;
 
 public class TopicBranchFilterModuleTest extends TopicBranchFilterModule {
 
   private final File resourceDir = TestUtils.getResourceDir(TopicBranchFilterModuleTest.class);
-  private final File expDir = new File(resourceDir, "exp");
 
   @TempDir
   private File tempDir;
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    TestUtils.copy(new File(resourceDir, "src"), tempDir);
-  }
+  @ParameterizedTest
+  @ValueSource(strings = { "test" })
+  public void testDuplicateTopic(String dir) throws IOException {
+    final File expDir = new File(resourceDir, "exp" + File.separator + dir);
+    TestUtils.copy(new File(resourceDir, "src" + File.separator + dir), tempDir);
 
-  @Test
-  public void testDuplicateTopic() throws IOException {
     final TopicBranchFilterModule m = new TopicBranchFilterModule();
     final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     job.setInputDir(tempDir.toURI());
@@ -69,7 +67,7 @@ public class TopicBranchFilterModuleTest extends TopicBranchFilterModule {
       new InputSource(new File(tempDir, "t1-1.xml").toURI().toString())
     );
     assertEquals(getDuplicateTopicFileInfos(), new HashSet<>(job.getFileInfo()));
-    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level == ERROR).count());
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 
   private Set<FileInfo> getDuplicateTopicFileInfos() {

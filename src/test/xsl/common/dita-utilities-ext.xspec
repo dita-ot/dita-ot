@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               stylesheet="dita-utilities.xsl" run-as="external">
+
+  <x:scenario label="dita-ot:get-first-topic-language (template mode)">
+    <x:scenario label="@xml:lang of first child">
+      <x:context mode="get-first-topic-lang" select=".">
+        <topic id="foo" xml:lang="is-is">
+          <title>foo</title>
+        </topic>
+      </x:context>
+      <x:expect label="return @xml:lang" select="'is-is'"/>
+    </x:scenario>
+
+    <x:scenario label="@xml:lang of dita element child">
+      <x:context mode="get-first-topic-lang" select=".">
+        <dita>
+          <topic id="foo" xml:lang="el-gr">
+            <title>foo</title>
+          </topic>
+        </dita>
+      </x:context>
+      <x:expect label="return @xml:lang" select="'el-gr'"/>
+    </x:scenario>
+
+    <x:scenario label="upper-case @xml:lang">
+      <x:context mode="get-first-topic-lang" select=".">
+        <topic id="foo" xml:lang="pt-BR">
+          <title>foo</title>
+        </topic>
+      </x:context>
+      <x:expect label="return @xml:lang" select="'pt-br'"/>
+    </x:scenario>
+
+    <x:scenario label="no @xml:lang">
+      <x:context mode="get-first-topic-lang" select=".">
+        <topic id="foo">
+          <title>foo</title>
+        </topic>
+      </x:context>
+      <x:expect label="return $DEFAULTLANG" select="'en'"/>
+    </x:scenario>
+  </x:scenario>
+
+    <x:scenario label="dita-ot:get-current-language">
+    <x:scenario label="given element has @xml:lang">
+      <x:context select=".">
+        <topic id="foo" xml:lang="el-gr">
+          <title>foo</title>
+        </topic>
+      </x:context>
+      <x:call template="getLowerCaseLang"/>
+      <x:expect label="return @xml:lang">el-gr</x:expect>
+    </x:scenario>
+
+    <x:scenario label="given element has no @xml:lang">
+      <x:context select=".">
+        <topic id="foo">
+          <title>foo</title>
+        </topic>
+      </x:context>
+      <x:call template="getLowerCaseLang"/>
+      <x:expect label="return $DEFAULTLANG">en</x:expect>
+    </x:scenario>
+  </x:scenario>
+
+</x:description>

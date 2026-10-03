@@ -52,7 +52,7 @@ public class FilterUtilsTest {
     .put(new FilterKey(AUDIENCE, "novice"), Action.EXCLUDE)
     .build();
 
-  private XMLUtils xmlUtils = new XMLUtils();
+  private final XMLUtils xmlUtils = new XMLUtils();
 
   @Test
   public void testNeedExcludeNoAttribute() {

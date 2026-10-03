@@ -26,13 +26,13 @@ public class PipelineHashIOTest {
     p.setAttribute("foo", "baz");
     assertEquals("baz", p.getAttribute("foo"));
     p.setAttribute("foo", null);
-    assertEquals(null, p.getAttribute("foo"));
+    assertNull(p.getAttribute("foo"));
   }
 
   @Test
   public void testGetAttribute() {
     final AbstractPipelineInput p = new PipelineHashIO();
-    assertEquals(null, p.getAttribute("foo"));
+    assertNull(p.getAttribute("foo"));
     p.setAttribute("foo", "bar");
     assertEquals("bar", p.getAttribute("foo"));
   }

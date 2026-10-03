@@ -100,14 +100,14 @@ public final class DebugAndFilterModule extends SourceReaderModule {
       job
         .getFileInfo()
         .stream()
-        .filter(f -> isFormatDita(f.format) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format))
+        .filter(f -> isFormatDita(f.format()) || ATTR_FORMAT_VALUE_DITAMAP.equals(f.format()))
         .forEach(this::processFile);
 
       job.write();
     } catch (final RuntimeException e) {
       throw e;
     } catch (final Exception e) {
-      e.printStackTrace();
+      //      e.printStackTrace();
       throw new DITAOTException("Exception doing debug and filter module processing: " + e.getMessage(), e);
     }
 
@@ -115,18 +115,18 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   }
 
   private void processFile(final FileInfo f) {
-    currentFile = f.src;
-    if (f.src == null || !exists(f.src) || !f.src.equals(f.result)) {
-      logger.warn("Ignoring a copy-to file " + f.result);
+    currentFile = f.src();
+    if (f.src() == null || !exists(f.src()) || !f.src().equals(f.result())) {
+      logger.warn("Ignoring a copy-to file {}", f.result());
       return;
-    } else if (f.uri.isAbsolute() && !f.uri.toString().startsWith(job.tempDirURI.toString())) {
+    } else if (f.uri().isAbsolute() && !f.uri().toString().startsWith(job.tempDirURI.toString())) {
       //The file is outside the temp dir, we cannot write to itself
-      throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri);
+      throw new RuntimeException("Cannot write outside of the temporary files folder: " + f.uri());
     }
-    outputFile = new File(job.tempDirURI.resolve(f.uri));
-    logger.info("Processing " + f.src + " to " + outputFile.toURI());
+    outputFile = new File(job.tempDirURI.resolve(f.uri()));
+    logger.info("Processing {} to {}", f.src(), outputFile.toURI());
 
-    final Set<URI> schemaSet = dic.get(f.uri);
+    final Set<URI> schemaSet = dic.get(f.uri());
     if (schemaSet != null && !schemaSet.isEmpty()) {
       logger.debug("Loading subject schemes");
       subjectSchemeReader.reset();
@@ -149,7 +149,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
     try {
       reader.setErrorHandler(new DITAOTXMLErrorHandler(currentFile.toString(), logger, processingMode));
 
-      XMLReader parser = XMLUtils.getXmlReader(f.format, processingMode).orElse(reader);
+      XMLReader parser = XMLUtils.getXmlReader(f.format(), processingMode).orElse(reader);
       XMLReader xmlSource = parser;
       for (final XMLFilter filter : getProcessingPipe(currentFile)) {
         filter.setParent(xmlSource);
@@ -165,7 +165,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         parser.setFeature("http://xml.org/sax/features/lexical-handler", true);
       } catch (final SAXNotRecognizedException e) {}
 
-      in = new InputSource(f.src.toString());
+      in = new InputSource(f.src().toString());
 
       final ContentHandler result = job.getStore().getContentHandler(outputFile.toURI());
 
@@ -183,16 +183,16 @@ public final class DebugAndFilterModule extends SourceReaderModule {
       }
     }
 
-    if (isFormatDita(f.format)) {
+    if (isFormatDita(f.format())) {
+      String format;
       if (typeFilter.getDitaClass() == null) {
-        f.format = ATTR_FORMAT_VALUE_DITA;
+        format = ATTR_FORMAT_VALUE_DITA;
+      } else if (MAP_MAP.matches(typeFilter.getDitaClass())) {
+        format = ATTR_FORMAT_VALUE_DITAMAP;
       } else {
-        if (MAP_MAP.matches(typeFilter.getDitaClass())) {
-          f.format = ATTR_FORMAT_VALUE_DITAMAP;
-        } else {
-          f.format = ATTR_FORMAT_VALUE_DITA;
-        }
+        format = ATTR_FORMAT_VALUE_DITA;
       }
+      job.add(FileInfo.builder(f).format(format).build());
     }
   }
 
@@ -360,7 +360,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
         final File tmprel = new File(FileUtils.resolve(job.tempDir, parent) + SUBJECT_SCHEME_EXTENSION);
         final Document parentRoot;
         if (!tmprel.exists()) {
-          final URI src = job.getFileInfo(parent).src;
+          final URI src = job.getFileInfo(parent).src();
           parentRoot = job.getStore().getDocument(src);
         } else {
           parentRoot = job.getStore().getDocument(tmprel.toURI());
@@ -505,26 +505,17 @@ public final class DebugAndFilterModule extends SourceReaderModule {
   /**
    * Get path to base directory
    *
-   * @param filename relative input file path from base directory
-   * @param traceFilename absolute input file
-   * @param inputMap absolute path to start file
+   * @param currentFile absolute input file
+   * @param job         the job
    * @return path to base directory, {@code null} if not available
    */
-  public static File getPathtoProject(
-    final File filename,
-    final File traceFilename,
-    final File inputMap,
-    final Job job
-  ) {
+  public static File getPathtoProject(final File currentFile, final Job job) {
+    File inputDir = toFile(job.getInputDir());
+    File inputMap = toFile(job.getInputFile());
     if (job.getGeneratecopyouter() != Job.Generate.OLDSOLUTION) {
-      if (isOutFile(traceFilename, inputMap)) {
-        return toFile(getRelativePathFromOut(traceFilename.getAbsoluteFile(), job));
-      } else {
-        return getRelativePath(traceFilename.getAbsoluteFile(), inputMap.getAbsoluteFile()).getParentFile();
-      }
-    } else {
-      return FileUtils.getRelativePath(filename);
+      return getRelativePath(currentFile, inputMap.getParentFile());
     }
+    return getRelativePath(currentFile, inputDir);
   }
 
   /**
@@ -554,7 +545,7 @@ public final class DebugAndFilterModule extends SourceReaderModule {
    */
   private static boolean isOutFile(final File filePathName, final File inputMap) {
     final File relativePath = FileUtils.getRelativePath(inputMap.getAbsoluteFile(), filePathName.getAbsoluteFile());
-    return !(relativePath.getPath().length() == 0 || !relativePath.getPath().startsWith(".."));
+    return !(relativePath.getPath().isEmpty() || !relativePath.getPath().startsWith(".."));
   }
 
   /**

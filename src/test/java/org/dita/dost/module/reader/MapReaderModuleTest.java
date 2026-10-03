@@ -9,8 +9,7 @@
 package org.dita.dost.module.reader;
 
 import static org.dita.dost.util.Constants.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,8 +36,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class MapReaderModuleTest {
 
-  File resourceDir = TestUtils.getResourceDir(getClass());
-  File srcDir = new File(resourceDir, "src");
+  final File resourceDir = TestUtils.getResourceDir(getClass());
+  final File srcDir = new File(resourceDir, "src");
   File expDir = new File(resourceDir, "exp");
 
   private MapReaderModule reader;
@@ -94,28 +93,28 @@ public class MapReaderModuleTest {
     assertEquals(5, job.getFileInfo().size());
     for (Job.FileInfo fileInfo : job.getFileInfo()) {
       assertEquals(
-        Objects.equals(fileInfo.format, "ditamap"),
-        job.getStore().exists(tempDir.toURI().resolve(fileInfo.uri))
+        Objects.equals(fileInfo.format(), "ditamap"),
+        job.getStore().exists(tempDir.toURI().resolve(fileInfo.uri()))
       );
-      final URI src = srcDir.toURI().relativize(fileInfo.src);
+      final URI src = srcDir.toURI().relativize(fileInfo.src());
       switch (src.toString()) {
         case "root.ditamap":
         case "submap.ditamap":
-          assertEquals("ditamap", fileInfo.format);
+          assertEquals("ditamap", fileInfo.format());
           break;
         case "topic.dita":
         case "subtopic.dita":
-          assertEquals(null, fileInfo.format);
+          assertNull(fileInfo.format());
           break;
         case "ext.pdf":
-          assertEquals("pdf", fileInfo.format);
+          assertEquals("pdf", fileInfo.format());
           break;
         default:
-          throw new RuntimeException("Unmapped " + fileInfo.uri);
+          throw new RuntimeException("Unmapped " + fileInfo.uri());
       }
     }
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.WARN));
-    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level == Level.ERROR));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.WARN));
+    assertFalse(logger.getMessages().stream().anyMatch(m -> m.level() == Level.ERROR));
   }
 
   @Test

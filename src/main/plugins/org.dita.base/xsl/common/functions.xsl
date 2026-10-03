@@ -21,6 +21,18 @@ See the accompanying LICENSE file for applicable license.
     <xsl:sequence select="contains($class, ' topic/linktext ') or contains($class, ' map/linktext ')"/>
   </xsl:function>
   
+  <xsl:function name="dita-ot:matches-linktitle-titlealt" as="xs:boolean">
+    <xsl:param name="class" as="attribute(class)?"/>
+    <xsl:param name="titlerole" as="attribute(title-role)?"/>
+    <xsl:sequence select="contains($class, ' topic/titlealt ') and $titlerole and tokenize($titlerole) = 'linking'"/>
+  </xsl:function>
+
+  <xsl:function name="dita-ot:matches-navtitle-titlealt" as="xs:boolean">
+    <xsl:param name="class" as="attribute(class)?"/>
+    <xsl:param name="titlerole" as="attribute(title-role)?"/>
+    <xsl:sequence select="contains($class, ' topic/titlealt ') and $titlerole and tokenize($titlerole) = 'navigation'"/>
+  </xsl:function>
+
   <xsl:function name="dita-ot:matches-shortdesc-class" as="xs:boolean">
     <xsl:param name="class" as="attribute(class)?"/>
     <xsl:sequence select="contains($class, ' topic/shortdesc ') or contains($class, ' map/shortdesc ')"/>

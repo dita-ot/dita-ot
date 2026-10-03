@@ -86,6 +86,8 @@ See the accompanying LICENSE file for applicable license.
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/pr-domain.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/hi-domain-attr.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/hi-domain.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/emphasis-domain-attr.xsl"/>
+    <xsl:import href="plugin:org.dita.pdf2:xsl/fo/emphasis-domain.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:cfg/fo/attrs/ui-domain-attr.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/ui-domain.xsl"/>
     <xsl:import href="plugin:org.dita.pdf2:xsl/fo/ut-domain.xsl"/>

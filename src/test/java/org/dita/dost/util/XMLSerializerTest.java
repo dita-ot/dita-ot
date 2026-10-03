@@ -40,12 +40,21 @@ public class XMLSerializerTest {
     serializer.writeStartDocument();
     serializer.writeStartElement("topic");
     serializer.writeAttribute("class", "- topic/topic ");
-    serializer.writeCharacters("\n" + "foo" + "\n" + "&<" + "\n" + "bar" + "\n" + "entity" + "\n");
+    serializer.writeCharacters("""
+        
+        foo
+        &<
+        bar
+        entity
+        """);
     serializer.writeComment("foo & <");
     serializer.writeCharacters("\n");
     serializer.writeProcessingInstruction("foo", "bar & <");
     serializer.writeProcessingInstruction("baz", "");
-    serializer.writeCharacters("\n" + "bar & <" + "\n");
+    serializer.writeCharacters("""
+        
+        bar & <
+        """);
     serializer.writeStartElement("empty");
     serializer.writeEndElement(); // empty
     serializer.writeStartElement("empty");
@@ -255,12 +264,8 @@ public class XMLSerializerTest {
     final XMLReader parser = XMLReaderFactory.createXMLReader();
     parser.setContentHandler(transformer);
     parser.setProperty("http://xml.org/sax/properties/lexical-handler", transformer);
-    Reader in = null;
-    try {
-      in = new FileReader(new File(srcDir, "test.xml"));
+    try (Reader in = new FileReader(new File(srcDir, "test.xml"))) {
       parser.parse(new InputSource(in));
-    } finally {
-      in.close();
     }
 
     assertXMLEqual(

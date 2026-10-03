@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.dita.dost.exception.StopParsingException;
 import org.dita.dost.util.XMLUtils;
 import org.dita.dost.writer.ImageMetadataFilter;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,23 +44,27 @@ public class SvgMetadataReaderTest {
       final InputStream in = this.getClass().getResourceAsStream("/SvgMetadataReaderTest/SVG_example_markup_grid.svg")
     ) {
       reader.parse(new InputSource(in));
-      final ImageMetadataFilter.Dimensions dimensions = svgMetadataReader.getDimensions();
-      assertEquals("391", dimensions.width);
-      assertEquals("392", dimensions.height);
-      assertNull(dimensions.verticalDpi);
-      assertNull(dimensions.horizontalDpi);
+    } catch (StopParsingException e) {
+      // expected exit
     }
+    final ImageMetadataFilter.Dimensions dimensions = svgMetadataReader.getDimensions();
+    assertEquals("391", dimensions.width);
+    assertEquals("392", dimensions.height);
+    assertNull(dimensions.verticalDpi);
+    assertNull(dimensions.horizontalDpi);
   }
 
   @Test
   public void testImageWithoutDoctype() throws IOException, SAXException {
     try (final InputStream in = this.getClass().getResourceAsStream("/SvgMetadataReaderTest/without_doctype.svg")) {
       reader.parse(new InputSource(in));
-      final ImageMetadataFilter.Dimensions dimensions = svgMetadataReader.getDimensions();
-      assertEquals("391", dimensions.width);
-      assertEquals("392", dimensions.height);
-      assertNull(dimensions.verticalDpi);
-      assertNull(dimensions.horizontalDpi);
+    } catch (StopParsingException e) {
+      // expected exit
     }
+    final ImageMetadataFilter.Dimensions act = svgMetadataReader.getDimensions();
+    assertEquals("391", act.width);
+    assertEquals("392", act.height);
+    assertNull(act.verticalDpi);
+    assertNull(act.horizontalDpi);
   }
 }

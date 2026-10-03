@@ -8,5 +8,6 @@
   <title class="- topic/title ">Test ref to a topic ID with matching element ID</title>
   <topicref class="- map/topicref " href="tables.dita#table" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">Use the topic ID in the topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Use the topic ID in the topic</linktext></topicmeta></topicref>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Use the topic ID in the topic</navtitle><?ditaot gentext?><linktext class="- map/linktext ">Use the topic ID in the topic</linktext></topicmeta></topicref>
 </map>

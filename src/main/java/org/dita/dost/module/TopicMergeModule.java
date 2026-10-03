@@ -53,8 +53,8 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
     if (logger == null) {
       throw new IllegalStateException("Logger not set");
     }
-    final FileInfo in = job.getFileInfo(fi -> fi.isInput).iterator().next();
-    final File ditaInput = new File(job.tempDirURI.resolve(in.uri));
+    final FileInfo in = job.getFileInfo(FileInfo::isInput).iterator().next();
+    final File ditaInput = new File(job.tempDirURI.resolve(in.uri()));
     if (!job.getStore().exists(ditaInput.toURI())) {
       logger.error(MessageUtils.getMessage("DOTJ025E").toString());
       return null;
@@ -103,7 +103,7 @@ final class TopicMergeModule extends AbstractPipelineModuleImpl {
       } catch (FileAlreadyExistsException e) {
         // Ignore
       } catch (IOException e) {
-        logger.error("Failed to create directory " + outputDir.getAbsolutePath());
+        logger.error("Failed to create directory {}", outputDir.getAbsolutePath());
       }
     }
     try (final OutputStream output = new BufferedOutputStream(job.getStore().getOutputStream(out.toURI()))) {

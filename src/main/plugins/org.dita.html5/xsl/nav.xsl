@@ -36,17 +36,17 @@ See the accompanying LICENSE file for applicable license.
           <xsl:choose>
             <xsl:when test="$nav-toc = 'partial'">
               <xsl:apply-templates select="$current-topicref" mode="toc-pull">
-                <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
+                <xsl:with-param name="pathFromMaplist" select="$pathToMapDir" as="xs:string"/>
                 <xsl:with-param name="children" as="element()*">
                     <xsl:apply-templates select="$current-topicref/*[contains(@class, ' map/topicref ')]" mode="toc">
-                    <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
+                    <xsl:with-param name="pathFromMaplist" select="$pathToMapDir" as="xs:string"/>
                   </xsl:apply-templates>
                 </xsl:with-param>
               </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="$nav-toc = 'full'">
               <xsl:apply-templates select="$input.map" mode="toc">
-                <xsl:with-param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
+                <xsl:with-param name="pathFromMaplist" select="$pathToMapDir" as="xs:string"/>
               </xsl:apply-templates>
             </xsl:when>
           </xsl:choose>
@@ -54,13 +54,15 @@ See the accompanying LICENSE file for applicable license.
       </nav>
     </xsl:if>
   </xsl:template>
-  
-  <xsl:variable name="current-file" select="dita-ot:normalize-href(if ($FILEDIR = '.') then $FILENAME else concat($FILEDIR, '/', $FILENAME))" as="xs:string?"/>
+      
+  <xsl:variable name="pathToMapDir" select="dita-ot:get-path2map-dir($input.map.url, base-uri())" />
+  <xsl:variable name="pathToFile" select="dita-ot:get-path2file($input.map.url, base-uri(), $FILENAME)" />
+  <xsl:variable name="current-file" select="dita-ot:normalize-href($pathToFile)" as="xs:string?"/>
   <xsl:variable name="current-topicrefs" select="$input.map//*[contains(@class, ' map/topicref ')][dita-ot:get-path($PATH2PROJ, .) = $current-file]" as="element()*"/>
   <xsl:variable name="current-topicref" select="$current-topicrefs[1]" as="element()?"/>
-  
+
   <xsl:template match="*[contains(@class, ' map/map ')]" mode="toc-pull">
-    <xsl:param name="pathFromMaplist" select="$PATH2PROJ" as="xs:string"/>
+    <xsl:param name="pathFromMaplist" select="$pathToMapDir" as="xs:string"/>
     <xsl:param name="children" select="()" as="element()*"/>
     <xsl:param name="parent" select="parent::*" as="element()?"/>
     <xsl:copy-of select="$children"/>

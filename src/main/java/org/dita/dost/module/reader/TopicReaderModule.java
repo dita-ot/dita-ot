@@ -138,14 +138,13 @@ public final class TopicReaderModule extends AbstractReaderModule {
         if (fi == null) {
           addToWaitList(new Reference(resource));
         } else {
-          if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+          if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
             getStartDocuments(fi).forEach(this::addToWaitList);
           } else {
-            if (isFormatDita(fi.format)) {
-              fi.format = ATTR_FORMAT_VALUE_DITA;
-              job.add(fi);
+            if (isFormatDita(fi.format())) {
+              job.add(FileInfo.builder(fi).format(ATTR_FORMAT_VALUE_DITA).build());
             }
-            addToWaitList(new Reference(resource, fi.format));
+            addToWaitList(new Reference(resource, fi.format()));
           }
         }
       }
@@ -167,13 +166,13 @@ public final class TopicReaderModule extends AbstractReaderModule {
   }
 
   private XdmNode getMapDocument() throws DITAOTException {
-    final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
-    if (fi == null || isFormatDita(fi.format)) {
+    final FileInfo fi = job.getFileInfo(FileInfo::isInput).iterator().next();
+    if (fi == null || isFormatDita(fi.format())) {
       return null;
     }
-    final URI currentFile = job.tempDirURI.resolve(fi.uri);
+    final URI currentFile = job.tempDirURI.resolve(fi.uri());
     try {
-      logger.debug("Reading " + currentFile);
+      logger.debug("Reading {}", currentFile);
       return job.getStore().getImmutableNode(currentFile);
     } catch (final IOException e) {
       throw new DITAOTException(new SAXException("Failed to parse " + currentFile, e));
@@ -182,29 +181,28 @@ public final class TopicReaderModule extends AbstractReaderModule {
 
   @Override
   public void readStartFile() throws DITAOTException {
-    final FileInfo fi = job.getFileInfo(f -> f.isInput).iterator().next();
+    final FileInfo fi = job.getFileInfo(FileInfo::isInput).iterator().next();
     final URI rootFile = job.getInputFile();
     if (fi == null) {
       addToWaitList(new Reference(rootFile, getFormatFromPath(rootFile)));
     } else {
-      if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format)) {
+      if (ATTR_FORMAT_VALUE_DITAMAP.equals(fi.format())) {
         getStartDocuments(fi).forEach(this::addToWaitList);
       } else {
-        if (fi.format == null) {
-          fi.format = ATTR_FORMAT_VALUE_DITA;
-          job.add(fi);
+        if (fi.format() == null) {
+          job.add(FileInfo.builder(fi).format(ATTR_FORMAT_VALUE_DITA).build());
         }
-        addToWaitList(new Reference(rootFile, fi.format));
+        addToWaitList(new Reference(rootFile, fi.format()));
       }
     }
   }
 
   private List<Reference> getStartDocuments(final FileInfo startFileInfo) throws DITAOTException {
     final List<Reference> res = new ArrayList<>();
-    assert startFileInfo.src != null;
-    final URI tmp = job.tempDirURI.resolve(startFileInfo.uri);
+    assert startFileInfo.src() != null;
+    final URI tmp = job.tempDirURI.resolve(startFileInfo.uri());
     try {
-      logger.info("Reading " + tmp);
+      logger.info("Reading {}", tmp);
       final XdmNode source = job.getStore().getImmutableNode(tmp);
       final Predicate<? super XdmNode> isTopicref = xdmItem ->
         MAP_TOPICREF.matches(xdmItem.getAttributeValue(QNAME_CLASS));
@@ -213,39 +211,39 @@ public final class TopicReaderModule extends AbstractReaderModule {
         .forEach(xdmItem -> {
           final URI href = getHref(xdmItem);
           if (href != null) {
-            FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+            FileInfo fi = job.getFileInfo(startFileInfo.src().resolve(href));
             if (fi == null) {
               fi = job.getFileInfo(tmp.resolve(href));
             }
-            if (fi != null && fi.src != null) {
+            if (fi != null && fi.src() != null) {
               String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
               if (format == null) {
                 format = xdmItem.getAttributeValue(QNAME_FORMAT);
               }
-              res.add(new Reference(fi.src, format));
-              nonConrefCopytoTargetSet.add(fi.src);
+              res.add(new Reference(fi.src(), format));
+              nonConrefCopytoTargetSet.add(fi.src());
             }
           }
         });
       source
         .select(descendant(Predicates.hasAttribute(ATTRIBUTE_NAME_CONREF)))
-        .forEach(xdmItem -> {
+        .forEach(xdmItem ->
           getConref(xdmItem)
             .ifPresent(href -> {
-              FileInfo fi = job.getFileInfo(startFileInfo.src.resolve(href));
+              FileInfo fi = job.getFileInfo(startFileInfo.src().resolve(href));
               if (fi == null) {
                 fi = job.getFileInfo(tmp.resolve(href));
               }
-              if (fi != null && fi.src != null) {
+              if (fi != null && fi.src() != null) {
                 String format = xdmItem.getAttributeValue(QNAME_ORIG_FORMAT);
                 if (format == null) {
                   format = xdmItem.getAttributeValue(QNAME_FORMAT);
                 }
-                res.add(new Reference(fi.src, format));
-                conrefTargetSet.add(fi.src);
+                res.add(new Reference(fi.src(), format));
+                conrefTargetSet.add(fi.src());
               }
-            });
-        });
+            })
+        );
     } catch (final IOException e) {
       throw new DITAOTException(e);
     }
@@ -322,29 +320,32 @@ public final class TopicReaderModule extends AbstractReaderModule {
   @Override
   void categorizeReferenceFile(final Reference file) {
     // avoid files referred by coderef being added into wait list
-    if (listFilter.getCoderefTargets().contains(file.filename)) {
+    if (listFilter.getCoderefTargets().contains(file.filename())) {
       return;
     }
-    if (formatFilter.test(file.format)) {
-      if (isFormatDita(file.format) && !job.crawlTopics() && !listFilter.getConrefTargets().contains(file.filename)) {
+    if (formatFilter.test(file.format())) {
+      if (
+        isFormatDita(file.format()) && !job.crawlTopics() && !listFilter.getConrefTargets().contains(file.filename())
+      ) {
         return; // Do not process topics linked from within topics
       } else if (
-        isFormatDita(file.format) && (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename))
+        isFormatDita(file.format()) &&
+        (!job.getOnlyTopicInMap() || listFilter.getConrefTargets().contains(file.filename()))
       ) {
         addToWaitList(file);
-      } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format)) {
+      } else if (ATTR_FORMAT_VALUE_IMAGE.equals(file.format())) {
         formatSet.add(file);
-        if (!exists(file.filename)) {
+        if (!exists(file.filename())) {
           if (processingMode == Configuration.Mode.STRICT) {
             throw new UncheckedDITAOTException(
-              MessageUtils.getMessage("DOTX008E", file.filename.toString()).toException()
+              MessageUtils.getMessage("DOTX008E", file.filename().toString()).toException()
             );
           } else {
-            logger.warn(MessageUtils.getMessage("DOTX008E", file.filename.toString()).toString());
+            logger.warn(MessageUtils.getMessage("DOTX008E", file.filename().toString()).toString());
           }
         }
       } else {
-        htmlSet.put(file.format, file.filename);
+        htmlSet.put(file.format(), file.filename());
       }
     }
   }

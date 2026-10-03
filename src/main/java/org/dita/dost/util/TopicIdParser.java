@@ -10,6 +10,7 @@ package org.dita.dost.util;
 
 import static org.dita.dost.util.Constants.*;
 
+import org.dita.dost.exception.StopParsingException;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -27,15 +28,8 @@ public final class TopicIdParser implements ContentHandler {
   private StringBuilder firstId = null;
 
   /**
-   * Default Constructor.
-   *
-   */
-  public TopicIdParser() {
-    this(null);
-  }
-
-  /**
    * Constructor.
+   *
    * @param result to store the topic id
    */
   public TopicIdParser(final StringBuilder result) {
@@ -74,6 +68,7 @@ public final class TopicIdParser implements ContentHandler {
       if (atts.getValue(ATTRIBUTE_NAME_ID) != null) {
         isFirstId = false;
         firstId.append(atts.getValue(ATTRIBUTE_NAME_ID));
+        throw new StopParsingException();
       }
     }
   }

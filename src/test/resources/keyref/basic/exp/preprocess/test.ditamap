@@ -3,35 +3,40 @@
 <map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" cascade="nomerge" class="- map/map " ditaarch:DITAArchVersion="1.3" domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         " id="test" title="Key reference test">
   <topicref class="- map/topicref " keys="scope-local" href="a.xml" type="topic">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">a</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">a</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">a</linktext>
     </topicmeta>
   </topicref>
   <topicref class="- map/topicref " keys="scope-peer" href="b.xml" scope="peer" navtitle="b" >
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
     </topicmeta>
   </topicref>
   <topicref class="- map/topicref " keys="scope-external" href="http://www.example.com/" format="html" scope="external">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">http://www.example.com/</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">http://www.example.com/</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">http://www.example.com/</linktext>
     </topicmeta>
   </topicref>
   <topicref class="- map/topicref " href="b.xml" keyref="topicref" navtitle="b" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle><?ditaot usertext?><linktext class="- map/linktext ">topicref linktext</linktext><?ditaot usershortdesc?><shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle><?ditaot usertext?><linktext class="- map/linktext ">topicref linktext</linktext><?ditaot usershortdesc?><shortdesc class="- map/shortdesc ">topicref shortdesc</shortdesc>
       <keywords class="- topic/keywords "><keyword class="- topic/keyword ">topicref keyword</keyword></keywords>
       </topicmeta>
   </topicref>
   <navref class="- map/navref " mapref="b.xml" keyref="navref" scope="peer"/>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="author" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <author class="- topic/author ">author author</author>
@@ -42,7 +47,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="data" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <keywords class="- topic/keywords ">
@@ -53,7 +59,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="data-about" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <keywords class="- topic/keywords ">
@@ -66,7 +73,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " format="gif" href="delta.gif" keys="image" navtitle="b" processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle "/>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation"/>
       <?ditaot usertext?>
       <linktext class="- map/linktext ">image linktext</linktext>
       <?ditaot usershortdesc?>
@@ -78,7 +86,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="link" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot usertext?>
       <linktext class="- map/linktext ">link linktext</linktext>
       <?ditaot usershortdesc?>
@@ -90,7 +99,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="lq" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <keywords class="- topic/keywords ">
@@ -100,7 +110,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="navref" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <keywords class="- topic/keywords ">
@@ -110,7 +121,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="publisher" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <publisher class="- topic/publisher ">publisher publisher</publisher>
@@ -121,7 +133,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="source" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot gentext?>
       <linktext class="- map/linktext ">b</linktext>
       <source class="- topic/source ">source source</source>
@@ -132,7 +145,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="topicref" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot usertext?>
       <linktext class="- map/linktext ">topicref linktext</linktext>
       <?ditaot usershortdesc?>
@@ -144,7 +158,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " href="b.xml" keys="xref" navtitle="b" processing-role="resource-only" scope="peer">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">b</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">b</navtitle>
       <?ditaot usertext?>
       <linktext class="- map/linktext ">xref linktext</linktext>
       <?ditaot usershortdesc?>
@@ -213,7 +228,8 @@
   </keydef>
   <keydef class="+ map/topicref mapgroup-d/keydef " keys="object" href="https://example.com" scope="external" format="html" processing-role="resource-only">
     <topicmeta class="- map/topicmeta ">
-      <navtitle class="- topic/navtitle ">Object test</navtitle>
+      <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
+           title-role="navigation">Object test</navtitle>
       <linktext class="- map/linktext ">Object test</linktext>
     </topicmeta>
   </keydef>

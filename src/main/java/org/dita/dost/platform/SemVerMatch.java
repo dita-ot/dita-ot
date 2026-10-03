@@ -14,8 +14,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SemVerMatch {
-
+public record SemVerMatch(Range start, Range end) {
   enum Match {
     TILDE,
     CARET,
@@ -88,32 +87,12 @@ public class SemVerMatch {
 
   private static final Pattern MATCH_PATTERN = Pattern.compile("(~|\\^|<=?|>=?)?([0-9.x*]+?)(-.+?(\\+.+?)?)?");
 
-  public final Range start;
-  public final Range end;
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    SemVerMatch that = (SemVerMatch) o;
-    return Objects.equals(start, that.start) && Objects.equals(end, that.end);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(start, end);
-  }
-
-  public SemVerMatch(Range start, Range end) {
-    this.start = start;
-    this.end = end;
-  }
-
-  public SemVerMatch(String str) {
-    if (str.equals("") || str.equals("*")) {
+  public static SemVerMatch of(String str) {
+    Range start, end;
+    if (str.isEmpty() || str.equals("*")) {
       start = new Range(Match.GE, 0, 0, 0);
       end = null;
-      return;
+      return new SemVerMatch(start, end);
     }
     final Matcher matcher = MATCH_PATTERN.matcher(str);
     if (!matcher.matches()) {
@@ -170,6 +149,7 @@ public class SemVerMatch {
       }
       default -> throw new IllegalArgumentException();
     }
+    return new SemVerMatch(start, end);
   }
 
   private static Range inc(Match match, Integer major, Integer minor, Integer patch) {
@@ -217,7 +197,7 @@ public class SemVerMatch {
 
     return new Range(
       match,
-      tokens.size() > 0 && tokens.get(0) != null ? tokens.get(0) : 0,
+      !tokens.isEmpty() && tokens.get(0) != null ? tokens.get(0) : 0,
       tokens.size() > 1 && tokens.get(1) != null ? tokens.get(1) : 0,
       tokens.size() > 2 && tokens.get(2) != null ? tokens.get(2) : 0
     );

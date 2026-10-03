@@ -39,9 +39,13 @@ import static org.dita.dost.util.XMLUtils.toList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Strings;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
@@ -87,7 +91,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   private static final String ANT_TRANSTYPE = "transtype";
   private static final String ANT_PLUGIN_FILE = "plugin.file";
   private static final String ANT_PLUGIN_ID = "plugin.id";
-  private static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
+  public static final String ANT_PROJECT_DELIVERABLE = "project.deliverable";
   private static final String ANT_PROJECT_CONTEXT = "project.context";
   private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
   private static final Map<String, String> RESERVED_PARAMS = Map.of(
@@ -324,8 +328,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    */
   private void processArgs(final String[] arguments) {
     args = argumentParser.processArgs(arguments);
-    final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
-    projectProps = Collections.singletonList(definedProps);
     buildFile = args.buildFile;
     logger.setOutputLevel(args.msgOutputLevel);
     logger.setUseColor(args.useColor);
@@ -349,6 +351,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
       definedProps.putAll(getLocalProperties(ditaDir));
       definedProps.put(USE_COLOR, Boolean.toString(validateArgs.useColor));
       if (validateArgs.projectFile == null) {
@@ -388,12 +391,13 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
       final File ditaDir = new File(System.getProperty(SYSTEM_PROPERTY_DITA_HOME));
       final File basePluginDir = new File(ditaDir, Configuration.pluginResourceDirs.get("org.dita.base").getPath());
       buildFile = findBuildFile(basePluginDir.getAbsolutePath(), "build.xml");
+      final Map<String, Object> definedProps = new HashMap<>(args.definedProps);
       definedProps.putAll(getLocalProperties(ditaDir));
       definedProps.put(USE_COLOR, Boolean.toString(conversionArgs.useColor));
       if (conversionArgs.projectFile == null) {
         projectProps = collectArguments(conversionArgs.inputs, conversionArgs.formats, definedProps);
       } else {
-        projectProps = collectProperties(conversionArgs.projectFile, definedProps);
+        projectProps = collectProperties(conversionArgs, definedProps);
       }
       final String tempDirToken = "temp" + LocalDateTime.now().format(dateTimeFormatter);
       for (Map<String, Object> projectProp : projectProps) {
@@ -409,8 +413,8 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
           throw new CliException(err, args.getUsage(true));
         }
         // default values
-        if (!definedProps.containsKey(ANT_OUTPUT_DIR)) {
-          definedProps.put(ANT_OUTPUT_DIR, new File(new File("."), "out").getAbsolutePath());
+        if (!projectProp.containsKey(ANT_OUTPUT_DIR)) {
+          projectProp.put(ANT_OUTPUT_DIR, Paths.get("out").toAbsolutePath().toString());
         }
         if (!projectProp.containsKey(ANT_BASE_TEMP_DIR)) {
           projectProp.put(ANT_BASE_TEMP_DIR, new File(System.getProperty("java.io.tmpdir")).getAbsolutePath());
@@ -443,12 +447,17 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
 
     // Normalize buildFile for re-import detection
     buildFile = FileUtils.getFileUtils().normalize(buildFile.getAbsolutePath());
-    logger.debug("Buildfile " + buildFile);
+    logger.debug("Buildfile {}", buildFile);
 
     if (args.logFile != null) {
       PrintStream logTo;
       try {
-        logTo = new PrintStream(new FileOutputStream(args.logFile));
+        logTo =
+          new PrintStream(
+            Files.newOutputStream(args.logFile.toPath(), StandardOpenOption.WRITE, StandardOpenOption.CREATE),
+            false,
+            StandardCharsets.UTF_8
+          );
       } catch (final IOException ioe) {
         throw new CliException(
           "Cannot write to the specified log file. Make sure the path exists and you have write permissions."
@@ -599,7 +608,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .max(Integer::compare)
         .get();
       templates.forEach(dir ->
-        logger.info(dir.getKey() + " ".repeat(width - dir.getKey().length()) + "  " + dir.getValue())
+        logger.info("{}{}  {}", dir.getKey(), " ".repeat(width - dir.getKey().length()), dir.getValue())
       );
     }
   }
@@ -648,7 +657,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     if (installFile.contains("@")) {
       final String[] tokens = installFile.split("@");
       pluginInstall.setPluginName(tokens[0]);
-      pluginInstall.setPluginVersion(new SemVerMatch(tokens[1]));
+      pluginInstall.setPluginVersion(SemVerMatch.of(tokens[1]));
     } else {
       pluginInstall.setPluginName(installFile);
       pluginInstall.setPluginVersion(null);
@@ -694,7 +703,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
   }
 
   private Map<String, Object> readProperties(File localPropertiesFile) {
-    logger.debug("Reading " + localPropertiesFile);
+    logger.debug("Reading {}", localPropertiesFile);
     try (InputStream in = Files.newInputStream(localPropertiesFile.toPath())) {
       final Properties localProperties = new Properties();
       localProperties.load(in);
@@ -703,28 +712,42 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         .stream()
         .collect(Collectors.toMap(e -> e.getKey().toString(), Map.Entry::getValue));
     } catch (IOException e) {
-      logger.error("Failed to read " + localPropertiesFile, e);
+      logger.error("Failed to read {}", localPropertiesFile, e);
       return Collections.emptyMap();
     }
   }
 
-  private List<Map<String, Object>> collectProperties(final File projectFile, final Map<String, Object> definedProps) {
+  private List<Map<String, Object>> collectProperties(
+    final ConversionArguments conversionArgs,
+    final Map<String, Object> definedProps
+  ) {
+    final File projectFile = conversionArgs.projectFile;
+    final Set<String> deliverables = Set.copyOf(conversionArgs.deliverables);
+
     final URI base = projectFile.toURI();
     final org.dita.dost.project.Project project = readProjectFile(projectFile);
 
-    return collectProperties(project, base, definedProps);
+    return collectProperties(project, base, deliverables, definedProps);
   }
 
   @VisibleForTesting
   List<Map<String, Object>> collectProperties(
     final org.dita.dost.project.Project project,
     final URI base,
+    final Set<String> deliverables,
     final Map<String, Object> definedProps
   ) {
-    final String runDeliverable = (String) definedProps.get(ANT_PROJECT_DELIVERABLE);
+    final List<org.dita.dost.project.Project.Deliverable> projectDeliverables = project.deliverables();
+    if (!deliverables.isEmpty()) {
+      for (String runDeliverable : deliverables) {
+        if (projectDeliverables.stream().noneMatch(d -> d.id().equals(runDeliverable))) {
+          throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
+        }
+      }
+    }
 
-    final List<Map<String, Object>> projectProps = zipWithIndex(project.deliverables())
-      .filter(entry -> runDeliverable == null || Objects.equals(entry.getKey().id(), runDeliverable))
+    final List<Map<String, Object>> projectProps = zipWithIndex(projectDeliverables)
+      .filter(entry -> deliverables.isEmpty() || deliverables.contains(entry.getKey().id()))
       .map(entry -> {
         final org.dita.dost.project.Project.Deliverable deliverable = entry.getKey();
         final Map<String, Object> props = new HashMap<>(definedProps);
@@ -785,9 +808,6 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         return props;
       })
       .collect(Collectors.toList());
-    if (runDeliverable != null && projectProps.isEmpty()) {
-      throw new CliException(locale.getString("project.error.deliverable_not_found").formatted(runDeliverable));
-    }
 
     return projectProps;
   }
@@ -923,7 +943,9 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final int length = pairs.stream().map(Map.Entry::getKey).map(String::length).reduce(Integer::max).orElse(0);
     for (Map.Entry<String, String> pair : pairs) {
       logger.info(
-        Strings.padEnd(pair.getKey(), length, ' ') + (pair.getValue() != null ? ("  " + pair.getValue()) : "")
+        "{}{}",
+        Strings.padEnd(pair.getKey(), length, ' '),
+        pair.getValue() != null ? ("  " + pair.getValue()) : ""
       );
     }
   }
@@ -942,7 +964,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     final File parent = file.getParentFile();
 
     if (parent != null) {
-      logger.trace("Searching in " + parent.getAbsolutePath());
+      logger.trace("Searching in {}", parent.getAbsolutePath());
     }
 
     return parent;
@@ -962,7 +984,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
    * not
    */
   private File findBuildFile(final String start, final String suffix) {
-    logger.debug("Searching for " + suffix);
+    logger.debug("Searching for {}", suffix);
 
     File parent = new File(new File(start).getAbsolutePath());
     File file = new File(parent, suffix);
@@ -1062,7 +1084,7 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
         ProjectHelper.configureProject(project, buildFile);
 
         // make sure that we have a target to execute
-        if (targets.size() == 0) {
+        if (targets.isEmpty()) {
           if (project.getDefaultTarget() != null) {
             targets.addElement(project.getDefaultTarget());
           }
@@ -1162,8 +1184,11 @@ public class Main extends org.apache.tools.ant.Main implements AntMain {
     } else if (Configuration.configuration.getOrDefault("cli.log-format", "legacy").equals("legacy")) {
       logger = new org.apache.tools.ant.DefaultLogger();
     } else {
-      logger = new DefaultLogger();
-      ((DefaultLogger) logger).useColor(args.useColor);
+      logger = new DefaultLogger().useColor(args.useColor).setPrintStacktrace(args.printStacktrace);
+    }
+
+    if (logger instanceof JsonLogger jsonLogger && args.logFile != null) {
+      jsonLogger.setArray(true);
     }
 
     logger.setMessageOutputLevel(args.msgOutputLevel);

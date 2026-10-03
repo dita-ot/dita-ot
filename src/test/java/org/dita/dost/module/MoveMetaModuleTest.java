@@ -53,7 +53,8 @@ public class MoveMetaModuleTest extends AbstractModuleTest {
       Arguments.of("MetadataInheritance_critdates"),
       Arguments.of("MetadataInheritance_critdates_replace"),
       Arguments.of("MetadataInheritance_data"),
-      Arguments.of("MetadataInheritance_dataabout")
+      Arguments.of("MetadataInheritance_dataabout"),
+      Arguments.of("MetadataInheritance_linktitle")
     );
   }
 

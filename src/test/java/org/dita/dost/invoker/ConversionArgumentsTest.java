@@ -99,6 +99,18 @@ public class ConversionArgumentsTest {
     assertEquals(List.of("html5"), arguments.formats);
   }
 
+  @Test
+  public void deliverable() {
+    arguments.parse(new String[] { "--project=project.yaml", "--deliverable", "pdf", "--deliverable=html5" });
+
+    assertEquals(List.of("pdf", "html5"), arguments.deliverables);
+  }
+
+  @Test
+  public void deliverable_whenProjectNotDefined_shouldThrowException() {
+    assertThrows(CliException.class, () -> arguments.parse(new String[] { "--deliverable", "pdf" }));
+  }
+
   static Stream<Arguments> resource() {
     return Stream.of(
       Arguments.of(List.of("-r", "foo.dita", "-r", "bar.dita")),

@@ -16,6 +16,7 @@ import static org.dita.dost.util.XMLUtils.getChildElement;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Steps;
 import org.dita.dost.log.DITAOTLogger;
@@ -26,7 +27,6 @@ import org.dita.dost.reader.SubjectSchemeReader;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.StringUtils;
 import org.w3c.dom.Element;
 
 /**
@@ -115,7 +115,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
     final URI href = toURI(ditavalRef.getAttribute(ATTRIBUTE_NAME_HREF));
     final URI tmp = currentFile.resolve(href);
     final FileInfo fi = job.getFileInfo(tmp);
-    final URI ditaval = fi.src;
+    final URI ditaval = fi.src();
     return filterCache.computeIfAbsent(ditaval, this::getFilterUtils);
   }
 
@@ -126,7 +126,7 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
    * Read DITAVAL file.
    */
   FilterUtils getFilterUtils(final URI ditaval) {
-    logger.info("Reading " + ditaval);
+    logger.info("Reading {}", ditaval);
     ditaValReader.filterReset();
     ditaValReader.read(ditaval);
     flagImageSet.addAll(ditaValReader.getImageList());
@@ -143,10 +143,10 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
 
   void addFlagImagesSetToProperties(final Job prop, final Set<URI> set) {
     for (final URI file : flagImageSet) {
-      final FileInfo f = getOrCreateFileInfo(file);
-      f.isFlagImage = true;
-      f.format = ATTR_FORMAT_VALUE_IMAGE;
-      job.add(f);
+      final FileInfo.Builder f = getOrCreateFileInfo(file);
+      f.isFlagImage(true);
+      f.format(ATTR_FORMAT_VALUE_IMAGE);
+      job.add(f.build());
     }
 
     final Set<URI> newSet = new LinkedHashSet<>(128);
@@ -177,10 +177,10 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
       logger.error(e.getMessage(), e);
     }
 
-    prop.setProperty(REL_FLAGIMAGE_LIST, StringUtils.join(newSet, COMMA));
+    prop.setProperty(REL_FLAGIMAGE_LIST, newSet.stream().map(URI::toString).collect(Collectors.joining(COMMA)));
   }
 
-  private FileInfo getOrCreateFileInfo(final URI file) {
+  private FileInfo.Builder getOrCreateFileInfo(final URI file) {
     assert file.isAbsolute();
     assert file.getFragment() == null;
     final URI f = file.normalize();
@@ -188,7 +188,6 @@ public abstract class AbstractBranchFilterModule extends AbstractPipelineModuleI
       .ofNullable(job.getFileInfo(f))
       .map(FileInfo.Builder::new)
       .orElse(new FileInfo.Builder().src(file))
-      .uri(tempFileNameScheme.generateTempFileName(file))
-      .build();
+      .uri(tempFileNameScheme.generateTempFileName(file));
   }
 }

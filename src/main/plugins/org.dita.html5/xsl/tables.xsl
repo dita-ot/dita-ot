@@ -491,19 +491,23 @@ See the accompanying LICENSE file for applicable license.
     </tr>
   </xsl:template>
 
-  <xsl:template match="*[table:is-thead-entry(.)]">
+  <xsl:template match="*[table:is-thead-entry(.) or @scope = ('col', 'colgroup')]">
     <th>
+      <xsl:copy-of select="@scope"/>
       <xsl:apply-templates select="." mode="table:entry"/>
     </th>
   </xsl:template>
 
   <xsl:template match="*[table:is-tbody-entry(.)][table:is-row-header(.)]">
     <th scope="row">
+      <xsl:if test="@scope eq 'rowgroup'">
+        <xsl:attribute name="scope" select="'rowgroup'"/>
+      </xsl:if>
       <xsl:apply-templates select="." mode="table:entry"/>
     </th>
   </xsl:template>
 
-  <xsl:template match="*[table:is-tbody-entry(.)][not(table:is-row-header(.))]" name="topic.entry">
+  <xsl:template match="*[table:is-tbody-entry(.)][not(table:is-row-header(.) or @scope = ('col', 'colgroup'))]" name="topic.entry">
     <td>
       <xsl:apply-templates select="." mode="table:entry"/>
     </td>
