@@ -135,8 +135,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
         }
         var hrefAbs = stripFragment(currentFile.resolve(href));
         var srcFi = job.getFileInfo(hrefAbs);
-        if (srcFi == null) {
-          logger.error("Deliverable anchor source {} not found", hrefAbs);
+        if (srcFi == null || srcFi.src() == null) {
+          logger.warn("Deliverable anchor source {} not found", hrefAbs);
           continue;
         }
 
@@ -160,6 +160,15 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           .result(dstResultAbs)
           .build();
         var copyToAbs = job.tempDirURI.resolve(dstFi.uri());
+        if (job.getFileInfo(copyToAbs) != null) {
+          logger.warn(
+            MessageUtils
+              .getMessage("DOTJ090W", resourceid.getAttribute(ATTRIBUTE_NAME_APPID))
+              .setLocation(resourceid)
+              .toString()
+          );
+          continue;
+        }
         var existingMapping = dstToSrc.get(copyToAbs);
         if (existingMapping != null) {
           logger.warn(
