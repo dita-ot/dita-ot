@@ -455,6 +455,16 @@ See the accompanying LICENSE file for applicable license.
     <response></response>
   </message>
 
+  <message id="DOTJ089W" type="WARN">
+    <reason>Two unique source files each specify an @appid value '%2', which results in a collision.</reason>
+    <response>Ignoring the @appid value associated with the @href value '%1'.</response>
+  </message>
+
+  <message id="DOTJ090W" type="WARN">
+    <reason>The @appid attribute value '%1' uses the name of a resource that already exists.</reason>
+    <response>Ignoring the @appid value.</response>
+  </message>
+
   <!-- End of Java Messages -->
 
   <!-- Start of XSL Messages -->

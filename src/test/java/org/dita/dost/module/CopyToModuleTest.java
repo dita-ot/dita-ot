@@ -9,16 +9,15 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.PipelineHashIO;
 import org.dita.dost.util.Configuration;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.xml.sax.SAXException;
 
 public class CopyToModuleTest extends AbstractModuleTest {
 
   @Override
   protected AbstractPipelineInput getAbstractPipelineInput() {
-    var input = new PipelineHashIO();
-    //    input.setAttribute(ANT_INVOKER_EXT_PARAM_TRANSTYPE, "html5");
-    return input;
+    return new PipelineHashIO();
   }
 
   @Override
@@ -26,9 +25,10 @@ public class CopyToModuleTest extends AbstractModuleTest {
     return new CopyToModule();
   }
 
-  @Test
-  public void testCopyTo() throws IOException, SAXException {
-    testCase = "basic";
+  @ParameterizedTest
+  @ValueSource(strings = { "basic", "basic_dita2" })
+  public void testCopyTo(String testCase) throws IOException, SAXException {
+    this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
     //    params = Map.of("force-unique", "true");
     //    this.warningCount = warningCount;
