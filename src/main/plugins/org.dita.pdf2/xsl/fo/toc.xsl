@@ -264,7 +264,7 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:if test="count($toc/*) > 0">
+        <xsl:if test="exists($toc/*)">
             <fo:page-sequence master-reference="toc-sequence" xsl:use-attribute-sets="page-sequence.toc">
                 <xsl:call-template name="insertTocStaticContents"/>
                 <fo:flow flow-name="xsl-region-body">
