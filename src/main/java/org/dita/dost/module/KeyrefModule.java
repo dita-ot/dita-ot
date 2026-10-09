@@ -51,7 +51,20 @@ import org.dita.dost.writer.TopicFragmentFilter;
 import org.xml.sax.XMLFilter;
 
 /**
- * Keyref ModuleElem.
+ * Resolve key references in maps and topics.
+ *
+ * <p>Reads key definitions from the input map and resource maps into key scopes, and resolves {@code keyref} and
+ * {@code conkeyref} in the files that have key references. A topic that is used in more than one key scope is
+ * resolved once for each scope. The additional resolved topics are written to new files, and the map is updated to
+ * refer to them.
+ *
+ * <p>Module parameters:
+ *
+ * <dl>
+ *   <dt>{@code replace-keyref}</dt>
+ *   <dd>If {@code true}, remove key reference attributes once resolution has been attempted and store their values
+ *   in {@code dita-ot:orig-*} attributes. Default is {@code false}.</dd>
+ * </dl>
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
@@ -75,11 +88,25 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
   }
 
   /**
-   * Entry point of KeyrefModule.
+   * Resolve key references in files that have them.
    *
-   * @param input Input parameters and resources.
-   * @return null
-   * @throws DITAOTException exception
+   * <p>The key space is built from the input map and the resource maps. Resolution runs in this order:
+   *
+   * <ol>
+   *   <li>Collect resolve tasks and rewrite the input map for topics that need a copy, see
+   *   {@link #collectProcessingTopics}.</li>
+   *   <li>Resolve tasks that write to a new file, i.e. copies.</li>
+   *   <li>Resolve tasks that update the file in place.</li>
+   * </ol>
+   *
+   * <p>Copies are made first because they read the topic as it was before key references were resolved in it.
+   *
+   * <p>Topics that are resolved as link targets with normal processing role are no longer marked resource-only in
+   * the job configuration, and the job configuration is stored.
+   *
+   * @param input input parameters, see class description
+   * @return always {@code null}
+   * @throws DITAOTException if reading the maps or storing the job configuration fails
    */
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
