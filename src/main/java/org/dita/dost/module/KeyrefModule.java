@@ -55,7 +55,11 @@ import org.xml.sax.XMLFilter;
  */
 final class KeyrefModule extends AbstractPipelineModuleImpl {
 
+  /** Module parameter: replace resolved keyref attributes with dita-ot:orig-keyref. */
+  private static final String PARAM_REPLACE_KEYREF = "replace-keyref";
+
   private TempFileNameScheme tempFileNameScheme;
+  private boolean replaceKeyref;
   final Set<URI> normalProcessingRole = new HashSet<>();
   final Map<URI, Integer> usage = new HashMap<>();
 
@@ -79,6 +83,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
    */
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
+    replaceKeyref = Boolean.parseBoolean(input.getAttribute(PARAM_REPLACE_KEYREF));
     if (fileInfoFilter == null) {
       fileInfoFilter =
         f ->
@@ -517,6 +522,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     parser.setKeyDefinition(r.scope);
     parser.setCurrentFile(job.tempDirURI.resolve(r.in.uri()));
     parser.setTopicIdCache(topicIdCache);
+    parser.setReplaceKeyref(replaceKeyref);
     filters.add(parser);
 
     try {

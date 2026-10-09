@@ -502,7 +502,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
   <xsl:template match="*[dita-ot:is-link(.)]">
     <xsl:choose>
       <xsl:when test="normalize-space(@href)='' or empty(@href)">
-        <xsl:if test="empty(@keyref) and @href">
+        <xsl:if test="empty(@keyref) and empty(@dita-ot:orig-keyref) and @href">
           <!-- If keyref is specified, keyref code can generate message about unresolved key -->
           <xsl:apply-templates select="." mode="ditamsg:empty-href"/>
         </xsl:if>

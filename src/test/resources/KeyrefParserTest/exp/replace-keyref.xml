@@ -1,0 +1,15 @@
+<topic xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot" class="- topic/topic "
+  domains="(topic hi-d)" id="replace" ditaarch:DITAArchVersion="1.3">
+  <title class="- topic/title ">Replace keyref</title>
+  <body class="- topic/body ">
+    <object class="- topic/object " dita-ot:orig-archivekeyrefs="object" dita-ot:orig-classidkeyref="object" dita-ot:orig-codebasekeyref="missing" dita-ot:orig-datakeyref="object">
+      <param class="- topic/param " dita-ot:orig-keyref="param"/>
+    </object>
+  </body>
+  <related-links class="- topic/related-links ">
+    <link class="- topic/link " dita-ot:orig-keyref="second" href="a.xml"/>
+    <link class="- topic/link " dita-ot:orig-keyref="empty"/>
+    <link class="- topic/link " dita-ot:orig-keyref="missing"/>
+    <link class="- topic/link " href="a.xml"/>
+  </related-links>
+</topic>

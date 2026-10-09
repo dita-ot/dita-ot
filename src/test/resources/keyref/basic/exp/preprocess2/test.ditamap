@@ -29,7 +29,7 @@
     </topicmeta>
   </topicref>
 
-  <topicref class="- map/topicref " keyref="topicref" navtitle="b" scope="peer" href="b.xml">
+  <topicref class="- map/topicref " dita-ot:orig-keyref="topicref" keyref="topicref" navtitle="b" scope="peer" href="b.xml">
     <topicmeta class="- map/topicmeta ">
       <navtitle class="- topic/navtitle topic/titlealt alternativeTitles-d/navtitle "
            title-role="navigation">b</navtitle>
@@ -42,7 +42,7 @@
       </keywords>
     </topicmeta>
   </topicref>
-  <navref class="- map/navref " keyref="navref" mapref="b.xml" scope="peer"/>
+  <navref class="- map/navref " dita-ot:orig-keyref="navref" keyref="navref" mapref="b.xml" scope="peer"/>
 
 
 

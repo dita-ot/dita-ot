@@ -37,6 +37,7 @@ import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.URLUtils;
 import org.dita.dost.writer.AbstractXMLFilter;
+import org.dita.dost.writer.KeyrefRestoreFilter;
 import org.dita.dost.writer.LinkFilter;
 import org.dita.dost.writer.MapCleanFilter;
 import org.dita.dost.writer.TopicCleanFilter;
@@ -56,6 +57,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
   private final LinkFilter linkFilter = new LinkFilter();
   private final MapCleanFilter mapFilter = new MapCleanFilter();
   private final TopicCleanFilter topicFilter = new TopicCleanFilter();
+  private final KeyrefRestoreFilter keyrefRestoreFilter = new KeyrefRestoreFilter();
 
   private boolean useResultFilename;
   private XsltTransformer rewriteTransformer;
@@ -111,6 +113,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     linkFilter.setLogger(logger);
     mapFilter.setLogger(logger);
     topicFilter.setLogger(logger);
+    keyrefRestoreFilter.setLogger(logger);
   }
 
   @Override
@@ -165,6 +168,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
     linkFilter.setJob(tempJob);
     mapFilter.setJob(tempJob);
     topicFilter.setJob(tempJob);
+    keyrefRestoreFilter.setJob(tempJob);
 
     for (final FileInfo fi : rewritten) {
       try {
@@ -260,6 +264,7 @@ public class CleanPreprocessModule extends AbstractPipelineModuleImpl {
       linkFilter.setCurrentFile(srcFile.toURI());
       linkFilter.setDestFile(destFile.toURI());
       res.add(linkFilter);
+      res.add(keyrefRestoreFilter);
     }
 
     if (isDitaFormat(fi)) {
