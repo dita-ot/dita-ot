@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Obrázok</variable>
    <variable id="Table">Tabuľka</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Nasledujúca téma</variable>
    <variable id="Previous topic">Predchádzajúca téma</variable>
    <variable id="Parent topic">Nadradená téma</variable>

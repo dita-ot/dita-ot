@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">圖</variable>
    <variable id="Table">表</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">下一個主題</variable>
    <variable id="Previous topic">前一個主題</variable>
    <variable id="Parent topic">上層主題</variable>
