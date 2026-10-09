@@ -36,6 +36,7 @@ See the accompanying LICENSE file for applicable license.
                   map-reader-profile,
                   map-branch-filter,
                   map-keyref,
+                  map-iterative-resolution,
                   map-conrefpush,
                   map-conref,
                   map-profile"/>
@@ -75,7 +76,7 @@ See the accompanying LICENSE file for applicable license.
                   clean-preprocess,
                   copy-files2,
                   {depend.preprocess.post}"/>
-  
+
   <target name="preprocess2.init"
           description="Initialize map-first preprocessing">
     <dita-ot-fail id="DOTA002F">
@@ -106,8 +107,8 @@ See the accompanying LICENSE file for applicable license.
       <uriBasenameTask property="dita.map.filename.root" file="${args.input}" suffix=".*"/>
     </sequential>
 
-    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
-    
+    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
+
     <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
     <echo level="info">${log-prefix}input = ${args.input}</echo>
     <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
@@ -141,7 +142,7 @@ See the accompanying LICENSE file for applicable license.
     <preprocess-skip-init name="preprocess.normalize-codeblock" step="normalize-codeblock"/>
     <preprocess-skip-init name="preprocess.topicpull" step="topicpull"/>
   </target>
-  
+
   <target name="map-reader"
     description="Read input map files to temporary store">
     <pipeline message="Generate maps" taskname="map-reader"
@@ -192,7 +193,7 @@ See the accompanying LICENSE file for applicable license.
       <module class="org.dita.dost.module.filter.MapBranchFilterModule"/>
     </pipeline>
   </target>
-  
+
   <target name="map-keyref"
     unless="preprocess.keyref.skip"
     description="Resolve input map files keyref">
@@ -213,7 +214,19 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
   </target>
-  
+
+  <target name="map-iterative-resolution"
+          description="Resolve input map files keyref iteratively">
+    <pipeline message="Resolve keyref iteratively" taskname="keyref">
+      <module class="org.dita.dost.module.MapModule"><!--  parallel="${parallel}"-->
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </module>
+    </pipeline>
+  </target>
+
   <target name="map-conrefpush"
     unless="preprocess.conref.skip"
     description="Resolve input map files conref push">
@@ -222,9 +235,9 @@ See the accompanying LICENSE file for applicable license.
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
       </module>
-    </pipeline>  
+    </pipeline>
   </target>
-  
+
   <target name="map-conref"
     unless="preprocess.conref.skip"
     description="Resolve conref in input map files">
@@ -445,7 +458,7 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
   </target>
-  
+
   <target name="topic-topicpull"
     unless="preprocess.topicpull.skip"
     description="Pull metadata for link and xref element">
@@ -464,8 +477,8 @@ See the accompanying LICENSE file for applicable license.
       </xslt>
     </pipeline>
   </target>
-  
-  <target name="map-clean-map" 
+
+  <target name="map-clean-map"
           unless="preprocess.clean-map-check.skip"
           description="Clean ditamap">
     <property name="dita.preprocess.reloadstylesheet.clean-map" value="${dita.preprocess.reloadstylesheet}"/>
@@ -493,9 +506,9 @@ See the accompanying LICENSE file for applicable license.
       <jobmapper/>
     </copy>
   </target>
-  
-  <target name="copy-html2" 
-          unless="preprocess.copy-html.skip" 
+
+  <target name="copy-html2"
+          unless="preprocess.copy-html.skip"
           description="Copy html files">
     <copy todir="${dita.output.dir}" failonerror="false" overwrite="true">
       <ditafileset>
@@ -507,7 +520,7 @@ See the accompanying LICENSE file for applicable license.
       </ditafileset>
       <jobmapper/>
     </copy>
-  </target>  
+  </target>
 
   <target name="preprocess2.post"
           description="Preprocess post">
