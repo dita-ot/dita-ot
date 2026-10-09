@@ -36,6 +36,7 @@ See the accompanying LICENSE file for applicable license.
                   map-reader-profile,
                   map-branch-filter,
                   map-keyref,
+                  map-iterative-resolution,
                   map-conrefpush,
                   map-conref,
                   map-profile"/>
@@ -110,8 +111,8 @@ See the accompanying LICENSE file for applicable license.
       <uriBasenameTask property="dita.map.filename.root" file="${args.input}" suffix=".*"/>
     </sequential>
 
-    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>    
-    
+    <property name="dita.topic.filename.root" value="${dita.map.filename.root}"/>
+
     <echo level="info" if:true="${legacy-format}">*****************************************************************</echo>
     <echo level="info">${log-prefix}input = ${args.input}</echo>
     <echo level="info" if:set="args.resources">* resources = ${args.resources}</echo>
@@ -218,7 +219,26 @@ See the accompanying LICENSE file for applicable license.
       </module>
     </pipeline>
   </target>
-  
+
+  <target name="map-iterative-resolution"
+          description="Resolve input map files keyref iteratively"
+          unless:set="preprocess.mapref.skip">
+    <pipeline message="Resolve keyref iteratively" taskname="keyref">
+      <module class="org.dita.dost.module.MapModule"><!--  parallel="${parallel}"-->
+        <param name="style" location="${dita.plugin.org.dita.base.dir}/xsl/preprocess/mapref.xsl"/>
+        <param name="ditaval" location="${dita.input.valfile}" if:set="dita.input.valfile"/>
+        <param name="transtype" value="${transtype}"/>
+        <param name="replace-keyref" value="true"/>
+        <param name="preprocess.map-profile.skip" value="${preprocess.map-profile.skip}" if:set="preprocess.map-profile.skip"/>
+        <param name="preprocess.branch-filter.skip" value="${preprocess.branch-filter.skip}" if:set="preprocess.branch-filter.skip"/>
+        <param name="map.filter-on-parse" value="${map.filter-on-parse}" if:set="map.filter-on-parse"/>
+        <param name="preprocess.branch-filter.skip" value="${preprocess.branch-filter.skip}" if:set="preprocess.branch-filter.skip"/>
+        <param name="preprocess.keyref.skip" value="${preprocess.keyref.skip}" if:set="preprocess.keyref.skip"/>
+        <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
+      </module>
+    </pipeline>
+  </target>
+
   <target name="map-conrefpush"
     unless="preprocess.conref.skip"
     description="Resolve input map files conref push">
