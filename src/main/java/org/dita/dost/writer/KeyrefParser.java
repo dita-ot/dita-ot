@@ -52,7 +52,8 @@ public final class KeyrefParser extends AbstractXMLFilter {
     ATTRIBUTE_NAME_HREF,
     ATTRIBUTE_NAME_KEYS,
     ATTRIBUTE_NAME_TOC,
-    ATTRIBUTE_NAME_PROCESSING_ROLE
+    ATTRIBUTE_NAME_PROCESSING_ROLE,
+    ATTRIBUTE_NAME_ORIG_KEYREF
   );
 
   /**
@@ -118,13 +119,20 @@ public final class KeyrefParser extends AbstractXMLFilter {
     keyrefInfos = Collections.unmodifiableList(ki);
   }
 
-  private static final List<String> KEYREF_ATTRIBUTES = List.of(
+  static final List<String> KEYREF_ATTRIBUTES = List.of(
     ATTRIBUTE_NAME_KEYREF,
     ATTRIBUTE_NAME_ARCHIVEKEYREFS,
     ATTRIBUTE_NAME_CLASSIDKEYREF,
     ATTRIBUTE_NAME_CODEBASEKEYREF,
     ATTRIBUTE_NAME_DATAKEYREF
   );
+
+  /**
+   * Get the local name of the attribute that stores the original value of a resolved key reference attribute.
+   */
+  static String origAttributeName(final String keyrefAttr) {
+    return ATTRIBUTE_NAME_ORIG_PREFIX + keyrefAttr;
+  }
 
   /**
    * Stack used to store the current KeyScope, and its start uri.
@@ -177,11 +185,16 @@ public final class KeyrefParser extends AbstractXMLFilter {
   private final MergeUtils mergeUtils;
   private Map<URI, String> topicIdCache;
   private boolean compatibilityMode;
+  /** Replace resolved {@code keyref} attribute with {@code dita-ot:orig-keyref}. */
+  private boolean replaceKeyref;
+  /** Stack of flags indicating whether {@code dita-ot} prefix mapping was started for an element. */
+  private final Deque<Boolean> prefixMappings;
 
   /**
    * Constructor.
    */
   public KeyrefParser() {
+    prefixMappings = new ArrayDeque<>();
     keyrefLevel = 0;
     definitionMaps = new ArrayDeque<>();
     keyrefLevalStack = new ArrayDeque<>();
@@ -211,6 +224,14 @@ public final class KeyrefParser extends AbstractXMLFilter {
    */
   public void setCompatibilityMode(boolean compatibilityMode) {
     this.compatibilityMode = compatibilityMode;
+  }
+
+  /**
+   * Set whether a {@code keyref} attribute is removed after key resolution has been attempted and its value stored in
+   * {@code dita-ot:orig-keyref}. By default the {@code keyref} attribute is retained.
+   */
+  public void setReplaceKeyref(final boolean replaceKeyref) {
+    this.replaceKeyref = replaceKeyref;
   }
 
   public void setKeyDefinition(final KeyScope definitionMap) {
@@ -311,6 +332,9 @@ public final class KeyrefParser extends AbstractXMLFilter {
     definitionMaps.pop();
 
     getContentHandler().endElement(uri, localName, name);
+    if (prefixMappings.pop()) {
+      getContentHandler().endPrefixMapping(DITA_OT_NS_PREFIX);
+    }
   }
 
   /**
@@ -701,6 +725,19 @@ public final class KeyrefParser extends AbstractXMLFilter {
       resAtts = processElement(atts);
     }
 
+    boolean addPrefixMapping = false;
+    if (replaceKeyref) {
+      for (final String attr : KEYREF_ATTRIBUTES) {
+        if (resAtts.getIndex(DITA_OT_NS, origAttributeName(attr)) != -1) {
+          addPrefixMapping = true;
+          break;
+        }
+      }
+    }
+    prefixMappings.push(addPrefixMapping);
+    if (addPrefixMapping) {
+      getContentHandler().startPrefixMapping(DITA_OT_NS_PREFIX, DITA_OT_NS);
+    }
     getContentHandler().startElement(uri, localName, name, resAtts);
   }
 
@@ -854,6 +891,18 @@ public final class KeyrefParser extends AbstractXMLFilter {
             ? MessageUtils.getMessage("DOTJ047I", atts.getValue(ATTRIBUTE_NAME_KEYREF))
             : MessageUtils.getMessage("DOTJ048I", atts.getValue(ATTRIBUTE_NAME_KEYREF), definitionMaps.peek().name());
           logger.info(m.setLocation(atts).toString());
+        }
+
+        if (replaceKeyref) {
+          XMLUtils.removeAttribute(resAtts, keyrefAttr);
+          XMLUtils.addOrSetAttribute(
+            resAtts,
+            DITA_OT_NS,
+            origAttributeName(keyrefAttr),
+            DITA_OT_NS_PREFIX + ":" + origAttributeName(keyrefAttr),
+            "CDATA",
+            keyrefValue
+          );
         }
 
         validKeyref.push(valid);

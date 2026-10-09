@@ -6,12 +6,7 @@
   <body class="- topic/body ">
     <p class="- topic/p ">key: <keyword class="- topic/keyword " dita-ot:orig-keyref="key" keyref="key">value</keyword>
     </p>
-    <p class="- topic/p ">common: <keyword class="- topic/keyword " dita-ot:orig-keyref="common" keyref="common">base</keyword>
-    </p>
-    <p class="- topic/p ">scope key: <keyword class="- topic/keyword " dita-ot:orig-keyref="scope.key" keyref="scope.key">scope value</keyword>
-    </p>
-    <p class="- topic/p ">scope common: <keyword class="- topic/keyword " dita-ot:orig-keyref="scope.common" keyref="scope.common" keyscope="scope"
-        >scope base</keyword>
+    <p class="- topic/p ">common: <keyword class="- topic/keyword " dita-ot:orig-keyref="common" keyref="common">override</keyword>
     </p>
   </body>
 </topic>

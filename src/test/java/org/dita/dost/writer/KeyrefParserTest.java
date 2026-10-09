@@ -115,6 +115,28 @@ public class KeyrefParserTest {
     );
   }
 
+  @Test
+  public void replaceKeyref() throws Exception {
+    Path file = Paths.get("replace-keyref.xml");
+    Path map = Paths.get("keys.ditamap");
+
+    TestUtils.copy(srcDir, tempDir);
+
+    final KeyScope keyDefinition = readKeyMap(map);
+    final KeyrefParser parser = new KeyrefParser();
+    parser.setLogger(new TestUtils.TestLogger());
+    parser.setJob(new Job(tempDir, new StreamStore(tempDir, new XMLUtils())));
+    parser.setKeyDefinition(keyDefinition);
+    parser.setCurrentFile(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri());
+    parser.setReplaceKeyref(true);
+    parser.write(Paths.get(tempDir.getAbsolutePath(), file.toString()).toFile());
+
+    assertXMLEqual(
+      new InputSource(Paths.get(expDir.getAbsolutePath(), file.toString()).toUri().toString()),
+      new InputSource(Paths.get(tempDir.getAbsolutePath(), file.toString()).toUri().toString())
+    );
+  }
+
   @ParameterizedTest(name = "{0}")
   @MethodSource("testDomToSaxArguments")
   public void testDomToSax(String ignore, SaplingElement src, SaplingNode exp, boolean retainElements)

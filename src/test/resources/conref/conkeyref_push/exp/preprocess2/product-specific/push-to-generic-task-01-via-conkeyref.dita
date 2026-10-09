@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?path2project ../?>
+<task xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" id="push-to-generic" ditaarch:DITAArchVersion="1.3" domains="(topic task)                            (topic hi-d)                             (topic ut-d)                             (topic indexing-d)                            (topic hazard-d)                            (topic abbrev-d)                            (topic pr-d)                             (topic sw-d)                            (topic ui-d)                            (topic task strictTaskbody-c)    " class="- topic/topic task/task ">
+  <title class="- topic/title ">Conref push task using conkeyref</title>
+  <taskbody class="- topic/body task/taskbody ">
+    <context class="- topic/section task/context ">
+      <p class="- topic/p ">This is product-specific context.</p>
+    </context>
+    <steps class="- topic/ol task/steps ">
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Do this before you do anything else.</cmd>
+      </step>
+      <step class="- topic/li task/step ">
+        <cmd class="- topic/ph task/cmd ">Do this after you do everything else.</cmd>
+      </step>
+    </steps>
+  </taskbody>
+</task>

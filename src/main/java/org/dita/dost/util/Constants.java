@@ -1628,6 +1628,10 @@ public final class Constants {
   public static final String ATTRIBUTE_NAME_NONAMESPACESCHEMALOCATION = XSI_NS_PREFIX + ":noNamespaceSchemaLocation";
   /**dita-ot:orig-href.*/
   public static final String ATTRIBUTE_NAME_DITA_OT_ORIG_HREF = DITA_OT_NS_PREFIX + ":" + "orig-href";
+  /**Prefix of local attribute names that store the original value of a resolved attribute.*/
+  public static final String ATTRIBUTE_NAME_ORIG_PREFIX = "orig-";
+  /**orig-keyref attribute local name.*/
+  public static final String ATTRIBUTE_NAME_ORIG_KEYREF = ATTRIBUTE_NAME_ORIG_PREFIX + ATTRIBUTE_NAME_KEYREF;
 
   /**ATTR_CLASS_VALUE_SUBJECT_SCHEME_BASE. Deprecated since 3.0 */
   @Deprecated

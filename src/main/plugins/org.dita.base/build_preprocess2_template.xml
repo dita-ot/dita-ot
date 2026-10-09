@@ -198,6 +198,7 @@ See the accompanying LICENSE file for applicable license.
     description="Resolve input map files keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
+        <param name="replace-keyref" value="true"/>
         <ditafileset format="ditamap" input="true"/>
         <ditafileset format="ditamap" inputResource="true"/>
       </module>
@@ -309,6 +310,7 @@ See the accompanying LICENSE file for applicable license.
           description="Resolve keyref">
     <pipeline message="Resolve keyref." taskname="keyref">
       <module class="org.dita.dost.module.KeyrefModule" parallel="${parallel}">
+        <param name="replace-keyref" value="true"/>
         <ditafileset format="dita"/>
       </module>
     </pipeline>
