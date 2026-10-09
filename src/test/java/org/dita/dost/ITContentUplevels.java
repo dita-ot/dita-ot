@@ -26,6 +26,7 @@ public interface ITContentUplevels {
     assertThatThrownBy(() ->
         builder()
           .name("uplevels1")
+          .copySource()
           .transtype(XHTML)
           .input(Paths.get("maps/above.ditamap"))
           .put("generate.copy.outer", "1")
@@ -71,6 +72,7 @@ public interface ITContentUplevels {
     assertThatThrownBy(() ->
         builder()
           .name("uplevels1_resource_only")
+          .copySource()
           .transtype(XHTML)
           .input(Paths.get("maps/above.ditamap"))
           .put("generate.copy.outer", "1")
@@ -85,6 +87,7 @@ public interface ITContentUplevels {
   default void uplevels3() throws Throwable {
     builder()
       .name("uplevels3")
+      .copySource()
       .transtype(XHTML)
       .input(Paths.get("maps/above.ditamap"))
       .put("generate.copy.outer", "3")
@@ -97,6 +100,7 @@ public interface ITContentUplevels {
     assertThatThrownBy(() ->
         builder()
           .name("uplevels3_resource_only")
+          .copySource()
           .transtype(XHTML)
           .input(Paths.get("maps/above.ditamap"))
           .put("generate.copy.outer", "3")

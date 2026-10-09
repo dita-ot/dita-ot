@@ -149,6 +149,7 @@ public class ITFormatHtml5 extends AbstractIntegrationTest implements ITContentU
   public void html5_nav_toc(String name, String input, String navToc) throws Throwable {
     builder()
       .name(name)
+      .copySource()
       .transtype(HTML5)
       .input(Paths.get(input))
       .put("generate.copy.outer", "3")

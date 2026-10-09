@@ -101,6 +101,7 @@ public class ITPreprocess2 extends AbstractIntegrationTest implements ITPreproce
   public void uplevelslinkOnlytopic() throws Throwable {
     builder()
       .name("uplevelslink")
+      .copySource()
       .transtype(PREPROCESS)
       .input(Paths.get("main/uplevel-in-topic.ditamap"))
       .put("outer.control", "quiet")
