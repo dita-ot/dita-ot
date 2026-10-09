@@ -103,6 +103,7 @@ public abstract class AbstractIntegrationTest {
   private String[] targets;
   private Path input;
   private final Map<String, Object> args = new HashMap<>();
+  private boolean copySource = false;
   private int warnCount = 0;
   private int errorCount = 0;
 
@@ -135,6 +136,16 @@ public abstract class AbstractIntegrationTest {
 
   public AbstractIntegrationTest put(String key, Object value) {
     this.args.put(key, value);
+    return this;
+  }
+
+  /**
+   * Run the test against a copy of the test source directory. Use for tests where processing can write files next to
+   * the sources, e.g. when input refers to files above the input map directory, so that tests do not modify fixtures
+   * under version control.
+   */
+  public AbstractIntegrationTest copySource() {
+    this.copySource = true;
     return this;
   }
 
@@ -229,7 +240,14 @@ public abstract class AbstractIntegrationTest {
 
   protected File run() throws Throwable {
     final File testDir = Paths.get("src", "test", "resources").resolve(name).toFile();
-    final File srcDir = new File(testDir, SRC_DIR);
+    final File srcDir;
+    if (copySource) {
+      srcDir = new File(baseTempDir, name + File.separator + SRC_DIR);
+      deleteDirectory(srcDir);
+      TestUtils.copy(new File(testDir, SRC_DIR), srcDir);
+    } else {
+      srcDir = new File(testDir, SRC_DIR);
+    }
     final File outDir = new File(baseTempDir, name + File.separator + "out");
     final File tempDir = new File(baseTempDir, name + File.separator + "temp");
 

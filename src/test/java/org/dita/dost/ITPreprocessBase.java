@@ -282,6 +282,7 @@ public interface ITPreprocessBase {
   default void uplevelslink() throws Throwable {
     builder()
       .name("uplevelslink")
+      .copySource()
       .transtype(PREPROCESS)
       .input(Paths.get("main/uplevel-in-topic.ditamap"))
       .put("outer.control", "quiet")
@@ -292,6 +293,7 @@ public interface ITPreprocessBase {
   default void uplevelslinkOnlytopic() throws Throwable {
     builder()
       .name("uplevelslink")
+      .copySource()
       .transtype(PREPROCESS)
       .input(Paths.get("main/uplevel-in-topic.ditamap"))
       .put("outer.control", "quiet")
