@@ -33,8 +33,11 @@ public class MapModule extends AbstractPipelineModuleImpl {
 
   private void init(AbstractPipelineInput input) {
     maxIterationCount =
-      Optional.ofNullable(configuration.get("preprocess.max-iteration-count")).map(Integer::parseInt).orElse(10);
-
+      Optional
+        .ofNullable(input.getAttribute("max-iteration-count"))
+        .or(() -> Optional.ofNullable(configuration.get("preprocess.max-iteration-count")))
+        .map(Integer::parseInt)
+        .orElse(10);
     var skipMapProfile = input.getAttribute("preprocess.map-profile.skip") != null;
     var skipBranchFilter = input.getAttribute("preprocess.branch-filter.skip") != null;
     var filterOnParse = input.getAttribute("map.filter-on-parse") != null;
@@ -86,18 +89,18 @@ public class MapModule extends AbstractPipelineModuleImpl {
     init(input);
 
     for (int i = 0; i < maxIterationCount; i++) {
-      if (hasUnresolvedKeyrefs()) {
+      if (!hasUnresolvedKeyrefs()) {
         logger.info("No topicref with @keyref, stop iteration");
         break;
       }
       logger.info("Run map module iteration {}", i + 1);
       for (AbstractPipelineModuleImpl module : modules) {
-        logger.info("Running " + module.getClass().getSimpleName());
+        logger.info("Running {}", module.getClass().getSimpleName());
         // TODO: keep track which files still have something to process and only process them
         module.execute(input);
       }
       if (i + 1 == maxIterationCount) {
-        logger.warn("Done with " + maxIterationCount + " iterations, break to prevent infinite loop");
+        logger.warn("Done with {} iterations, break to prevent infinite loop", maxIterationCount);
       }
     }
     return null;
@@ -111,7 +114,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
     return job
       .getFileInfo(fileInfoFilter)
       .stream()
-      .noneMatch(fi -> {
+      .anyMatch(fi -> {
         try {
           var doc = job.getStore().getImmutableNode(job.tempDirURI.resolve(fi.uri()));
           return doc.select(hasTopicrefWithKeyref).exists();
