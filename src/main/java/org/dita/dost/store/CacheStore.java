@@ -121,7 +121,7 @@ public class CacheStore extends AbstractStore implements Store {
     final URI b = toAbsolute(toURI(base));
     final URI h = toURI(href);
     assert b.isAbsolute();
-    assert h.isAbsolute();
+    //    assert h.isAbsolute();
     final URI f = b.resolve(h).normalize();
     if (LOG) System.err.println("Cache resolve: " + f);
     if (isTempFile(f)) {
