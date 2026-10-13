@@ -2,12 +2,14 @@ package org.dita.dost.module;
 
 import static net.sf.saxon.s9api.streams.Predicates.empty;
 import static net.sf.saxon.s9api.streams.Steps.attribute;
+import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.streams.Predicates;
@@ -17,19 +19,22 @@ import org.dita.dost.exception.DITAOTException;
 import org.dita.dost.module.filter.MapBranchFilterModule;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
 
 public class MapModule extends AbstractPipelineModuleImpl {
 
-  private static final int MAX_ITERATION_COUNT = 10;
-
   private final Predicate<FileInfo> fileInfoFilter = fi ->
     DitaUtils.isDitaMap(fi) && (fi.isInput() || fi.isResourceOnly());
 
+  private int maxIterationCount;
   private List<AbstractPipelineModuleImpl> modules;
 
   private void init(AbstractPipelineInput input) {
+    maxIterationCount =
+      Optional.ofNullable(configuration.get("preprocess.max-iteration-count")).map(Integer::parseInt).orElse(10);
+
     var skipMapProfile = input.getAttribute("preprocess.map-profile.skip") != null;
     var skipBranchFilter = input.getAttribute("preprocess.branch-filter.skip") != null;
     var filterOnParse = input.getAttribute("map.filter-on-parse") != null;
@@ -80,7 +85,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     init(input);
 
-    for (int i = 0; i < MAX_ITERATION_COUNT; i++) {
+    for (int i = 0; i < maxIterationCount; i++) {
       if (hasUnresolvedKeyrefs()) {
         logger.info("No topicref with @keyref, stop iteration");
         break;
@@ -91,8 +96,8 @@ public class MapModule extends AbstractPipelineModuleImpl {
         // TODO: keep track which files still have something to process and only process them
         module.execute(input);
       }
-      if (i + 1 == MAX_ITERATION_COUNT) {
-        logger.warn("Done with " + MAX_ITERATION_COUNT + " iterations, break to prevent infinite loop");
+      if (i + 1 == maxIterationCount) {
+        logger.warn("Done with " + maxIterationCount + " iterations, break to prevent infinite loop");
       }
     }
     return null;
