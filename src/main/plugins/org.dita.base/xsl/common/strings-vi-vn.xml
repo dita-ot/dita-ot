@@ -7,6 +7,7 @@ This file is part of the DITA Open Toolkit project.
 <variables>
    <variable id="Figure">Hình</variable>
    <variable id="Table">Bảng</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Chủ đề tiếp theo</variable>
    <variable id="Previous topic">Chủ đề trước</variable>
    <variable id="Parent topic">Chủ đề chính</variable>
