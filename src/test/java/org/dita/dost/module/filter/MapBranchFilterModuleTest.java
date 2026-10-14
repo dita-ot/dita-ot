@@ -11,7 +11,6 @@ import static org.dita.dost.TestUtils.CachingLogger.Message.Level.ERROR;
 import static org.dita.dost.TestUtils.assertXMLEqual;
 import static org.dita.dost.util.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,6 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -56,8 +54,8 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     job.setInputDir(tempDir.toURI());
     job.add(
       new FileInfo.Builder()
-        .src(new File(tempDir, file + ".ditamap").toURI())
-        .uri(URI.create(file + ".ditamap"))
+        .src(new File(tempDir, file).toURI())
+        .uri(URI.create(file))
         .format(ATTR_FORMAT_VALUE_DITAMAP)
         .build()
     );
@@ -89,7 +87,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input" })
+  @ValueSource(strings = { "input", "input_dita2" })
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
     final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -103,29 +101,25 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     assertXMLEqual(exp, act);
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = { "input" })
-  public void testProcessMap(String file) throws SAXException, IOException {
+  @Test
+  public void testProcessMap() throws IOException {
     final MapBranchFilterModule m = new MapBranchFilterModule();
-    final Job job = getJob(file);
+    final Job job = getJob("input.ditamap");
     m.setJob(job);
     final CachingLogger logger = new CachingLogger();
     m.setLogger(logger);
     m.setXmlUtils(new XMLUtils());
 
-    final FileInfo fi = new FileInfo.Builder().uri(URI.create(file + ".ditamap")).build();
+    final FileInfo fi = new FileInfo.Builder().uri(URI.create("input.ditamap")).build();
     m.processMap(fi);
     assertXMLEqual(
-      new InputSource(new File(expDir, file + ".ditamap").toURI().toString()),
-      new InputSource(new File(tempDir, file + ".ditamap").toURI().toString())
+      new InputSource(new File(expDir, "input.ditamap").toURI().toString()),
+      new InputSource(new File(tempDir, "input.ditamap").toURI().toString())
     );
 
-    final List<String> exp = Arrays.asList(
-      //                "installation-procedure.dita",
-      //                "getting-started.dita",
-      //                "http://example.com/install.dita",
+    var exp = Set.of(
       "configure.dita",
-      file + ".ditamap",
+      "input.ditamap",
       "install.dita",
       "linux.ditaval",
       "perform-install.dita",
@@ -136,48 +130,78 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       "install-mac.dita",
       "mac.ditaval",
       "perform-install-mac.dita",
-      //                "installation-procedure-mac.dita",
       "configure-novice-mac.dita",
       "configure-admin-mac.dita",
       "install-win.dita",
       "win.ditaval",
       "perform-install-win.dita",
-      //                "installation-procedure-win.dita",
       "configure-novice-win.dita",
       "configure-admin-win.dita",
       "install-linux.dita"
     );
-    assertEquals(exp.size(), job.getFileInfo().size());
-    for (final String f : exp) {
-      assertNotNull(job.getFileInfo(URI.create(f)), f);
-    }
+    assertEquals(exp, job.getFileInfo().stream().map(FileInfo::uri).map(URI::toString).collect(Collectors.toSet()));
 
-    final List<String> filesExp = Arrays.asList(
-      //                "install.dita",
-      "configure.dita",
-      "perform-install.dita",
-      //                "configure-novice.dita",
-      //                "configure-admin.dita",
-      //                "install-mac.dita",
-      //                "perform-install-mac.dita",
-      //                "installation-procedure-mac.dita",
-      //                "configure-novice-mac.dita",
-      //                "configure-admin-mac.dita",
-      //                "install-win.dita",
-      //                "perform-install-win.dita",
-      //                "installation-procedure-win.dita",
-      //                "configure-novice-win.dita",
-      //                "configure-admin-win.dita",
-      //                "install-linux.dita",
-      "install.dita"
-    );
-    Collections.sort(filesExp);
-    final List<String> filesAct = Arrays
+    var filesExp = Set.of("configure.dita", "perform-install.dita", "install.dita");
+    var filesAct = Arrays
       .stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
       .map(File::getName)
-      .sorted()
-      .collect(Collectors.toList());
+      .collect(Collectors.toSet());
     assertEquals(filesExp, filesAct);
+
+    assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
+  }
+
+  @Test
+  public void testProcessMap2() throws IOException {
+    final MapBranchFilterModule m = new MapBranchFilterModule();
+    final Job job = getJob("input_dita2.ditamap");
+    m.setJob(job);
+    final CachingLogger logger = new CachingLogger();
+    m.setLogger(logger);
+    m.setXmlUtils(new XMLUtils());
+
+    final FileInfo fi = new FileInfo.Builder().uri(URI.create("input_dita2.ditamap")).build();
+    m.processMap(fi);
+    assertXMLEqual(
+      new InputSource(new File(expDir, "input_dita2.ditamap").toURI().toString()),
+      new InputSource(new File(tempDir, "input_dita2.ditamap").toURI().toString())
+    );
+
+    var exp = Set.of(
+      "installation-procedure.dita",
+      "getting-started.dita",
+      "configure.dita",
+      "input_dita2.ditamap",
+      "install.dita",
+      "linux.ditaval",
+      "perform-install.dita",
+      "configure-novice.dita",
+      "novice.ditaval",
+      "configure-admin.dita",
+      "advanced.ditaval",
+      "install-mac.dita",
+      "mac.ditaval",
+      "perform-install-mac.dita",
+      "installation-procedure-mac.dita",
+      "configure-novice-mac.dita",
+      "configure-admin-mac.dita",
+      "install-win.dita",
+      "win.ditaval",
+      "perform-install-win.dita",
+      "installation-procedure-win.dita",
+      "configure-novice-win.dita",
+      "configure-admin-win.dita",
+      "install-linux.dita"
+    );
+    assertEquals(exp, job.getFileInfo().stream().map(FileInfo::uri).map(URI::toString).collect(Collectors.toSet()));
+
+    var filesExp = Set.of("configure.dita", "perform-install.dita", "install.dita");
+    var filesAct = Arrays
+      .stream(tempDir.listFiles((dir, name) -> name.endsWith(".dita")))
+      .map(File::getName)
+      .collect(Collectors.toSet());
+    assertEquals(filesExp, filesAct);
+
     assertEquals(0, logger.getMessages().stream().filter(msg -> msg.level() == ERROR).count());
   }
 

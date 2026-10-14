@@ -10,13 +10,14 @@ package org.dita.dost.module.filter;
 
 import static java.util.Collections.singletonList;
 import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.DitaUtils.getDitaVersion;
 import static org.dita.dost.util.DitaUtils.isExternalScope;
+import static org.dita.dost.util.FileUtils.getExtension;
 import static org.dita.dost.util.StringUtils.getExtProps;
 import static org.dita.dost.util.StringUtils.getExtPropsFromSpecializations;
 import static org.dita.dost.util.URLUtils.stripFragment;
 import static org.dita.dost.util.URLUtils.toURI;
-import static org.dita.dost.util.XMLUtils.getCascadeValue;
-import static org.dita.dost.util.XMLUtils.getChildElements;
+import static org.dita.dost.util.XMLUtils.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,10 +31,14 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
+import org.dita.dost.util.FileUtils;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.URLUtils;
+import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
+import org.xmlresolver.utils.URIUtils;
 
 /**
  * Branch filter module for map processing.
@@ -96,6 +101,8 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       return;
     }
 
+    cascadeAppId(doc.getDocumentElement());
+
     logger.debug("Split branches and generate copy-to");
     splitBranches(doc.getDocumentElement(), Branch.EMPTY);
     logger.debug("Filter map");
@@ -108,6 +115,78 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       job.getStore().writeDocument(doc, currentFile);
     } catch (final IOException e) {
       logger.error("Failed to serialize {}: {}", map.toString(), e.getMessage(), e);
+    }
+  }
+
+  private void cascadeAppId(Element root) {
+    if (!(getDitaVersion(root) >= 2.0)) {
+      return;
+    }
+    logger.debug("Cascade appid to copy-to");
+    var dstToSrc = new HashMap<URI, URI>();
+    var resourceids = getChildElements(root, TOPIC_RESOURCEID, true);
+    for (Element resourceid : resourceids) {
+      if (resourceid.getAttribute(ATTRIBUTE_NAME_APPID_ROLE).equals(ATTRIBUTE_APPID_ROLE_VALUE_DELIVERABLE_ANCHOR)) {
+        var topicref = (Element) resourceid.getParentNode().getParentNode();
+        var href = topicref.getAttribute(ATTRIBUTE_NAME_HREF);
+        if (href.isEmpty()) {
+          logger.debug("Deliverable anchor source not defined");
+          continue;
+        }
+        var hrefAbs = stripFragment(currentFile.resolve(href));
+        var srcFi = job.getFileInfo(hrefAbs);
+        if (srcFi == null || srcFi.src() == null) {
+          logger.warn("Deliverable anchor source {} not found", hrefAbs);
+          continue;
+        }
+
+        var appid = resourceid.getAttribute(ATTRIBUTE_NAME_APPID);
+        if (appid.isEmpty()) {
+          logger.debug("Deliverable anchor target defined");
+          continue;
+        }
+        // TODO: Support fragment in appid
+        if (!appid.contains(".")) {
+          var ext = getExtension(FileUtils.getName(srcFi.src().toString()));
+          appid = appid + "." + ext;
+        }
+
+        var dstResultAbs = srcFi.result().resolve(appid);
+        var dstFi = FileInfo
+          .builder(srcFi)
+          // XXX: null source is used to identify copy-to targets for 1.x processing
+          .src(null)
+          .uri(tempFileNameScheme.generateTempFileName(dstResultAbs))
+          .result(dstResultAbs)
+          .build();
+        var copyToAbs = job.tempDirURI.resolve(dstFi.uri());
+        if (job.getFileInfo(copyToAbs) != null) {
+          logger.warn(
+            MessageUtils
+              .getMessage("DOTJ090W", resourceid.getAttribute(ATTRIBUTE_NAME_APPID))
+              .setLocation(resourceid)
+              .toString()
+          );
+          continue;
+        }
+        var existingMapping = dstToSrc.get(copyToAbs);
+        if (existingMapping != null) {
+          logger.warn(
+            MessageUtils
+              .getMessage("DOTJ089W", href, resourceid.getAttribute(ATTRIBUTE_NAME_APPID))
+              .setLocation(resourceid)
+              .toString()
+          );
+          continue;
+        }
+
+        dstToSrc.put(copyToAbs, hrefAbs);
+        job.add(dstFi);
+        var copyTo = currentFile.resolve(".").relativize(copyToAbs);
+
+        logger.info("Processing {} to {}", hrefAbs, copyToAbs);
+        topicref.setAttribute(ATTRIBUTE_NAME_COPY_TO, copyTo.toString());
+      }
     }
   }
 

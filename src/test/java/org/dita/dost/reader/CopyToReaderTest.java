@@ -51,7 +51,7 @@ public class CopyToReaderTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "test.ditamap" })
+  @ValueSource(strings = { "test.ditamap", "test_dita2.ditamap" })
   public void testGetCopytoMap(String file) throws Exception {
     final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
@@ -73,7 +73,7 @@ public class CopyToReaderTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "keyref.ditamap" })
+  @ValueSource(strings = { "keyref.ditamap", "keyref_dita2.ditamap" })
   public void testGetCopytoMapKeyref(String file) throws Exception {
     final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
@@ -89,7 +89,7 @@ public class CopyToReaderTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "same.ditamap" })
+  @ValueSource(strings = { "same.ditamap", "same_dita2.ditamap" })
   public void testGetCopytoMapSame(String file) throws Exception {
     final URI inputFile = new File(srcDir, file).toURI();
     reader.setCurrentFile(inputFile);
