@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><topic id="source">
+  <title>Same-file conref with topic-root xref</title>
+  <body>
+    <p id="reused">See <xref href="#source" type="topic"><?ditaot gentext?>Same-file conref with topic-root xref</xref>.</p>
+    <p>See <xref href="#source" type="topic"><?ditaot gentext?>Same-file conref with topic-root xref</xref>.</p>
+  </body>
+</topic>

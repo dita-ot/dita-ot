@@ -923,7 +923,9 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
       <xsl:otherwise>
         <xsl:attribute name="href">
-          <xsl:value-of select="dita-ot:relativize(base-uri($root), ../@conref:src)"/>
+          <xsl:if test="../@conref:src != base-uri($root)">
+            <xsl:value-of select="dita-ot:relativize(base-uri($root), xs:anyURI(../@conref:src))"/>
+          </xsl:if>
           <xsl:text>#</xsl:text>
           <xsl:value-of select="$href-topic-id"/>
           <xsl:if test="$href-element-id">
