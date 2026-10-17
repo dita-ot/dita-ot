@@ -26,6 +26,8 @@ import org.dita.dost.util.FilterUtils.Action;
 import org.dita.dost.util.FilterUtils.FilterKey;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -88,6 +90,19 @@ public class ProfilingFilterTest {
     final FilterUtils filterUtils = new FilterUtils(false, filterMap, null, null);
 
     test(filterUtils, "topic_2.dita", "topic1_2.dita");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"cascade_merge.ditamap", "cascade_nomerge.ditamap"})
+  void testCascadeMerge(final String file) throws Exception {
+    var filterUtils = new FilterUtils(false,
+        Map.of(
+            new FilterKey(QName.valueOf("product"), "x"),
+            EXCLUDE
+        ),
+        null,
+        null);
+    test(filterUtils, file, file);
   }
 
   @Test
