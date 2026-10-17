@@ -12,6 +12,8 @@ import static org.dita.dost.util.Constants.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
+
+import org.dita.dost.util.AttributeStack;
 import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.FilterUtils;
 import org.dita.dost.util.FilterUtils.Flag;
@@ -40,6 +42,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
   private boolean lastElementExcluded = false;
   private final Deque<Set<Flag>> flagStack = new LinkedList<>();
   private final boolean doFlag;
+  /** Stack for cascading attributes. */
+  private final AttributeStack attributeStack = new AttributeStack();
 
   /**
    * Create new profiling filter.
@@ -88,6 +92,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
   @Override
   public void startElement(final String uri, final String localName, final String qName, final Attributes atts)
     throws SAXException {
+    attributeStack.push(atts);
     Set<Flag> flags = null;
 
     final DitaClass cls = atts.getValue(ATTRIBUTE_NAME_CLASS) != null
@@ -161,6 +166,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     } else { // exclude shows whether it's excluded by filtering
       getContentHandler().endElement(uri, localName, qName);
     }
+    attributeStack.pop();
   }
 
   @Override
@@ -175,6 +181,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     if (!exclude) {
       getContentHandler().endDocument();
     }
+    attributeStack.clear();
   }
 
   @Override
