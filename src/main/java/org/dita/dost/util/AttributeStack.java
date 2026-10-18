@@ -64,13 +64,13 @@ public class AttributeStack {
     NULL_NS_URI,
   };
 
-  private String[] stack;
-  private final String[] localNames;
-  private final String[] namespaces;
-  private final int attributeCount;
+  String[] stack;
+  final String[] localNames;
+  final String[] namespaces;
+  final int attributeCount;
   private final int[] localNameHashes;
   private final int[] namespaceHashes;
-  private int top = -1;
+  int top = -1;
 
   /**
    * Create new attribute stack for all cascading attributes.
@@ -123,9 +123,7 @@ public class AttributeStack {
    */
   public void push(Attributes attrs) {
     top++;
-    if ((top + 1) * attributeCount > stack.length) {
-      stack = Arrays.copyOf(stack, stack.length * 2);
-    }
+    ensureCapacity();
 
     int baseIndex = top * attributeCount;
     for (int i = 0; i < attributeCount; i++) {
@@ -134,6 +132,12 @@ public class AttributeStack {
         value = stack[(top - 1) * attributeCount + i];
       }
       stack[baseIndex + i] = value;
+    }
+  }
+
+  void ensureCapacity() {
+    if ((top + 1) * attributeCount > stack.length) {
+      stack = Arrays.copyOf(stack, stack.length * 2);
     }
   }
 
