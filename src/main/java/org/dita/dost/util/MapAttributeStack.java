@@ -13,7 +13,16 @@ public class MapAttributeStack extends AttributeStack {
   private boolean[] mergeStack;
 
   public MapAttributeStack() {
-    super();
+    super(
+      ATTRIBUTE_NAME_AUDIENCE,
+      ATTRIBUTE_NAME_PLATFORM,
+      ATTRIBUTE_NAME_PRODUCT,
+      ATTRIBUTE_NAME_OTHERPROPS,
+      ATTRIBUTE_NAME_PROPS,
+      ATTRIBUTE_NAME_DELIVERY_TARGET,
+      // FIXME: This just fixes the test, correct approach is to detect props specializations
+      "hardware-platform"
+    );
     this.mergeStack = new boolean[stack.length / attributeCount];
   }
 

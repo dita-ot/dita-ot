@@ -173,7 +173,7 @@ public class AttributeStack {
         return stack[top * attributeCount + i];
       }
     }
-    throw new IllegalArgumentException("Stack not initialized for attribute {%s}%s".formatted(namespace, localName));
+    return null;
   }
 
   /**

@@ -7,7 +7,6 @@
  */
 package org.dita.dost.writer;
 
-import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
@@ -135,7 +134,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
           }
         }
       }
-      stackAttributes.clear();
+      stackAttributes.reset();
     }
 
     if (doFlag) {
@@ -225,6 +224,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
     prefixes.put(prefix, uri);
   }
 
+  /**
+   * Mutable decorator for {@link org.xml.sax.Attributes Attributes} that returns cascaded value for profiling
+   * attributes.
+   *
+   * <p>Not thread-safe, reusable.
+   */
   private class AttributeStackDecorator implements Attributes {
 
     private Attributes atts;
@@ -233,7 +238,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
       this.atts = atts;
     }
 
-    private void clear() {
+    private void reset() {
       this.atts = null;
     }
 
@@ -264,9 +269,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 
     @Override
     public String getValue(int index) {
-      var value = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
-      if (value == null) {
-        value = atts.getValue(index);
+      var value = atts.getValue(index);
+      if (value != null) {
+        var cascaded = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
+        if (cascaded != null) {
+          value = cascaded;
+        }
       }
       return value;
     }
@@ -293,9 +301,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
 
     @Override
     public String getValue(String uri, String localName) {
-      var value = attributeStack.peek(uri, localName);
-      if (value == null) {
-        value = atts.getValue(uri, localName);
+      var value = atts.getValue(uri, localName);
+      if (value != null) {
+        var cascaded = attributeStack.peek(uri, localName);
+        if (cascaded != null) {
+          value = cascaded;
+        }
       }
       return value;
     }
@@ -306,9 +317,12 @@ public final class ProfilingFilter extends AbstractXMLFilter {
       if (index == -1) {
         return null;
       }
-      var value = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
-      if (value == null) {
-        value = atts.getValue(qName);
+      var value = atts.getValue(index);
+      if (value != null) {
+        var cascaded = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
+        if (cascaded != null) {
+          value = cascaded;
+        }
       }
       return value;
     }
