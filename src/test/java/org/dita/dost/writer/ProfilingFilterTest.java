@@ -93,15 +93,9 @@ public class ProfilingFilterTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"cascade_merge.ditamap", "cascade_nomerge.ditamap"})
+  @ValueSource(strings = { "cascade_merge.ditamap", "cascade_nomerge.ditamap", "cascade_default.ditamap" })
   void testCascadeMerge(final String file) throws Exception {
-    var filterUtils = new FilterUtils(false,
-        Map.of(
-            new FilterKey(QName.valueOf("product"), "x"),
-            EXCLUDE
-        ),
-        null,
-        null);
+    var filterUtils = new FilterUtils(false, Map.of(new FilterKey(QName.valueOf("product"), "x"), EXCLUDE), null, null);
     test(filterUtils, file, file);
   }
 

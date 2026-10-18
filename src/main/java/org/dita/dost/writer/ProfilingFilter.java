@@ -7,17 +7,14 @@
  */
 package org.dita.dost.writer;
 
+import static javax.xml.XMLConstants.NULL_NS_URI;
 import static org.dita.dost.util.Constants.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.xml.namespace.QName;
-
-import org.dita.dost.util.AttributeStack;
-import org.dita.dost.util.DitaClass;
-import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.FilterUtils.Flag;
-import org.dita.dost.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -43,7 +40,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
   private final Deque<Set<Flag>> flagStack = new LinkedList<>();
   private final boolean doFlag;
   /** Stack for cascading attributes. */
-  private final AttributeStack attributeStack = new AttributeStack();
+  private final AttributeStack attributeStack = new MapAttributeStack();
+  private final AttributeStackDecorator stackAttributes = new AttributeStackDecorator();
 
   /**
    * Create new profiling filter.
@@ -114,7 +112,8 @@ public final class ProfilingFilter extends AbstractXMLFilter {
       // If it is the start of a child of an excluded tag, level increase
       level++;
     } else { // exclude shows whether it's excluded by filtering
-      if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.needExclude(atts, props))) {
+      stackAttributes.setAttributes(atts);
+      if (cls.isValid() && filterUtils.stream().anyMatch(f -> f.needExclude(stackAttributes, props))) {
         exclude = true;
         level = 0;
       } else {
@@ -128,7 +127,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
           flags =
             filterUtils
               .stream()
-              .flatMap(f -> f.getFlags(atts, props).stream())
+              .flatMap(f -> f.getFlags(stackAttributes, props).stream())
               .map(f -> f.adjustPath(currentFile, job))
               .collect(Collectors.toSet());
           for (final Flag flag : flags) {
@@ -136,6 +135,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
           }
         }
       }
+      stackAttributes.clear();
     }
 
     if (doFlag) {
@@ -223,5 +223,94 @@ public final class ProfilingFilter extends AbstractXMLFilter {
   @Override
   public void startPrefixMapping(final String prefix, final String uri) throws SAXException {
     prefixes.put(prefix, uri);
+  }
+
+  private class AttributeStackDecorator implements Attributes {
+
+    private Attributes atts;
+
+    private void setAttributes(final Attributes atts) {
+      this.atts = atts;
+    }
+
+    private void clear() {
+      this.atts = null;
+    }
+
+    @Override
+    public int getLength() {
+      return atts.getLength();
+    }
+
+    @Override
+    public String getURI(int index) {
+      return atts.getURI(index);
+    }
+
+    @Override
+    public String getLocalName(int index) {
+      return atts.getLocalName(index);
+    }
+
+    @Override
+    public String getQName(int index) {
+      return atts.getQName(index);
+    }
+
+    @Override
+    public String getType(int index) {
+      return atts.getType(index);
+    }
+
+    @Override
+    public String getValue(int index) {
+      var value = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
+      if (value == null) {
+        value = atts.getValue(index);
+      }
+      return value;
+    }
+
+    @Override
+    public int getIndex(String uri, String localName) {
+      return atts.getIndex(uri, localName);
+    }
+
+    @Override
+    public int getIndex(String qName) {
+      return atts.getIndex(qName);
+    }
+
+    @Override
+    public String getType(String uri, String localName) {
+      return atts.getType(uri, localName);
+    }
+
+    @Override
+    public String getType(String qName) {
+      return atts.getType(qName);
+    }
+
+    @Override
+    public String getValue(String uri, String localName) {
+      var value = attributeStack.peek(uri, localName);
+      if (value == null) {
+        value = atts.getValue(uri, localName);
+      }
+      return value;
+    }
+
+    @Override
+    public String getValue(String qName) {
+      var index = atts.getIndex(qName);
+      if (index == -1) {
+        return null;
+      }
+      var value = attributeStack.peek(atts.getURI(index), atts.getLocalName(index));
+      if (value == null) {
+        value = atts.getValue(qName);
+      }
+      return value;
+    }
   }
 }

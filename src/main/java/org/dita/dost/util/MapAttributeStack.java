@@ -19,18 +19,6 @@ public class MapAttributeStack extends AttributeStack {
 
   @Override
   public void push(Attributes attrs) {
-    // TODO: optimize
-    //    var cls = attrs.getValue("class");
-    //    var cascade = attrs.getValue(ATTRIBUTE_NAME_CASCADE);
-    //    if (cascade == null && top > 0) {
-    //      cascade = peek(ATTRIBUTE_NAME_CASCADE);
-    //    }
-    //    if (cascade == null) {
-    //      cascade = MAP_MAP.matches(attrs) ?
-    //          ATTRIBUTE_CASCADE_VALUE_MERGE : ATTRIBUTE_CASCADE_VALUE_NOMERGE;
-    //    }
-    //    var merge = cascade.equals(ATTRIBUTE_CASCADE_VALUE_MERGE);
-
     top++;
     ensureCapacity();
 
