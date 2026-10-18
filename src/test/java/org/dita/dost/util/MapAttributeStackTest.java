@@ -167,7 +167,7 @@ class MapAttributeStackTest {
 
   @Test
   void cascadingWithSingleAttribute() {
-    AttributeStack singleStack = new MapAttributeStack();
+    var singleStack = new MapAttributeStack();
 
     singleStack.push(new AttributesBuilder().add("props", "first").build());
 
@@ -218,13 +218,13 @@ class MapAttributeStackTest {
 
     assertNull(stack.peek("unknown"));
 
-    AttributeStack emptyStack = new MapAttributeStack();
+    var emptyStack = new MapAttributeStack();
     assertThrows(IllegalStateException.class, () -> emptyStack.peek("props"));
   }
 
   @Test
   void cascadingWithThreeAttributes() {
-    AttributeStack tripleStack = new MapAttributeStack();
+    var tripleStack = new MapAttributeStack();
 
     tripleStack.push(
       new AttributesBuilder().add("audience", "1st").add("platform", "2nd").add("product", "3rd").build()
