@@ -51,6 +51,10 @@ See the accompanying LICENSE file for applicable license.
       </condition>
     </dita-ot-fail>
 
+    <init-project storeType="${store-type}">
+      <param name="temp-file-name-scheme" value="org.dita.dost.module.reader.HashTempFileScheme"/>
+    </init-project>
+
     <condition property="clean-preprocess.use-result-filename" value="true">
       <or>
         <isset property="result.rewrite-rule.class"/>

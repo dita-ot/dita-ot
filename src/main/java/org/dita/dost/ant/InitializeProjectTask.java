@@ -12,10 +12,13 @@ import static org.dita.dost.util.URLUtils.toFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
+import org.dita.dost.ant.ExtensibleAntInvoker.ParamElem;
 import org.dita.dost.log.DITAOTAntLogger;
 import org.dita.dost.store.Store;
 import org.dita.dost.store.StoreBuilder;
@@ -32,6 +35,8 @@ import org.dita.dost.util.XMLUtils;
 public final class InitializeProjectTask extends Task {
 
   private static final ServiceLoader<StoreBuilder> storeBuilderLoader = ServiceLoader.load(StoreBuilder.class);
+
+  private final List<ParamElem> params = new ArrayList<>();
 
   private String storeType = "file";
 
@@ -54,7 +59,17 @@ public final class InitializeProjectTask extends Task {
 
     try {
       final Job job = new Job(new File(getProject().getProperty("dita.temp.dir")), store);
-      job.setProperty("temp-file-name-scheme", Configuration.configuration.get("temp-file-name-scheme"));
+      for (var param : params) {
+        log("Setting " + param.getName() + " to " + param.getValue(), Project.MSG_VERBOSE);
+        job.setProperty(param.getName(), param.getValue());
+      }
+      if (!job.getProperties().containsKey("temp-file-name-scheme")) {
+        log(
+          "Setting temp-file-name-scheme to default " + Configuration.configuration.get("temp-file-name-scheme"),
+          Project.MSG_VERBOSE
+        );
+        job.setProperty("temp-file-name-scheme", Configuration.configuration.get("temp-file-name-scheme"));
+      }
       getProject().addReference(ANT_REFERENCE_JOB, job);
     } catch (final IOException e) {
       throw new BuildException("Failed to initialize project: " + e.getMessage(), e);
@@ -80,5 +95,9 @@ public final class InitializeProjectTask extends Task {
 
   public void setStoreType(final String storeType) {
     this.storeType = storeType;
+  }
+
+  public void addConfiguredParam(ParamElem param) {
+    params.add(param);
   }
 }
