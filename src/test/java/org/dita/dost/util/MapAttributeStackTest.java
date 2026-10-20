@@ -1,11 +1,17 @@
 package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SPECIALIZATIONS;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
 import org.dita.dost.util.XMLUtils.AttributesBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class MapAttributeStackTest {
 
@@ -17,9 +23,39 @@ class MapAttributeStackTest {
   }
 
   @Test
-  void defaultAttributes() {
-    stack = new MapAttributeStack();
+  void specializations() {
+    stack.push(
+      new AttributesBuilder()
+        .add(
+          ATTRIBUTE_NAME_SPECIALIZATIONS,
+          "@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
+        )
+        .add("audience", "audience 1")
+        .build()
+    );
 
+    stack.push(
+      new AttributesBuilder()
+        .add(
+          ATTRIBUTE_NAME_SPECIALIZATIONS,
+          "@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product @props/hardware-platform"
+        )
+        .add("audience", "audience 2")
+        .add("hardware-platform", "hardware-platform 1")
+        .build()
+    );
+
+    assertEquals("audience 2", stack.peek("audience"));
+    assertEquals("hardware-platform 1", stack.peek("hardware-platform"));
+
+    stack.pop();
+
+    assertEquals("audience 1", stack.peek("audience"));
+    assertEquals(null, stack.peek("hardware-platform"));
+  }
+
+  @Test
+  void defaultAttributes() {
     stack.push(
       new AttributesBuilder()
         .add("audience", "audience value")
@@ -107,7 +143,6 @@ class MapAttributeStackTest {
         .add("platform", "parent_baz")
         .build()
     );
-
     stack.push(new AttributesBuilder().build());
 
     assertEquals("parent_foo", stack.peek("props"));
@@ -124,7 +159,6 @@ class MapAttributeStackTest {
         .add("platform", "parent_baz")
         .build()
     );
-
     stack.push(new AttributesBuilder().add("audience", "child_bar").build());
 
     assertEquals("parent_foo", stack.peek("props"));
@@ -135,7 +169,6 @@ class MapAttributeStackTest {
   @Test
   void popRestoresOriginalValues() {
     stack.push(new AttributesBuilder().add("props", "parent_foo").add("audience", "parent_bar").build());
-
     stack.push(new AttributesBuilder().add("props", "child_foo").build());
 
     assertEquals("child_foo", stack.peek("props"));
@@ -167,13 +200,11 @@ class MapAttributeStackTest {
 
   @Test
   void cascadingWithSingleAttribute() {
-    var singleStack = new MapAttributeStack();
+    stack.push(new AttributesBuilder().add("props", "first").build());
 
-    singleStack.push(new AttributesBuilder().add("props", "first").build());
+    stack.push(new AttributesBuilder().build());
 
-    singleStack.push(new AttributesBuilder().build());
-
-    assertEquals("first", singleStack.peek("props"));
+    assertEquals("first", stack.peek("props"));
   }
 
   @Test
@@ -224,17 +255,12 @@ class MapAttributeStackTest {
 
   @Test
   void cascadingWithThreeAttributes() {
-    var tripleStack = new MapAttributeStack();
+    stack.push(new AttributesBuilder().add("audience", "1st").add("platform", "2nd").add("product", "3rd").build());
+    stack.push(new AttributesBuilder().add("audience", "new_1st").build());
 
-    tripleStack.push(
-      new AttributesBuilder().add("audience", "1st").add("platform", "2nd").add("product", "3rd").build()
-    );
-
-    tripleStack.push(new AttributesBuilder().add("audience", "new_1st").build());
-
-    assertEquals("new_1st", tripleStack.peek("audience"));
-    assertEquals("2nd", tripleStack.peek("platform"));
-    assertEquals("3rd", tripleStack.peek("product"));
+    assertEquals("new_1st", stack.peek("audience"));
+    assertEquals("2nd", stack.peek("platform"));
+    assertEquals("3rd", stack.peek("product"));
   }
 
   @Test
@@ -268,5 +294,37 @@ class MapAttributeStackTest {
 
     stack.clear();
     assertThrows(IllegalStateException.class, () -> stack.peek("props"));
+  }
+
+  static Stream<Arguments> testParseSpecializationsArgs() {
+    return Stream.of(
+      Arguments.of("@props/foo", new String[] { "props", "foo" }),
+      Arguments.of(" @props/foo ", new String[] { "props", "foo" }),
+      Arguments.of("@props/foo @props/bar", new String[] { "props", "foo", "bar" }),
+      Arguments.of("@props/foo @base/bar", new String[] { "props", "foo" }),
+      Arguments.of("@base/bar", new String[] { "props" })
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("testParseSpecializationsArgs")
+  void testParseSpecializations(String src, String[] exp) {
+    assertArrayEquals(exp, MapAttributeStack.parseSpecializations(src));
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    {
+      "foo, bar, foo bar",
+      "foo bar, baz, foo bar baz",
+      "foo, bar baz, foo bar baz",
+      "foo, foo, foo",
+      "foo bar, bar, foo bar",
+      "foo bar, foo, foo bar",
+      "foo bar, foo bar, foo bar",
+    }
+  )
+  void testMerge(String prev, String curr, String exp) {
+    assertEquals(exp, MapAttributeStack.merge(prev, curr));
   }
 }
