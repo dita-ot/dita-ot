@@ -602,8 +602,12 @@ public final class GenListModuleReader extends AbstractXMLFilter {
       }
     }
 
-    // external resource is filtered here.
-    if (!isLocalScope(attrScope) || attrValue.toString().startsWith(SHARP)) {
+    // A resource is external when the URI is absolute and the effective scope is non-local,
+    // or when the element explicitly declares a non-local scope on a relative URI.
+    // Per DITA 1.3, inherited scope never makes a relative URI external by default.
+    final String ownScope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+    final boolean isExternal = attrValue.isAbsolute() ? !isLocalScope(attrScope) : !isLocalScope(ownScope);
+    if (isExternal || attrValue.toString().startsWith(SHARP)) {
       return;
     }
 
