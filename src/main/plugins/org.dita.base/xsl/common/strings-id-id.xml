@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Gambar</variable>
    <variable id="Table">Tabel</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Topik berikutnya</variable>
    <variable id="Previous topic">Topik sebelumnya</variable>
    <variable id="Parent topic">Topik Induk</variable>

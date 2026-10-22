@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Малюнак</variable>
    <variable id="Table">Табліца</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Наступная тэма</variable>
    <variable id="Previous topic">Папярэдняя тэма</variable>
    <variable id="Parent topic">Тэма вышэйшага ўзроўню</variable>

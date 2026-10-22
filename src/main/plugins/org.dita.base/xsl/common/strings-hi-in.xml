@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">संख्या</variable>
    <variable id="Table">तालिका</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">अगला विषय</variable>
    <variable id="Previous topic">पिछला विषय</variable>
    <variable id="Parent topic">जनक विषय</variable>

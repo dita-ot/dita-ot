@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Ábra</variable>
    <variable id="Table">Táblázat</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Következő téma</variable>
    <variable id="Previous topic">Előző téma</variable>
    <variable id="Parent topic">Szülőtéma</variable>

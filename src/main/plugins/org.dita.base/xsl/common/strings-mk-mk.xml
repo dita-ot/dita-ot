@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Слика</variable>
    <variable id="Table">Табела</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Следна тема</variable>
    <variable id="Previous topic">Претходна тема</variable>
    <variable id="Parent topic">Матична тема</variable>
