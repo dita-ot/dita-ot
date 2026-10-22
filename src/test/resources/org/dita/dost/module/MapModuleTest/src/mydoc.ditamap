@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:dita-ot="http://dita-ot.sourceforge.net/ns/201007/dita-ot"
+  xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+  cascade="merge" class="- map/map " ditaarch:DITAArchVersion="1.3"
+  domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+  specializations="@props/deliveryTarget">
+  <keydef class="+ map/topicref mapgroup-d/keydef " href="concept01.dita"
+    keys="concept01" processing-role="resource-only"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " href="concept02.dita"
+    keys="concept02" processing-role="resource-only"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef " href="concept03.dita"
+    keys="concept03" processing-role="resource-only"/>
+  <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef "
+    format="ditamap" href="submap.ditamap" keys="submap"
+    processing-role="resource-only"/>
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+    dita-ot:orig-class="+ map/topicref mapgroup-d/keydef "
+    dita-ot:orig-format="ditamap" dita-ot:orig-href="submap.ditamap"
+    dita-ot:submap-DITAArchVersion="1.3" dita-ot:submap-cascade="merge"
+    dita-ot:submap-class="- map/map "
+    dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    dita-ot:submap-specializations="@props/deliveryTarget"
+    processing-role="resource-only">
+    <topicref class="+ map/topicref mapgroup-d/keydef "
+      dita-ot:orig-keyref="concept02" href="concept02.dita"/>
+    <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+      dita-ot:orig-class="+ map/topicref mapgroup-d/mapref "
+      dita-ot:orig-format="ditamap" dita-ot:orig-href="subsubmap.ditamap"
+      dita-ot:orig-keyref="subsubmap"
+      dita-ot:submap-DITAArchVersion="1.3" dita-ot:submap-cascade="merge"
+      dita-ot:submap-class="- map/map "
+      dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+      dita-ot:submap-specializations="@props/deliveryTarget">
+      <topicref class="- map/topicref " keyref="concept03"/>
+    </submap>
+  </submap>
+  <keydef class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef "
+    format="ditamap" href="subsubmap.ditamap" keys="subsubmap"
+    processing-role="resource-only"/>
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+    dita-ot:orig-class="+ map/topicref mapgroup-d/keydef "
+    dita-ot:orig-format="ditamap" dita-ot:orig-href="subsubmap.ditamap"
+    dita-ot:submap-DITAArchVersion="1.3" dita-ot:submap-cascade="merge"
+    dita-ot:submap-class="- map/map "
+    dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    dita-ot:submap-specializations="@props/deliveryTarget"
+    processing-role="resource-only">
+    <topicref class="+ map/topicref mapgroup-d/keydef "
+      dita-ot:orig-keyref="concept03" href="concept03.dita"/>
+  </submap>
+  <topicref class="- map/topicref " dita-ot:orig-keyref="concept01"
+    href="concept01.dita"/>
+  <submap class="+ map/topicref mapgroup-d/topicgroup ditaot-d/submap "
+    dita-ot:orig-class="+ map/topicref mapgroup-d/mapref "
+    dita-ot:orig-format="ditamap" dita-ot:orig-href="submap.ditamap"
+    dita-ot:orig-keyref="submap" dita-ot:submap-DITAArchVersion="1.3"
+    dita-ot:submap-cascade="merge" dita-ot:submap-class="- map/map "
+    dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
+    dita-ot:submap-specializations="@props/deliveryTarget">
+    <topicref class="- map/topicref " keyref="concept02"/>
+    <mapref class="+ map/topicref mapgroup-d/mapref " format="ditamap"
+      keyref="subsubmap"/>
+  </submap>
+</map>

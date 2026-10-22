@@ -80,11 +80,25 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
   public void setJob(final Job job) {
     super.setJob(job);
     try {
-      tempFileNameScheme = (TempFileNameScheme) Class.forName(job.getProperty("temp-file-name-scheme")).newInstance();
+      final String cls = Optional
+        .ofNullable(job.getProperty("temp-file-name-scheme"))
+        .orElse(configuration.get("temp-file-name-scheme"));
+      tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
     tempFileNameScheme.setBaseDir(job.getInputDir());
+  }
+
+  private void init(AbstractPipelineInput input) {
+    replaceKeyref = Boolean.parseBoolean(input.getAttribute(PARAM_REPLACE_KEYREF));
+    if (fileInfoFilter == null) {
+      fileInfoFilter =
+        f ->
+          f.format() == null ||
+          f.format().equals(ATTR_FORMAT_VALUE_DITA) ||
+          f.format().equals(ATTR_FORMAT_VALUE_DITAMAP);
+    }
   }
 
   /**
@@ -110,103 +124,85 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
    */
   @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
-    replaceKeyref = Boolean.parseBoolean(input.getAttribute(PARAM_REPLACE_KEYREF));
-    if (fileInfoFilter == null) {
-      fileInfoFilter =
-        f ->
-          f.format() == null ||
-          f.format().equals(ATTR_FORMAT_VALUE_DITA) ||
-          f.format().equals(ATTR_FORMAT_VALUE_DITAMAP);
+    init(input);
+
+    var hasKeyref = job.getFileInfo(fileInfoFilter).stream().anyMatch(FileInfo::hasKeyref);
+    if (!hasKeyref) {
+      return null;
     }
-    final Collection<FileInfo> fis = job
-      .getFileInfo(fileInfoFilter)
+
+    // Read start map
+    final KeyrefReader reader = new KeyrefReader();
+    reader.setLogger(logger);
+    reader.setXmlUtils(xmlUtils);
+    final Job.FileInfo in = job.getFileInfo(FileInfo::isInput).iterator().next();
+    final URI mapFile = in.uri();
+    final XdmNode doc = readMap(in);
+    logger.info("Reading {}", job.tempDirURI.resolve(mapFile));
+    reader.read(job.tempDirURI.resolve(mapFile), doc);
+
+    final KeyScope startScope = reader.getKeyDefinition();
+
+    // Read resources maps
+    final Collection<FileInfo> resourceMapFis = job.getFileInfo(fi ->
+      fi.isInputResource() && Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP)
+    );
+    final KeyScope rootScope = resourceMapFis
       .stream()
-      .filter(FileInfo::hasKeyref)
-      .collect(Collectors.toSet());
-    if (!fis.isEmpty()) {
-      try {
-        final String cls = Optional
-          .ofNullable(job.getProperty("temp-file-name-scheme"))
-          .orElse(configuration.get("temp-file-name-scheme"));
-        tempFileNameScheme = (TempFileNameScheme) Class.forName(cls).newInstance();
-      } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-        throw new RuntimeException(e);
-      }
-      tempFileNameScheme.setBaseDir(job.getInputDir());
-
-      // Read start map
-      final KeyrefReader reader = new KeyrefReader();
-      reader.setLogger(logger);
-      reader.setXmlUtils(xmlUtils);
-      final Job.FileInfo in = job.getFileInfo(FileInfo::isInput).iterator().next();
-      final URI mapFile = in.uri();
-      final XdmNode doc = readMap(in);
-      logger.info("Reading {}", job.tempDirURI.resolve(mapFile));
-      reader.read(job.tempDirURI.resolve(mapFile), doc);
-
-      final KeyScope startScope = reader.getKeyDefinition();
-
-      // Read resources maps
-      final Collection<FileInfo> resourceMapFis = job.getFileInfo(fi ->
-        fi.isInputResource() && Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP)
-      );
-      final KeyScope rootScope = resourceMapFis
-        .stream()
-        .map(fi -> {
-          try {
-            final XdmNode d = readMap(fi);
-            logger.info("Reading {}", job.tempDirURI.resolve(fi.uri()));
-            final KeyrefReader r = new KeyrefReader();
-            r.setLogger(logger);
-            r.read(job.tempDirURI.resolve(fi.uri()), d);
-            final KeyScope s = r.getKeyDefinition();
-            logger.debug("Writing {}", job.tempDirURI.resolve(fi.uri()));
-            writeMap(fi, d);
-            return s;
-          } catch (DITAOTException e) {
-            throw new RuntimeException(e);
-          }
-        })
-        .reduce(startScope, KeyScope::merge);
-
-      final Set<String> topicsInMap = doc
-        .select(descendant(MAP_TOPICREF.matcher()).where(isDitaFormat()).then(attribute(ATTRIBUTE_NAME_HREF)))
-        .map(node -> {
-          final URI href = stripFragment(job.tempDirURI.resolve(mapFile).resolve(node.getStringValue()));
-          return job.tempDirURI.relativize(href).toString();
-        })
-        .collect(Collectors.toSet());
-      final Collection<FileInfo> resourceTopicsFis = job.getFileInfo(fi ->
-        !topicsInMap.contains(fi.uri().toString()) &&
-        (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
-      );
-      final Collection<FileInfo> resourceFis = Stream
-        .concat(resourceMapFis.stream(), resourceTopicsFis.stream())
-        .toList();
-      final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
-
-      final Map<URI, String> topicIdCache = new ConcurrentHashMap<>();
-
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null)
-        .forEach(r -> processFile(r, topicIdCache));
-
-      (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null)
-        .forEach(r -> processFile(r, topicIdCache));
-
-      // Store job configuration updates
-      for (final URI file : normalProcessingRole) {
-        final FileInfo f = job.getFileInfo(file);
-        if (f != null) {
-          var b = FileInfo.builder(f).isResourceOnly(false);
-          job.add(b.build());
+      .map(fi -> {
+        try {
+          final XdmNode d = readMap(fi);
+          logger.info("Reading {}", job.tempDirURI.resolve(fi.uri()));
+          final KeyrefReader r = new KeyrefReader();
+          r.setLogger(logger);
+          r.read(job.tempDirURI.resolve(fi.uri()), d);
+          final KeyScope s = r.getKeyDefinition();
+          logger.debug("Writing {}", job.tempDirURI.resolve(fi.uri()));
+          writeMap(fi, d);
+          return s;
+        } catch (DITAOTException e) {
+          throw new RuntimeException(e);
         }
-      }
+      })
+      .reduce(startScope, KeyScope::merge);
 
-      try {
-        job.write();
-      } catch (final IOException e) {
-        throw new DITAOTException("Failed to store job state: " + e.getMessage(), e);
+    final Set<String> topicsInMap = doc
+      .select(descendant(MAP_TOPICREF.matcher()).where(isDitaFormat()).then(attribute(ATTRIBUTE_NAME_HREF)))
+      .map(node -> {
+        final URI href = stripFragment(job.tempDirURI.resolve(mapFile).resolve(node.getStringValue()));
+        return job.tempDirURI.relativize(href).toString();
+      })
+      .collect(Collectors.toSet());
+    final Collection<FileInfo> resourceTopicsFis = job.getFileInfo(fi ->
+      !topicsInMap.contains(fi.uri().toString()) &&
+      (Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITA) || fi.format() == null)
+    );
+    final Collection<FileInfo> resourceFis = Stream
+      .concat(resourceMapFis.stream(), resourceTopicsFis.stream())
+      .toList();
+    final List<ResolveTask> jobs = collectProcessingTopics(in, resourceFis, rootScope, doc);
+
+    final Map<URI, String> topicIdCache = new ConcurrentHashMap<>();
+
+    (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out != null)
+      .forEach(r -> processFile(r, topicIdCache));
+
+    (parallel ? jobs.stream().parallel() : jobs.stream()).filter(r -> r.out == null)
+      .forEach(r -> processFile(r, topicIdCache));
+
+    // Store job configuration updates
+    for (final URI file : normalProcessingRole) {
+      final FileInfo f = job.getFileInfo(file);
+      if (f != null) {
+        var b = FileInfo.builder(f).isResourceOnly(false);
+        job.add(b.build());
       }
+    }
+
+    try {
+      job.write();
+    } catch (final IOException e) {
+      throw new DITAOTException("Failed to store job state: " + e.getMessage(), e);
     }
     return null;
   }

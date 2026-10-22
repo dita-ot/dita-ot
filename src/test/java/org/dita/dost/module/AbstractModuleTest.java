@@ -168,6 +168,10 @@ public abstract class AbstractModuleTest {
   }
 
   public void test() {
+    test(getAbstractPipelineInput());
+  }
+
+  public void test(AbstractPipelineInput input) {
     if (job == null) {
       final Store store = new StreamStore(tempDir, xmlUtils);
       try {
@@ -181,7 +185,6 @@ public abstract class AbstractModuleTest {
     chunkModule.setLogger(logger);
     final File expDir = new File(expBaseDir, testCase);
     try {
-      final AbstractPipelineInput input = getAbstractPipelineInput();
       params.forEach(input::setAttribute);
       chunkModule.execute(input);
 
