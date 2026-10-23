@@ -169,7 +169,7 @@ public class ProfilingAttributeStack {
   }
 
   private void ensureCapacity() {
-    if (top > stack.length) {
+    if (top >= stack.length) {
       localNames = Arrays.copyOf(localNames, localNames.length * 2);
       stack = Arrays.copyOf(stack, stack.length * 2);
       mergeStack = Arrays.copyOf(mergeStack, mergeStack.length * 2);

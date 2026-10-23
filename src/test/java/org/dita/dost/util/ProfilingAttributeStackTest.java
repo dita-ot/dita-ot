@@ -265,9 +265,9 @@ class ProfilingAttributeStackTest {
   }
 
   @Test
-  void sixteenLevelsDeepWithCascading() {
+  void testEnsureCapacity() {
     stack.clear();
-    for (int i = 1; i <= 16; i++) {
+    for (int i = 1; i <= 26; i++) {
       if (i % 3 == 1) {
         stack.push(new AttributesBuilder().add("props", "level" + i).build());
       } else {
@@ -275,9 +275,9 @@ class ProfilingAttributeStackTest {
       }
     }
 
-    assertEquals("level16", stack.peek("props"));
+    assertEquals("level25", stack.peek("props"));
 
-    for (int i = 15; i >= 1; i--) {
+    for (int i = 25; i >= 1; i--) {
       stack.pop();
       if (i % 3 == 1) {
         assertEquals("level" + i, stack.peek("props"));
