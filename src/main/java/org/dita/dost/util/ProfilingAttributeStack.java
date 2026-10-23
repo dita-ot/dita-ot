@@ -7,17 +7,27 @@ import static org.dita.dost.util.Constants.MAP_MAP;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import org.xml.sax.Attributes;
 
+/**
+ * Attribute stack that tracks cascading profiling attributes.
+ *
+ * <ul>
+ *   <li>{@code props}</li>
+ *   <li>Built-in specializations {@code audience}, {@code platform} {@code product}, and {@code otherpropes}</li>
+ *   <li>Attribute specializations of {@code props}, as defined by {@code domains} or {@code specializations}</li>
+ * </ul>
+ */
 public class ProfilingAttributeStack {
 
-  private static final String[] LOCAL_NAMES = {
+  private static final List<String> LOCAL_NAMES = List.of(
     ATTRIBUTE_NAME_PROPS,
     ATTRIBUTE_NAME_AUDIENCE,
     ATTRIBUTE_NAME_PLATFORM,
     ATTRIBUTE_NAME_PRODUCT,
-    ATTRIBUTE_NAME_OTHERPROPS,
-  };
+    ATTRIBUTE_NAME_OTHERPROPS
+  );
 
   private static final String PROPS_PREFIX = "@props/";
 
@@ -32,6 +42,10 @@ public class ProfilingAttributeStack {
     this.mergeStack = new boolean[16];
   }
 
+  /**
+   * Push profiling attributes to top of stack.
+   * @param attrs attributes to read profiling attributes from
+   */
   public void push(Attributes attrs) {
     top++;
     ensureCapacity();
@@ -40,7 +54,7 @@ public class ProfilingAttributeStack {
     if (specializations != null) {
       localNames[top] = parseSpecializations(specializations);
     } else {
-      localNames[top] = top == 0 ? LOCAL_NAMES : localNames[top - 1];
+      localNames[top] = top == 0 ? LOCAL_NAMES.toArray(String[]::new) : localNames[top - 1];
     }
 
     var cascade = attrs.getValue(ATTRIBUTE_NAME_CASCADE);
@@ -75,8 +89,7 @@ public class ProfilingAttributeStack {
 
   @VisibleForTesting
   static String[] parseSpecializations(String specializations) {
-    var res = new LinkedHashSet<String>();
-    res.add(ATTRIBUTE_NAME_PROPS);
+    var res = new LinkedHashSet<>(LOCAL_NAMES);
     final int len = specializations.length();
     int pos = 0;
     while (pos < len) {
@@ -167,6 +180,7 @@ public class ProfilingAttributeStack {
    * Peek the top most attribute on the stack.
    * @param localName name of the attribute in namespace
    * @return cascaded value for the attribute, may be {@code null}
+   * @throws IllegalStateException when stack is empty
    */
   public String peek(String localName) {
     return peek(NULL_NS_URI, localName);
@@ -177,6 +191,7 @@ public class ProfilingAttributeStack {
    * @param namespace namespace URI of the attribute
    * @param localName local name of the attribute
    * @return cascaded value for the attribute, may be {@code null}
+   * @throws IllegalStateException when stack is empty
    */
   public String peek(String namespace, String localName) {
     if (top < 0) {
@@ -194,6 +209,7 @@ public class ProfilingAttributeStack {
 
   /**
    * Pop attribute from the top of the stack.
+   * @throws IllegalStateException when stack is empty
    */
   public void pop() {
     if (top < 0) {
