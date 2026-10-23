@@ -15,7 +15,8 @@ import org.xml.sax.Attributes;
  *
  * <ul>
  *   <li>{@code props}</li>
- *   <li>Built-in specializations {@code audience}, {@code platform} {@code product}, and {@code otherpropes}</li>
+ *   <li>Built-in specializations {@code audience}, {@code platform} {@code product}, {@code otherpropes},
+ *     and {@code rev}</li>
  *   <li>Attribute specializations of {@code props}, as defined by {@code domains} or {@code specializations}</li>
  * </ul>
  */
@@ -26,7 +27,8 @@ public class ProfilingAttributeStack {
     ATTRIBUTE_NAME_AUDIENCE,
     ATTRIBUTE_NAME_PLATFORM,
     ATTRIBUTE_NAME_PRODUCT,
-    ATTRIBUTE_NAME_OTHERPROPS
+    ATTRIBUTE_NAME_OTHERPROPS,
+    ATTRIBUTE_NAME_REV
   );
 
   private static final String PROPS_PREFIX = "@props/";
@@ -70,13 +72,15 @@ public class ProfilingAttributeStack {
 
     var length = localNames[top].length;
     stack[top] = new String[length];
+    String localName;
     for (int i = 0; i < length; i++) {
-      var value = attrs.getValue(NULL_NS_URI, localNames[top][i]);
+      localName = localNames[top][i];
+      var value = attrs.getValue(NULL_NS_URI, localName);
       if (top > 0) {
         if (value == null) {
           var prev = stack[top - 1][i];
           value = prev;
-        } else if (mergeStack[top]) {
+        } else if (mergeStack[top] && !localName.equals(ATTRIBUTE_NAME_REV)) {
           var prev = stack[top - 1][i];
           if (prev != null) {
             value = merge(value, prev);

@@ -88,6 +88,95 @@ class ProfilingAttributeStackTest {
     assertEquals("otherprops value", stack.peek("otherprops"));
     assertEquals("props value", stack.peek("props"));
     assertEquals("deliveryTarget value", stack.peek("deliveryTarget"));
+    assertEquals("rev value", stack.peek("rev"));
+  }
+
+  @Test
+  void testCascadeMerge() {
+    stack.push(
+      new AttributesBuilder()
+        .add("cascade", "merge")
+        .add("audience", "audience_1")
+        .add("platform", "platform_1")
+        .add("product", "product_1")
+        .add("otherprops", "otherprops_1")
+        .add("props", "props_1")
+        .add("deliveryTarget", "deliveryTarget_1")
+        .add("rev", "rev_1")
+        .build()
+    );
+
+    assertEquals("audience_1", stack.peek("audience"));
+    assertEquals("platform_1", stack.peek("platform"));
+    assertEquals("product_1", stack.peek("product"));
+    assertEquals("otherprops_1", stack.peek("otherprops"));
+    assertEquals("props_1", stack.peek("props"));
+    assertEquals("deliveryTarget_1", stack.peek("deliveryTarget"));
+    assertEquals("rev_1", stack.peek("rev"));
+
+    stack.push(
+      new AttributesBuilder()
+        .add("audience", "audience_2")
+        .add("platform", "platform_2")
+        .add("product", "product_2")
+        .add("otherprops", "otherprops_2")
+        .add("props", "props_2")
+        .add("deliveryTarget", "deliveryTarget_2")
+        .add("rev", "rev_2")
+        .build()
+    );
+
+    assertEquals("audience_2 audience_1", stack.peek("audience"));
+    assertEquals("platform_2 platform_1", stack.peek("platform"));
+    assertEquals("product_2 product_1", stack.peek("product"));
+    assertEquals("otherprops_2 otherprops_1", stack.peek("otherprops"));
+    assertEquals("props_2 props_1", stack.peek("props"));
+    assertEquals("deliveryTarget_2 deliveryTarget_1", stack.peek("deliveryTarget"));
+    assertEquals("rev_2", stack.peek("rev"));
+  }
+
+  @Test
+  void testCascadeNoMerge() {
+    stack.push(
+      new AttributesBuilder()
+        .add("cascade", "nomerge")
+        .add("audience", "audience_1")
+        .add("platform", "platform_1")
+        .add("product", "product_1")
+        .add("otherprops", "otherprops_1")
+        .add("props", "props_1")
+        .add("deliveryTarget", "deliveryTarget_1")
+        .add("rev", "rev_1")
+        .build()
+    );
+
+    assertEquals("audience_1", stack.peek("audience"));
+    assertEquals("platform_1", stack.peek("platform"));
+    assertEquals("product_1", stack.peek("product"));
+    assertEquals("otherprops_1", stack.peek("otherprops"));
+    assertEquals("props_1", stack.peek("props"));
+    assertEquals("deliveryTarget_1", stack.peek("deliveryTarget"));
+    assertEquals("rev_1", stack.peek("rev"));
+
+    stack.push(
+      new AttributesBuilder()
+        .add("audience", "audience_2")
+        .add("platform", "platform_2")
+        .add("product", "product_2")
+        .add("otherprops", "otherprops_2")
+        .add("props", "props_2")
+        .add("deliveryTarget", "deliveryTarget_2")
+        .add("rev", "rev_2")
+        .build()
+    );
+
+    assertEquals("audience_2", stack.peek("audience"));
+    assertEquals("platform_2", stack.peek("platform"));
+    assertEquals("product_2", stack.peek("product"));
+    assertEquals("otherprops_2", stack.peek("otherprops"));
+    assertEquals("props_2", stack.peek("props"));
+    assertEquals("deliveryTarget_2", stack.peek("deliveryTarget"));
+    assertEquals("rev_2", stack.peek("rev"));
   }
 
   @Test
@@ -300,17 +389,23 @@ class ProfilingAttributeStackTest {
 
   static Stream<Arguments> testParseSpecializationsArgs() {
     return Stream.of(
-      Arguments.of("@props/foo", new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }),
-      Arguments.of(" @props/foo ", new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }),
+      Arguments.of(
+        "@props/foo",
+        new String[] { "props", "audience", "platform", "product", "otherprops", "rev", "foo" }
+      ),
+      Arguments.of(
+        " @props/foo ",
+        new String[] { "props", "audience", "platform", "product", "otherprops", "rev", "foo" }
+      ),
       Arguments.of(
         "@props/foo @props/bar",
-        new String[] { "props", "audience", "platform", "product", "otherprops", "foo", "bar" }
+        new String[] { "props", "audience", "platform", "product", "otherprops", "rev", "foo", "bar" }
       ),
       Arguments.of(
         "@props/foo @base/bar",
-        new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }
+        new String[] { "props", "audience", "platform", "product", "otherprops", "rev", "foo" }
       ),
-      Arguments.of("@base/bar", new String[] { "props", "audience", "platform", "product", "otherprops" })
+      Arguments.of("@base/bar", new String[] { "props", "audience", "platform", "product", "otherprops", "rev" })
     );
   }
 
