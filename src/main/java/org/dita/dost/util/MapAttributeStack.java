@@ -7,6 +7,7 @@ import static org.dita.dost.util.Constants.MAP_MAP;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.xml.sax.Attributes;
@@ -21,6 +22,8 @@ public class MapAttributeStack {
     ATTRIBUTE_NAME_OTHERPROPS,
     ATTRIBUTE_NAME_DELIVERY_TARGET,
   };
+
+  private static final String PROPS_PREFIX = "@props/";
 
   private String[][] localNames;
   private String[][] stack;
@@ -76,16 +79,31 @@ public class MapAttributeStack {
 
   @VisibleForTesting
   static String[] parseSpecializations(String specializations) {
-    var res = new LinkedHashSet<>(LOCAL_NAMES.length);
+    var res = new LinkedHashSet<String>();
     res.add(ATTRIBUTE_NAME_PROPS);
-    Arrays
-      .stream(specializations.trim().split("\\s+"))
-      .filter(token -> token.startsWith("@props/"))
-      .flatMap(token -> {
-        String[] names = token.split("/");
-        return Arrays.stream(names, 1, names.length);
-      })
-      .forEach(res::add);
+    final int len = specializations.length();
+    int pos = 0;
+    while (pos < len) {
+      while (pos < len && specializations.charAt(pos) <= ' ') {
+        pos++;
+      }
+      int end = pos;
+      while (end < len && specializations.charAt(end) > ' ') {
+        end++;
+      }
+      if (specializations.startsWith(PROPS_PREFIX, pos)) {
+        int start = pos + PROPS_PREFIX.length();
+        for (int i = start; i <= end; i++) {
+          if (i == end || specializations.charAt(i) == '/') {
+            if (i > start) {
+              res.add(specializations.substring(start, i));
+            }
+            start = i + 1;
+          }
+        }
+      }
+      pos = end;
+    }
     return res.toArray(String[]::new);
   }
 
