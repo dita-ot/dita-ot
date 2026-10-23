@@ -7,9 +7,6 @@ import static org.dita.dost.util.Constants.MAP_MAP;
 import com.google.common.annotations.VisibleForTesting;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.xml.sax.Attributes;
 
 public class MapAttributeStack {
@@ -108,13 +105,55 @@ public class MapAttributeStack {
   }
 
   @VisibleForTesting
-  static String merge(String prev, String curr) {
-    return Stream
-      .of(prev, curr)
-      .flatMap(s -> Arrays.stream(s.strip().split("\\s+")))
-      .filter(token -> !token.isEmpty())
-      .distinct()
-      .collect(Collectors.joining(" "));
+  static String merge(final String prev, final String curr) {
+    final StringBuilder res = new StringBuilder(prev.length() + curr.length() + 1);
+    appendTokens(res, prev);
+    appendTokens(res, curr);
+    return res.toString();
+  }
+
+  private static void appendTokens(final StringBuilder res, final String value) {
+    final int len = value.length();
+    int pos = 0;
+    while (pos < len) {
+      while (pos < len && value.charAt(pos) <= ' ') {
+        pos++;
+      }
+      int end = pos;
+      while (end < len && value.charAt(end) > ' ') {
+        end++;
+      }
+      if (end > pos && !containsToken(res, value, pos, end)) {
+        if (!res.isEmpty()) {
+          res.append(' ');
+        }
+        res.append(value, pos, end);
+      }
+      pos = end;
+    }
+  }
+
+  private static boolean containsToken(final StringBuilder res, final String value, final int from, final int to) {
+    final int length = to - from;
+    final int len = res.length();
+    int pos = 0;
+    while (pos < len) {
+      int end = res.indexOf(" ", pos);
+      if (end == -1) {
+        end = len;
+      }
+      if (end - pos == length) {
+        int i = 0;
+        while (i < length && res.charAt(pos + i) == value.charAt(from + i)) {
+          i++;
+        }
+        if (i == length) {
+          return true;
+        }
+      }
+      pos = end + 1;
+    }
+    return false;
   }
 
   private void ensureCapacity() {

@@ -319,8 +319,8 @@ class MapAttributeStackTest {
       "foo bar, baz, foo bar baz",
       "foo, bar baz, foo bar baz",
       "foo, foo, foo",
-      "foo bar, bar, foo bar",
       "foo bar, foo, foo bar",
+      "foo bar, bar, foo bar",
       "foo bar, foo bar, foo bar",
     }
   )
