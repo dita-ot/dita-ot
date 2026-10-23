@@ -17,7 +17,6 @@ public class ProfilingAttributeStack {
     ATTRIBUTE_NAME_PLATFORM,
     ATTRIBUTE_NAME_PRODUCT,
     ATTRIBUTE_NAME_OTHERPROPS,
-    ATTRIBUTE_NAME_DELIVERY_TARGET,
   };
 
   private static final String PROPS_PREFIX = "@props/";

@@ -1,7 +1,8 @@
 package org.dita.dost.util;
 
 import static javax.xml.XMLConstants.XML_NS_URI;
-import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_SPECIALIZATIONS;
+import static org.dita.dost.util.Constants.*;
+import static org.dita.dost.util.Constants.ATTRIBUTE_NAME_OTHERPROPS;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.Stream;
@@ -20,19 +21,19 @@ class ProfilingAttributeStackTest {
   @BeforeEach
   void setUp() {
     stack = new ProfilingAttributeStack();
-  }
-
-  @Test
-  void specializations() {
     stack.push(
       new AttributesBuilder()
         .add(
           ATTRIBUTE_NAME_SPECIALIZATIONS,
           "@props/audience @props/deliveryTarget @props/otherprops @props/platform @props/product"
         )
-        .add("audience", "audience 1")
         .build()
     );
+  }
+
+  @Test
+  void specializations() {
+    stack.push(new AttributesBuilder().add("audience", "audience 1").build());
 
     stack.push(
       new AttributesBuilder()
@@ -265,6 +266,7 @@ class ProfilingAttributeStackTest {
 
   @Test
   void sixteenLevelsDeepWithCascading() {
+    stack.clear();
     for (int i = 1; i <= 16; i++) {
       if (i % 3 == 1) {
         stack.push(new AttributesBuilder().add("props", "level" + i).build());
@@ -298,11 +300,17 @@ class ProfilingAttributeStackTest {
 
   static Stream<Arguments> testParseSpecializationsArgs() {
     return Stream.of(
-      Arguments.of("@props/foo", new String[] { "props", "foo" }),
-      Arguments.of(" @props/foo ", new String[] { "props", "foo" }),
-      Arguments.of("@props/foo @props/bar", new String[] { "props", "foo", "bar" }),
-      Arguments.of("@props/foo @base/bar", new String[] { "props", "foo" }),
-      Arguments.of("@base/bar", new String[] { "props" })
+      Arguments.of("@props/foo", new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }),
+      Arguments.of(" @props/foo ", new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }),
+      Arguments.of(
+        "@props/foo @props/bar",
+        new String[] { "props", "audience", "platform", "product", "otherprops", "foo", "bar" }
+      ),
+      Arguments.of(
+        "@props/foo @base/bar",
+        new String[] { "props", "audience", "platform", "product", "otherprops", "foo" }
+      ),
+      Arguments.of("@base/bar", new String[] { "props", "audience", "platform", "product", "otherprops" })
     );
   }
 
