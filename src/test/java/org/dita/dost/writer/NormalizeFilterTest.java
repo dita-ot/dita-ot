@@ -51,13 +51,10 @@ public class NormalizeFilterTest {
         public void startElement(String uri, String localName, String qName, Attributes attributes)
           throws SAXException {
           assertEquals(
-            "(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d) a(props audience) a(props deliveryTarget) a(props platform) a(props product) a(props otherprops)",
+            "(topic hi-d) (topic ut-d) (topic indexing-d) (topic hazard-d) (topic abbrev-d) (topic pr-d) (topic sw-d) (topic ui-d) a(props deliveryTarget)",
             attributes.getValue(ATTRIBUTE_NAME_DOMAINS)
           );
-          assertEquals(
-            "@props/audience @props/deliveryTarget @props/platform @props/product @props/otherprops",
-            attributes.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS)
-          );
+          assertEquals("@props/deliveryTarget", attributes.getValue(ATTRIBUTE_NAME_SPECIALIZATIONS));
         }
       }
     );
@@ -70,19 +67,16 @@ public class NormalizeFilterTest {
         .add(
           ATTRIBUTE_NAME_DOMAINS,
           """
-                        (topic hi-d)
-                        (topic ut-d)
-                        (topic indexing-d)
-                        (topic hazard-d)
-                        (topic abbrev-d)
-                        (topic pr-d)
-                        (topic sw-d)
-                        (topic ui-d)
-                        a(props audience)
-                        a(props deliveryTarget)
-                        a(props platform)
-                        a(props product)
-                        a(props otherprops)   \s"""
+          (topic hi-d)
+          (topic ut-d)
+          (topic indexing-d)
+          (topic hazard-d)
+          (topic abbrev-d)
+          (topic pr-d)
+          (topic sw-d)
+          (topic ui-d)
+          a(props deliveryTarget)
+          """
         )
         .build()
     );
@@ -117,11 +111,12 @@ public class NormalizeFilterTest {
         .add(
           ATTRIBUTE_NAME_SPECIALIZATIONS,
           """
-                          @props/audience
-                        @props/deliveryTarget
-                        @props/platform
-                        @props/product
-                        @props/otherprops \s"""
+          @props/audience
+          @props/deliveryTarget
+          @props/platform
+          @props/product
+          @props/otherprops
+          """
         )
         .build()
     );
