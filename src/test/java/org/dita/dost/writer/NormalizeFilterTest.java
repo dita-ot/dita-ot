@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.dita.dost.TestUtils;
 import org.dita.dost.util.XMLUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -144,5 +146,27 @@ public class NormalizeFilterTest {
         .add(ATTRIBUTE_NAME_CASCADE, ATTRIBUTE_CASCADE_VALUE_MERGE)
         .build()
     );
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    {
+      "(topic hi-d) a(props deliveryTarget), @props/deliveryTarget",
+      "a(props audience) a(props deliveryTarget) a(props platform) a(props product) a(props otherprops), @props/audience @props/deliveryTarget @props/platform @props/product @props/otherprops",
+    }
+  )
+  void testDomainsToSpecializations(String src, String exp) {
+    assertEquals(exp, NormalizeFilter.domainsToSpecializations(src));
+  }
+
+  @ParameterizedTest
+  @CsvSource(
+    {
+      "@props/deliveryTarget, a(props deliveryTarget)",
+      "@props/audience @props/deliveryTarget @props/platform @props/product @props/otherprops, a(props audience) a(props deliveryTarget) a(props platform) a(props product) a(props otherprops)",
+    }
+  )
+  void testSpecializationsToDomains(String src, String exp) {
+    assertEquals(exp, NormalizeFilter.specializationsToDomains(src));
   }
 }
