@@ -267,7 +267,7 @@ class AttributeStackTest {
   void errorConditionsWithCascading() {
     stack.push(new AttributesBuilder().add("foo", "value").build());
 
-    assertNull(stack.peek("unknown"));
+    assertThrows(IllegalArgumentException.class, () -> stack.peek("unknown"));
 
     AttributeStack emptyStack = new AttributeStack("test");
     assertThrows(IllegalStateException.class, () -> emptyStack.peek("test"));

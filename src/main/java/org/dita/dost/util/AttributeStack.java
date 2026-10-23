@@ -123,7 +123,9 @@ public class AttributeStack {
    */
   public void push(Attributes attrs) {
     top++;
-    ensureCapacity();
+    if ((top + 1) * attributeCount > stack.length) {
+      stack = Arrays.copyOf(stack, stack.length * 2);
+    }
 
     int baseIndex = top * attributeCount;
     for (int i = 0; i < attributeCount; i++) {
@@ -132,12 +134,6 @@ public class AttributeStack {
         value = stack[(top - 1) * attributeCount + i];
       }
       stack[baseIndex + i] = value;
-    }
-  }
-
-  private void ensureCapacity() {
-    if ((top + 1) * attributeCount > stack.length) {
-      stack = Arrays.copyOf(stack, stack.length * 2);
     }
   }
 
@@ -173,7 +169,7 @@ public class AttributeStack {
         return stack[top * attributeCount + i];
       }
     }
-    return null;
+    throw new IllegalArgumentException("Stack not initialized for attribute {%s}%s".formatted(namespace, localName));
   }
 
   /**
