@@ -13,13 +13,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-class MapAttributeStackTest {
+class ProfilingAttributeStackTest {
 
-  private MapAttributeStack stack;
+  private ProfilingAttributeStack stack;
 
   @BeforeEach
   void setUp() {
-    stack = new MapAttributeStack();
+    stack = new ProfilingAttributeStack();
   }
 
   @Test
@@ -249,7 +249,7 @@ class MapAttributeStackTest {
 
     assertNull(stack.peek("unknown"));
 
-    var emptyStack = new MapAttributeStack();
+    var emptyStack = new ProfilingAttributeStack();
     assertThrows(IllegalStateException.class, () -> emptyStack.peek("props"));
   }
 
@@ -309,7 +309,7 @@ class MapAttributeStackTest {
   @ParameterizedTest
   @MethodSource("testParseSpecializationsArgs")
   void testParseSpecializations(String src, String[] exp) {
-    assertArrayEquals(exp, MapAttributeStack.parseSpecializations(src));
+    assertArrayEquals(exp, ProfilingAttributeStack.parseSpecializations(src));
   }
 
   @ParameterizedTest
@@ -325,6 +325,6 @@ class MapAttributeStackTest {
     }
   )
   void testMerge(String prev, String curr, String exp) {
-    assertEquals(exp, MapAttributeStack.merge(prev, curr));
+    assertEquals(exp, ProfilingAttributeStack.merge(prev, curr));
   }
 }

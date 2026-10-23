@@ -39,7 +39,7 @@ public final class ProfilingFilter extends AbstractXMLFilter {
   private final Deque<Set<Flag>> flagStack = new LinkedList<>();
   private final boolean doFlag;
   /** Stack for cascading attributes. */
-  private final MapAttributeStack attributeStack = new MapAttributeStack();
+  private final ProfilingAttributeStack attributeStack = new ProfilingAttributeStack();
   private final AttributeStackDecorator stackAttributes = new AttributeStackDecorator();
 
   /**

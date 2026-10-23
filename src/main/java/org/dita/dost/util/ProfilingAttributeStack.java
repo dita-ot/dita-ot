@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import org.xml.sax.Attributes;
 
-public class MapAttributeStack {
+public class ProfilingAttributeStack {
 
   private static final String[] LOCAL_NAMES = {
     ATTRIBUTE_NAME_PROPS,
@@ -27,7 +27,7 @@ public class MapAttributeStack {
   private int top = -1;
   private boolean[] mergeStack;
 
-  public MapAttributeStack() {
+  public ProfilingAttributeStack() {
     this.localNames = new String[16][];
     this.stack = new String[16][];
     this.mergeStack = new boolean[16];
