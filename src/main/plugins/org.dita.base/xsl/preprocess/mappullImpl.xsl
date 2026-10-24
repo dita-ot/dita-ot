@@ -89,8 +89,6 @@ Other modes can be found within the code, and may or may not prove useful for ov
     <!-- used for mapref target to see whether @toc should be override by the source of mapref -->
     <xsl:param name="parent-processing-role" as="xs:string">#none#</xsl:param>
 
-    <xsl:param name="topicref" as="element()" select="."/>
-
     <!--need to create these variables regardless, for passing as a parameter to get-stuff template-->
         <xsl:variable name="type" as="xs:string">
           <xsl:call-template name="inherit"><xsl:with-param name="attrib">type</xsl:with-param></xsl:call-template>
@@ -158,16 +156,9 @@ Other modes can be found within the code, and may or may not prove useful for ov
           </xsl:if>
 
           <!-- Cascade profiling attributes -->
-          <xsl:variable name="specializations" as="xs:string*">
-            <xsl:for-each select="ancestor-or-self::*[@domains][1]/@domains">
-              <xsl:analyze-string select="normalize-space(.)" regex="a\(props (.+?)\)">
-                <xsl:matching-substring>
-                  <xsl:sequence select="tokenize(regex-group(1), '\s+')"/>
-                </xsl:matching-substring>
-              </xsl:analyze-string>
-            </xsl:for-each>
-          </xsl:variable>
-
+          <xsl:variable name="specializations" as="xs:string*"
+                        select="dita-ot:parseSpecializations(ancestor-or-self::*[@specializations][1]/@specializations)"/>
+          <xsl:variable name="topicref" select="." as="element()"/>
           <xsl:for-each select="('rev', 'props', 'audience', 'platform', 'product', 'otherprops', $specializations)">
             <xsl:apply-templates select="$topicref" mode="mappull:inherit-and-set-attribute"><xsl:with-param name="attrib" select="."/></xsl:apply-templates>
           </xsl:for-each>
@@ -213,6 +204,17 @@ Other modes can be found within the code, and may or may not prove useful for ov
       </xsl:attribute>
     </xsl:if>
   </xsl:template>
+
+  <xsl:function name="dita-ot:parseSpecializations" as="xs:string*">
+    <xsl:param name="specializations" as="attribute()?"/>
+    <xsl:if test="$specializations">
+      <xsl:analyze-string select="$specializations" regex="@props/(\S+)+">
+        <xsl:matching-substring>
+          <xsl:sequence select="tokenize(regex-group(1), '/')"/>
+        </xsl:matching-substring>
+      </xsl:analyze-string>
+    </xsl:if>
+  </xsl:function>
 
   <!-- RDA: FUNCTIONS TO IMPROVE OVERRIDE CAPABILITIES FOR INHERITING ATTRIBUTES -->
 
