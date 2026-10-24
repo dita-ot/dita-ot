@@ -56,6 +56,12 @@
 
 /* Align images based on @align on topic/image */
 
+img.break {
+  display: block;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 div.imageleft {
   text-align: left;
 }
