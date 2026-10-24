@@ -118,7 +118,9 @@ public final class ImageMetadataFilter extends AbstractXMLFilter {
     if (TOPIC_IMAGE.matches(atts) || SVG_D_SVGREF.matches(atts)) {
       final XMLUtils.AttributesBuilder a = new XMLUtils.AttributesBuilder(atts);
       final URI href = toURI(atts.getValue(ATTRIBUTE_NAME_HREF));
-      if (href != null) {
+      final String scope = atts.getValue(ATTRIBUTE_NAME_SCOPE);
+      final boolean isScopeExternal = scope != null && scope.equals(ATTR_SCOPE_VALUE_EXTERNAL);
+      if (href != null && !isScopeExternal) {
         final URI imgInput = getImageFile(href);
         if (imgInput != null) {
           Attributes m = cache.computeIfAbsent(imgInput, this::readMetadata);
