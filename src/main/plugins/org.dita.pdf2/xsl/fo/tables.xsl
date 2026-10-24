@@ -694,13 +694,13 @@ See the accompanying LICENSE file for applicable license.
             <xsl:choose>
                 <xsl:when test="$frame = ('all', 'topbot', 'top')">
                     <xsl:choose>
-                        <xsl:when test="../parent::node()[contains(@class, ' topic/thead ')]">
+                        <xsl:when test="../parent::*[contains(@class, ' topic/thead ')]">
                             <xsl:sequence select="true()"/>
                         </xsl:when>
-                        <xsl:when test="(../parent::node()[contains(@class, ' topic/tbody ')]) and not(../preceding-sibling::*[contains(@class, ' topic/row ')])">
+                        <xsl:when test="exists(../parent::*[contains(@class, ' topic/tbody ')]) and not(../preceding-sibling::*[contains(@class, ' topic/row ')])">
                             <xsl:sequence select="true()"/>
                         </xsl:when>
-                        <xsl:when test="../parent::node()[contains(@class, ' topic/tbody ')]">
+                        <xsl:when test="../parent::*[contains(@class, ' topic/tbody ')]">
                             <xsl:variable name="entryNum" select="count(preceding-sibling::*[contains(@class, ' topic/entry ')]) + 1"/>
                             <xsl:variable name="prevEntryRowsep" as="xs:string?">
                                 <xsl:for-each select="../preceding-sibling::*[contains(@class, ' topic/row ')][1]/*[contains(@class, ' topic/entry ')][$entryNum]">
@@ -726,14 +726,14 @@ See the accompanying LICENSE file for applicable license.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:if test="number($rowsep) = 1 and (../parent::node()[contains(@class, ' topic/thead ')])">
+        <xsl:if test="number($rowsep) = 1 and exists(../parent::*[contains(@class, ' topic/thead ')])">
           <xsl:call-template name="get-attributes">
             <xsl:with-param name="element" as="element()">
               <placeholder xsl:use-attribute-sets="thead__tableframe__bottom"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:if>
-        <xsl:if test="number($rowsep) = 1 and ((../following-sibling::*[contains(@class, ' topic/row ')]) or (../parent::node()[contains(@class, ' topic/tbody ')] and ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/tfoot ')]))">
+        <xsl:if test="number($rowsep) = 1 and ((../following-sibling::*[contains(@class, ' topic/row ')]) or (../parent::*[contains(@class, ' topic/tbody ')] and ancestor::*[contains(@class, ' topic/tgroup ')][1]/*[contains(@class, ' topic/tfoot ')]))">
           <xsl:call-template name="get-attributes">
             <xsl:with-param name="element" as="element()">
               <placeholder xsl:use-attribute-sets="__tableframe__bottom"/>
