@@ -189,7 +189,7 @@ mode="topicpull:figure-linktext" and mode="topicpull:table-linktext"
             <!-- Local scope but not a dita or ditamap target, cannot resolve. -->
             <xsl:sequence select="()"/>
           </xsl:when>
-          <xsl:when test="empty($resourcePart)">
+          <xsl:when test="empty($resourcePart) or $resourcePart = ''">
             <xsl:sequence select="root($linkElement)"/>
           </xsl:when>
           <xsl:otherwise>
