@@ -54,12 +54,19 @@ See the accompanying LICENSE file for applicable license.
       </x:call>
       <x:expect label="" select="xs:anyURI('file:/d/a.dita')"/>
     </x:scenario>
-    <x:scenario label="same as base">
+    <x:scenario label="same directory as base">
       <x:call function="dita-ot:relativize">
         <x:param name="base" select="xs:anyURI('file:/c/map1/map2/map.ditamap')"/>
         <x:param name="uri" select="xs:anyURI('file:/c/map1/map2/a.dita')"/>
       </x:call>
       <x:expect label="" select="xs:anyURI('a.dita')"/>
+    </x:scenario>
+    <x:scenario label="same file as base">
+      <x:call function="dita-ot:relativize">
+        <x:param name="base" select="xs:anyURI('file:/c/map1/map2/map.ditamap')"/>
+        <x:param name="uri" select="xs:anyURI('file:/c/map1/map2/map.ditamap')"/>
+      </x:call>
+      <x:expect label="" select="xs:anyURI('')"/>
     </x:scenario>
     <x:scenario label="sibling directory">
       <x:call function="dita-ot:relativize">
