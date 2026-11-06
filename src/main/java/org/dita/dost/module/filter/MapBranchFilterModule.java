@@ -368,13 +368,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   /**
    * Duplicate branches so that each {@code ditavalref} will in a separate branch.
+   *
+   * <p>Some elements that can contain {@code ditavalref} cannot be duplicated, such as {@code map} and {@code relcell}.
+   * These need to be wrapped in a {@code topicgroup} in order to duplicate the branches.</p>
    */
-  void splitBranches(final Element elem, final Branch filter) {
-    if (MAP_MAP.matches(elem) && getChildElements(elem, DITAVAREF_D_DITAVALREF).size() > 1) {
-      splitElement(wrapChildren(elem, MAPGROUP_D_TOPICGROUP), filter);
-    } else {
-      splitElement(elem, filter);
+  void splitBranches(final Element root, final Branch filter) {
+    if (MAP_MAP.matches(root) && getChildElements(root, DITAVAREF_D_DITAVALREF).size() > 1) {
+      wrapChildren(root, MAPGROUP_D_TOPICGROUP);
     }
+    for (Element reltable : getChildElements(root, MAP_RELTABLE)) {
+      for (Element relrow : getChildElements(reltable, MAP_RELROW)) {
+        for (Element relcell : getChildElements(relrow, MAP_RELCELL)) {
+          if (getChildElements(relcell, DITAVAREF_D_DITAVALREF).size() > 1) {
+            wrapChildren(relcell, MAPGROUP_D_TOPICGROUP);
+          }
+        }
+      }
+    }
+
+    splitElement(root, filter);
   }
 
   private void splitElement(final Element elem, final Branch filter) {
