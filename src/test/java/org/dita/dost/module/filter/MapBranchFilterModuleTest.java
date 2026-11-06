@@ -24,6 +24,7 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.store.StreamStore;
+import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
@@ -39,6 +40,7 @@ import org.xml.sax.SAXException;
 public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   private final File resourceDir = TestUtils.getResourceDir(MapBranchFilterModuleTest.class);
+  private final File srcDir = new File(resourceDir, "src");
   private final File expDir = new File(resourceDir, "exp");
 
   @TempDir
@@ -46,7 +48,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @BeforeEach
   public void setUp() throws Exception {
-    TestUtils.copy(new File(resourceDir, "src"), tempDir);
+    TestUtils.copy(srcDir, tempDir);
   }
 
   private Job getJob(String file) throws IOException {
@@ -87,7 +89,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input", "input_dita2", "root-single" })
+  @ValueSource(strings = { "input", "input_dita2", "root-single", "root-multiple" })
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
     final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
@@ -320,5 +322,18 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       );
     }
     return res;
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "only-wrapped.ditamap", "with-title.ditamap", "with-reltable.ditamap", "with-both.ditamap" })
+  void testWrapChildren(String file) throws IOException, SAXException, ParserConfigurationException {
+    final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    var src = builder.parse(new File(srcDir, "wrapChildren/" + file));
+
+    var act = wrapChildren(src.getDocumentElement(), MAPGROUP_D_TOPICGROUP);
+
+    var exp = builder.parse(new File(expDir, "wrapChildren/" + file));
+
+    assertXMLEqual(exp, act.getOwnerDocument());
   }
 }

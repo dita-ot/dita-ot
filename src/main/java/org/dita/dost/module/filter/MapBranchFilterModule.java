@@ -31,12 +31,9 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.xmlresolver.utils.URIUtils;
 
@@ -373,6 +370,14 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    * Duplicate branches so that each {@code ditavalref} will in a separate branch.
    */
   void splitBranches(final Element elem, final Branch filter) {
+    if (MAP_MAP.matches(elem) && getChildElements(elem, DITAVAREF_D_DITAVALREF).size() > 1) {
+      splitElement(wrapChildren(elem, MAPGROUP_D_TOPICGROUP), filter);
+    } else {
+      splitElement(elem, filter);
+    }
+  }
+
+  private void splitElement(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
     if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
@@ -410,13 +415,13 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
             continue;
           }
-          splitBranches(child, childFilter);
+          splitElement(child, childFilter);
         }
       }
     } else {
       processAttributes(elem, filter);
       for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
-        splitBranches(child, filter);
+        splitElement(child, filter);
       }
     }
   }
@@ -502,5 +507,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     }
     return toURI(buf.toString());
+  }
+
+  /**
+   * Wrap element contents into an element.
+   */
+  static Element wrapChildren(Element elem, DitaClass cls) {
+    var inserted = false;
+    var wrapper = elem.getOwnerDocument().createElement(cls.localName);
+    wrapper.setAttribute(ATTRIBUTE_NAME_CLASS, cls.toString());
+    for (Node child = elem.getFirstChild(), next; child != null; child = next) {
+      next = child.getNextSibling();
+      if (MAP_TOPICREF.matches(child) || MAP_TOPICMETA.matches(child)) {
+        if (!inserted) {
+          child.getParentNode().insertBefore(wrapper, child);
+          inserted = true;
+        }
+        wrapper.appendChild(child);
+      }
+    }
+    return wrapper;
   }
 }
