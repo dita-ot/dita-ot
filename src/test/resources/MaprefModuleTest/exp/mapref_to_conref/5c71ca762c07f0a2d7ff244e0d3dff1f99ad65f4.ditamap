@@ -12,7 +12,7 @@
           dita-ot:submap-domains="(map mapgroup-d) (topic abbrev-d) (topic delay-d) a(props deliveryTarget) (map ditavalref-d) (map glossref-d) (topic hazard-d) (topic hi-d) (topic indexing-d) (topic markup-d) (topic pr-d) (topic relmgmt-d) (topic sw-d) (topic ui-d) (topic ut-d) (topic markup-d xml-d)"
           dita-ot:submap-specializations="@props/deliveryTarget">
     <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-      <submap-title class="+ topic/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">Indirect Map
+      <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title " dita-ot:submap-class="- topic/title ">Indirect Map
       </submap-title>
     </submap-topicmeta>
     <topicref class="- map/topicref " href="2b74d0fdd4c20584f94fecf059e6dd30c92f9269.dita">
