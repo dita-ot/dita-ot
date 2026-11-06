@@ -87,7 +87,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input", "input_dita2" })
+  @ValueSource(strings = { "input", "input_dita2", "root-single" })
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
     final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 

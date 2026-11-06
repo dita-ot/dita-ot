@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+     class="- map/map "
+     ditaarch:DITAArchVersion="1.3"
+     domains="(topic delay-d)                          (map mapgroup-d)                           (topic indexing-d)                          (map glossref-d)                          (topic hi-d)                           (topic ut-d)                           (topic hazard-d)                          (topic abbrev-d)                          (topic pr-d)                           (topic sw-d)                          (topic ui-d)                         ">
+  <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="linux.ditaval">
+    <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
+      <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">-linux</dvrResourceSuffix>
+    </ditavalmeta>
+  </ditavalref>
+  <topicref class="- map/topicref " filter-copy-to="install-linux.dita" href="install.dita"/>
+</map>
