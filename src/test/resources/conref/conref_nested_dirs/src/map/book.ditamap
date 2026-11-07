@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="book">
+  <booktitle><mainbooktitle>Book</mainbooktitle></booktitle>
+  <bookmeta>
+    <prodinfo conref="../common/common.ditamap#prodinfo">
+      <prodname><keyword conref="../common/library.dita#library/prodname"/></prodname>
+    </prodinfo>
+  </bookmeta>
+  <chapter href="topic.dita"/>
+</bookmap>
