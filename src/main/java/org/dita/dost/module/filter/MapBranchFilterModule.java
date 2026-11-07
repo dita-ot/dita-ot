@@ -31,12 +31,9 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
 import org.xmlresolver.utils.URIUtils;
 
@@ -371,8 +368,28 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
 
   /**
    * Duplicate branches so that each {@code ditavalref} will in a separate branch.
+   *
+   * <p>Some elements that can contain {@code ditavalref} cannot be duplicated, such as {@code map} and {@code relcell}.
+   * These need to be wrapped in a {@code topicgroup} in order to duplicate the branches.</p>
    */
-  void splitBranches(final Element elem, final Branch filter) {
+  void splitBranches(final Element root, final Branch filter) {
+    if (MAP_MAP.matches(root) && getChildElements(root, DITAVAREF_D_DITAVALREF).size() > 1) {
+      wrapChildren(root, MAPGROUP_D_TOPICGROUP);
+    }
+    for (Element reltable : getChildElements(root, MAP_RELTABLE)) {
+      for (Element relrow : getChildElements(reltable, MAP_RELROW)) {
+        for (Element relcell : getChildElements(relrow, MAP_RELCELL)) {
+          if (getChildElements(relcell, DITAVAREF_D_DITAVALREF).size() > 1) {
+            wrapChildren(relcell, MAPGROUP_D_TOPICGROUP);
+          }
+        }
+      }
+    }
+
+    splitElement(root, filter);
+  }
+
+  private void splitElement(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
     if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
@@ -410,13 +427,13 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
             continue;
           }
-          splitBranches(child, childFilter);
+          splitElement(child, childFilter);
         }
       }
     } else {
       processAttributes(elem, filter);
       for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
-        splitBranches(child, filter);
+        splitElement(child, filter);
       }
     }
   }
@@ -502,5 +519,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     }
     return toURI(buf.toString());
+  }
+
+  /**
+   * Wrap element contents into an element.
+   */
+  static Element wrapChildren(Element elem, DitaClass cls) {
+    var inserted = false;
+    var wrapper = elem.getOwnerDocument().createElement(cls.localName);
+    wrapper.setAttribute(ATTRIBUTE_NAME_CLASS, cls.toString());
+    for (Node child = elem.getFirstChild(), next; child != null; child = next) {
+      next = child.getNextSibling();
+      if (MAP_TOPICREF.matches(child) || MAP_TOPICMETA.matches(child)) {
+        if (!inserted) {
+          child.getParentNode().insertBefore(wrapper, child);
+          inserted = true;
+        }
+        wrapper.appendChild(child);
+      }
+    }
+    return wrapper;
   }
 }
