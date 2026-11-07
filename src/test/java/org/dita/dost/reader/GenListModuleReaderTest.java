@@ -101,6 +101,54 @@ public class GenListModuleReaderTest {
   }
 
   @Test
+  public void startElement_imageWithInheritedExternalScope_isRegistered() throws SAXException {
+    // Per DITA 1.3: relative URIs are always local by default; an inherited scope="external"
+    // from an ancestor element must not prevent the image from being registered.
+    reader.startDocument();
+    reader.startElement(
+      NULL_NS_URI,
+      TOPIC_XREF.localName,
+      TOPIC_XREF.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_CLASS, TOPIC_XREF.toString())
+        .add(ATTRIBUTE_NAME_HREF, "https://www.example.com/")
+        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+        .build()
+    );
+    reader.startElement(
+      NULL_NS_URI,
+      TOPIC_IMAGE.localName,
+      TOPIC_IMAGE.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+        .add(ATTRIBUTE_NAME_HREF, "image.png")
+        .build()
+    );
+    assertEquals(1, reader.getNonConrefCopytoTargets().size());
+    assertEquals(
+      inputDir.toURI().resolve("image.png"),
+      reader.getNonConrefCopytoTargets().iterator().next().filename()
+    );
+  }
+
+  @Test
+  public void startElement_imageWithOwnExternalScope_isNotRegistered() throws SAXException {
+    // An explicit scope="external" on the image element itself must still be respected.
+    reader.startDocument();
+    reader.startElement(
+      NULL_NS_URI,
+      TOPIC_IMAGE.localName,
+      TOPIC_IMAGE.localName,
+      new AttributesBuilder()
+        .add(ATTRIBUTE_NAME_CLASS, TOPIC_IMAGE.toString())
+        .add(ATTRIBUTE_NAME_HREF, "image.png")
+        .add(ATTRIBUTE_NAME_SCOPE, ATTR_SCOPE_VALUE_EXTERNAL)
+        .build()
+    );
+    assertTrue(reader.getNonConrefCopytoTargets().isEmpty());
+  }
+
+  @Test
   public void startElement_localImage_crawlMap() throws SAXException {
     job.setCrawl("map");
 
