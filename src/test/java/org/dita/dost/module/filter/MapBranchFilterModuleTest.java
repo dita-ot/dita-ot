@@ -25,11 +25,9 @@ import org.dita.dost.TestUtils;
 import org.dita.dost.TestUtils.CachingLogger;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.store.StreamStore;
-import org.dita.dost.util.DitaClass;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -46,11 +44,6 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @TempDir
   private File tempDir;
-
-  @BeforeEach
-  public void setUp() throws Exception {
-    TestUtils.copy(srcDir, tempDir);
-  }
 
   private Job getJob(File dir, String file) throws IOException {
     final Job job = new Job(dir, new StreamStore(dir, new XMLUtils()));
@@ -97,6 +90,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       "root-single.ditamap",
       "root-multiple.ditamap",
       "relcell-multiple.ditamap",
+      "reltable.ditamap",
     }
   )
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
@@ -116,6 +110,8 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @Test
   public void testProcessMap() throws IOException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
     final Job job = getJob(tempDir, "input.ditamap");
     m.setJob(job);
@@ -166,6 +162,8 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @Test
   public void testProcessMap2() throws IOException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
     final Job job = getJob(tempDir, "input_dita2.ditamap");
     m.setJob(job);
@@ -273,6 +271,8 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @Test
   public void testDuplicateTopic() throws IOException, SAXException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
     final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     job.setInputDir(tempDir.toURI());

@@ -35,7 +35,6 @@ import org.dita.dost.util.*;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
 import org.w3c.dom.*;
-import org.xmlresolver.utils.URIUtils;
 
 /**
  * Branch filter module for map processing.
@@ -371,11 +370,24 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
    *
    * <p>Some elements that can contain {@code ditavalref} cannot be duplicated, such as {@code map} and {@code relcell}.
    * These need to be wrapped in a {@code topicgroup} in order to duplicate the branches.</p>
+   *
+   * <p>Per schema {@code reltable} cannot contain {@code ditavalref}, but for processing {@code ditavalref} elements
+   * are copied frmo {@code map} into {@code reltable}.</p>
    */
   void splitBranches(final Element root, final Branch filter) {
-    if (MAP_MAP.matches(root) && getChildElements(root, DITAVAREF_D_DITAVALREF).size() > 1) {
+    var ditavalrefs = getChildElements(root, DITAVAREF_D_DITAVALREF);
+    if (MAP_MAP.matches(root) && ditavalrefs.size() > 1) {
+      // copy ditavalref to reltable
+      var reltables = getChildElements(root, MAP_RELTABLE);
+      for (Element reltable : reltables) {
+        for (Element ditavalref : ditavalrefs) {
+          reltable.appendChild(ditavalref.cloneNode(true));
+        }
+      }
+      // wrap topicref and topicmeta to topicgroup
       wrapChildren(root, MAPGROUP_D_TOPICGROUP);
     }
+    // wrap relcell contents to topicgroup
     for (Element reltable : getChildElements(root, MAP_RELTABLE)) {
       for (Element relrow : getChildElements(reltable, MAP_RELROW)) {
         for (Element relcell : getChildElements(relrow, MAP_RELCELL)) {
@@ -423,7 +435,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           null
         );
         // process children of all branches
-        for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
+        var children = getChildElements(branch, MAP_TOPICREF);
+        children.addAll(getChildElements(branch, MAP_RELTABLE));
+        for (final Element child : children) {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
             continue;
           }
@@ -432,7 +446,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     } else {
       processAttributes(elem, filter);
-      for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
+      var children = getChildElements(elem, MAP_TOPICREF);
+      children.addAll(getChildElements(elem, MAP_RELTABLE));
+      for (final Element child : children) {
         splitElement(child, filter);
       }
     }
