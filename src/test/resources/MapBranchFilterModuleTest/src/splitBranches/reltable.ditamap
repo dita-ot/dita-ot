@@ -16,7 +16,7 @@
   <reltable class="- map/reltable " toc="no">
     <relrow class="- map/relrow ">
       <relcell class="- map/relcell " toc="no">
-        <topicref class="- map/topicref "/>
+        <topicref class="- map/topicref " href="install.dita"/>
       </relcell>
     </relrow>
   </reltable>

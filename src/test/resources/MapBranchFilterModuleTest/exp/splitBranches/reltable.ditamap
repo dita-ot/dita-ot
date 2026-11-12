@@ -25,7 +25,7 @@
       </ditavalref>
       <relrow class="- map/relrow ">
          <relcell class="- map/relcell " toc="no">
-            <topicref class="- map/topicref "/>
+            <topicref class="- map/topicref " filter-copy-to="install-linux.dita" href="install.dita"/>
          </relcell>
       </relrow>
    </reltable>
@@ -37,7 +37,7 @@
      </ditavalref>
      <relrow class="- map/relrow ">
         <relcell class="- map/relcell " toc="no">
-           <topicref class="- map/topicref "/>
+           <topicref class="- map/topicref " filter-copy-to="install-windows.dita" href="install.dita"/>
         </relcell>
      </relrow>
   </reltable>

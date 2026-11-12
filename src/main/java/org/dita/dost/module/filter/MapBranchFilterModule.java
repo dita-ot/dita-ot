@@ -435,8 +435,7 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           null
         );
         // process children of all branches
-        var children = getChildElements(branch, MAP_TOPICREF);
-        children.addAll(getChildElements(branch, MAP_RELTABLE));
+        var children = getBranchChildren(branch);
         for (final Element child : children) {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
             continue;
@@ -446,12 +445,26 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     } else {
       processAttributes(elem, filter);
-      var children = getChildElements(elem, MAP_TOPICREF);
-      children.addAll(getChildElements(elem, MAP_RELTABLE));
+      var children = getBranchChildren(elem);
       for (final Element child : children) {
         splitElement(child, filter);
       }
     }
+  }
+
+  private static List<Element> getBranchChildren(final Element elem) {
+    var res = new ArrayList<Element>();
+    for (var child = elem.getFirstChild(); child != null; child = child.getNextSibling()) {
+      if (
+        MAP_TOPICREF.matches(child) ||
+        MAP_RELTABLE.matches(child) ||
+        MAP_RELROW.matches(child) ||
+        MAP_RELCELL.matches(child)
+      ) {
+        res.add((Element) child);
+      }
+    }
+    return res;
   }
 
   private void processAttributes(final Element elem, final Branch filter) {

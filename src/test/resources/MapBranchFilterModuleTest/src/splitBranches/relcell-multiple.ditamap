@@ -16,7 +16,7 @@
             <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">-windows</dvrResourceSuffix>
           </ditavalmeta>
         </ditavalref>
-        <topicref class="- map/topicref "/>
+        <topicref class="- map/topicref " href="install.dita"/>
       </relcell>
     </relrow>
   </reltable>

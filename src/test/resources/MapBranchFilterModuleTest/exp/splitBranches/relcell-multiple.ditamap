@@ -12,12 +12,15 @@
               <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">-linux</dvrResourceSuffix>
             </ditavalmeta>
           </ditavalref>
+          <topicref class="- map/topicref " filter-copy-to="install-linux.dita" href="install.dita"/>
+        </topicgroup>
+        <topicgroup class="+ map/topicref mapgroup-d/topicgroup ">
           <ditavalref class="+ map/topicref ditavalref-d/ditavalref " href="windows.ditaval">
             <ditavalmeta class="+ map/topicmeta ditavalref-d/ditavalmeta ">
               <dvrResourceSuffix class="+ topic/data ditavalref-d/dvrResourceSuffix ">-windows</dvrResourceSuffix>
             </ditavalmeta>
           </ditavalref>
-          <topicref class="- map/topicref "/>
+          <topicref class="- map/topicref " filter-copy-to="install-windows.dita" href="install.dita"/>
         </topicgroup>
       </relcell>
     </relrow>
