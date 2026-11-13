@@ -99,7 +99,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
     for (int i = 0; i < maxIterationCount; i++) {
       if (!hasUnresolvedKeyrefs()) {
         logger.info("No topicref with @keyref, stop iteration");
-        break;
+        return null;
       }
       logger.info("Run map module iteration {}", i + 1);
       for (AbstractPipelineModuleImpl module : modules) {
@@ -107,9 +107,9 @@ public class MapModule extends AbstractPipelineModuleImpl {
         // TODO: keep track which files still have something to process and only process them
         module.execute(input);
       }
-      if (i + 1 == maxIterationCount) {
-        logger.warn("Done with {} iterations, break to prevent infinite loop", maxIterationCount);
-      }
+    }
+    if (hasUnresolvedKeyrefs()) {
+      logger.warn("Done with {} iterations, break to prevent infinite loop", maxIterationCount);
     }
     return null;
   }
