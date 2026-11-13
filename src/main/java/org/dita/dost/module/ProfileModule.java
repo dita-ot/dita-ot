@@ -41,6 +41,11 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
   private SubjectSchemeFilter subjectSchemeFilter;
 
   @Override
+  public void reset() {
+    subjectSchemeFilter = null;
+  }
+
+  @Override
   public AbstractPipelineOutput execute(final AbstractPipelineInput input) throws DITAOTException {
     init(input);
 

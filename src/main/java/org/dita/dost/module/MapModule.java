@@ -107,6 +107,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
         // TODO: keep track which files still have something to process and only process them
         module.execute(input);
       }
+      modules.forEach(AbstractPipelineModule::reset);
     }
     if (hasUnresolvedKeyrefs()) {
       logger.warn("Done with {} iterations, break to prevent infinite loop", maxIterationCount);

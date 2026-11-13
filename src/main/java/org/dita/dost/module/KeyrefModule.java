@@ -90,6 +90,12 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     tempFileNameScheme.setBaseDir(job.getInputDir());
   }
 
+  @Override
+  public void reset() {
+    normalProcessingRole.clear();
+    usage.clear();
+  }
+
   private void init(AbstractPipelineInput input) {
     replaceKeyref = Boolean.parseBoolean(input.getAttribute(PARAM_REPLACE_KEYREF));
     if (fileInfoFilter == null) {
