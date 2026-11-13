@@ -232,7 +232,6 @@ See the accompanying LICENSE file for applicable license.
         <param name="preprocess.map-profile.skip" value="${preprocess.map-profile.skip}" if:set="preprocess.map-profile.skip"/>
         <param name="preprocess.branch-filter.skip" value="${preprocess.branch-filter.skip}" if:set="preprocess.branch-filter.skip"/>
         <param name="map.filter-on-parse" value="${map.filter-on-parse}" if:set="map.filter-on-parse"/>
-        <param name="preprocess.branch-filter.skip" value="${preprocess.branch-filter.skip}" if:set="preprocess.branch-filter.skip"/>
         <param name="preprocess.keyref.skip" value="${preprocess.keyref.skip}" if:set="preprocess.keyref.skip"/>
         <dita:extension id="dita.preprocess.mapref.param" behavior="org.dita.dost.platform.InsertAction"/>
       </module>
