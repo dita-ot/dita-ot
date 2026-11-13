@@ -366,28 +366,25 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   /**
-   * Duplicate branches so that each {@code ditavalref} will in a separate branch.
+   * Duplicate branches so that each {@code ditavalref} will be in a separate branch.
    *
    * <p>Some elements that can contain {@code ditavalref} cannot be duplicated, such as {@code map} and {@code relcell}.
    * These need to be wrapped in a {@code topicgroup} in order to duplicate the branches.</p>
    *
    * <p>Per schema {@code reltable} cannot contain {@code ditavalref}, but for processing {@code ditavalref} elements
-   * are copied frmo {@code map} into {@code reltable}.</p>
+   * are copied from {@code map} into {@code reltable}.</p>
    */
   void splitBranches(final Element root, final Branch filter) {
     var ditavalrefs = getChildElements(root, DITAVAREF_D_DITAVALREF);
     if (MAP_MAP.matches(root) && ditavalrefs.size() > 1) {
-      // copy ditavalref to reltable
       var reltables = getChildElements(root, MAP_RELTABLE);
       for (Element reltable : reltables) {
         for (Element ditavalref : ditavalrefs) {
           reltable.appendChild(ditavalref.cloneNode(true));
         }
       }
-      // wrap topicref and topicmeta to topicgroup
       wrapChildren(root, MAPGROUP_D_TOPICGROUP);
     }
-    // wrap relcell contents to topicgroup
     for (Element reltable : getChildElements(root, MAP_RELTABLE)) {
       for (Element relrow : getChildElements(reltable, MAP_RELROW)) {
         for (Element relcell : getChildElements(relrow, MAP_RELCELL)) {
@@ -551,7 +548,9 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   /**
-   * Wrap element contents into an element.
+   * Wrap the {@code topicref} and {@code topicmeta} children, including {@code ditavalref}, into a new element that
+   * takes the place of the first wrapped child. Other children stay in place. If no child matches, the returned element
+   * is not inserted into the document.
    */
   static Element wrapChildren(Element elem, DitaClass cls) {
     var inserted = false;
