@@ -44,7 +44,13 @@ public class MapModule extends AbstractPipelineModuleImpl {
       Optional
         .ofNullable(input.getAttribute("max-iteration-count"))
         .or(() -> Optional.ofNullable(configuration.get("preprocess.max-iteration-count")))
-        .map(Integer::parseInt)
+        .map(value -> {
+          try {
+            return Integer.parseInt(value.trim());
+          } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid max iteration count '" + value + "', expected an integer", e);
+          }
+        })
         .orElse(10);
     var skipMapProfile = input.getAttribute("preprocess.map-profile.skip") != null;
     var skipBranchFilter = input.getAttribute("preprocess.branch-filter.skip") != null;
