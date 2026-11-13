@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
@@ -27,7 +28,6 @@ import org.dita.dost.store.StreamStore;
 import org.dita.dost.util.Job;
 import org.dita.dost.util.Job.FileInfo;
 import org.dita.dost.util.XMLUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,22 +39,18 @@ import org.xml.sax.SAXException;
 public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   private final File resourceDir = TestUtils.getResourceDir(MapBranchFilterModuleTest.class);
+  private final File srcDir = new File(resourceDir, "src");
   private final File expDir = new File(resourceDir, "exp");
 
   @TempDir
   private File tempDir;
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    TestUtils.copy(new File(resourceDir, "src"), tempDir);
-  }
-
-  private Job getJob(String file) throws IOException {
-    final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
-    job.setInputDir(tempDir.toURI());
+  private Job getJob(File dir, String file) throws IOException {
+    final Job job = new Job(dir, new StreamStore(dir, new XMLUtils()));
+    job.setInputDir(dir.toURI());
     job.add(
       new FileInfo.Builder()
-        .src(new File(tempDir, file).toURI())
+        .src(new File(dir, file).toURI())
         .uri(URI.create(file))
         .format(ATTR_FORMAT_VALUE_DITAMAP)
         .build()
@@ -68,7 +64,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     )) {
       job.add(
         new FileInfo.Builder()
-          .src(new File(tempDir, uri).toURI())
+          .src(new File(dir, uri).toURI())
           .uri(URI.create(uri))
           .format(ATTR_FORMAT_VALUE_DITAVAL)
           .build()
@@ -77,7 +73,7 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
     for (final String uri : Arrays.asList("install.dita", "perform-install.dita", "configure.dita")) {
       job.add(
         new FileInfo.Builder()
-          .src(new File(tempDir, uri).toURI())
+          .src(new File(dir, uri).toURI())
           .uri(URI.create(uri))
           .format(ATTR_FORMAT_VALUE_DITA)
           .build()
@@ -87,24 +83,37 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "input", "input_dita2" })
+  @ValueSource(
+    strings = {
+      "input.ditamap",
+      "input_dita2.ditamap",
+      "root-single.ditamap",
+      "root-multiple.ditamap",
+      "relcell-multiple.ditamap",
+      "reltable.ditamap",
+    }
+  )
   public void testSplitBranches(String file) throws ParserConfigurationException, IOException, SAXException {
     final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
-    final Document act = builder.parse(new File(tempDir, file + ".ditamap"));
-    currentFile = new File(tempDir, file + ".ditamap").toURI();
-    final Job job = getJob(file);
+    var dir = new File(srcDir, "splitBranches");
+    var src = new File(dir, file);
+    final Document act = builder.parse(src);
+    currentFile = src.toURI();
+    final Job job = getJob(dir, file);
     setJob(job);
     splitBranches(act.getDocumentElement(), Branch.EMPTY);
 
-    final Document exp = builder.parse(new File(expDir, file + "_splitBranches.ditamap"));
+    final Document exp = builder.parse(Path.of(expDir.getAbsolutePath(), "splitBranches", file).toFile());
     assertXMLEqual(exp, act);
   }
 
   @Test
   public void testProcessMap() throws IOException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
-    final Job job = getJob("input.ditamap");
+    final Job job = getJob(tempDir, "input.ditamap");
     m.setJob(job);
     final CachingLogger logger = new CachingLogger();
     m.setLogger(logger);
@@ -153,8 +162,10 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @Test
   public void testProcessMap2() throws IOException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
-    final Job job = getJob("input_dita2.ditamap");
+    final Job job = getJob(tempDir, "input_dita2.ditamap");
     m.setJob(job);
     final CachingLogger logger = new CachingLogger();
     m.setLogger(logger);
@@ -260,6 +271,8 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
 
   @Test
   public void testDuplicateTopic() throws IOException, SAXException {
+    TestUtils.copy(srcDir, tempDir);
+
     final MapBranchFilterModule m = new MapBranchFilterModule();
     final Job job = new Job(tempDir, new StreamStore(tempDir, new XMLUtils()));
     job.setInputDir(tempDir.toURI());
@@ -320,5 +333,18 @@ public class MapBranchFilterModuleTest extends MapBranchFilterModule {
       );
     }
     return res;
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "only-wrapped.ditamap", "with-title.ditamap", "with-reltable.ditamap", "with-both.ditamap" })
+  void testWrapChildren(String file) throws IOException, SAXException, ParserConfigurationException {
+    final DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    var src = builder.parse(new File(srcDir, "wrapChildren/" + file));
+
+    var act = wrapChildren(src.getDocumentElement(), MAPGROUP_D_TOPICGROUP);
+
+    var exp = builder.parse(new File(expDir, "wrapChildren/" + file));
+
+    assertXMLEqual(exp, act.getOwnerDocument());
   }
 }

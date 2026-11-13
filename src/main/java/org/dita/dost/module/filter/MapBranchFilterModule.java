@@ -31,14 +31,10 @@ import org.dita.dost.log.MessageUtils;
 import org.dita.dost.module.BranchFilterModule.Branch;
 import org.dita.dost.pipeline.AbstractPipelineInput;
 import org.dita.dost.pipeline.AbstractPipelineOutput;
-import org.dita.dost.util.FileUtils;
-import org.dita.dost.util.FilterUtils;
+import org.dita.dost.util.*;
 import org.dita.dost.util.FilterUtils.Flag;
 import org.dita.dost.util.Job.FileInfo;
-import org.dita.dost.util.URLUtils;
-import org.dita.dost.util.XMLUtils;
 import org.w3c.dom.*;
-import org.xmlresolver.utils.URIUtils;
 
 /**
  * Branch filter module for map processing.
@@ -370,9 +366,39 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
   }
 
   /**
-   * Duplicate branches so that each {@code ditavalref} will in a separate branch.
+   * Duplicate branches so that each {@code ditavalref} will be in a separate branch.
+   *
+   * <p>Some elements that can contain {@code ditavalref} cannot be duplicated, such as {@code map} and {@code relcell}.
+   * These need to be wrapped in a {@code topicgroup} in order to duplicate the branches.</p>
+   *
+   * <p>Per schema {@code reltable} cannot contain {@code ditavalref}, but for processing {@code ditavalref} elements
+   * are copied from {@code map} into {@code reltable}.</p>
    */
-  void splitBranches(final Element elem, final Branch filter) {
+  void splitBranches(final Element root, final Branch filter) {
+    var ditavalrefs = getChildElements(root, DITAVAREF_D_DITAVALREF);
+    if (MAP_MAP.matches(root) && ditavalrefs.size() > 1) {
+      var reltables = getChildElements(root, MAP_RELTABLE);
+      for (Element reltable : reltables) {
+        for (Element ditavalref : ditavalrefs) {
+          reltable.appendChild(ditavalref.cloneNode(true));
+        }
+      }
+      wrapChildren(root, MAPGROUP_D_TOPICGROUP);
+    }
+    for (Element reltable : getChildElements(root, MAP_RELTABLE)) {
+      for (Element relrow : getChildElements(reltable, MAP_RELROW)) {
+        for (Element relcell : getChildElements(relrow, MAP_RELCELL)) {
+          if (getChildElements(relcell, DITAVAREF_D_DITAVALREF).size() > 1) {
+            wrapChildren(relcell, MAPGROUP_D_TOPICGROUP);
+          }
+        }
+      }
+    }
+
+    splitElement(root, filter);
+  }
+
+  private void splitElement(final Element elem, final Branch filter) {
     final List<Element> ditavalRefs = getChildElements(elem, DITAVAREF_D_DITAVALREF);
     if (!ditavalRefs.isEmpty()) {
       // remove ditavalrefs
@@ -406,19 +432,36 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
           null
         );
         // process children of all branches
-        for (final Element child : getChildElements(branch, MAP_TOPICREF)) {
+        var children = getBranchChildren(branch);
+        for (final Element child : children) {
           if (DITAVAREF_D_DITAVALREF.matches(child)) {
             continue;
           }
-          splitBranches(child, childFilter);
+          splitElement(child, childFilter);
         }
       }
     } else {
       processAttributes(elem, filter);
-      for (final Element child : getChildElements(elem, MAP_TOPICREF)) {
-        splitBranches(child, filter);
+      var children = getBranchChildren(elem);
+      for (final Element child : children) {
+        splitElement(child, filter);
       }
     }
+  }
+
+  private static List<Element> getBranchChildren(final Element elem) {
+    var res = new ArrayList<Element>();
+    for (var child = elem.getFirstChild(); child != null; child = child.getNextSibling()) {
+      if (
+        MAP_TOPICREF.matches(child) ||
+        MAP_RELTABLE.matches(child) ||
+        MAP_RELROW.matches(child) ||
+        MAP_RELCELL.matches(child)
+      ) {
+        res.add((Element) child);
+      }
+    }
+    return res;
   }
 
   private void processAttributes(final Element elem, final Branch filter) {
@@ -502,5 +545,27 @@ public class MapBranchFilterModule extends AbstractBranchFilterModule {
       }
     }
     return toURI(buf.toString());
+  }
+
+  /**
+   * Wrap the {@code topicref} and {@code topicmeta} children, including {@code ditavalref}, into a new element that
+   * takes the place of the first wrapped child. Other children stay in place. If no child matches, the returned element
+   * is not inserted into the document.
+   */
+  static Element wrapChildren(Element elem, DitaClass cls) {
+    var inserted = false;
+    var wrapper = elem.getOwnerDocument().createElement(cls.localName);
+    wrapper.setAttribute(ATTRIBUTE_NAME_CLASS, cls.toString());
+    for (Node child = elem.getFirstChild(), next; child != null; child = next) {
+      next = child.getNextSibling();
+      if (MAP_TOPICREF.matches(child) || MAP_TOPICMETA.matches(child)) {
+        if (!inserted) {
+          child.getParentNode().insertBefore(wrapper, child);
+          inserted = true;
+        }
+        wrapper.appendChild(child);
+      }
+    }
+    return wrapper;
   }
 }
