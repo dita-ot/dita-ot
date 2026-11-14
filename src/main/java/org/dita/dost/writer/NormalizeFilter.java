@@ -10,6 +10,7 @@ package org.dita.dost.writer;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -90,7 +91,8 @@ public final class NormalizeFilter extends AbstractXMLFilter {
     getContentHandler().startElement(uri, localName, qName, res != null ? res : atts);
   }
 
-  private String domainsToSpecializations(final String domains) {
+  @VisibleForTesting
+  static String domainsToSpecializations(final String domains) {
     return Arrays
       .stream(domains.trim().replaceAll("(\\))\\s+(a?\\()", "$1\n$2").split("\n"))
       .filter(token -> token.startsWith("a("))
@@ -98,7 +100,8 @@ public final class NormalizeFilter extends AbstractXMLFilter {
       .collect(Collectors.joining(" "));
   }
 
-  private String specializationsToDomains(final String specializations) {
+  @VisibleForTesting
+  static String specializationsToDomains(final String specializations) {
     return Arrays
       .stream(specializations.trim().split("\\s+"))
       .map(token -> token.replaceAll("^@(.+)/(.+)$", "a($1 $2)"))
