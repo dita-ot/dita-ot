@@ -22,7 +22,7 @@ base {
     group = 'org.dita-ot'
     archivesName = 'dost'
     /** Semver version number */
-    version = '4.4.1'
+    version = '4.4.2'
 
     description = """DITA Open Toolkit"""
 }
