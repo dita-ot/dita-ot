@@ -9,7 +9,6 @@
 package org.dita.dost.module;
 
 import static java.util.stream.Collectors.toMap;
-import static net.sf.saxon.s9api.streams.Predicates.attributeEq;
 import static net.sf.saxon.s9api.streams.Steps.*;
 import static net.sf.saxon.type.BuiltInAtomicType.STRING;
 import static org.dita.dost.reader.GenListModuleReader.isFormatDita;
@@ -27,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.XMLConstants;
 import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -34,7 +34,8 @@ import net.sf.saxon.event.ReceiverOption;
 import net.sf.saxon.expr.parser.Loc;
 import net.sf.saxon.om.*;
 import net.sf.saxon.s9api.*;
-import net.sf.saxon.s9api.streams.Predicates;
+import net.sf.saxon.s9api.push.Container;
+import net.sf.saxon.s9api.streams.Steps;
 import net.sf.saxon.serialize.SerializationProperties;
 import net.sf.saxon.trans.XPathException;
 import org.dita.dost.exception.DITAOTException;
@@ -70,9 +71,13 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
   /** Module parameter: replace resolved keyref attributes with dita-ot:orig-keyref. */
   private static final String PARAM_REPLACE_KEYREF = "replace-keyref";
+  /** Serialize key space. */
+  private static final String PARAM_STORE_KEY_SPACE = "store-key-space";
 
   private TempFileNameScheme tempFileNameScheme;
   private boolean replaceKeyref;
+  private boolean storeKeySpace;
+  private KeyScope rootScope;
   final Set<URI> normalProcessingRole = new HashSet<>();
   final Map<URI, Integer> usage = new HashMap<>();
 
@@ -98,6 +103,7 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
 
   private void init(AbstractPipelineInput input) {
     replaceKeyref = Boolean.parseBoolean(input.getAttribute(PARAM_REPLACE_KEYREF));
+    storeKeySpace = Boolean.parseBoolean(input.getAttribute(PARAM_STORE_KEY_SPACE));
     if (fileInfoFilter == null) {
       fileInfoFilter =
         f ->
@@ -153,24 +159,27 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
     final Collection<FileInfo> resourceMapFis = job.getFileInfo(fi ->
       fi.isInputResource() && Objects.equals(fi.format(), ATTR_FORMAT_VALUE_DITAMAP)
     );
-    final KeyScope rootScope = resourceMapFis
-      .stream()
-      .map(fi -> {
-        try {
-          final XdmNode d = readMap(fi);
-          logger.info("Reading {}", job.tempDirURI.resolve(fi.uri()));
-          final KeyrefReader r = new KeyrefReader();
-          r.setLogger(logger);
-          r.read(job.tempDirURI.resolve(fi.uri()), d);
-          final KeyScope s = r.getKeyDefinition();
-          logger.debug("Writing {}", job.tempDirURI.resolve(fi.uri()));
-          writeMap(fi, d);
-          return s;
-        } catch (DITAOTException e) {
-          throw new RuntimeException(e);
-        }
-      })
-      .reduce(startScope, KeyScope::merge);
+    if (rootScope == null) {
+      rootScope =
+        resourceMapFis
+          .stream()
+          .map(fi -> {
+            try {
+              final XdmNode d = readMap(fi);
+              logger.info("Reading {}", job.tempDirURI.resolve(fi.uri()));
+              final KeyrefReader r = new KeyrefReader();
+              r.setLogger(logger);
+              r.read(job.tempDirURI.resolve(fi.uri()), d);
+              final KeyScope s = r.getKeyDefinition();
+              logger.debug("Writing {}", job.tempDirURI.resolve(fi.uri()));
+              writeMap(fi, d);
+              return s;
+            } catch (DITAOTException e) {
+              throw new RuntimeException(e);
+            }
+          })
+          .reduce(startScope, KeyScope::merge);
+    }
 
     final Set<String> topicsInMap = doc
       .select(descendant(MAP_TOPICREF.matcher()).where(isDitaFormat()).then(attribute(ATTRIBUTE_NAME_HREF)))
@@ -202,6 +211,16 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       if (f != null) {
         var b = FileInfo.builder(f).isResourceOnly(false);
         job.add(b.build());
+      }
+    }
+
+    if (storeKeySpace) {
+      var keySpaceFile = job.tempDirURI.resolve(".key-space.xml");
+      logger.info("Writing " + keySpaceFile);
+      try {
+        job.getStore().writeDocument(writeKeyScope(rootScope), keySpaceFile);
+      } catch (IOException e) {
+        throw new DITAOTException("Failed to store key space: " + e.getMessage(), e);
       }
     }
 
@@ -328,6 +347,10 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       newKeys,
       scope.childScopes().stream().map(c -> rewriteScopeTargets(c, rewrites)).collect(Collectors.toList())
     );
+  }
+
+  public void setKeyScope(KeyScope rootScope) {
+    this.rootScope = rootScope;
   }
 
   /**
@@ -586,6 +609,81 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       job.getStore().writeDocument(doc, file);
     } catch (final IOException e) {
       throw new DITAOTException("Failed to write map: " + e.getMessage(), e);
+    }
+  }
+
+  /**
+   * Serialize key scope.
+   */
+  XdmNode writeKeyScope(KeyScope keyScope) {
+    var dest = new XdmDestination();
+    try {
+      var push = xmlUtils.getProcessor().newPush(dest);
+      var doc = push.document(true);
+      writeKeyScope(keyScope, doc);
+      doc.close();
+      return dest.getXdmNode();
+    } catch (SaxonApiException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private void writeKeyScope(KeyScope keyScope, Container parent) throws SaxonApiException {
+    var elem = parent.element("keyScope");
+    elem.attribute("id", keyScope.id());
+    elem.attribute("name", keyScope.name());
+    for (var keyDef : keyScope.keyDefinition().values()) {
+      writeKeyDef(keyDef, elem);
+    }
+    for (KeyScope childScope : keyScope.childScopes()) {
+      writeKeyScope(childScope, elem);
+    }
+    elem.close();
+  }
+
+  private void writeKeyDef(KeyDef keyDef, Container parent) throws SaxonApiException {
+    var elem = parent.element("keyDef");
+    elem.attribute("format", keyDef.format);
+    elem.attribute("keys", keyDef.keys);
+    elem.attribute("scope", keyDef.scope);
+    if (keyDef.href != null) {
+      elem.attribute("href", keyDef.href.toString());
+    }
+    elem.attribute("version", Integer.toString(keyDef.version));
+    copy(keyDef.element, elem);
+    elem.close();
+  }
+
+  private static void copy(XdmNode node, Container out) throws SaxonApiException {
+    switch (node.getNodeKind()) {
+      case DOCUMENT -> {
+        for (var child : node.children()) {
+          copy(child, out);
+        }
+      }
+      case ELEMENT -> {
+        var elem = out.element(node.getNodeName());
+        for (var ns : node.select(Steps.namespace()).toList()) {
+          var prefix = ns.getNodeName() == null ? XMLConstants.DEFAULT_NS_PREFIX : ns.getNodeName().getLocalName();
+          if (!prefix.equals(XMLConstants.XML_NS_PREFIX)) {
+            elem.namespace(prefix, ns.getStringValue());
+          }
+        }
+        for (var attr : node.select(Steps.attribute()).toList()) {
+          elem.attribute(attr.getNodeName(), attr.getStringValue());
+        }
+        for (var child : node.children()) {
+          copy(child, elem);
+        }
+        elem.close();
+      }
+      case TEXT -> out.text(node.getStringValue());
+      case COMMENT -> {}
+      case PROCESSING_INSTRUCTION -> out.processingInstruction(
+        node.getNodeName().getLocalName(),
+        node.getStringValue()
+      );
+      default -> throw new IllegalArgumentException(node.getNodeKind().toString());
     }
   }
 }

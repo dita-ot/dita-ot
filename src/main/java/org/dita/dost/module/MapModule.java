@@ -13,8 +13,12 @@ import static net.sf.saxon.s9api.streams.Steps.attribute;
 import static org.dita.dost.util.Configuration.configuration;
 import static org.dita.dost.util.Constants.*;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +34,7 @@ import org.dita.dost.pipeline.AbstractPipelineOutput;
 import org.dita.dost.util.Configuration;
 import org.dita.dost.util.DitaUtils;
 import org.dita.dost.util.Job.FileInfo;
+import org.dita.dost.util.KeyScope;
 
 public class MapModule extends AbstractPipelineModuleImpl {
 
@@ -39,7 +44,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
   private int maxIterationCount;
   private List<AbstractPipelineModuleImpl> modules;
 
-  private void init(AbstractPipelineInput input) {
+  private void init(AbstractPipelineInput input) throws DITAOTException {
     maxIterationCount =
       Optional
         .ofNullable(input.getAttribute("max-iteration-count"))
@@ -79,7 +84,12 @@ public class MapModule extends AbstractPipelineModuleImpl {
     if (!skipKeyref) {
       var keyrefModule = new KeyrefModule();
       // TODO
-      //    keyrefModule.setKeyScope(keyScope);
+      try (var in = job.getStore().getInputStream(URI.create(".key-space.json"))) {
+        var keyScope = new ObjectMapper().readValue(in, KeyScope.class);
+        keyrefModule.setKeyScope(keyScope);
+      } catch (IOException e) {
+        throw new DITAOTException("Failed to read key space: " + e.getMessage(), e);
+      }
       keyrefModule.setFileInfoFilter(fileInfoFilter);
       modules.add(keyrefModule);
     }

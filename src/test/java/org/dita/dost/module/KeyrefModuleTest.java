@@ -454,4 +454,17 @@ public class KeyrefModuleTest {
     XdmNode node = destination.getXdmNode();
     assertNotNull(node);
   }
+
+  @Test
+  void testWriteKeySpace() {
+    module.setXmlUtils(xmlUtils);
+    final KeyScope src = new KeyScope(
+      "scope",
+      "scope",
+      Map.of("key", new KeyDef("key", create("target.dita"), null, null, null, null, 1)),
+      emptyList()
+    );
+    var act = module.writeKeyScope(src);
+    System.out.println(act.toString());
+  }
 }
