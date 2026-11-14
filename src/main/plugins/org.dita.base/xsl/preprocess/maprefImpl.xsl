@@ -95,6 +95,7 @@ See the accompanying LICENSE file for applicable license.
        The referenced map is not inlined, but templates are applied to the contents. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href(: | @dita-ot:orig-href:)) or
+                         contains-token(@class, 'ditaot-d/keydef') or
                          (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
     <xsl:copy>
