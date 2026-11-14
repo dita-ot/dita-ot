@@ -58,6 +58,9 @@ See the accompanying LICENSE file for applicable license.
     <xsl:variable name="b-scheme" select="substring-before($base, ':')" as="xs:string"/>
     <xsl:variable name="u-scheme" select="substring-before($uri, ':')" as="xs:string"/>
     <xsl:choose>
+      <xsl:when test="$base = $uri">
+        <xsl:sequence select="xs:anyURI('')"/>
+      </xsl:when>
       <xsl:when test="$b-scheme ne $u-scheme">
         <xsl:sequence select="$uri"/>
       </xsl:when>

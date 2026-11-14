@@ -37,7 +37,7 @@ import org.xml.sax.XMLFilter;
 public final class ProfileModule extends AbstractPipelineModuleImpl {
 
   private FilterUtils filterUtils;
-  private ProfilingFilter writer;
+  private ProfilingFilter profilingFilter;
   private SubjectSchemeFilter subjectSchemeFilter;
 
   @Override
@@ -50,7 +50,7 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
 
       try {
         job.getStore().transform(file, getProcessingPipe(file));
-        if (!writer.hasElementOutput()) {
+        if (!profilingFilter.hasElementOutput()) {
           logger.info("All content in {0} was filtered out", file);
           job.remove(f);
           job.getStore().delete(file);
@@ -72,8 +72,8 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
   private List<XMLFilter> getProcessingPipe(final URI fileToParse) {
     var res = new ArrayList<XMLFilter>();
 
-    writer.setCurrentFile(fileToParse);
-    res.add(writer);
+    profilingFilter.setCurrentFile(fileToParse);
+    res.add(profilingFilter);
 
     if (subjectSchemeFilter != null) {
       res.add(subjectSchemeFilter);
@@ -111,10 +111,10 @@ public final class ProfileModule extends AbstractPipelineModuleImpl {
 
     initSubjectScheme();
 
-    writer = new ProfilingFilter();
-    writer.setLogger(logger);
-    writer.setJob(job);
-    writer.setFilterUtils(filterUtils);
+    profilingFilter = new ProfilingFilter();
+    profilingFilter.setLogger(logger);
+    profilingFilter.setJob(job);
+    profilingFilter.setFilterUtils(filterUtils);
   }
 
   private void initSubjectScheme() throws DITAOTException {
