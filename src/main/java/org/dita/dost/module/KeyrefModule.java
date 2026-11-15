@@ -686,4 +686,37 @@ final class KeyrefModule extends AbstractPipelineModuleImpl {
       default -> throw new IllegalArgumentException(node.getNodeKind().toString());
     }
   }
+
+  /**
+   * Deserialize key scope.
+   */
+  KeyScope readKeyScope(XdmNode keyScope) {
+    var id = keyScope.attribute("id");
+    var name = keyScope.attribute("name");
+    var keyDefinition = keyScope
+      .select(child("keyDef"))
+      .map(this::readKeyDef)
+      .collect(Collectors.toMap(keyDef -> keyDef.keys, keyDef -> keyDef));
+    var childScopes = keyScope.select(child("keyScope")).map(this::readKeyScope).toList();
+    return new KeyScope(id, name, keyDefinition, childScopes);
+  }
+
+  KeyDef readKeyDef(XdmNode keyDef) {
+    var keys = keyDef.attribute("keys");
+    var href = keyDef.attribute("href");
+    var scope = keyDef.attribute("scope");
+    var format = keyDef.attribute("format");
+    var source = keyDef.attribute("source");
+    var element = keyDef.select(child()).firstItem();
+    var version = Integer.parseInt(keyDef.attribute("version"));
+    return new KeyDef(
+      keys,
+      href != null ? URI.create(href) : null,
+      scope,
+      format,
+      source != null ? URI.create(source) : null,
+      element,
+      version
+    );
+  }
 }

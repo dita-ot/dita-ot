@@ -83,10 +83,11 @@ public class MapModule extends AbstractPipelineModuleImpl {
     //              unless:set="preprocess.keyref.skip">
     if (!skipKeyref) {
       var keyrefModule = new KeyrefModule();
-      // TODO
-      try (var in = job.getStore().getInputStream(URI.create(".key-space.json"))) {
-        var keyScope = new ObjectMapper().readValue(in, KeyScope.class);
-        keyrefModule.setKeyScope(keyScope);
+      try {
+        var keySpaceFile = job.tempDirURI.resolve(".key-space.xml");
+        logger.info("Reading " + keySpaceFile);
+        var keySpace = job.getStore().getImmutableNode(keySpaceFile);
+        keyrefModule.readKeyScope(keySpace);
       } catch (IOException e) {
         throw new DITAOTException("Failed to read key space: " + e.getMessage(), e);
       }
@@ -114,7 +115,7 @@ public class MapModule extends AbstractPipelineModuleImpl {
 
     for (int i = 0; i < maxIterationCount; i++) {
       if (!hasUnresolvedKeyrefs()) {
-        logger.info("No topicref with @keyref, stop iteration");
+        logger.debug("No topicref with @keyref, stop iteration");
         return null;
       }
       logger.info("Run map module iteration {}", i + 1);
