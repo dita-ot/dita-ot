@@ -95,6 +95,7 @@ See the accompanying LICENSE file for applicable license.
        The referenced map is not inlined, but templates are applied to the contents. -->
   <xsl:template match="*[contains(@class, ' map/topicref ')][(@format, @dita-ot:orig-format) = 'ditamap']
                         [empty(@href(: | @dita-ot:orig-href:)) or
+                         contains-token(@class, 'ditaot-d/keydef') or
                          (:@processing-role = 'resource-only' or:)
                          @scope = ('peer', 'external')]" priority="15">
     <xsl:copy>
@@ -450,7 +451,8 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="gen-reltable">
     <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:apply-templates select="key('reltable','ditamap')" mode="mapref">
+    <xsl:apply-templates select="key('reltable','ditamap')[not(contains-token(@class, 'ditaot-d/keydef'))]"
+                         mode="mapref">
       <xsl:with-param name="relative-path" select="$relative-path"/>
       <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
     </xsl:apply-templates>
