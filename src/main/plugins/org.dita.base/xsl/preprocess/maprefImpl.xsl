@@ -43,15 +43,19 @@ See the accompanying LICENSE file for applicable license.
   <!-- list of attributes that can be overidden. -->
   <xsl:variable name="special-atts" select="('href', 'copy-to', 'class', 'linking', 'toc', 'print', 'audience', 'product', 'platform', 'otherprops', 'props')" as="xs:string*"/>
 
-  <!-- the xsl:key to get all maprefs in the document in order to get reltable -->
-  <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@format"/>
-  <xsl:key name="reltable" match="//*[contains(@class, ' map/topicref ')]" use="@dita-ot:orig-format"/>
+  <xsl:mode on-no-match="shallow-copy"/>
 
-  <!-- baseline identity transform -->
-  <xsl:template match="@* | node()">
+  <xsl:template match="*[contains(@class,' map/map ')]">
     <xsl:copy>
-      <xsl:apply-templates select="@* | node()">
-      </xsl:apply-templates>
+      <xsl:apply-templates select="@*"/>
+      <xsl:variable name="merged" as="node()*">
+        <xsl:apply-templates select="node()"/>
+      </xsl:variable>
+      <xsl:apply-templates select="$merged" mode="remove-reltable"/>
+      <xsl:copy-of select="$merged/self::*[contains-token(@class, 'map/reltable')]
+                                          [not(ancestor-or-self::*[@linking][1]/@linking = 'none')]"/>
+      <xsl:copy-of select="$merged/descendant::*[contains-token(@class, 'map/reltable')]
+                                                [not(ancestor-or-self::*[@linking][1]/@linking = 'none')]"/>
     </xsl:copy>
   </xsl:template>
 
@@ -70,7 +74,7 @@ See the accompanying LICENSE file for applicable license.
       </xsl:choose>
     </xsl:attribute>
   </xsl:template>
-  
+
   <xsl:template match="*[not(contains(@class,' map/topicref '))]/@href">
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:attribute name="href">
@@ -123,7 +127,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
     <xsl:param name="mapref-id-path" as="xs:string*"/>
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
- 
+
     <xsl:variable name="href" select="(@href, @dita-ot:orig-href)[1]" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="generate-id(.) = $mapref-id-path">
@@ -212,7 +216,7 @@ See the accompanying LICENSE file for applicable license.
                   <xsl:sequence select="$file//*[contains(@class,' map/topicref ')][@id = $element-id]"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ') or contains(@class,' map/navref ') or contains(@class,' map/anchor ')] |
+                  <xsl:sequence select="$file/*/*[contains(@class,' map/topicref ') or contains(@class,' map/navref ') or contains(@class,' map/anchor ') or contains(@class,' map/reltable ')] |
                                         $file/*/processing-instruction()"/>
                 </xsl:otherwise>
               </xsl:choose>
@@ -428,7 +432,7 @@ See the accompanying LICENSE file for applicable license.
   <xsl:template name="generate-attribute">
     <xsl:param name="referTypeFlag" as="xs:string">#none#</xsl:param>
     <xsl:param name="name"/>
-    
+
     <xsl:choose>
       <!-- refer to an element in map file -->
       <xsl:when test="$referTypeFlag = 'element'">
@@ -441,96 +445,13 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*[contains(@class,' map/map ')]">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()"/>
-      <xsl:call-template name="gen-reltable"/>
-    </xsl:copy>
-  </xsl:template>
-
-  <xsl:template name="gen-reltable">
-    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
-    <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:apply-templates select="key('reltable','ditamap')[not(contains-token(@class, 'ditaot-d/keydef'))]"
-                         mode="mapref">
-      <xsl:with-param name="relative-path" select="$relative-path"/>
-      <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
-    </xsl:apply-templates>
-  </xsl:template>
-  
-  <xsl:template match="*[contains(@class,' map/topicref ')]" mode="mapref">
-    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
-    <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:variable name="linking" as="xs:string?">
-      <xsl:choose>
-        <xsl:when test="empty(@linking)">
-          <xsl:call-template name="inherit">
-            <xsl:with-param name="attrib">linking</xsl:with-param>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@linking"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="generate-id(.) = $mapref-id-path">
-        <!-- this element was already processed during earlier recursive processing - inform the user of a reference loop -->
-        <xsl:call-template name="output-message">
-          <xsl:with-param name="id" select="'DOTX053E'"/>
-          <xsl:with-param name="msgparams">%1=<xsl:value-of select="@href"/></xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="not($linking='none') and @href and not(contains(@href,'#')) and not(@scope = 'peer')">
-        <xsl:variable name="update-id-path" select="($mapref-id-path, generate-id(.))"/>
-        <xsl:variable name="href" select="@href" as="xs:string?"/>
-        <xsl:apply-templates select="document($href, /)/*[contains(@class,' map/map ')]" mode="#current">
-          <xsl:with-param name="parentMaprefKeyscope" select="@keyscope" tunnel="yes"/>
-          <xsl:with-param name="relative-path">
-            <xsl:choose>
-              <!-- path is relative to the current map/submap file - resolve it -->
-              <xsl:when test="not($relative-path = '#none#' or $relative-path='')">
-                <xsl:value-of select="$relative-path"/>
-                <xsl:call-template name="find-relative-path">
-                  <xsl:with-param name="remainingpath" select="@href"/>
-                </xsl:call-template>
-              </xsl:when>
-              <!-- path is relative to $file-being-processed - use as-is -->
-              <xsl:otherwise>
-                <xsl:call-template name="find-relative-path">
-                  <xsl:with-param name="remainingpath" select="@href"/>
-                </xsl:call-template>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:with-param>
-          <xsl:with-param name="mapref-id-path" select="$update-id-path"/>  <!-- propagate the updated mapref-id-path downward -->
-        </xsl:apply-templates>
-      </xsl:when>
-    </xsl:choose>
-  </xsl:template>
-  
-  <xsl:template match="*[contains(@class,' map/map ')]" mode="mapref">
-    <xsl:param name="relative-path" as="xs:string">#none#</xsl:param>
-    <xsl:param name="mapref-id-path" as="xs:string*"/>
-    <xsl:param name="parentMaprefKeyscope" tunnel="yes" as="attribute()?"/>
-    <xsl:apply-templates select="*[contains(@class,' map/reltable ')]" mode="reltable-copy">
-      <xsl:with-param name="relative-path" select="$relative-path" tunnel="yes"/>
-      <xsl:with-param name="keyscope" select="string-join((@keyscope, $parentMaprefKeyscope), ' ')"/>
-    </xsl:apply-templates>
-    <!--xsl:copy-of select="*[contains(@class,' map/reltable ')]"/-->
-    <xsl:call-template name="gen-reltable">
-      <xsl:with-param name="relative-path" select="$relative-path"/>
-      <xsl:with-param name="mapref-id-path" select="$mapref-id-path"/>
-    </xsl:call-template>
-  </xsl:template>
-
   <xsl:template match="@*" mode="preserve-submap-attributes">
     <xsl:attribute name="dita-ot:submap-{local-name()}" select="."/>
   </xsl:template>
-  
+
   <xsl:template match="*[contains(@class,' topic/title ')]" mode="preserve-submap-title-and-topicmeta">
     <submap-topicmeta class="+ map/topicmeta ditaot-d/submap-topicmeta ">
-      <!-- Using both DITA 1.x and DITA 2.0 navtitle classes for this internal pseudo element --> 
+      <!-- Using both DITA 1.x and DITA 2.0 navtitle classes for this internal pseudo element -->
       <submap-title class="+ topic/navtitle alternativeTitles-d/navtitle ditaot-d/submap-title ">
         <xsl:apply-templates select="@*" mode="preserve-submap-attributes"/>
         <xsl:apply-templates/>
@@ -547,54 +468,6 @@ See the accompanying LICENSE file for applicable license.
     <mapref-topicmeta-container class="+ topic/foreign ditaot-d/mapref-topicmeta-container ">
       <xsl:apply-templates/>
     </mapref-topicmeta-container>
-  </xsl:template>
-
-  <xsl:template match="*" mode="reltable-copy" priority="10">
-    <xsl:param name="keyscope" as="xs:string?"/>
-    <xsl:copy>
-      <xsl:if test="$keyscope">
-        <xsl:attribute name="keyscope" select="$keyscope"/>
-      </xsl:if>
-      <xsl:apply-templates select="@* | node()" mode="#current"/>
-    </xsl:copy>
-  </xsl:template>
-
-  <xsl:template match="@* | node()" mode="reltable-copy">
-    <xsl:copy>
-      <xsl:apply-templates select="@* | node()" mode="#current"/>
-    </xsl:copy>
-  </xsl:template>
-
-  <xsl:template match="@href | @copy-to" mode="reltable-copy">
-    <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
-    <xsl:attribute name="{name()}">
-      <xsl:choose>
-        <!-- path is relative to $file-being-processed - use as-is -->
-        <xsl:when test="dita-ot:is-external(.) or $relative-path = ('#none#', '')">
-          <xsl:value-of select="."/>
-        </xsl:when>
-        <!-- path is relative to the current map/submap file - resolve it -->
-        <xsl:otherwise>
-          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
-  </xsl:template>
-
-  <xsl:template match="@conref" mode="reltable-copy">
-    <xsl:param name="relative-path" as="xs:string" tunnel="yes">#none#</xsl:param>
-    <xsl:attribute name="conref">
-      <xsl:choose>
-        <!-- path is relative to the current map/submap file - resolve it -->
-        <xsl:when test="not($relative-path = ('#none#', ''))">
-          <xsl:value-of select="dita-ot:normalize-uri(concat($relative-path, .))"/>
-        </xsl:when>
-        <!-- path is relative to $file-being-processed - use as-is -->
-        <xsl:otherwise>
-          <xsl:value-of select="."/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
   </xsl:template>
 
   <!-- RDA: FUNCTIONS TO IMPROVE OVERRIDE CAPABILITIES FOR INHERITING ATTRIBUTES -->
@@ -755,5 +628,9 @@ See the accompanying LICENSE file for applicable license.
       </xsl:call-template>
     </xsl:if>
   </xsl:template>
+
+  <xsl:mode name="remove-reltable" on-no-match="shallow-copy"/>
+
+  <xsl:template match="*[contains-token(@class, 'map/reltable')]" mode="remove-reltable"/>
 
 </xsl:stylesheet>

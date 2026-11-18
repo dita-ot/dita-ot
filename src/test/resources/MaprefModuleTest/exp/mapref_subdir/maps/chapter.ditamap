@@ -31,8 +31,8 @@
    <reltable class="- map/reltable " toc="no">
       <relrow class="- map/relrow ">
          <relcell class="- map/relcell " toc="no">
-            <topicref class="- map/topicref " href="deep/topics/app1.dita"/>
-            <topicref class="- map/topicref " href="topics/ch1.dita"/>
+            <topicref class="- map/topicref " href="deep/topics/app1.dita" toc="no"/>
+            <topicref class="- map/topicref " href="topics/ch1.dita" toc="no"/>
          </relcell>
       </relrow>
    </reltable>
