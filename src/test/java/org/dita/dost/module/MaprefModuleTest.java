@@ -44,7 +44,7 @@ class MaprefModuleTest extends AbstractModuleTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = { "basic", "mapref_reltables", "mapref_to_conref", "mapref_topicrefID" })
+  @ValueSource(strings = { "basic", "mapref_reltables", "mapref_subdir", "mapref_to_conref", "mapref_topicrefID" })
   public void process(String testCase) throws IOException {
     this.testCase = testCase;
     tempDir = new File(tempBaseDir, testCase);
