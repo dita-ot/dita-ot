@@ -71,5 +71,10 @@ public interface AbstractPipelineModule {
 
   void setParallel(boolean parallel);
 
+  /**
+   * Clear state accumulated by {@link #execute(Map)}, so the module can run again on the same job.
+   */
+  default void reset() {}
+
   void setProcessingMode(Mode processingMode);
 }

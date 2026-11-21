@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keyScope id="#root">
+  <keyDef format="dita" keys="concept02" scope="local" href="1286cfb28318eee256a04ae198a8bd3491b1ff99.dita" version="1">
+    <keydef
+      class="+ map/topicref mapgroup-d/keydef " href="1286cfb28318eee256a04ae198a8bd3491b1ff99.dita" keys="concept02"
+      processing-role="resource-only"/>
+  </keyDef>
+  <keyDef format="ditamap" keys="submap" scope="local" href="b35adc407eabef193d5cb70bfc7bf72a31788969.ditamap"
+          version="1">
+    <keydef
+      class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " format="ditamap"
+      href="b35adc407eabef193d5cb70bfc7bf72a31788969.ditamap" keys="submap" processing-role="resource-only"/>
+  </keyDef>
+  <keyDef format="dita" keys="concept03" scope="local" href="d62c090aa95b5165a0a41aeeb082025dcf9f17dc.dita" version="1">
+    <keydef
+      class="+ map/topicref mapgroup-d/keydef " href="d62c090aa95b5165a0a41aeeb082025dcf9f17dc.dita" keys="concept03"
+      processing-role="resource-only"/>
+  </keyDef>
+  <keyDef format="ditamap" keys="subsubmap" scope="local" href="b99f50a27e88cd3476ab37df9e831b4b7ce5f0d8.ditamap"
+          version="1">
+    <keydef
+      class="+ map/topicref mapgroup-d/keydef ditaot-d/keydef " format="ditamap"
+      href="b99f50a27e88cd3476ab37df9e831b4b7ce5f0d8.ditamap" keys="subsubmap" processing-role="resource-only"/>
+  </keyDef>
+  <keyDef format="dita" keys="concept01" scope="local" href="2f2f6e2c713f2b6fca1ef0b57bfb9be39c935485.dita" version="1">
+    <keydef
+      class="+ map/topicref mapgroup-d/keydef " href="2f2f6e2c713f2b6fca1ef0b57bfb9be39c935485.dita" keys="concept01"
+      processing-role="resource-only"/>
+  </keyDef>
+</keyScope>

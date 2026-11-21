@@ -103,10 +103,12 @@ public class StreamStore extends AbstractStore implements Store {
     } catch (SaxonApiException e) {
       throw new IOException(e);
     } finally {
-      try {
-        serializer.close();
-      } catch (SaxonApiException e) {
-        throw new IOException(e);
+      if (serializer != null) {
+        try {
+          serializer.close();
+        } catch (SaxonApiException e) {
+          throw new IOException(e);
+        }
       }
     }
   }
