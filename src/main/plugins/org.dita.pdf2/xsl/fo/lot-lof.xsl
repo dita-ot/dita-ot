@@ -62,7 +62,7 @@ See the accompanying LICENSE file for applicable license.
             <xsl:call-template name="createLOTHeader"/>
             
             <xsl:apply-templates select="//*[contains (@class, ' topic/table ')]
-                                            [child::*[contains(@class, ' topic/title ' )]]
+                                            [*[contains(@class, ' topic/title ' )]]
                                             [dita-ot:notExcludedByDraftElement(.)]"
                                  mode="list.of.tables"/>
           </fo:block>
@@ -87,7 +87,7 @@ See the accompanying LICENSE file for applicable license.
     </fo:block>
   </xsl:template>
   
-  <xsl:template match="*[contains (@class, ' topic/table ')][child::*[contains(@class, ' topic/title ' )]]" mode="list.of.tables">
+  <xsl:template match="*[contains (@class, ' topic/table ')][*[contains(@class, ' topic/title ' )]]" mode="list.of.tables">
 
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">
@@ -151,7 +151,7 @@ See the accompanying LICENSE file for applicable license.
               <xsl:call-template name="createLOFHeader"/>
 
               <xsl:apply-templates select="//*[contains (@class, ' topic/fig ')]
-                                              [child::*[contains(@class, ' topic/title ' )]]
+                                              [*[contains(@class, ' topic/title ' )]]
                                               [dita-ot:notExcludedByDraftElement(.)]"
                                    mode="list.of.figures"/>
             </fo:block>
@@ -176,7 +176,7 @@ See the accompanying LICENSE file for applicable license.
     </fo:block>
   </xsl:template>
   
-  <xsl:template match="*[contains (@class, ' topic/fig ')][child::*[contains(@class, ' topic/title ' )]]" mode="list.of.figures">
+  <xsl:template match="*[contains (@class, ' topic/fig ')][*[contains(@class, ' topic/title ' )]]" mode="list.of.figures">
     
     <fo:block xsl:use-attribute-sets="__lotf__indent">
       <fo:block xsl:use-attribute-sets="__lotf__content">

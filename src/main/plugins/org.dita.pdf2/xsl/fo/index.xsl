@@ -380,11 +380,11 @@ See the accompanying LICENSE file for applicable license.
             <fo:table-row>
               <fo:table-cell>
                 <fo:block xsl:use-attribute-sets="index-indents" keep-with-next="always">
-                  <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
+                  <xsl:if test="exists(ancestor::opentopic-index:index.entry)">
                     <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
                   </xsl:if>
                   <xsl:variable name="following-idx" select="following-sibling::opentopic-index:index.entry[@value = $value and opentopic-index:refID]"/>
-                  <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                  <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry[@value = $value])">
                     <xsl:variable name="page-setting" select=" (ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
                     <xsl:variable name="isNoPage" select=" $page-setting = 'true' and name($page-setting) = 'no-page' "/>
                     <xsl:choose>
@@ -427,7 +427,7 @@ See the accompanying LICENSE file for applicable license.
                 <fo:table-row>
                   <fo:table-cell>
                     <fo:block xsl:use-attribute-sets="index-indents" keep-together="always">
-                      <xsl:if test="true() or count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+                      <xsl:if test="true() or empty(preceding-sibling::opentopic-index:index.entry[@value = $value])">
                         <xsl:apply-templates select="opentopic-index:formatted-value/node()"/>
                         <fo:inline font-style="italic">
                           <xsl:text> (</xsl:text>
@@ -452,10 +452,10 @@ See the accompanying LICENSE file for applicable license.
       </xsl:when>
       <xsl:otherwise>
         <fo:block xsl:use-attribute-sets="index-indents">
-          <xsl:if test="count(ancestor::opentopic-index:index.entry) > 0">
+          <xsl:if test="exists(ancestor::opentopic-index:index.entry)">
             <xsl:attribute name="keep-together.within-page">always</xsl:attribute>
           </xsl:if>
-          <xsl:if test="count(preceding-sibling::opentopic-index:index.entry[@value = $value]) = 0">
+          <xsl:if test="empty(preceding-sibling::opentopic-index:index.entry[@value = $value])">
             <xsl:variable name="page-setting" select="(ancestor-or-self::opentopic-index:index.entry/@no-page | ancestor-or-self::opentopic-index:index.entry/@start-page)[last()]"/>
             <xsl:variable name="isNoPage" select="$page-setting = 'true' and name($page-setting) = 'no-page' "/>
             <xsl:apply-templates select="." mode="make-index-ref">
@@ -536,7 +536,7 @@ See the accompanying LICENSE file for applicable license.
   </xsl:function>
 
     <xsl:template name="createIndex">
-        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (count($index-entries//opentopic-index:index.entry) &gt; 0)">
+        <xsl:if test="(//opentopic-index:index.groups//opentopic-index:index.entry) and (exists($index-entries//opentopic-index:index.entry))">
             <xsl:variable name="index">
                 <xsl:choose>
                     <xsl:when test="$map//*[contains(@class,' bookmap/indexlist ')][@href]"/>
@@ -548,7 +548,7 @@ See the accompanying LICENSE file for applicable license.
                     </xsl:when>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:if test="count($index/*) > 0">
+            <xsl:if test="exists($index/*)">
                 <fo:page-sequence master-reference="index-sequence" xsl:use-attribute-sets="page-sequence.index">
 
                     <xsl:call-template name="insertIndexStaticContents"/>
