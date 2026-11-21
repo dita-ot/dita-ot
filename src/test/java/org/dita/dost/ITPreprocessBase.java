@@ -185,6 +185,15 @@ public interface ITPreprocessBase {
   }
 
   @Test
+  default void conref_nested_dirs() throws Throwable {
+    builder()
+      .name(Paths.get("conref", "conref_nested_dirs"))
+      .transtype(PREPROCESS)
+      .input(Paths.get("rootmap.ditamap"))
+      .test();
+  }
+
+  @Test
   default void conrefmissingfile() throws Throwable {
     builder()
       .name(Paths.get("conref", "conrefmissingfile"))
