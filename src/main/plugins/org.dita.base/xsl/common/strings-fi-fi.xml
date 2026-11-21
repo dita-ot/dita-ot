@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Kuva</variable>
    <variable id="Table">Taulukko</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Seuraava aihe</variable>
    <variable id="Previous topic">Edellinen aihe</variable>
    <variable id="Parent topic">Pääaihe</variable>

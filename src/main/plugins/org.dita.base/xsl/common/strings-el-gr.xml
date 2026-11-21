@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Σχήμα</variable>
    <variable id="Table">Πίνακας</variable>
+   <variable id="Equation">Equation</variable>
    <variable id="Next topic">Επόμενο θέμα</variable>
    <variable id="Previous topic">Προηγούμενο θέμα</variable>
    <variable id="Parent topic">Γονικό θέμα</variable>

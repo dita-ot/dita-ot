@@ -10,6 +10,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Slika</variable>
    <variable id="Table">Tablica</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Slijedeće poglavlje</variable>
    <variable id="Previous topic">Prethodno poglavlje</variable>
    <variable id="Parent topic">Nadređeno poglavlje</variable>

@@ -12,6 +12,7 @@ See the accompanying LICENSE file for applicable license.
 <variables>
    <variable id="Figure">Илустрација</variable>
    <variable id="Table">Табела</variable>
+   <variable id="Equation">Equation</variable><!-- TODO:Equation -->
    <variable id="Next topic">Следећа тема</variable>
    <variable id="Previous topic">Претходна тема</variable>
    <variable id="Parent topic">Надређена тема</variable>
