@@ -392,6 +392,7 @@ See the accompanying LICENSE file for applicable license.
     <xsl:value-of select="."/>
   </xsl:template>
 
+  <!-- Deprecated since 4.2 -->
   <xsl:template match="processing-instruction('path2project-uri')" mode="get-path2project">
     <xsl:choose>
       <!-- Backwards compatibility with path2project that is empty when current directory is the root directory -->
@@ -402,12 +403,14 @@ See the accompanying LICENSE file for applicable license.
     </xsl:choose>
   </xsl:template>
 
+  <!-- Deprecated since 4.2 -->
   <xsl:template match="processing-instruction('path2project')" mode="get-path2project">
     <xsl:call-template name="get-path2project">
       <xsl:with-param name="s" select="."/>
     </xsl:call-template>
   </xsl:template>
 
+  <!-- Deprecated since 4.2 -->
   <xsl:template name="get-path2project">
     <!-- Deal with being handed a Windows backslashed path by accident. -->
     <!-- This code only changes \ to / and doesn't handle the many other situations
