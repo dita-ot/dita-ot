@@ -1364,15 +1364,7 @@ See the accompanying LICENSE file for applicable license.
   <!-- =========== IMAGE/OBJECT =========== -->
   
   <xsl:template match="*[contains(@class, ' topic/image ')]" name="topic.image">
-    <!-- build any pre break indicated by style -->
-    <xsl:choose>
-      <xsl:when test="parent::*[contains(@class, ' topic/fig ')][contains(@frame, 'top ')]">
-        <!-- NOP if there is already a break implied by a parent property -->
-      </xsl:when>
-      <xsl:when test="@placement = 'break'">
-        <br/>
-      </xsl:when>
-    </xsl:choose>
+    <!-- apply any @placement or @align directives -->
     <xsl:call-template name="setaname"/>
     <xsl:choose>
       <xsl:when test="@placement = 'break'"><!--Align only works for break-->
@@ -1401,8 +1393,6 @@ See the accompanying LICENSE file for applicable license.
         <xsl:call-template name="topic-image"/>
       </xsl:otherwise>
     </xsl:choose>
-    <!-- build any post break indicated by style -->
-    <xsl:if test="not(@placement = 'inline')"><br/></xsl:if>
     <!-- image name for review -->
     <xsl:if test="$ARTLBL = 'yes'"> [<xsl:value-of select="@href"/>] </xsl:if>
   </xsl:template>
@@ -1414,9 +1404,12 @@ See the accompanying LICENSE file for applicable license.
         <xsl:with-param name="default-output-class">
           <xsl:if test="@placement = 'break'"><!--Align only works for break-->
             <xsl:choose>
+              <!-- when @align is used, the <img> is an inline element inside its <div> container -->
               <xsl:when test="@align = 'left'">imageleft</xsl:when>
               <xsl:when test="@align = 'right'">imageright</xsl:when>
               <xsl:when test="@align = 'center'">imagecenter</xsl:when>
+              <!-- otherwise, we apply "break" via CSS (as <img> are inline by default)-->
+              <xsl:otherwise>break</xsl:otherwise>
             </xsl:choose>
           </xsl:if>
         </xsl:with-param>
