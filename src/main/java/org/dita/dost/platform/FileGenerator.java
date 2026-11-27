@@ -39,6 +39,7 @@ final class FileGenerator extends XMLFilterImpl {
 
   public static final String PARAM_LOCALNAME = "localname";
   public static final String PARAM_TEMPLATE = "template";
+  public static final String PARAM_DITA_DIR = "dita.dir";
 
   private static final String DITA_OT_NS = "http://dita-ot.sourceforge.net";
   private static final String TEMPLATE_PREFIX = "_template.";
@@ -51,6 +52,8 @@ final class FileGenerator extends XMLFilterImpl {
   private final Map<String, Plugin> pluginTable;
   /** Template file. */
   private File templateFile;
+  /** DITA-OT directory. */
+  private File ditaDir;
 
   /**
    * Default Constructor.
@@ -69,8 +72,18 @@ final class FileGenerator extends XMLFilterImpl {
     templateFile = null;
   }
 
+
+
   public void setLogger(final DITAOTLogger logger) {
     this.logger = logger;
+  }
+
+  /**
+   * Set the DITA-OT directory.
+   * @param ditaDir DITA-OT root directory
+   */
+  public void setDitaDir(final File ditaDir) {
+    this.ditaDir = ditaDir;
   }
 
   /**
@@ -134,6 +147,9 @@ final class FileGenerator extends XMLFilterImpl {
         final IAction action = (IAction) Class.forName(attributes.getValue(BEHAVIOR_ATTR)).newInstance();
         action.setLogger(logger);
         action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
+        if (ditaDir != null) {
+          action.addParam(PARAM_DITA_DIR, ditaDir.getAbsolutePath());
+        }
         for (int i = 0; i < attributes.getLength(); i++) {
           action.addParam(attributes.getLocalName(i), attributes.getValue(i));
         }
@@ -157,6 +173,9 @@ final class FileGenerator extends XMLFilterImpl {
                 action.setLogger(logger);
                 action.setFeatures(pluginTable);
                 action.addParam(PARAM_TEMPLATE, templateFile.getAbsolutePath());
+                if (ditaDir != null) {
+                  action.addParam(PARAM_DITA_DIR, ditaDir.getAbsolutePath());
+                }
                 final List<Value> value = Stream
                   .of(attributes.getValue(i).split(Integrator.FEAT_VALUE_SEPARATOR))
                   .map(val -> new Value.StringValue(null, val))
