@@ -67,20 +67,17 @@ public class ProjectBuilder {
     }
   }
 
-  public record Context(String name, String id, String idref, List<URI> input, Deliverable.Profile profiles) {
-    @JsonCreator
-    public Context(
-      @JsonProperty("name") String name,
-      @JsonProperty("id") String id,
-      @JsonProperty("idref") String idref,
-      @JsonProperty("input") List<URI> input,
-      @JsonProperty("profiles") Deliverable.Profile profiles
-    ) {
-      this.name = name;
-      this.id = id;
-      this.idref = idref;
-      this.input = input;
-      this.profiles = profiles;
+  public record Context(
+    @JsonProperty("name") String name,
+    @JsonProperty("id") String id,
+    @JsonProperty("idref") String idref,
+    @JsonProperty("input") List<URI> input,
+    @JsonProperty("profiles") Deliverable.Profile profiles
+  ) {
+    public Context {
+      if (input != null) {
+        input.forEach(ProjectBuilder::validateURI);
+      }
     }
   }
 
@@ -109,19 +106,23 @@ public class ProjectBuilder {
       this.profiles = profiles;
     }
 
-    public record Param(String name, String value, URI href, URI path) {
-      @JsonCreator
-      public Param(
-        @JsonProperty("name") String name,
-        @JsonProperty("value") String value,
-        @JsonProperty("href") URI href,
-        @JsonProperty("path") URI path
-      ) {
-        this.name = name;
-        this.value = value;
-        this.href = href;
-        this.path = path;
+    public record Param(
+      @JsonProperty("name") String name,
+      @JsonProperty("value") String value,
+      @JsonProperty("href") URI href,
+      @JsonProperty("path") URI path
+    ) {
+      public Param {
+        validateURI(href);
       }
+    }
+  }
+
+  private static void validateURI(URI href) {
+    if (href != null && href.toString().isEmpty()) {
+      throw new IllegalArgumentException(
+        "value of attribute \"href\" is invalid; must be a URI with length at least 1 (actual length was 0)"
+      );
     }
   }
 }

@@ -11,6 +11,7 @@ package org.dita.dost.project;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;
@@ -62,6 +63,21 @@ public class ProjectFactory {
       } else {
         throw new IOException(String.format("Failed to read project file %s: %s", file, e.getLocalizedMessage()), e);
       }
+    } catch (ValueInstantiationException e) {
+      var msg = e.getMessage();
+      if (e.getCause() instanceof IllegalArgumentException cause) {
+        msg = cause.getLocalizedMessage();
+      }
+      throw new IOException(
+        String.format(
+          "Failed to read project file %s:%s:%s: %s",
+          file,
+          e.getLocation().getLineNr(),
+          e.getLocation().getColumnNr(),
+          msg
+        ),
+        e
+      );
     } catch (IOException e) {
       throw new IOException("Failed to read project file: " + e.getMessage(), e);
     }

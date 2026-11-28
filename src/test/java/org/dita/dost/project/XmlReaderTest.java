@@ -107,4 +107,20 @@ public class XmlReaderTest {
       }
     );
   }
+
+  @Test
+  public void deserializeXml_validationFails() throws IOException, SAXException {
+    assertThrows(
+      SAXException.class,
+      () -> {
+        try (
+          InputStream input = getClass()
+            .getClassLoader()
+            .getResourceAsStream("org/dita/dost/project/invalid_input_href.xml")
+        ) {
+          xmlReader.read(input, null);
+        }
+      }
+    );
+  }
 }
