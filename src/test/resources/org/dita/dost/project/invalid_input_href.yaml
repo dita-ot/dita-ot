@@ -1,0 +1,7 @@
+---
+deliverables:
+- context:
+    input: ""
+  output: "./site"
+  publication:
+    transtype: "html5"
